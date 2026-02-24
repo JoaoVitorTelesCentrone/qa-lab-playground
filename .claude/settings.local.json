@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(bun install:*)",
+      "Bash(timeout 8 bun run:*)",
+      "Bash(bunx shadcn@latest add:*)",
+      "Bash(bun run build)",
+      "Bash(timeout 5 bun run:*)",
+      "Bash(python:*)",
+      "Bash(node -e:*)",
+      "Bash(node --version:*)"
+    ]
+  }
+}

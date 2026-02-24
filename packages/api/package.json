@@ -1,0 +1,16 @@
+{
+  "name": "@qa-lab/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch src/index.ts"
+  },
+  "dependencies": {
+    "@qa-lab/shared": "workspace:*",
+    "hono": "^4"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,22 @@
+FROM oven/bun:1 AS base
+WORKDIR /app
+
+# Copy workspace root config
+COPY package.json bun.lock ./
+
+# Copy package.json files for dependency resolution
+COPY packages/shared/package.json packages/shared/
+COPY packages/web/package.json packages/web/
+
+# Install dependencies
+RUN bun install --frozen-lockfile
+
+# Copy source code
+COPY packages/shared packages/shared
+COPY packages/web packages/web
+
+EXPOSE 3000
+
+ENV NEXT_PUBLIC_API_URL=http://api:3001
+
+CMD ["bun", "run", "--cwd", "packages/web", "dev"]

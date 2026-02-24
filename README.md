@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# QA Lab Playground
 
-## Getting Started
+Plataforma educacional para treino de QA. Aprenda quebrando coisas de proposito.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Frontend:** Next.js 16, React 19, Tailwind CSS 4, shadcn/ui
+- **Backend:** Hono (Bun runtime)
+- **Monorepo:** Bun workspaces
+- **Containers:** Docker + docker-compose
+
+## Estrutura
+
+```
+packages/
+  web/       → Frontend Next.js (:3000)
+  api/       → Backend Hono (:3001)
+  shared/    → Tipos e constantes compartilhadas
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Como Rodar
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Requisitos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [Bun](https://bun.sh) >= 1.0
 
-## Learn More
+### Desenvolvimento Local
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Instalar dependencias
+bun install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Rodar API e frontend simultaneamente
+bun run dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Ou separadamente
+bun run dev:api   # API em http://localhost:3001
+bun run dev:web   # Frontend em http://localhost:3000
+```
 
-## Deploy on Vercel
+### Docker
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+docker-compose up --build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Frontend: http://localhost:3000
+API: http://localhost:3001
+
+## Modulos
+
+### API Playground
+Envie requests para 10 endpoints com bugs configuraveis. Ative o **Modo Caos** para descobrir falhas como:
+- Respostas 500 aleatorias
+- Dados incorretos
+- Timeouts intermitentes
+- Paginacao inconsistente
+- Status codes mentirosos
+
+### Cenarios de Teste
+5 cenarios guiados para praticar QA:
+1. Validar listagem de usuarios
+2. Encontrar bugs no formulario
+3. Testar busca com edge cases
+4. Identificar respostas inconsistentes
+5. Validar tratamento de erros
+
+### Form Bugado
+Formulario de cadastro com 5 bugs propositais para encontrar.
+
+## Endpoints da API
+
+| Metodo | Endpoint | Bug |
+|--------|----------|-----|
+| GET | /api/users | 500 aleatorio |
+| GET | /api/users/:id | Retorna usuario errado |
+| POST | /api/users | Descarta campos silenciosamente |
+| GET | /api/products | Paginacao pula itens |
+| GET | /api/products/:id | Status 200 com body de erro |
+| POST | /api/orders | Timeout intermitente |
+| GET | /api/orders/:id | Formato muda a cada request |
+| PUT | /api/users/:id | Sucesso falso (nao atualiza) |
+| DELETE | /api/products/:id | 204 mas nao deleta |
+| GET | /api/health | Mente sobre status |
+
+### Controle de Caos
+
+```bash
+# Ver config atual
+GET /api/_chaos/config
+
+# Ativar/desativar caos em um endpoint
+POST /api/_chaos/config
+{"endpoint": "GET /api/users", "config": {"enabled": true}}
+
+# Ativar/desativar todos
+POST /api/_chaos/toggle
+{"enabled": true}
+
+# Resetar dados
+POST /api/_admin/reset
+```
