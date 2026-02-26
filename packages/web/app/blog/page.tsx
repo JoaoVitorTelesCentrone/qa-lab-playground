@@ -16,9 +16,9 @@ export default function BlogPage() {
   const rest = posts.filter((p) => !p.destaque);
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 animate-fade-in">
       {/* Header */}
-      <div className="space-y-2">
+      <div className="space-y-2 animate-slide-in-up">
         <div className="flex items-center gap-3">
           <BookOpen className="size-7 text-primary" />
           <h1 className="text-3xl font-bold tracking-tight">Blog QA Lab</h1>
@@ -86,7 +86,7 @@ export default function BlogPage() {
         <h2 className="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
           Todos os artigos
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 stagger">
           {rest.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`}>
               <Card className="group h-full transition-colors hover:border-primary/30">

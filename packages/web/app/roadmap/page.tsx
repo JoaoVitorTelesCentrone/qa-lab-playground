@@ -103,8 +103,8 @@ function ItemRow({
             <Check className="size-3 text-primary" />
           </div>
         ) : status === "em_progresso" ? (
-          <div className="flex size-5 items-center justify-center rounded-full bg-amber-500/20">
-            <Loader2 className="size-3 animate-spin text-amber-400" />
+          <div className="flex size-5 items-center justify-center rounded-full bg-amber-100">
+            <Loader2 className="size-3 animate-spin text-amber-600" />
           </div>
         ) : (
           <Circle className="size-5 text-muted-foreground/40 group-hover:text-muted-foreground" />
@@ -338,7 +338,7 @@ export default function RoadmapPage() {
   const selected = topics.find((t) => t.id === selectedId)!;
 
   return (
-    <div className="flex h-full gap-6 lg:gap-8">
+    <div className="flex h-full gap-6 lg:gap-8 animate-fade-in">
       {/* ── Topic list sidebar ── */}
       <aside className="hidden w-52 shrink-0 lg:block">
         <div className="sticky top-0 space-y-1">

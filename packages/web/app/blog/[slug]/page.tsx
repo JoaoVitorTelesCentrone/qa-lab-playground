@@ -84,15 +84,15 @@ function BlockRenderer({ block }: { block: Block }) {
         },
         tip: {
           icon: Lightbulb,
-          className: "border-emerald-500/30 bg-emerald-500/5 text-emerald-400",
+          className: "border-green-200 bg-green-50 text-green-600",
         },
         warning: {
           icon: AlertTriangle,
-          className: "border-amber-500/30 bg-amber-500/5 text-amber-400",
+          className: "border-amber-200 bg-amber-50 text-amber-600",
         },
         danger: {
           icon: AlertCircle,
-          className: "border-red-500/30 bg-red-500/5 text-red-400",
+          className: "border-red-200 bg-red-50 text-red-600",
         },
       };
       const v = variants[block.variant ?? "info"];
@@ -151,7 +151,7 @@ export default async function BlogPostPage({ params }: Props) {
   const related = getRelatedPosts(slug);
 
   return (
-    <div className="mx-auto max-w-2xl space-y-10">
+    <div className="mx-auto max-w-2xl space-y-10 animate-fade-in">
       {/* Back */}
       <Link href="/blog">
         <Button variant="ghost" size="sm" className="gap-1.5 pl-0">
@@ -186,7 +186,7 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {/* Article Body */}
-      <div className="space-y-5">
+      <div className="space-y-5 stagger">
         {post.blocos.map((block, i) => (
           <BlockRenderer key={i} block={block} />
         ))}

@@ -42,23 +42,23 @@ export const levelConfig: Record<
 > = {
   junior: {
     label: "Júnior",
-    className: "text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
-    dotClass: "bg-emerald-400",
+    className: "text-green-600 border-green-200 bg-green-50",
+    dotClass: "bg-green-600",
   },
   pleno: {
     label: "Pleno",
-    className: "text-sky-400 border-sky-500/30 bg-sky-500/5",
-    dotClass: "bg-sky-400",
+    className: "text-sky-600 border-sky-200 bg-sky-50",
+    dotClass: "bg-sky-600",
   },
   senior: {
     label: "Sênior",
-    className: "text-violet-400 border-violet-500/30 bg-violet-500/5",
-    dotClass: "bg-violet-400",
+    className: "text-violet-600 border-violet-200 bg-violet-50",
+    dotClass: "bg-violet-600",
   },
   expert: {
     label: "Expert",
-    className: "text-amber-400 border-amber-500/30 bg-amber-500/5",
-    dotClass: "bg-amber-400",
+    className: "text-amber-600 border-amber-200 bg-amber-50",
+    dotClass: "bg-amber-600",
   },
 };
 
@@ -74,7 +74,7 @@ export const topics: RoadmapTopic[] = [
     resumo:
       "Da anatomia de um teste até estratégias de arquitetura testável para sistemas de grande escala.",
     icon: "🧪",
-    cor: "text-emerald-400",
+    cor: "text-green-600",
     niveis: [
       {
         nivel: "junior",
@@ -232,7 +232,7 @@ export const topics: RoadmapTopic[] = [
     resumo:
       "Do Postman básico até contract testing e chaos engineering em APIs de produção.",
     icon: "🔌",
-    cor: "text-violet-400",
+    cor: "text-violet-600",
     niveis: [
       {
         nivel: "junior",
@@ -383,7 +383,7 @@ export const topics: RoadmapTopic[] = [
     resumo:
       "De scripts básicos no Playwright até pipelines de CI/CD com automação inteligente e confiável.",
     icon: "🤖",
-    cor: "text-sky-400",
+    cor: "text-sky-600",
     niveis: [
       {
         nivel: "junior",
@@ -541,7 +541,7 @@ export const topics: RoadmapTopic[] = [
     resumo:
       "Integrar qualidade em todo o ciclo de desenvolvimento: do código ao monitoramento em produção.",
     icon: "⚙️",
-    cor: "text-orange-400",
+    cor: "text-orange-600",
     niveis: [
       {
         nivel: "junior",
@@ -694,7 +694,7 @@ export const topics: RoadmapTopic[] = [
     resumo:
       "Garantir que o sistema aguenta a carga real: load testing, stress testing e análise de gargalos.",
     icon: "⚡",
-    cor: "text-amber-400",
+    cor: "text-amber-600",
     niveis: [
       {
         nivel: "junior",

@@ -78,9 +78,9 @@ const modules = [
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 animate-fade-in">
       {/* Hero */}
-      <div className="space-y-3">
+      <div className="space-y-3 animate-slide-in-up">
         <div className="flex items-center gap-3">
           <FlaskConical className="size-8 text-primary" />
           <h1 className="text-3xl font-bold tracking-tight">
@@ -94,10 +94,10 @@ export default function DashboardPage() {
       </div>
 
       {/* Module Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 stagger-scale">
         {modules.map((mod) => (
           <Link key={mod.href} href={mod.href}>
-            <Card className="group h-full transition-colors hover:border-primary/30">
+            <Card className="group h-full transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
               <CardHeader>
                 <div className="flex items-center gap-2">
                   <mod.icon className="size-5 text-primary" />

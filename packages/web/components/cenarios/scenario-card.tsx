@@ -19,9 +19,9 @@ const moduleIcons = {
 };
 
 const difficultyColors = {
-  iniciante: "bg-emerald-500/20 text-emerald-400",
-  intermediario: "bg-amber-500/20 text-amber-400",
-  avancado: "bg-red-500/20 text-red-400",
+  iniciante: "bg-green-100 text-green-600",
+  intermediario: "bg-amber-100 text-amber-600",
+  avancado: "bg-red-100 text-red-600",
 };
 
 const statusLabels: Record<ScenarioStatus, string> = {
@@ -33,7 +33,7 @@ const statusLabels: Record<ScenarioStatus, string> = {
 const statusColors: Record<ScenarioStatus, string> = {
   nao_iniciado: "bg-secondary text-muted-foreground",
   em_progresso: "bg-blue-500/20 text-blue-400",
-  completo: "bg-emerald-500/20 text-emerald-400",
+  completo: "bg-green-100 text-green-600",
 };
 
 interface ScenarioCardProps {

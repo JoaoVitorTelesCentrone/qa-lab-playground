@@ -55,7 +55,7 @@ export function ChaosPanel() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {allEnabled ? (
-            <Zap className="size-4 text-amber-400" />
+            <Zap className="size-4 text-amber-600" />
           ) : (
             <ZapOff className="size-4 text-muted-foreground" />
           )}
@@ -82,7 +82,7 @@ export function ChaosPanel() {
               variant="secondary"
               className={
                 value.enabled
-                  ? "bg-amber-500/20 text-amber-400"
+                  ? "bg-amber-100 text-amber-600"
                   : "bg-secondary text-muted-foreground"
               }
             >

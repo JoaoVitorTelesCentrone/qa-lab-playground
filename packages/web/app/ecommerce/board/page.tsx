@@ -236,25 +236,25 @@ const statusConfig: Record<TaskStatus, { label: string; color: string; dotColor:
   },
   concluido: {
     label: "Concluído",
-    color: "text-emerald-400",
-    dotColor: "bg-emerald-400",
+    color: "text-green-600",
+    dotColor: "bg-green-600",
     barColor: "bg-emerald-500",
   },
 };
 
 const priorityConfig: Record<TaskPriority, { label: string; className: string; barColor: string }> = {
-  critica: { label: "Crítica", className: "bg-red-500/20 text-red-400 border-red-500/20", barColor: "bg-red-500" },
-  alta: { label: "Alta", className: "bg-amber-500/20 text-amber-400 border-amber-500/20", barColor: "bg-amber-500" },
+  critica: { label: "Crítica", className: "bg-red-100 text-red-600 border-red-200", barColor: "bg-red-500" },
+  alta: { label: "Alta", className: "bg-amber-100 text-amber-600 border-amber-200", barColor: "bg-amber-500" },
   media: { label: "Média", className: "bg-blue-500/20 text-blue-400 border-blue-500/20", barColor: "bg-blue-500" },
   baixa: { label: "Baixa", className: "bg-secondary text-muted-foreground", barColor: "bg-border" },
 };
 
 const moduleConfig: Record<QaModule, { label: string; icon: React.ElementType; color: string }> = {
   api: { label: "API Playground", icon: Send, color: "text-violet-400" },
-  ecommerce: { label: "E-commerce", icon: ShoppingBag, color: "text-orange-400" },
+  ecommerce: { label: "E-commerce", icon: ShoppingBag, color: "text-orange-600" },
   cenarios: { label: "Cenários de Teste", icon: ListChecks, color: "text-sky-400" },
   datas: { label: "Módulo Datas", icon: Calendar, color: "text-cyan-400" },
-  login: { label: "Login / Auth", icon: LogIn, color: "text-emerald-400" },
+  login: { label: "Login / Auth", icon: LogIn, color: "text-green-600" },
 };
 
 const columns: TaskStatus[] = ["backlog", "em_progresso", "concluido"];
@@ -309,7 +309,7 @@ function EditModal({ task, onClose, onSave }: EditModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-gray-800/60 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
       <div className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border border-border bg-card shadow-2xl mx-4">
@@ -485,7 +485,7 @@ function EditModal({ task, onClose, onSave }: EditModalProps) {
                         <button
                           onClick={() => addScenarioLink(s.id, s.titulo)}
                           disabled={linked}
-                          className={`shrink-0 rounded-md px-2 py-1 text-xs font-medium transition-colors ${linked ? "text-emerald-400 bg-emerald-500/10 cursor-default" : "text-primary bg-primary/10 hover:bg-primary/20"}`}
+                          className={`shrink-0 rounded-md px-2 py-1 text-xs font-medium transition-colors ${linked ? "text-green-600 bg-green-100 cursor-default" : "text-primary bg-primary/10 hover:bg-primary/20"}`}
                         >
                           {linked ? "Adicionado" : "Adicionar"}
                         </button>
@@ -677,7 +677,7 @@ function StatsBar({ tasks }: { tasks: BoardTask[] }) {
           <span className="font-bold text-foreground">{emProgresso}</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-emerald-400" />
+          <span className="size-2 rounded-full bg-green-600" />
           <span className="text-muted-foreground">Concluído</span>
           <span className="font-bold text-foreground">{concluidas}</span>
         </div>
@@ -708,9 +708,9 @@ export default function EcommerceBoardPage() {
   const tasksByStatus = (status: TaskStatus) => tasks.filter(t => t.status === status);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 animate-slide-in-up">
         <Link
           href="/ecommerce"
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors w-fit"
@@ -753,7 +753,7 @@ export default function EcommerceBoardPage() {
       </div>
 
       {/* Kanban */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3 stagger">
         {columns.map(status => (
           <Column
             key={status}

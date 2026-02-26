@@ -362,9 +362,9 @@ export default function EcommerceBugadoPage() {
   const produtosFiltrados = filtrarProdutos();
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6 animate-fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-slide-in-up">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">E-commerce Bugado</h1>
           <p className="text-sm text-gray-500">
@@ -427,7 +427,7 @@ export default function EcommerceBugadoPage() {
           </Card>
 
           {/* Lista de Produtos */}
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="grid gap-6 sm:grid-cols-2 stagger-scale">
             {produtosFiltrados.map((product) => (
               <Card key={product.id} className="overflow-hidden">
                 <div className="relative">
@@ -701,7 +701,7 @@ export default function EcommerceBugadoPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Bug className="size-4 text-blue-600" />
+                <Bug className="size-4 text-green-600" />
                 <CardTitle className="text-base">Bugs Encontrados</CardTitle>
               </div>
               <CardDescription>
@@ -709,7 +709,7 @@ export default function EcommerceBugadoPage() {
               </CardDescription>
               <div className="h-2 rounded-full bg-gray-200">
                 <div
-                  className="h-2 rounded-full bg-blue-600 transition-all"
+                  className="h-2 rounded-full bg-green-500 transition-all"
                   style={{ width: `${(foundBugs.size / bugs.length) * 100}%` }}
                 />
               </div>

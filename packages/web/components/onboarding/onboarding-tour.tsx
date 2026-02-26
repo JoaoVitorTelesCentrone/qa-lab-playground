@@ -51,8 +51,8 @@ const steps: Step[] = [
   },
   {
     icon: Lightbulb,
-    iconColor: "text-amber-400",
-    iconBg: "bg-amber-500/10",
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-100",
     titulo: "A ideia por trás do lab",
     descricao:
       "Você vai testar um e-commerce em desenvolvimento — com todos os problemas reais que um produto tem antes de ir para produção. Cada funcionalidade tem bugs intencionais para você encontrar.",
@@ -78,8 +78,8 @@ const steps: Step[] = [
   },
   {
     icon: ShoppingBag,
-    iconColor: "text-orange-400",
-    iconBg: "bg-orange-500/10",
+    iconColor: "text-orange-600",
+    iconBg: "bg-orange-100",
     titulo: "A Loja E-commerce",
     descricao:
       "O produto sendo testado. Navegue pela loja, adicione itens ao carrinho, aplique cupons e tente finalizar uma compra. Cada interação tem pelo menos um bug escondido.",
@@ -106,8 +106,8 @@ const steps: Step[] = [
   },
   {
     icon: ListChecks,
-    iconColor: "text-emerald-400",
-    iconBg: "bg-emerald-500/10",
+    iconColor: "text-green-600",
+    iconBg: "bg-green-100",
     titulo: "Cenários de Teste",
     descricao:
       "Organize seus testes no estilo Azure DevOps Test Plans. Crie suites, adicione casos de teste manuais ou vincule aos cenários guiados existentes. Marque execuções como Passou, Falhou ou Bloqueado.",
@@ -216,7 +216,7 @@ export function OnboardingTour() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-gray-800/70 backdrop-blur-sm"
             onClick={close}
           />
 

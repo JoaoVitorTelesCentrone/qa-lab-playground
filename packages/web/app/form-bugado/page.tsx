@@ -48,8 +48,8 @@ export default function FormBugadoPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
+    <div className="space-y-6 animate-fade-in">
+      <div className="animate-slide-in-up">
         <h1 className="text-2xl font-bold tracking-tight">Form Bugado</h1>
         <p className="text-sm text-muted-foreground">
           Este formulario de cadastro tem 5 bugs propositais. Teste cada campo,
@@ -57,7 +57,7 @@ export default function FormBugadoPage() {
         </p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+      <div className="grid gap-6 lg:grid-cols-[1fr_320px] stagger">
         {/* Form */}
         <Card>
           <CardHeader>

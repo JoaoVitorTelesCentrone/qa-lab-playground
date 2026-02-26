@@ -65,10 +65,10 @@ const Button = ({
   const baseClasses = "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
   
   const variants = {
-    default: "bg-blue-600 text-white hover:bg-blue-700",
-    destructive: "bg-red-600 text-white hover:bg-red-700",
-    outline: "border border-gray-300 bg-white hover:bg-gray-100",
-    ghost: "hover:bg-gray-100",
+    default: "bg-green-500 text-white hover:bg-green-600",
+    destructive: "bg-red-500 text-white hover:bg-red-600",
+    outline: "border border-gray-300 bg-white hover:bg-gray-100 text-gray-700",
+    ghost: "hover:bg-gray-100 text-gray-600",
     success: "bg-green-600 text-white hover:bg-green-700",
   };
   
@@ -93,7 +93,7 @@ const Button = ({
 
 const Input = ({ className = "", ...props }: { className?: string; [key: string]: any }) => (
   <input
-    className={`flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+    className={`flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:border-green-400 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
     {...props}
   />
 );
@@ -108,12 +108,12 @@ const Badge = ({
   className?: string;
 }) => {
   const variants = {
-    default: "bg-blue-600 text-white",
-    destructive: "bg-red-600 text-white",
+    default: "bg-green-100 text-green-700",
+    destructive: "bg-red-100 text-red-700",
     outline: "border border-gray-300 bg-white text-gray-700",
-    secondary: "bg-gray-200 text-gray-800",
-    success: "bg-green-600 text-white",
-    warning: "bg-yellow-500 text-white",
+    secondary: "bg-gray-200 text-gray-700",
+    success: "bg-green-100 text-green-700",
+    warning: "bg-amber-100 text-amber-700",
   };
   
   return (
@@ -139,7 +139,7 @@ const TabsTrigger = ({ children, value, activeValue }: { children: React.ReactNo
   <button
     className={`px-4 py-2 text-sm font-medium transition-colors ${
       activeValue === value
-        ? "border-b-2 border-blue-600 text-blue-600"
+        ? "border-b-2 border-green-500 text-green-600"
         : "text-gray-600 hover:text-gray-900"
     }`}
     onClick={() => onValueChange(value)}
@@ -227,7 +227,7 @@ const Calendar = ({ selected, onSelect }: { selected: Date | null; onSelect: (da
               variant={isSelected ? "default" : "ghost"}
               size="icon"
               className={`h-8 w-8 text-sm ${
-                isSelected ? "bg-blue-600 text-white" : ""
+                isSelected ? "bg-green-500 text-white" : ""
               }`}
               onClick={() => onSelect(date)}
             >
@@ -467,9 +467,9 @@ export default function DataBugadaPage() {
   }
 
   return (
-    <div className="space-y-6 p-6 max-w-7xl mx-auto">
+    <div className="space-y-6 p-6 max-w-7xl mx-auto animate-fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-slide-in-up">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">QA Playground - Datas</h1>
           <p className="text-sm text-gray-500">
@@ -491,7 +491,7 @@ export default function DataBugadaPage() {
           <button
             className={`px-4 py-2 text-sm font-medium transition-colors ${
               activeTab === "calendar"
-                ? "border-b-2 border-blue-600 text-blue-600"
+                ? "border-b-2 border-green-500 text-green-600"
                 : "text-gray-600 hover:text-gray-900"
             }`}
             onClick={() => setActiveTab("calendar")}
@@ -502,7 +502,7 @@ export default function DataBugadaPage() {
           <button
             className={`px-4 py-2 text-sm font-medium transition-colors ${
               activeTab === "timer"
-                ? "border-b-2 border-blue-600 text-blue-600"
+                ? "border-b-2 border-green-500 text-green-600"
                 : "text-gray-600 hover:text-gray-900"
             }`}
             onClick={() => setActiveTab("timer")}
@@ -513,7 +513,7 @@ export default function DataBugadaPage() {
           <button
             className={`px-4 py-2 text-sm font-medium transition-colors ${
               activeTab === "timezone"
-                ? "border-b-2 border-blue-600 text-blue-600"
+                ? "border-b-2 border-green-500 text-green-600"
                 : "text-gray-600 hover:text-gray-900"
             }`}
             onClick={() => setActiveTab("timezone")}
@@ -524,7 +524,7 @@ export default function DataBugadaPage() {
           <button
             className={`px-4 py-2 text-sm font-medium transition-colors ${
               activeTab === "events"
-                ? "border-b-2 border-blue-600 text-blue-600"
+                ? "border-b-2 border-green-500 text-green-600"
                 : "text-gray-600 hover:text-gray-900"
             }`}
             onClick={() => setActiveTab("events")}
@@ -976,7 +976,7 @@ export default function DataBugadaPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Bug className="size-4 text-blue-600" />
+                <Bug className="size-4 text-green-600" />
                 <CardTitle className="text-base">Bugs de Data Encontrados</CardTitle>
               </div>
               <CardDescription>
@@ -984,7 +984,7 @@ export default function DataBugadaPage() {
               </CardDescription>
               <div className="h-2 rounded-full bg-gray-200">
                 <div
-                  className="h-2 rounded-full bg-blue-600 transition-all"
+                  className="h-2 rounded-full bg-green-500 transition-all"
                   style={{ width: `${(foundBugs.size / bugs.length) * 100}%` }}
                 />
               </div>
@@ -1062,8 +1062,8 @@ export default function DataBugadaPage() {
 
               {/* Informações Rápidas */}
               <div className="mt-4 grid grid-cols-2 gap-2">
-                <div className="p-2 bg-blue-50 rounded-lg text-center">
-                  <Sunrise className="size-4 mx-auto text-blue-600" />
+                <div className="p-2 bg-green-50 rounded-lg text-center">
+                  <Sunrise className="size-4 mx-auto text-green-600" />
                   <span className="text-xs">Nascer do Sol</span>
                   <span className="text-sm font-mono block">06:15</span>
                 </div>

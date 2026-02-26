@@ -61,8 +61,8 @@ export default function ApiPlaygroundPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
+    <div className="space-y-6 animate-fade-in">
+      <div className="animate-slide-in-up">
         <h1 className="text-2xl font-bold tracking-tight">API Playground</h1>
         <p className="text-sm text-muted-foreground">
           Envie requests para a API e explore os endpoints. Ative o modo caos
@@ -70,7 +70,7 @@ export default function ApiPlaygroundPage() {
         </p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+      <div className="grid gap-6 lg:grid-cols-[1fr_300px] stagger">
         <div className="space-y-6">
           <RequestPanel onSend={handleSend} loading={loading} />
           <ResponsePanel

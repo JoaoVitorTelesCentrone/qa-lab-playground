@@ -10,10 +10,10 @@ import { Send, Plus, X } from "lucide-react";
 const METHODS = ["GET", "POST", "PUT", "DELETE"] as const;
 
 const METHOD_COLORS: Record<string, string> = {
-  GET: "bg-emerald-500/20 text-emerald-400",
+  GET: "bg-green-100 text-green-600",
   POST: "bg-blue-500/20 text-blue-400",
-  PUT: "bg-amber-500/20 text-amber-400",
-  DELETE: "bg-red-500/20 text-red-400",
+  PUT: "bg-amber-100 text-amber-600",
+  DELETE: "bg-red-100 text-red-600",
 };
 
 interface RequestPanelProps {

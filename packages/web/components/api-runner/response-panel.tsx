@@ -6,9 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 function statusColor(status: number): string {
   if (status === 0) return "bg-gray-500/20 text-gray-400";
-  if (status < 300) return "bg-emerald-500/20 text-emerald-400";
-  if (status < 400) return "bg-amber-500/20 text-amber-400";
-  return "bg-red-500/20 text-red-400";
+  if (status < 300) return "bg-green-100 text-green-600";
+  if (status < 400) return "bg-amber-100 text-amber-600";
+  return "bg-red-100 text-red-600";
 }
 
 interface ResponsePanelProps {
@@ -43,7 +43,7 @@ export function ResponsePanel({
           {response.duration}ms
         </span>
         {response.error && (
-          <span className="text-xs text-red-400">{response.error}</span>
+          <span className="text-xs text-red-600">{response.error}</span>
         )}
       </div>
 

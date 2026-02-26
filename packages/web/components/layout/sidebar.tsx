@@ -82,11 +82,11 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-full w-16 flex-col items-center border-r border-sidebar-border bg-sidebar py-4 lg:w-56">
+    <aside className="flex h-full w-16 flex-col items-center border-r border-border bg-white py-4 lg:w-56 animate-slide-in-left">
       {/* Logo */}
       <Link href="/" className="mb-8 flex items-center gap-2 px-3">
         <FlaskConical className="size-7 text-primary" />
-        <span className="hidden text-sm font-bold tracking-tight text-primary lg:block">
+        <span className="hidden text-sm font-bold tracking-tight text-gray-700 lg:block">
           QA Lab
         </span>
       </Link>
@@ -104,16 +104,16 @@ export function Sidebar() {
                 <Link
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                     isActive
-                      ? "bg-sidebar-accent text-primary"
-                      : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                      ? "bg-accent text-accent-foreground"
+                      : "text-gray-500 hover:bg-gray-100 hover:text-gray-700 hover:translate-x-0.5"
                   )}
                 >
                   <item.icon
                     className={cn(
                       "size-5 shrink-0",
-                      isActive && "text-primary"
+                      isActive ? "text-primary" : ""
                     )}
                   />
                   <span className="hidden lg:block">{item.label}</span>
@@ -129,7 +129,7 @@ export function Sidebar() {
 
       {/* Footer */}
       <div className="hidden px-3 lg:block">
-        <p className="text-xs text-muted-foreground">QALabBrain v0.1</p>
+        <p className="text-xs text-gray-400">QALabBrain v0.1</p>
       </div>
     </aside>
   );

@@ -11,7 +11,12 @@
       "Bash(timeout 5 bun run:*)",
       "Bash(python:*)",
       "Bash(node -e:*)",
-      "Bash(node --version:*)"
+      "Bash(node --version:*)",
+      "Bash(npx skills:*)",
+      "Bash(npx next build --filter=@qa-lab/web)",
+      "Bash(npx next build:*)",
+      "Bash(bun run:*)",
+      "Bash(bunx tsc:*)"
     ]
   }
 }

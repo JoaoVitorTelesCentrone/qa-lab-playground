@@ -130,7 +130,7 @@ function ChallengeCard({
     >
       {challenge.destaque && !isComplete && (
         <div className="absolute -top-2.5 left-4">
-          <span className="flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-xs font-bold text-amber-400">
+          <span className="flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-700">
             <Star className="size-3" />
             Destaque
           </span>
@@ -249,7 +249,7 @@ function ChallengeCard({
             </span>
           ) : (
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Flame className="size-3.5 text-orange-400" />
+              <Flame className="size-3.5 text-orange-500" />
               Em progresso
             </span>
           )}
@@ -313,9 +313,9 @@ export default function DesafiosPage() {
   }).length;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-fade-in">
       {/* Header */}
-      <div className="space-y-2">
+      <div className="space-y-2 animate-slide-in-up">
         <div className="flex items-center gap-3">
           <Trophy className="size-7 text-primary" />
           <h1 className="text-3xl font-bold tracking-tight">Desafios</h1>
@@ -327,7 +327,7 @@ export default function DesafiosPage() {
       </div>
 
       {/* Stats bar */}
-      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 stagger-scale">
         <Card className="p-3">
           <p className="text-xs text-muted-foreground">XP Acumulado</p>
           <p className="mt-1 text-xl font-bold text-primary">
@@ -396,7 +396,7 @@ export default function DesafiosPage() {
       </div>
 
       {/* Challenge grid */}
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-5 sm:grid-cols-2 stagger">
         {filtered.map((challenge) => (
           <ChallengeCard
             key={challenge.id}

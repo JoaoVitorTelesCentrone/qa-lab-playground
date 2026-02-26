@@ -159,16 +159,16 @@ const initialPlans: TestPlan[] = [
 // ==============================
 
 const statusConfig: Record<CaseStatus, { label: string; icon: React.ElementType; className: string; next: CaseStatus }> = {
-  nao_executado: { label: "Não executado", icon: Circle,       className: "text-muted-foreground bg-secondary",               next: "passou" },
-  passou:        { label: "Passou",         icon: CheckCircle2, className: "text-emerald-400 bg-emerald-500/10",               next: "falhou" },
-  falhou:        { label: "Falhou",         icon: XCircle,      className: "text-red-400 bg-red-500/10",                       next: "bloqueado" },
-  bloqueado:     { label: "Bloqueado",      icon: MinusCircle,  className: "text-amber-400 bg-amber-500/10",                   next: "nao_executado" },
+  nao_executado: { label: "Não executado", icon: Circle,       className: "text-gray-500 bg-gray-100",                        next: "passou" },
+  passou:        { label: "Passou",         icon: CheckCircle2, className: "text-green-700 bg-green-100",                      next: "falhou" },
+  falhou:        { label: "Falhou",         icon: XCircle,      className: "text-red-700 bg-red-100",                          next: "bloqueado" },
+  bloqueado:     { label: "Bloqueado",      icon: MinusCircle,  className: "text-amber-700 bg-amber-100",                      next: "nao_executado" },
 };
 
 const priorityConfig: Record<CasePriority, { label: string; className: string }> = {
-  alta:  { label: "Alta",  className: "bg-red-500/10 text-red-400 border-red-500/20" },
-  media: { label: "Média", className: "bg-amber-500/10 text-amber-400 border-amber-500/20" },
-  baixa: { label: "Baixa", className: "bg-secondary text-muted-foreground" },
+  alta:  { label: "Alta",  className: "bg-red-100 text-red-700 border-red-200" },
+  media: { label: "Média", className: "bg-amber-100 text-amber-700 border-amber-200" },
+  baixa: { label: "Baixa", className: "bg-gray-100 text-gray-600" },
 };
 
 // ==============================
@@ -184,7 +184,7 @@ function NewSuiteModal({ onClose, onConfirm }: NewSuiteModalProps) {
   const [nome, setNome] = useState("");
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-gray-800/60 backdrop-blur-sm" onClick={onClose} />
       <div className="relative z-10 w-full max-w-sm rounded-xl border border-border bg-card shadow-2xl mx-4">
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div className="flex items-center gap-2">
@@ -266,7 +266,7 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-gray-800/60 backdrop-blur-sm" onClick={onClose} />
       <div className="relative z-10 w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-xl border border-border bg-card shadow-2xl mx-4">
         <div className="flex items-center justify-between border-b border-border px-5 py-4 sticky top-0 bg-card">
           <div className="flex items-center gap-2">
@@ -444,9 +444,9 @@ function TestCaseTable({ suite, planId, onStatusChange, onDelete, onAddCase }: T
         <div className="flex items-center gap-3">
           {total > 0 && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="text-emerald-400 font-medium">{passou} passou</span>
+              <span className="text-green-600 font-medium">{passou} passou</span>
               <span>·</span>
-              <span className="text-red-400 font-medium">{falhou} falhou</span>
+              <span className="text-red-600 font-medium">{falhou} falhou</span>
               <span>·</span>
               <span>{total - passou - falhou} pendente</span>
             </div>
@@ -764,9 +764,9 @@ export default function CenariosPage() {
   const totalPending = allCases.length - totalPassed - totalFailed - totalBlocked;
 
   return (
-    <div className="flex flex-col gap-4 h-full">
+    <div className="flex flex-col gap-4 h-full animate-fade-in">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-4 animate-slide-in-up">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Cenários de Teste</h1>
           <p className="text-sm text-muted-foreground">
@@ -776,15 +776,15 @@ export default function CenariosPage() {
         {/* Global stats */}
         <div className="flex items-center gap-3 shrink-0">
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="size-2 rounded-full bg-emerald-400" />
+            <span className="size-2 rounded-full bg-green-500" />
             <span className="text-muted-foreground">{totalPassed} passou</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="size-2 rounded-full bg-red-400" />
+            <span className="size-2 rounded-full bg-red-500" />
             <span className="text-muted-foreground">{totalFailed} falhou</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="size-2 rounded-full bg-amber-400" />
+            <span className="size-2 rounded-full bg-amber-500" />
             <span className="text-muted-foreground">{totalBlocked} bloqueado</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs">
