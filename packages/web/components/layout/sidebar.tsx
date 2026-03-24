@@ -12,6 +12,7 @@ import {
   Calendar,
   BookOpen,
   Trophy,
+  SearchCheck,
   Map,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -68,6 +69,12 @@ const navItems = [
     href: "/desafios",
     label: "Desafios",
     icon: Trophy,
+    exact: false,
+  },
+  {
+    href: "/pdca",
+    label: "PDCA",
+    icon: SearchCheck,
     exact: false,
   },
   {

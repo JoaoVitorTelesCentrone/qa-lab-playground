@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FlaskConical, Send, ListChecks, ClipboardList, ArrowRight, ShoppingBag, Calendar, BookOpen, Trophy, Map } from "lucide-react";
+import { FlaskConical, Send, ListChecks, ClipboardList, ArrowRight, ShoppingBag, Calendar, BookOpen, Trophy, SearchCheck, Map } from "lucide-react";
 
 const modules = [
   {
@@ -65,6 +65,14 @@ const modules = [
     descricao:
       "Desafios semanais e mensais para a comunidade. Aceite, complete os passos e acumule XP.",
     stats: "4 semanais · 4 mensais",
+  },
+  {
+    href: "/pdca",
+    icon: SearchCheck,
+    titulo: "Análise PDCA",
+    descricao:
+      "Investigue bugs com o ciclo PDCA: registre, planeje, execute e documente a causa raiz com 5 Porquês.",
+    stats: "6 etapas · 3 templates",
   },
   {
     href: "/roadmap",

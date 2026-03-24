@@ -11,7 +11,6 @@ import {
   ExternalLink,
   ChevronRight,
   ClipboardList,
-  Activity,
   Pencil,
   X,
   Plus,
@@ -19,12 +18,6 @@ import {
   ListChecks,
   Bug,
 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,7 +50,7 @@ interface BoardTask {
 }
 
 // ==============================
-// Initial Data (sem Form Bugado)
+// Initial Data
 // ==============================
 
 const initialTasks: BoardTask[] = [
@@ -218,290 +211,137 @@ const initialTasks: BoardTask[] = [
 ];
 
 // ==============================
-// Config maps
+// Config
 // ==============================
 
-const statusConfig: Record<TaskStatus, { label: string; color: string; dotColor: string; barColor: string }> = {
-  backlog: {
-    label: "Backlog",
-    color: "text-muted-foreground",
-    dotColor: "bg-muted-foreground",
-    barColor: "bg-secondary",
-  },
-  em_progresso: {
-    label: "Em Progresso",
-    color: "text-blue-400",
-    dotColor: "bg-blue-400",
-    barColor: "bg-blue-500",
-  },
-  concluido: {
-    label: "Concluído",
-    color: "text-green-600",
-    dotColor: "bg-green-600",
-    barColor: "bg-emerald-500",
-  },
+const statusConfig: Record<TaskStatus, { label: string; dot: string }> = {
+  backlog:       { label: "Backlog",       dot: "bg-muted-foreground" },
+  em_progresso:  { label: "Em Progresso",  dot: "bg-blue-400" },
+  concluido:     { label: "Concluído",     dot: "bg-green-500" },
 };
 
-const priorityConfig: Record<TaskPriority, { label: string; className: string; barColor: string }> = {
-  critica: { label: "Crítica", className: "bg-red-100 text-red-600 border-red-200", barColor: "bg-red-500" },
-  alta: { label: "Alta", className: "bg-amber-100 text-amber-600 border-amber-200", barColor: "bg-amber-500" },
-  media: { label: "Média", className: "bg-blue-500/20 text-blue-400 border-blue-500/20", barColor: "bg-blue-500" },
-  baixa: { label: "Baixa", className: "bg-secondary text-muted-foreground", barColor: "bg-border" },
+const priorityDot: Record<TaskPriority, string> = {
+  critica: "bg-red-500",
+  alta:    "bg-amber-500",
+  media:   "bg-blue-400",
+  baixa:   "bg-gray-300",
 };
 
-const moduleConfig: Record<QaModule, { label: string; icon: React.ElementType; color: string }> = {
-  api: { label: "API Playground", icon: Send, color: "text-violet-400" },
-  ecommerce: { label: "E-commerce", icon: ShoppingBag, color: "text-orange-600" },
-  cenarios: { label: "Cenários de Teste", icon: ListChecks, color: "text-sky-400" },
-  datas: { label: "Módulo Datas", icon: Calendar, color: "text-cyan-400" },
-  login: { label: "Login / Auth", icon: LogIn, color: "text-green-600" },
+const moduleConfig: Record<QaModule, { label: string; icon: React.ElementType }> = {
+  api:       { label: "API",       icon: Send },
+  ecommerce: { label: "E-commerce", icon: ShoppingBag },
+  cenarios:  { label: "Cenários",   icon: ListChecks },
+  datas:     { label: "Datas",      icon: Calendar },
+  login:     { label: "Auth",       icon: LogIn },
 };
 
 const columns: TaskStatus[] = ["backlog", "em_progresso", "concluido"];
 
 // ==============================
-// Edit Modal
+// Edit Modal (compacto)
 // ==============================
 
-interface EditModalProps {
-  task: BoardTask;
-  onClose: () => void;
-  onSave: (updated: BoardTask) => void;
-}
-
-function EditModal({ task, onClose, onSave }: EditModalProps) {
+function EditModal({ task, onClose, onSave }: { task: BoardTask; onClose: () => void; onSave: (t: BoardTask) => void }) {
   const [form, setForm] = useState<BoardTask>({ ...task, bugsConhecidos: [...task.bugsConhecidos], qaLinks: task.qaLinks.map(l => ({ ...l })) });
   const [newBug, setNewBug] = useState("");
-  const [newLinkLabel, setNewLinkLabel] = useState("");
-  const [newLinkHref, setNewLinkHref] = useState("");
-  const [scenarioTab, setScenarioTab] = useState(false);
+  const [showScenarios, setShowScenarios] = useState(false);
 
   function addBug() {
-    const trimmed = newBug.trim();
-    if (!trimmed) return;
-    setForm(f => ({ ...f, bugsConhecidos: [...f.bugsConhecidos, trimmed] }));
+    const t = newBug.trim();
+    if (!t) return;
+    setForm(f => ({ ...f, bugsConhecidos: [...f.bugsConhecidos, t] }));
     setNewBug("");
-  }
-
-  function removeBug(index: number) {
-    setForm(f => ({ ...f, bugsConhecidos: f.bugsConhecidos.filter((_, i) => i !== index) }));
-  }
-
-  function addLink() {
-    const label = newLinkLabel.trim();
-    const href = newLinkHref.trim();
-    if (!label || !href) return;
-    setForm(f => ({ ...f, qaLinks: [...f.qaLinks, { label, href }] }));
-    setNewLinkLabel("");
-    setNewLinkHref("");
-  }
-
-  function addScenarioLink(scenarioId: string, titulo: string) {
-    const href = `/cenarios/${scenarioId}`;
-    if (form.qaLinks.some(l => l.href === href)) return;
-    setForm(f => ({ ...f, qaLinks: [...f.qaLinks, { label: `Cenário: ${titulo}`, href }] }));
-  }
-
-  function removeLink(index: number) {
-    setForm(f => ({ ...f, qaLinks: f.qaLinks.filter((_, i) => i !== index) }));
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Overlay */}
       <div className="absolute inset-0 bg-gray-800/60 backdrop-blur-sm" onClick={onClose} />
-
-      {/* Modal */}
-      <div className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border border-border bg-card shadow-2xl mx-4">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-border px-6 py-4 sticky top-0 bg-card z-10">
-          <div className="flex items-center gap-2">
-            <Pencil className="size-4 text-primary" />
-            <h2 className="font-semibold">Editar tarefa <span className="font-mono text-sm text-muted-foreground">{task.id}</span></h2>
-          </div>
-          <button onClick={onClose} className="rounded-md p-1 hover:bg-secondary transition-colors">
+      <div className="relative z-10 w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-xl border border-border bg-card shadow-2xl mx-4 animate-scale-in">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3 sticky top-0 bg-card z-10">
+          <span className="text-sm font-semibold">Editar {task.id}</span>
+          <button onClick={onClose} className="rounded p-1 hover:bg-secondary transition-colors">
             <X className="size-4 text-muted-foreground" />
           </button>
         </div>
 
-        <div className="p-6 space-y-5">
-          {/* Título */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Título</label>
-            <Input
-              value={form.titulo}
-              onChange={e => setForm(f => ({ ...f, titulo: e.target.value }))}
-              placeholder="Título da tarefa"
-            />
-          </div>
+        <div className="p-5 space-y-4">
+          <Input value={form.titulo} onChange={e => setForm(f => ({ ...f, titulo: e.target.value }))} placeholder="Título" />
+          <Textarea value={form.descricao} onChange={e => setForm(f => ({ ...f, descricao: e.target.value }))} rows={2} placeholder="Descrição" />
 
-          {/* Descrição */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Descrição</label>
-            <Textarea
-              value={form.descricao}
-              onChange={e => setForm(f => ({ ...f, descricao: e.target.value }))}
-              placeholder="Descrição da tarefa"
-              rows={3}
-            />
-          </div>
-
-          {/* Status + Prioridade */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Status</label>
-              <select
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                value={form.status}
-                onChange={e => setForm(f => ({ ...f, status: e.target.value as TaskStatus }))}
-              >
-                <option value="backlog">Backlog</option>
-                <option value="em_progresso">Em Progresso</option>
-                <option value="concluido">Concluído</option>
-              </select>
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Prioridade</label>
-              <select
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                value={form.prioridade}
-                onChange={e => setForm(f => ({ ...f, prioridade: e.target.value as TaskPriority }))}
-              >
-                <option value="critica">Crítica</option>
-                <option value="alta">Alta</option>
-                <option value="media">Média</option>
-                <option value="baixa">Baixa</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Módulo QA */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Módulo de QA</label>
-            <select
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              value={form.qaModulo}
-              onChange={e => setForm(f => ({ ...f, qaModulo: e.target.value as QaModule }))}
-            >
-              {Object.entries(moduleConfig).map(([key, cfg]) => (
-                <option key={key} value={key}>{cfg.label}</option>
-              ))}
+          <div className="grid grid-cols-3 gap-3">
+            <select className="h-9 w-full rounded-lg border border-input bg-background px-2 text-sm" value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value as TaskStatus }))}>
+              <option value="backlog">Backlog</option>
+              <option value="em_progresso">Em Progresso</option>
+              <option value="concluido">Concluído</option>
+            </select>
+            <select className="h-9 w-full rounded-lg border border-input bg-background px-2 text-sm" value={form.prioridade} onChange={e => setForm(f => ({ ...f, prioridade: e.target.value as TaskPriority }))}>
+              <option value="critica">Crítica</option>
+              <option value="alta">Alta</option>
+              <option value="media">Média</option>
+              <option value="baixa">Baixa</option>
+            </select>
+            <select className="h-9 w-full rounded-lg border border-input bg-background px-2 text-sm" value={form.qaModulo} onChange={e => setForm(f => ({ ...f, qaModulo: e.target.value as QaModule }))}>
+              {Object.entries(moduleConfig).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
             </select>
           </div>
 
-          {/* Bugs conhecidos */}
+          {/* Bugs */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-              <Bug className="size-3.5" />
-              Bugs Conhecidos ({form.bugsConhecidos.length})
-            </label>
-            <div className="space-y-1.5">
-              {form.bugsConhecidos.map((bug, i) => (
-                <div key={i} className="flex items-center gap-2 rounded-md bg-secondary/60 px-3 py-1.5">
-                  <span className="flex-1 text-xs text-foreground">{bug}</span>
-                  <button onClick={() => removeBug(i)} className="shrink-0 rounded p-0.5 hover:bg-destructive/20 transition-colors">
-                    <Trash2 className="size-3 text-muted-foreground hover:text-destructive" />
-                  </button>
-                </div>
-              ))}
-            </div>
+            <span className="text-xs font-medium text-muted-foreground">Bugs ({form.bugsConhecidos.length})</span>
+            {form.bugsConhecidos.map((b, i) => (
+              <div key={i} className="flex items-center gap-2 rounded-md bg-secondary/50 px-3 py-1.5">
+                <span className="flex-1 text-xs">{b}</span>
+                <button onClick={() => setForm(f => ({ ...f, bugsConhecidos: f.bugsConhecidos.filter((_, idx) => idx !== i) }))} className="shrink-0">
+                  <X className="size-3 text-muted-foreground hover:text-destructive" />
+                </button>
+              </div>
+            ))}
             <div className="flex gap-2">
-              <Input
-                value={newBug}
-                onChange={e => setNewBug(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && addBug()}
-                placeholder="Descrever bug e pressionar Enter"
-                className="text-xs"
-              />
-              <Button variant="outline" size="sm" onClick={addBug} className="shrink-0">
-                <Plus className="size-3.5" />
-              </Button>
+              <Input value={newBug} onChange={e => setNewBug(e.target.value)} onKeyDown={e => e.key === "Enter" && addBug()} placeholder="Novo bug..." className="text-xs" />
+              <Button variant="outline" size="sm" onClick={addBug} className="shrink-0"><Plus className="size-3.5" /></Button>
             </div>
           </div>
 
-          {/* Links de QA */}
+          {/* Links */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-              <ExternalLink className="size-3.5" />
-              Links de QA
-            </label>
-            <div className="space-y-1.5">
-              {form.qaLinks.map((link, i) => (
-                <div key={i} className="flex items-center gap-2 rounded-md bg-secondary/60 px-3 py-1.5">
-                  <span className="flex-1 text-xs text-primary truncate">{link.label}</span>
-                  <span className="text-xs text-muted-foreground truncate max-w-35">{link.href}</span>
-                  <button onClick={() => removeLink(i)} className="shrink-0 rounded p-0.5 hover:bg-destructive/20 transition-colors">
-                    <Trash2 className="size-3 text-muted-foreground hover:text-destructive" />
-                  </button>
-                </div>
-              ))}
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Links de QA</span>
+              <button onClick={() => setShowScenarios(!showScenarios)} className="text-xs text-primary hover:underline">
+                {showScenarios ? "Fechar" : "Vincular cenário"}
+              </button>
             </div>
-
-            {/* Tabs: Manual / Cenários */}
-            <div className="rounded-lg border border-border overflow-hidden">
-              <div className="flex border-b border-border">
-                <button
-                  className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${!scenarioTab ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-                  onClick={() => setScenarioTab(false)}
-                >
-                  Link manual
-                </button>
-                <button
-                  className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${scenarioTab ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-                  onClick={() => setScenarioTab(true)}
-                >
-                  Cenários de Teste
+            {form.qaLinks.map((link, i) => (
+              <div key={i} className="flex items-center gap-2 text-xs">
+                <ExternalLink className="size-3 text-primary shrink-0" />
+                <span className="flex-1 text-primary truncate">{link.label}</span>
+                <button onClick={() => setForm(f => ({ ...f, qaLinks: f.qaLinks.filter((_, idx) => idx !== i) }))}>
+                  <X className="size-3 text-muted-foreground hover:text-destructive" />
                 </button>
               </div>
-
-              {!scenarioTab ? (
-                <div className="p-3 flex gap-2">
-                  <Input
-                    value={newLinkLabel}
-                    onChange={e => setNewLinkLabel(e.target.value)}
-                    placeholder="Rótulo do link"
-                    className="text-xs"
-                  />
-                  <Input
-                    value={newLinkHref}
-                    onChange={e => setNewLinkHref(e.target.value)}
-                    placeholder="/caminho"
-                    className="text-xs"
-                  />
-                  <Button variant="outline" size="sm" onClick={addLink} className="shrink-0">
-                    <Plus className="size-3.5" />
-                  </Button>
-                </div>
-              ) : (
-                <div className="p-3 space-y-1.5 max-h-48 overflow-y-auto">
-                  {scenarios.map(s => {
-                    const linked = form.qaLinks.some(l => l.href === `/cenarios/${s.id}`);
-                    return (
-                      <div key={s.id} className="flex items-center justify-between gap-2 rounded-md px-2 py-1.5 hover:bg-secondary/60 transition-colors">
-                        <div className="min-w-0">
-                          <p className="text-xs font-medium text-foreground truncate">{s.titulo}</p>
-                          <p className="text-xs text-muted-foreground truncate">{s.descricao}</p>
-                        </div>
-                        <button
-                          onClick={() => addScenarioLink(s.id, s.titulo)}
-                          disabled={linked}
-                          className={`shrink-0 rounded-md px-2 py-1 text-xs font-medium transition-colors ${linked ? "text-green-600 bg-green-100 cursor-default" : "text-primary bg-primary/10 hover:bg-primary/20"}`}
-                        >
-                          {linked ? "Adicionado" : "Adicionar"}
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+            ))}
+            {showScenarios && (
+              <div className="rounded-lg border border-border p-2 space-y-1 max-h-36 overflow-y-auto">
+                {scenarios.map(s => {
+                  const linked = form.qaLinks.some(l => l.href === `/cenarios/${s.id}`);
+                  return (
+                    <button
+                      key={s.id}
+                      onClick={() => !linked && setForm(f => ({ ...f, qaLinks: [...f.qaLinks, { label: s.titulo, href: `/cenarios/${s.id}` }] }))}
+                      disabled={linked}
+                      className={`w-full text-left rounded px-2 py-1.5 text-xs transition-colors ${linked ? "text-muted-foreground" : "hover:bg-secondary/60"}`}
+                    >
+                      {s.titulo} {linked && <span className="text-primary ml-1">+</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-2 border-t border-border px-6 py-4 sticky bottom-0 bg-card">
+        <div className="flex justify-end gap-2 border-t border-border px-5 py-3 sticky bottom-0 bg-card">
           <Button variant="outline" size="sm" onClick={onClose}>Cancelar</Button>
-          <Button size="sm" onClick={() => onSave(form)}>Salvar alterações</Button>
+          <Button size="sm" onClick={() => onSave(form)}>Salvar</Button>
         </div>
       </div>
     </div>
@@ -509,101 +349,52 @@ function EditModal({ task, onClose, onSave }: EditModalProps) {
 }
 
 // ==============================
-// Task Card
+// Task Card (minimalista)
 // ==============================
 
-function TaskCard({ task, onEdit }: { task: BoardTask; onEdit: (task: BoardTask) => void }) {
-  const priority = priorityConfig[task.prioridade];
-  const module = moduleConfig[task.qaModulo];
-  const ModuleIcon = module.icon;
+function TaskCard({ task, onEdit }: { task: BoardTask; onEdit: (t: BoardTask) => void }) {
+  const ModuleIcon = moduleConfig[task.qaModulo].icon;
 
   return (
-    <Card className="group flex flex-col gap-0 p-0 overflow-hidden transition-colors hover:border-primary/30">
-      <div className={`h-0.5 w-full ${priority.barColor}`} />
-
-      <CardHeader className="px-4 pt-4 pb-2">
-        <div className="flex items-start justify-between gap-2">
-          <span className="font-mono text-xs text-muted-foreground">{task.id}</span>
-          <div className="flex items-center gap-1.5">
-            <Badge className={`text-xs shrink-0 ${priority.className}`}>
-              {priority.label}
-            </Badge>
-            <button
-              onClick={() => onEdit(task)}
-              className="rounded-md p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-secondary"
-              title="Editar tarefa"
-            >
-              <Pencil className="size-3 text-muted-foreground" />
-            </button>
-          </div>
+    <div className="group rounded-lg border border-border bg-card p-3.5 space-y-2.5 transition-all duration-200 hover:border-primary/25 hover:shadow-sm">
+      {/* Header: id + priority + edit */}
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-xs text-muted-foreground">{task.id}</span>
+        <div className="flex items-center gap-2">
+          <span className={`size-2 rounded-full ${priorityDot[task.prioridade]}`} title={task.prioridade} />
+          <button
+            onClick={() => onEdit(task)}
+            className="rounded p-0.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-secondary"
+          >
+            <Pencil className="size-3 text-muted-foreground" />
+          </button>
         </div>
-        <CardTitle className="text-sm font-semibold leading-snug mt-1">
-          {task.titulo}
-        </CardTitle>
-        <p className="text-xs text-muted-foreground leading-relaxed mt-1">
-          {task.descricao}
-        </p>
-      </CardHeader>
+      </div>
 
-      <CardContent className="px-4 pb-4 flex flex-col gap-3 mt-auto">
-        {/* Módulo QA */}
-        <div className="flex items-center gap-1.5">
-          <ModuleIcon className={`size-3.5 shrink-0 ${module.color}`} />
-          <span className={`text-xs font-medium ${module.color}`}>{module.label}</span>
-        </div>
+      {/* Title */}
+      <p className="text-sm font-medium leading-snug">{task.titulo}</p>
 
-        {/* Bugs conhecidos */}
-        {task.bugsConhecidos.length > 0 && (
-          <div className="rounded-md bg-secondary/60 px-3 py-2 space-y-1">
-            <p className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-              <Bug className="size-3" />
-              {task.bugsConhecidos.length} bug{task.bugsConhecidos.length > 1 ? "s" : ""} conhecidos
-            </p>
-            <ul className="space-y-0.5">
-              {task.bugsConhecidos.slice(0, 2).map((bug, i) => (
-                <li key={i} className="text-xs text-muted-foreground truncate">· {bug}</li>
-              ))}
-              {task.bugsConhecidos.length > 2 && (
-                <li className="text-xs text-muted-foreground">
-                  · +{task.bugsConhecidos.length - 2} mais...
-                </li>
-              )}
-            </ul>
-          </div>
-        )}
-
-        {/* Links de QA */}
-        {task.qaLinks.length > 0 && (
-          <div className="flex flex-col gap-1">
-            {task.qaLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline"
-              >
-                <ExternalLink className="size-3 shrink-0" />
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {/* Footer */}
-        <div className="flex items-center justify-between pt-1 border-t border-border">
-          <span className="text-xs text-muted-foreground">
-            {task.objetivos} objetivo{task.objetivos > 1 ? "s" : ""}
+      {/* Meta row */}
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1">
+            <ModuleIcon className="size-3" />
+            {moduleConfig[task.qaModulo].label}
           </span>
-          {task.qaLinks[0] && (
-            <Link href={task.qaLinks[0].href}>
-              <Button variant="ghost" size="xs" className="h-6 gap-1 text-xs">
-                Testar
-                <ChevronRight className="size-3" />
-              </Button>
-            </Link>
+          {task.bugsConhecidos.length > 0 && (
+            <span className="flex items-center gap-1">
+              <Bug className="size-3" />
+              {task.bugsConhecidos.length}
+            </span>
           )}
         </div>
-      </CardContent>
-    </Card>
+        {task.qaLinks[0] && (
+          <Link href={task.qaLinks[0].href} className="text-primary hover:underline flex items-center gap-0.5">
+            Testar <ChevronRight className="size-3" />
+          </Link>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -611,82 +402,24 @@ function TaskCard({ task, onEdit }: { task: BoardTask; onEdit: (task: BoardTask)
 // Column
 // ==============================
 
-function Column({ status, tasks, onEdit }: { status: TaskStatus; tasks: BoardTask[]; onEdit: (task: BoardTask) => void }) {
-  const config = statusConfig[status];
+function Column({ status, tasks, onEdit }: { status: TaskStatus; tasks: BoardTask[]; onEdit: (t: BoardTask) => void }) {
+  const cfg = statusConfig[status];
 
   return (
-    <div className="flex flex-col gap-3 min-w-0">
-      <div className="flex items-center gap-2 px-1">
-        <span className={`size-2 rounded-full shrink-0 ${config.dotColor}`} />
-        <h3 className={`text-sm font-semibold ${config.color}`}>{config.label}</h3>
-        <span className="ml-auto flex size-5 items-center justify-center rounded-full bg-secondary text-xs font-medium text-muted-foreground">
-          {tasks.length}
-        </span>
+    <div className="flex flex-col gap-2.5 min-w-0">
+      <div className="flex items-center gap-2 px-0.5 pb-1">
+        <span className={`size-1.5 rounded-full ${cfg.dot}`} />
+        <span className="text-xs font-medium text-muted-foreground">{cfg.label}</span>
+        <span className="text-xs text-muted-foreground/60">{tasks.length}</span>
       </div>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         {tasks.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-border p-6 text-center">
-            <p className="text-xs text-muted-foreground">Nenhuma tarefa</p>
+          <div className="rounded-lg border border-dashed border-border py-8 text-center">
+            <p className="text-xs text-muted-foreground">Vazio</p>
           </div>
         ) : (
-          tasks.map(task => <TaskCard key={task.id} task={task} onEdit={onEdit} />)
+          tasks.map(t => <TaskCard key={t.id} task={t} onEdit={onEdit} />)
         )}
-      </div>
-    </div>
-  );
-}
-
-// ==============================
-// Stats bar
-// ==============================
-
-function StatsBar({ tasks }: { tasks: BoardTask[] }) {
-  const total = tasks.length;
-  const concluidas = tasks.filter(t => t.status === "concluido").length;
-  const emProgresso = tasks.filter(t => t.status === "em_progresso").length;
-  const backlog = tasks.filter(t => t.status === "backlog").length;
-  const totalBugs = tasks.reduce((acc, t) => acc + t.bugsConhecidos.length, 0);
-  const progressPercent = Math.round((concluidas / total) * 100);
-
-  return (
-    <div className="flex flex-wrap items-center gap-6">
-      <div className="flex items-center gap-3">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center justify-between gap-8">
-            <span className="text-xs text-muted-foreground">Progresso geral</span>
-            <span className="text-xs font-bold text-foreground">{progressPercent}%</span>
-          </div>
-          <div className="h-1.5 w-40 rounded-full bg-secondary">
-            <div
-              className="h-1.5 rounded-full bg-primary transition-all"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="h-6 w-px bg-border" />
-      <div className="flex items-center gap-5 text-xs">
-        <div className="flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-muted-foreground" />
-          <span className="text-muted-foreground">Backlog</span>
-          <span className="font-bold text-foreground">{backlog}</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-blue-400" />
-          <span className="text-muted-foreground">Em progresso</span>
-          <span className="font-bold text-foreground">{emProgresso}</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-green-600" />
-          <span className="text-muted-foreground">Concluído</span>
-          <span className="font-bold text-foreground">{concluidas}</span>
-        </div>
-      </div>
-      <div className="h-6 w-px bg-border" />
-      <div className="flex items-center gap-1.5 text-xs">
-        <Bug className="size-3.5 text-rose-400" />
-        <span className="text-muted-foreground">Bugs mapeados</span>
-        <span className="font-bold text-foreground">{totalBugs}</span>
       </div>
     </div>
   );
@@ -705,88 +438,57 @@ export default function EcommerceBoardPage() {
     setEditingTask(null);
   }
 
-  const tasksByStatus = (status: TaskStatus) => tasks.filter(t => t.status === status);
+  const tasksByStatus = (s: TaskStatus) => tasks.filter(t => t.status === s);
+  const total = tasks.length;
+  const done = tasks.filter(t => t.status === "concluido").length;
+  const pct = Math.round((done / total) * 100);
 
   return (
     <div className="flex flex-col gap-6 animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col gap-4 animate-slide-in-up">
-        <Link
-          href="/ecommerce"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors w-fit"
-        >
-          <ArrowLeft className="size-4" />
-          Voltar à loja
+      <div className="flex flex-col gap-3 animate-slide-in-up">
+        <Link href="/ecommerce" className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors w-fit">
+          <ArrowLeft className="size-3.5" /> Voltar
         </Link>
 
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <ClipboardList className="size-5 text-primary" />
-              <h1 className="text-2xl font-bold tracking-tight">Board de Tarefas</h1>
-            </div>
-            <p className="text-sm text-muted-foreground max-w-xl">
-              Histórias de desenvolvimento do e-commerce. Clique em{" "}
-              <Pencil className="size-3 inline" /> para editar qualquer tarefa e vincular cenários de teste.
-            </p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <ClipboardList className="size-5 text-primary" />
+            <h1 className="text-xl font-bold tracking-tight">Board</h1>
           </div>
-          <div className="flex gap-2">
-            <Link href="/api-playground">
-              <Button variant="outline" size="sm" className="gap-2">
-                <Activity className="size-4" />
-                API Playground
-              </Button>
-            </Link>
-            <Link href="/cenarios">
-              <Button variant="outline" size="sm" className="gap-2">
-                <ListChecks className="size-4" />
-                Cenários
-              </Button>
-            </Link>
-          </div>
-        </div>
 
-        {/* Stats */}
-        <div className="rounded-lg border border-border bg-card px-4 py-3">
-          <StatsBar tasks={tasks} />
+          <div className="flex items-center gap-4">
+            {/* Progress inline */}
+            <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
+              <span>{done}/{total}</span>
+              <div className="h-1 w-20 rounded-full bg-secondary">
+                <div className="h-1 rounded-full bg-primary transition-all duration-300" style={{ width: `${pct}%` }} />
+              </div>
+              <span className="font-medium text-foreground">{pct}%</span>
+            </div>
+
+            <div className="flex gap-1.5">
+              <Link href="/api-playground">
+                <Button variant="outline" size="xs" className="gap-1"><Send className="size-3" /> API</Button>
+              </Link>
+              <Link href="/cenarios">
+                <Button variant="outline" size="xs" className="gap-1"><ListChecks className="size-3" /> Cenários</Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Kanban */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3 stagger">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-3 stagger">
         {columns.map(status => (
-          <Column
-            key={status}
-            status={status}
-            tasks={tasksByStatus(status)}
-            onEdit={setEditingTask}
-          />
+          <Column key={status} status={status} tasks={tasksByStatus(status)} onEdit={setEditingTask} />
         ))}
-      </div>
-
-      {/* Legenda de módulos */}
-      <div className="rounded-lg border border-border bg-card px-4 py-3">
-        <p className="text-xs font-medium text-muted-foreground mb-3">Módulos de QA disponíveis</p>
-        <div className="flex flex-wrap gap-4">
-          {Object.entries(moduleConfig).map(([key, config]) => {
-            const Icon = config.icon;
-            return (
-              <div key={key} className="flex items-center gap-1.5">
-                <Icon className={`size-3.5 ${config.color}`} />
-                <span className="text-xs text-muted-foreground">{config.label}</span>
-              </div>
-            );
-          })}
-        </div>
       </div>
 
       {/* Edit Modal */}
       {editingTask && (
-        <EditModal
-          task={editingTask}
-          onClose={() => setEditingTask(null)}
-          onSave={handleSave}
-        />
+        <EditModal task={editingTask} onClose={() => setEditingTask(null)} onSave={handleSave} />
       )}
     </div>
   );
