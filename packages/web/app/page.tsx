@@ -7,49 +7,33 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FlaskConical, Send, ListChecks, ClipboardList, ArrowRight, ShoppingBag, BookOpen, Map } from "lucide-react";
+import { FlaskConical, Send, Target, Layers, ArrowRight, BookOpen, Map } from "lucide-react";
 
 const modules = [
+  {
+    href: "/missoes",
+    icon: Target,
+    titulo: "Missões",
+    descricao:
+      "Prove bugs reais com automação. Cada missão tem objetivo, dica e snippet pra você adaptar.",
+    stats: "8 missões · 2 níveis",
+  },
+  {
+    href: "/alvos",
+    icon: Layers,
+    titulo: "Alvos",
+    descricao:
+      "Documentação dos sistemas que você vai testar — endpoints, seletores e bugs conhecidos.",
+    stats: "API · E-commerce · Form",
+  },
   {
     href: "/api-playground",
     icon: Send,
     titulo: "API Playground",
     descricao:
-      "Envie requests para uma API com bugs e explore os endpoints disponíveis.",
+      "Envie requests manualmente e explore os endpoints disponíveis antes de automatizar.",
     stats: "10 endpoints",
   },
-  {
-    href: "/cenarios",
-    icon: ListChecks,
-    titulo: "Cenarios de Teste",
-    descricao:
-      "Cenarios guiados com objetivos claros para praticar tecnicas de QA.",
-    stats: "5 cenarios",
-  },
-  {
-    href: "/ecommerce/board",
-    icon: ClipboardList,
-    titulo: "Board de Tarefas",
-    descricao:
-      "Kanban com as historias do e-commerce. Cada card conecta a um modulo de QA para praticar.",
-    stats: "8 tarefas",
-  },
-  {
-    href: "/ecommerce",
-    icon: ShoppingBag,
-    titulo: "E-commerce",
-    descricao:
-      "Loja virtual com bugs propositais e um board de tarefas que conecta todos os modulos do lab.",
-    stats: "7 bugs · board",
-  },
-  // {
-  //   href: "/datas",
-  //   icon: Calendar,
-  //   titulo: "Datas Bugadas",
-  //   descricao:
-  //     "Calendarios, timers e fusos horarios com 10 bugs propositais para encontrar.",
-  //   stats: "10 bugs",
-  // },
   {
     href: "/blog",
     icon: BookOpen,
@@ -58,22 +42,6 @@ const modules = [
       "Artigos sobre qualidade de software, tecnicas de teste e boas praticas para QAs.",
     stats: "5 artigos",
   },
-  // {
-  //   href: "/desafios",
-  //   icon: Trophy,
-  //   titulo: "Desafios",
-  //   descricao:
-  //     "Desafios semanais e mensais para a comunidade. Aceite, complete os passos e acumule XP.",
-  //   stats: "4 semanais · 4 mensais",
-  // },
-  // {
-  //   href: "/pdca",
-  //   icon: SearchCheck,
-  //   titulo: "Análise PDCA",
-  //   descricao:
-  //     "Investigue bugs com o ciclo PDCA: registre, planeje, execute e documente a causa raiz com 5 Porquês.",
-  //   stats: "6 etapas · 3 templates",
-  // },
   {
     href: "/roadmap",
     icon: Map,
@@ -144,8 +112,8 @@ export default function DashboardPage() {
                 1
               </span>
               <span>
-                Acesse o <strong className="text-foreground">API Playground</strong> e
-                envie sua primeira request para <code className="rounded bg-secondary px-1.5 py-0.5 font-mono text-xs">GET /api/users</code>
+                Abra <strong className="text-foreground">Alvos</strong> e
+                leia os endpoints, seletores e bugs conhecidos dos sistemas que você vai testar
               </span>
             </li>
             <li className="flex gap-3">
@@ -153,8 +121,8 @@ export default function DashboardPage() {
                 2
               </span>
               <span>
-                Explore os <strong className="text-foreground">Cenarios</strong> para
-                praticar com objetivos guiados e dicas
+                Escolha uma <strong className="text-foreground">Missão</strong> pelo
+                seu nível, leia o objetivo e tente escrever o teste antes de ver o snippet
               </span>
             </li>
             <li className="flex gap-3">
@@ -162,8 +130,8 @@ export default function DashboardPage() {
                 3
               </span>
               <span>
-                Abra o <strong className="text-foreground">Board de Tarefas</strong> e
-                navegue pelas historias do e-commerce para ver os bugs mapeados e os cenarios vinculados
+                Use o <strong className="text-foreground">API Playground</strong> para
+                explorar manualmente os endpoints antes de automatizar
               </span>
             </li>
           </ol>

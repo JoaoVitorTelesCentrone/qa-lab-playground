@@ -6,13 +6,9 @@ import {
   FlaskConical,
   Home,
   Send,
-  ListChecks,
-  ClipboardList,
-  ShoppingBag,
-  // Calendar, // Datas comentado
+  Target,
+  Layers,
   BookOpen,
-  // Trophy, // Desafios comentado
-  // SearchCheck, // PDCA comentado
   Map,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -30,53 +26,29 @@ const navItems = [
     exact: true,
   },
   {
+    href: "/missoes",
+    label: "Missões",
+    icon: Target,
+    exact: false,
+  },
+  {
+    href: "/alvos",
+    label: "Alvos",
+    icon: Layers,
+    exact: false,
+  },
+  {
     href: "/api-playground",
     label: "API Playground",
     icon: Send,
     exact: false,
   },
   {
-    href: "/cenarios",
-    label: "Cenarios",
-    icon: ListChecks,
-    exact: false,
-  },
-  {
-    href: "/ecommerce/board",
-    label: "Board",
-    icon: ClipboardList,
-    exact: false,
-  },
-  {
-    href: "/ecommerce",
-    label: "E-commerce",
-    icon: ShoppingBag,
-    exact: true,
-  },
-  // {
-  //   href: "/datas",
-  //   label: "Datas",
-  //   icon: Calendar,
-  //   exact: false,
-  // },
-  {
     href: "/blog",
     label: "Blog",
     icon: BookOpen,
     exact: false,
   },
-  // {
-  //   href: "/desafios",
-  //   label: "Desafios",
-  //   icon: Trophy,
-  //   exact: false,
-  // },
-  // {
-  //   href: "/pdca",
-  //   label: "PDCA",
-  //   icon: SearchCheck,
-  //   exact: false,
-  // },
   {
     href: "/roadmap",
     label: "Roadmap",

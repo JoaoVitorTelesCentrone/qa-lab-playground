@@ -1,0 +1,352 @@
+"use client";
+
+import { useState } from "react";
+import { Target, Lightbulb, Terminal, ChevronDown, ChevronUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
+type Nivel = "iniciante" | "intermediario";
+type PainelAberto = "dica" | "snippet" | null;
+
+interface Missao {
+  id: number;
+  nivel: Nivel;
+  titulo: string;
+  objetivo: string;
+  alvo: string;
+  ferramentas: string[];
+  dica: string;
+  snippet: string;
+}
+
+const missoes: Missao[] = [
+  {
+    id: 1,
+    nivel: "iniciante",
+    titulo: "O DELETE que não deleta",
+    objetivo:
+      "Prove que DELETE /api/products/:id retorna 204 mas o recurso continua existindo após a requisição.",
+    alvo: "API",
+    ferramentas: ["Playwright", "Cypress"],
+    dica: "Faça o DELETE e em seguida um GET no mesmo ID. Se o GET retornar 200 com dados, o bug está confirmado. Seu teste deve falhar no assert do GET.",
+    snippet: `// Playwright — API Testing
+test('DELETE não remove o produto', async ({ request }) => {
+  const id = 1
+
+  await request.delete(\`/api/products/\${id}\`)
+
+  const res = await request.get(\`/api/products/\${id}\`)
+  expect(res.status()).toBe(404) // vai falhar — bug confirmado
+})`,
+  },
+  {
+    id: 2,
+    nivel: "iniciante",
+    titulo: "O health check mentiroso",
+    objetivo:
+      "Prove que GET /api/health reporta todos os serviços como 'healthy' mesmo quando a API está falhando.",
+    alvo: "API",
+    ferramentas: ["Playwright", "Cypress"],
+    dica: "Compare o que o health check responde com o que os outros endpoints retornam na prática. Um health check honesto deve refletir falhas reais.",
+    snippet: `// Playwright — API Testing
+test('health check deve refletir falhas reais', async ({ request }) => {
+  const health = await request.get('/api/health')
+  const body = await health.json()
+
+  // Força erro num endpoint real
+  const broken = await request.get('/api/products/99999')
+
+  // Se health diz "healthy" mas endpoint falha, é bug
+  if (broken.status() !== 200) {
+    expect(body.status).not.toBe('healthy') // vai falhar
+  }
+})`,
+  },
+  {
+    id: 3,
+    nivel: "iniciante",
+    titulo: "Paginação que pula itens",
+    objetivo:
+      "Prove que a listagem de produtos pula registros ao paginar — IDs da página 1 somem ou se repetem na página 2.",
+    alvo: "API",
+    ferramentas: ["Playwright", "K6"],
+    dica: "Busque todas as páginas e compare os IDs retornados. Se houver IDs duplicados ou ausentes entre as páginas, o bug está confirmado.",
+    snippet: `// Playwright — API Testing
+test('paginação não deve pular itens', async ({ request }) => {
+  const p1 = await (await request.get('/api/products?page=1&limit=5')).json()
+  const p2 = await (await request.get('/api/products?page=2&limit=5')).json()
+
+  const ids1 = p1.data.map((p: any) => p.id)
+  const ids2 = p2.data.map((p: any) => p.id)
+
+  // Não deve haver IDs repetidos entre páginas
+  const overlap = ids1.filter((id: number) => ids2.includes(id))
+  expect(overlap).toHaveLength(0) // vai falhar — bug confirmado
+})`,
+  },
+  {
+    id: 4,
+    nivel: "iniciante",
+    titulo: "O formulário com 5 bugs",
+    objetivo:
+      "Encontre e documente os 5 bugs escondidos no formulário de cadastro usando automação de UI.",
+    alvo: "Form Bugado",
+    ferramentas: ["Playwright", "Cypress"],
+    dica: "Teste cada campo com valores válidos, inválidos e vazios. Foque em: validação de e-mail, campos obrigatórios, senhas e comportamento do submit.",
+    snippet: `// Playwright — UI Testing
+test('formulário deve rejeitar e-mail inválido', async ({ page }) => {
+  await page.goto('/form-bugado')
+
+  await page.fill('[name="email"]', 'emailsemarrobase')
+  await page.click('[type="submit"]')
+
+  // Deve exibir mensagem de erro
+  await expect(
+    page.locator('[data-testid="email-error"]')
+  ).toBeVisible() // vai falhar — bug confirmado
+})`,
+  },
+  {
+    id: 5,
+    nivel: "intermediario",
+    titulo: "Contrato de resposta inconsistente",
+    objetivo:
+      "Crie um teste que detecte quando GET /api/orders/:id alterna entre camelCase e snake_case na mesma resposta.",
+    alvo: "API",
+    ferramentas: ["Playwright", "Cypress"],
+    dica: "Execute o mesmo request várias vezes e compare as chaves da resposta. Se as chaves mudarem entre chamadas, o contrato da API está quebrado.",
+    snippet: `// Playwright — API Testing
+test('contrato de resposta deve ser consistente', async ({ request }) => {
+  const calls = await Promise.all(
+    Array.from({ length: 5 }, () => request.get('/api/orders/1'))
+  )
+  const bodies = await Promise.all(calls.map(r => r.json()))
+  const keysets = bodies.map(b => Object.keys(b).sort().join(','))
+
+  const unique = new Set(keysets)
+  expect(unique.size).toBe(1) // vai falhar — chaves mudam a cada request
+})`,
+  },
+  {
+    id: 6,
+    nivel: "intermediario",
+    titulo: "Carrinho sem validação de estoque",
+    objetivo:
+      "Prove via E2E que é possível adicionar ao carrinho mais unidades do que o estoque disponível.",
+    alvo: "E-commerce",
+    ferramentas: ["Playwright", "Cypress"],
+    dica: "Identifique um produto com estoque limitado, adicione-o múltiplas vezes e verifique se a quantidade ultrapassa o estoque. Use os data-testid documentados em Alvos.",
+    snippet: `// Playwright — E2E
+test('carrinho não deve ultrapassar o estoque', async ({ page }) => {
+  await page.goto('/ecommerce')
+
+  const card = page.locator('[data-testid="product-card"]').first()
+  const estoqueText = await card.locator('[data-testid="stock"]').textContent()
+  const max = parseInt(estoqueText ?? '0')
+
+  // Clica uma vez a mais que o estoque
+  for (let i = 0; i <= max; i++) {
+    await card.locator('[data-testid="add-to-cart"]').click()
+  }
+
+  const qty = page.locator('[data-testid="cart-quantity"]').first()
+  await expect(qty).toHaveText(String(max)) // vai falhar — aceita mais
+})`,
+  },
+  {
+    id: 7,
+    nivel: "intermediario",
+    titulo: "Login sem rate limiting",
+    objetivo:
+      "Prove que o endpoint de autenticação não bloqueia tentativas repetidas — é possível tentar login ilimitadas vezes.",
+    alvo: "API",
+    ferramentas: ["Playwright", "K6"],
+    dica: "Faça 20+ requisições com credenciais erradas em sequência. Se nenhuma retornar 429 (Too Many Requests), o bug está confirmado.",
+    snippet: `// Playwright — API Security
+test('login deve ter rate limiting', async ({ request }) => {
+  const attempts = await Promise.all(
+    Array.from({ length: 20 }, () =>
+      request.post('/api/auth/login', {
+        data: { email: 'test@test.com', password: 'errado' },
+      })
+    )
+  )
+
+  const statuses = attempts.map(r => r.status())
+  expect(statuses).toContain(429) // vai falhar — sem rate limiting
+})`,
+  },
+  {
+    id: 8,
+    nivel: "intermediario",
+    titulo: "Suite de smoke da API",
+    objetivo:
+      "Monte uma suite que valide os 5 endpoints principais da API. Todos devem responder com o status esperado em menos de 2s.",
+    alvo: "API",
+    ferramentas: ["Playwright", "K6"],
+    dica: "Um smoke test é rápido e valida o básico: o endpoint existe, responde no tempo certo e retorna o formato esperado. Não teste lógica de negócio aqui.",
+    snippet: `// Playwright — API Smoke Suite
+const endpoints = [
+  { method: 'GET',  path: '/api/health',       expected: 200 },
+  { method: 'GET',  path: '/api/users',         expected: 200 },
+  { method: 'GET',  path: '/api/products',      expected: 200 },
+  { method: 'GET',  path: '/api/orders',        expected: 200 },
+  { method: 'GET',  path: '/api/products/9999', expected: 404 },
+]
+
+for (const ep of endpoints) {
+  test(\`\${ep.method} \${ep.path} → \${ep.expected}\`, async ({ request }) => {
+    const res = await request[ep.method.toLowerCase() as 'get'](ep.path)
+    expect(res.status()).toBe(ep.expected)
+  })
+}`,
+  },
+];
+
+const nivelConfig: Record<Nivel, { label: string; classes: string }> = {
+  iniciante:     { label: "Iniciante",     classes: "bg-green-100 text-green-700" },
+  intermediario: { label: "Intermediário", classes: "bg-blue-100 text-blue-700" },
+};
+
+function MissaoCard({ missao }: { missao: Missao }) {
+  const [painel, setPainel] = useState<PainelAberto>(null);
+  const cfg = nivelConfig[missao.nivel];
+
+  function toggle(tipo: "dica" | "snippet") {
+    setPainel(prev => (prev === tipo ? null : tipo));
+  }
+
+  return (
+    <div className="rounded-xl border border-border bg-card flex flex-col transition-all duration-200 hover:border-primary/25 hover:shadow-sm">
+      {/* Header */}
+      <div className="p-5 space-y-3 flex-1">
+        <div className="flex items-center justify-between">
+          <span className="font-mono text-xs text-muted-foreground">#{String(missao.id).padStart(2, "0")}</span>
+          <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${cfg.classes}`}>
+            {cfg.label}
+          </span>
+        </div>
+
+        <h3 className="text-sm font-semibold leading-snug">{missao.titulo}</h3>
+
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          {missao.objetivo}
+        </p>
+
+        <div className="flex items-center gap-2 flex-wrap pt-1">
+          <span className="rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground">
+            {missao.alvo}
+          </span>
+          {missao.ferramentas.map(f => (
+            <span key={f} className="rounded-md bg-secondary px-2 py-0.5 text-xs text-muted-foreground">
+              {f}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Painel expansível */}
+      {painel && (
+        <div className="border-t border-border mx-5 mb-0" />
+      )}
+      {painel === "dica" && (
+        <div className="px-5 py-4 text-xs text-muted-foreground leading-relaxed bg-amber-50/60 rounded-b-none border-x-0">
+          <div className="flex items-center gap-1.5 mb-2 text-amber-700 font-medium">
+            <Lightbulb className="size-3.5" />
+            Dica
+          </div>
+          {missao.dica}
+        </div>
+      )}
+      {painel === "snippet" && (
+        <div className="px-5 py-4 bg-gray-900 rounded-b-none overflow-x-auto">
+          <pre className="text-xs text-gray-100 font-mono leading-relaxed whitespace-pre">
+            {missao.snippet}
+          </pre>
+        </div>
+      )}
+
+      {/* Footer */}
+      <div className="flex items-center gap-2 px-5 py-3 border-t border-border">
+        <button
+          onClick={() => toggle("dica")}
+          className={`flex items-center gap-1.5 text-xs rounded-md px-2.5 py-1.5 transition-colors ${
+            painel === "dica"
+              ? "bg-amber-100 text-amber-700"
+              : "text-muted-foreground hover:bg-secondary"
+          }`}
+        >
+          <Lightbulb className="size-3.5" />
+          Dica
+          {painel === "dica" ? <ChevronUp className="size-3" /> : <ChevronDown className="size-3" />}
+        </button>
+        <button
+          onClick={() => toggle("snippet")}
+          className={`flex items-center gap-1.5 text-xs rounded-md px-2.5 py-1.5 transition-colors ${
+            painel === "snippet"
+              ? "bg-gray-800 text-gray-100"
+              : "text-muted-foreground hover:bg-secondary"
+          }`}
+        >
+          <Terminal className="size-3.5" />
+          Snippet
+          {painel === "snippet" ? <ChevronUp className="size-3" /> : <ChevronDown className="size-3" />}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default function MissoesPage() {
+  const [filtro, setFiltro] = useState<"todos" | Nivel>("todos");
+
+  const filtradas = filtro === "todos" ? missoes : missoes.filter(m => m.nivel === filtro);
+
+  const filtros: { value: "todos" | Nivel; label: string }[] = [
+    { value: "todos",         label: "Todas" },
+    { value: "iniciante",     label: "Iniciante" },
+    { value: "intermediario", label: "Intermediário" },
+  ];
+
+  return (
+    <div className="space-y-8 animate-fade-in">
+      {/* Header */}
+      <div className="space-y-2 animate-slide-in-up">
+        <div className="flex items-center gap-2.5">
+          <Target className="size-6 text-primary" />
+          <h1 className="text-2xl font-bold tracking-tight">Missões</h1>
+        </div>
+        <p className="text-sm text-muted-foreground max-w-xl">
+          Cada missão tem um bug real pra você provar com automação. Escolha pelo seu nível, leia o objetivo e escreva o teste.
+        </p>
+      </div>
+
+      {/* Filtros */}
+      <div className="flex items-center gap-1.5">
+        {filtros.map(f => (
+          <button
+            key={f.value}
+            onClick={() => setFiltro(f.value)}
+            className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-all ${
+              filtro === f.value
+                ? "bg-primary text-white"
+                : "text-muted-foreground hover:bg-secondary"
+            }`}
+          >
+            {f.label}
+          </button>
+        ))}
+        <span className="ml-auto text-xs text-muted-foreground">
+          {filtradas.length} missão{filtradas.length !== 1 ? "ões" : ""}
+        </span>
+      </div>
+
+      {/* Grid */}
+      <div className="grid gap-4 sm:grid-cols-2 stagger">
+        {filtradas.map(m => (
+          <MissaoCard key={m.id} missao={m} />
+        ))}
+      </div>
+    </div>
+  );
+}
