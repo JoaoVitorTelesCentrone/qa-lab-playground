@@ -9,8 +9,8 @@ O **QA Lab Playground** é uma plataforma educacional desenvolvida especificamen
 
 ## 🚀 Principais Funcionalidades (Features)
 
-### 1. API Playground com "Modo Caos"
-Uma API simulada contendo 10 endpoints críticos. O grande diferencial é o controle do **Modo Caos**, que permite injetar falhas propositais e realistas, tais como:
+### 1. API Playground
+Uma API simulada contendo 10 endpoints críticos. O ambiente permite interagir com falhas propositais e realistas para fins de estudo, tais como:
 - Erros 500 intermitentes
 - Retorno de dados incorretos ou formatos mutáveis
 - Timeouts severos e intermitentes
@@ -27,6 +27,18 @@ Para direcionar o aprendizado, a plataforma oferece 5 cenários estruturados:
 
 ### 3. Formulário "Bugado" (Buggy Form)
 Um formulário de cadastro na interface que contém exatamente 5 bugs propositais ocultos. Excelente para treinar o olhar clínico e a criação de automações de teste de UI.
+
+### 4. Gestão de Testes (E-commerce Board)
+Um quadro Kanban interativo que correlaciona as diversas funcionalidades da plataforma (Carrinho, Login, Datas, etc) com os seus respectivos "bugs conhecidos". Permite estruturar quais áreas precisam ser testadas e acompanhar o progresso das validações da equipe.
+
+### 5. Análise de Causa Raiz (Módulo PDCA)
+Uma ferramenta embutida para investigar bugs de forma estruturada utilizando o ciclo PDCA (Plan, Do, Check, Act). Conta com templates de análise, gamificação (badges) conforme as resoluções avançam e registro histórico, ideal para consolidar a mentalidade analítica da equipe de QA.
+
+### 6. Desafios Gamificados (Mentoria Prática)
+Uma área dedicada a missões semanais e mensais para a equipe de QA. Os usuários podem aceitar desafios focados em módulos específicos, concluir passos para validar cenários e acumular "XP" (pontos de experiência), promovendo forte engajamento e aprendizado constante.
+
+### 7. Blog QA Lab (Base de Conhecimento)
+Conta com um portal educacional integrado contendo artigos sobre qualidade de software, técnicas avançadas de teste e boas práticas. Perfeito para complementar os cenários práticos com bagagem teórica.
 
 ---
 
@@ -50,5 +62,5 @@ A solução foi construída com tecnologias modernas, garantindo performance e f
 
 ## 🎯 Próximos Passos Sugeridos
 1. Disponibilizar a plataforma para a equipe de QA realizar testes exploratórios.
-2. Criar desafios semanais baseados no "Modo Caos" para engajar o time técnico.
+2. Criar missões e desafios engajadores para o time técnico.
 3. Coletar feedback para inclusão de novos cenários de testes baseados nos problemas reais que enfrentamos em produção.

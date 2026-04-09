@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FlaskConical, Send, ListChecks, ClipboardList, ArrowRight, ShoppingBag, Calendar, BookOpen, Trophy, SearchCheck, Map } from "lucide-react";
+import { FlaskConical, Send, ListChecks, ClipboardList, ArrowRight, ShoppingBag, BookOpen, Map } from "lucide-react";
 
 const modules = [
   {
@@ -15,7 +15,7 @@ const modules = [
     icon: Send,
     titulo: "API Playground",
     descricao:
-      "Envie requests para uma API com bugs configuraveis. Ative o modo caos e descubra falhas.",
+      "Envie requests para uma API com bugs e explore os endpoints disponíveis.",
     stats: "10 endpoints",
   },
   {
@@ -42,14 +42,14 @@ const modules = [
       "Loja virtual com bugs propositais e um board de tarefas que conecta todos os modulos do lab.",
     stats: "7 bugs · board",
   },
-  {
-    href: "/datas",
-    icon: Calendar,
-    titulo: "Datas Bugadas",
-    descricao:
-      "Calendarios, timers e fusos horarios com 10 bugs propositais para encontrar.",
-    stats: "10 bugs",
-  },
+  // {
+  //   href: "/datas",
+  //   icon: Calendar,
+  //   titulo: "Datas Bugadas",
+  //   descricao:
+  //     "Calendarios, timers e fusos horarios com 10 bugs propositais para encontrar.",
+  //   stats: "10 bugs",
+  // },
   {
     href: "/blog",
     icon: BookOpen,
@@ -58,22 +58,22 @@ const modules = [
       "Artigos sobre qualidade de software, tecnicas de teste e boas praticas para QAs.",
     stats: "5 artigos",
   },
-  {
-    href: "/desafios",
-    icon: Trophy,
-    titulo: "Desafios",
-    descricao:
-      "Desafios semanais e mensais para a comunidade. Aceite, complete os passos e acumule XP.",
-    stats: "4 semanais · 4 mensais",
-  },
-  {
-    href: "/pdca",
-    icon: SearchCheck,
-    titulo: "Análise PDCA",
-    descricao:
-      "Investigue bugs com o ciclo PDCA: registre, planeje, execute e documente a causa raiz com 5 Porquês.",
-    stats: "6 etapas · 3 templates",
-  },
+  // {
+  //   href: "/desafios",
+  //   icon: Trophy,
+  //   titulo: "Desafios",
+  //   descricao:
+  //     "Desafios semanais e mensais para a comunidade. Aceite, complete os passos e acumule XP.",
+  //   stats: "4 semanais · 4 mensais",
+  // },
+  // {
+  //   href: "/pdca",
+  //   icon: SearchCheck,
+  //   titulo: "Análise PDCA",
+  //   descricao:
+  //     "Investigue bugs com o ciclo PDCA: registre, planeje, execute e documente a causa raiz com 5 Porquês.",
+  //   stats: "6 etapas · 3 templates",
+  // },
   {
     href: "/roadmap",
     icon: Map,
@@ -153,23 +153,13 @@ export default function DashboardPage() {
                 2
               </span>
               <span>
-                Ative o <strong className="text-foreground">Modo Caos</strong> e
-                observe como os endpoints comecam a falhar de formas
-                diferentes
-              </span>
-            </li>
-            <li className="flex gap-3">
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                3
-              </span>
-              <span>
                 Explore os <strong className="text-foreground">Cenarios</strong> para
                 praticar com objetivos guiados e dicas
               </span>
             </li>
             <li className="flex gap-3">
               <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                4
+                3
               </span>
               <span>
                 Abra o <strong className="text-foreground">Board de Tarefas</strong> e

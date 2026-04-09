@@ -3,7 +3,6 @@
 import { useState, useCallback } from "react";
 import { RequestPanel } from "@/components/api-runner/request-panel";
 import { ResponsePanel } from "@/components/api-runner/response-panel";
-import { ChaosPanel } from "@/components/api-runner/chaos-panel";
 import { sendRequest, type ApiRequestResult } from "@/lib/api-client";
 
 interface HistoryEntry {
@@ -65,28 +64,22 @@ export default function ApiPlaygroundPage() {
       <div className="animate-slide-in-up">
         <h1 className="text-2xl font-bold tracking-tight">API Playground</h1>
         <p className="text-sm text-muted-foreground">
-          Envie requests para a API e explore os endpoints. Ative o modo caos
-          para descobrir bugs.
+          Envie requests para a API e explore os endpoints disponíveis.
         </p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_300px] stagger">
-        <div className="space-y-6">
-          <RequestPanel onSend={handleSend} loading={loading} />
-          <ResponsePanel
-            response={currentResponse}
-            history={history.map((h) => ({
-              method: h.method,
-              url: h.url,
-              status: h.status,
-              duration: h.duration,
-            }))}
-            onHistorySelect={handleHistorySelect}
-          />
-        </div>
-        <div>
-          <ChaosPanel />
-        </div>
+      <div className="space-y-6 stagger">
+        <RequestPanel onSend={handleSend} loading={loading} />
+        <ResponsePanel
+          response={currentResponse}
+          history={history.map((h) => ({
+            method: h.method,
+            url: h.url,
+            status: h.status,
+            duration: h.duration,
+          }))}
+          onHistorySelect={handleHistorySelect}
+        />
       </div>
     </div>
   );

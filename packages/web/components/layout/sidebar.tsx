@@ -9,10 +9,10 @@ import {
   ListChecks,
   ClipboardList,
   ShoppingBag,
-  Calendar,
+  // Calendar, // Datas comentado
   BookOpen,
-  Trophy,
-  SearchCheck,
+  // Trophy, // Desafios comentado
+  // SearchCheck, // PDCA comentado
   Map,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -53,30 +53,30 @@ const navItems = [
     icon: ShoppingBag,
     exact: true,
   },
-  {
-    href: "/datas",
-    label: "Datas",
-    icon: Calendar,
-    exact: false,
-  },
+  // {
+  //   href: "/datas",
+  //   label: "Datas",
+  //   icon: Calendar,
+  //   exact: false,
+  // },
   {
     href: "/blog",
     label: "Blog",
     icon: BookOpen,
     exact: false,
   },
-  {
-    href: "/desafios",
-    label: "Desafios",
-    icon: Trophy,
-    exact: false,
-  },
-  {
-    href: "/pdca",
-    label: "PDCA",
-    icon: SearchCheck,
-    exact: false,
-  },
+  // {
+  //   href: "/desafios",
+  //   label: "Desafios",
+  //   icon: Trophy,
+  //   exact: false,
+  // },
+  // {
+  //   href: "/pdca",
+  //   label: "PDCA",
+  //   icon: SearchCheck,
+  //   exact: false,
+  // },
   {
     href: "/roadmap",
     label: "Roadmap",
