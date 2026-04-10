@@ -55,9 +55,9 @@ export function ChaosPanel() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {allEnabled ? (
-            <Zap className="size-4 text-amber-600" />
+            <Zap className="size-4 text-neon" />
           ) : (
-            <ZapOff className="size-4 text-muted-foreground" />
+            <ZapOff className="size-4 text-off-white/50" />
           )}
           <span className="text-sm font-medium">Modo Caos</span>
         </div>
@@ -75,15 +75,15 @@ export function ChaosPanel() {
           <button
             key={key}
             onClick={() => toggleEndpoint(key, value.enabled)}
-            className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-xs hover:bg-secondary transition-colors"
+            className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-xs hover:bg-off-white/5 transition-colors"
           >
-            <span className="font-mono text-muted-foreground">{key}</span>
+            <span className="font-mono text-off-white/50">{key}</span>
             <Badge
               variant="secondary"
               className={
                 value.enabled
-                  ? "bg-amber-100 text-amber-600"
-                  : "bg-secondary text-muted-foreground"
+                  ? "bg-[#F4A8A3]/10 text-[#F4A8A3]"
+                  : "bg-off-white/10 text-off-white/50"
               }
             >
               {value.enabled ? "ON" : "OFF"}

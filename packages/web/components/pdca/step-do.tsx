@@ -26,7 +26,7 @@ function Tip({ id, active }: { id: string; active: boolean }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <HelpCircle className="size-3.5 text-amber-500 cursor-help shrink-0" />
+        <HelpCircle className="size-3.5 text-[#F4A8A3] cursor-help shrink-0" />
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-xs text-xs">
         {text}
@@ -36,9 +36,9 @@ function Tip({ id, active }: { id: string; active: boolean }) {
 }
 
 const statusIcon: Record<HypothesisStatus, { icon: React.ElementType; class: string }> = {
-  pendente:   { icon: Circle, class: "text-muted-foreground/40" },
-  confirmada: { icon: Check,  class: "text-green-500" },
-  descartada: { icon: X,      class: "text-red-400" },
+  pendente:   { icon: Circle, class: "text-off-white/50/40" },
+  confirmada: { icon: Check,  class: "text-neon" },
+  descartada: { icon: X,      class: "text-coral" },
 };
 
 export function StepDo({ data, hipoteses, onChange, learning }: Props) {
@@ -91,10 +91,10 @@ export function StepDo({ data, hipoteses, onChange, learning }: Props) {
           const StatusIcon = si.icon;
 
           return (
-            <div key={i} className="rounded-lg border border-border p-4 space-y-3">
+            <div key={i} className="rounded-lg border border-mint/10 p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-mint/20 text-xs font-bold text-mint">
                     {i + 1}
                   </span>
                   <span className="text-sm font-medium">{h}</span>
@@ -102,9 +102,9 @@ export function StepDo({ data, hipoteses, onChange, learning }: Props) {
                 <button
                   onClick={() => cycleStatus(i)}
                   className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all ${
-                    test.status === "confirmada" ? "border-green-200 bg-green-50 text-green-600" :
-                    test.status === "descartada" ? "border-red-200 bg-red-50 text-red-500" :
-                    "border-border text-muted-foreground hover:border-primary/30"
+                    test.status === "confirmada" ? "border-neon/30 bg-neon/10 text-neon" :
+                    test.status === "descartada" ? "border-coral/30 bg-coral/10 text-coral" :
+                    "border-mint/10 text-off-white/50 hover:border-mint/30"
                   }`}
                 >
                   <StatusIcon className={`size-3 ${si.class}`} />
@@ -116,7 +116,7 @@ export function StepDo({ data, hipoteses, onChange, learning }: Props) {
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="space-y-1">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs text-muted-foreground">O que foi testado?</span>
+                    <span className="text-xs text-off-white/50">O que foi testado?</span>
                     <Tip id="do.teste" active={learning} />
                   </div>
                   <Input
@@ -127,7 +127,7 @@ export function StepDo({ data, hipoteses, onChange, learning }: Props) {
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs text-muted-foreground">Resultado encontrado</span>
+                    <span className="text-xs text-off-white/50">Resultado encontrado</span>
                     <Tip id="do.resultado" active={learning} />
                   </div>
                   <Input
@@ -156,14 +156,14 @@ export function StepDo({ data, hipoteses, onChange, learning }: Props) {
 
               return (
                 <div key={i} className="relative flex items-start gap-3">
-                  <div className="absolute -left-4 top-1 flex size-4 items-center justify-center rounded-full bg-background border border-border">
+                  <div className="absolute -left-4 top-1 flex size-4 items-center justify-center rounded-full bg-[#3D5454] border border-mint/10">
                     <StatusIcon className={`size-2.5 ${si.class}`} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium truncate">{label}</p>
-                    <p className="text-xs text-muted-foreground">{t.resultado || "Sem resultado"}</p>
+                    <p className="text-xs text-off-white/50">{t.resultado || "Sem resultado"}</p>
                   </div>
-                  <span className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
+                  <span className="flex items-center gap-1 text-xs text-off-white/50 shrink-0">
                     <Clock className="size-3" /> {time}
                   </span>
                 </div>

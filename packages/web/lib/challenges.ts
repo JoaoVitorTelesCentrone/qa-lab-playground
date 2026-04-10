@@ -328,22 +328,22 @@ export const difficultyConfig: Record<
 > = {
   facil: {
     label: "Fácil",
-    className: "text-green-600 bg-green-100 border-green-200",
+    className: "text-neon bg-neon/20 border-neon/30",
     xpMultiplier: 1,
   },
   medio: {
     label: "Médio",
-    className: "text-amber-600 bg-amber-100 border-amber-200",
+    className: "text-off-white/80 bg-off-white/10 border-off-white/20",
     xpMultiplier: 1.5,
   },
   dificil: {
     label: "Difícil",
-    className: "text-orange-600 bg-orange-100 border-orange-200",
+    className: "text-[#F4A8A3] bg-[#F4A8A3]/10 border-[#F4A8A3]/30",
     xpMultiplier: 2,
   },
   expert: {
     label: "Expert",
-    className: "text-red-600 bg-red-100 border-red-200",
+    className: "text-coral bg-coral/20 border-coral/30",
     xpMultiplier: 3,
   },
 };
@@ -352,10 +352,10 @@ export const moduleConfig: Record<
   ChallengeModule,
   { label: string; color: string }
 > = {
-  api: { label: "API Playground", color: "text-violet-600" },
-  ecommerce: { label: "E-commerce", color: "text-orange-600" },
-  cenarios: { label: "Cenários", color: "text-sky-600" },
-  datas: { label: "Datas", color: "text-cyan-600" },
-  board: { label: "Board", color: "text-indigo-600" },
-  blog: { label: "Blog", color: "text-pink-600" },
+  api: { label: "API Playground", color: "text-mint" },
+  ecommerce: { label: "E-commerce", color: "text-[#F4A8A3]" },
+  cenarios: { label: "Cenários", color: "text-mint/80" },
+  datas: { label: "Datas", color: "text-mint/70" },
+  board: { label: "Board", color: "text-mint/60" },
+  blog: { label: "Blog", color: "text-coral/70" },
 };

@@ -56,7 +56,7 @@ function saveState(state: Record<string, ChallengeState>) {
 
 function XPBadge({ xp }: { xp: number }) {
   return (
-    <span className="flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">
+    <span className="flex items-center gap-1 rounded-xl border border-neon/30 bg-neon/10 px-2.5 py-1 text-xs font-bold text-neon">
       <Zap className="size-3" />
       {xp} XP
     </span>
@@ -80,16 +80,16 @@ function StepList({
           <button
             key={step.id}
             onClick={() => onToggleStep(step.id)}
-            className="flex w-full items-start gap-2.5 rounded-md p-2 text-left transition-colors hover:bg-secondary/50"
+            className="flex w-full items-start gap-2.5 rounded-xl p-2 text-left transition-colors hover:bg-off-white/5"
           >
             {done ? (
-              <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+              <Check className="mt-0.5 size-4 shrink-0 text-neon" />
             ) : (
-              <Circle className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+              <Circle className="mt-0.5 size-4 shrink-0 text-off-white/30" />
             )}
             <span
               className={`text-xs leading-relaxed ${
-                done ? "text-muted-foreground line-through" : "text-foreground"
+                done ? "text-off-white/40 line-through" : "text-off-white/80"
               }`}
             >
               {step.descricao}
@@ -125,12 +125,12 @@ function ChallengeCard({
   return (
     <Card
       className={`relative flex flex-col transition-colors ${
-        challenge.destaque ? "border-primary/40" : ""
-      } ${isComplete ? "border-primary/60 bg-primary/5" : ""}`}
+        challenge.destaque ? "border-neon/30" : ""
+      } ${isComplete ? "border-neon/40 bg-neon/5" : ""}`}
     >
       {challenge.destaque && !isComplete && (
         <div className="absolute -top-2.5 left-4">
-          <span className="flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-700">
+          <span className="flex items-center gap-1 rounded-xl border border-neon/40 bg-neon/20 px-2.5 py-0.5 text-xs font-bold text-neon uppercase tracking-wide">
             <Star className="size-3" />
             Destaque
           </span>
@@ -138,7 +138,7 @@ function ChallengeCard({
       )}
       {isComplete && (
         <div className="absolute -top-2.5 left-4">
-          <span className="flex items-center gap-1 rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">
+          <span className="flex items-center gap-1 rounded-xl border border-mint/30 bg-mint/20 px-2.5 py-0.5 text-xs font-bold text-mint uppercase tracking-wide">
             <Trophy className="size-3" />
             Concluído
           </span>
@@ -171,7 +171,7 @@ function ChallengeCard({
           <span className={`text-xs font-medium ${mod.color}`}>
             {mod.label}
           </span>
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1 text-xs text-off-white/50">
             <Users className="size-3" />
             {challenge.participantes} participantes
           </span>
@@ -189,15 +189,15 @@ function ChallengeCard({
         {/* Progress bar (only when accepted) */}
         {state.accepted && (
           <div className="space-y-1">
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <div className="flex items-center justify-between text-xs text-off-white/50">
               <span>Progresso</span>
               <span>
                 {state.completedSteps.length}/{challenge.passos.length} passos
               </span>
             </div>
-            <div className="h-1.5 rounded-full bg-secondary">
+            <div className="h-1.5 rounded-full bg-off-white/10">
               <div
-                className="h-1.5 rounded-full bg-primary transition-all duration-300"
+                className="h-1.5 rounded-full bg-neon transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -209,7 +209,7 @@ function ChallengeCard({
           <div>
             <button
               onClick={() => setExpanded((v) => !v)}
-              className="flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground"
+              className="flex items-center gap-1 text-xs font-medium text-off-white/50 hover:text-off-white"
             >
               <ChevronRight
                 className={`size-3.5 transition-transform ${
@@ -243,13 +243,13 @@ function ChallengeCard({
               Aceitar desafio
             </Button>
           ) : isComplete ? (
-            <span className="flex items-center gap-1 text-xs font-semibold text-primary">
+            <span className="flex items-center gap-1 text-xs font-bold text-mint uppercase tracking-wide">
               <Trophy className="size-3.5" />
               Desafio completo!
             </span>
           ) : (
-            <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Flame className="size-3.5 text-orange-500" />
+            <span className="flex items-center gap-1 text-xs text-off-white/50">
+              <Flame className="size-3.5 text-[#F4A8A3]" />
               Em progresso
             </span>
           )}
@@ -315,12 +315,21 @@ export default function DesafiosPage() {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
-      <div className="space-y-2 animate-slide-in-up">
+      <div className="space-y-4 animate-slide-in-up">
         <div className="flex items-center gap-3">
-          <Trophy className="size-7 text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight">Desafios</h1>
+          <div className="flex items-center justify-center size-10 rounded-xl bg-neon/20">
+            <Trophy className="size-5 text-neon" />
+          </div>
+          <div>
+            <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-wider text-mint italic">
+              DESAFIOS
+            </h1>
+            <p className="text-sm text-mint/50 uppercase tracking-[0.15em]">
+              Desafios semanais e mensais
+            </p>
+          </div>
         </div>
-        <p className="max-w-xl text-muted-foreground">
+        <p className="text-sm text-off-white/60 max-w-xl">
           Desafios semanais e mensais para a comunidade QA Lab. Aceite, complete
           os passos e acumule XP.
         </p>
@@ -329,67 +338,67 @@ export default function DesafiosPage() {
       {/* Stats bar */}
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 stagger-scale">
         <Card className="p-3">
-          <p className="text-xs text-muted-foreground">XP Acumulado</p>
-          <p className="mt-1 text-xl font-bold text-primary">
+          <p className="text-xs text-off-white/50 uppercase tracking-wide">XP Acumulado</p>
+          <p className="mt-1 text-xl font-bold text-neon">
             {totalXP.toLocaleString()}
           </p>
         </Card>
         <Card className="p-3">
-          <p className="text-xs text-muted-foreground">Concluídos</p>
-          <p className="mt-1 text-xl font-bold">
+          <p className="text-xs text-off-white/50 uppercase tracking-wide">Concluídos</p>
+          <p className="mt-1 text-xl font-bold text-mint">
             {completedCount}/{challenges.length}
           </p>
         </Card>
         <Card className="p-3">
-          <p className="text-xs text-muted-foreground">Semanais</p>
-          <p className="mt-1 text-xl font-bold">{semanais.length}</p>
+          <p className="text-xs text-off-white/50 uppercase tracking-wide">Semanais</p>
+          <p className="mt-1 text-xl font-bold text-off-white">{semanais.length}</p>
         </Card>
         <Card className="p-3 hidden sm:block">
-          <p className="text-xs text-muted-foreground">Mensais</p>
-          <p className="mt-1 text-xl font-bold">{mensais.length}</p>
+          <p className="text-xs text-off-white/50 uppercase tracking-wide">Mensais</p>
+          <p className="mt-1 text-xl font-bold text-off-white">{mensais.length}</p>
         </Card>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 rounded-lg border bg-secondary/30 p-1 w-fit">
+      <div className="flex items-center gap-1 border-b border-mint/10">
         <button
           onClick={() => setTab("semanal")}
-          className={`rounded-md px-4 py-1.5 text-sm font-medium transition-colors ${
+          className={`px-5 py-3 text-sm font-bold uppercase tracking-wide border-b-2 transition-all -mb-px ${
             tab === "semanal"
-              ? "bg-background shadow-sm text-foreground"
-              : "text-muted-foreground hover:text-foreground"
+              ? "border-mint text-mint"
+              : "border-transparent text-off-white/40 hover:text-off-white/70"
           }`}
         >
           Semanais
-          <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-xs text-primary">
+          <span className="ml-1.5 rounded-lg bg-mint/10 px-1.5 py-0.5 text-xs text-mint">
             {semanais.length}
           </span>
         </button>
         <button
           onClick={() => setTab("mensal")}
-          className={`rounded-md px-4 py-1.5 text-sm font-medium transition-colors ${
+          className={`px-5 py-3 text-sm font-bold uppercase tracking-wide border-b-2 transition-all -mb-px ${
             tab === "mensal"
-              ? "bg-background shadow-sm text-foreground"
-              : "text-muted-foreground hover:text-foreground"
+              ? "border-mint text-mint"
+              : "border-transparent text-off-white/40 hover:text-off-white/70"
           }`}
         >
           Mensais
-          <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-xs text-primary">
+          <span className="ml-1.5 rounded-lg bg-mint/10 px-1.5 py-0.5 text-xs text-mint">
             {mensais.length}
           </span>
         </button>
       </div>
 
       {/* Section description */}
-      <div className="rounded-lg border bg-secondary/20 p-3 text-xs text-muted-foreground">
+      <div className="rounded-2xl border border-mint/10 bg-dark-green/30 p-4 text-xs text-off-white/60">
         {tab === "semanal" ? (
           <>
-            <strong className="text-foreground">Desafios Semanais</strong> — renovados toda segunda-feira.
+            <strong className="text-mint font-bold uppercase tracking-wide">Desafios Semanais</strong> — renovados toda segunda-feira.
             São mais rápidos e focados, ideais para praticar uma técnica específica durante a semana.
           </>
         ) : (
           <>
-            <strong className="text-foreground">Desafios Mensais</strong> — renovados no primeiro dia de cada mês.
+            <strong className="text-mint font-bold uppercase tracking-wide">Desafios Mensais</strong> — renovados no primeiro dia de cada mês.
             São mais extensos e recompensadores, projetados para aprendizado profundo ao longo do mês.
           </>
         )}
@@ -406,6 +415,13 @@ export default function DesafiosPage() {
             onToggleStep={(stepId) => handleToggleStep(challenge.id, stepId)}
           />
         ))}
+      </div>
+
+      {/* Series Badge */}
+      <div className="flex justify-end">
+        <span className="series-number text-4xl text-off-white/10">
+          #09
+        </span>
       </div>
     </div>
   );

@@ -16,7 +16,11 @@
       "Bash(npx next build --filter=@qa-lab/web)",
       "Bash(npx next build:*)",
       "Bash(bun run:*)",
-      "Bash(bunx tsc:*)"
+      "Bash(bunx tsc:*)",
+      "Bash(find /c/Projects/qa-lab-playground -type f \\\\\\(-name *.html -o -name *.css -o -name *.js -o -name *.jsx -o -name *.tsx -o -name *.vue -o -name *.svelte \\\\\\))",
+      "Bash(netstat -ano)",
+      "Bash(awk '{print $5}')",
+      "Bash(taskkill:*)"
     ]
   }
 }

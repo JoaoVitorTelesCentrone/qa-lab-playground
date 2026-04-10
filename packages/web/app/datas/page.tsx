@@ -20,13 +20,13 @@ import {
   Sunset,
 } from "lucide-react";
 
-// Componentes nativos com Tailwind
+// Componentes do design system QA Lab
 const Card = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`bg-white rounded-lg border shadow-sm ${className}`}>{children}</div>
+  <div className={`bg-dark-green/40 rounded-2xl border border-mint/10 shadow-lg shadow-black/10 ${className}`}>{children}</div>
 );
 
 const CardHeader = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`p-6 pb-4 ${className}`}>{children}</div>
+  <div className={`p-6 pb-4 flex flex-col gap-2 ${className}`}>{children}</div>
 );
 
 const CardContent = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
@@ -38,23 +38,23 @@ const CardFooter = ({ children, className = "" }: { children: React.ReactNode; c
 );
 
 const CardTitle = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <h3 className={`text-lg font-semibold ${className}`}>{children}</h3>
+  <h3 className={`text-base font-bold text-mint ${className}`}>{children}</h3>
 );
 
 const CardDescription = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <p className={`text-sm text-gray-500 ${className}`}>{children}</p>
+  <p className={`text-sm text-off-white/60 ${className}`}>{children}</p>
 );
 
-const Button = ({ 
-  children, 
-  onClick, 
+const Button = ({
+  children,
+  onClick,
   variant = "default",
   size = "default",
   className = "",
   disabled = false,
-  ...props 
-}: { 
-  children: React.ReactNode; 
+  ...props
+}: {
+  children: React.ReactNode;
   onClick?: () => void;
   variant?: "default" | "destructive" | "outline" | "ghost" | "success";
   size?: "default" | "sm" | "lg" | "icon";
@@ -62,23 +62,23 @@ const Button = ({
   disabled?: boolean;
   [key: string]: any;
 }) => {
-  const baseClasses = "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
-  
+  const baseClasses = "inline-flex items-center justify-center rounded-xl font-bold uppercase tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint/30 disabled:pointer-events-none disabled:opacity-50";
+
   const variants = {
-    default: "bg-green-500 text-white hover:bg-green-600",
-    destructive: "bg-red-500 text-white hover:bg-red-600",
-    outline: "border border-gray-300 bg-white hover:bg-gray-100 text-gray-700",
-    ghost: "hover:bg-gray-100 text-gray-600",
-    success: "bg-green-600 text-white hover:bg-green-700",
+    default: "bg-mint text-[#3D5454] hover:bg-[#A8C5C3] hover:-translate-y-0.5",
+    destructive: "bg-coral text-[#3D5454] hover:bg-[#F4A8A3]",
+    outline: "border-2 border-mint/30 bg-transparent text-mint hover:bg-mint/10 hover:border-mint/50",
+    ghost: "hover:bg-off-white/10 hover:text-off-white text-off-white/70",
+    success: "bg-neon text-[#3D5454] hover:bg-[#C8E85F] hover:-translate-y-0.5",
   };
-  
+
   const sizes = {
-    default: "h-10 px-4 py-2",
-    sm: "h-8 px-3 text-sm",
-    lg: "h-12 px-8",
+    default: "h-10 px-5 py-2 text-sm",
+    sm: "h-8 px-3 text-xs",
+    lg: "h-12 px-8 text-base",
     icon: "h-10 w-10",
   };
-  
+
   return (
     <button
       className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
@@ -93,38 +93,38 @@ const Button = ({
 
 const Input = ({ className = "", ...props }: { className?: string; [key: string]: any }) => (
   <input
-    className={`flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:border-green-400 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+    className={`flex h-9 w-full rounded-lg border border-mint/20 bg-dark-green/40 text-off-white px-3 py-2 text-sm placeholder:text-off-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint/30 focus-visible:border-mint/50 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
     {...props}
   />
 );
 
-const Badge = ({ 
-  children, 
+const Badge = ({
+  children,
   variant = "default",
-  className = "" 
-}: { 
-  children: React.ReactNode; 
+  className = ""
+}: {
+  children: React.ReactNode;
   variant?: "default" | "destructive" | "outline" | "secondary" | "success" | "warning";
   className?: string;
 }) => {
   const variants = {
-    default: "bg-green-100 text-green-700",
-    destructive: "bg-red-100 text-red-700",
-    outline: "border border-gray-300 bg-white text-gray-700",
-    secondary: "bg-gray-200 text-gray-700",
-    success: "bg-green-100 text-green-700",
-    warning: "bg-amber-100 text-amber-700",
+    default: "bg-mint/20 text-mint border-mint/30",
+    destructive: "bg-coral/20 text-coral border-coral/30",
+    outline: "border border-mint/30 text-mint/70",
+    secondary: "bg-off-white/10 text-off-white/70 border-off-white/20",
+    success: "bg-neon/20 text-neon border-neon/30",
+    warning: "bg-[#F4A8A3]/20 text-[#F4A8A3] border-[#F4A8A3]/30",
   };
-  
+
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${variants[variant]} ${className}`}>
+    <span className={`inline-flex items-center rounded-lg border px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${variants[variant]} ${className}`}>
       {children}
     </span>
   );
 };
 
 const Separator = ({ className = "" }: { className?: string }) => (
-  <div className={`h-px bg-gray-200 ${className}`} />
+  <div className={`h-px bg-mint/10 ${className}`} />
 );
 
 const Tabs = ({ children, value, onValueChange }: { children: React.ReactNode; value: string; onValueChange: (value: string) => void }) => {
@@ -132,15 +132,15 @@ const Tabs = ({ children, value, onValueChange }: { children: React.ReactNode; v
 };
 
 const TabsList = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`flex gap-2 border-b border-gray-200 ${className}`}>{children}</div>
+  <div className={`flex gap-2 border-b border-mint/10 ${className}`}>{children}</div>
 );
 
 const TabsTrigger = ({ children, value, activeValue, onClick }: { children: React.ReactNode; value: string; activeValue: string; onClick: () => void }) => (
   <button
-    className={`px-4 py-2 text-sm font-medium transition-colors ${
+    className={`px-4 py-2 text-sm font-bold uppercase tracking-wide transition-colors ${
       activeValue === value
-        ? "border-b-2 border-green-500 text-green-600"
-        : "text-gray-600 hover:text-gray-900"
+        ? "border-b-2 border-mint text-mint"
+        : "text-off-white/40 hover:text-off-white/70"
     }`}
     onClick={onClick}
   >
@@ -155,19 +155,19 @@ const TabsContent = ({ children, value, activeValue }: { children: React.ReactNo
 // Calendário customizado
 const Calendar = ({ selected, onSelect }: { selected: Date | null; onSelect: (date: Date) => void }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  
+
   const daysInMonth = new Date(
     currentMonth.getFullYear(),
     currentMonth.getMonth() + 1,
     0
   ).getDate();
-  
+
   const firstDayOfMonth = new Date(
     currentMonth.getFullYear(),
     currentMonth.getMonth(),
     1
   ).getDay();
-  
+
   const days = [];
   for (let i = 0; i < firstDayOfMonth; i++) {
     days.push(null);
@@ -175,36 +175,36 @@ const Calendar = ({ selected, onSelect }: { selected: Date | null; onSelect: (da
   for (let i = 1; i <= daysInMonth; i++) {
     days.push(i);
   }
-  
+
   const monthNames = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
-  
+
   const prevMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
   };
-  
+
   const nextMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
   };
-  
+
   return (
     <div className="p-3">
       <div className="flex items-center justify-between mb-4">
-        <Button variant="ghost" size="icon" onClick={prevMonth}>
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <span className="font-medium">
+        <button onClick={prevMonth} className="rounded-lg p-1.5 hover:bg-off-white/10 transition-colors">
+          <ChevronLeft className="h-4 w-4 text-off-white/60" />
+        </button>
+        <span className="font-bold text-off-white text-sm uppercase tracking-wide">
           {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
         </span>
-        <Button variant="ghost" size="icon" onClick={nextMonth}>
-          <ChevronRight className="h-4 w-4" />
-        </Button>
+        <button onClick={nextMonth} className="rounded-lg p-1.5 hover:bg-off-white/10 transition-colors">
+          <ChevronRight className="h-4 w-4 text-off-white/60" />
+        </button>
       </div>
       <div className="grid grid-cols-7 gap-1 mb-2">
         {["D", "S", "T", "Q", "Q", "S", "S"].map((day, i) => (
-          <div key={i} className="text-center text-xs font-medium text-gray-500">
+          <div key={i} className="text-center text-xs font-bold text-off-white/40 uppercase">
             {day}
           </div>
         ))}
@@ -214,25 +214,23 @@ const Calendar = ({ selected, onSelect }: { selected: Date | null; onSelect: (da
           if (day === null) {
             return <div key={i} className="h-8" />;
           }
-          
+
           const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-          const isSelected = selected && 
+          const isSelected = selected &&
             date.getDate() === selected.getDate() &&
             date.getMonth() === selected.getMonth() &&
             date.getFullYear() === selected.getFullYear();
-          
+
           return (
-            <Button
+            <button
               key={i}
-              variant={isSelected ? "default" : "ghost"}
-              size="icon"
-              className={`h-8 w-8 text-sm ${
-                isSelected ? "bg-green-500 text-white" : ""
+              className={`h-8 w-8 rounded-lg text-sm font-medium transition-colors ${
+                isSelected ? "bg-mint text-[#3D5454] font-bold" : "text-off-white/70 hover:bg-off-white/10"
               }`}
               onClick={() => onSelect(date)}
             >
               {day}
-            </Button>
+            </button>
           );
         })}
       </div>
@@ -467,72 +465,79 @@ export default function DataBugadaPage() {
   }
 
   return (
-    <div className="space-y-6 p-6 max-w-7xl mx-auto animate-fade-in">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between animate-slide-in-up">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">QA Playground - Datas</h1>
-          <p className="text-sm text-gray-500">
-            Teste funcionalidades de data, hora, fuso horário e calendário. Encontre os 10 bugs propositais.
-          </p>
-        </div>
-        
-        <div className="flex items-center gap-2">
+      <div className="space-y-4 animate-slide-in-up">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center size-10 rounded-xl bg-coral/20">
+              <CalendarIcon className="size-5 text-coral" />
+            </div>
+            <div>
+              <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-wider text-coral italic">
+                DATAS BUGADAS
+              </h1>
+              <p className="text-sm text-coral/50 uppercase tracking-[0.15em]">
+                Encontre os 10 bugs
+              </p>
+            </div>
+          </div>
           <Badge variant="outline" className="gap-1">
             <CalendarIcon className="size-3" />
             {selectedDate?.toLocaleDateString('pt-BR')}
           </Badge>
         </div>
+        <p className="text-sm text-off-white/60 max-w-xl">
+          Teste funcionalidades de data, hora, fuso horário e calendário. Encontre os 10 bugs propositais.
+        </p>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-200">
-        <div className="flex gap-4">
-          <button
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === "calendar"
-                ? "border-b-2 border-green-500 text-green-600"
-                : "text-gray-600 hover:text-gray-900"
-            }`}
-            onClick={() => setActiveTab("calendar")}
-          >
-            <CalendarRange className="size-4 inline mr-2" />
-            Calendário
-          </button>
-          <button
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === "timer"
-                ? "border-b-2 border-green-500 text-green-600"
-                : "text-gray-600 hover:text-gray-900"
-            }`}
-            onClick={() => setActiveTab("timer")}
-          >
-            <Timer className="size-4 inline mr-2" />
-            Timer
-          </button>
-          <button
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === "timezone"
-                ? "border-b-2 border-green-500 text-green-600"
-                : "text-gray-600 hover:text-gray-900"
-            }`}
-            onClick={() => setActiveTab("timezone")}
-          >
-            <Clock className="size-4 inline mr-2" />
-            Fuso Horário
-          </button>
-          <button
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === "events"
-                ? "border-b-2 border-green-500 text-green-600"
-                : "text-gray-600 hover:text-gray-900"
-            }`}
-            onClick={() => setActiveTab("events")}
-          >
-            <Zap className="size-4 inline mr-2" />
-            Eventos
-          </button>
-        </div>
+      <div className="flex items-center gap-1 border-b border-mint/10">
+        <button
+          className={`px-5 py-3 text-sm font-bold uppercase tracking-wide border-b-2 transition-all -mb-px flex items-center gap-2 ${
+            activeTab === "calendar"
+              ? "border-mint text-mint"
+              : "border-transparent text-off-white/40 hover:text-off-white/70"
+          }`}
+          onClick={() => setActiveTab("calendar")}
+        >
+          <CalendarRange className="size-4" />
+          Calendário
+        </button>
+        <button
+          className={`px-5 py-3 text-sm font-bold uppercase tracking-wide border-b-2 transition-all -mb-px flex items-center gap-2 ${
+            activeTab === "timer"
+              ? "border-mint text-mint"
+              : "border-transparent text-off-white/40 hover:text-off-white/70"
+          }`}
+          onClick={() => setActiveTab("timer")}
+        >
+          <Timer className="size-4" />
+          Timer
+        </button>
+        <button
+          className={`px-5 py-3 text-sm font-bold uppercase tracking-wide border-b-2 transition-all -mb-px flex items-center gap-2 ${
+            activeTab === "timezone"
+              ? "border-mint text-mint"
+              : "border-transparent text-off-white/40 hover:text-off-white/70"
+          }`}
+          onClick={() => setActiveTab("timezone")}
+        >
+          <Clock className="size-4" />
+          Fuso Horário
+        </button>
+        <button
+          className={`px-5 py-3 text-sm font-bold uppercase tracking-wide border-b-2 transition-all -mb-px flex items-center gap-2 ${
+            activeTab === "events"
+              ? "border-mint text-mint"
+              : "border-transparent text-off-white/40 hover:text-off-white/70"
+          }`}
+          onClick={() => setActiveTab("events")}
+        >
+          <Zap className="size-4" />
+          Eventos
+        </button>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
@@ -555,7 +560,7 @@ export default function DataBugadaPage() {
                       onSelect={setSelectedDate}
                     />
                     
-                    <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <div className="mt-4 p-4 bg-dark-green/30 rounded-xl">
                       <p className="text-sm font-medium mb-2">Data Selecionada:</p>
                       <p className="text-lg">
                         {selectedDate?.toLocaleDateString('pt-BR', {
@@ -565,7 +570,7 @@ export default function DataBugadaPage() {
                           day: 'numeric'
                         })}
                       </p>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-off-white/60 mt-1">
                         Dia da semana: {selectedDate && getDayOfWeek(selectedDate)}
                       </p>
                     </div>
@@ -591,7 +596,7 @@ export default function DataBugadaPage() {
                           Validar
                         </Button>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-off-white/60 mt-1">
                         BUG #1: Datas passadas são aceitas como futuras
                       </p>
                     </div>
@@ -617,9 +622,9 @@ export default function DataBugadaPage() {
                           Calcular Diferença
                         </Button>
                         {difference !== null && (
-                          <div className="p-2 bg-gray-50 rounded text-center">
+                          <div className="p-2 bg-dark-green/30 rounded-xl text-center">
                             <span className="font-medium">{difference} dias</span>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-off-white/60 mt-1">
                               BUG #2: Anos bissextos ignorados
                             </p>
                           </div>
@@ -648,7 +653,7 @@ export default function DataBugadaPage() {
                           Interpretar Data
                         </Button>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-off-white/60 mt-1">
                         BUG #6: Aceita 31/02/2024 como válido
                       </p>
                     </div>
@@ -670,7 +675,7 @@ export default function DataBugadaPage() {
               <CardContent>
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-4">
-                    <div className="text-center p-6 bg-gray-50 rounded-lg">
+                    <div className="text-center p-6 bg-dark-green/30 rounded-xl">
                       <div className="text-4xl font-mono font-bold mb-4">
                         {Math.floor(timerSeconds / 60)}:
                         {(timerSeconds % 60).toString().padStart(2, '0')}
@@ -699,7 +704,7 @@ export default function DataBugadaPage() {
                           Reset
                         </Button>
                       </div>
-                      <p className="text-xs text-gray-500 mt-2">
+                      <p className="text-xs text-off-white/60 mt-2">
                         BUG #5: Timer continua rodando mesmo pausado
                       </p>
                     </div>
@@ -722,11 +727,11 @@ export default function DataBugadaPage() {
                         Calcular Expiração
                       </Button>
                       {expirationDate && (
-                        <div className="mt-2 p-2 bg-gray-50 rounded">
+                        <div className="mt-2 p-2 bg-dark-green/30 rounded-xl">
                           <p className="text-sm">
                             Expira em: {expirationDate.toLocaleDateString('pt-BR')}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-off-white/60">
                             BUG #7: Cálculo ignora meses com 31/30/28 dias
                           </p>
                         </div>
@@ -735,24 +740,24 @@ export default function DataBugadaPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="p-4 bg-dark-green/30 rounded-xl">
                       <h4 className="font-medium mb-3">Relógio Digital</h4>
                       <div className="text-3xl font-mono text-center">
                         {digitalTime.toLocaleTimeString('pt-BR')}
                       </div>
                     </div>
 
-                    <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="p-4 bg-dark-green/30 rounded-xl">
                       <h4 className="font-medium mb-3">Relógio Analógico (simulado)</h4>
                       <div className="text-3xl font-mono text-center">
                         {analogTime.toLocaleTimeString('pt-BR')}
                       </div>
-                      <p className="text-xs text-gray-500 text-center mt-2">
+                      <p className="text-xs text-off-white/60 text-center mt-2">
                         BUG #10: Relógios mostram horas diferentes
                       </p>
                     </div>
 
-                    <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="p-4 bg-dark-green/30 rounded-xl">
                       <h4 className="font-medium mb-3">Horário em diferentes cidades</h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
@@ -810,7 +815,7 @@ export default function DataBugadaPage() {
                     <div>
                       <label className="text-sm font-medium mb-1 block">De</label>
                       <select
-                        className="w-full h-10 rounded-md border border-gray-300 px-3"
+                        className="w-full h-10 rounded-md border border-mint/20 bg-dark-green/40 px-3 text-off-white"
                         value={timezone}
                         onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setTimezone(e.target.value)}
                       >
@@ -824,7 +829,7 @@ export default function DataBugadaPage() {
                     <div>
                       <label className="text-sm font-medium mb-1 block">Para</label>
                       <select
-                        className="w-full h-10 rounded-md border border-gray-300 px-3"
+                        className="w-full h-10 rounded-md border border-mint/20 bg-dark-green/40 px-3 text-off-white"
                         value={timezone}
                         onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setTimezone(e.target.value)}
                       >
@@ -841,15 +846,15 @@ export default function DataBugadaPage() {
                     Converter Data/Hora
                   </Button>
 
-                  <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="mt-4 p-4 bg-coral/10 border border-coral/30 rounded-xl">
                     <div className="flex items-start gap-2">
-                      <AlertCircle className="size-5 text-yellow-600 shrink-0 mt-0.5" />
+                      <AlertCircle className="size-5 text-coral shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-medium text-yellow-800">Bugs de Fuso Horário</p>
-                        <p className="text-sm text-yellow-700 mt-1">
+                        <p className="font-bold uppercase tracking-wide text-coral text-xs">Bugs de Fuso Horário</p>
+                        <p className="text-sm text-off-white/70 mt-1">
                           BUG #3: A conversão não considera a diferença real entre fusos
                         </p>
-                        <p className="text-sm text-yellow-700 mt-1">
+                        <p className="text-sm text-off-white/70 mt-1">
                           BUG #8: Horário de verão não é considerado
                         </p>
                       </div>
@@ -857,9 +862,9 @@ export default function DataBugadaPage() {
                   </div>
 
                   <div className="grid gap-4 md:grid-cols-2 mt-4">
-                    <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="p-4 bg-dark-green/30 rounded-xl">
                       <h4 className="font-medium mb-2">Exemplo: Horário de Verão</h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-off-white/60">
                         Data: 15/10/2024 15:00<br />
                         São Paulo → Nova York<br />
                         <span className="font-mono block mt-2">
@@ -869,9 +874,9 @@ export default function DataBugadaPage() {
                       </p>
                     </div>
 
-                    <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="p-4 bg-dark-green/30 rounded-xl">
                       <h4 className="font-medium mb-2">Exemplo: Datas Extremas</h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-off-white/60">
                         Data: 31/12/2024 23:59<br />
                         São Paulo → Tóquio<br />
                         <span className="font-mono block mt-2">
@@ -918,11 +923,11 @@ export default function DataBugadaPage() {
                     {events.map((event) => (
                       <div
                         key={event.id}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                        className="flex items-center justify-between p-3 bg-dark-green/30 rounded-xl"
                       >
                         <div>
                           <p className="font-medium">{event.titulo}</p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-off-white/60">
                             {event.data.toLocaleDateString('pt-BR')} - {getDayOfWeek(event.data)}
                           </p>
                         </div>
@@ -937,7 +942,7 @@ export default function DataBugadaPage() {
                     ))}
                   </div>
 
-                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="mt-4 p-4 bg-dark-green/30 rounded-xl">
                     <h4 className="font-medium mb-2">Validações de Data</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center gap-2">
@@ -961,7 +966,7 @@ export default function DataBugadaPage() {
                         <Badge variant="warning">BUG #9</Badge>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="text-xs text-off-white/60 mt-2">
                       BUG #9: Datas muito antigas ou muito futuras são aceitas
                     </p>
                   </div>
@@ -976,15 +981,15 @@ export default function DataBugadaPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Bug className="size-4 text-green-600" />
+                <Bug className="size-4 text-neon" />
                 <CardTitle className="text-base">Bugs de Data Encontrados</CardTitle>
               </div>
               <CardDescription>
                 {foundBugs.size}/{bugs.length} bugs encontrados
               </CardDescription>
-              <div className="h-2 rounded-full bg-gray-200">
+              <div className="h-2 rounded-full bg-off-white/10">
                 <div
-                  className="h-2 rounded-full bg-green-500 transition-all"
+                  className="h-2 rounded-full bg-neon transition-all"
                   style={{ width: `${(foundBugs.size / bugs.length) * 100}%` }}
                 />
               </div>
@@ -997,20 +1002,20 @@ export default function DataBugadaPage() {
                     <button
                       key={bug.id}
                       onClick={() => toggleBug(bug.id)}
-                      className="flex w-full items-start gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-gray-100"
+                      className="flex w-full items-start gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-off-white/5"
                     >
                       {found ? (
-                        <Check className="mt-0.5 size-4 shrink-0 text-green-600" />
+                        <Check className="mt-0.5 size-4 shrink-0 text-neon" />
                       ) : (
-                        <Circle className="mt-0.5 size-4 shrink-0 text-gray-400" />
+                        <Circle className="mt-0.5 size-4 shrink-0 text-off-white/40" />
                       )}
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <span
                             className={
                               found
-                                ? "line-through text-gray-400"
-                                : "text-gray-900"
+                                ? "line-through text-off-white/40"
+                                : "text-off-white/90"
                             }
                           >
                             Bug #{bug.id}: {bug.titulo}
@@ -1038,17 +1043,17 @@ export default function DataBugadaPage() {
               </div>
 
               {foundBugs.size === bugs.length && (
-                <div className="mt-4 rounded-lg border border-green-300 bg-green-50 p-3 text-center">
-                  <p className="text-sm font-medium text-green-600">
+                <div className="mt-4 rounded-lg border border-neon/30 bg-neon/10 p-3 text-center">
+                  <p className="text-sm font-medium text-neon">
                     🎉 Parabéns! Você encontrou todos os {bugs.length} bugs de data!
                   </p>
                 </div>
               )}
 
               {/* Dicas de Teste */}
-              <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+              <div className="mt-4 p-3 bg-dark-green/30 rounded-xl">
                 <p className="text-xs font-medium mb-2">🧪 Dicas para Testar Datas:</p>
-                <ul className="text-xs text-gray-500 space-y-1 list-disc list-inside">
+                <ul className="text-xs text-off-white/60 space-y-1 list-disc list-inside">
                   <li>Teste 29/02 em anos não bissextos</li>
                   <li>Use 31/04, 30/02 (datas inválidas)</li>
                   <li>Teste mudanças de ano (31/12 para 01/01)</li>
@@ -1062,23 +1067,23 @@ export default function DataBugadaPage() {
 
               {/* Informações Rápidas */}
               <div className="mt-4 grid grid-cols-2 gap-2">
-                <div className="p-2 bg-green-50 rounded-lg text-center">
-                  <Sunrise className="size-4 mx-auto text-green-600" />
+                <div className="p-2 bg-neon/10 rounded-lg text-center">
+                  <Sunrise className="size-4 mx-auto text-neon" />
                   <span className="text-xs">Nascer do Sol</span>
                   <span className="text-sm font-mono block">06:15</span>
                 </div>
-                <div className="p-2 bg-orange-50 rounded-lg text-center">
-                  <Sunset className="size-4 mx-auto text-orange-600" />
+                <div className="p-2 bg-[#F4A8A3]/10 rounded-lg text-center">
+                  <Sunset className="size-4 mx-auto text-[#F4A8A3]" />
                   <span className="text-xs">Pôr do Sol</span>
                   <span className="text-sm font-mono block">18:45</span>
                 </div>
-                <div className="p-2 bg-purple-50 rounded-lg text-center">
-                  <Moon className="size-4 mx-auto text-purple-600" />
+                <div className="p-2 bg-mint/10 rounded-lg text-center">
+                  <Moon className="size-4 mx-auto text-mint" />
                   <span className="text-xs">Lua</span>
                   <span className="text-sm font-mono block">🌕 Cheia</span>
                 </div>
-                <div className="p-2 bg-green-50 rounded-lg text-center">
-                  <Hourglass className="size-4 mx-auto text-green-600" />
+                <div className="p-2 bg-neon/10 rounded-lg text-center">
+                  <Hourglass className="size-4 mx-auto text-neon" />
                   <span className="text-xs">Dias no ano</span>
                   <span className="text-sm font-mono block">365</span>
                 </div>
@@ -1086,6 +1091,13 @@ export default function DataBugadaPage() {
             </CardContent>
           </Card>
         </div>
+      </div>
+
+      {/* Series Badge */}
+      <div className="flex justify-end">
+        <span className="series-number text-4xl text-off-white/10">
+          #11
+        </span>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { FlaskConical, Send, Target, Layers, ArrowRight, BookOpen, Map } from "lucide-react";
 
 const modules = [
@@ -17,6 +18,7 @@ const modules = [
     descricao:
       "Prove bugs reais com automação. Cada missão tem objetivo, dica e snippet pra você adaptar.",
     stats: "8 missões · 2 níveis",
+    badge: "neon",
   },
   {
     href: "/alvos",
@@ -25,6 +27,7 @@ const modules = [
     descricao:
       "Documentação dos sistemas que você vai testar — endpoints, seletores e bugs conhecidos.",
     stats: "API · E-commerce · Form",
+    badge: "default",
   },
   {
     href: "/api-playground",
@@ -33,22 +36,25 @@ const modules = [
     descricao:
       "Envie requests manualmente e explore os endpoints disponíveis antes de automatizar.",
     stats: "10 endpoints",
+    badge: "default",
   },
   {
     href: "/blog",
     icon: BookOpen,
     titulo: "Blog QA Lab",
     descricao:
-      "Artigos sobre qualidade de software, tecnicas de teste e boas praticas para QAs.",
+      "Artigos sobre qualidade de software, técnicas de teste e boas práticas para QAs.",
     stats: "5 artigos",
+    badge: "outline",
   },
   {
     href: "/roadmap",
     icon: Map,
     titulo: "Roadmap",
     descricao:
-      "Trilhas de aprendizado para se tornar senior em testes unitarios, API, automacao e mais.",
-    stats: "5 trilhas · 4 niveis",
+      "Trilhas de aprendizado para se tornar sênior em testes unitários, API, automação e mais.",
+    stats: "5 trilhas · 4 níveis",
+    badge: "neon",
   },
 ];
 
@@ -56,40 +62,59 @@ export default function DashboardPage() {
   return (
     <div className="space-y-10 animate-fade-in">
       {/* Hero */}
-      <div className="space-y-3 animate-slide-in-up">
-        <div className="flex items-center gap-3">
-          <FlaskConical className="size-8 text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight">
-            QA Lab Playground
-          </h1>
+      <div className="space-y-4 animate-slide-in-up">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center size-12 rounded-2xl bg-mint/20">
+            <FlaskConical className="size-7 text-mint" />
+          </div>
+          <div>
+            <h1 className="font-[family-name:var(--font-display)] text-4xl md:text-5xl tracking-wider text-mint italic">
+              QA LAB
+            </h1>
+            <span className="text-sm uppercase tracking-[0.2em] text-mint/50">
+              Playground
+            </span>
+          </div>
         </div>
-        <p className="max-w-xl text-muted-foreground">
-          Aprenda QA na pratica quebrando coisas de proposito. Explore APIs
-          instáveis, formularios bugados e cenarios de teste reais.
-        </p>
+        <div className="max-w-2xl">
+          <p className="text-lg text-off-white/80 leading-relaxed">
+            Aprenda QA na <span className="text-neon font-bold">prática</span> quebrando coisas de <span className="text-coral font-bold">propósito</span>.
+          </p>
+          <p className="text-off-white/60 mt-2">
+            Explore APIs instáveis, formulários bugados e cenários de teste reais.
+          </p>
+        </div>
       </div>
 
       {/* Module Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 stagger-scale">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 stagger-scale">
         {modules.map((mod) => (
           <Link key={mod.href} href={mod.href}>
-            <Card className="group h-full transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <mod.icon className="size-5 text-primary" />
-                  <CardTitle className="text-base">{mod.titulo}</CardTitle>
-                </div>
-                <CardDescription>{mod.descricao}</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <Card className="group h-full border-mint/10 hover:border-mint/30 hover:-translate-y-1 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-mint/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <CardHeader className="relative">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center size-10 rounded-xl bg-mint/10 group-hover:bg-mint/20 transition-colors">
+                      <mod.icon className="size-5 text-mint" />
+                    </div>
+                    <CardTitle className="text-lg">{mod.titulo}</CardTitle>
+                  </div>
+                  <Badge variant={mod.badge as any}>
+                    #{modules.indexOf(mod) + 1}
+                  </Badge>
+                </div>
+                <CardDescription className="mt-3">{mod.descricao}</CardDescription>
+              </CardHeader>
+              <CardContent className="relative">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-off-white/50">
                     {mod.stats}
                   </span>
                   <Button
                     variant="ghost"
                     size="xs"
-                    className="gap-1 opacity-0 transition-opacity group-hover:opacity-100"
+                    className="gap-1 opacity-0 transition-all group-hover:opacity-100 text-mint"
                   >
                     Abrir <ArrowRight className="size-3" />
                   </Button>
@@ -101,42 +126,66 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Start */}
-      <Card>
+      <Card className="border-mint/10">
         <CardHeader>
-          <CardTitle className="text-base">Como comecar</CardTitle>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center size-8 rounded-lg bg-neon/20">
+              <span className="text-neon font-bold text-sm">#</span>
+            </div>
+            <CardTitle className="text-base uppercase tracking-wide">Como começar</CardTitle>
+          </div>
         </CardHeader>
         <CardContent>
-          <ol className="space-y-3 text-sm text-muted-foreground">
-            <li className="flex gap-3">
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+          <ol className="space-y-4">
+            <li className="flex gap-4">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-mint/20 text-sm font-bold text-mint">
                 1
               </span>
-              <span>
-                Abra <strong className="text-foreground">Alvos</strong> e
-                leia os endpoints, seletores e bugs conhecidos dos sistemas que você vai testar
-              </span>
+              <div>
+                <span className="text-off-white/90 font-semibold">
+                  Abra <Link href="/alvos" className="text-mint hover:underline">Alvos</Link>
+                </span>
+                <p className="text-sm text-off-white/60">
+                  Leia os endpoints, seletores e bugs conhecidos dos sistemas que você vai testar
+                </p>
+              </div>
             </li>
-            <li className="flex gap-3">
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+            <li className="flex gap-4">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-mint/20 text-sm font-bold text-mint">
                 2
               </span>
-              <span>
-                Escolha uma <strong className="text-foreground">Missão</strong> pelo
-                seu nível, leia o objetivo e tente escrever o teste antes de ver o snippet
-              </span>
+              <div>
+                <span className="text-off-white/90 font-semibold">
+                  Escolha uma <Link href="/missoes" className="text-neon hover:underline">Missão</Link>
+                </span>
+                <p className="text-sm text-off-white/60">
+                  Pelo seu nível, leia o objetivo e tente escrever o teste antes de ver o snippet
+                </p>
+              </div>
             </li>
-            <li className="flex gap-3">
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+            <li className="flex gap-4">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-mint/20 text-sm font-bold text-mint">
                 3
               </span>
-              <span>
-                Use o <strong className="text-foreground">API Playground</strong> para
-                explorar manualmente os endpoints antes de automatizar
-              </span>
+              <div>
+                <span className="text-off-white/90 font-semibold">
+                  Use o <Link href="/api-playground" className="text-mint hover:underline">API Playground</Link>
+                </span>
+                <p className="text-sm text-off-white/60">
+                  Para explorar manualmente os endpoints antes de automatizar
+                </p>
+              </div>
             </li>
           </ol>
         </CardContent>
       </Card>
+
+      {/* Series Badge */}
+      <div className="flex justify-end">
+        <span className="series-number text-4xl text-off-white/20">
+          #01
+        </span>
+      </div>
     </div>
   );
 }

@@ -37,8 +37,8 @@ interface Step {
 const steps: Step[] = [
   {
     icon: FlaskConical,
-    iconColor: "text-primary",
-    iconBg: "bg-primary/10",
+    iconColor: "text-mint",
+    iconBg: "bg-mint/10",
     titulo: "Bem-vindo ao QA Lab Playground",
     descricao:
       "Uma plataforma para evoluir em automação de testes na prática. Aqui você não lê sobre bugs — você os prova com código real em sistemas propositalmente quebrados.",
@@ -50,8 +50,8 @@ const steps: Step[] = [
   },
   {
     icon: Lightbulb,
-    iconColor: "text-amber-600",
-    iconBg: "bg-amber-100",
+    iconColor: "text-[#F4A8A3]",
+    iconBg: "bg-[#F4A8A3]/10",
     titulo: "Como o lab funciona",
     descricao:
       "O lab tem dois elementos principais: Alvos (os sistemas que você vai testar) e Missões (os objetivos que você vai provar com automação). Simples assim.",
@@ -63,8 +63,8 @@ const steps: Step[] = [
   },
   {
     icon: Layers,
-    iconColor: "text-sky-500",
-    iconBg: "bg-sky-500/10",
+    iconColor: "text-mint",
+    iconBg: "bg-mint/10",
     titulo: "Alvos — o que você vai testar",
     descricao:
       "Antes de escrever um teste, você precisa conhecer o sistema. Em Alvos você encontra todos os endpoints da API, seletores do E-commerce e bugs do formulário documentados.",
@@ -77,8 +77,8 @@ const steps: Step[] = [
   },
   {
     icon: Target,
-    iconColor: "text-green-600",
-    iconBg: "bg-green-100",
+    iconColor: "text-neon",
+    iconBg: "bg-neon/10",
     titulo: "Missões — prove o bug com código",
     descricao:
       "Cada missão tem um bug real pra você provar com automação. Leia o objetivo, tente escrever o teste sozinho e só depois expanda a dica ou o snippet.",
@@ -91,8 +91,8 @@ const steps: Step[] = [
   },
   {
     icon: Send,
-    iconColor: "text-violet-500",
-    iconBg: "bg-violet-500/10",
+    iconColor: "text-mint",
+    iconBg: "bg-mint/10",
     titulo: "API Playground",
     descricao:
       "Explore os endpoints manualmente antes de automatizar. Útil para entender o comportamento real da API e confirmar o bug que você vai provar no teste.",
@@ -105,8 +105,8 @@ const steps: Step[] = [
   },
   {
     icon: BookOpen,
-    iconColor: "text-amber-600",
-    iconBg: "bg-amber-100",
+    iconColor: "text-[#F4A8A3]",
+    iconBg: "bg-[#F4A8A3]/10",
     titulo: "Blog e Roadmap",
     descricao:
       "Conteúdo de apoio para complementar a prática. O Blog tem artigos sobre técnicas de teste e o Roadmap mostra trilhas de aprendizado por especialidade.",
@@ -118,8 +118,8 @@ const steps: Step[] = [
   },
   {
     icon: Rocket,
-    iconColor: "text-primary",
-    iconBg: "bg-primary/10",
+    iconColor: "text-neon",
+    iconBg: "bg-neon/10",
     titulo: "Pronto para começar?",
     descricao:
       "Comece pelos Alvos para entender os sistemas, escolha uma Missão pelo seu nível e escreva seu primeiro teste automatizado que prova um bug real.",
@@ -188,7 +188,7 @@ export function OnboardingTour() {
       {/* Floating button */}
       <button
         onClick={openTour}
-        className={`fixed bottom-6 right-6 z-40 flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110 active:scale-95 ${pulse ? "animate-pulse" : ""}`}
+        className={`fixed bottom-6 right-6 z-40 flex size-12 items-center justify-center rounded-full bg-mint text-[#3D5454] shadow-lg transition-transform hover:scale-110 active:scale-95 ${pulse ? "animate-pulse" : ""}`}
         title="Tour de boas-vindas"
         aria-label="Abrir tour de onboarding"
       >
@@ -200,16 +200,16 @@ export function OnboardingTour() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-gray-800/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-[#3D5454]/70 backdrop-blur-sm"
             onClick={close}
           />
 
           {/* Modal */}
-          <div className="relative z-10 w-full max-w-lg rounded-2xl border border-border bg-card shadow-2xl overflow-hidden">
+          <div className="relative z-10 w-full max-w-lg rounded-2xl border border-mint/20 bg-[#405555] shadow-2xl overflow-hidden">
             {/* Progress bar */}
-            <div className="h-1 w-full bg-secondary">
+            <div className="h-1 w-full bg-off-white/10">
               <div
-                className="h-1 bg-primary transition-all duration-300"
+                className="h-1 bg-mint transition-all duration-300"
                 style={{ width: `${((step + 1) / steps.length) * 100}%` }}
               />
             </div>
@@ -217,7 +217,7 @@ export function OnboardingTour() {
             {/* Close */}
             <button
               onClick={close}
-              className="absolute right-4 top-4 z-10 rounded-md p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+              className="absolute right-4 top-4 z-10 rounded-md p-1.5 text-off-white/50 hover:bg-off-white/5 hover:text-off-white transition-colors"
             >
               <X className="size-4" />
             </button>
@@ -230,7 +230,7 @@ export function OnboardingTour() {
               </div>
 
               {/* Step label */}
-              <span className="text-xs font-medium text-muted-foreground">
+              <span className="text-xs font-medium text-off-white/50">
                 Passo {step + 1} de {steps.length}
               </span>
 
@@ -240,21 +240,21 @@ export function OnboardingTour() {
               </h2>
 
               {/* Description */}
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
+              <p className="text-sm text-off-white/50 leading-relaxed max-w-sm">
                 {current.descricao}
               </p>
 
               {/* Highlights */}
               {current.destaques && (
-                <div className="w-full space-y-2 rounded-xl bg-secondary/50 p-4">
+                <div className="w-full space-y-2 rounded-xl bg-dark-green/50 p-4">
                   {current.destaques.map((d, i) => {
                     const DIcon = d.icon;
                     return (
                       <div key={i} className="flex items-center gap-3 text-left">
-                        <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-background border border-border">
-                          <DIcon className="size-3.5 text-primary" />
+                        <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-[#3D5454] border border-mint/10">
+                          <DIcon className="size-3.5 text-mint" />
                         </div>
-                        <span className="text-xs text-foreground">{d.texto}</span>
+                        <span className="text-xs text-off-white">{d.texto}</span>
                       </div>
                     );
                   })}
@@ -266,7 +266,7 @@ export function OnboardingTour() {
                 <Link
                   href={current.cta.href}
                   onClick={close}
-                  className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-mint hover:underline"
                 >
                   {current.cta.label}
                   <ArrowRight className="size-3" />
@@ -275,7 +275,7 @@ export function OnboardingTour() {
             </div>
 
             {/* Footer — navigation */}
-            <div className="flex items-center justify-between border-t border-border px-6 py-4">
+            <div className="flex items-center justify-between border-t border-mint/10 px-6 py-4">
               {/* Dot indicators */}
               <div className="flex items-center gap-1.5">
                 {steps.map((_, i) => (
@@ -284,8 +284,8 @@ export function OnboardingTour() {
                     onClick={() => setStep(i)}
                     className={`rounded-full transition-all ${
                       i === step
-                        ? "size-2 bg-primary"
-                        : "size-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60"
+                        ? "size-2 bg-mint"
+                        : "size-1.5 bg-off-white/20 hover:bg-off-white/40"
                     }`}
                   />
                 ))}

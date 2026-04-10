@@ -5,19 +5,22 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center justify-center rounded-md border border-transparent px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive transition-all duration-200 overflow-hidden",
+  "inline-flex items-center justify-center rounded-lg border px-3 py-1 text-xs font-bold uppercase tracking-wider w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1.5 [&>svg]:pointer-events-none focus-visible:ring-2 focus-visible:ring-ring/50 transition-all duration-200 overflow-hidden",
   {
     variants: {
       variant: {
-        default: "bg-green-100 text-green-700 [a&]:hover:bg-green-200",
+        default:
+          "bg-mint/20 text-mint border-mint/30 [a&]:hover:bg-mint/30",
         secondary:
-          "bg-gray-200 text-gray-700 [a&]:hover:bg-gray-300",
+          "bg-off-white/10 text-off-white/80 border-off-white/20 [a&]:hover:bg-off-white/20",
         destructive:
-          "bg-red-100 text-red-700 [a&]:hover:bg-red-200 focus-visible:ring-destructive/20",
+          "bg-coral/20 text-coral border-coral/30 [a&]:hover:bg-coral/30",
         outline:
-          "border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-        ghost: "[a&]:hover:bg-gray-100 [a&]:hover:text-gray-700",
-        link: "text-primary underline-offset-4 [a&]:hover:underline",
+          "border-mint/40 text-mint [a&]:hover:bg-mint/10",
+        neon:
+          "bg-neon/20 text-neon border-neon/40 [a&]:hover:bg-neon/30",
+        ghost:
+          "border-transparent text-off-white/60 [a&]:hover:bg-off-white/10 [a&]:hover:text-off-white",
       },
     },
     defaultVariants: {

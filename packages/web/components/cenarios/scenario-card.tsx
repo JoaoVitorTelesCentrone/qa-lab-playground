@@ -19,9 +19,9 @@ const moduleIcons = {
 };
 
 const difficultyColors = {
-  iniciante: "bg-green-100 text-green-600",
-  intermediario: "bg-amber-100 text-amber-600",
-  avancado: "bg-red-100 text-red-600",
+  iniciante: "bg-neon/10 text-neon",
+  intermediario: "bg-[#F4A8A3]/10 text-[#F4A8A3]",
+  avancado: "bg-coral/10 text-coral",
 };
 
 const statusLabels: Record<ScenarioStatus, string> = {
@@ -31,9 +31,9 @@ const statusLabels: Record<ScenarioStatus, string> = {
 };
 
 const statusColors: Record<ScenarioStatus, string> = {
-  nao_iniciado: "bg-secondary text-muted-foreground",
-  em_progresso: "bg-blue-500/20 text-blue-400",
-  completo: "bg-green-100 text-green-600",
+  nao_iniciado: "bg-off-white/10 text-off-white/50",
+  em_progresso: "bg-mint/20 text-mint",
+  completo: "bg-neon/10 text-neon",
 };
 
 interface ScenarioCardProps {
@@ -46,11 +46,11 @@ export function ScenarioCard({ scenario, status }: ScenarioCardProps) {
 
   return (
     <Link href={`/cenarios/${scenario.id}`}>
-      <Card className="transition-colors hover:border-primary/30 cursor-pointer">
+      <Card className="transition-colors hover:border-mint/30 cursor-pointer">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Icon className="size-4 text-primary" />
+              <Icon className="size-4 text-mint" />
               <Badge className={difficultyColors[scenario.dificuldade]}>
                 {scenario.dificuldade}
               </Badge>
@@ -63,7 +63,7 @@ export function ScenarioCard({ scenario, status }: ScenarioCardProps) {
           <CardDescription>{scenario.descricao}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1 text-xs text-off-white/50">
             <span>{scenario.objetivos.length} objetivos</span>
             {scenario.endpointsRelacionados && (
               <>

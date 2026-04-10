@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter, JetBrains_Mono } from "next/font/google";
+import { Bebas_Neue, Inter, JetBrains_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Sidebar } from "@/components/layout/sidebar";
 import { OnboardingTour } from "@/components/onboarding/onboarding-tour";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
 });
@@ -25,7 +26,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "QA Lab Playground",
-  description: "Aprenda QA na pratica quebrando coisas de proposito",
+  description: "Aprenda QA na prática quebrando coisas de propósito",
 };
 
 export default function RootLayout({
@@ -36,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${plusJakarta.variable} ${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${bebasNeue.variable} ${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-background bg-qalab-pattern`}
       >
         <TooltipProvider>
           <div className="flex h-screen overflow-hidden">

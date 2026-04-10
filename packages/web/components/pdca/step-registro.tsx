@@ -25,7 +25,7 @@ function Tip({ id, active }: { id: string; active: boolean }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <HelpCircle className="size-3.5 text-amber-500 cursor-help shrink-0" />
+        <HelpCircle className="size-3.5 text-[#F4A8A3] cursor-help shrink-0" />
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-xs text-xs">
         {text}
@@ -72,7 +72,7 @@ export function StepRegistro({ data, onChange, learning }: Props) {
             <Tip id="registro.ambiente" active={learning} />
           </div>
           <select
-            className="h-9 w-full rounded-lg border border-input bg-background px-3 text-sm"
+            className="h-9 w-full rounded-lg border border-mint/20 bg-dark-green/40 px-3 text-sm text-off-white"
             value={data.ambiente}
             onChange={e => set("ambiente", e.target.value as Environment)}
           >
@@ -88,7 +88,7 @@ export function StepRegistro({ data, onChange, learning }: Props) {
             <Tip id="registro.severidade" active={learning} />
           </div>
           <select
-            className="h-9 w-full rounded-lg border border-input bg-background px-3 text-sm"
+            className="h-9 w-full rounded-lg border border-mint/20 bg-dark-green/40 px-3 text-sm text-off-white"
             value={data.severidade}
             onChange={e => set("severidade", e.target.value as Severity)}
           >

@@ -115,7 +115,7 @@ export function BuggyForm() {
   if (submitted) {
     return (
       <Alert className="border-primary/30">
-        <CheckCircle2 className="size-4 text-primary" />
+        <CheckCircle2 className="size-4 text-mint" />
         <AlertTitle>Cadastro realizado!</AlertTitle>
         <AlertDescription>
           {/* BUG 5: Shows wrong email */}
@@ -150,7 +150,7 @@ export function BuggyForm() {
       {/* Nome - BUG 2: asterisk shown but not validated */}
       <div className="space-y-2">
         <Label htmlFor="nome">
-          Nome completo <span className="text-red-500">*</span>
+          Nome completo <span className="text-coral">*</span>
         </Label>
         <Input
           id="nome"
@@ -160,14 +160,14 @@ export function BuggyForm() {
           placeholder="Seu nome completo"
         />
         {errors.nome && (
-          <p className="text-xs text-red-500">{errors.nome}</p>
+          <p className="text-xs text-coral">{errors.nome}</p>
         )}
       </div>
 
       {/* Email - BUG 1: broken regex */}
       <div className="space-y-2">
         <Label htmlFor="email">
-          Email <span className="text-red-500">*</span>
+          Email <span className="text-coral">*</span>
         </Label>
         <Input
           id="email"
@@ -178,14 +178,14 @@ export function BuggyForm() {
           placeholder="seu@email.com"
         />
         {errors.email && (
-          <p className="text-xs text-red-500">{errors.email}</p>
+          <p className="text-xs text-coral">{errors.email}</p>
         )}
       </div>
 
       {/* Telefone - BUG 3: paste breaks mask */}
       <div className="space-y-2">
         <Label htmlFor="telefone">
-          Telefone <span className="text-red-500">*</span>
+          Telefone <span className="text-coral">*</span>
         </Label>
         <Input
           id="telefone"
@@ -195,14 +195,14 @@ export function BuggyForm() {
           placeholder="(11) 99999-0000"
         />
         {errors.telefone && (
-          <p className="text-xs text-red-500">{errors.telefone}</p>
+          <p className="text-xs text-coral">{errors.telefone}</p>
         )}
       </div>
 
       {/* Senha */}
       <div className="space-y-2">
         <Label htmlFor="senha">
-          Senha <span className="text-red-500">*</span>
+          Senha <span className="text-coral">*</span>
         </Label>
         <Input
           id="senha"
@@ -213,14 +213,14 @@ export function BuggyForm() {
           placeholder="Minimo 6 caracteres"
         />
         {errors.senha && (
-          <p className="text-xs text-red-500">{errors.senha}</p>
+          <p className="text-xs text-coral">{errors.senha}</p>
         )}
       </div>
 
       {/* Confirmar Senha */}
       <div className="space-y-2">
         <Label htmlFor="confirmarSenha">
-          Confirmar Senha <span className="text-red-500">*</span>
+          Confirmar Senha <span className="text-coral">*</span>
         </Label>
         <Input
           id="confirmarSenha"
@@ -231,7 +231,7 @@ export function BuggyForm() {
           placeholder="Repita a senha"
         />
         {errors.confirmarSenha && (
-          <p className="text-xs text-red-500">{errors.confirmarSenha}</p>
+          <p className="text-xs text-coral">{errors.confirmarSenha}</p>
         )}
       </div>
 
@@ -247,12 +247,12 @@ export function BuggyForm() {
         />
         <Label htmlFor="aceitarTermos" className="text-sm leading-relaxed">
           Li e aceito os{" "}
-          <span className="text-primary underline">Termos de Uso</span> e a{" "}
-          <span className="text-primary underline">Politica de Privacidade</span>
+          <span className="text-mint underline">Termos de Uso</span> e a{" "}
+          <span className="text-mint underline">Politica de Privacidade</span>
         </Label>
       </div>
       {errors.aceitarTermos && (
-        <p className="text-xs text-red-500">{errors.aceitarTermos}</p>
+        <p className="text-xs text-coral">{errors.aceitarTermos}</p>
       )}
 
       {/* BUG 4: Button is always enabled, even when errors are showing */}
@@ -261,7 +261,7 @@ export function BuggyForm() {
       </Button>
 
       {Object.keys(errors).length > 0 && (
-        <p className="text-center text-xs text-muted-foreground">
+        <p className="text-center text-xs text-off-white/50">
           Corrija os erros acima antes de continuar
         </p>
       )}

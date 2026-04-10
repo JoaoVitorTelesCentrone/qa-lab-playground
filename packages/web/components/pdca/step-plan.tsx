@@ -27,7 +27,7 @@ function Tip({ id, active }: { id: string; active: boolean }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <HelpCircle className="size-3.5 text-amber-500 cursor-help shrink-0" />
+        <HelpCircle className="size-3.5 text-[#F4A8A3] cursor-help shrink-0" />
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-xs text-xs">
         {text}
@@ -96,7 +96,7 @@ export function StepPlan({ data, onChange, learning }: Props) {
             <Label>Hipóteses Iniciais</Label>
             <Tip id="plan.hipoteses" active={learning} />
           </div>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-off-white/50">
             {validCount}/3 mínimo
           </span>
         </div>
@@ -104,7 +104,7 @@ export function StepPlan({ data, onChange, learning }: Props) {
         <div className="space-y-2">
           {data.hipoteses.map((h, i) => (
             <div key={i} className="flex items-center gap-2">
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-mint/20 text-xs font-bold text-mint">
                 {i + 1}
               </span>
               <Input
@@ -114,8 +114,8 @@ export function StepPlan({ data, onChange, learning }: Props) {
                 className="flex-1"
               />
               {data.hipoteses.length > 3 && (
-                <button onClick={() => removeHipotese(i)} className="shrink-0 rounded p-1 hover:bg-secondary">
-                  <X className="size-3.5 text-muted-foreground" />
+                <button onClick={() => removeHipotese(i)} className="shrink-0 rounded p-1 hover:bg-off-white/5">
+                  <X className="size-3.5 text-off-white/50" />
                 </button>
               )}
             </div>
@@ -135,21 +135,21 @@ export function StepPlan({ data, onChange, learning }: Props) {
         </div>
 
         {data.planoInvestigacao.length > 0 && (
-          <div className="space-y-1.5 rounded-lg border border-border p-3">
+          <div className="space-y-1.5 rounded-lg border border-mint/10 p-3">
             {data.planoInvestigacao.map(item => (
               <div key={item.id} className="flex items-center gap-2 group">
                 <button onClick={() => toggleStep(item.id)} className="shrink-0">
                   {item.concluido ? (
-                    <Check className="size-4 text-primary" />
+                    <Check className="size-4 text-neon" />
                   ) : (
-                    <Circle className="size-4 text-muted-foreground/40" />
+                    <Circle className="size-4 text-off-white/50/40" />
                   )}
                 </button>
-                <span className={`flex-1 text-sm ${item.concluido ? "line-through text-muted-foreground" : ""}`}>
+                <span className={`flex-1 text-sm ${item.concluido ? "line-through text-off-white/50" : ""}`}>
                   {item.texto}
                 </span>
-                <button onClick={() => removeStep(item.id)} className="opacity-0 group-hover:opacity-100 shrink-0 rounded p-0.5 hover:bg-secondary">
-                  <X className="size-3 text-muted-foreground" />
+                <button onClick={() => removeStep(item.id)} className="opacity-0 group-hover:opacity-100 shrink-0 rounded p-0.5 hover:bg-off-white/5">
+                  <X className="size-3 text-off-white/50" />
                 </button>
               </div>
             ))}
@@ -185,8 +185,8 @@ export function StepPlan({ data, onChange, learning }: Props) {
                 onClick={() => toggleResource(tag)}
                 className={`rounded-full border px-3 py-1 text-xs font-medium transition-all ${
                   active
-                    ? "border-primary/40 bg-primary/10 text-primary"
-                    : "border-border text-muted-foreground hover:border-primary/20 hover:text-foreground"
+                    ? "border-mint/40 bg-mint/10 text-mint"
+                    : "border-mint/10 text-off-white/50 hover:border-mint/20 hover:text-off-white"
                 }`}
               >
                 {tag}

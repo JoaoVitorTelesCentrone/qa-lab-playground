@@ -110,19 +110,19 @@ export interface PDCATemplate {
 export const stepOrder: PDCAStep[] = ["registro", "plan", "do", "check", "act", "relatorio"];
 
 export const stepConfig: Record<PDCAStep, { label: string; descricao: string; cor: string }> = {
-  registro:  { label: "Registro",    descricao: "Registrar o bug encontrado",                       cor: "text-blue-500" },
-  plan:      { label: "Plan",        descricao: "Planejar a investigação com hipóteses",             cor: "text-amber-500" },
-  do:        { label: "Do",          descricao: "Executar testes para cada hipótese",                cor: "text-orange-500" },
-  check:     { label: "Check",       descricao: "Verificar resultados e encontrar causa raiz",       cor: "text-violet-500" },
-  act:       { label: "Act",         descricao: "Definir correções e ações preventivas",             cor: "text-green-500" },
-  relatorio: { label: "Relatório",   descricao: "Visualizar relatório final completo",               cor: "text-primary" },
+  registro:  { label: "Registro",    descricao: "Registrar o bug encontrado",                       cor: "text-coral" },
+  plan:      { label: "Plan",        descricao: "Planejar a investigação com hipóteses",             cor: "text-[#F4A8A3]" },
+  do:        { label: "Do",          descricao: "Executar testes para cada hipótese",                cor: "text-neon" },
+  check:     { label: "Check",       descricao: "Verificar resultados e encontrar causa raiz",       cor: "text-mint" },
+  act:       { label: "Act",         descricao: "Definir correções e ações preventivas",             cor: "text-neon" },
+  relatorio: { label: "Relatório",   descricao: "Visualizar relatório final completo",               cor: "text-mint" },
 };
 
 export const severityConfig: Record<Severity, { label: string; cor: string }> = {
-  critico: { label: "Crítico", cor: "bg-red-500" },
-  alto:    { label: "Alto",    cor: "bg-amber-500" },
-  medio:   { label: "Médio",   cor: "bg-blue-400" },
-  baixo:   { label: "Baixo",   cor: "bg-gray-400" },
+  critico: { label: "Crítico", cor: "bg-coral" },
+  alto:    { label: "Alto",    cor: "bg-[#F4A8A3]" },
+  medio:   { label: "Médio",   cor: "bg-mint/60" },
+  baixo:   { label: "Baixo",   cor: "bg-off-white/40" },
 };
 
 export const environmentConfig: Record<Environment, string> = {
@@ -150,7 +150,7 @@ export const pdcaTemplates: PDCATemplate[] = [
     titulo: "Bug de Performance",
     descricao: "Página ou funcionalidade lenta, alto tempo de resposta",
     categoria: "performance",
-    cor: "text-red-500 bg-red-500/10",
+    cor: "text-coral bg-coral/10",
     registro: {
       titulo: "Página de listagem de produtos carrega lentamente",
       descricao: "A página de produtos demora mais de 5 segundos para carregar quando há mais de 50 produtos. O spinner fica visível por tempo excessivo e a interface trava durante o carregamento.",
@@ -170,7 +170,7 @@ export const pdcaTemplates: PDCATemplate[] = [
     titulo: "Bug de Integração API",
     descricao: "Endpoint retornando erro intermitente ou dados inconsistentes",
     categoria: "integracao",
-    cor: "text-violet-500 bg-violet-500/10",
+    cor: "text-mint bg-mint/10",
     registro: {
       titulo: "POST /api/orders retorna 500 intermitente",
       descricao: "Ao finalizar uma compra, o endpoint POST /api/orders retorna status 500 de forma intermitente. Aproximadamente 1 em cada 5 requests falha. O body da resposta contém 'Internal Server Error' sem detalhes.",
@@ -190,7 +190,7 @@ export const pdcaTemplates: PDCATemplate[] = [
     titulo: "Bug de UI/UX",
     descricao: "Problema visual ou de interação na interface",
     categoria: "ui",
-    cor: "text-sky-500 bg-sky-500/10",
+    cor: "text-neon bg-neon/10",
     registro: {
       titulo: "Botão de checkout não responde ao clique",
       descricao: "O botão 'Finalizar Compra' no carrinho não responde ao clique em telas menores (< 768px). O cursor muda para pointer mas nada acontece. Em desktop funciona normalmente.",

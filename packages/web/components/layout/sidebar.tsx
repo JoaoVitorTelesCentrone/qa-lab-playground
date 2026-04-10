@@ -68,17 +68,24 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-full w-16 flex-col items-center border-r border-border bg-white py-4 lg:w-56 animate-slide-in-left">
+    <aside className="flex h-full w-16 flex-col items-center border-r border-mint/10 bg-[#405555] py-5 lg:w-64 animate-slide-in-left">
       {/* Logo */}
-      <Link href="/" className="mb-8 flex items-center gap-2 px-3">
-        <FlaskConical className="size-7 text-primary" />
-        <span className="hidden text-sm font-bold tracking-tight text-gray-700 lg:block">
-          QA Lab
-        </span>
+      <Link href="/" className="mb-10 flex items-center gap-3 px-4">
+        <div className="flex items-center justify-center size-10 rounded-xl bg-mint/20">
+          <FlaskConical className="size-6 text-mint" />
+        </div>
+        <div className="hidden lg:flex flex-col">
+          <span className="font-[family-name:var(--font-display)] text-2xl tracking-wider text-mint italic">
+            QA LAB
+          </span>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-mint/50 -mt-1">
+            Playground
+          </span>
+        </div>
       </Link>
 
       {/* Nav */}
-      <nav className="flex w-full flex-1 flex-col gap-1 px-2">
+      <nav className="flex w-full flex-1 flex-col gap-1.5 px-3">
         {navItems.map((item) => {
           const isActive = item.exact
             ? pathname === item.href
@@ -90,22 +97,22 @@ export function Sidebar() {
                 <Link
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                    "flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-semibold uppercase tracking-wide transition-all duration-200",
                     isActive
-                      ? "bg-accent text-accent-foreground"
-                      : "text-gray-500 hover:bg-gray-100 hover:text-gray-700 hover:translate-x-0.5"
+                      ? "bg-mint/20 text-mint shadow-inner shadow-mint/10"
+                      : "text-off-white/60 hover:bg-off-white/5 hover:text-off-white hover:translate-x-0.5"
                   )}
                 >
                   <item.icon
                     className={cn(
                       "size-5 shrink-0",
-                      isActive ? "text-primary" : ""
+                      isActive ? "text-mint" : ""
                     )}
                   />
                   <span className="hidden lg:block">{item.label}</span>
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right" className="lg:hidden">
+              <TooltipContent side="right" className="lg:hidden bg-dark-green border-mint/20">
                 {item.label}
               </TooltipContent>
             </Tooltip>
@@ -114,8 +121,17 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="hidden px-3 lg:block">
-        <p className="text-xs text-gray-400">QALabBrain v0.1</p>
+      <div className="hidden px-4 lg:block">
+        <p className="text-[10px] uppercase tracking-[0.15em] text-mint/30">
+          v0.1 — Break things
+        </p>
+      </div>
+
+      {/* QA Watermark */}
+      <div className="absolute bottom-4 left-2 pointer-events-none lg:left-4">
+        <span className="font-[family-name:var(--font-display)] text-6xl lg:text-8xl text-mint/5 italic tracking-wider select-none">
+          QA
+        </span>
       </div>
     </aside>
   );

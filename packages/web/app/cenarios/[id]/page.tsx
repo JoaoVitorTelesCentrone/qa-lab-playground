@@ -13,10 +13,10 @@ export default function ScenarioPage() {
   if (!scenario) {
     return (
       <div className="space-y-4">
-        <p className="text-muted-foreground">Cenario nao encontrado.</p>
+        <p className="text-off-white/50">Cenario nao encontrado.</p>
         <Link
           href="/cenarios"
-          className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+          className="inline-flex items-center gap-1 text-sm text-mint hover:underline"
         >
           <ArrowLeft className="size-4" />
           Voltar aos cenarios
@@ -29,7 +29,7 @@ export default function ScenarioPage() {
     <div className="space-y-4">
       <Link
         href="/cenarios"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="inline-flex items-center gap-1 text-sm text-off-white/50 hover:text-off-white transition-colors"
       >
         <ArrowLeft className="size-4" />
         Voltar aos cenarios

@@ -203,9 +203,9 @@ for (const ep of endpoints) {
   },
 ];
 
-const nivelConfig: Record<Nivel, { label: string; classes: string }> = {
-  iniciante:     { label: "Iniciante",     classes: "bg-green-100 text-green-700" },
-  intermediario: { label: "Intermediário", classes: "bg-blue-100 text-blue-700" },
+const nivelConfig: Record<Nivel, { label: string; variant: any }> = {
+  iniciante:     { label: "Iniciante",     variant: "neon" },
+  intermediario: { label: "Intermediário", variant: "default" },
 };
 
 function MissaoCard({ missao }: { missao: Missao }) {
@@ -217,28 +217,28 @@ function MissaoCard({ missao }: { missao: Missao }) {
   }
 
   return (
-    <div className="rounded-xl border border-border bg-card flex flex-col transition-all duration-200 hover:border-primary/25 hover:shadow-sm">
+    <div className="rounded-2xl border border-mint/10 bg-dark-green/40 flex flex-col transition-all duration-200 hover:border-mint/25 hover:shadow-lg hover:shadow-mint/5">
       {/* Header */}
       <div className="p-5 space-y-3 flex-1">
         <div className="flex items-center justify-between">
-          <span className="font-mono text-xs text-muted-foreground">#{String(missao.id).padStart(2, "0")}</span>
-          <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${cfg.classes}`}>
+          <span className="font-mono text-xs text-mint/50">#{String(missao.id).padStart(2, "0")}</span>
+          <Badge variant={cfg.variant}>
             {cfg.label}
-          </span>
+          </Badge>
         </div>
 
-        <h3 className="text-sm font-semibold leading-snug">{missao.titulo}</h3>
+        <h3 className="text-base font-bold text-off-white leading-snug">{missao.titulo}</h3>
 
-        <p className="text-xs text-muted-foreground leading-relaxed">
+        <p className="text-sm text-off-white/60 leading-relaxed">
           {missao.objetivo}
         </p>
 
         <div className="flex items-center gap-2 flex-wrap pt-1">
-          <span className="rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground">
+          <span className="rounded-lg border border-mint/20 px-2.5 py-1 text-xs text-mint/70 uppercase tracking-wide">
             {missao.alvo}
           </span>
           {missao.ferramentas.map(f => (
-            <span key={f} className="rounded-md bg-secondary px-2 py-0.5 text-xs text-muted-foreground">
+            <span key={f} className="rounded-lg bg-off-white/5 px-2.5 py-1 text-xs text-off-white/50">
               {f}
             </span>
           ))}
@@ -247,33 +247,33 @@ function MissaoCard({ missao }: { missao: Missao }) {
 
       {/* Painel expansível */}
       {painel && (
-        <div className="border-t border-border mx-5 mb-0" />
+        <div className="border-t border-mint/10 mx-5 mb-0" />
       )}
       {painel === "dica" && (
-        <div className="px-5 py-4 text-xs text-muted-foreground leading-relaxed bg-amber-50/60 rounded-b-none border-x-0">
-          <div className="flex items-center gap-1.5 mb-2 text-amber-700 font-medium">
-            <Lightbulb className="size-3.5" />
+        <div className="px-5 py-4 text-sm text-off-white/70 leading-relaxed bg-neon/5 border-x-0">
+          <div className="flex items-center gap-2 mb-2 text-neon font-bold uppercase tracking-wide text-xs">
+            <Lightbulb className="size-4" />
             Dica
           </div>
           {missao.dica}
         </div>
       )}
       {painel === "snippet" && (
-        <div className="px-5 py-4 bg-gray-900 rounded-b-none overflow-x-auto">
-          <pre className="text-xs text-gray-100 font-mono leading-relaxed whitespace-pre">
+        <div className="px-5 py-4 bg-[#2a3a3a] rounded-b-none overflow-x-auto border-x-0">
+          <pre className="text-xs text-mint font-mono leading-relaxed whitespace-pre">
             {missao.snippet}
           </pre>
         </div>
       )}
 
       {/* Footer */}
-      <div className="flex items-center gap-2 px-5 py-3 border-t border-border">
+      <div className="flex items-center gap-2 px-5 py-3 border-t border-mint/10">
         <button
           onClick={() => toggle("dica")}
-          className={`flex items-center gap-1.5 text-xs rounded-md px-2.5 py-1.5 transition-colors ${
+          className={`flex items-center gap-1.5 text-xs rounded-lg px-3 py-2 transition-all font-bold uppercase tracking-wide ${
             painel === "dica"
-              ? "bg-amber-100 text-amber-700"
-              : "text-muted-foreground hover:bg-secondary"
+              ? "bg-neon text-[#3D5454]"
+              : "text-off-white/60 hover:bg-off-white/10 hover:text-off-white"
           }`}
         >
           <Lightbulb className="size-3.5" />
@@ -282,10 +282,10 @@ function MissaoCard({ missao }: { missao: Missao }) {
         </button>
         <button
           onClick={() => toggle("snippet")}
-          className={`flex items-center gap-1.5 text-xs rounded-md px-2.5 py-1.5 transition-colors ${
+          className={`flex items-center gap-1.5 text-xs rounded-lg px-3 py-2 transition-all font-bold uppercase tracking-wide ${
             painel === "snippet"
-              ? "bg-gray-800 text-gray-100"
-              : "text-muted-foreground hover:bg-secondary"
+              ? "bg-mint text-[#3D5454]"
+              : "text-off-white/60 hover:bg-off-white/10 hover:text-off-white"
           }`}
         >
           <Terminal className="size-3.5" />
@@ -311,41 +311,57 @@ export default function MissoesPage() {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
-      <div className="space-y-2 animate-slide-in-up">
-        <div className="flex items-center gap-2.5">
-          <Target className="size-6 text-primary" />
-          <h1 className="text-2xl font-bold tracking-tight">Missões</h1>
+      <div className="space-y-4 animate-slide-in-up">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center size-10 rounded-xl bg-mint/20">
+            <Target className="size-5 text-mint" />
+          </div>
+          <div>
+            <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-wider text-mint italic">
+              MISSÕES
+            </h1>
+            <p className="text-sm text-mint/50 uppercase tracking-[0.15em]">
+              Prove bugs reais com automação
+            </p>
+          </div>
         </div>
-        <p className="text-sm text-muted-foreground max-w-xl">
+        <p className="text-sm text-off-white/60 max-w-xl">
           Cada missão tem um bug real pra você provar com automação. Escolha pelo seu nível, leia o objetivo e escreva o teste.
         </p>
       </div>
 
       {/* Filtros */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-2">
         {filtros.map(f => (
           <button
             key={f.value}
             onClick={() => setFiltro(f.value)}
-            className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-all ${
+            className={`rounded-xl px-4 py-2 text-sm font-bold uppercase tracking-wide transition-all ${
               filtro === f.value
-                ? "bg-primary text-white"
-                : "text-muted-foreground hover:bg-secondary"
+                ? "bg-mint text-[#3D5454]"
+                : "text-off-white/60 hover:bg-off-white/10 hover:text-off-white border border-mint/20"
             }`}
           >
             {f.label}
           </button>
         ))}
-        <span className="ml-auto text-xs text-muted-foreground">
+        <span className="ml-auto text-xs text-off-white/40 uppercase tracking-wide">
           {filtradas.length} missão{filtradas.length !== 1 ? "ões" : ""}
         </span>
       </div>
 
       {/* Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 stagger">
+      <div className="grid gap-5 sm:grid-cols-2 stagger">
         {filtradas.map(m => (
           <MissaoCard key={m.id} missao={m} />
         ))}
+      </div>
+
+      {/* Series Badge */}
+      <div className="flex justify-end">
+        <span className="series-number text-4xl text-off-white/10">
+          #02
+        </span>
       </div>
     </div>
   );

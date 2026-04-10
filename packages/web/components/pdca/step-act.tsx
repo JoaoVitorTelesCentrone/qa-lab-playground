@@ -25,7 +25,7 @@ function Tip({ id, active }: { id: string; active: boolean }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <HelpCircle className="size-3.5 text-amber-500 cursor-help shrink-0" />
+        <HelpCircle className="size-3.5 text-[#F4A8A3] cursor-help shrink-0" />
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-xs text-xs">
         {text}
@@ -44,7 +44,7 @@ export function StepAct({ data, onChange, learning }: Props) {
           <Tip id="act.correcao" active={learning} />
         </div>
 
-        <div className="space-y-3 rounded-lg border border-border p-4">
+        <div className="space-y-3 rounded-lg border border-mint/10 p-4">
           <div className="space-y-1.5">
             <Label htmlFor="fix-desc">Descrição da correção</Label>
             <Textarea
@@ -86,7 +86,7 @@ export function StepAct({ data, onChange, learning }: Props) {
           <Tip id="act.preventiva" active={learning} />
         </div>
 
-        <div className="space-y-3 rounded-lg border border-border p-4">
+        <div className="space-y-3 rounded-lg border border-mint/10 p-4">
           <div className="space-y-1.5">
             <Label htmlFor="preventiva-desc">O que fazer para evitar bugs similares?</Label>
             <Textarea
@@ -101,7 +101,7 @@ export function StepAct({ data, onChange, learning }: Props) {
           <div className="space-y-1.5">
             <Label>Tipo de ação</Label>
             <select
-              className="h-9 w-full rounded-lg border border-input bg-background px-3 text-sm"
+              className="h-9 w-full rounded-lg border border-mint/20 bg-dark-green/40 px-3 text-sm text-off-white"
               value={data.acaoPreventiva.tipo}
               onChange={e => onChange({ ...data, acaoPreventiva: { ...data.acaoPreventiva, tipo: e.target.value as PreventiveActionType } })}
             >
@@ -129,7 +129,7 @@ export function StepAct({ data, onChange, learning }: Props) {
       </div>
 
       {/* Teste de regressão */}
-      <label className="flex items-center gap-3 cursor-pointer rounded-lg border border-border p-4 hover:bg-secondary/30 transition-colors">
+      <label className="flex items-center gap-3 cursor-pointer rounded-lg border border-mint/10 p-4 hover:bg-off-white/5 transition-colors">
         <input
           type="checkbox"
           checked={data.testeRegressao}
@@ -138,7 +138,7 @@ export function StepAct({ data, onChange, learning }: Props) {
         />
         <div>
           <p className="text-sm font-medium">Adicionar caso de teste de regressão?</p>
-          <p className="text-xs text-muted-foreground">Marque se um novo teste automatizado deve ser criado para este cenário</p>
+          <p className="text-xs text-off-white/50">Marque se um novo teste automatizado deve ser criado para este cenário</p>
         </div>
       </label>
     </div>

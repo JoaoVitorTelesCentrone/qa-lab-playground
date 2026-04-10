@@ -55,20 +55,20 @@ export function ScenarioRunner({ scenario }: ScenarioRunnerProps) {
         <h1 className="text-2xl font-bold tracking-tight">
           {scenario.titulo}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-sm text-off-white/50">
           {scenario.descricaoCompleta}
         </p>
       </div>
 
       {/* Progress */}
       <div className="flex items-center gap-3">
-        <div className="h-2 flex-1 rounded-full bg-secondary">
+        <div className="h-2 flex-1 rounded-full bg-off-white/10">
           <div
-            className="h-2 rounded-full bg-primary transition-all"
+            className="h-2 rounded-full bg-mint transition-all"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <span className="text-sm font-medium text-muted-foreground">
+        <span className="text-sm font-medium text-off-white/50">
           {completedObjectives.size}/{scenario.objetivos.length}
         </span>
       </div>
@@ -77,7 +77,7 @@ export function ScenarioRunner({ scenario }: ScenarioRunnerProps) {
       {scenario.endpointsRelacionados &&
         scenario.endpointsRelacionados.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            <span className="text-xs text-muted-foreground">Endpoints:</span>
+            <span className="text-xs text-off-white/50">Endpoints:</span>
             {scenario.endpointsRelacionados.map((ep) => (
               <Badge key={ep} variant="secondary" className="font-mono text-xs">
                 {ep}
@@ -102,13 +102,13 @@ export function ScenarioRunner({ scenario }: ScenarioRunnerProps) {
                     className="mt-0.5 shrink-0"
                   >
                     {isComplete ? (
-                      <Check className="size-5 text-primary" />
+                      <Check className="size-5 text-neon" />
                     ) : (
-                      <Circle className="size-5 text-muted-foreground" />
+                      <Circle className="size-5 text-off-white/50" />
                     )}
                   </button>
                   <CardTitle
-                    className={`text-sm ${isComplete ? "line-through text-muted-foreground" : ""}`}
+                    className={`text-sm ${isComplete ? "line-through text-off-white/50" : ""}`}
                   >
                     {obj.descricao}
                   </CardTitle>
@@ -129,7 +129,7 @@ export function ScenarioRunner({ scenario }: ScenarioRunnerProps) {
                   {hintRevealed ? "Esconder dica" : "Ver dica"}
                 </Button>
                 {hintRevealed && (
-                  <p className="mt-2 rounded-md bg-secondary/50 p-2 text-xs text-muted-foreground">
+                  <p className="mt-2 rounded-md bg-dark-green/40 p-2 text-xs text-off-white/50">
                     {obj.dica}
                   </p>
                 )}
@@ -151,8 +151,8 @@ export function ScenarioRunner({ scenario }: ScenarioRunnerProps) {
       </div>
 
       {progress === 100 && (
-        <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-center">
-          <p className="text-sm font-medium text-primary">
+        <div className="rounded-xl border border-neon/30 bg-neon/5 p-4 text-center">
+          <p className="text-sm font-medium text-neon">
             Parabens! Voce completou todos os objetivos deste cenario.
           </p>
         </div>

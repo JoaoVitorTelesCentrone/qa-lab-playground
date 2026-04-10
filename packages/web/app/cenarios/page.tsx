@@ -159,16 +159,16 @@ const initialPlans: TestPlan[] = [
 // ==============================
 
 const statusConfig: Record<CaseStatus, { label: string; icon: React.ElementType; className: string; next: CaseStatus }> = {
-  nao_executado: { label: "Não executado", icon: Circle,       className: "text-gray-500 bg-gray-100",                        next: "passou" },
-  passou:        { label: "Passou",         icon: CheckCircle2, className: "text-green-700 bg-green-100",                      next: "falhou" },
-  falhou:        { label: "Falhou",         icon: XCircle,      className: "text-red-700 bg-red-100",                          next: "bloqueado" },
-  bloqueado:     { label: "Bloqueado",      icon: MinusCircle,  className: "text-amber-700 bg-amber-100",                      next: "nao_executado" },
+  nao_executado: { label: "Não executado", icon: Circle,       className: "text-off-white/60 bg-off-white/10",   next: "passou" },
+  passou:        { label: "Passou",         icon: CheckCircle2, className: "text-neon bg-neon/20",               next: "falhou" },
+  falhou:        { label: "Falhou",         icon: XCircle,      className: "text-coral bg-coral/20",             next: "bloqueado" },
+  bloqueado:     { label: "Bloqueado",      icon: MinusCircle,  className: "text-[#F4A8A3] bg-[#F4A8A3]/20",    next: "nao_executado" },
 };
 
 const priorityConfig: Record<CasePriority, { label: string; className: string }> = {
-  alta:  { label: "Alta",  className: "bg-red-100 text-red-700 border-red-200" },
-  media: { label: "Média", className: "bg-amber-100 text-amber-700 border-amber-200" },
-  baixa: { label: "Baixa", className: "bg-gray-100 text-gray-600" },
+  alta:  { label: "Alta",  className: "bg-coral/20 text-coral border-coral/30" },
+  media: { label: "Média", className: "bg-[#F4A8A3]/20 text-[#F4A8A3] border-[#F4A8A3]/30" },
+  baixa: { label: "Baixa", className: "bg-off-white/10 text-off-white/60 border-off-white/20" },
 };
 
 // ==============================
@@ -184,17 +184,17 @@ function NewSuiteModal({ onClose, onConfirm }: NewSuiteModalProps) {
   const [nome, setNome] = useState("");
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gray-800/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-sm rounded-xl border border-border bg-card shadow-2xl mx-4">
-        <div className="flex items-center justify-between border-b border-border px-5 py-4">
+      <div className="absolute inset-0 bg-dark-green/80 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative z-10 w-full max-w-sm rounded-2xl border border-mint/20 bg-[#405555] shadow-2xl mx-4">
+        <div className="flex items-center justify-between border-b border-mint/10 px-5 py-4">
           <div className="flex items-center gap-2">
-            <Folder className="size-4 text-primary" />
-            <h2 className="font-semibold text-sm">Nova Suite</h2>
+            <Folder className="size-4 text-mint" />
+            <h2 className="font-bold text-sm uppercase tracking-wide text-off-white">Nova Suite</h2>
           </div>
-          <button onClick={onClose} className="rounded p-1 hover:bg-secondary"><X className="size-4 text-muted-foreground" /></button>
+          <button onClick={onClose} className="rounded-lg p-1 hover:bg-off-white/10"><X className="size-4 text-off-white/50" /></button>
         </div>
         <div className="p-5 space-y-3">
-          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Nome da suite</label>
+          <label className="text-xs font-bold text-off-white/50 uppercase tracking-wide">Nome da suite</label>
           <Input
             autoFocus
             value={nome}
@@ -203,7 +203,7 @@ function NewSuiteModal({ onClose, onConfirm }: NewSuiteModalProps) {
             placeholder="Ex: Regressão — Login"
           />
         </div>
-        <div className="flex justify-end gap-2 border-t border-border px-5 py-4">
+        <div className="flex justify-end gap-2 border-t border-mint/10 px-5 py-4">
           <Button variant="outline" size="sm" onClick={onClose}>Cancelar</Button>
           <Button size="sm" disabled={!nome.trim()} onClick={() => onConfirm(nome.trim())}>Criar</Button>
         </div>
@@ -266,26 +266,26 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gray-800/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-xl border border-border bg-card shadow-2xl mx-4">
-        <div className="flex items-center justify-between border-b border-border px-5 py-4 sticky top-0 bg-card">
+      <div className="absolute inset-0 bg-dark-green/80 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative z-10 w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border border-mint/20 bg-[#405555] shadow-2xl mx-4">
+        <div className="flex items-center justify-between border-b border-mint/10 px-5 py-4 sticky top-0 bg-[#405555]">
           <div className="flex items-center gap-2">
-            <FileText className="size-4 text-primary" />
-            <h2 className="font-semibold text-sm">Novo Caso de Teste</h2>
+            <FileText className="size-4 text-mint" />
+            <h2 className="font-bold text-sm uppercase tracking-wide text-off-white">Novo Caso de Teste</h2>
           </div>
-          <button onClick={onClose} className="rounded p-1 hover:bg-secondary"><X className="size-4 text-muted-foreground" /></button>
+          <button onClick={onClose} className="rounded-lg p-1 hover:bg-off-white/10"><X className="size-4 text-off-white/50" /></button>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-border">
+        <div className="flex border-b border-mint/10">
           <button
-            className={`flex-1 px-4 py-2.5 text-xs font-medium transition-colors ${tab === "cenario" ? "border-b-2 border-primary text-primary bg-primary/5" : "text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 px-4 py-2.5 text-xs font-bold uppercase tracking-wide transition-colors ${tab === "cenario" ? "border-b-2 border-mint text-mint bg-mint/5" : "text-off-white/40 hover:text-off-white"}`}
             onClick={() => setTab("cenario")}
           >
             Vincular cenário existente
           </button>
           <button
-            className={`flex-1 px-4 py-2.5 text-xs font-medium transition-colors ${tab === "manual" ? "border-b-2 border-primary text-primary bg-primary/5" : "text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 px-4 py-2.5 text-xs font-bold uppercase tracking-wide transition-colors ${tab === "manual" ? "border-b-2 border-mint text-mint bg-mint/5" : "text-off-white/40 hover:text-off-white"}`}
             onClick={() => setTab("manual")}
           >
             Criar manualmente
@@ -296,7 +296,7 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
           {tab === "cenario" ? (
             <>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-off-white/40" />
                 <Input
                   placeholder="Buscar cenário..."
                   value={search}
@@ -305,7 +305,7 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
                 />
               </div>
               {availableScenarios.length === 0 ? (
-                <p className="text-xs text-muted-foreground text-center py-4">
+                <p className="text-xs text-off-white/40 text-center py-4">
                   {existingScenarioIds.length >= scenarios.length ? "Todos os cenários já estão nesta suite." : "Nenhum cenário encontrado."}
                 </p>
               ) : (
@@ -314,16 +314,16 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
                     <button
                       key={s.id}
                       onClick={() => setSelectedScenarioId(s.id)}
-                      className={`w-full text-left rounded-lg border px-4 py-3 transition-colors ${selectedScenarioId === s.id ? "border-primary bg-primary/5" : "border-border hover:border-primary/40 hover:bg-secondary/50"}`}
+                      className={`w-full text-left rounded-xl border px-4 py-3 transition-colors ${selectedScenarioId === s.id ? "border-mint/40 bg-mint/10" : "border-mint/10 hover:border-mint/30 hover:bg-off-white/5"}`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <p className="text-sm font-medium">{s.titulo}</p>
-                          <p className="text-xs text-muted-foreground mt-0.5">{s.descricao}</p>
-                          <p className="text-xs text-muted-foreground mt-1">{s.objetivos.length} objetivos</p>
+                          <p className="text-sm font-medium text-off-white">{s.titulo}</p>
+                          <p className="text-xs text-off-white/50 mt-0.5">{s.descricao}</p>
+                          <p className="text-xs text-off-white/40 mt-1">{s.objetivos.length} objetivos</p>
                         </div>
                         {selectedScenarioId === s.id && (
-                          <CheckCircle2 className="size-4 text-primary shrink-0 mt-0.5" />
+                          <CheckCircle2 className="size-4 text-mint shrink-0 mt-0.5" />
                         )}
                       </div>
                     </button>
@@ -332,9 +332,9 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
               )}
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Prioridade</label>
+                <label className="text-xs font-bold text-off-white/50 uppercase tracking-wide">Prioridade</label>
                 <select
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className="flex h-9 w-full rounded-xl border border-mint/20 bg-dark-green/40 text-off-white px-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/30"
                   value={prioridade}
                   onChange={e => setPrioridade(e.target.value as CasePriority)}
                 >
@@ -347,17 +347,17 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
           ) : (
             <>
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Título *</label>
+                <label className="text-xs font-bold text-off-white/50 uppercase tracking-wide">Título *</label>
                 <Input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="Ex: Verificar validação de e-mail" />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Descrição</label>
+                <label className="text-xs font-bold text-off-white/50 uppercase tracking-wide">Descrição</label>
                 <Textarea value={descricao} onChange={e => setDescricao(e.target.value)} rows={2} placeholder="Objetivo do teste..." />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Prioridade</label>
+                <label className="text-xs font-bold text-off-white/50 uppercase tracking-wide">Prioridade</label>
                 <select
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className="flex h-9 w-full rounded-xl border border-mint/20 bg-dark-green/40 text-off-white px-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/30"
                   value={prioridade}
                   onChange={e => setPrioridade(e.target.value as CasePriority)}
                 >
@@ -367,14 +367,14 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Passos</label>
+                <label className="text-xs font-bold text-off-white/50 uppercase tracking-wide">Passos</label>
                 <div className="space-y-1.5">
                   {passos.map((p, i) => (
-                    <div key={i} className="flex items-center gap-2 rounded-md bg-secondary/60 px-3 py-1.5">
-                      <span className="shrink-0 font-mono text-xs text-muted-foreground w-4">{i + 1}.</span>
-                      <span className="flex-1 text-xs">{p}</span>
+                    <div key={i} className="flex items-center gap-2 rounded-xl bg-off-white/5 px-3 py-1.5">
+                      <span className="shrink-0 font-mono text-xs text-off-white/40 w-4">{i + 1}.</span>
+                      <span className="flex-1 text-xs text-off-white/80">{p}</span>
                       <button onClick={() => setPassos(prev => prev.filter((_, idx) => idx !== i))}>
-                        <X className="size-3 text-muted-foreground hover:text-destructive" />
+                        <X className="size-3 text-off-white/40 hover:text-coral" />
                       </button>
                     </div>
                   ))}
@@ -396,7 +396,7 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
           )}
         </div>
 
-        <div className="flex justify-end gap-2 border-t border-border px-5 py-4 sticky bottom-0 bg-card">
+        <div className="flex justify-end gap-2 border-t border-mint/10 px-5 py-4 sticky bottom-0 bg-[#405555]">
           <Button variant="outline" size="sm" onClick={onClose}>Cancelar</Button>
           <Button size="sm" disabled={!canConfirm} onClick={handleConfirm}>Adicionar caso</Button>
         </div>
@@ -437,16 +437,16 @@ function TestCaseTable({ suite, planId, onStatusChange, onDelete, onAddCase }: T
       {/* Suite header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <FolderOpen className="size-4 text-primary" />
-          <h2 className="font-semibold">{suite.nome}</h2>
-          <span className="text-xs text-muted-foreground">{total} caso{total !== 1 ? "s" : ""}</span>
+          <FolderOpen className="size-4 text-mint" />
+          <h2 className="font-bold text-off-white">{suite.nome}</h2>
+          <span className="text-xs text-off-white/40">{total} caso{total !== 1 ? "s" : ""}</span>
         </div>
         <div className="flex items-center gap-3">
           {total > 0 && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="text-green-600 font-medium">{passou} passou</span>
+            <div className="flex items-center gap-2 text-xs text-off-white/50">
+              <span className="text-neon font-bold">{passou} passou</span>
               <span>·</span>
-              <span className="text-red-600 font-medium">{falhou} falhou</span>
+              <span className="text-coral font-bold">{falhou} falhou</span>
               <span>·</span>
               <span>{total - passou - falhou} pendente</span>
             </div>
@@ -459,24 +459,24 @@ function TestCaseTable({ suite, planId, onStatusChange, onDelete, onAddCase }: T
       </div>
 
       {total === 0 ? (
-        <div className="rounded-lg border border-dashed border-border p-10 text-center">
-          <FileText className="size-8 text-muted-foreground/40 mx-auto mb-2" />
-          <p className="text-sm text-muted-foreground">Nenhum caso de teste nesta suite.</p>
+        <div className="rounded-2xl border border-dashed border-mint/20 p-10 text-center">
+          <FileText className="size-8 text-off-white/20 mx-auto mb-2" />
+          <p className="text-sm text-off-white/50">Nenhum caso de teste nesta suite.</p>
           <Button variant="outline" size="sm" className="mt-3 gap-1.5" onClick={onAddCase}>
             <Plus className="size-3.5" />
             Adicionar primeiro caso
           </Button>
         </div>
       ) : (
-        <div className="rounded-lg border border-border overflow-hidden">
+        <div className="rounded-2xl border border-mint/10 overflow-hidden">
           {/* Table header */}
-          <div className="grid grid-cols-[32px_60px_1fr_90px_130px_80px] gap-x-3 items-center border-b border-border bg-secondary/40 px-3 py-2">
+          <div className="grid grid-cols-[32px_60px_1fr_90px_130px_80px] gap-x-3 items-center border-b border-mint/10 bg-dark-green/60 px-3 py-2">
             <span />
-            <span className="text-xs font-medium text-muted-foreground">ID</span>
-            <span className="text-xs font-medium text-muted-foreground">Título</span>
-            <span className="text-xs font-medium text-muted-foreground">Prioridade</span>
-            <span className="text-xs font-medium text-muted-foreground">Status</span>
-            <span className="text-xs font-medium text-muted-foreground">Ações</span>
+            <span className="text-xs font-bold uppercase tracking-wide text-off-white/40">ID</span>
+            <span className="text-xs font-bold uppercase tracking-wide text-off-white/40">Título</span>
+            <span className="text-xs font-bold uppercase tracking-wide text-off-white/40">Prioridade</span>
+            <span className="text-xs font-bold uppercase tracking-wide text-off-white/40">Status</span>
+            <span className="text-xs font-bold uppercase tracking-wide text-off-white/40">Ações</span>
           </div>
 
           {/* Rows */}
@@ -487,29 +487,29 @@ function TestCaseTable({ suite, planId, onStatusChange, onDelete, onAddCase }: T
             const isExpanded = expanded.has(tc.id);
 
             return (
-              <div key={tc.id} className="border-b border-border last:border-0">
-                <div className="grid grid-cols-[32px_60px_1fr_90px_130px_80px] gap-x-3 items-center px-3 py-2.5 hover:bg-secondary/30 transition-colors">
+              <div key={tc.id} className="border-b border-mint/10 last:border-0">
+                <div className="grid grid-cols-[32px_60px_1fr_90px_130px_80px] gap-x-3 items-center px-3 py-2.5 hover:bg-off-white/5 transition-colors">
                   {/* Expand */}
                   <button
                     onClick={() => toggleExpand(tc.id)}
-                    className="flex items-center justify-center rounded p-0.5 hover:bg-secondary"
+                    className="flex items-center justify-center rounded-lg p-0.5 hover:bg-off-white/10"
                   >
                     {isExpanded
-                      ? <ChevronDown className="size-3.5 text-muted-foreground" />
-                      : <ChevronRight className="size-3.5 text-muted-foreground" />
+                      ? <ChevronDown className="size-3.5 text-off-white/40" />
+                      : <ChevronRight className="size-3.5 text-off-white/40" />
                     }
                   </button>
 
                   {/* ID */}
-                  <span className="font-mono text-xs text-muted-foreground">
+                  <span className="font-mono text-xs text-off-white/40">
                     TC-{String(idx + 1).padStart(3, "0")}
                   </span>
 
                   {/* Title */}
                   <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{tc.titulo}</p>
+                    <p className="text-sm font-medium text-off-white truncate">{tc.titulo}</p>
                     {tc.descricao && (
-                      <p className="text-xs text-muted-foreground truncate">{tc.descricao}</p>
+                      <p className="text-xs text-off-white/50 truncate">{tc.descricao}</p>
                     )}
                   </div>
 
@@ -521,7 +521,7 @@ function TestCaseTable({ suite, planId, onStatusChange, onDelete, onAddCase }: T
                   {/* Status — clicável para ciclar */}
                   <button
                     onClick={() => onStatusChange(planId, suite.id, tc.id, status.next)}
-                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors hover:opacity-80 ${status.className}`}
+                    className={`inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1 text-xs font-bold uppercase tracking-wide transition-colors hover:opacity-80 ${status.className}`}
                     title="Clique para alterar status"
                   >
                     <StatusIcon className="size-3 shrink-0" />
@@ -532,7 +532,7 @@ function TestCaseTable({ suite, planId, onStatusChange, onDelete, onAddCase }: T
                   <div className="flex items-center gap-1">
                     {tc.scenarioId ? (
                       <Link href={`/cenarios/${tc.scenarioId}`}>
-                        <Button variant="ghost" size="xs" className="h-7 gap-1 text-xs text-primary">
+                        <Button variant="ghost" size="xs" className="h-7 gap-1 text-xs text-mint">
                           <Play className="size-3" />
                           Executar
                         </Button>
@@ -545,20 +545,20 @@ function TestCaseTable({ suite, planId, onStatusChange, onDelete, onAddCase }: T
                     )}
                     <button
                       onClick={() => onDelete(planId, suite.id, tc.id)}
-                      className="rounded p-1 hover:bg-destructive/10 transition-colors"
+                      className="rounded-lg p-1 hover:bg-coral/10 transition-colors"
                     >
-                      <Trash2 className="size-3.5 text-muted-foreground hover:text-destructive" />
+                      <Trash2 className="size-3.5 text-off-white/40 hover:text-coral" />
                     </button>
                   </div>
                 </div>
 
                 {/* Expanded — passos */}
                 {isExpanded && tc.passos.length > 0 && (
-                  <div className="px-12 pb-3 pt-1 bg-secondary/20">
-                    <p className="text-xs font-medium text-muted-foreground mb-2">Passos</p>
+                  <div className="px-12 pb-3 pt-1 bg-off-white/5">
+                    <p className="text-xs font-bold uppercase tracking-wide text-off-white/40 mb-2">Passos</p>
                     <ol className="space-y-1">
                       {tc.passos.map((p, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <li key={i} className="flex items-start gap-2 text-xs text-off-white/60">
                           <span className="font-mono shrink-0 w-4">{i + 1}.</span>
                           <span>{p}</span>
                         </li>
@@ -595,20 +595,20 @@ function SuiteItem({ suite, planId, isSelected, onSelect, onDelete, onToggle }: 
 
   return (
     <div
-      className={`group flex items-center gap-1.5 rounded-md px-2 py-1.5 cursor-pointer transition-colors ${isSelected ? "bg-primary/10 text-primary" : "hover:bg-secondary/70 text-foreground"}`}
+      className={`group flex items-center gap-1.5 rounded-xl px-2 py-1.5 cursor-pointer transition-colors ${isSelected ? "bg-mint/20 text-mint" : "hover:bg-off-white/5 text-off-white/70"}`}
       onClick={onSelect}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <Folder className={`size-3.5 shrink-0 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
+      <Folder className={`size-3.5 shrink-0 ${isSelected ? "text-mint" : "text-off-white/40"}`} />
       <span className="flex-1 text-xs font-medium truncate">{suite.nome}</span>
-      <span className="text-xs text-muted-foreground shrink-0">{suite.casos.length}</span>
+      <span className="text-xs text-off-white/40 shrink-0">{suite.casos.length}</span>
       {(hovered || isSelected) && (
         <button
           onClick={e => { e.stopPropagation(); onDelete(); }}
-          className="rounded p-0.5 hover:bg-destructive/20 transition-colors shrink-0"
+          className="rounded-lg p-0.5 hover:bg-coral/20 transition-colors shrink-0"
         >
-          <Trash2 className="size-3 text-muted-foreground hover:text-destructive" />
+          <Trash2 className="size-3 text-off-white/40 hover:text-coral" />
         </button>
       )}
     </div>
@@ -635,19 +635,19 @@ function PlanItem({ plan, selectedSuiteId, onSelectSuite, onTogglePlan, onDelete
     <div className="space-y-0.5">
       <button
         onClick={onTogglePlan}
-        className="w-full flex items-center gap-1.5 rounded-md px-2 py-1.5 hover:bg-secondary/70 transition-colors"
+        className="w-full flex items-center gap-1.5 rounded-xl px-2 py-1.5 hover:bg-off-white/5 transition-colors"
       >
         {plan.expanded
-          ? <ChevronDown className="size-3.5 shrink-0 text-muted-foreground" />
-          : <ChevronRight className="size-3.5 shrink-0 text-muted-foreground" />
+          ? <ChevronDown className="size-3.5 shrink-0 text-off-white/40" />
+          : <ChevronRight className="size-3.5 shrink-0 text-off-white/40" />
         }
-        <ListChecks className="size-3.5 shrink-0 text-primary" />
-        <span className="flex-1 text-left text-xs font-semibold truncate">{plan.nome}</span>
-        <span className="text-xs text-muted-foreground shrink-0">{totalCases}</span>
+        <ListChecks className="size-3.5 shrink-0 text-mint" />
+        <span className="flex-1 text-left text-xs font-bold uppercase tracking-wide text-off-white/80 truncate">{plan.nome}</span>
+        <span className="text-xs text-off-white/40 shrink-0">{totalCases}</span>
       </button>
 
       {plan.expanded && (
-        <div className="ml-4 space-y-0.5 border-l border-border pl-2">
+        <div className="ml-4 space-y-0.5 border-l border-mint/10 pl-2">
           {plan.suites.map(suite => (
             <SuiteItem
               key={suite.id}
@@ -661,7 +661,7 @@ function PlanItem({ plan, selectedSuiteId, onSelectSuite, onTogglePlan, onDelete
           ))}
           <button
             onClick={e => { e.stopPropagation(); onAddSuite(); }}
-            className="flex w-full items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
+            className="flex w-full items-center gap-1.5 rounded-xl px-2 py-1 text-xs text-off-white/40 hover:text-mint hover:bg-mint/5 transition-colors"
           >
             <Plus className="size-3" />
             Nova Suite
@@ -767,29 +767,38 @@ export default function CenariosPage() {
     <div className="flex flex-col gap-4 h-full animate-fade-in">
       {/* Header */}
       <div className="flex items-start justify-between gap-4 animate-slide-in-up">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Cenários de Teste</h1>
-          <p className="text-sm text-muted-foreground">
-            Organize seus testes em suites, vincule cenários existentes ou crie casos manuais.
-          </p>
+        <div className="space-y-1">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center size-10 rounded-xl bg-mint/20">
+              <ListChecks className="size-5 text-mint" />
+            </div>
+            <div>
+              <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-wider text-mint italic">
+                CENÁRIOS
+              </h1>
+              <p className="text-sm text-mint/50 uppercase tracking-[0.15em]">
+                Organize seus testes em suites
+              </p>
+            </div>
+          </div>
         </div>
         {/* Global stats */}
         <div className="flex items-center gap-3 shrink-0">
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="size-2 rounded-full bg-green-500" />
-            <span className="text-muted-foreground">{totalPassed} passou</span>
+            <span className="size-2 rounded-full bg-neon" />
+            <span className="text-off-white/50">{totalPassed} passou</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="size-2 rounded-full bg-red-500" />
-            <span className="text-muted-foreground">{totalFailed} falhou</span>
+            <span className="size-2 rounded-full bg-coral" />
+            <span className="text-off-white/50">{totalFailed} falhou</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="size-2 rounded-full bg-amber-500" />
-            <span className="text-muted-foreground">{totalBlocked} bloqueado</span>
+            <span className="size-2 rounded-full bg-[#F4A8A3]" />
+            <span className="text-off-white/50">{totalBlocked} bloqueado</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="size-2 rounded-full bg-muted-foreground" />
-            <span className="text-muted-foreground">{totalPending} pendente</span>
+            <span className="size-2 rounded-full bg-off-white/30" />
+            <span className="text-off-white/50">{totalPending} pendente</span>
           </div>
         </div>
       </div>
@@ -797,8 +806,8 @@ export default function CenariosPage() {
       {/* Layout: tree + content */}
       <div className="flex gap-4 min-h-0 flex-1">
         {/* Left — Test Suite Tree */}
-        <div className="w-64 shrink-0 flex flex-col gap-2 rounded-lg border border-border bg-card p-3">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-1">Test Plans</p>
+        <div className="w-64 shrink-0 flex flex-col gap-2 rounded-2xl border border-mint/10 bg-dark-green/40 p-3">
+          <p className="text-xs font-bold text-off-white/50 uppercase tracking-wider px-1">Test Plans</p>
           <div className="flex-1 space-y-1 overflow-y-auto">
             {plans.map(plan => (
               <PlanItem
@@ -815,7 +824,7 @@ export default function CenariosPage() {
         </div>
 
         {/* Right — Test Case Table */}
-        <div className="flex-1 min-w-0 rounded-lg border border-border bg-card p-5 overflow-y-auto">
+        <div className="flex-1 min-w-0 rounded-2xl border border-mint/10 bg-dark-green/30 p-5 overflow-y-auto">
           {selectedSuite ? (
             <TestCaseTable
               suite={selectedSuite}
@@ -827,8 +836,8 @@ export default function CenariosPage() {
           ) : (
             <div className="flex h-full items-center justify-center">
               <div className="text-center">
-                <Folder className="size-10 text-muted-foreground/30 mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground">Selecione uma suite no painel esquerdo.</p>
+                <Folder className="size-10 text-off-white/20 mx-auto mb-2" />
+                <p className="text-sm text-off-white/40">Selecione uma suite no painel esquerdo.</p>
               </div>
             </div>
           )}
@@ -849,6 +858,13 @@ export default function CenariosPage() {
           existingScenarioIds={existingScenarioIds}
         />
       )}
+
+      {/* Series Badge */}
+      <div className="flex justify-end">
+        <span className="series-number text-4xl text-off-white/10">
+          #10
+        </span>
+      </div>
     </div>
   );
 }

@@ -33,19 +33,19 @@ function BlockRenderer({ block }: { block: Block }) {
   switch (block.type) {
     case "paragraph":
       return (
-        <p className="leading-7 text-muted-foreground">{block.content}</p>
+        <p className="leading-7 text-off-white/50">{block.content}</p>
       );
 
     case "heading":
       return (
-        <h2 className="mt-8 text-xl font-bold tracking-tight text-foreground">
+        <h2 className="mt-8 text-xl font-bold tracking-tight text-off-white">
           {block.content}
         </h2>
       );
 
     case "subheading":
       return (
-        <h3 className="mt-6 text-base font-semibold text-foreground">
+        <h3 className="mt-6 text-base font-semibold text-off-white">
           {block.content}
         </h3>
       );
@@ -54,8 +54,8 @@ function BlockRenderer({ block }: { block: Block }) {
       return (
         <ul className="space-y-1.5 pl-1">
           {block.items?.map((item, i) => (
-            <li key={i} className="flex gap-2 text-sm text-muted-foreground">
-              <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
+            <li key={i} className="flex gap-2 text-sm text-off-white/50">
+              <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-mint" />
               {item}
             </li>
           ))}
@@ -66,8 +66,8 @@ function BlockRenderer({ block }: { block: Block }) {
       return (
         <ol className="space-y-1.5 pl-1">
           {block.items?.map((item, i) => (
-            <li key={i} className="flex gap-2.5 text-sm text-muted-foreground">
-              <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+            <li key={i} className="flex gap-2.5 text-sm text-off-white/50">
+              <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-mint/20 text-xs font-bold text-mint">
                 {i + 1}
               </span>
               <span className="pt-0.5">{item}</span>
@@ -80,19 +80,19 @@ function BlockRenderer({ block }: { block: Block }) {
       const variants = {
         info: {
           icon: Info,
-          className: "border-blue-500/30 bg-blue-500/5 text-blue-400",
+          className: "border-mint/30 bg-mint/5 text-mint",
         },
         tip: {
           icon: Lightbulb,
-          className: "border-green-200 bg-green-50 text-green-600",
+          className: "border-neon/30 bg-neon/10 text-neon",
         },
         warning: {
           icon: AlertTriangle,
-          className: "border-amber-200 bg-amber-50 text-amber-600",
+          className: "border-[#F4A8A3]/30 bg-[#F4A8A3]/10 text-[#F4A8A3]",
         },
         danger: {
           icon: AlertCircle,
-          className: "border-red-200 bg-red-50 text-red-600",
+          className: "border-coral/30 bg-coral/10 text-coral",
         },
       };
       const v = variants[block.variant ?? "info"];
@@ -111,15 +111,15 @@ function BlockRenderer({ block }: { block: Block }) {
 
     case "code":
       return (
-        <div className="rounded-lg border bg-secondary/50">
+        <div className="rounded-xl border border-mint/10 bg-dark-green/60">
           {block.language && (
-            <div className="border-b px-4 py-1.5">
-              <span className="font-mono text-xs text-muted-foreground">
+            <div className="border-b border-mint/10 px-4 py-1.5">
+              <span className="font-mono text-xs text-off-white/50">
                 {block.language}
               </span>
             </div>
           )}
-          <pre className="overflow-x-auto p-4 text-xs leading-relaxed text-foreground">
+          <pre className="overflow-x-auto p-4 text-xs leading-relaxed text-off-white">
             <code>{block.content}</code>
           </pre>
         </div>
@@ -127,13 +127,13 @@ function BlockRenderer({ block }: { block: Block }) {
 
     case "quote":
       return (
-        <blockquote className="border-l-2 border-primary/50 pl-4 italic text-muted-foreground">
+        <blockquote className="border-l-2 border-mint/50 pl-4 italic text-off-white/50">
           {block.content}
         </blockquote>
       );
 
     case "divider":
-      return <hr className="border-border" />;
+      return <hr className="border-mint/10" />;
 
     default:
       return null;
@@ -173,8 +173,8 @@ export default async function BlogPostPage({ params }: Props) {
         <h1 className="text-3xl font-bold tracking-tight leading-tight">
           {post.titulo}
         </h1>
-        <p className="text-muted-foreground leading-relaxed">{post.resumo}</p>
-        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+        <p className="text-off-white/50 leading-relaxed">{post.resumo}</p>
+        <div className="flex items-center gap-4 text-xs text-off-white/50">
           <span className="flex items-center gap-1">
             <Clock className="size-3" />
             {post.tempoLeitura} min de leitura
@@ -182,7 +182,7 @@ export default async function BlogPostPage({ params }: Props) {
           <span>{formatDate(post.data)}</span>
           <span>por {post.autor}</span>
         </div>
-        <hr className="border-border" />
+        <hr className="border-mint/10" />
       </div>
 
       {/* Article Body */}
@@ -195,8 +195,8 @@ export default async function BlogPostPage({ params }: Props) {
       {/* Related Posts */}
       {related.length > 0 && (
         <div className="space-y-4">
-          <hr className="border-border" />
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+          <hr className="border-mint/10" />
+          <h2 className="text-sm font-semibold text-off-white/50 uppercase tracking-wider">
             Artigos relacionados
           </h2>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -210,7 +210,7 @@ export default async function BlogPostPage({ params }: Props) {
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1 text-xs text-off-white/50">
                         <Clock className="size-3" />
                         {rel.tempoLeitura} min
                       </span>

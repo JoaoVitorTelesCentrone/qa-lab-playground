@@ -27,7 +27,7 @@ function Tip({ id, active }: { id: string; active: boolean }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <HelpCircle className="size-3.5 text-amber-500 cursor-help shrink-0" />
+        <HelpCircle className="size-3.5 text-[#F4A8A3] cursor-help shrink-0" />
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-xs text-xs">
         {text}
@@ -71,20 +71,20 @@ export function StepCheck({ data, planData, doData, onChange, learning }: Props)
       <div className="space-y-3">
         <Label>Resumo das Hipóteses</Label>
         <div className="flex gap-3 text-xs">
-          <span className="flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-green-600">
+          <span className="flex items-center gap-1.5 rounded-full border border-neon/30 bg-neon/10 px-3 py-1 text-neon">
             <Check className="size-3" /> {confirmadas} confirmada{confirmadas !== 1 ? "s" : ""}
           </span>
-          <span className="flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-red-500">
+          <span className="flex items-center gap-1.5 rounded-full border border-coral/30 bg-coral/10 px-3 py-1 text-coral">
             <X className="size-3" /> {descartadas} descartada{descartadas !== 1 ? "s" : ""}
           </span>
           {pendentes > 0 && (
-            <span className="flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-muted-foreground">
+            <span className="flex items-center gap-1.5 rounded-full border border-mint/10 px-3 py-1 text-off-white/50">
               {pendentes} pendente{pendentes !== 1 ? "s" : ""}
             </span>
           )}
         </div>
-        <div className="rounded-lg border border-border bg-secondary/30 p-3">
-          <pre className="whitespace-pre-wrap text-xs text-muted-foreground font-mono">{autoResumo || "Nenhuma hipótese testada ainda."}</pre>
+        <div className="rounded-lg border border-mint/10 bg-dark-green/40 p-3">
+          <pre className="whitespace-pre-wrap text-xs text-off-white/50 font-mono">{autoResumo || "Nenhuma hipótese testada ainda."}</pre>
         </div>
       </div>
 
@@ -101,20 +101,20 @@ export function StepCheck({ data, planData, doData, onChange, learning }: Props)
               {/* Connector line */}
               {i > 0 && (
                 <div className="flex justify-center py-1">
-                  <ArrowDown className="size-4 text-muted-foreground/30" />
+                  <ArrowDown className="size-4 text-off-white/50/30" />
                 </div>
               )}
 
-              <div className="rounded-lg border border-border p-4 space-y-2">
+              <div className="rounded-lg border border-mint/10 p-4 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-2">
-                    <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-600">
+                    <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-mint/20 text-xs font-bold text-mint">
                       {i + 1}
                     </span>
-                    <span className="text-xs font-medium text-muted-foreground">Porquê #{i + 1}</span>
+                    <span className="text-xs font-medium text-off-white/50">Porquê #{i + 1}</span>
                   </span>
                   {i > 0 && i === data.cincoporques.length - 1 && (
-                    <button onClick={removeLastWhy} className="text-xs text-muted-foreground hover:text-destructive">
+                    <button onClick={removeLastWhy} className="text-xs text-off-white/50 hover:text-coral">
                       Remover
                     </button>
                   )}
@@ -155,7 +155,7 @@ export function StepCheck({ data, planData, doData, onChange, learning }: Props)
             <Button variant="ghost" size="sm" onClick={() => {
               const last = data.cincoporques[data.cincoporques.length - 1];
               if (last?.resposta) onChange({ ...data, causaRaiz: last.resposta });
-            }} className="gap-1.5 text-primary">
+            }} className="gap-1.5 text-mint">
               <Check className="size-3.5" /> Causa raiz encontrada
             </Button>
           )}

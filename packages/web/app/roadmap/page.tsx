@@ -93,21 +93,21 @@ function ItemRow({
 }) {
   return (
     <div
-      className="group flex cursor-pointer items-start gap-3 rounded-lg p-2.5 transition-colors hover:bg-secondary/50"
+      className="group flex cursor-pointer items-start gap-3 rounded-xl p-3 transition-colors hover:bg-off-white/5"
       onClick={onToggle}
     >
       {/* Status icon */}
       <div className="mt-0.5 shrink-0">
         {status === "concluido" ? (
-          <div className="flex size-5 items-center justify-center rounded-full bg-primary/20">
-            <Check className="size-3 text-primary" />
+          <div className="flex size-5 items-center justify-center rounded-full bg-neon/20">
+            <Check className="size-3 text-neon" />
           </div>
         ) : status === "em_progresso" ? (
-          <div className="flex size-5 items-center justify-center rounded-full bg-amber-100">
-            <Loader2 className="size-3 animate-spin text-amber-600" />
+          <div className="flex size-5 items-center justify-center rounded-full bg-[#F4A8A3]/20">
+            <Loader2 className="size-3 animate-spin text-[#F4A8A3]" />
           </div>
         ) : (
-          <Circle className="size-5 text-muted-foreground/40 group-hover:text-muted-foreground" />
+          <Circle className="size-5 text-off-white/20 group-hover:text-off-white/40" />
         )}
       </div>
 
@@ -116,20 +116,20 @@ function ItemRow({
         <p
           className={`text-sm font-medium leading-snug ${
             status === "concluido"
-              ? "text-muted-foreground line-through"
-              : "text-foreground"
+              ? "text-off-white/40 line-through"
+              : "text-off-white"
           }`}
         >
           {item.titulo}
         </p>
-        <p className="text-xs text-muted-foreground leading-relaxed">
+        <p className="text-xs text-off-white/50 leading-relaxed">
           {item.descricao}
         </p>
         {item.recurso && (
           <Link
             href={item.recurso.href}
             onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+            className="inline-flex items-center gap-1 text-xs text-mint hover:underline"
           >
             <ExternalLink className="size-3" />
             {item.recurso.label}
@@ -165,12 +165,12 @@ function LevelSection({
         <div
           className={`z-10 flex size-9 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
             complete
-              ? "border-primary bg-primary/20"
-              : "border-border bg-background"
+              ? "border-neon bg-neon/20"
+              : "border-mint/20 bg-dark-green/50"
           }`}
         >
           {complete ? (
-            <Check className="size-4 text-primary" />
+            <Check className="size-4 text-neon" />
           ) : (
             <div className={`size-2.5 rounded-full ${cfg.dotClass} opacity-70`} />
           )}
@@ -178,7 +178,7 @@ function LevelSection({
         {!isLast && (
           <div
             className={`mt-1 w-0.5 flex-1 rounded-full transition-colors ${
-              complete ? "bg-primary/30" : "bg-border"
+              complete ? "bg-neon/30" : "bg-mint/10"
             }`}
           />
         )}
@@ -186,7 +186,7 @@ function LevelSection({
 
       {/* Content card */}
       <div className="mb-6 flex-1">
-        <Card className={`${complete ? "border-primary/30 bg-primary/5" : ""}`}>
+        <Card className={`${complete ? "border-neon/30 bg-neon/5" : "border-mint/10"}`}>
           <CardHeader className="pb-2">
             <button
               className="flex w-full items-center justify-between gap-3 text-left"
@@ -195,20 +195,20 @@ function LevelSection({
               <div className="flex items-center gap-2.5">
                 <Badge
                   variant="outline"
-                  className={`text-xs font-semibold ${cfg.className}`}
+                  className={`text-xs font-bold uppercase tracking-wide ${cfg.className}`}
                 >
                   {cfg.label}
                 </Badge>
-                <CardTitle className="text-sm font-semibold">
+                <CardTitle className="text-sm font-bold text-off-white">
                   {level.titulo}
                 </CardTitle>
               </div>
               <div className="flex shrink-0 items-center gap-2">
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-off-white/50">
                   {done}/{total}
                 </span>
                 <ChevronRight
-                  className={`size-4 text-muted-foreground transition-transform ${
+                  className={`size-4 text-off-white/40 transition-transform ${
                     open ? "rotate-90" : ""
                   }`}
                 />
@@ -216,9 +216,9 @@ function LevelSection({
             </button>
 
             {/* Level progress bar */}
-            <div className="mt-2 h-1 rounded-full bg-secondary">
+            <div className="mt-2 h-1 rounded-full bg-off-white/10">
               <div
-                className="h-1 rounded-full bg-primary transition-all duration-300"
+                className="h-1 rounded-full bg-neon transition-all duration-300"
                 style={{ width: `${pct}%` }}
               />
             </div>
@@ -226,10 +226,10 @@ function LevelSection({
 
           {open && (
             <CardContent className="pt-0">
-              <p className="mb-3 text-xs text-muted-foreground">
+              <p className="mb-3 text-xs text-off-white/50">
                 {level.descricao}
               </p>
-              <div className="divide-y divide-border/50">
+              <div className="divide-y divide-mint/10">
                 {level.items.map((item) => (
                   <ItemRow
                     key={item.id}
@@ -270,13 +270,15 @@ function TopicPanel({
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="text-2xl">{topic.icon}</span>
-              <h2 className="text-2xl font-bold tracking-tight">{topic.titulo}</h2>
+              <h2 className="font-[family-name:var(--font-display)] text-2xl tracking-wider text-mint italic">
+                {topic.titulo}
+              </h2>
             </div>
-            <p className="text-sm text-muted-foreground">{topic.resumo}</p>
+            <p className="text-sm text-off-white/60">{topic.resumo}</p>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-2xl font-bold text-primary">{pct}%</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-2xl font-bold text-neon">{pct}%</p>
+            <p className="text-xs text-off-white/50">
               {done}/{total} itens
             </p>
           </div>
@@ -284,17 +286,17 @@ function TopicPanel({
 
         {/* Overall progress bar */}
         <div className="space-y-1">
-          <div className="h-2 rounded-full bg-secondary">
+          <div className="h-2 rounded-full bg-off-white/10">
             <div
-              className="h-2 rounded-full bg-primary transition-all duration-300"
+              className="h-2 rounded-full bg-neon transition-all duration-300"
               style={{ width: `${pct}%` }}
             />
           </div>
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center justify-between text-xs text-off-white/50">
             <span>Nível atual:</span>
             <Badge
               variant="outline"
-              className={`text-xs font-semibold ${cfg.className}`}
+              className={`text-xs font-bold uppercase tracking-wide ${cfg.className}`}
             >
               {cfg.label}
             </Badge>
@@ -342,9 +344,18 @@ export default function RoadmapPage() {
       {/* ── Topic list sidebar ── */}
       <aside className="hidden w-52 shrink-0 lg:block">
         <div className="sticky top-0 space-y-1">
-          <div className="mb-4 flex items-center gap-2">
-            <Map className="size-5 text-primary" />
-            <h1 className="text-base font-bold">Roadmap</h1>
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex items-center justify-center size-10 rounded-xl bg-mint/20">
+              <Map className="size-5 text-mint" />
+            </div>
+            <div>
+              <h1 className="font-[family-name:var(--font-display)] text-xl tracking-wider text-mint italic">
+                ROADMAP
+              </h1>
+              <p className="text-xs text-mint/50 uppercase tracking-[0.1em]">
+                Trilhas de aprendizado
+              </p>
+            </div>
           </div>
           {topics.map((topic) => {
             const { pct } = topicProgress(topic, state);
@@ -355,22 +366,22 @@ export default function RoadmapPage() {
                 variant="ghost"
                 className={`h-auto w-full justify-start gap-2 px-3 py-2.5 text-left ${
                   isSelected
-                    ? "bg-sidebar-accent text-primary"
-                    : "text-muted-foreground"
+                    ? "bg-mint/10 text-mint border border-mint/20"
+                    : "text-off-white/50 hover:text-off-white hover:bg-off-white/5"
                 }`}
                 onClick={() => setSelectedId(topic.id)}
               >
                 <span className="text-base leading-none">{topic.icon}</span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-medium">{topic.titulo}</p>
-                  <div className="mt-1 h-1 rounded-full bg-secondary">
+                  <p className="truncate text-xs font-bold uppercase tracking-wide">{topic.titulo}</p>
+                  <div className="mt-1 h-1 rounded-full bg-off-white/10">
                     <div
-                      className="h-1 rounded-full bg-primary transition-all"
+                      className="h-1 rounded-full bg-neon transition-all"
                       style={{ width: `${pct}%` }}
                     />
                   </div>
                 </div>
-                <span className="shrink-0 text-xs text-muted-foreground">
+                <span className="shrink-0 text-xs text-off-white/40">
                   {pct}%
                 </span>
               </Button>
@@ -382,9 +393,15 @@ export default function RoadmapPage() {
       {/* ── Mobile topic tabs ── */}
       <div className="lg:hidden w-full">
         <div className="mb-6">
-          <div className="flex items-center gap-2 mb-3">
-            <Map className="size-5 text-primary" />
-            <h1 className="text-xl font-bold">Roadmap</h1>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center justify-center size-10 rounded-xl bg-mint/20">
+              <Map className="size-5 text-mint" />
+            </div>
+            <div>
+              <h1 className="font-[family-name:var(--font-display)] text-xl tracking-wider text-mint italic">
+                ROADMAP
+              </h1>
+            </div>
           </div>
           <div className="flex gap-1 overflow-x-auto pb-2">
             {topics.map((topic) => {
@@ -394,10 +411,10 @@ export default function RoadmapPage() {
                 <button
                   key={topic.id}
                   onClick={() => setSelectedId(topic.id)}
-                  className={`flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                  className={`flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold uppercase tracking-wide transition-colors ${
                     isSelected
-                      ? "border-primary/40 bg-primary/10 text-primary"
-                      : "border-border text-muted-foreground hover:text-foreground"
+                      ? "border-mint/40 bg-mint/10 text-mint"
+                      : "border-mint/10 text-off-white/50 hover:text-off-white"
                   }`}
                 >
                   <span>{topic.icon}</span>
@@ -422,6 +439,13 @@ export default function RoadmapPage() {
           state={state}
           onToggle={handleToggle}
         />
+      </div>
+
+      {/* Series Badge */}
+      <div className="hidden lg:flex justify-end absolute bottom-8 right-8">
+        <span className="series-number text-4xl text-off-white/10">
+          #06
+        </span>
       </div>
     </div>
   );

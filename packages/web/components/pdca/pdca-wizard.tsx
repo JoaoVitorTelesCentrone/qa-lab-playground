@@ -71,13 +71,13 @@ export function PDCAWizard({ cycle, allCycles, onUpdate, onFinish, onBack, learn
     <div className="space-y-6">
       {/* Top bar */}
       <div className="flex items-center justify-between">
-        <button onClick={onBack} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+        <button onClick={onBack} className="flex items-center gap-1 text-xs text-off-white/50 hover:text-off-white transition-colors">
           <ArrowLeft className="size-3.5" /> Voltar ao histórico
         </button>
         <button
           onClick={onToggleLearning}
           className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all ${
-            learning ? "border-amber-200 bg-amber-50 text-amber-700" : "border-border text-muted-foreground"
+            learning ? "border-neon/30 bg-neon/10 text-neon" : "border-mint/10 text-off-white/50"
           }`}
         >
           <Lightbulb className="size-3" />
@@ -101,17 +101,17 @@ export function PDCAWizard({ cycle, allCycles, onUpdate, onFinish, onBack, learn
                     onClick={() => isClickable && goTo(step)}
                     className={`flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium transition-all w-full justify-center ${
                       isActive
-                        ? "bg-primary/10 text-primary border border-primary/30"
+                        ? "bg-mint/10 text-mint border border-mint/30"
                         : isDone
-                        ? "bg-green-50 text-green-600 border border-green-200"
-                        : "text-muted-foreground/50 border border-transparent"
-                    } ${isClickable ? "cursor-pointer hover:bg-secondary" : "cursor-default"}`}
+                        ? "bg-neon/10 text-neon border border-neon/20"
+                        : "text-off-white/30 border border-transparent"
+                    } ${isClickable ? "cursor-pointer hover:bg-off-white/5" : "cursor-default"}`}
                   >
                     {isDone ? (
                       <Check className="size-3 shrink-0" />
                     ) : (
                       <span className={`size-4 flex items-center justify-center rounded-full text-[10px] font-bold shrink-0 ${
-                        isActive ? "bg-primary text-white" : "bg-muted-foreground/20 text-muted-foreground/60"
+                        isActive ? "bg-mint text-[#3D5454]" : "bg-off-white/20 text-off-white/40"
                       }`}>
                         {i + 1}
                       </span>
@@ -131,7 +131,7 @@ export function PDCAWizard({ cycle, allCycles, onUpdate, onFinish, onBack, learn
       {/* Step title */}
       <div>
         <h2 className="text-lg font-bold">{cfg.label}</h2>
-        <p className="text-sm text-muted-foreground">{cfg.descricao}</p>
+        <p className="text-sm text-off-white/50">{cfg.descricao}</p>
       </div>
 
       {/* Step content */}
@@ -157,13 +157,13 @@ export function PDCAWizard({ cycle, allCycles, onUpdate, onFinish, onBack, learn
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between border-t border-border pt-4">
+      <div className="flex items-center justify-between border-t border-mint/10 pt-4">
         <Button variant="outline" size="sm" onClick={prev} disabled={isFirst} className="gap-1.5">
           <ArrowLeft className="size-3.5" /> Anterior
         </Button>
 
         {!valid && !isLast && (
-          <span className="text-xs text-muted-foreground">Preencha os campos obrigatórios para avançar</span>
+          <span className="text-xs text-off-white/50">Preencha os campos obrigatórios para avançar</span>
         )}
 
         <Button

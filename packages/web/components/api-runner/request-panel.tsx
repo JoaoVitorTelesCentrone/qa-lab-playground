@@ -10,10 +10,10 @@ import { Send, Plus, X } from "lucide-react";
 const METHODS = ["GET", "POST", "PUT", "DELETE"] as const;
 
 const METHOD_COLORS: Record<string, string> = {
-  GET: "bg-green-100 text-green-600",
-  POST: "bg-blue-500/20 text-blue-400",
-  PUT: "bg-amber-100 text-amber-600",
-  DELETE: "bg-red-100 text-red-600",
+  GET: "bg-neon/10 text-neon",
+  POST: "bg-mint/20 text-mint",
+  PUT: "bg-[#F4A8A3]/10 text-[#F4A8A3]",
+  DELETE: "bg-coral/10 text-coral",
 };
 
 interface RequestPanelProps {
@@ -53,7 +53,7 @@ export function RequestPanel({ onSend, loading }: RequestPanelProps) {
               setMethod(e.target.value);
               setShowBody(e.target.value !== "GET");
             }}
-            className="h-9 appearance-none rounded-md border bg-secondary px-3 pr-8 text-sm font-mono font-bold focus:outline-none focus:ring-2 focus:ring-ring"
+            className="h-9 appearance-none rounded-md border bg-dark-green/40 px-3 pr-8 text-sm font-mono font-bold focus:outline-none focus:ring-2 focus:ring-ring"
           >
             {METHODS.map((m) => (
               <option key={m} value={m}>
@@ -79,14 +79,14 @@ export function RequestPanel({ onSend, loading }: RequestPanelProps) {
       <div className="flex gap-2">
         <button
           onClick={() => setShowHeaders(!showHeaders)}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          className="text-xs text-off-white/50 hover:text-off-white transition-colors"
         >
           Headers {headers.length > 0 && `(${headers.length})`}
         </button>
-        <span className="text-muted-foreground">|</span>
+        <span className="text-off-white/50">|</span>
         <button
           onClick={() => setShowBody(!showBody)}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          className="text-xs text-off-white/50 hover:text-off-white transition-colors"
         >
           Body
         </button>
@@ -96,7 +96,7 @@ export function RequestPanel({ onSend, loading }: RequestPanelProps) {
       {showHeaders && (
         <div className="space-y-2 rounded-lg border p-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">
+            <span className="text-xs font-medium text-off-white/50">
               Headers
             </span>
             <Button
@@ -146,7 +146,7 @@ export function RequestPanel({ onSend, loading }: RequestPanelProps) {
       {/* Body Editor */}
       {showBody && (
         <div className="space-y-2 rounded-lg border p-3">
-          <span className="text-xs font-medium text-muted-foreground">
+          <span className="text-xs font-medium text-off-white/50">
             Body (JSON)
           </span>
           <Textarea
@@ -160,7 +160,7 @@ export function RequestPanel({ onSend, loading }: RequestPanelProps) {
 
       {/* Quick Endpoints */}
       <div className="space-y-2">
-        <span className="text-xs font-medium text-muted-foreground">
+        <span className="text-xs font-medium text-off-white/50">
           Endpoints disponiveis
         </span>
         <div className="flex flex-wrap gap-1.5">
@@ -183,7 +183,7 @@ export function RequestPanel({ onSend, loading }: RequestPanelProps) {
                 setUrl(ep.p);
                 setShowBody(ep.m !== "GET");
               }}
-              className="inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs hover:bg-secondary transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs hover:bg-dark-green/40 transition-colors"
             >
               <Badge
                 variant="secondary"
@@ -191,7 +191,7 @@ export function RequestPanel({ onSend, loading }: RequestPanelProps) {
               >
                 {ep.m}
               </Badge>
-              <span className="font-mono text-muted-foreground">{ep.p}</span>
+              <span className="font-mono text-off-white/50">{ep.p}</span>
             </button>
           ))}
         </div>

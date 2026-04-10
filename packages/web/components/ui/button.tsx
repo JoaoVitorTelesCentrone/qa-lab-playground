@@ -5,30 +5,35 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-bold uppercase tracking-wide transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 cursor-pointer box-text",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-green-600 hover:-translate-y-px",
+        default:
+          "bg-primary text-primary-foreground hover:bg-[#A8C5C3] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20",
         destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20",
+          "bg-coral text-[#3D5454] hover:bg-[#F4A8A3] hover:-translate-y-0.5 animate-coral-glow",
         outline:
-          "border border-gray-300 bg-white shadow-xs hover:bg-gray-100 hover:border-gray-400 text-gray-700",
+          "border-2 border-mint/30 bg-transparent text-mint hover:bg-mint/10 hover:border-mint/50",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "bg-secondary text-secondary-foreground hover:bg-[#657578] hover:-translate-y-0.5",
         ghost:
-          "hover:bg-gray-100 hover:text-gray-700",
-        link: "text-primary underline-offset-4 hover:underline",
+          "hover:bg-off-white/10 hover:text-off-white text-off-white/70",
+        link: "text-mint underline-offset-4 hover:underline hover:text-[#A8C5C3]",
+        neon:
+          "bg-neon text-[#3D5454] hover:bg-[#C8E85F] hover:-translate-y-0.5 animate-neon-glow font-extrabold",
+        coral:
+          "bg-coral text-[#3D5454] hover:bg-[#F4A8A3] hover:-translate-y-0.5 font-extrabold",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        xs: "h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9",
-        "icon-xs": "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm": "size-8",
-        "icon-lg": "size-10",
+        default: "h-10 px-5 py-2 has-[>svg]:px-4",
+        xs: "h-7 gap-1 rounded-lg px-3 text-xs has-[>svg]:px-2 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-9 rounded-lg gap-1.5 px-4 has-[>svg]:px-3",
+        lg: "h-12 rounded-xl px-8 has-[>svg]:px-6 text-base",
+        icon: "size-10",
+        "icon-xs": "size-7 rounded-lg [&_svg:not([class*='size-'])]:size-3",
+        "icon-sm": "size-9",
+        "icon-lg": "size-12 rounded-xl",
       },
     },
     defaultVariants: {
