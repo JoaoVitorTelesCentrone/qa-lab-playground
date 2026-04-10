@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  getStoredUser, clearStoredUser, setStoredCart as syncCart,
+  type EcommerceUser,
+} from "@/lib/ecommerce";
 
 // Componentes nativos substituindo shadcn/ui
 const Card = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
@@ -41,7 +46,7 @@ const Button = ({
   children: React.ReactNode; 
   onClick?: () => void;
   variant?: "default" | "destructive" | "outline" | "ghost";
-  size?: "default" | "sm" | "lg";
+  size?: "default" | "sm" | "lg" | "icon";
   className?: string;
   disabled?: boolean;
   [key: string]: any;
@@ -55,10 +60,11 @@ const Button = ({
     ghost: "hover:bg-accent hover:text-accent-foreground",
   };
   
-  const sizes = {
+  const sizes: Record<string, string> = {
     default: "h-10 px-4 py-2",
     sm: "h-9 rounded-md px-3",
     lg: "h-11 rounded-md px-8",
+    icon: "h-10 w-10 p-0",
   };
   
   return (
@@ -73,7 +79,7 @@ const Button = ({
   );
 };
 
-const Input = ({ className = "", ...props }: { className?: string; [key: string]: any }) => (
+const Input = ({ className = "", ...props }: React.InputHTMLAttributes<HTMLInputElement> & { className?: string }) => (
   <input
     className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
     {...props}
@@ -109,10 +115,10 @@ const Separator = ({ className = "" }: { className?: string }) => (
 
 // Select nativo
 const Select = ({ value, onValueChange, children }: { value?: string; onValueChange?: (value: string) => void; children: React.ReactNode }) => (
-  <select 
+  <select
     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     value={value}
-    onChange={(e) => onValueChange?.(e.target.value)}
+    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onValueChange?.(e.target.value)}
   >
     {children}
   </select>
@@ -141,6 +147,10 @@ import {
   X,
   Heart,
   AlertCircle,
+  LogIn,
+  LogOut,
+  User,
+  Package,
 } from "lucide-react";
 
 // Produtos com bugs propositais
@@ -193,6 +203,102 @@ const products = [
     categoria: "Wearables",
     descricao: "Smartwatch com GPS e monitor cardíaco",
   },
+  {
+    id: 5,
+    nome: "Câmera DSLR 4K",
+    preco: 3199.99,
+    precoOriginal: 3899.99,
+    rating: 4.7,
+    reviews: 45,
+    estoque: 3,
+    imagem: "/api/placeholder/300/300",
+    categoria: "Fotografia",
+    descricao: "Câmera DSLR com gravação 4K e sensor full-frame",
+  },
+  {
+    id: 6,
+    nome: "Teclado Mecânico RGB",
+    preco: 349.99,
+    precoOriginal: 429.99,
+    rating: 4.4,
+    reviews: 312,
+    estoque: 25,
+    imagem: "/api/placeholder/300/300",
+    categoria: "Periféricos",
+    descricao: "Teclado mecânico com switches Cherry MX Red e iluminação RGB",
+  },
+  {
+    id: 7,
+    nome: 'Monitor 4K 27"',
+    preco: 2199.99,
+    precoOriginal: 2699.99,
+    rating: 4.6,
+    reviews: 78,
+    estoque: 8,
+    imagem: "/api/placeholder/300/300",
+    categoria: "Monitores",
+    descricao: "Monitor 4K IPS com 144Hz e painel HDR600",
+  },
+  {
+    id: 8,
+    nome: "Mouse Gamer Pro",
+    preco: 199.99,
+    precoOriginal: 249.99,
+    rating: 4.5,
+    reviews: 421,
+    estoque: 30,
+    imagem: "/api/placeholder/300/300",
+    categoria: "Periféricos",
+    descricao: "Mouse gamer com sensor de 25600 DPI e 8 botões programáveis",
+  },
+  {
+    id: 9,
+    nome: "SSD NVMe 1TB",
+    preco: 459.99,
+    precoOriginal: 599.99,
+    rating: 4.9,
+    reviews: 189,
+    estoque: 20,
+    imagem: "/api/placeholder/300/300",
+    categoria: "Armazenamento",
+    descricao: "SSD NVMe Gen4 com velocidade de leitura de 7000MB/s",
+  },
+  {
+    id: 10,
+    nome: "Webcam Full HD",
+    preco: 279.99,
+    precoOriginal: 349.99,
+    rating: 4.2,
+    reviews: 93,
+    estoque: 12,
+    imagem: "/api/placeholder/300/300",
+    categoria: "Periféricos",
+    descricao: "Webcam 1080p60fps com microfone embutido e correção de luz",
+  },
+  {
+    id: 11,
+    nome: 'Tablet Pro 11"',
+    preco: 3499.99,
+    precoOriginal: 3999.99,
+    rating: 4.7,
+    reviews: 67,
+    estoque: 6,
+    imagem: "/api/placeholder/300/300",
+    categoria: "Eletrônicos",
+    descricao: "Tablet com chip M2, tela OLED e suporte a Apple Pencil",
+  },
+  {
+    id: 12,
+    nome: "Caixa de Som Bluetooth",
+    preco: 599.99,
+    precoOriginal: 749.99,
+    rating: 4.3,
+    reviews: 204,
+    estoque: 0,
+    imagem: "/api/placeholder/300/300",
+    categoria: "Áudio",
+    descricao: "Caixa de som portátil com 360° de som e autonomia de 20h",
+  },
 ];
 
 // Bugs do e-commerce
@@ -205,25 +311,25 @@ const bugs = [
   },
   {
     id: 2,
-    titulo: "Cálculo de frete não considera CEP inválido",
+    titulo: "Cálculo de frete aceita CEP com menos de 8 dígitos",
     categoria: "Checkout",
     severidade: "Média",
   },
   {
     id: 3,
-    titulo: "Cupom de desconto pode ser usado múltiplas vezes",
+    titulo: "Cupom de desconto pode ser reaplicado múltiplas vezes",
     categoria: "Promoção",
     severidade: "Crítica",
   },
   {
     id: 4,
-    titulo: "Produto esgotado ainda aparece como disponível no carrinho",
+    titulo: "Checkout aceita pedido com quantidade acima do estoque",
     categoria: "Estoque",
     severidade: "Alta",
   },
   {
     id: 5,
-    titulo: "Preço total não atualiza ao remover item",
+    titulo: "Cálculo do total com cupom aplica desconto de forma incorreta",
     categoria: "Carrinho",
     severidade: "Média",
   },
@@ -235,9 +341,45 @@ const bugs = [
   },
   {
     id: 7,
-    titulo: "Avaliações permitem notas maiores que 5 estrelas",
+    titulo: "Avaliações permitem notas maiores que 5 estrelas via teclado",
     categoria: "Reviews",
     severidade: "Média",
+  },
+  {
+    id: 8,
+    titulo: "Login revela se o e-mail existe no sistema (information disclosure)",
+    categoria: "Autenticação",
+    severidade: "Crítica",
+  },
+  {
+    id: 9,
+    titulo: "Sem bloqueio após múltiplas tentativas de login (brute force)",
+    categoria: "Autenticação",
+    severidade: "Crítica",
+  },
+  {
+    id: 10,
+    titulo: '"Lembrar de mim" não tem efeito funcional',
+    categoria: "Autenticação",
+    severidade: "Baixa",
+  },
+  {
+    id: 11,
+    titulo: "Token JWT armazenado sem expiração",
+    categoria: "Autenticação",
+    severidade: "Alta",
+  },
+  {
+    id: 12,
+    titulo: "Links 'Esqueci a senha' e 'Criar conta' levam a página 404",
+    categoria: "Autenticação",
+    severidade: "Média",
+  },
+  {
+    id: 13,
+    titulo: "Schema do detalhe do pedido muda a cada request (camelCase / snake_case / flat)",
+    categoria: "Pedidos",
+    severidade: "Alta",
   },
 ];
 
@@ -247,9 +389,13 @@ interface CartItem {
   preco: number;
   quantidade: number;
   estoque: number;
+  categoria: string;
 }
 
 export default function EcommerceBugadoPage() {
+  const router = useRouter();
+  const [authLoading, setAuthLoading] = useState(true);
+  const [user, setUser] = useState<EcommerceUser | null>(null);
   const [foundBugs, setFoundBugs] = useState<Set<number>>(new Set());
   const [cart, setCart] = useState<CartItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -261,6 +407,22 @@ export default function EcommerceBugadoPage() {
   const [showCart, setShowCart] = useState(false);
   const [rating, setRating] = useState<Record<number, number>>({});
   const [wishlist, setWishlist] = useState<Set<number>>(new Set());
+
+  // Carrega usuário e redireciona para login se não autenticado
+  useEffect(() => {
+    const stored = getStoredUser();
+    if (!stored) {
+      router.replace("/ecommerce/login?redirect=/ecommerce");
+    } else {
+      setUser(stored);
+      setAuthLoading(false);
+    }
+  }, []);
+
+  // Sincroniza carrinho com localStorage para o checkout ler
+  useEffect(() => {
+    syncCart(cart);
+  }, [cart]);
 
   function toggleBug(id: number) {
     const next = new Set(foundBugs);
@@ -285,12 +447,13 @@ export default function EcommerceBugadoPage() {
         );
       }
       
-      return [...prev, { 
-        id: product.id, 
-        nome: product.nome, 
+      return [...prev, {
+        id: product.id,
+        nome: product.nome,
         preco: product.preco,
         quantidade: 1,
-        estoque: product.estoque 
+        estoque: product.estoque,
+        categoria: product.categoria,
       }];
     });
   }
@@ -361,6 +524,14 @@ export default function EcommerceBugadoPage() {
   const categorias = ["all", ...new Set(products.map(p => p.categoria))];
   const produtosFiltrados = filtrarProdutos();
 
+  if (authLoading) {
+    return (
+      <div className="flex h-full items-center justify-center p-6">
+        <p className="text-sm text-gray-400 animate-pulse">Verificando acesso...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 p-6 animate-fade-in">
       {/* Header */}
@@ -368,25 +539,56 @@ export default function EcommerceBugadoPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">E-commerce Bugado</h1>
           <p className="text-sm text-gray-500">
-            Teste todas as funcionalidades da loja virtual e encontre os 7 bugs propositais
+            Teste todas as funcionalidades da loja virtual e encontre os {bugs.length} bugs propositais
           </p>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 flex-wrap">
           <Link href="/ecommerce/board">
             <Button variant="outline" size="sm">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
-              Board de Tarefas
+              Board
             </Button>
           </Link>
+
+          {/* Auth */}
+          {user ? (
+            <div className="flex items-center gap-2">
+              <Link href="/ecommerce/pedidos">
+                <Button variant="outline" size="sm">
+                  <Package className="size-4 mr-1.5" />
+                  Pedidos
+                </Button>
+              </Link>
+              <div className="flex items-center gap-1.5 text-xs text-gray-600 bg-gray-100 px-2.5 py-1.5 rounded-md">
+                <User className="size-3.5" />
+                <span className="max-w-[100px] truncate">{user.nome}</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => { clearStoredUser(); setUser(null); }}
+                className="text-gray-500 hover:text-red-600"
+              >
+                <LogOut className="size-4" />
+              </Button>
+            </div>
+          ) : (
+            <Link href="/ecommerce/login">
+              <Button variant="outline" size="sm">
+                <LogIn className="size-4 mr-1.5" />
+                Entrar
+              </Button>
+            </Link>
+          )}
 
           <Button
             variant="outline"
             size="sm"
             onClick={() => setWishlist(new Set())}
           >
-            <Heart className="size-4 mr-2" />
-            Lista de Desejos ({wishlist.size})
+            <Heart className="size-4 mr-1.5" />
+            ({wishlist.size})
           </Button>
 
           <Button
@@ -394,7 +596,7 @@ export default function EcommerceBugadoPage() {
             size="sm"
             onClick={() => setShowCart(!showCart)}
           >
-            <ShoppingCart className="size-4 mr-2" />
+            <ShoppingCart className="size-4 mr-1.5" />
             Carrinho ({cart.reduce((acc, item) => acc + item.quantidade, 0)})
           </Button>
         </div>
@@ -688,8 +890,17 @@ export default function EcommerceBugadoPage() {
                       </div>
                     </div>
 
-                    <Button className="w-full">
-                      Finalizar Compra
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        if (user) {
+                          router.push("/ecommerce/checkout");
+                        } else {
+                          router.push("/ecommerce/login?redirect=/ecommerce/checkout");
+                        }
+                      }}
+                    >
+                      {user ? "Finalizar Compra" : "Entrar para Comprar"}
                     </Button>
                   </>
                 )}

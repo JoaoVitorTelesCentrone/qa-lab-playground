@@ -135,14 +135,14 @@ const TabsList = ({ children, className = "" }: { children: React.ReactNode; cla
   <div className={`flex gap-2 border-b border-gray-200 ${className}`}>{children}</div>
 );
 
-const TabsTrigger = ({ children, value, activeValue }: { children: React.ReactNode; value: string; activeValue: string; onClick: () => void }) => (
+const TabsTrigger = ({ children, value, activeValue, onClick }: { children: React.ReactNode; value: string; activeValue: string; onClick: () => void }) => (
   <button
     className={`px-4 py-2 text-sm font-medium transition-colors ${
       activeValue === value
         ? "border-b-2 border-green-500 text-green-600"
         : "text-gray-600 hover:text-gray-900"
     }`}
-    onClick={() => onValueChange(value)}
+    onClick={onClick}
   >
     {children}
   </button>
@@ -580,7 +580,7 @@ export default function DataBugadaPage() {
                         <Input
                           type="date"
                           value={startDate}
-                          onChange={(e) => setStartDate(e.target.value)}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setStartDate(e.target.value)}
                           className="flex-1"
                         />
                         <Button 
@@ -605,13 +605,13 @@ export default function DataBugadaPage() {
                           type="date"
                           placeholder="Data inicial"
                           value={startDate}
-                          onChange={(e) => setStartDate(e.target.value)}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setStartDate(e.target.value)}
                         />
                         <Input
                           type="date"
                           placeholder="Data final"
                           value={endDate}
-                          onChange={(e) => setEndDate(e.target.value)}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setEndDate(e.target.value)}
                         />
                         <Button onClick={calculateDifference} className="w-full">
                           Calcular Diferença
@@ -635,7 +635,7 @@ export default function DataBugadaPage() {
                         <Input
                           placeholder="DD/MM/AAAA"
                           value={dateInput}
-                          onChange={(e) => setDateInput(e.target.value)}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setDateInput(e.target.value)}
                         />
                         <Button 
                           variant="outline" 
@@ -712,7 +712,7 @@ export default function DataBugadaPage() {
                         <Input
                           type="number"
                           value={expirationDays}
-                          onChange={(e) => setExpirationDays(parseInt(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setExpirationDays(parseInt(e.target.value))}
                           min={1}
                           className="w-24"
                         />
@@ -804,7 +804,7 @@ export default function DataBugadaPage() {
                       <Input
                         type="datetime-local"
                         value={dateTimeInput}
-                        onChange={(e) => setDateTimeInput(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setDateTimeInput(e.target.value)}
                       />
                     </div>
                     <div>
@@ -812,7 +812,7 @@ export default function DataBugadaPage() {
                       <select
                         className="w-full h-10 rounded-md border border-gray-300 px-3"
                         value={timezone}
-                        onChange={(e) => setTimezone(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setTimezone(e.target.value)}
                       >
                         <option value="America/Sao_Paulo">São Paulo (GMT-3)</option>
                         <option value="America/New_York">Nova York (GMT-4)</option>
@@ -826,7 +826,7 @@ export default function DataBugadaPage() {
                       <select
                         className="w-full h-10 rounded-md border border-gray-300 px-3"
                         value={timezone}
-                        onChange={(e) => setTimezone(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setTimezone(e.target.value)}
                       >
                         <option value="America/Sao_Paulo">São Paulo (GMT-3)</option>
                         <option value="America/New_York">Nova York (GMT-4)</option>
@@ -901,12 +901,12 @@ export default function DataBugadaPage() {
                     <Input
                       placeholder="Título do evento"
                       value={newEventTitle}
-                      onChange={(e) => setNewEventTitle(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setNewEventTitle(e.target.value)}
                     />
                     <Input
                       type="date"
                       value={newEventDate}
-                      onChange={(e) => setNewEventDate(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setNewEventDate(e.target.value)}
                       className="w-40"
                     />
                     <Button onClick={addEvent}>
