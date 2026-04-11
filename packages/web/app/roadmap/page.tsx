@@ -3,39 +3,24 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  Map,
-  Check,
-  Loader2,
-  Circle,
-  ChevronRight,
-  ExternalLink,
+  Map, Check, Loader2, Circle,
+  ChevronRight, ExternalLink, Trophy,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  topics,
-  levelConfig,
-  countItems,
-  type RoadmapTopic,
-  type RoadmapLevel,
+  fases, nivelConfig, countAllItems,
+  type RoadmapFase, type NivelFase,
   type ItemStatus,
-  type Level,
 } from "@/lib/roadmap";
 
-// ─── Storage ──────────────────────────────────────────────────────────────────
+// ── Storage ────────────────────────────────────────────────────────────────────
 
-const STORAGE_KEY = "qa-lab-roadmap";
-
-type RoadmapState = Record<string, ItemStatus>; // itemId → status
+const STORAGE_KEY = "qa-lab-roadmap-v2";
+type RoadmapState = Record<string, ItemStatus>;
 
 function loadState(): RoadmapState {
   if (typeof window === "undefined") return {};
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "{}");
-  } catch {
-    return {};
-  }
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "{}"); }
+  catch { return {}; }
 }
 
 function saveState(s: RoadmapState) {
@@ -45,49 +30,17 @@ function saveState(s: RoadmapState) {
 const statusCycle: Record<ItemStatus, ItemStatus> = {
   nao_iniciado: "em_progresso",
   em_progresso: "concluido",
-  concluido: "nao_iniciado",
+  concluido:    "nao_iniciado",
 };
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function topicProgress(
-  topic: RoadmapTopic,
-  state: RoadmapState
-): { done: number; total: number; pct: number } {
-  const total = countItems(topic);
-  const done = topic.niveis
-    .flatMap((n) => n.items)
-    .filter((i) => state[i.id] === "concluido").length;
-  return { done, total, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
-}
-
-function levelProgress(
-  level: RoadmapLevel,
-  state: RoadmapState
-): { done: number; total: number; pct: number } {
-  const total = level.items.length;
-  const done = level.items.filter((i) => state[i.id] === "concluido").length;
-  return { done, total, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
-}
-
-function getCurrentLevel(topic: RoadmapTopic, state: RoadmapState): Level {
-  const order: Level[] = ["junior", "pleno", "senior", "expert"];
-  let current: Level = "junior";
-  for (const nivel of topic.niveis) {
-    const { pct } = levelProgress(nivel, state);
-    if (pct === 100) current = nivel.nivel;
-  }
-  return current;
-}
-
-// ─── Item row ─────────────────────────────────────────────────────────────────
+// ── Item Row ───────────────────────────────────────────────────────────────────
 
 function ItemRow({
   item,
   status,
   onToggle,
 }: {
-  item: RoadmapTopic["niveis"][0]["items"][0];
+  item: RoadmapFase["items"][0];
   status: ItemStatus;
   onToggle: () => void;
 }) {
@@ -96,40 +49,34 @@ function ItemRow({
       className="group flex cursor-pointer items-start gap-3 rounded-xl p-3 transition-colors hover:bg-off-white/5"
       onClick={onToggle}
     >
-      {/* Status icon */}
       <div className="mt-0.5 shrink-0">
         {status === "concluido" ? (
           <div className="flex size-5 items-center justify-center rounded-full bg-neon/20">
             <Check className="size-3 text-neon" />
           </div>
         ) : status === "em_progresso" ? (
-          <div className="flex size-5 items-center justify-center rounded-full bg-[#F4A8A3]/20">
-            <Loader2 className="size-3 animate-spin text-[#F4A8A3]" />
+          <div className="flex size-5 items-center justify-center rounded-full bg-coral/20">
+            <Loader2 className="size-3 animate-spin text-coral" />
           </div>
         ) : (
-          <Circle className="size-5 text-off-white/20 group-hover:text-off-white/40" />
+          <Circle className="size-5 text-off-white/20 group-hover:text-off-white/40 transition-colors" />
         )}
       </div>
 
-      {/* Content */}
       <div className="min-w-0 flex-1 space-y-0.5">
-        <p
-          className={`text-sm font-medium leading-snug ${
-            status === "concluido"
-              ? "text-off-white/40 line-through"
-              : "text-off-white"
-          }`}
-        >
+        <p className={`text-sm font-medium leading-snug transition-colors ${
+          status === "concluido"
+            ? "text-off-white/35 line-through"
+            : "text-off-white"
+        }`}>
           {item.titulo}
         </p>
-        <p className="text-xs text-off-white/50 leading-relaxed">
-          {item.descricao}
-        </p>
+        <p className="text-xs text-off-white/50 leading-relaxed">{item.descricao}</p>
         {item.recurso && (
           <Link
             href={item.recurso.href}
-            onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1 text-xs text-mint hover:underline"
+            onClick={e => e.stopPropagation()}
+            className="inline-flex items-center gap-1 text-xs text-mint hover:underline mt-0.5"
           >
             <ExternalLink className="size-3" />
             {item.recurso.label}
@@ -140,194 +87,130 @@ function ItemRow({
   );
 }
 
-// ─── Level section ────────────────────────────────────────────────────────────
+// ── Fase Card ──────────────────────────────────────────────────────────────────
 
-function LevelSection({
-  level,
+function FaseCard({
+  fase,
   state,
   onToggle,
   isLast,
+  defaultOpen,
 }: {
-  level: RoadmapLevel;
+  fase: RoadmapFase;
   state: RoadmapState;
   onToggle: (id: string) => void;
   isLast: boolean;
+  defaultOpen: boolean;
 }) {
-  const [open, setOpen] = useState(true);
-  const cfg = levelConfig[level.nivel];
-  const { done, total, pct } = levelProgress(level, state);
-  const complete = pct === 100;
+  const [open, setOpen] = useState(defaultOpen);
+  const cfg     = nivelConfig[fase.nivel];
+  const done    = fase.items.filter(i => state[i.id] === "concluido").length;
+  const total   = fase.items.length;
+  const pct     = total > 0 ? Math.round((done / total) * 100) : 0;
+  const complete = done === total;
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-5">
       {/* Timeline spine */}
-      <div className="flex flex-col items-center">
-        <div
-          className={`z-10 flex size-9 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
-            complete
-              ? "border-neon bg-neon/20"
-              : "border-mint/20 bg-dark-green/50"
-          }`}
-        >
-          {complete ? (
-            <Check className="size-4 text-neon" />
-          ) : (
-            <div className={`size-2.5 rounded-full ${cfg.dotClass} opacity-70`} />
-          )}
+      <div className="flex flex-col items-center shrink-0">
+        <div className={`z-10 flex size-10 items-center justify-center rounded-full border-2 transition-all duration-300 ${
+          complete
+            ? "border-neon bg-neon/20 shadow-[0_0_12px_rgba(212,245,110,0.3)]"
+            : "border-mint/20 bg-[#405555]"
+        }`}>
+          {complete
+            ? <Check className="size-4 text-neon" />
+            : <span className={`text-sm font-bold ${cfg.textClass}`}>{fase.numero}</span>
+          }
         </div>
         {!isLast && (
-          <div
-            className={`mt-1 w-0.5 flex-1 rounded-full transition-colors ${
-              complete ? "bg-neon/30" : "bg-mint/10"
-            }`}
-          />
+          <div className={`mt-1 w-px flex-1 min-h-6 rounded-full transition-colors duration-500 ${
+            complete ? "bg-neon/25" : "bg-mint/10"
+          }`} />
         )}
       </div>
 
-      {/* Content card */}
-      <div className="mb-6 flex-1">
-        <Card className={`${complete ? "border-neon/30 bg-neon/5" : "border-mint/10"}`}>
-          <CardHeader className="pb-2">
-            <button
-              className="flex w-full items-center justify-between gap-3 text-left"
-              onClick={() => setOpen((v) => !v)}
-            >
-              <div className="flex items-center gap-2.5">
-                <Badge
-                  variant="outline"
-                  className={`text-xs font-bold uppercase tracking-wide ${cfg.className}`}
-                >
-                  {cfg.label}
-                </Badge>
-                <CardTitle className="text-sm font-bold text-off-white">
-                  {level.titulo}
-                </CardTitle>
+      {/* Card */}
+      <div className="flex-1 mb-8">
+        <div className={`rounded-2xl border transition-all duration-300 ${
+          complete
+            ? "border-neon/25 bg-neon/5"
+            : "border-mint/10 bg-card"
+        }`}>
+          {/* Header (always visible) */}
+          <button
+            className="w-full p-5 text-left"
+            onClick={() => setOpen(v => !v)}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3 min-w-0">
+                <span className="text-2xl leading-none mt-0.5">{fase.icon}</span>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h2 className="font-bold text-off-white text-base leading-snug">
+                      {fase.titulo}
+                    </h2>
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border ${cfg.textClass} ${cfg.borderClass} ${cfg.bgClass}`}>
+                      {cfg.label}
+                    </span>
+                  </div>
+                  <p className="text-xs text-off-white/50 mt-1 leading-relaxed max-w-lg">
+                    {fase.descricao}
+                  </p>
+                </div>
               </div>
-              <div className="flex shrink-0 items-center gap-2">
-                <span className="text-xs text-off-white/50">
-                  {done}/{total}
-                </span>
-                <ChevronRight
-                  className={`size-4 text-off-white/40 transition-transform ${
-                    open ? "rotate-90" : ""
-                  }`}
+              <div className="flex items-center gap-2.5 shrink-0">
+                <span className="text-xs text-off-white/40 tabular-nums">{done}/{total}</span>
+                <ChevronRight className={`size-4 text-off-white/30 transition-transform duration-200 ${open ? "rotate-90" : ""}`} />
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div className="mt-4 space-y-1.5">
+              <div className="h-1.5 rounded-full bg-off-white/8 overflow-hidden">
+                <div
+                  className="h-1.5 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${pct}%`,
+                    backgroundColor: complete ? "#D4F56E" : "#B4D4D1",
+                  }}
                 />
               </div>
-            </button>
-
-            {/* Level progress bar */}
-            <div className="mt-2 h-1 rounded-full bg-off-white/10">
-              <div
-                className="h-1 rounded-full bg-neon transition-all duration-300"
-                style={{ width: `${pct}%` }}
-              />
-            </div>
-          </CardHeader>
-
-          {open && (
-            <CardContent className="pt-0">
-              <p className="mb-3 text-xs text-off-white/50">
-                {level.descricao}
-              </p>
-              <div className="divide-y divide-mint/10">
-                {level.items.map((item) => (
-                  <ItemRow
-                    key={item.id}
-                    item={item}
-                    status={state[item.id] ?? "nao_iniciado"}
-                    onToggle={() => onToggle(item.id)}
-                  />
-                ))}
+              <div className="flex justify-between text-[10px] text-off-white/35">
+                <span>Fase {fase.numero} de 8</span>
+                <span>{pct}% concluído</span>
               </div>
-            </CardContent>
-          )}
-        </Card>
-      </div>
-    </div>
-  );
-}
-
-// ─── Topic panel ─────────────────────────────────────────────────────────────
-
-function TopicPanel({
-  topic,
-  state,
-  onToggle,
-}: {
-  topic: RoadmapTopic;
-  state: RoadmapState;
-  onToggle: (itemId: string) => void;
-}) {
-  const { done, total, pct } = topicProgress(topic, state);
-  const currentLevel = getCurrentLevel(topic, state);
-  const cfg = levelConfig[currentLevel];
-
-  return (
-    <div className="space-y-6">
-      {/* Topic header */}
-      <div className="space-y-3">
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">{topic.icon}</span>
-              <h2 className="font-[family-name:var(--font-display)] text-2xl tracking-wider text-mint italic">
-                {topic.titulo}
-              </h2>
             </div>
-            <p className="text-sm text-off-white/60">{topic.resumo}</p>
-          </div>
-          <div className="shrink-0 text-right">
-            <p className="text-2xl font-bold text-neon">{pct}%</p>
-            <p className="text-xs text-off-white/50">
-              {done}/{total} itens
-            </p>
-          </div>
-        </div>
+          </button>
 
-        {/* Overall progress bar */}
-        <div className="space-y-1">
-          <div className="h-2 rounded-full bg-off-white/10">
-            <div
-              className="h-2 rounded-full bg-neon transition-all duration-300"
-              style={{ width: `${pct}%` }}
-            />
-          </div>
-          <div className="flex items-center justify-between text-xs text-off-white/50">
-            <span>Nível atual:</span>
-            <Badge
-              variant="outline"
-              className={`text-xs font-bold uppercase tracking-wide ${cfg.className}`}
-            >
-              {cfg.label}
-            </Badge>
-          </div>
+          {/* Items */}
+          {open && (
+            <div className="border-t border-mint/10 px-5 pb-3 pt-1 divide-y divide-mint/8">
+              {fase.items.map(item => (
+                <ItemRow
+                  key={item.id}
+                  item={item}
+                  status={state[item.id] ?? "nao_iniciado"}
+                  onToggle={() => onToggle(item.id)}
+                />
+              ))}
+            </div>
+          )}
         </div>
-      </div>
-
-      {/* Roadmap levels */}
-      <div>
-        {topic.niveis.map((level, i) => (
-          <LevelSection
-            key={level.nivel}
-            level={level}
-            state={state}
-            onToggle={onToggle}
-            isLast={i === topic.niveis.length - 1}
-          />
-        ))}
       </div>
     </div>
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// ── Page ───────────────────────────────────────────────────────────────────────
 
 export default function RoadmapPage() {
-  const [selectedId, setSelectedId] = useState(topics[0].id);
   const [state, setState] = useState<RoadmapState>({});
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setState(loadState());
+    setMounted(true);
   }, []);
 
   function handleToggle(itemId: string) {
@@ -337,115 +220,145 @@ export default function RoadmapPage() {
     saveState(next);
   }
 
-  const selected = topics.find((t) => t.id === selectedId)!;
+  const totalItems = countAllItems();
+  const donePorFase = fases.map(f => f.items.filter(i => state[i.id] === "concluido").length);
+  const totalDone   = donePorFase.reduce((s, n) => s + n, 0);
+  const globalPct   = totalItems > 0 ? Math.round((totalDone / totalItems) * 100) : 0;
+  const allDone     = totalDone === totalItems;
+
+  const faseAtual = mounted
+    ? fases.find(f => f.items.some(i => (state[i.id] ?? "nao_iniciado") !== "concluido")) ?? fases[fases.length - 1]
+    : fases[0];
 
   return (
-    <div className="flex h-full gap-6 lg:gap-8 animate-fade-in">
-      {/* ── Topic list sidebar ── */}
-      <aside className="hidden w-52 shrink-0 lg:block">
-        <div className="sticky top-0 space-y-1">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex items-center justify-center size-10 rounded-xl bg-mint/20">
-              <Map className="size-5 text-mint" />
+    <div className="animate-fade-in">
+      <div className="max-w-2xl mx-auto space-y-10">
+
+        {/* ── Header ────────────────────────────────────────────────────────── */}
+        <div className="space-y-6 animate-slide-in-up">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="flex items-center justify-center size-12 rounded-2xl bg-mint/20 shrink-0">
+                <Map className="size-6 text-mint" />
+              </div>
+              <div>
+                <h1 className="font-[family-name:var(--font-display)] text-4xl tracking-wider text-mint italic">
+                  ROADMAP
+                </h1>
+                <p className="text-xs uppercase tracking-[0.15em] text-mint/50 -mt-0.5">
+                  Iniciante ao Intermediário
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="font-[family-name:var(--font-display)] text-xl tracking-wider text-mint italic">
-                ROADMAP
-              </h1>
-              <p className="text-xs text-mint/50 uppercase tracking-[0.1em]">
-                Trilhas de aprendizado
-              </p>
+
+            {/* Level legend */}
+            <div className="flex flex-col gap-1.5 shrink-0">
+              {(["iniciante", "intermediario"] as NivelFase[]).map(n => {
+                const cfg = nivelConfig[n];
+                return (
+                  <span key={n} className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border ${cfg.textClass} ${cfg.borderClass} ${cfg.bgClass}`}>
+                    {cfg.label}
+                  </span>
+                );
+              })}
             </div>
           </div>
-          {topics.map((topic) => {
-            const { pct } = topicProgress(topic, state);
-            const isSelected = topic.id === selectedId;
-            return (
-              <Button
-                key={topic.id}
-                variant="ghost"
-                className={`h-auto w-full justify-start gap-2 px-3 py-2.5 text-left ${
-                  isSelected
-                    ? "bg-mint/10 text-mint border border-mint/20"
-                    : "text-off-white/50 hover:text-off-white hover:bg-off-white/5"
-                }`}
-                onClick={() => setSelectedId(topic.id)}
-              >
-                <span className="text-base leading-none">{topic.icon}</span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-bold uppercase tracking-wide">{topic.titulo}</p>
-                  <div className="mt-1 h-1 rounded-full bg-off-white/10">
-                    <div
-                      className="h-1 rounded-full bg-neon transition-all"
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
+
+          {/* Global progress */}
+          <div className="rounded-2xl border border-mint/10 bg-card p-5 space-y-3">
+            {allDone ? (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center size-10 rounded-full bg-neon/20">
+                  <Trophy className="size-5 text-neon" />
                 </div>
-                <span className="shrink-0 text-xs text-off-white/40">
-                  {pct}%
-                </span>
-              </Button>
-            );
-          })}
-        </div>
-      </aside>
+                <div>
+                  <p className="font-bold text-neon">Roadmap concluído!</p>
+                  <p className="text-xs text-off-white/50">Você completou todos os {totalItems} tópicos. Hora do sênior.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm font-semibold text-off-white">Seu progresso</p>
+                  <p className="text-xs text-off-white/50 mt-0.5">
+                    {mounted ? (
+                      <>
+                        Fase atual: <span className="text-mint">{faseAtual.numero}. {faseAtual.titulo}</span>
+                      </>
+                    ) : "Carregando..."}
+                  </p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-3xl font-[family-name:var(--font-display)] text-neon tracking-wide leading-none">
+                    {mounted ? globalPct : 0}%
+                  </p>
+                  <p className="text-xs text-off-white/40 mt-0.5">
+                    {mounted ? totalDone : 0}/{totalItems} tópicos
+                  </p>
+                </div>
+              </div>
+            )}
 
-      {/* ── Mobile topic tabs ── */}
-      <div className="lg:hidden w-full">
-        <div className="mb-6">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="flex items-center justify-center size-10 rounded-xl bg-mint/20">
-              <Map className="size-5 text-mint" />
+            <div className="h-2 rounded-full bg-off-white/8 overflow-hidden">
+              <div
+                className="h-2 rounded-full transition-all duration-700"
+                style={{
+                  width: mounted ? `${globalPct}%` : "0%",
+                  backgroundColor: allDone ? "#D4F56E" : "#B4D4D1",
+                }}
+              />
             </div>
-            <div>
-              <h1 className="font-[family-name:var(--font-display)] text-xl tracking-wider text-mint italic">
-                ROADMAP
-              </h1>
-            </div>
+
+            {/* Per-phase mini bars */}
+            {mounted && (
+              <div className="flex gap-1 pt-0.5">
+                {fases.map((f, i) => {
+                  const fasePct = Math.round((donePorFase[i] / f.items.length) * 100);
+                  const cfg = nivelConfig[f.nivel];
+                  return (
+                    <div key={f.id} className="flex-1 space-y-1 group/bar" title={`Fase ${f.numero}: ${fasePct}%`}>
+                      <div className="h-1 rounded-full bg-off-white/8 overflow-hidden">
+                        <div
+                          className="h-1 rounded-full transition-all duration-500"
+                          style={{ width: `${fasePct}%`, backgroundColor: fasePct === 100 ? "#D4F56E" : (f.nivel === "iniciante" ? "#B4D4D1" : "#D4F56E") }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
-          <div className="flex gap-1 overflow-x-auto pb-2">
-            {topics.map((topic) => {
-              const { pct } = topicProgress(topic, state);
-              const isSelected = topic.id === selectedId;
-              return (
-                <button
-                  key={topic.id}
-                  onClick={() => setSelectedId(topic.id)}
-                  className={`flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold uppercase tracking-wide transition-colors ${
-                    isSelected
-                      ? "border-mint/40 bg-mint/10 text-mint"
-                      : "border-mint/10 text-off-white/50 hover:text-off-white"
-                  }`}
-                >
-                  <span>{topic.icon}</span>
-                  {topic.titulo}
-                  <span className="text-xs opacity-70">{pct}%</span>
-                </button>
-              );
-            })}
-          </div>
+
+          {/* Instructions */}
+          <p className="text-xs text-off-white/40 text-center">
+            Clique em um tópico para marcar como{" "}
+            <span className="text-coral">em progresso</span> →{" "}
+            <span className="text-neon">concluído</span> →{" "}
+            não iniciado
+          </p>
         </div>
-        <TopicPanel
-          topic={selected}
-          state={state}
-          onToggle={handleToggle}
-        />
-      </div>
 
-      {/* ── Roadmap content (desktop) ── */}
-      <div className="hidden flex-1 min-w-0 lg:block">
-        <TopicPanel
-          topic={selected}
-          state={state}
-          onToggle={handleToggle}
-        />
-      </div>
+        {/* ── Timeline ──────────────────────────────────────────────────────── */}
+        <div>
+          {fases.map((fase, i) => (
+            <FaseCard
+              key={fase.id}
+              fase={fase}
+              state={state}
+              onToggle={handleToggle}
+              isLast={i === fases.length - 1}
+              defaultOpen={i === 0}
+            />
+          ))}
+        </div>
 
-      {/* Series Badge */}
-      <div className="hidden lg:flex justify-end absolute bottom-8 right-8">
-        <span className="series-number text-4xl text-off-white/10">
-          #06
-        </span>
+        {/* Footer badge */}
+        <div className="flex justify-end pb-4">
+          <span className="font-[family-name:var(--font-display)] text-5xl text-mint/5 italic tracking-wider select-none">
+            QA
+          </span>
+        </div>
       </div>
     </div>
   );

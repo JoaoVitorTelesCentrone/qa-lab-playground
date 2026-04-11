@@ -11,6 +11,7 @@ import {
   BookOpen,
   Map,
   ShoppingCart,
+  Wallet,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -60,6 +61,12 @@ const navItems = [
     href: "/ecommerce",
     label: "E-commerce",
     icon: ShoppingCart,
+    exact: false,
+  },
+  {
+    href: "/despesas",
+    label: "Despesas",
+    icon: Wallet,
     exact: false,
   },
 ];
