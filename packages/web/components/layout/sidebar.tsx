@@ -7,7 +7,7 @@ import {
   Home,
   LayoutGrid,
   BookOpen,
-  Map,
+  // Map, // roadmap comentado
   CalendarDays,
   Wallet,
   Rocket,
@@ -38,12 +38,12 @@ const navItems = [
     icon: BookOpen,
     exact: false,
   },
-  {
-    href: "/roadmap",
-    label: "Roadmap",
-    icon: Map,
-    exact: false,
-  },
+  // {
+  //   href: "/roadmap",
+  //   label: "Roadmap",
+  //   icon: Map,
+  //   exact: false,
+  // },
   {
     href: "/datas",
     label: "Datas",

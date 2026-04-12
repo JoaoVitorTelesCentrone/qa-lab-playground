@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FlaskConical, LayoutGrid, ArrowRight, BookOpen, Map, CalendarDays, Wallet, Rocket } from "lucide-react";
+import { FlaskConical, LayoutGrid, ArrowRight, BookOpen, CalendarDays, Wallet, Rocket } from "lucide-react";
 
 const modules = [
   {
@@ -29,15 +29,15 @@ const modules = [
     stats: "6 artigos",
     badge: "outline",
   },
-  {
-    href: "/roadmap",
-    icon: Map,
-    titulo: "Roadmap",
-    descricao:
-      "Trilhas de aprendizado para se tornar sênior em testes unitários, API, automação e mais.",
-    stats: "8 fases · Iniciante → Intermediário",
-    badge: "neon",
-  },
+  // {
+  //   href: "/roadmap",
+  //   icon: Map,
+  //   titulo: "Roadmap",
+  //   descricao:
+  //     "Trilhas de aprendizado para se tornar sênior em testes unitários, API, automação e mais.",
+  //   stats: "8 fases · Iniciante → Intermediário",
+  //   badge: "neon",
+  // },
   {
     href: "/datas",
     icon: CalendarDays,
