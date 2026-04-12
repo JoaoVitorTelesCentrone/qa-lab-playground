@@ -1,4 +1,4 @@
-import type { User, Product, Order } from "@qa-lab/shared";
+import type { User, Product, Order, CasoTeste } from "@qa-lab/shared";
 
 // ==============================
 // Seed Data
@@ -72,17 +72,21 @@ class Store {
   users: User[];
   products: Product[];
   orders: Order[];
+  casos: CasoTeste[];
   private nextUserId: number;
   private nextProductId: number;
   private nextOrderId: number;
+  private nextCasoId: number;
 
   constructor() {
     this.users = gerarUsuarios();
     this.products = gerarProdutos();
     this.orders = gerarPedidos();
+    this.casos = [];
     this.nextUserId = this.users.length + 1;
     this.nextProductId = this.products.length + 1;
     this.nextOrderId = this.orders.length + 1;
+    this.nextCasoId = 1;
   }
 
   // Users
@@ -192,14 +196,45 @@ class Store {
     return order;
   }
 
+  // Casos de Teste
+  getCasos(): CasoTeste[] {
+    return this.casos;
+  }
+
+  createCaso(data: Omit<CasoTeste, "id" | "criadoEm">): CasoTeste {
+    const caso: CasoTeste = {
+      ...data,
+      id: String(this.nextCasoId++),
+      criadoEm: new Date().toISOString(),
+    };
+    this.casos.push(caso);
+    return caso;
+  }
+
+  updateCaso(id: string, data: Partial<Omit<CasoTeste, "id" | "criadoEm">>): CasoTeste | null {
+    const caso = this.casos.find((c) => c.id === id);
+    if (!caso) return null;
+    Object.assign(caso, data);
+    return caso;
+  }
+
+  deleteCaso(id: string): boolean {
+    const idx = this.casos.findIndex((c) => c.id === id);
+    if (idx === -1) return false;
+    this.casos.splice(idx, 1);
+    return true;
+  }
+
   // Reset
   reset() {
     this.users = gerarUsuarios();
     this.products = gerarProdutos();
     this.orders = gerarPedidos();
+    this.casos = [];
     this.nextUserId = this.users.length + 1;
     this.nextProductId = this.products.length + 1;
     this.nextOrderId = this.orders.length + 1;
+    this.nextCasoId = 1;
   }
 }
 

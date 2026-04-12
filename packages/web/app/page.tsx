@@ -8,34 +8,16 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FlaskConical, Send, Target, Layers, ArrowRight, BookOpen, Map } from "lucide-react";
+import { FlaskConical, LayoutGrid, ArrowRight, BookOpen, Map, CalendarDays, Wallet, Rocket } from "lucide-react";
 
 const modules = [
   {
-    href: "/missoes",
-    icon: Target,
-    titulo: "Missões",
+    href: "/elementos",
+    icon: LayoutGrid,
+    titulo: "Elementos",
     descricao:
-      "Prove bugs reais com automação. Cada missão tem objetivo, dica e snippet pra você adaptar.",
-    stats: "8 missões · 2 níveis",
-    badge: "neon",
-  },
-  {
-    href: "/alvos",
-    icon: Layers,
-    titulo: "Alvos",
-    descricao:
-      "Documentação dos sistemas que você vai testar — endpoints, seletores e bugs conhecidos.",
-    stats: "API · E-commerce · Form",
-    badge: "default",
-  },
-  {
-    href: "/api-playground",
-    icon: Send,
-    titulo: "API Playground",
-    descricao:
-      "Envie requests manualmente e explore os endpoints disponíveis antes de automatizar.",
-    stats: "10 endpoints",
+      "Tabela dinâmica, carregamento assíncrono e interações de UI — todos com data-testid para automação.",
+    stats: "Tabela · Loading · Interações",
     badge: "default",
   },
   {
@@ -44,7 +26,7 @@ const modules = [
     titulo: "Blog QA Lab",
     descricao:
       "Artigos sobre qualidade de software, técnicas de teste e boas práticas para QAs.",
-    stats: "5 artigos",
+    stats: "6 artigos",
     badge: "outline",
   },
   {
@@ -53,7 +35,34 @@ const modules = [
     titulo: "Roadmap",
     descricao:
       "Trilhas de aprendizado para se tornar sênior em testes unitários, API, automação e mais.",
-    stats: "5 trilhas · 4 níveis",
+    stats: "8 fases · Iniciante → Intermediário",
+    badge: "neon",
+  },
+  {
+    href: "/datas",
+    icon: CalendarDays,
+    titulo: "Datas Bugadas",
+    descricao:
+      "Módulo com 10 bugs propositais de data, hora e timezone. Encontre todos e marque no checklist.",
+    stats: "10 bugs · Calendário · Timer · Fuso",
+    badge: "default",
+  },
+  {
+    href: "/despesas",
+    icon: Wallet,
+    titulo: "Despesas",
+    descricao:
+      "Controle financeiro com tabela paginável, seleção de linhas, filtros combinados e export CSV.",
+    stats: "Paginação · Bulk delete · Filtros",
+    badge: "default",
+  },
+  {
+    href: "/proximos-passos",
+    icon: Rocket,
+    titulo: "Próximos Passos",
+    descricao:
+      "Veja o que está sendo desenvolvido e o que vem por aí no QA Lab Playground.",
+    stats: "Em construção",
     badge: "neon",
   },
 ];
@@ -143,10 +152,10 @@ export default function DashboardPage() {
               </span>
               <div>
                 <span className="text-off-white/90 font-semibold">
-                  Abra <Link href="/alvos" className="text-mint hover:underline">Alvos</Link>
+                  Explore os <Link href="/elementos" className="text-mint hover:underline">Elementos</Link>
                 </span>
                 <p className="text-sm text-off-white/60">
-                  Leia os endpoints, seletores e bugs conhecidos dos sistemas que você vai testar
+                  Tabela dinâmica com sort, filtros e paginação — interações e carregamento assíncrono
                 </p>
               </div>
             </li>
@@ -156,36 +165,16 @@ export default function DashboardPage() {
               </span>
               <div>
                 <span className="text-off-white/90 font-semibold">
-                  Escolha uma <Link href="/missoes" className="text-neon hover:underline">Missão</Link>
+                  Veja os <Link href="/proximos-passos" className="text-mint hover:underline">Próximos Passos</Link>
                 </span>
                 <p className="text-sm text-off-white/60">
-                  Pelo seu nível, leia o objetivo e tente escrever o teste antes de ver o snippet
-                </p>
-              </div>
-            </li>
-            <li className="flex gap-4">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-mint/20 text-sm font-bold text-mint">
-                3
-              </span>
-              <div>
-                <span className="text-off-white/90 font-semibold">
-                  Use o <Link href="/api-playground" className="text-mint hover:underline">API Playground</Link>
-                </span>
-                <p className="text-sm text-off-white/60">
-                  Para explorar manualmente os endpoints antes de automatizar
+                  Acompanhe o que está sendo desenvolvido e o que vem por aí no QA Lab
                 </p>
               </div>
             </li>
           </ol>
         </CardContent>
       </Card>
-
-      {/* Series Badge */}
-      <div className="flex justify-end">
-        <span className="series-number text-4xl text-off-white/20">
-          #01
-        </span>
-      </div>
     </div>
   );
 }

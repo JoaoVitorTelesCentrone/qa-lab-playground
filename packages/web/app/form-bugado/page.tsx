@@ -140,13 +140,6 @@ export default function FormBugadoPage() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Series Badge */}
-      <div className="flex justify-end">
-        <span className="series-number text-4xl text-off-white/10">
-          #07
-        </span>
-      </div>
     </div>
   );
 }

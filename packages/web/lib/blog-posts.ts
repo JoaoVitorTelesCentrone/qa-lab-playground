@@ -498,6 +498,184 @@ const dataLocal = new Date("2024-03-15T15:00:00-03:00"); // São Paulo`,
       },
     ],
   },
+  {
+    slug: "timing-e-waits",
+    titulo: "Timing e Waits: como parar de escrever testes flaky",
+    resumo:
+      "Testes que passam na sua máquina mas falham no CI. Testes que precisam de um sleep(3000) para funcionar. Entenda por que isso acontece e como explicit waits resolvem de vez.",
+    autor: "JV Centrone",
+    data: "2026-03-20",
+    tags: ["Playwright", "Automação", "Flaky Tests", "Timing"],
+    tempoLeitura: 8,
+    blocos: [
+      {
+        type: "paragraph",
+        content:
+          "Testes flaky — aqueles que passam às vezes e falham às outras sem mudança de código — têm uma causa raiz em mais de 80% dos casos: suposições de timing. O teste assume que um elemento já está na tela, ou que uma requisição já terminou, quando na realidade ainda não.",
+      },
+      {
+        type: "heading",
+        content: "O problema: testes que assumem estado",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Quando você clica num botão que dispara uma chamada de API e logo em seguida verifica o resultado, está assumindo que a API respondeu instantaneamente. Em desenvolvimento local, com cache quente e conexão rápida, isso quase sempre funciona. No CI, com máquina mais lenta, sem cache e mais carga, falha.",
+      },
+      {
+        type: "code",
+        language: "typescript",
+        content: `// ❌ Frágil: assume que a mensagem já apareceu
+await page.click('[data-testid="salvar-btn"]')
+expect(await page.textContent('[data-testid="status"]')).toBe('Salvo')
+
+// ✅ Robusto: espera a condição ser verdadeira
+await page.click('[data-testid="salvar-btn"]')
+await expect(page.locator('[data-testid="status"]')).toHaveText('Salvo')`,
+      },
+      {
+        type: "callout",
+        variant: "danger",
+        content:
+          "Nunca use sleep() ou page.waitForTimeout() como solução permanente. É um band-aid que esconde o problema real e torna os testes lentos sem garantia de estabilidade.",
+      },
+      {
+        type: "heading",
+        content: "Implicit vs. Explicit Waits",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Implicit wait define um timeout global: 'se não encontrar o elemento, tenta por até X segundos'. O problema é que isso vale para TODAS as buscas, mesmo as que deveriam falhar rápido, tornando os testes lentos e mascarando erros reais.",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Explicit wait espera uma condição específica. É preciso, comunicativo e não afeta o restante da suite.",
+      },
+      {
+        type: "subheading",
+        content: "Os waits mais úteis no Playwright",
+      },
+      {
+        type: "list",
+        items: [
+          "toBeVisible() — elemento está no DOM e visível na tela",
+          "toHaveText() — texto do elemento corresponde ao esperado",
+          "toHaveValue() — valor de input corresponde ao esperado",
+          "toBeEnabled() / toBeDisabled() — estado do elemento",
+          "waitForURL() — aguarda a URL mudar (ideal após navegação)",
+          "waitForResponse() — aguarda uma requisição de rede específica",
+          "waitForLoadState('networkidle') — aguarda rede parar de fazer requests",
+        ],
+      },
+      {
+        type: "heading",
+        content: "O padrão correto para carregamento assíncrono",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Quando um elemento aparece após uma ação (clique, submit, navegação), sempre espere pela condição resultante — não pelo elemento que disparou a ação.",
+      },
+      {
+        type: "code",
+        language: "typescript",
+        content: `// Cenário: clicar em 'Carregar dados' e aguardar o conteúdo aparecer
+// Seletor: [data-testid="gatilho-btn"] e [data-testid="gatilho-conteudo"]
+
+test('deve carregar dados após clicar no botão', async ({ page }) => {
+  await page.goto('/elementos')
+
+  // O conteúdo ainda não existe
+  await expect(
+    page.locator('[data-testid="gatilho-conteudo"]')
+  ).not.toBeVisible()
+
+  // Clica no gatilho
+  await page.click('[data-testid="gatilho-btn"]')
+
+  // Espera o conteúdo aparecer (até o timeout padrão de 30s)
+  await expect(
+    page.locator('[data-testid="gatilho-conteudo"]')
+  ).toBeVisible()
+})`,
+      },
+      {
+        type: "heading",
+        content: "Polling: quando o conteúdo muda sozinho",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Alguns elementos atualizam periodicamente sem interação do usuário — dashboards em tempo real, contadores, status de processamento. Para esses casos, use expect.poll() ou waitForFunction().",
+      },
+      {
+        type: "code",
+        language: "typescript",
+        content: `// Aguarda o contador chegar em 3 (atualiza a cada 2s)
+await expect.poll(
+  async () => {
+    const text = await page.textContent('[data-testid="poll-contador"]')
+    return Number(text)
+  },
+  { timeout: 10_000 }
+).toBeGreaterThanOrEqual(3)`,
+      },
+      {
+        type: "heading",
+        content: "Retry após falha de rede",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Aplicações reais têm estados de erro e botões de retry. Seu teste deve validar o estado de erro E o estado de sucesso após o retry — não assumir que sempre vai dar certo.",
+      },
+      {
+        type: "code",
+        language: "typescript",
+        content: `test('deve recuperar após falha de rede', async ({ page }) => {
+  await page.goto('/elementos')
+  await page.getByRole('tab', { name: 'Carregamento' }).click()
+
+  // Verifica o estado de erro inicial
+  await expect(
+    page.locator('[data-testid="retry-erro"]')
+  ).toBeVisible()
+
+  // Clica em retry
+  await page.click('[data-testid="retry-btn"]')
+
+  // Aguarda a recuperação
+  await expect(
+    page.locator('[data-testid="retry-conteudo"]')
+  ).toBeVisible()
+})`,
+      },
+      {
+        type: "callout",
+        variant: "tip",
+        content:
+          "O módulo Elementos do QA Lab tem todos esses padrões implementados com data-testid prontos para você praticar: auto-carregamento, gatilho, retry e polling.",
+      },
+      {
+        type: "heading",
+        content: "Checklist anti-flaky",
+      },
+      {
+        type: "list",
+        items: [
+          "Nunca use sleep() — sempre prefira waits condicionais",
+          "Após qualquer clique que muda estado, espere pela mudança — não pelo clique",
+          "Use toBeVisible() em vez de verificar o DOM diretamente",
+          "Para formulários, aguarde toHaveValue() antes de verificar resultado",
+          "Para navegação, use waitForURL() ou waitForLoadState()",
+          "Para APIs, use waitForResponse() para garantir que o request terminou",
+          "Rode seus testes 3x seguidas em modo headless antes de considerar estáveis",
+        ],
+      },
+    ],
+  },
 ];
 
 // ==============================

@@ -101,6 +101,28 @@ export interface Scenario {
 }
 
 // ==============================
+// Casos de Teste
+// ==============================
+
+export type StatusCasoTeste     = "nao_executado" | "passou" | "falhou" | "bloqueado";
+export type SistemaCasoTeste    = "API" | "E-commerce" | "Form Bugado";
+export type TipoCasoTeste       = "funcional" | "regressao" | "smoke" | "seguranca" | "exploratorio";
+export type PrioridadeCasoTeste = "alta" | "media" | "baixa";
+
+export interface CasoTeste {
+  id:                 string;
+  titulo:             string;
+  descricao:          string;
+  resultado_esperado: string;
+  sistema:            SistemaCasoTeste;
+  tipo:               TipoCasoTeste;
+  prioridade:         PrioridadeCasoTeste;
+  status:             StatusCasoTeste;
+  passos:             string[];
+  criadoEm:           string;
+}
+
+// ==============================
 // API Endpoint Catalog
 // ==============================
 

@@ -238,13 +238,6 @@ export default function AlvosPage() {
           </div>
         </div>
       )}
-
-      {/* Series Badge */}
-      <div className="flex justify-end">
-        <span className="series-number text-4xl text-off-white/10">
-          #03
-        </span>
-      </div>
     </div>
   );
 }

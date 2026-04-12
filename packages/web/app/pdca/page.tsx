@@ -248,13 +248,6 @@ export default function PDCAPage() {
           </div>
         )}
       </div>
-
-      {/* Series Badge */}
-      <div className="flex justify-end">
-        <span className="series-number text-4xl text-off-white/10">
-          #08
-        </span>
-      </div>
     </div>
   );
 }

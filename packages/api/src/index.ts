@@ -5,6 +5,7 @@ import users from "./routes/users";
 import products from "./routes/products";
 import orders from "./routes/orders";
 import health from "./routes/health";
+import casos from "./routes/casos";
 import { getChaosConfig, updateChaosConfig, setAllChaos } from "./config/chaos-config";
 import { store } from "./data/store";
 import type { ChaosEndpointConfig } from "@qa-lab/shared";
@@ -25,6 +26,7 @@ app.route("/api/users", users);
 app.route("/api/products", products);
 app.route("/api/orders", orders);
 app.route("/api/health", health);
+app.route("/api/casos", casos);
 
 // ==============================
 // Chaos Control Endpoints

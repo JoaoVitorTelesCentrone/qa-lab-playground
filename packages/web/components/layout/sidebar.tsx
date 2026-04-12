@@ -5,13 +5,12 @@ import { usePathname } from "next/navigation";
 import {
   FlaskConical,
   Home,
-  Send,
-  Target,
-  Layers,
+  LayoutGrid,
   BookOpen,
   Map,
-  ShoppingCart,
+  CalendarDays,
   Wallet,
+  Rocket,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -28,21 +27,9 @@ const navItems = [
     exact: true,
   },
   {
-    href: "/missoes",
-    label: "Missões",
-    icon: Target,
-    exact: false,
-  },
-  {
-    href: "/alvos",
-    label: "Alvos",
-    icon: Layers,
-    exact: false,
-  },
-  {
-    href: "/api-playground",
-    label: "API Playground",
-    icon: Send,
+    href: "/elementos",
+    label: "Elementos",
+    icon: LayoutGrid,
     exact: false,
   },
   {
@@ -58,15 +45,21 @@ const navItems = [
     exact: false,
   },
   {
-    href: "/ecommerce",
-    label: "E-commerce",
-    icon: ShoppingCart,
+    href: "/datas",
+    label: "Datas",
+    icon: CalendarDays,
     exact: false,
   },
   {
     href: "/despesas",
     label: "Despesas",
     icon: Wallet,
+    exact: false,
+  },
+  {
+    href: "/proximos-passos",
+    label: "Próximos Passos",
+    icon: Rocket,
     exact: false,
   },
 ];

@@ -356,13 +356,6 @@ export default function MissoesPage() {
           <MissaoCard key={m.id} missao={m} />
         ))}
       </div>
-
-      {/* Series Badge */}
-      <div className="flex justify-end">
-        <span className="series-number text-4xl text-off-white/10">
-          #02
-        </span>
-      </div>
     </div>
   );
 }

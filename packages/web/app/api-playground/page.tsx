@@ -95,13 +95,6 @@ export default function ApiPlaygroundPage() {
           onHistorySelect={handleHistorySelect}
         />
       </div>
-
-      {/* Series Badge */}
-      <div className="flex justify-end">
-        <span className="series-number text-4xl text-off-white/10">
-          #04
-        </span>
-      </div>
     </div>
   );
 }

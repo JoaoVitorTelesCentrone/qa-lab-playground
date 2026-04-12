@@ -14,6 +14,11 @@ export type {
   ScenarioObjective,
   Scenario,
   EndpointInfo,
+  CasoTeste,
+  StatusCasoTeste,
+  SistemaCasoTeste,
+  TipoCasoTeste,
+  PrioridadeCasoTeste,
 } from "./types";
 
 export { scenarios, endpointCatalog } from "./scenarios";

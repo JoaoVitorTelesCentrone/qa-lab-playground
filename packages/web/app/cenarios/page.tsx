@@ -859,12 +859,6 @@ export default function CenariosPage() {
         />
       )}
 
-      {/* Series Badge */}
-      <div className="flex justify-end">
-        <span className="series-number text-4xl text-off-white/10">
-          #10
-        </span>
-      </div>
     </div>
   );
 }

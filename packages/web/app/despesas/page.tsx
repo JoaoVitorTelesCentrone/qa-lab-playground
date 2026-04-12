@@ -80,6 +80,9 @@ interface Categoria {
 
 type SortField = "data" | "valor" | "descricao";
 type SortDir   = "asc" | "desc";
+type FiltroTipo = "all" | "despesa" | "receita";
+
+const ITEMS_PER_PAGE = 8;
 
 // ── Seed data ──────────────────────────────────────────────────────────────────
 
@@ -108,12 +111,20 @@ const SEED: Despesa[] = [
   { id: 10, descricao: "Curso de QA",       valor: 297.00,  categoria: "Educação",    data: "2026-04-06", tipo: "despesa" },
 ];
 
-const EMPTY_FORM = {
+type FormDraft = {
+  descricao: string;
+  valor: string;
+  categoria: string;
+  data: string;
+  tipo: "despesa" | "receita";
+};
+
+const EMPTY_FORM: FormDraft = {
   descricao: "",
   valor: "",
   categoria: "Moradia",
   data: new Date().toISOString().slice(0, 10),
-  tipo: "despesa" as const,
+  tipo: "despesa",
 };
 
 // ── Inline UI components ───────────────────────────────────────────────────────
@@ -172,10 +183,15 @@ export default function DespesasPage() {
   // filters & sort
   const [busca,           setBusca]           = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState("all");
+  const [filtroTipo,      setFiltroTipo]      = useState<FiltroTipo>("all");
   const [filtroInicio,    setFiltroInicio]    = useState("");
   const [filtroFim,       setFiltroFim]       = useState("");
   const [sortField,       setSortField]       = useState<SortField>("data");
   const [sortDir,         setSortDir]         = useState<SortDir>("desc");
+
+  // selection & pagination
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [page,     setPage]     = useState(1);
 
   // modal: add/edit
   const [modalDespesa, setModalDespesa] = useState<{ open: boolean; editing?: Despesa }>({ open: false });
@@ -203,6 +219,7 @@ export default function DespesasPage() {
       .filter(d => {
         if (busca && !d.descricao.toLowerCase().includes(busca.toLowerCase()) && !d.categoria.toLowerCase().includes(busca.toLowerCase())) return false;
         if (filtroCategoria !== "all" && d.categoria !== filtroCategoria) return false;
+        if (filtroTipo      !== "all" && d.tipo      !== filtroTipo)      return false;
         if (filtroInicio && d.data < filtroInicio) return false;
         if (filtroFim    && d.data > filtroFim)    return false;
         return true;
@@ -214,7 +231,12 @@ export default function DespesasPage() {
         if (sortField === "descricao") diff = a.descricao.localeCompare(b.descricao);
         return sortDir === "asc" ? diff : -diff;
       });
-  }, [despesas, busca, filtroCategoria, filtroInicio, filtroFim, sortField, sortDir]);
+  }, [despesas, busca, filtroCategoria, filtroTipo, filtroInicio, filtroFim, sortField, sortDir]);
+
+  const totalPaginas       = Math.max(1, Math.ceil(despesasFiltradas.length / ITEMS_PER_PAGE));
+  const despesasPaginadas  = despesasFiltradas.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  const todosNaPagSelec    = despesasPaginadas.length > 0 && despesasPaginadas.every(d => selected.has(d.id));
+  const algunsNaPagSelec   = despesasPaginadas.some(d => selected.has(d.id));
 
   const totalReceitas = despesas.filter(d => d.tipo === "receita").reduce((s, d) => s + d.valor, 0);
   const totalDespesas = despesas.filter(d => d.tipo === "despesa").reduce((s, d) => s + d.valor, 0);
@@ -339,6 +361,55 @@ export default function DespesasPage() {
   const sortIcon = (field: SortField) =>
     sortField === field ? (sortDir === "asc" ? " ↑" : " ↓") : "";
 
+  function resetarFiltros() {
+    setBusca(""); setFiltroCategoria("all"); setFiltroTipo("all");
+    setFiltroInicio(""); setFiltroFim("");
+    setPage(1); setSelected(new Set());
+  }
+
+  function resetarDados() {
+    setDespesas(SEED);
+    resetarFiltros();
+    toast.add("Dados restaurados para o estado inicial", "info");
+  }
+
+  function toggleSelect(id: number) {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (todosNaPagSelec) {
+      setSelected(prev => {
+        const next = new Set(prev);
+        despesasPaginadas.forEach(d => next.delete(d.id));
+        return next;
+      });
+    } else {
+      setSelected(prev => {
+        const next = new Set(prev);
+        despesasPaginadas.forEach(d => next.add(d.id));
+        return next;
+      });
+    }
+  }
+
+  function deletarSelecionados() {
+    const count = selected.size;
+    setDespesas(prev => prev.filter(d => !selected.has(d.id)));
+    setSelected(new Set());
+    setPage(1);
+    toast.add(`${count} lançamento(s) excluído(s)`, "info");
+  }
+
+  function irPagina(p: number) {
+    setPage(Math.max(1, Math.min(totalPaginas, p)));
+    setSelected(new Set());
+  }
+
   // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
@@ -371,10 +442,13 @@ export default function DespesasPage() {
             ))}
           </div>
 
-          <Btn variant="outline" size="sm" onClick={exportarCSV} className="gap-1.5">
+          <Btn variant="outline" size="sm" onClick={exportarCSV} className="gap-1.5" data-testid="btn-exportar-csv">
             <Download className="size-3.5" /> CSV
           </Btn>
-          <Btn size="sm" onClick={abrirNova} className="gap-1.5">
+          <Btn variant="ghost" size="sm" onClick={resetarDados} className="gap-1.5 text-muted-foreground" data-testid="btn-resetar-dados">
+            Resetar dados
+          </Btn>
+          <Btn size="sm" onClick={abrirNova} className="gap-1.5" data-testid="btn-novo-lancamento">
             <Plus className="size-3.5" /> Nova
           </Btn>
         </div>
@@ -403,37 +477,52 @@ export default function DespesasPage() {
           {/* Filters */}
           <Card>
             <div className="p-4 space-y-3">
-              {/* Row 1: search + category */}
-              <div className="flex gap-2">
-                <div className="flex-1 relative">
+              {/* Row 1: search + category + tipo */}
+              <div className="flex gap-2 flex-wrap">
+                <div className="flex-1 min-w-[160px] relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
                   <Input
                     placeholder="Buscar por descrição ou categoria..."
                     value={busca}
-                    onChange={e => setBusca(e.target.value)}
+                    onChange={e => { setBusca(e.target.value); setPage(1); }}
                     className="pl-8"
+                    data-testid="filtro-busca"
                   />
                 </div>
                 <select
                   value={filtroCategoria}
-                  onChange={e => setFiltroCategoria(e.target.value)}
+                  onChange={e => { setFiltroCategoria(e.target.value); setPage(1); setSelected(new Set()); }}
                   className="h-9 rounded-lg border border-input bg-background px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  data-testid="filtro-categoria"
                 >
                   <option value="all">Todas as categorias</option>
                   {categorias.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                </select>
+                <select
+                  value={filtroTipo}
+                  onChange={e => { setFiltroTipo(e.target.value as FiltroTipo); setPage(1); setSelected(new Set()); }}
+                  className="h-9 rounded-lg border border-input bg-background px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  data-testid="filtro-tipo"
+                >
+                  <option value="all">Todos os tipos</option>
+                  <option value="despesa">Despesas</option>
+                  <option value="receita">Receitas</option>
                 </select>
               </div>
 
               {/* Row 2: date range */}
               <div className="flex gap-2 items-center">
                 <span className="text-xs text-muted-foreground whitespace-nowrap">Período:</span>
-                <Input type="date" value={filtroInicio} onChange={e => setFiltroInicio(e.target.value)} className="flex-1" />
+                <Input type="date" value={filtroInicio} onChange={e => { setFiltroInicio(e.target.value); setPage(1); }} className="flex-1" data-testid="filtro-data-inicio" />
                 <span className="text-xs text-muted-foreground">até</span>
-                <Input type="date" value={filtroFim}    onChange={e => setFiltroFim(e.target.value)}    className="flex-1" />
-                {(filtroInicio || filtroFim) && (
-                  <button onClick={() => { setFiltroInicio(""); setFiltroFim(""); }}
-                    className="text-muted-foreground hover:text-foreground transition-colors">
-                    <X className="size-3.5" />
+                <Input type="date" value={filtroFim}    onChange={e => { setFiltroFim(e.target.value); setPage(1); }}    className="flex-1" data-testid="filtro-data-fim" />
+                {(filtroInicio || filtroFim || filtroCategoria !== "all" || filtroTipo !== "all" || busca) && (
+                  <button
+                    onClick={resetarFiltros}
+                    className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 text-xs whitespace-nowrap"
+                    data-testid="btn-limpar-filtros"
+                  >
+                    <X className="size-3.5" /> Limpar
                   </button>
                 )}
               </div>
@@ -443,52 +532,94 @@ export default function DespesasPage() {
           {/* ── Lista View ──────────────────────────────────────────────────── */}
           {view === "lista" && (
             <Card>
+              {/* Bulk action bar */}
+              {selected.size > 0 && (
+                <div className="px-4 py-2.5 border-b border-coral/30 bg-coral/5 flex items-center justify-between gap-2" data-testid="bulk-action-bar">
+                  <span className="text-xs font-semibold text-coral" data-testid="bulk-count">
+                    {selected.size} selecionado(s)
+                  </span>
+                  <Btn variant="destructive" size="sm" onClick={deletarSelecionados} className="gap-1.5" data-testid="btn-bulk-delete">
+                    <Trash2 className="size-3.5" /> Excluir selecionados
+                  </Btn>
+                </div>
+              )}
+
               {/* Column headers */}
-              <div className="grid grid-cols-[1fr_110px_120px_110px_64px] gap-2 px-4 py-2.5 border-b border-border">
-                <button onClick={() => toggleSort("descricao")} className="text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+              <div className="grid grid-cols-[32px_1fr_110px_120px_110px_64px] gap-2 px-4 py-2.5 border-b border-border" data-testid="tabela-header">
+                <div className="flex items-center justify-center">
+                  <input
+                    type="checkbox"
+                    checked={todosNaPagSelec}
+                    ref={el => { if (el) el.indeterminate = algunsNaPagSelec && !todosNaPagSelec; }}
+                    onChange={toggleSelectAll}
+                    className="size-3.5 cursor-pointer accent-primary"
+                    data-testid="checkbox-selecionar-todos"
+                  />
+                </div>
+                <button onClick={() => toggleSort("descricao")} className="text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors" data-testid="sort-descricao">
                   Descrição{sortIcon("descricao")}
                 </button>
-                <button onClick={() => toggleSort("data")} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={() => toggleSort("data")} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors" data-testid="sort-data">
                   Data{sortIcon("data")}
                 </button>
                 <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Categoria</span>
-                <button onClick={() => toggleSort("valor")} className="text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={() => toggleSort("valor")} className="text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors" data-testid="sort-valor">
                   Valor{sortIcon("valor")}
                 </button>
                 <span />
               </div>
 
               {/* Rows */}
-              <div className="divide-y divide-border">
+              <div className="divide-y divide-border" data-testid="tabela-body">
                 {despesasFiltradas.length === 0 ? (
-                  <div className="py-14 text-center text-sm text-muted-foreground">
+                  <div className="py-14 text-center text-sm text-muted-foreground" data-testid="tabela-vazia">
                     <Search className="size-8 mx-auto mb-2 opacity-30" />
                     Nenhum lançamento encontrado
                   </div>
-                ) : despesasFiltradas.map(d => {
+                ) : despesasPaginadas.map(d => {
                   const cat = categorias.find(c => c.id === d.categoria);
+                  const isSel = selected.has(d.id);
                   return (
-                    <div key={d.id} className="grid grid-cols-[1fr_110px_120px_110px_64px] gap-2 px-4 py-3 items-center hover:bg-accent/30 transition-colors">
-                      <p className="text-sm font-medium text-foreground truncate">{d.descricao}</p>
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">
+                    <div
+                      key={d.id}
+                      className={`grid grid-cols-[32px_1fr_110px_120px_110px_64px] gap-2 px-4 py-3 items-center transition-colors ${isSel ? "bg-primary/5" : "hover:bg-accent/30"}`}
+                      data-testid={`linha-lancamento-${d.id}`}
+                    >
+                      <div className="flex items-center justify-center">
+                        <input
+                          type="checkbox"
+                          checked={isSel}
+                          onChange={() => toggleSelect(d.id)}
+                          className="size-3.5 cursor-pointer accent-primary"
+                          data-testid={`checkbox-lancamento-${d.id}`}
+                        />
+                      </div>
+                      <p className="text-sm font-medium text-foreground truncate" data-testid={`descricao-${d.id}`}>{d.descricao}</p>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap" data-testid={`data-${d.id}`}>
                         {new Date(d.data + "T12:00:00").toLocaleDateString("pt-BR")}
                       </span>
                       <span
                         className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium w-fit"
                         style={{ backgroundColor: (cat?.cor ?? "#888") + "25", color: cat?.cor ?? "#888" }}
+                        data-testid={`categoria-${d.id}`}
                       >
                         {d.categoria}
                       </span>
-                      <span className={`text-sm font-semibold text-right whitespace-nowrap ${d.tipo === "receita" ? "text-neon" : "text-foreground"}`}>
+                      <span
+                        className={`text-sm font-semibold text-right whitespace-nowrap ${d.tipo === "receita" ? "text-neon" : "text-foreground"}`}
+                        data-testid={`valor-${d.id}`}
+                      >
                         {d.tipo === "receita" ? "+" : "−"}R$ {d.valor.toFixed(2)}
                       </span>
                       <div className="flex items-center justify-end gap-0.5">
                         <button onClick={() => abrirEditar(d)}
-                          className="size-7 flex items-center justify-center rounded text-muted-foreground hover:text-mint hover:bg-mint/10 transition-colors">
+                          className="size-7 flex items-center justify-center rounded text-muted-foreground hover:text-mint hover:bg-mint/10 transition-colors"
+                          data-testid={`btn-editar-${d.id}`}>
                           <Edit2 className="size-3.5" />
                         </button>
                         <button onClick={() => setModalDelete({ open: true, id: d.id })}
-                          className="size-7 flex items-center justify-center rounded text-muted-foreground hover:text-coral hover:bg-coral/10 transition-colors">
+                          className="size-7 flex items-center justify-center rounded text-muted-foreground hover:text-coral hover:bg-coral/10 transition-colors"
+                          data-testid={`btn-excluir-${d.id}`}>
                           <Trash2 className="size-3.5" />
                         </button>
                       </div>
@@ -497,24 +628,52 @@ export default function DespesasPage() {
                 })}
               </div>
 
-              {/* Footer totals */}
+              {/* Footer: totals + pagination */}
               {despesasFiltradas.length > 0 && (
-                <div className="px-4 py-3 border-t border-border flex items-center justify-between flex-wrap gap-2">
-                  <span className="text-xs text-muted-foreground">{despesasFiltradas.length} registro(s)</span>
-                  <div className="flex items-center gap-4 text-sm">
-                    <span className="text-muted-foreground text-xs">
-                      Despesas:{" "}
-                      <span className="text-coral font-semibold">
-                        −R$ {despesasFiltradas.filter(d => d.tipo === "despesa").reduce((s, d) => s + d.valor, 0).toFixed(2)}
-                      </span>
+                <div className="px-4 py-3 border-t border-border flex items-center justify-between flex-wrap gap-3">
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <span data-testid="total-registros">{despesasFiltradas.length} registro(s)</span>
+                    <span>
+                      Despesas: <span className="text-coral font-semibold">−R$ {despesasFiltradas.filter(d => d.tipo === "despesa").reduce((s, d) => s + d.valor, 0).toFixed(2)}</span>
                     </span>
-                    <span className="text-muted-foreground text-xs">
-                      Receitas:{" "}
-                      <span className="text-neon font-semibold">
-                        +R$ {despesasFiltradas.filter(d => d.tipo === "receita").reduce((s, d) => s + d.valor, 0).toFixed(2)}
-                      </span>
+                    <span>
+                      Receitas: <span className="text-neon font-semibold">+R$ {despesasFiltradas.filter(d => d.tipo === "receita").reduce((s, d) => s + d.valor, 0).toFixed(2)}</span>
                     </span>
                   </div>
+
+                  {/* Pagination */}
+                  {totalPaginas > 1 && (
+                    <div className="flex items-center gap-1.5" data-testid="paginacao">
+                      <button
+                        onClick={() => irPagina(page - 1)}
+                        disabled={page === 1}
+                        className="size-7 flex items-center justify-center rounded border border-border text-xs text-foreground hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                        data-testid="btn-pagina-anterior"
+                      >
+                        ‹
+                      </button>
+                      {Array.from({ length: totalPaginas }, (_, i) => i + 1).map(p => (
+                        <button
+                          key={p}
+                          onClick={() => irPagina(p)}
+                          className={`size-7 flex items-center justify-center rounded text-xs font-medium transition-colors ${
+                            p === page ? "bg-primary text-primary-foreground" : "border border-border text-foreground hover:bg-accent"
+                          }`}
+                          data-testid={`btn-pagina-${p}`}
+                        >
+                          {p}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => irPagina(page + 1)}
+                        disabled={page === totalPaginas}
+                        className="size-7 flex items-center justify-center rounded border border-border text-xs text-foreground hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                        data-testid="btn-proxima-pagina"
+                      >
+                        ›
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </Card>

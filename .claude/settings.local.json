@@ -20,7 +20,17 @@
       "Bash(find /c/Projects/qa-lab-playground -type f \\\\\\(-name *.html -o -name *.css -o -name *.js -o -name *.jsx -o -name *.tsx -o -name *.vue -o -name *.svelte \\\\\\))",
       "Bash(netstat -ano)",
       "Bash(awk '{print $5}')",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(npx tsc:*)",
+      "Bash(bun tsc:*)",
+      "Bash(python3:*)",
+      "Bash(sed -n '579,587p' \"C:/Projects/qa-lab-playground/packages/web/app/casos/page.tsx\")",
+      "Bash(sed -n '812,818p' \"C:/Projects/qa-lab-playground/packages/web/app/elementos/page.tsx\")",
+      "Bash(sed -n '862,868p' \"C:/Projects/qa-lab-playground/packages/web/app/cenarios/page.tsx\")",
+      "Bash(sed -n '1096,1102p' \"C:/Projects/qa-lab-playground/packages/web/app/datas/page.tsx\")",
+      "Bash(bun x:*)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(echo \"Exit: $?\")"
     ]
   }
 }

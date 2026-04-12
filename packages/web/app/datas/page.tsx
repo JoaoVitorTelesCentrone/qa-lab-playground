@@ -1093,12 +1093,6 @@ export default function DataBugadaPage() {
         </div>
       </div>
 
-      {/* Series Badge */}
-      <div className="flex justify-end">
-        <span className="series-number text-4xl text-off-white/10">
-          #11
-        </span>
-      </div>
     </div>
   );
 }
