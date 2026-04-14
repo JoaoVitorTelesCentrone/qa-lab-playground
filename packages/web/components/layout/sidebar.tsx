@@ -11,6 +11,7 @@ import {
   CalendarDays,
   Wallet,
   Rocket,
+  Linkedin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -121,8 +122,17 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="hidden px-4 lg:block">
-        <p className="text-[10px] uppercase tracking-[0.15em] text-mint/30">
+      <div className="flex flex-col items-center gap-3 px-4 lg:items-start">
+        <a
+          href="https://www.linkedin.com/company/qa-lab-oficial/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 rounded-xl border border-mint/20 px-3 py-2 text-xs text-mint/60 hover:border-mint/40 hover:text-mint transition-colors"
+        >
+          <Linkedin className="size-3.5 shrink-0" />
+          <span className="hidden lg:block font-semibold tracking-wide">Siga no LinkedIn</span>
+        </a>
+        <p className="hidden text-[10px] uppercase tracking-[0.15em] text-mint/30 lg:block">
           v0.1 — Break things
         </p>
       </div>

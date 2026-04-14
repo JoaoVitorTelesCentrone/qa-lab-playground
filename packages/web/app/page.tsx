@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FlaskConical, LayoutGrid, ArrowRight, BookOpen, CalendarDays, Wallet, Rocket } from "lucide-react";
+import { FlaskConical, LayoutGrid, ArrowRight, BookOpen, CalendarDays, Wallet, Rocket, Linkedin } from "lucide-react";
 
 const modules = [
   {
@@ -92,6 +92,15 @@ export default function DashboardPage() {
           <p className="text-off-white/60 mt-2">
             Explore APIs instáveis, formulários bugados e cenários de teste reais.
           </p>
+          <a
+            href="https://www.linkedin.com/company/qa-lab-oficial/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex items-center gap-2 rounded-xl border border-mint/20 px-4 py-2 text-xs font-semibold text-mint/70 hover:border-mint/40 hover:text-mint transition-colors"
+          >
+            <Linkedin className="size-3.5" />
+            Siga o QA Lab no LinkedIn
+          </a>
         </div>
       </div>
 
@@ -145,17 +154,17 @@ export default function DashboardPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <ol className="space-y-4">
+          <ol className="space-y-6">
             <li className="flex gap-4">
               <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-mint/20 text-sm font-bold text-mint">
                 1
               </span>
-              <div>
+              <div className="space-y-1">
                 <span className="text-off-white/90 font-semibold">
                   Explore os <Link href="/elementos" className="text-mint hover:underline">Elementos</Link>
                 </span>
                 <p className="text-sm text-off-white/60">
-                  Tabela dinâmica com sort, filtros e paginação — interações e carregamento assíncrono
+                  Comece por aqui. Tabela dinâmica com sort, filtro e paginação, estados de loading assíncrono e interações de UI — tudo com <code className="text-neon/80 text-xs bg-neon/10 px-1 py-0.5 rounded">data-testid</code> exposto para você automatizar.
                 </p>
               </div>
             </li>
@@ -163,12 +172,38 @@ export default function DashboardPage() {
               <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-mint/20 text-sm font-bold text-mint">
                 2
               </span>
-              <div>
+              <div className="space-y-1">
                 <span className="text-off-white/90 font-semibold">
-                  Veja os <Link href="/proximos-passos" className="text-mint hover:underline">Próximos Passos</Link>
+                  Encontre os bugs nas <Link href="/datas" className="text-mint hover:underline">Datas Bugadas</Link>
                 </span>
                 <p className="text-sm text-off-white/60">
-                  Acompanhe o que está sendo desenvolvido e o que vem por aí no QA Lab
+                  10 bugs intencionais de data, hora e timezone escondidos no módulo. Cada bug tem um checklist — marque conforme for encontrando. Ótimo para praticar asserções de data em testes.
+                </p>
+              </div>
+            </li>
+            <li className="flex gap-4">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-mint/20 text-sm font-bold text-mint">
+                3
+              </span>
+              <div className="space-y-1">
+                <span className="text-off-white/90 font-semibold">
+                  Teste o módulo de <Link href="/despesas" className="text-mint hover:underline">Despesas</Link>
+                </span>
+                <p className="text-sm text-off-white/60">
+                  Tabela com paginação, seleção múltipla, filtros combinados e export CSV. Simula um CRUD real — bom para cobrir fluxos completos de leitura, edição e deleção em massa.
+                </p>
+              </div>
+            </li>
+            <li className="flex gap-4">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-mint/20 text-sm font-bold text-mint">
+                4
+              </span>
+              <div className="space-y-1">
+                <span className="text-off-white/90 font-semibold">
+                  Leia os artigos do <Link href="/blog" className="text-mint hover:underline">Blog</Link>
+                </span>
+                <p className="text-sm text-off-white/60">
+                  Artigos sobre técnicas de teste, boas práticas e conceitos de QA para complementar a prática. Leia um artigo, volte para o módulo e aplique o que aprendeu.
                 </p>
               </div>
             </li>

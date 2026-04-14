@@ -6,7 +6,6 @@ import {
   FlaskConical,
   Target,
   Layers,
-  Send,
   BookOpen,
   Lightbulb,
   Rocket,
@@ -17,6 +16,11 @@ import {
   Bug,
   Terminal,
   ArrowRight,
+  LayoutGrid,
+  CalendarDays,
+  Wallet,
+  Trophy,
+  FileCode2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -41,11 +45,11 @@ const steps: Step[] = [
     iconBg: "bg-mint/10",
     titulo: "Bem-vindo ao QA Lab Playground",
     descricao:
-      "Uma plataforma para evoluir em automação de testes na prática. Aqui você não lê sobre bugs — você os prova com código real em sistemas propositalmente quebrados.",
+      "Uma plataforma para evoluir em QA na prática. Aqui você explora sistemas propositalmente quebrados, escreve testes reais e acumula experiência com cenários do dia a dia.",
     destaques: [
-      { icon: Bug,      texto: "Bugs reais escondidos nos sistemas alvo" },
-      { icon: Terminal, texto: "Missões com snippets de Playwright e Cypress" },
-      { icon: Target,   texto: "Do iniciante ao intermediário no seu ritmo" },
+      { icon: Bug,        texto: "Sistemas com bugs intencionais para você encontrar" },
+      { icon: Terminal,   texto: "Missões com snippets de Playwright e Cypress" },
+      { icon: Trophy,     texto: "Desafios mensais com XP para evoluir no seu ritmo" },
     ],
   },
   {
@@ -54,67 +58,40 @@ const steps: Step[] = [
     iconBg: "bg-[#F4A8A3]/10",
     titulo: "Como o lab funciona",
     descricao:
-      "O lab tem dois elementos principais: Alvos (os sistemas que você vai testar) e Missões (os objetivos que você vai provar com automação). Simples assim.",
+      "O lab tem três tipos de conteúdo: módulos de prática com bugs reais, missões para automatizar e ferramentas para acelerar seu aprendizado.",
     destaques: [
-      { icon: Layers, texto: "Alvos: API, E-commerce e Form Bugado documentados" },
-      { icon: Target, texto: "Missões: bugs reais com objetivo claro pra automatizar" },
-      { icon: Send,   texto: "API Playground para exploração manual antes de automatizar" },
+      { icon: LayoutGrid, texto: "Módulos: Elementos, Datas e Despesas com bugs intencionais" },
+      { icon: Target,     texto: "Missões: automatize bugs reais com Playwright ou Cypress" },
+      { icon: Trophy,     texto: "Desafios mensais + Gerador de BDD para praticar escrita" },
     ],
   },
   {
-    icon: Layers,
+    icon: LayoutGrid,
     iconColor: "text-mint",
     iconBg: "bg-mint/10",
-    titulo: "Alvos — o que você vai testar",
+    titulo: "Módulos de prática",
     descricao:
-      "Antes de escrever um teste, você precisa conhecer o sistema. Em Alvos você encontra todos os endpoints da API, seletores do E-commerce e bugs do formulário documentados.",
+      "Cada módulo é um sistema com comportamentos propositalmente errados. Explore, encontre os bugs e use os data-testid para escrever seus testes.",
     destaques: [
-      { icon: Send,     texto: "10 endpoints com método, contrato e bug conhecido" },
-      { icon: Layers,   texto: "Seletores data-testid do E-commerce prontos pra usar" },
-      { icon: Bug,      texto: "5 bugs do formulário numerados e descritos" },
+      { icon: LayoutGrid,  texto: "Elementos: tabela dinâmica, loading assíncrono e interações de UI" },
+      { icon: CalendarDays, texto: "Datas Bugadas: 10 bugs de data, hora e timezone para encontrar" },
+      { icon: Wallet,      texto: "Despesas: paginação, bulk delete, filtros e export CSV" },
     ],
-    cta: { label: "Ver Alvos", href: "/alvos" },
+    cta: { label: "Ver Elementos", href: "/elementos" },
   },
   {
-    icon: Target,
+    icon: Trophy,
     iconColor: "text-neon",
     iconBg: "bg-neon/10",
-    titulo: "Missões — prove o bug com código",
+    titulo: "Desafios",
     descricao:
-      "Cada missão tem um bug real pra você provar com automação. Leia o objetivo, tente escrever o teste sozinho e só depois expanda a dica ou o snippet.",
+      "Os desafios mensais te mantêm em ritmo com objetivos maiores e XP acumulado. Aceite, complete os passos e suba de nível.",
     destaques: [
-      { icon: Target,   texto: "Iniciante: snippets prontos para adaptar e rodar" },
-      { icon: Terminal, texto: "Intermediário: apenas objetivo e alvo, sem mão na massa" },
-      { icon: Bug,      texto: "Seu teste deve falhar — isso confirma o bug" },
+      { icon: Trophy,  texto: "Desafios mensais com progresso e XP" },
+      { icon: Target,  texto: "Aceite o desafio e acompanhe cada passo" },
+      { icon: Lightbulb, texto: "Dificuldades variadas: iniciante ao avançado" },
     ],
-    cta: { label: "Ver Missões", href: "/missoes" },
-  },
-  {
-    icon: Send,
-    iconColor: "text-mint",
-    iconBg: "bg-mint/10",
-    titulo: "API Playground",
-    descricao:
-      "Explore os endpoints manualmente antes de automatizar. Útil para entender o comportamento real da API e confirmar o bug que você vai provar no teste.",
-    destaques: [
-      { icon: Send,     texto: "Envie requests e veja as respostas em tempo real" },
-      { icon: Bug,      texto: "10 endpoints com falhas propositais diferentes" },
-      { icon: Terminal, texto: "Use junto com as missões de API Testing" },
-    ],
-    cta: { label: "Abrir API Playground", href: "/api-playground" },
-  },
-  {
-    icon: BookOpen,
-    iconColor: "text-[#F4A8A3]",
-    iconBg: "bg-[#F4A8A3]/10",
-    titulo: "Blog e Roadmap",
-    descricao:
-      "Conteúdo de apoio para complementar a prática. O Blog tem artigos sobre técnicas de teste e o Roadmap mostra trilhas de aprendizado por especialidade.",
-    destaques: [
-      { icon: BookOpen, texto: "Artigos sobre API testing, E2E, performance e mais" },
-      { icon: Target,   texto: "Roadmap com 5 trilhas e 4 níveis de evolução" },
-      { icon: Lightbulb, texto: "Teoria que faz sentido depois da prática" },
-    ],
+    cta: { label: "Ver Desafios", href: "/desafios" },
   },
   {
     icon: Rocket,
@@ -122,13 +99,13 @@ const steps: Step[] = [
     iconBg: "bg-neon/10",
     titulo: "Pronto para começar?",
     descricao:
-      "Comece pelos Alvos para entender os sistemas, escolha uma Missão pelo seu nível e escreva seu primeiro teste automatizado que prova um bug real.",
+      "Explore um módulo, leia os Alvos, escolha uma Missão e escreva seu primeiro teste que prova um bug real.",
     destaques: [
-      { icon: Layers,   texto: "1. Leia os Alvos e conheça o sistema" },
-      { icon: Target,   texto: "2. Escolha uma Missão e escreva o teste" },
-      { icon: Terminal, texto: "3. Rode, veja falhar e confirme o bug" },
+      { icon: LayoutGrid, texto: "1. Explore Elementos, Datas ou Despesas" },
+      { icon: Target,     texto: "2. Escolha uma Missão e escreva o teste" },
+      { icon: Trophy,     texto: "3. Aceite um Desafio mensal e acumule XP" },
     ],
-    cta: { label: "Ver Missões", href: "/missoes" },
+    cta: { label: "Explorar Elementos", href: "/elementos" },
   },
 ];
 

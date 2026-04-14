@@ -6,6 +6,7 @@ import {
   Clock,
   CheckCircle2,
   Circle,
+  Wallet,
 } from "lucide-react";
 import {
   Card,
@@ -14,7 +15,6 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -39,6 +39,47 @@ interface Modulo {
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const modulos: Modulo[] = [
+  {
+    href: "/despesas",
+    icon: Wallet,
+    titulo: "Melhorias no módulo de Despesas",
+    descricao: "Evolução do módulo de Despesas com novos cenários de teste, bugs intencionais mais elaborados e funcionalidades adicionais.",
+    status: "planejado",
+    features: [
+      {
+        titulo: "Novos bugs intencionais",
+        descricao: "Comportamentos bugados mais elaborados para ampliar a cobertura de testes.",
+        detalhes: [
+          "Cálculo incorreto de totais ao aplicar filtros combinados",
+          "Export CSV com dados inconsistentes em casos de borda",
+          "Paginação que perde a seleção ao trocar de página",
+          "Ordenação que ignora acentuação nas categorias",
+        ],
+        status: "planejado",
+      },
+      {
+        titulo: "Fluxo de edição inline",
+        descricao: "Edição de despesas diretamente na tabela sem abrir modal.",
+        detalhes: [
+          "Clique duplo na célula para editar",
+          "Validação em tempo real com feedback visual",
+          "Cancelar edição com Esc",
+          "Bug intencional: salvar sem alterar marca como modificado",
+        ],
+        status: "planejado",
+      },
+      {
+        titulo: "Gráficos e estatísticas",
+        descricao: "Painel com visão geral das despesas por categoria e período.",
+        detalhes: [
+          "Gráfico de pizza por categoria",
+          "Evolução mensal em linha do tempo",
+          "Bug intencional: totais do gráfico não batem com a tabela",
+        ],
+        status: "planejado",
+      },
+    ],
+  },
   {
     href: "/desafios",
     icon: Trophy,
@@ -78,17 +119,6 @@ const modulos: Modulo[] = [
           "Encontrou todos os bugs do módulo Datas",
           "Completou um desafio de nível Avançado",
           "Contribuiu com um artigo para o Blog",
-        ],
-        status: "planejado",
-      },
-      {
-        titulo: "Ranking semanal",
-        descricao: "Placar com os QAs que mais pontuaram na semana atual.",
-        detalhes: [
-          "Top 10 da semana com XP acumulado",
-          "Destaque para o 1º, 2º e 3º colocados",
-          "Histórico de vencedores por semana",
-          "Filtro por nível para comparar com pares",
         ],
         status: "planejado",
       },
@@ -217,8 +247,7 @@ export default function ProximosPassosPage() {
       {/* Modulos */}
       <div className="space-y-8">
         {modulos.map((mod) => {
-          const StatusIcon = statusConfig[mod.status].icon;
-          const ModIcon    = mod.icon;
+          const ModIcon = mod.icon;
 
           return (
             <div key={mod.href} className="space-y-4">
@@ -230,10 +259,6 @@ export default function ProximosPassosPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 flex-wrap">
                     <h2 className="text-xl font-bold text-off-white tracking-tight">{mod.titulo}</h2>
-                    <Badge variant={statusConfig[mod.status].badge}>
-                      <StatusIcon className="size-3 mr-1" />
-                      {statusConfig[mod.status].label}
-                    </Badge>
                   </div>
                   <p className="text-sm text-off-white/60 mt-1">{mod.descricao}</p>
                 </div>
