@@ -6,18 +6,10 @@ import {
   Clock,
   ChevronLeft,
   ChevronRight,
-  Check,
-  Circle,
-  Bug,
-  AlertCircle,
   CalendarRange,
   Timer,
   AlarmClock,
-  Hourglass,
   Zap,
-  Moon,
-  Sunrise,
-  Sunset,
 } from "lucide-react";
 
 // Componentes do design system QA Lab
@@ -310,7 +302,6 @@ interface Evento {
 }
 
 export default function DataBugadaPage() {
-  const [foundBugs, setFoundBugs] = useState<Set<number>>(new Set());
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -333,16 +324,6 @@ export default function DataBugadaPage() {
   const [digitalTime, setDigitalTime] = useState(new Date());
   const [analogTime, setAnalogTime] = useState(new Date());
   const [activeTab, setActiveTab] = useState("calendar");
-
-  function toggleBug(id: number) {
-    const next = new Set(foundBugs);
-    if (next.has(id)) {
-      next.delete(id);
-    } else {
-      next.add(id);
-    }
-    setFoundBugs(next);
-  }
 
   // BUG #1: Permite datas no passado
   function isDateValid(date: Date): boolean {
@@ -478,7 +459,7 @@ export default function DataBugadaPage() {
                 DATAS BUGADAS
               </h1>
               <p className="text-sm text-coral/50 uppercase tracking-[0.15em]">
-                Encontre os 10 bugs
+                Data · Hora · Timezone
               </p>
             </div>
           </div>
@@ -488,7 +469,7 @@ export default function DataBugadaPage() {
           </Badge>
         </div>
         <p className="text-sm text-off-white/60 max-w-xl">
-          Teste funcionalidades de data, hora, fuso horário e calendário. Encontre os 10 bugs propositais.
+          Teste funcionalidades de data, hora, fuso horário e calendário.
         </p>
       </div>
 
@@ -540,9 +521,7 @@ export default function DataBugadaPage() {
         </button>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-        {/* Conteúdo Principal */}
-        <div className="space-y-6">
+      <div className="space-y-6">
           {/* Tab Calendário */}
           {activeTab === "calendar" && (
             <Card>
@@ -596,9 +575,6 @@ export default function DataBugadaPage() {
                           Validar
                         </Button>
                       </div>
-                      <p className="text-xs text-off-white/60 mt-1">
-                        BUG #1: Datas passadas são aceitas como futuras
-                      </p>
                     </div>
 
                     <div>
@@ -624,10 +600,7 @@ export default function DataBugadaPage() {
                         {difference !== null && (
                           <div className="p-2 bg-dark-green/30 rounded-xl text-center">
                             <span className="font-medium">{difference} dias</span>
-                            <p className="text-xs text-off-white/60 mt-1">
-                              BUG #2: Anos bissextos ignorados
-                            </p>
-                          </div>
+                            </div>
                         )}
                       </div>
                     </div>
@@ -653,9 +626,6 @@ export default function DataBugadaPage() {
                           Interpretar Data
                         </Button>
                       </div>
-                      <p className="text-xs text-off-white/60 mt-1">
-                        BUG #6: Aceita 31/02/2024 como válido
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -704,9 +674,6 @@ export default function DataBugadaPage() {
                           Reset
                         </Button>
                       </div>
-                      <p className="text-xs text-off-white/60 mt-2">
-                        BUG #5: Timer continua rodando mesmo pausado
-                      </p>
                     </div>
 
                     <div>
@@ -731,9 +698,6 @@ export default function DataBugadaPage() {
                           <p className="text-sm">
                             Expira em: {expirationDate.toLocaleDateString('pt-BR')}
                           </p>
-                          <p className="text-xs text-off-white/60">
-                            BUG #7: Cálculo ignora meses com 31/30/28 dias
-                          </p>
                         </div>
                       )}
                     </div>
@@ -752,9 +716,6 @@ export default function DataBugadaPage() {
                       <div className="text-3xl font-mono text-center">
                         {analogTime.toLocaleTimeString('pt-BR')}
                       </div>
-                      <p className="text-xs text-off-white/60 text-center mt-2">
-                        BUG #10: Relógios mostram horas diferentes
-                      </p>
                     </div>
 
                     <div className="p-4 bg-dark-green/30 rounded-xl">
@@ -846,21 +807,6 @@ export default function DataBugadaPage() {
                     Converter Data/Hora
                   </Button>
 
-                  <div className="mt-4 p-4 bg-coral/10 border border-coral/30 rounded-xl">
-                    <div className="flex items-start gap-2">
-                      <AlertCircle className="size-5 text-coral shrink-0 mt-0.5" />
-                      <div>
-                        <p className="font-bold uppercase tracking-wide text-coral text-xs">Bugs de Fuso Horário</p>
-                        <p className="text-sm text-off-white/70 mt-1">
-                          BUG #3: A conversão não considera a diferença real entre fusos
-                        </p>
-                        <p className="text-sm text-off-white/70 mt-1">
-                          BUG #8: Horário de verão não é considerado
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
                   <div className="grid gap-4 md:grid-cols-2 mt-4">
                     <div className="p-4 bg-dark-green/30 rounded-xl">
                       <h4 className="font-medium mb-2">Exemplo: Horário de Verão</h4>
@@ -942,155 +888,10 @@ export default function DataBugadaPage() {
                     ))}
                   </div>
 
-                  <div className="mt-4 p-4 bg-dark-green/30 rounded-xl">
-                    <h4 className="font-medium mb-2">Validações de Data</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        <div className="w-32 font-medium">Ano 1899:</div>
-                        <Input
-                          type="date"
-                          value="1899-12-31"
-                          readOnly
-                          className="w-40"
-                        />
-                        <Badge variant="warning">BUG #9</Badge>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-32 font-medium">Ano 2101:</div>
-                        <Input
-                          type="date"
-                          value="2101-01-01"
-                          readOnly
-                          className="w-40"
-                        />
-                        <Badge variant="warning">BUG #9</Badge>
-                      </div>
-                    </div>
-                    <p className="text-xs text-off-white/60 mt-2">
-                      BUG #9: Datas muito antigas ou muito futuras são aceitas
-                    </p>
-                  </div>
                 </div>
               </CardContent>
             </Card>
           )}
-        </div>
-
-        {/* Sidebar - Bug Checklist */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Bug className="size-4 text-neon" />
-                <CardTitle className="text-base">Bugs de Data Encontrados</CardTitle>
-              </div>
-              <CardDescription>
-                {foundBugs.size}/{bugs.length} bugs encontrados
-              </CardDescription>
-              <div className="h-2 rounded-full bg-off-white/10">
-                <div
-                  className="h-2 rounded-full bg-neon transition-all"
-                  style={{ width: `${(foundBugs.size / bugs.length) * 100}%` }}
-                />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
-                {bugs.map((bug) => {
-                  const found = foundBugs.has(bug.id);
-                  return (
-                    <button
-                      key={bug.id}
-                      onClick={() => toggleBug(bug.id)}
-                      className="flex w-full items-start gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-off-white/5"
-                    >
-                      {found ? (
-                        <Check className="mt-0.5 size-4 shrink-0 text-neon" />
-                      ) : (
-                        <Circle className="mt-0.5 size-4 shrink-0 text-off-white/40" />
-                      )}
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={
-                              found
-                                ? "line-through text-off-white/40"
-                                : "text-off-white/90"
-                            }
-                          >
-                            Bug #{bug.id}: {bug.titulo}
-                          </span>
-                        </div>
-                        <div className="flex gap-2 mt-1">
-                          <Badge variant="outline" className="text-xs">
-                            {bug.categoria}
-                          </Badge>
-                          <Badge 
-                            variant={
-                              bug.severidade === "Crítica" ? "destructive" :
-                              bug.severidade === "Alta" ? "warning" :
-                              "secondary"
-                            }
-                            className="text-xs"
-                          >
-                            {bug.severidade}
-                          </Badge>
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {foundBugs.size === bugs.length && (
-                <div className="mt-4 rounded-lg border border-neon/30 bg-neon/10 p-3 text-center">
-                  <p className="text-sm font-medium text-neon">
-                    🎉 Parabéns! Você encontrou todos os {bugs.length} bugs de data!
-                  </p>
-                </div>
-              )}
-
-              {/* Dicas de Teste */}
-              <div className="mt-4 p-3 bg-dark-green/30 rounded-xl">
-                <p className="text-xs font-medium mb-2">🧪 Dicas para Testar Datas:</p>
-                <ul className="text-xs text-off-white/60 space-y-1 list-disc list-inside">
-                  <li>Teste 29/02 em anos não bissextos</li>
-                  <li>Use 31/04, 30/02 (datas inválidas)</li>
-                  <li>Teste mudanças de ano (31/12 para 01/01)</li>
-                  <li>Horário de verão (início e fim)</li>
-                  <li>Fuso horário: diferenças de dias</li>
-                  <li>Timers: pause, resume, reset</li>
-                  <li>Datas: 01/01/1970 (timestamp 0)</li>
-                  <li>Ano 2038 problem (32-bit)</li>
-                </ul>
-              </div>
-
-              {/* Informações Rápidas */}
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                <div className="p-2 bg-neon/10 rounded-lg text-center">
-                  <Sunrise className="size-4 mx-auto text-neon" />
-                  <span className="text-xs">Nascer do Sol</span>
-                  <span className="text-sm font-mono block">06:15</span>
-                </div>
-                <div className="p-2 bg-[#F4A8A3]/10 rounded-lg text-center">
-                  <Sunset className="size-4 mx-auto text-[#F4A8A3]" />
-                  <span className="text-xs">Pôr do Sol</span>
-                  <span className="text-sm font-mono block">18:45</span>
-                </div>
-                <div className="p-2 bg-mint/10 rounded-lg text-center">
-                  <Moon className="size-4 mx-auto text-mint" />
-                  <span className="text-xs">Lua</span>
-                  <span className="text-sm font-mono block">🌕 Cheia</span>
-                </div>
-                <div className="p-2 bg-neon/10 rounded-lg text-center">
-                  <Hourglass className="size-4 mx-auto text-neon" />
-                  <span className="text-xs">Dias no ano</span>
-                  <span className="text-sm font-mono block">365</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
 
     </div>

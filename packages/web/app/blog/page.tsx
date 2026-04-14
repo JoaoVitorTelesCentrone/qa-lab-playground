@@ -1,4 +1,4 @@
-import { BookOpen, MessageCircle } from "lucide-react";
+import { BookOpen, MessageCircle, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function BlogPage() {
@@ -32,24 +32,34 @@ export default function BlogPage() {
       </div>
 
       {/* CTA */}
-      <Card className="border-mint/10 max-w-sm">
-        <CardContent className="pt-5 pb-5">
-          <div className="flex items-start gap-3">
-            <div className="flex items-center justify-center size-8 rounded-lg bg-neon/20 shrink-0 mt-0.5">
-              <MessageCircle className="size-4 text-neon" />
+      <a
+        href="https://www.linkedin.com/company/qa-lab-oficial/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group block max-w-sm"
+      >
+        <Card className="border-mint/10 hover:border-mint/30 transition-colors">
+          <CardContent className="pt-5 pb-5">
+            <div className="flex items-start gap-3">
+              <div className="flex items-center justify-center size-8 rounded-lg bg-neon/20 shrink-0 mt-0.5">
+                <MessageCircle className="size-4 text-neon" />
+              </div>
+              <div className="space-y-1 flex-1">
+                <p className="text-sm font-semibold text-off-white">
+                  Quer ter um texto publicado?
+                </p>
+                <p className="text-xs text-off-white/50 leading-relaxed">
+                  Manda uma mensagem para o QA Lab e a gente avalia publicar
+                  o seu conteúdo aqui.
+                </p>
+                <p className="text-xs text-mint font-semibold flex items-center gap-1 pt-1 group-hover:gap-2 transition-all">
+                  Falar no LinkedIn <ArrowRight className="size-3" />
+                </p>
+              </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-off-white">
-                Quer ter um texto publicado?
-              </p>
-              <p className="text-xs text-off-white/50 leading-relaxed">
-                Manda uma mensagem para o QA Lab e a gente avalia publicar
-                o seu conteúdo aqui.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </a>
     </div>
   );
 }

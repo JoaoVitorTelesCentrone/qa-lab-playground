@@ -47,9 +47,9 @@ const steps: Step[] = [
     descricao:
       "Uma plataforma para evoluir em QA na prática. Aqui você explora sistemas propositalmente quebrados, escreve testes reais e acumula experiência com cenários do dia a dia.",
     destaques: [
-      { icon: Bug,        texto: "Sistemas com bugs intencionais para você encontrar" },
-      { icon: Terminal,   texto: "Missões com snippets de Playwright e Cypress" },
-      { icon: Trophy,     texto: "Desafios mensais com XP para evoluir no seu ritmo" },
+      { icon: Bug,      texto: "Sistemas com bugs intencionais para você encontrar" },
+      { icon: Terminal, texto: "Missões com snippets de Playwright e Cypress" },
+      { icon: BookOpen, texto: "Blog com artigos para complementar a prática" },
     ],
   },
   {
@@ -62,7 +62,7 @@ const steps: Step[] = [
     destaques: [
       { icon: LayoutGrid, texto: "Módulos: Elementos, Datas e Despesas com bugs intencionais" },
       { icon: Target,     texto: "Missões: automatize bugs reais com Playwright ou Cypress" },
-      { icon: Trophy,     texto: "Desafios mensais + Gerador de BDD para praticar escrita" },
+      { icon: BookOpen,   texto: "Blog: artigos para aprofundar conceitos de QA" },
     ],
   },
   {
@@ -80,20 +80,6 @@ const steps: Step[] = [
     cta: { label: "Ver Elementos", href: "/elementos" },
   },
   {
-    icon: Trophy,
-    iconColor: "text-neon",
-    iconBg: "bg-neon/10",
-    titulo: "Desafios",
-    descricao:
-      "Os desafios mensais te mantêm em ritmo com objetivos maiores e XP acumulado. Aceite, complete os passos e suba de nível.",
-    destaques: [
-      { icon: Trophy,  texto: "Desafios mensais com progresso e XP" },
-      { icon: Target,  texto: "Aceite o desafio e acompanhe cada passo" },
-      { icon: Lightbulb, texto: "Dificuldades variadas: iniciante ao avançado" },
-    ],
-    cta: { label: "Ver Desafios", href: "/desafios" },
-  },
-  {
     icon: Rocket,
     iconColor: "text-neon",
     iconBg: "bg-neon/10",
@@ -103,7 +89,7 @@ const steps: Step[] = [
     destaques: [
       { icon: LayoutGrid, texto: "1. Explore Elementos, Datas ou Despesas" },
       { icon: Target,     texto: "2. Escolha uma Missão e escreva o teste" },
-      { icon: Trophy,     texto: "3. Aceite um Desafio mensal e acumule XP" },
+      { icon: BookOpen,   texto: "3. Leia o Blog e aprofunde os conceitos" },
     ],
     cta: { label: "Explorar Elementos", href: "/elementos" },
   },
@@ -165,7 +151,7 @@ export function OnboardingTour() {
       {/* Floating button */}
       <button
         onClick={openTour}
-        className={`fixed bottom-6 right-6 z-40 flex size-12 items-center justify-center rounded-full bg-mint text-[#3D5454] shadow-lg transition-transform hover:scale-110 active:scale-95 ${pulse ? "animate-pulse" : ""}`}
+        className={`fixed bottom-24 right-4 z-40 lg:bottom-6 lg:right-6 flex size-12 items-center justify-center rounded-full bg-mint text-[#3D5454] shadow-lg transition-transform hover:scale-110 active:scale-95 ${pulse ? "animate-pulse" : ""}`}
         title="Tour de boas-vindas"
         aria-label="Abrir tour de onboarding"
       >

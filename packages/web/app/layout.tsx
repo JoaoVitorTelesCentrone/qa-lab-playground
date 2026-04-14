@@ -42,8 +42,8 @@ export default function RootLayout({
         <TooltipProvider>
           <div className="flex h-screen overflow-hidden">
             <Sidebar />
-            <main className="flex-1 overflow-y-auto animate-fade-in">
-              <div className="p-6 lg:p-8">{children}</div>
+            <main className="flex-1 overflow-y-auto animate-fade-in pt-14 lg:pt-0 pb-20 lg:pb-0">
+              <div className="p-4 sm:p-6 lg:p-8">{children}</div>
             </main>
           </div>
           <OnboardingTour />
