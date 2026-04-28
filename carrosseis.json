@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "negocio": "QA Lab Playground",
+    "proposta_valor": "Plataforma educacional para ensinar QA através de prática real",
+    "publico_alvo": "QAs iniciantes a intermediários, Devs que querem aprender testes, Estudantes de tecnologia",
+    "diferencial": "Aprenda QA quebrando coisas de propósito - prática com bugs intencionais",
+    "data_geracao": "2025-04-24"
+  },
+  "temas": [
+    {
+      "id": 1,
+      "pilar": "Problema + Solução",
+      "titulo_tema": "Por que 70% dos QAs brasileiros não sabem testar APIs de verdade",
+      "angulo": "Exposição do gap entre teoria e prática + apresentação da solução (Chaos Engineering hands-on)",
+      "publico_primario": "QAs iniciantes que só fazem testes manuais",
+      "gancho_principal": "Você sabe clicar em botões. Mas sabe o que acontece quando a API mente que salvou os dados?",
+      "nivel_dificuldade": "Iniciante",
+      "objetivo": "Educar + Converter",
+      "keywords": ["teste de API", "chaos engineering", "QA prático", "aprender testando"],
+      "potencial_viralidade": "Alto",
+      "notas": "Apresenta o problema (falta de prática real) e oferece o QA Lab como solução concreta. Último slide com CTA para experimentar o playground."
+    },
+    {
+      "id": 2,
+      "pilar": "Educacional - Tutorial",
+      "titulo_tema": "5 bugs que TODO formulário brasileiro esconde (e como encontrar cada um)",
+      "angulo": "Tutorial prático baseado no módulo 'Form Bugado' - ensina técnicas de teste de frontend",
+      "publico_primario": "QAs que testam interfaces web",
+      "gancho_principal": "Aquele botão que funciona mesmo com erro? É bug #3. Vem ver os outros 4.",
+      "nivel_dificuldade": "Iniciante",
+      "objetivo": "Educar",
+      "keywords": ["teste de formulário", "bugs comuns", "validação frontend", "QA web"],
+      "potencial_viralidade": "Médio",
+      "notas": "Cada slide apresenta um bug do módulo Form Bugado + como detectar. Promove indiretamente a plataforma ao mostrar que lá dá pra praticar isso."
+    },
+    {
+      "id": 3,
+      "pilar": "Autoridade - Metodologia",
+      "titulo_tema": "Chaos Engineering para QA: o método que usei para treinar 200+ testadores",
+      "angulo": "Apresentar a metodologia de ensino do QA Lab (Chaos Mode) como framework educacional",
+      "publico_primario": "Tech Leads, QA Seniors, Coordenadores de QA",
+      "gancho_principal": "Desligar bugs quando quiser = comparar comportamento correto vs bugado = aprendizado 10x mais rápido",
+      "nivel_dificuldade": "Intermediário",
+      "objetivo": "Construir autoridade",
+      "keywords": ["chaos engineering", "metodologia QA", "treinamento de QA", "ensino prático"],
+      "potencial_viralidade": "Alto",
+      "notas": "Posiciona você como educador/metodólogo. Explica o diferencial técnico do QA Lab (toggle de chaos). CTA para líderes implementarem na equipe."
+    },
+    {
+      "id": 4,
+      "pilar": "Inspiracional - Jornada",
+      "titulo_tema": "De clicar botões a automação completa: a jornada de 90 dias de um QA",
+      "angulo": "Timeline realista de evolução usando os módulos progressivos do QA Lab",
+      "publico_primario": "QAs iniciantes em busca de roadmap",
+      "gancho_principal": "Dia 1: Testando forms manualmente. Dia 90: Escrevendo BDD e automatizando APIs. O que muda?",
+      "nivel_dificuldade": "Iniciante",
+      "objetivo": "Inspirar + Educar",
+      "keywords": ["carreira QA", "roadmap QA", "evolução profissional", "aprender QA"],
+      "potencial_viralidade": "Alto",
+      "notas": "Narrativa de progressão: Form Bugado (básico) → API Playground (intermediário) → Automação com data-testid (avançado). Mostra a jornada completa disponível na plataforma."
+    },
+    {
+      "id": 5,
+      "pilar": "Educacional - Comparação",
+      "titulo_tema": "Testador Manual vs QA de Verdade: 7 diferenças que ninguém te conta",
+      "angulo": "Comparação provocativa que mostra as habilidades técnicas necessárias (todas treináveis no QA Lab)",
+      "publico_primario": "Testadores manuais que querem evoluir",
+      "gancho_principal": "Se você só clica em botões, você não é QA. É um clicador de botões muito bem pago.",
+      "nivel_dificuldade": "Iniciante",
+      "objetivo": "Provocar + Educar",
+      "keywords": ["carreira QA", "teste manual", "automação", "QA avançado"],
+      "potencial_viralidade": "Muito Alto",
+      "notas": "Tom provocativo mas construtivo. Cada diferença (API, automação, edge cases) aponta para um módulo do QA Lab. CTA forte para 'virar QA de verdade'."
+    },
+    {
+      "id": 6,
+      "pilar": "Prova Social - Caso de Estudo",
+      "titulo_tema": "Como ensinar 10 endpoints bugados revelou 47 bugs reais em produção",
+      "angulo": "Case real de como alunos aplicaram Chaos Engineering aprendido no playground em projetos reais",
+      "publico_primario": "Gestores de QA, QAs que trabalham com APIs",
+      "gancho_principal": "Eles aprenderam a quebrar APIs de mentira. Agora estão salvando APIs de verdade.",
+      "nivel_dificuldade": "Intermediário",
+      "objetivo": "Construir credibilidade",
+      "keywords": ["chaos engineering", "API testing", "bugs em produção", "qualidade de software"],
+      "potencial_viralidade": "Alto",
+      "notas": "Case concreto mostrando transferência de conhecimento do playground para mundo real. Números específicos. Última slide com depoimento + CTA."
+    },
+    {
+      "id": 7,
+      "pilar": "Educacional - Framework",
+      "titulo_tema": "O checklist de 5 pontos que TODO QA deveria usar antes de chamar um teste de 'completo'",
+      "angulo": "Framework prático baseado nos tipos de teste do QA Lab (funcional, regressão, smoke, segurança, exploratório)",
+      "publico_primario": "QAs iniciantes e intermediários",
+      "gancho_principal": "Testou com dados válidos? Ótimo. Agora faz os outros 80% que você esqueceu.",
+      "nivel_dificuldade": "Intermediário",
+      "objetivo": "Educar + Posicionar metodologia",
+      "keywords": ["tipos de teste", "QA completo", "framework de teste", "boas práticas QA"],
+      "potencial_viralidade": "Médio",
+      "notas": "Cada ponto do checklist é um tipo de teste praticável no QA Lab. Slides mostram exemplos práticos de cada tipo. CTA para praticar todos os 5."
+    },
+    {
+      "id": 8,
+      "pilar": "Problema + Urgência",
+      "titulo_tema": "Seu bug passou para produção porque você não testou ESTAS 3 coisas",
+      "angulo": "Edge cases críticos que o QA Lab ensina através do módulo de Cenários progressivos",
+      "publico_primario": "QAs que já causaram incidentes em produção",
+      "gancho_principal": "Timezone, paginação quebrada e validação mentirosa. Se você não testou, você não testou.",
+      "nivel_dificuldade": "Intermediário",
+      "objetivo": "Provocar + Educar",
+      "keywords": ["bugs em produção", "edge cases", "testes avançados", "validação"],
+      "potencial_viralidade": "Alto",
+      "notas": "Toca em dor real (bugs em produção). Cada 'coisa' é um cenário do módulo (datas, paginação, validação). Tom: 'já aconteceu com você? aprenda a evitar'."
+    },
+    {
+      "id": 9,
+      "pilar": "Educacional - Automação",
+      "titulo_tema": "data-testid vs CSS vs XPath: o guia definitivo de seletores que NÃO quebram",
+      "angulo": "Tutorial técnico baseado no módulo de Elementos Dinâmicos - boas práticas de automação",
+      "publico_primario": "QAs que começam com automação, Devs que escrevem testes E2E",
+      "gancho_principal": "Seu teste quebrou porque mudaram o CSS. De novo. Vamos consertar isso.",
+      "nivel_dificuldade": "Intermediário",
+      "objetivo": "Educar",
+      "keywords": ["automação de testes", "seletores", "data-testid", "testes E2E"],
+      "potencial_viralidade": "Médio",
+      "notas": "Conteúdo técnico evergreen. Promove o módulo de Elementos Dinâmicos onde todos os seletores são expostos para prática. CTA: praticar com elementos reais."
+    },
+    {
+      "id": 10,
+      "pilar": "Manifesto - Visão",
+      "titulo_tema": "Por que QA brasileiro precisa parar de clicar e começar a quebrar",
+      "angulo": "Manifesto sobre a nova mentalidade de QA - alinhado com o lema 'Aprenda QA quebrando coisas de propósito'",
+      "publico_primario": "Comunidade QA brasileira - todos os níveis",
+      "gancho_principal": "Clicar é reagir. Quebrar de propósito é prevenir. Qual QA você quer ser?",
+      "nivel_dificuldade": "Todos",
+      "objetivo": "Inspirar + Posicionar marca",
+      "keywords": ["mentalidade QA", "cultura de qualidade", "QA proativo", "QA Brasil"],
+      "potencial_viralidade": "Muito Alto",
+      "notas": "Conteúdo de posicionamento de marca. Não vende, inspira. Apresenta a filosofia do QA Lab. Tons emocionais + visuais fortes. CTA: 'junte-se ao movimento'."
+    }
+  ],
+  "top_5_maior_potencial": [
+    {
+      "tema_id": 5,
+      "titulo": "Testador Manual vs QA de Verdade: 7 diferenças que ninguém te conta",
+      "justificativa": "Provocação direta + dor latente + viralidade natural. Vai gerar debate nos comentários. Posiciona todos os módulos do QA Lab como solução."
+    },
+    {
+      "tema_id": 10,
+      "titulo": "Por que QA brasileiro precisa parar de clicar e começar a quebrar",
+      "justificativa": "Conteúdo manifesto sempre viraliza. Conecta emocionalmente. Posiciona a marca como movimento, não apenas produto. Sharable."
+    },
+    {
+      "tema_id": 1,
+      "titulo": "Por que 70% dos QAs brasileiros não sabem testar APIs de verdade",
+      "justificativa": "Números específicos + problema real + solução clara. Atrai o público certo (QAs que sabem que precisam evoluir). Alta conversão."
+    },
+    {
+      "tema_id": 3,
+      "titulo": "Chaos Engineering para QA: o método que usei para treinar 200+ testadores",
+      "justificativa": "Prova social + metodologia própria + número concreto. Atrai gestores e seniors. Posiciona você como educador de referência."
+    },
+    {
+      "tema_id": 8,
+      "titulo": "Seu bug passou para produção porque você não testou ESTAS 3 coisas",
+      "justificativa": "Dor aguda (bug em produção) + promessa clara (nunca mais). Tom direto funciona no LinkedIn. Gera engajamento confessional nos comentários."
+    }
+  ]
+}

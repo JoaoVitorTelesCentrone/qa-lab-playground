@@ -30,7 +30,12 @@
       "Bash(sed -n '1096,1102p' \"C:/Projects/qa-lab-playground/packages/web/app/datas/page.tsx\")",
       "Bash(bun x:*)",
       "Bash(node_modules/.bin/tsc --noEmit)",
-      "Bash(echo \"Exit: $?\")"
+      "Bash(echo \"Exit: $?\")",
+      "Bash(grep -E \"\\\\.tsx$\")",
+      "Bash(bun run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(npx --yes concurrently \"cd packages/web && bun dev\")",
+      "Bash(curl -s -o /dev/null -w \"http_status=%{http_code}\" http://localhost:3000)"
     ]
   }
 }

@@ -185,8 +185,8 @@ function NewSuiteModal({ onClose, onConfirm }: NewSuiteModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-dark-green/80 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-sm rounded-2xl border border-mint/20 bg-[#405555] shadow-2xl mx-4">
-        <div className="flex items-center justify-between border-b border-mint/10 px-5 py-4">
+      <div className="relative z-10 w-full max-w-sm rounded-lg border border-[#30363D] bg-[#1A1D23] shadow-2xl mx-4">
+        <div className="flex items-center justify-between border-b border-[#30363D] px-5 py-4">
           <div className="flex items-center gap-2">
             <Folder className="size-4 text-mint" />
             <h2 className="font-bold text-sm uppercase tracking-wide text-off-white">Nova Suite</h2>
@@ -267,8 +267,8 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-dark-green/80 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border border-mint/20 bg-[#405555] shadow-2xl mx-4">
-        <div className="flex items-center justify-between border-b border-mint/10 px-5 py-4 sticky top-0 bg-[#405555]">
+      <div className="relative z-10 w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-lg border border-[#30363D] bg-[#1A1D23] shadow-2xl mx-4">
+        <div className="flex items-center justify-between border-b border-[#30363D] px-5 py-4 sticky top-0 bg-[#1A1D23]">
           <div className="flex items-center gap-2">
             <FileText className="size-4 text-mint" />
             <h2 className="font-bold text-sm uppercase tracking-wide text-off-white">Novo Caso de Teste</h2>
@@ -396,7 +396,7 @@ function NewCaseModal({ onClose, onConfirm, existingScenarioIds }: NewCaseModalP
           )}
         </div>
 
-        <div className="flex justify-end gap-2 border-t border-mint/10 px-5 py-4 sticky bottom-0 bg-[#405555]">
+        <div className="flex justify-end gap-2 border-t border-[#30363D] px-5 py-4 sticky bottom-0 bg-[#1A1D23]">
           <Button variant="outline" size="sm" onClick={onClose}>Cancelar</Button>
           <Button size="sm" disabled={!canConfirm} onClick={handleConfirm}>Adicionar caso</Button>
         </div>

@@ -20,6 +20,17 @@ const app = new Hono<{ Variables: Variables }>();
 // Middleware
 app.use("*", cors({ origin: "*" }));
 app.use("*", logger());
+app.use("*", async (c, next) => {
+  const path = new URL(c.req.url).pathname;
+  if (!path.startsWith("/api/_")) {
+    const ip =
+      c.req.header("x-forwarded-for")?.split(",")[0].trim() ??
+      c.req.header("x-real-ip") ??
+      "unknown";
+    store.recordVisit(ip);
+  }
+  await next();
+});
 
 // Routes
 app.route("/api/users", users);
@@ -63,6 +74,15 @@ app.post("/api/_chaos/toggle", async (c) => {
     message: `Caos ${body.enabled ? "ativado" : "desativado"} para todos os endpoints`,
     config: getChaosConfig(),
   });
+});
+
+// View stats (protegido por token)
+app.get("/api/_admin/stats", (c) => {
+  const secret = process.env.ADMIN_SECRET;
+  if (secret && c.req.query("secret") !== secret) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+  return c.json(store.getStats());
 });
 
 // Reset store data

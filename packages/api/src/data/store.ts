@@ -77,6 +77,8 @@ class Store {
   private nextProductId: number;
   private nextOrderId: number;
   private nextCasoId: number;
+  private uniqueVisitors: Set<string> = new Set();
+  private totalVisits: number = 0;
 
   constructor() {
     this.users = gerarUsuarios();
@@ -87,6 +89,18 @@ class Store {
     this.nextProductId = this.products.length + 1;
     this.nextOrderId = this.orders.length + 1;
     this.nextCasoId = 1;
+  }
+
+  recordVisit(ip: string) {
+    this.totalVisits++;
+    if (ip && ip !== "unknown") this.uniqueVisitors.add(ip);
+  }
+
+  getStats() {
+    return {
+      uniqueVisitors: this.uniqueVisitors.size,
+      totalVisits: this.totalVisits,
+    };
   }
 
   // Users

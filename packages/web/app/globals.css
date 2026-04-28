@@ -7,12 +7,11 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-plus-jakarta);
+  --font-sans: var(--font-inter);
   --font-body: var(--font-inter);
   --font-mono: var(--font-jetbrains);
   --font-display: var(--font-display);
 
-  /* QA Lab Design System Colors */
   --color-gray-base: var(--gray-base);
   --color-mint: var(--mint);
   --color-coral: var(--coral);
@@ -63,95 +62,74 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.5rem;
 
-  /* ═══ QA Lab Design System Colors ═══ */
+  --gray-base: #30363D;
+  --gray-base-rgb: 48, 54, 61;
 
-  /* Cinza Base - Background principal */
-  --gray-base: #5F6C6F;
-  --gray-base-rgb: 95, 108, 111;
+  --mint: #2DD4BF;
+  --mint-rgb: 45, 212, 191;
 
-  /* Verde Menta - Destaque, identidade QA LAB */
-  --mint: #B4D4D1;
-  --mint-rgb: 180, 212, 209;
-
-  /* Rosa Coral - Negativo, alerta */
   --coral: #E8A5A0;
   --coral-rgb: 232, 165, 160;
 
-  /* Amarelo Neon - Positivo, sucesso */
   --neon: #D4F56E;
   --neon-rgb: 212, 245, 110;
 
-  /* Verde Escuro - Boxes de texto, overlays */
-  --dark-green: #3D5454;
-  --dark-green-rgb: 61, 84, 84;
+  --dark-green: #1A1D23;
+  --dark-green-rgb: 26, 29, 35;
 
-  /* Off-white - Texto em boxes */
-  --off-white: #E8EDE8;
-  --off-white-rgb: 232, 237, 232;
+  --off-white: #F0F6FC;
+  --off-white-rgb: 240, 246, 252;
 
-  /* Background & Foreground */
-  --background: #657578;
-  --foreground: #E8EDE8;
+  --background: #101319;
+  --foreground: #F0F6FC;
 
-  /* Card */
-  --card: #3D5454;
-  --card-foreground: #E8EDE8;
+  --card: #1A1D23;
+  --card-foreground: #F0F6FC;
 
-  /* Popover */
-  --popover: #405555;
-  --popover-foreground: #E8EDE8;
+  --popover: #1A1D23;
+  --popover-foreground: #F0F6FC;
 
-  /* Primary — Verde Menta */
-  --primary: #B4D4D1;
-  --primary-foreground: #3D5454;
+  --primary: #2DD4BF;
+  --primary-foreground: #0D1117;
 
-  /* Secondary — Cinza Base */
-  --secondary: #5F6C6F;
-  --secondary-foreground: #E8EDE8;
+  --secondary: #21262D;
+  --secondary-foreground: #F0F6FC;
 
-  /* Muted */
-  --muted: #5F6C6F;
-  --muted-foreground: #A8C5C3;
+  --muted: #21262D;
+  --muted-foreground: #8B949E;
 
-  /* Accent — Verde Escuro */
-  --accent: #3D5454;
-  --accent-foreground: #E8EDE8;
+  --accent: #21262D;
+  --accent-foreground: #F0F6FC;
 
-  /* Destructive — Rosa Coral */
   --destructive: #E8A5A0;
-  --destructive-foreground: #3D5454;
+  --destructive-foreground: #0D1117;
 
-  /* Border & Input */
-  --border: rgba(180, 212, 209, 0.2);
-  --input: rgba(180, 212, 209, 0.15);
+  --border: #30363D;
+  --input: #30363D;
 
-  /* Ring */
-  --ring: #B4D4D1;
+  --ring: #2DD4BF;
 
-  /* Chart colors */
-  --chart-1: #B4D4D1;
+  --chart-1: #2DD4BF;
   --chart-2: #D4F56E;
   --chart-3: #E8A5A0;
-  --chart-4: #5F6C6F;
-  --chart-5: #3D5454;
+  --chart-4: #8B949E;
+  --chart-5: #21262D;
 
-  /* Sidebar */
-  --sidebar: #405555;
-  --sidebar-foreground: #E8EDE8;
-  --sidebar-primary: #B4D4D1;
-  --sidebar-primary-foreground: #3D5454;
-  --sidebar-accent: #3D5454;
-  --sidebar-accent-foreground: #E8EDE8;
-  --sidebar-border: rgba(180, 212, 209, 0.2);
-  --sidebar-ring: #B4D4D1;
+  --sidebar: #0D1117;
+  --sidebar-foreground: #F0F6FC;
+  --sidebar-primary: #2DD4BF;
+  --sidebar-primary-foreground: #0D1117;
+  --sidebar-accent: #1A1D23;
+  --sidebar-accent-foreground: #F0F6FC;
+  --sidebar-border: #30363D;
+  --sidebar-ring: #2DD4BF;
 
-  /* Semantic colors */
   --success: #D4F56E;
   --error: #E8A5A0;
-  --warning: #F4A8A3;
-  --info: #B4D4D1;
+  --warning: #F0C040;
+  --info: #2DD4BF;
 }
 
 @layer base {
@@ -163,152 +141,98 @@
   }
 }
 
-/* ═══ Design System Animations ═══ */
-
 @keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
 @keyframes fade-in {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
 @keyframes slide-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0);     }
 }
 
 @keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0);    }
 }
 
 @keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1);    }
 }
 
 @keyframes slide-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
 @keyframes success-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(212, 245, 110, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(212, 245, 110, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(212, 245, 110, 0); }
+  0%   { box-shadow: 0 0 0 0    rgba(212, 245, 110, 0.4); }
+  70%  { box-shadow: 0 0 0 10px rgba(212, 245, 110, 0);   }
+  100% { box-shadow: 0 0 0 0    rgba(212, 245, 110, 0);   }
 }
 
 @keyframes neon-glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(212, 245, 110, 0.5), 0 0 20px rgba(212, 245, 110, 0.3); }
-  50% { box-shadow: 0 0 10px rgba(212, 245, 110, 0.8), 0 0 30px rgba(212, 245, 110, 0.5); }
+  0%, 100% { box-shadow: 0 0 5px  rgba(45, 212, 191, 0.5), 0 0 20px rgba(45, 212, 191, 0.3); }
+  50%       { box-shadow: 0 0 10px rgba(45, 212, 191, 0.8), 0 0 30px rgba(45, 212, 191, 0.5); }
 }
 
 @keyframes coral-glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(232, 165, 160, 0.5), 0 0 20px rgba(232, 165, 160, 0.3); }
-  50% { box-shadow: 0 0 10px rgba(232, 165, 160, 0.8), 0 0 30px rgba(232, 165, 160, 0.5); }
+  0%, 100% { box-shadow: 0 0 5px  rgba(232, 165, 160, 0.5), 0 0 20px rgba(232, 165, 160, 0.3); }
+  50%       { box-shadow: 0 0 10px rgba(232, 165, 160, 0.8), 0 0 30px rgba(232, 165, 160, 0.5); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.5; transform: scale(0.75); }
+}
+
+@keyframes cursor-blink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 @layer utilities {
-  .animate-fade-in-up {
-    animation: fade-in-up 0.3s ease-out forwards;
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.4s ease-out forwards;
-  }
-
-  .animate-slide-in-left {
-    animation: slide-in-left 0.35s ease-out forwards;
-  }
-
-  .animate-slide-in-right {
-    animation: slide-in-right 0.35s ease-out forwards;
-  }
-
-  .animate-scale-in {
-    animation: scale-in 0.3s ease-out forwards;
-  }
-
-  .animate-slide-in-up {
-    animation: slide-in-up 0.4s ease-out forwards;
-  }
-
-  .animate-success {
-    animation: success-pulse 0.6s ease-out;
-  }
-
-  .animate-neon-glow {
-    animation: neon-glow 2s ease-in-out infinite;
-  }
-
-  .animate-coral-glow {
-    animation: coral-glow 2s ease-in-out infinite;
-  }
+  .animate-fade-in-up     { animation: fade-in-up     0.3s  ease-out forwards;        }
+  .animate-fade-in        { animation: fade-in         0.4s  ease-out forwards;        }
+  .animate-slide-in-left  { animation: slide-in-left   0.35s ease-out forwards;        }
+  .animate-slide-in-right { animation: slide-in-right  0.35s ease-out forwards;        }
+  .animate-scale-in       { animation: scale-in        0.3s  ease-out forwards;        }
+  .animate-slide-in-up    { animation: slide-in-up     0.4s  ease-out forwards;        }
+  .animate-success        { animation: success-pulse   0.6s  ease-out;                 }
+  .animate-neon-glow      { animation: neon-glow       2s    ease-in-out infinite;     }
+  .animate-coral-glow     { animation: coral-glow      2s    ease-in-out infinite;     }
+  .animate-pulse-dot      { animation: pulse-dot       2s    ease-in-out infinite;     }
+  .animate-cursor-blink   { animation: cursor-blink    0.8s  step-end   infinite;      }
 
   .hover-lift {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
   .hover-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(61, 84, 84, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
   }
 
-  /* Stagger children animations */
-  .stagger > * {
-    opacity: 0;
-    animation: fade-in-up 0.35s ease-out forwards;
-  }
-  .stagger > *:nth-child(1) { animation-delay: 0ms; }
-  .stagger > *:nth-child(2) { animation-delay: 60ms; }
-  .stagger > *:nth-child(3) { animation-delay: 120ms; }
-  .stagger > *:nth-child(4) { animation-delay: 180ms; }
-  .stagger > *:nth-child(5) { animation-delay: 240ms; }
-  .stagger > *:nth-child(6) { animation-delay: 300ms; }
-  .stagger > *:nth-child(7) { animation-delay: 360ms; }
-  .stagger > *:nth-child(8) { animation-delay: 420ms; }
-  .stagger > *:nth-child(9) { animation-delay: 480ms; }
+  .stagger > * { opacity: 0; animation: fade-in-up 0.35s ease-out forwards; }
+  .stagger > *:nth-child(1)  { animation-delay:   0ms; }
+  .stagger > *:nth-child(2)  { animation-delay:  60ms; }
+  .stagger > *:nth-child(3)  { animation-delay: 120ms; }
+  .stagger > *:nth-child(4)  { animation-delay: 180ms; }
+  .stagger > *:nth-child(5)  { animation-delay: 240ms; }
+  .stagger > *:nth-child(6)  { animation-delay: 300ms; }
+  .stagger > *:nth-child(7)  { animation-delay: 360ms; }
+  .stagger > *:nth-child(8)  { animation-delay: 420ms; }
+  .stagger > *:nth-child(9)  { animation-delay: 480ms; }
   .stagger > *:nth-child(10) { animation-delay: 540ms; }
 
-  /* Stagger with scale-in variant */
-  .stagger-scale > * {
-    opacity: 0;
-    animation: scale-in 0.35s ease-out forwards;
-  }
-  .stagger-scale > *:nth-child(1) { animation-delay: 0ms; }
-  .stagger-scale > *:nth-child(2) { animation-delay: 60ms; }
+  .stagger-scale > * { opacity: 0; animation: scale-in 0.35s ease-out forwards; }
+  .stagger-scale > *:nth-child(1) { animation-delay:   0ms; }
+  .stagger-scale > *:nth-child(2) { animation-delay:  60ms; }
   .stagger-scale > *:nth-child(3) { animation-delay: 120ms; }
   .stagger-scale > *:nth-child(4) { animation-delay: 180ms; }
   .stagger-scale > *:nth-child(5) { animation-delay: 240ms; }
@@ -316,30 +240,25 @@
   .stagger-scale > *:nth-child(7) { animation-delay: 360ms; }
   .stagger-scale > *:nth-child(8) { animation-delay: 420ms; }
 
-  /* Subtle gradient background */
   .bg-gradient-subtle {
-    background: linear-gradient(135deg, #657578 0%, #5F6C6F 50%, #657578 100%);
+    background: linear-gradient(135deg, #101319 0%, #0D1117 50%, #101319 100%);
   }
 
-  /* QA Lab pattern */
   .bg-qalab-pattern {
     background-image:
-      radial-gradient(circle at 20% 80%, rgba(180, 212, 209, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(212, 245, 110, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(232, 165, 160, 0.05) 0%, transparent 40%);
+      radial-gradient(circle at 15% 85%, rgba(45, 212, 191, 0.04)  0%, transparent 45%),
+      radial-gradient(circle at 85% 15%, rgba(212, 245, 110, 0.025) 0%, transparent 45%);
   }
 
-  /* Grid pattern */
   .bg-grid {
     background-image:
-      linear-gradient(rgba(180, 212, 209, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(180, 212, 209, 0.1) 1px, transparent 1px);
-    background-size: 20px 20px;
+      linear-gradient(rgba(48, 54, 61, 0.6) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(48, 54, 61, 0.6) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 
-  /* Text gradient utilities */
   .text-gradient-mint {
-    background: linear-gradient(135deg, #B4D4D1 0%, #A8C5C3 100%);
+    background: linear-gradient(135deg, #2DD4BF 0%, #1FBFAC 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -360,9 +279,6 @@
   }
 }
 
-/* ═══ QA Lab Typography ═══ */
-
-/* Display font - Bold Condensed Italic style */
 .font-display {
   font-family: var(--font-display), var(--font-sans), sans-serif;
   font-weight: 800;
@@ -370,24 +286,24 @@
   letter-spacing: -0.02em;
 }
 
-/* Box text - uppercase bold */
 .box-text {
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
   line-height: 1.3;
 }
 
-/* QA Lab Logo styling */
 .logo-qa {
   color: var(--mint);
-  opacity: 0.5;
-  text-shadow: 0 0 30px rgba(180, 212, 209, 0.3);
+  opacity: 0.25;
+  text-shadow: 0 0 30px rgba(45, 212, 191, 0.15);
 }
 
-/* Series number styling */
-.series-number {
-  font-weight: 700;
-  font-style: italic;
-  color: var(--off-white);
+.with-cursor::after {
+  content: '|';
+  display: inline-block;
+  color: var(--mint);
+  margin-left: 2px;
+  font-weight: 200;
+  animation: cursor-blink 0.8s step-end infinite;
 }
