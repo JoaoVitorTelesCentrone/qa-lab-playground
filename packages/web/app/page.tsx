@@ -21,7 +21,7 @@ const modules = [
     icon: BookOpen,
     titulo: "Blog QA Lab",
     descricao: "Artigos sobre qualidade de software, técnicas de teste e boas práticas para QAs.",
-    stats: "6 artigos publicados",
+    stats: "0 artigos publicados",
     num: "02",
     color: "text-neon border-neon/20 bg-neon/[0.04] hover:bg-neon/[0.08]",
     icon_color: "text-neon",
@@ -131,7 +131,7 @@ export default function DashboardPage() {
         {[
           { label: "Módulos ativos",     value: "5",   icon: Terminal, color: "text-mint"  },
           { label: "Bugs intencionais",  value: "15+", icon: Bug,      color: "text-coral" },
-          { label: "Artigos publicados", value: "6",   icon: Zap,      color: "text-neon"  },
+          { label: "Artigos publicados", value: "0",   icon: Zap,      color: "text-neon"  },
         ].map(({ label, value, icon: Icon, color }) => (
           <div key={label} className="flex items-center gap-3 rounded-lg border border-[#30363D] bg-[#1A1D23] px-4 py-3.5">
             <Icon className={`size-4 shrink-0 ${color}`} />
