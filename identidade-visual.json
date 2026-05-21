@@ -1,0 +1,287 @@
+{
+  "brand": {
+    "name": "QA Lab Playground",
+    "shortName": "QA LAB",
+    "tagline": "Break things on purpose",
+    "taglinePT": "Aprenda QA quebrando coisas de propósito",
+    "version": "v0.1",
+    "categoria": "Plataforma educacional de QA e automação de testes",
+    "publicoAlvo": [
+      "QA iniciante aprendendo Playwright/Cypress do zero",
+      "QA com base que quer praticar cenários específicos (API, E2E, segurança)"
+    ],
+    "proposta": "Pratique automação de testes contra sistemas propositalmente quebrados. O objetivo não é teoria — é escrever testes reais que provam bugs reais."
+  },
+
+  "cores": {
+    "background": {
+      "principal": "#0D1117",
+      "secundario": "#161B22",
+      "card": "#1A1D23",
+      "darkGreen": "#3D5454",
+      "nome": "Fundo escuro estilo GitHub Dark"
+    },
+    "texto": {
+      "principal": "#F0F6FC",
+      "secundario": "#8B949E",
+      "offWhite": "#F0F6FC",
+      "mutado": "#8B949E"
+    },
+    "accent": {
+      "mint": {
+        "hex": "#2DD4BF",
+        "tailwind": "teal-400",
+        "uso": "Cor primária do brand — ações principais, highlights, ativo na nav, logo"
+      },
+      "neon": {
+        "hex": "#A3E635",
+        "tailwind": "lime-400",
+        "uso": "Nível iniciante, badges, destaques secundários"
+      },
+      "coral": {
+        "hex": "#FB7185",
+        "tailwind": "rose-400",
+        "uso": "Bugs, alertas, nível intermediário, avisos"
+      },
+      "amarelo": {
+        "hex": "#F0C040",
+        "uso": "Em construção, roadmap, próximos passos"
+      }
+    },
+    "bordas": {
+      "padrao": "#30363D",
+      "ativa": "mint/20",
+      "hover": "mint/25"
+    }
+  },
+
+  "tipografia": {
+    "display": {
+      "familia": "Bebas Neue",
+      "google": "Bebas_Neue",
+      "cssVar": "--font-display",
+      "uso": "Títulos grandes, logo, headers de seção",
+      "estilo": "italic tracking-widest uppercase",
+      "exemplos": ["QA LAB", "MISSÕES", "ALVOS", "PERFIL"]
+    },
+    "body": {
+      "familia": "Inter",
+      "google": "Inter",
+      "cssVar": "--font-inter",
+      "uso": "Corpo de texto, descrições, labels, UI em geral"
+    },
+    "codigo": {
+      "familia": "JetBrains Mono",
+      "google": "JetBrains_Mono",
+      "cssVar": "--font-jetbrains",
+      "uso": "Snippets de código, IDs de missão (#01), valores técnicos, terminal"
+    },
+    "escalaBase": {
+      "heroLogo": "text-5xl md:text-6xl tracking-wider italic",
+      "tituloPagina": "text-3xl tracking-wider italic",
+      "cardTitulo": "text-base font-bold",
+      "label": "text-[11px] uppercase tracking-[0.2em] font-semibold",
+      "body": "text-sm leading-relaxed",
+      "caption": "text-xs text-[#8B949E]",
+      "mono": "text-xs font-mono"
+    }
+  },
+
+  "componentesVisuais": {
+    "card": {
+      "borderRadius": "rounded-xl ou rounded-2xl",
+      "border": "border border-[#30363D]",
+      "background": "bg-[#1A1D23] ou bg-[#161B22]",
+      "hover": "hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40",
+      "padding": "p-4 a p-5"
+    },
+    "badge": {
+      "iniciante": "bg-neon/10 text-neon border border-neon/20",
+      "intermediario": "bg-mint/10 text-mint border border-mint/20",
+      "avancado": "bg-coral/10 text-coral border border-coral/20"
+    },
+    "botaoPrimario": {
+      "classes": "bg-mint text-[#0D1117] font-bold text-sm rounded-lg px-5 py-2.5 hover:bg-mint/90 transition-all",
+      "cor": "Verde mint com texto escuro"
+    },
+    "botaoSecundario": {
+      "classes": "border border-[#30363D] text-[#8B949E] hover:border-mint/25 hover:text-mint rounded-lg px-3 py-2 text-xs transition-all"
+    },
+    "input": {
+      "classes": "bg-[#161B22] border border-[#30363D] rounded-lg px-3.5 py-2.5 text-sm text-[#F0F6FC] focus:border-mint/40 focus:ring-1 focus:ring-mint/20"
+    },
+    "navItem": {
+      "ativo": "bg-mint/10 text-mint border border-mint/20",
+      "inativo": "text-[#8B949E] hover:bg-[#161B22] hover:text-[#F0F6FC] border border-transparent",
+      "indicador": "w-0.5 h-4 rounded-full bg-mint (barra esquerda quando ativo)"
+    },
+    "terminal": {
+      "descricao": "Bloco estilo terminal com dots coral/amarelo/mint no topo",
+      "header": "bg-[#161B22] border-b border-[#30363D] flex gap-1.5 dots coloridos",
+      "dots": ["size-2.5 bg-coral/60", "size-2.5 bg-amarelo/60", "size-2.5 bg-neon/60"]
+    },
+    "gradiente": {
+      "topoSidebar": "bg-gradient-to-b from-mint/[0.06] to-transparent",
+      "fundoWatermark": "text-mint/[0.03] — texto QA gigante no fundo"
+    }
+  },
+
+  "animacoes": {
+    "fadeIn": "animate-fade-in — entrada suave da página",
+    "slideInUp": "animate-slide-in-up — slide de baixo para cima",
+    "slideInLeft": "animate-slide-in-left — sidebar deslizando",
+    "stagger": "stagger / stagger-scale — filhos animam em cascata",
+    "pulseDot": "animate-pulse-dot — ponto verde piscando no nav ativo",
+    "hoverCard": "hover:-translate-y-0.5 transition-all duration-150"
+  },
+
+  "iconografia": {
+    "biblioteca": "lucide-react",
+    "logo": "FlaskConical — frasco de laboratório",
+    "iconesPrincipais": {
+      "dashboard": "Home",
+      "missoes": "Target",
+      "alvos": "Target",
+      "blog": "BookOpen",
+      "elementos": "LayoutGrid",
+      "datas": "CalendarDays",
+      "despesas": "Wallet",
+      "roadmap": "Rocket",
+      "apiPlayground": "Terminal",
+      "bugs": "Bug",
+      "artigos": "Zap",
+      "perfil": "User",
+      "entrar": "LogIn",
+      "sair": "LogOut",
+      "dica": "Lightbulb",
+      "snippet": "Terminal",
+      "linkedin": "Linkedin",
+      "concluido": "CheckCircle2",
+      "pendente": "Circle",
+      "loading": "Loader2 animate-spin"
+    },
+    "tamanhos": {
+      "logo": "size-4 a size-5",
+      "nav": "size-[15px]",
+      "card": "size-4",
+      "hero": "size-5 a size-8",
+      "mobile": "size-[17px]"
+    }
+  },
+
+  "layout": {
+    "estrutura": "Monorepo Bun workspaces — packages/web (Next.js 15), packages/api (Hono/Bun), packages/shared (TypeScript types)",
+    "sidebar": {
+      "larguraDesktop": "w-14 (colapsada) / xl:w-60 (expandida)",
+      "posicao": "fixed left, height 100vh",
+      "comportamento": "Ícones apenas em lg, labels aparecem em xl+"
+    },
+    "mobile": {
+      "header": "fixed top, h-14, logo + botão de perfil/login",
+      "nav": "fixed bottom, h-16, grid-cols-6 com ícone + label"
+    },
+    "main": {
+      "padding": "p-4 sm:p-6 lg:p-8",
+      "maxWidth": "max-w-3xl em páginas de detalhe, livre em grids",
+      "overflow": "overflow-y-auto"
+    },
+    "grid": {
+      "cards2col": "grid gap-3 sm:grid-cols-2",
+      "cards3col": "grid gap-3 sm:grid-cols-2 lg:grid-cols-3",
+      "stats": "grid grid-cols-3 gap-3"
+    }
+  },
+
+  "tom": {
+    "voz": "Direto, técnico, sem enrolação. Fala de QA para QA.",
+    "personalidade": [
+      "Confiante mas acessível",
+      "Técnico sem ser intimidador",
+      "Irreverente com propósito ('break things on purpose')",
+      "Prático acima de tudo — teoria serve à prática"
+    ],
+    "vocabulario": {
+      "preferidos": ["prove", "teste real", "bug confirmado", "automação", "missão", "alvo", "snippet"],
+      "evitar": ["aprenda de forma fácil", "simples assim", "não precisa saber nada"]
+    },
+    "formatoPostsLinkedIn": {
+      "abertura": "Frase de impacto curta (1 linha)",
+      "corpo": "3-5 bullets ou parágrafos curtos, técnicos e diretos",
+      "cta": "Link para a plataforma ou missão específica",
+      "hashtags": ["#QA", "#TestAutomation", "#Playwright", "#QualidadeDeSoftware", "#QALab"]
+    }
+  },
+
+  "plataforma": {
+    "paginas": {
+      "dashboard": "/ — visão geral, módulos disponíveis, como começar",
+      "missoes": "/missoes — 8 desafios com bugs reais para provar com automação",
+      "alvos": "/alvos — documentação dos sistemas: API, E-commerce, Form Bugado",
+      "apiPlayground": "/api-playground — testa endpoints diretamente na plataforma",
+      "blog": "/blog — artigos sobre QA e automação",
+      "roadmap": "/roadmap — o que vem por aí",
+      "waitlist": "/waitlist — lista de espera para acesso antecipado",
+      "perfil": "/perfil — progresso do usuário, dados pessoais",
+      "login": "/login — autenticação",
+      "cadastro": "/cadastro — criação de conta"
+    },
+    "missoes": [
+      { "id": 1, "nivel": "iniciante",     "titulo": "O DELETE que não deleta",               "alvo": "API"        },
+      { "id": 2, "nivel": "iniciante",     "titulo": "O health check mentiroso",              "alvo": "API"        },
+      { "id": 3, "nivel": "iniciante",     "titulo": "Paginação que pula itens",              "alvo": "API"        },
+      { "id": 4, "nivel": "iniciante",     "titulo": "O formulário com 5 bugs",               "alvo": "Form Bugado"},
+      { "id": 5, "nivel": "intermediario", "titulo": "Contrato de resposta inconsistente",    "alvo": "API"        },
+      { "id": 6, "nivel": "intermediario", "titulo": "Carrinho sem validação de estoque",     "alvo": "E-commerce" },
+      { "id": 7, "nivel": "intermediario", "titulo": "Login sem rate limiting",               "alvo": "API"        },
+      { "id": 8, "nivel": "intermediario", "titulo": "Suite de smoke da API",                 "alvo": "API"        }
+    ],
+    "bugsIntencionais": "15+ bugs distribuídos em API, E-commerce e Form Bugado",
+    "ferramentas": ["Playwright", "Cypress", "K6"],
+    "stack": {
+      "frontend": "Next.js 15, React 19, Tailwind CSS 4, shadcn/ui",
+      "backend": "Hono rodando no Bun",
+      "banco": "Supabase (PostgreSQL + Auth + RLS)",
+      "infraestrutura": "Docker + docker-compose"
+    }
+  },
+
+  "supabase": {
+    "tabelas": [
+      {
+        "nome": "profiles",
+        "descricao": "Perfil do usuário — estende auth.users",
+        "campos": ["id", "username", "full_name", "avatar_url", "bio", "linkedin_url", "role", "created_at", "updated_at"]
+      },
+      {
+        "nome": "waitlist",
+        "descricao": "Lista de espera para acesso antecipado",
+        "campos": ["id", "email", "name", "role", "source", "status", "created_at"]
+      },
+      {
+        "nome": "mission_progress",
+        "descricao": "Progresso do usuário nas missões",
+        "campos": ["id", "user_id", "mission_id", "status", "completed_at"]
+      },
+      {
+        "nome": "bug_checklist",
+        "descricao": "Checklist de bugs encontrados no módulo Datas",
+        "campos": ["id", "user_id", "bug_id", "checked"]
+      }
+    ]
+  },
+
+  "redesSociais": {
+    "linkedin": {
+      "url": "https://www.linkedin.com/company/qa-lab-oficial/",
+      "handle": "qa-lab-oficial",
+      "tipo": "Company Page"
+    }
+  },
+
+  "meta": {
+    "versao": "1.0",
+    "atualizadoEm": "2026-05-21",
+    "autor": "QA Lab Playground",
+    "uso": "Use este JSON para gerar conteúdo de marketing, posts LinkedIn, posts de blog, stories, emails e qualquer material de comunicação alinhado com a identidade do QA Lab Playground. Mantenha sempre o tom técnico, direto e prático."
+  }
+}

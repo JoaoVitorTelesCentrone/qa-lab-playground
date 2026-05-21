@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Target, Lightbulb, Terminal, ChevronDown, ChevronUp } from "lucide-react";
+import { Target, Lightbulb, Terminal, ChevronDown, ChevronUp, CheckCircle2, Circle, LogIn } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useMissionProgress } from "@/hooks/use-mission-progress";
+import Link from "next/link";
 
 type Nivel = "iniciante" | "intermediario";
 type PainelAberto = "dica" | "snippet" | null;
@@ -208,7 +210,14 @@ const nivelConfig: Record<Nivel, { label: string; variant: any }> = {
   intermediario: { label: "Intermediário", variant: "default" },
 };
 
-function MissaoCard({ missao }: { missao: Missao }) {
+interface MissaoCardProps {
+  missao: Missao;
+  completed: boolean;
+  onToggle: (id: number) => void;
+  loggedIn: boolean;
+}
+
+function MissaoCard({ missao, completed, onToggle, loggedIn }: MissaoCardProps) {
   const [painel, setPainel] = useState<PainelAberto>(null);
   const cfg = nivelConfig[missao.nivel];
 
@@ -217,14 +226,30 @@ function MissaoCard({ missao }: { missao: Missao }) {
   }
 
   return (
-    <div className="rounded-2xl border border-mint/10 bg-dark-green/40 flex flex-col transition-all duration-200 hover:border-mint/25 hover:shadow-lg hover:shadow-mint/5">
+    <div className={`rounded-2xl border flex flex-col transition-all duration-200 hover:shadow-lg hover:shadow-mint/5 ${completed ? "border-mint/30 bg-mint/5" : "border-mint/10 bg-dark-green/40 hover:border-mint/25"}`}>
       {/* Header */}
       <div className="p-5 space-y-3 flex-1">
         <div className="flex items-center justify-between">
           <span className="font-mono text-xs text-mint/50">#{String(missao.id).padStart(2, "0")}</span>
-          <Badge variant={cfg.variant}>
-            {cfg.label}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant={cfg.variant}>{cfg.label}</Badge>
+            {loggedIn ? (
+              <button
+                onClick={() => onToggle(missao.id)}
+                title={completed ? "Marcar como não concluída" : "Marcar como concluída"}
+                className="transition-all hover:scale-110"
+              >
+                {completed
+                  ? <CheckCircle2 className="size-4 text-mint" />
+                  : <Circle className="size-4 text-mint/30 hover:text-mint/60" />
+                }
+              </button>
+            ) : (
+              <Link href="/login" title="Entre para marcar progresso">
+                <Circle className="size-4 text-mint/20 hover:text-mint/40 transition-colors" />
+              </Link>
+            )}
+          </div>
         </div>
 
         <h3 className="text-base font-bold text-off-white leading-snug">{missao.titulo}</h3>
@@ -299,6 +324,7 @@ function MissaoCard({ missao }: { missao: Missao }) {
 
 export default function MissoesPage() {
   const [filtro, setFiltro] = useState<"todos" | Nivel>("todos");
+  const { user, completed, loading, toggle } = useMissionProgress();
 
   const filtradas = filtro === "todos" ? missoes : missoes.filter(m => m.nivel === filtro);
 
@@ -348,12 +374,32 @@ export default function MissoesPage() {
         <span className="ml-auto text-xs text-off-white/40 uppercase tracking-wide">
           {filtradas.length} missão{filtradas.length !== 1 ? "ões" : ""}
         </span>
+        {!loading && !user && (
+          <Link
+            href="/login"
+            className="flex items-center gap-1.5 text-xs text-[#8B949E] hover:text-mint transition-colors border border-[#30363D] hover:border-mint/25 rounded-lg px-3 py-1.5"
+          >
+            <LogIn className="size-3.5" />
+            Entre para salvar progresso
+          </Link>
+        )}
+        {!loading && user && (
+          <span className="text-xs text-mint/60 font-mono">
+            {completed.size}/8 concluídas
+          </span>
+        )}
       </div>
 
       {/* Grid */}
       <div className="grid gap-5 sm:grid-cols-2 stagger">
         {filtradas.map(m => (
-          <MissaoCard key={m.id} missao={m} />
+          <MissaoCard
+            key={m.id}
+            missao={m}
+            completed={completed.has(m.id)}
+            onToggle={toggle}
+            loggedIn={!!user}
+          />
         ))}
       </div>
     </div>

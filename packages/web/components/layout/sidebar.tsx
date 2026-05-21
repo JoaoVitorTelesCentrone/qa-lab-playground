@@ -2,26 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import {
-  FlaskConical,
-  Home,
-  LayoutGrid,
-  BookOpen,
-  CalendarDays,
-  Wallet,
-  Rocket,
-  Linkedin,
+  FlaskConical, Home, LayoutGrid, BookOpen,
+  CalendarDays, Wallet, Rocket, Linkedin, User, LogIn,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const navItems = [
-  { href: "/",                label: "Dashboard",       mobileLabel: "Home",     icon: Home,         exact: true  },
+  { href: "/",                label: "Dashboard",       mobileLabel: "Home",      icon: Home,         exact: true  },
   { href: "/elementos",       label: "Elementos",       mobileLabel: "Elementos", icon: LayoutGrid,   exact: false },
-  { href: "/blog",            label: "Blog",            mobileLabel: "Blog",     icon: BookOpen,     exact: false },
-  { href: "/datas",           label: "Datas",           mobileLabel: "Datas",    icon: CalendarDays, exact: false },
-  { href: "/despesas",        label: "Despesas",        mobileLabel: "Despesas", icon: Wallet,       exact: false },
-  { href: "/proximos-passos", label: "Próximos Passos", mobileLabel: "Futuro",   icon: Rocket,       exact: false },
+  { href: "/blog",            label: "Blog",            mobileLabel: "Blog",      icon: BookOpen,     exact: false },
+  { href: "/datas",           label: "Datas",           mobileLabel: "Datas",     icon: CalendarDays, exact: false },
+  { href: "/despesas",        label: "Despesas",        mobileLabel: "Despesas",  icon: Wallet,       exact: false },
+  { href: "/proximos-passos", label: "Próximos Passos", mobileLabel: "Futuro",    icon: Rocket,       exact: false },
 ];
 
 function isActive(href: string, exact: boolean, pathname: string) {
@@ -30,6 +27,16 @@ function isActive(href: string, exact: boolean, pathname: string) {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const supabase = createClient();
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   return (
     <>
@@ -90,6 +97,47 @@ export function Sidebar() {
         </div>
 
         <div className="flex flex-col items-center gap-2 px-2.5 xl:items-start w-full">
+          {user ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/perfil"
+                  className={cn(
+                    "flex items-center justify-center xl:justify-start gap-2 rounded-lg border px-2.5 py-2 text-xs font-medium transition-all duration-150 w-full",
+                    isActive("/perfil", false, pathname)
+                      ? "border-mint/30 text-mint bg-mint/10"
+                      : "border-[#30363D] text-[#8B949E] hover:border-mint/25 hover:text-mint"
+                  )}
+                >
+                  <div className="size-5 rounded-full bg-mint/20 border border-mint/30 flex items-center justify-center shrink-0">
+                    <User className="size-3 text-mint" />
+                  </div>
+                  <span className="hidden xl:block truncate max-w-[120px]">
+                    {user.email?.split("@")[0]}
+                  </span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="xl:hidden bg-[#1A1D23] border-[#30363D] text-[#F0F6FC] text-xs">
+                Perfil
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/login"
+                  className="flex items-center justify-center xl:justify-start gap-2 rounded-lg border border-[#30363D] px-2.5 py-2 text-xs text-[#8B949E] hover:border-mint/25 hover:text-mint transition-all duration-150 w-full"
+                >
+                  <LogIn className="size-3.5 shrink-0" />
+                  <span className="hidden xl:block font-medium tracking-wide">Entrar</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="xl:hidden bg-[#1A1D23] border-[#30363D] text-[#F0F6FC] text-xs">
+                Entrar
+              </TooltipContent>
+            </Tooltip>
+          )}
+
           <a
             href="https://www.linkedin.com/company/qa-lab-oficial/"
             target="_blank"
@@ -120,15 +168,24 @@ export function Sidebar() {
             Playground
           </span>
         </Link>
-        <a
-          href="https://www.linkedin.com/company/qa-lab-oficial/"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href={user ? "/perfil" : "/login"}
           className="flex items-center gap-1.5 rounded-lg border border-[#30363D] px-2.5 py-1.5 text-[#8B949E] hover:text-mint hover:border-mint/25 transition-all duration-150"
         >
-          <Linkedin className="size-3.5" />
-          <span className="text-[10px] font-semibold tracking-wide">LinkedIn</span>
-        </a>
+          {user ? (
+            <>
+              <User className="size-3.5" />
+              <span className="text-[10px] font-semibold tracking-wide">
+                {user.email?.split("@")[0]}
+              </span>
+            </>
+          ) : (
+            <>
+              <LogIn className="size-3.5" />
+              <span className="text-[10px] font-semibold tracking-wide">Entrar</span>
+            </>
+          )}
+        </Link>
       </header>
 
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-[#30363D] bg-[#0D1117]/95 backdrop-blur-md">
