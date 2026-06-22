@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "bun run --filter '*' dev",
     "dev:api": "bun run --filter '@qa-lab/api' dev",
-    "dev:web": "bun run --filter '@qa-lab/web' dev"
+    "dev:web": "bun run --filter '@qa-lab/web' dev",
+    "build": "bun run --filter '@qa-lab/web' build",
+    "lint": "bun run --filter '@qa-lab/web' lint"
   }
 }

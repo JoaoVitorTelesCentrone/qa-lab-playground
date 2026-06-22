@@ -1,406 +1,53 @@
 "use client";
 
-import { useState } from "react";
-import { Target, Lightbulb, Terminal, ChevronDown, ChevronUp, CheckCircle2, Circle, LogIn } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useMissionProgress } from "@/hooks/use-mission-progress";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { CheckCircle2, ChevronDown, Circle, ExternalLink, Lightbulb, Target } from "lucide-react";
 
-type Nivel = "iniciante" | "intermediario";
-type PainelAberto = "dica" | "snippet" | null;
-
-interface Missao {
-  id: number;
-  nivel: Nivel;
-  titulo: string;
-  objetivo: string;
-  alvo: string;
-  ferramentas: string[];
-  dica: string;
-  snippet: string;
-}
-
-const missoes: Missao[] = [
-  {
-    id: 1,
-    nivel: "iniciante",
-    titulo: "O DELETE que não deleta",
-    objetivo:
-      "Prove que DELETE /api/products/:id retorna 204 mas o recurso continua existindo após a requisição.",
-    alvo: "API",
-    ferramentas: ["Playwright", "Cypress"],
-    dica: "Faça o DELETE e em seguida um GET no mesmo ID. Se o GET retornar 200 com dados, o bug está confirmado. Seu teste deve falhar no assert do GET.",
-    snippet: `// Playwright — API Testing
-test('DELETE não remove o produto', async ({ request }) => {
-  const id = 1
-
-  await request.delete(\`/api/products/\${id}\`)
-
-  const res = await request.get(\`/api/products/\${id}\`)
-  expect(res.status()).toBe(404) // vai falhar — bug confirmado
-})`,
-  },
-  {
-    id: 2,
-    nivel: "iniciante",
-    titulo: "O health check mentiroso",
-    objetivo:
-      "Prove que GET /api/health reporta todos os serviços como 'healthy' mesmo quando a API está falhando.",
-    alvo: "API",
-    ferramentas: ["Playwright", "Cypress"],
-    dica: "Compare o que o health check responde com o que os outros endpoints retornam na prática. Um health check honesto deve refletir falhas reais.",
-    snippet: `// Playwright — API Testing
-test('health check deve refletir falhas reais', async ({ request }) => {
-  const health = await request.get('/api/health')
-  const body = await health.json()
-
-  // Força erro num endpoint real
-  const broken = await request.get('/api/products/99999')
-
-  // Se health diz "healthy" mas endpoint falha, é bug
-  if (broken.status() !== 200) {
-    expect(body.status).not.toBe('healthy') // vai falhar
-  }
-})`,
-  },
-  {
-    id: 3,
-    nivel: "iniciante",
-    titulo: "Paginação que pula itens",
-    objetivo:
-      "Prove que a listagem de produtos pula registros ao paginar — IDs da página 1 somem ou se repetem na página 2.",
-    alvo: "API",
-    ferramentas: ["Playwright", "K6"],
-    dica: "Busque todas as páginas e compare os IDs retornados. Se houver IDs duplicados ou ausentes entre as páginas, o bug está confirmado.",
-    snippet: `// Playwright — API Testing
-test('paginação não deve pular itens', async ({ request }) => {
-  const p1 = await (await request.get('/api/products?page=1&limit=5')).json()
-  const p2 = await (await request.get('/api/products?page=2&limit=5')).json()
-
-  const ids1 = p1.data.map((p: any) => p.id)
-  const ids2 = p2.data.map((p: any) => p.id)
-
-  // Não deve haver IDs repetidos entre páginas
-  const overlap = ids1.filter((id: number) => ids2.includes(id))
-  expect(overlap).toHaveLength(0) // vai falhar — bug confirmado
-})`,
-  },
-  {
-    id: 4,
-    nivel: "iniciante",
-    titulo: "O formulário com 5 bugs",
-    objetivo:
-      "Encontre e documente os 5 bugs escondidos no formulário de cadastro usando automação de UI.",
-    alvo: "Form Bugado",
-    ferramentas: ["Playwright", "Cypress"],
-    dica: "Teste cada campo com valores válidos, inválidos e vazios. Foque em: validação de e-mail, campos obrigatórios, senhas e comportamento do submit.",
-    snippet: `// Playwright — UI Testing
-test('formulário deve rejeitar e-mail inválido', async ({ page }) => {
-  await page.goto('/form-bugado')
-
-  await page.fill('[name="email"]', 'emailsemarrobase')
-  await page.click('[type="submit"]')
-
-  // Deve exibir mensagem de erro
-  await expect(
-    page.locator('[data-testid="email-error"]')
-  ).toBeVisible() // vai falhar — bug confirmado
-})`,
-  },
-  {
-    id: 5,
-    nivel: "intermediario",
-    titulo: "Contrato de resposta inconsistente",
-    objetivo:
-      "Crie um teste que detecte quando GET /api/orders/:id alterna entre camelCase e snake_case na mesma resposta.",
-    alvo: "API",
-    ferramentas: ["Playwright", "Cypress"],
-    dica: "Execute o mesmo request várias vezes e compare as chaves da resposta. Se as chaves mudarem entre chamadas, o contrato da API está quebrado.",
-    snippet: `// Playwright — API Testing
-test('contrato de resposta deve ser consistente', async ({ request }) => {
-  const calls = await Promise.all(
-    Array.from({ length: 5 }, () => request.get('/api/orders/1'))
-  )
-  const bodies = await Promise.all(calls.map(r => r.json()))
-  const keysets = bodies.map(b => Object.keys(b).sort().join(','))
-
-  const unique = new Set(keysets)
-  expect(unique.size).toBe(1) // vai falhar — chaves mudam a cada request
-})`,
-  },
-  {
-    id: 6,
-    nivel: "intermediario",
-    titulo: "Carrinho sem validação de estoque",
-    objetivo:
-      "Prove via E2E que é possível adicionar ao carrinho mais unidades do que o estoque disponível.",
-    alvo: "E-commerce",
-    ferramentas: ["Playwright", "Cypress"],
-    dica: "Identifique um produto com estoque limitado, adicione-o múltiplas vezes e verifique se a quantidade ultrapassa o estoque. Use os data-testid documentados em Alvos.",
-    snippet: `// Playwright — E2E
-test('carrinho não deve ultrapassar o estoque', async ({ page }) => {
-  await page.goto('/ecommerce')
-
-  const card = page.locator('[data-testid="product-card"]').first()
-  const estoqueText = await card.locator('[data-testid="stock"]').textContent()
-  const max = parseInt(estoqueText ?? '0')
-
-  // Clica uma vez a mais que o estoque
-  for (let i = 0; i <= max; i++) {
-    await card.locator('[data-testid="add-to-cart"]').click()
-  }
-
-  const qty = page.locator('[data-testid="cart-quantity"]').first()
-  await expect(qty).toHaveText(String(max)) // vai falhar — aceita mais
-})`,
-  },
-  {
-    id: 7,
-    nivel: "intermediario",
-    titulo: "Login sem rate limiting",
-    objetivo:
-      "Prove que o endpoint de autenticação não bloqueia tentativas repetidas — é possível tentar login ilimitadas vezes.",
-    alvo: "API",
-    ferramentas: ["Playwright", "K6"],
-    dica: "Faça 20+ requisições com credenciais erradas em sequência. Se nenhuma retornar 429 (Too Many Requests), o bug está confirmado.",
-    snippet: `// Playwright — API Security
-test('login deve ter rate limiting', async ({ request }) => {
-  const attempts = await Promise.all(
-    Array.from({ length: 20 }, () =>
-      request.post('/api/auth/login', {
-        data: { email: 'test@test.com', password: 'errado' },
-      })
-    )
-  )
-
-  const statuses = attempts.map(r => r.status())
-  expect(statuses).toContain(429) // vai falhar — sem rate limiting
-})`,
-  },
-  {
-    id: 8,
-    nivel: "intermediario",
-    titulo: "Suite de smoke da API",
-    objetivo:
-      "Monte uma suite que valide os 5 endpoints principais da API. Todos devem responder com o status esperado em menos de 2s.",
-    alvo: "API",
-    ferramentas: ["Playwright", "K6"],
-    dica: "Um smoke test é rápido e valida o básico: o endpoint existe, responde no tempo certo e retorna o formato esperado. Não teste lógica de negócio aqui.",
-    snippet: `// Playwright — API Smoke Suite
-const endpoints = [
-  { method: 'GET',  path: '/api/health',       expected: 200 },
-  { method: 'GET',  path: '/api/users',         expected: 200 },
-  { method: 'GET',  path: '/api/products',      expected: 200 },
-  { method: 'GET',  path: '/api/orders',        expected: 200 },
-  { method: 'GET',  path: '/api/products/9999', expected: 404 },
-]
-
-for (const ep of endpoints) {
-  test(\`\${ep.method} \${ep.path} → \${ep.expected}\`, async ({ request }) => {
-    const res = await request[ep.method.toLowerCase() as 'get'](ep.path)
-    expect(res.status()).toBe(ep.expected)
-  })
-}`,
-  },
+const STORAGE_KEY = "qa-lab-free-missions";
+const missions = [
+  { id: "expense-risk", level: "Iniciante", title: "Caça aos riscos do ExpenseFlow", description: "Explore o fluxo por 20 minutos e registre três problemas que possam reduzir a confiança nos dados financeiros.", deliverable: "3 bug reports com impacto e severidade", hint: "Combine filtros, paginação, edição e exclusão. Observe também valores-limite.", href: "/despesas", action: "Abrir ExpenseFlow" },
+  { id: "date-boundaries", level: "Iniciante", title: "Fronteiras do calendário", description: "Monte uma estratégia para validar datas em viradas de mês, ano, horário de verão e anos bissextos.", deliverable: "Checklist com ao menos 8 cenários", hint: "Não teste apenas o dia atual. Pense no que acontece antes, durante e depois de cada fronteira.", href: "/datas", action: "Abrir Datas Bugadas" },
+  { id: "bdd-review", level: "Iniciante", title: "Do requisito ao exemplo", description: "Transforme a regra “o usuário bloqueia após cinco tentativas inválidas” em cenários positivos, negativos e de limite.", deliverable: "Arquivo .feature com 4 cenários", hint: "Inclua a quarta, a quinta e a sexta tentativa. Explique quando o contador deve ser reiniciado.", href: "/bdd", action: "Abrir Gerador BDD" },
+  { id: "bug-triage", level: "Intermediário", title: "Defenda sua priorização", description: "Escolha cinco achados, classifique severidade e prioridade separadamente e justifique a ordem de correção.", deliverable: "Tabela de triagem com justificativas", hint: "Severidade mede impacto técnico; prioridade considera também urgência, alcance e contexto de negócio.", href: "/despesas", action: "Investigar sistema" },
+  { id: "test-charter", level: "Intermediário", title: "Escreva um charter exploratório", description: "Planeje uma sessão de 30 minutos com alvo, riscos, dados, oráculos e critérios claros de encerramento.", deliverable: "Charter reutilizável de uma página", hint: "Um bom charter direciona sem virar um roteiro rígido de passos.", href: "/datas", action: "Escolher alvo" },
+  { id: "quality-story", level: "Intermediário", title: "Conte a história da qualidade", description: "Produza uma publicação curta explicando um bug encontrado, o raciocínio usado e o aprendizado para outros QAs.", deliverable: "Post de até 1.200 caracteres", hint: "Remova a resposta completa se quiser que outras pessoas também investiguem o desafio.", href: "/blog", action: "Ler referências" },
 ];
 
-const nivelConfig: Record<Nivel, { label: string; variant: any }> = {
-  iniciante:     { label: "Iniciante",     variant: "neon" },
-  intermediario: { label: "Intermediário", variant: "default" },
-};
+export default function MissionsPage() {
+  const [completed, setCompleted] = useState<string[]>([]);
+  const [openHint, setOpenHint] = useState<string | null>(null);
 
-interface MissaoCardProps {
-  missao: Missao;
-  completed: boolean;
-  onToggle: (id: number) => void;
-  loggedIn: boolean;
-}
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      try { setCompleted(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]")); } catch { setCompleted([]); }
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
-function MissaoCard({ missao, completed, onToggle, loggedIn }: MissaoCardProps) {
-  const [painel, setPainel] = useState<PainelAberto>(null);
-  const cfg = nivelConfig[missao.nivel];
-
-  function toggle(tipo: "dica" | "snippet") {
-    setPainel(prev => (prev === tipo ? null : tipo));
+  function toggle(id: string) {
+    setCompleted((current) => {
+      const next = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
   }
 
   return (
-    <div className={`rounded-2xl border flex flex-col transition-all duration-200 hover:shadow-lg hover:shadow-mint/5 ${completed ? "border-mint/30 bg-mint/5" : "border-mint/10 bg-dark-green/40 hover:border-mint/25"}`}>
-      {/* Header */}
-      <div className="p-5 space-y-3 flex-1">
-        <div className="flex items-center justify-between">
-          <span className="font-mono text-xs text-mint/50">#{String(missao.id).padStart(2, "0")}</span>
-          <div className="flex items-center gap-2">
-            <Badge variant={cfg.variant}>{cfg.label}</Badge>
-            {loggedIn ? (
-              <button
-                onClick={() => onToggle(missao.id)}
-                title={completed ? "Marcar como não concluída" : "Marcar como concluída"}
-                className="transition-all hover:scale-110"
-              >
-                {completed
-                  ? <CheckCircle2 className="size-4 text-mint" />
-                  : <Circle className="size-4 text-mint/30 hover:text-mint/60" />
-                }
-              </button>
-            ) : (
-              <Link href="/login" title="Entre para marcar progresso">
-                <Circle className="size-4 text-mint/20 hover:text-mint/40 transition-colors" />
-              </Link>
-            )}
-          </div>
-        </div>
-
-        <h3 className="text-base font-bold text-off-white leading-snug">{missao.titulo}</h3>
-
-        <p className="text-sm text-off-white/60 leading-relaxed">
-          {missao.objetivo}
-        </p>
-
-        <div className="flex items-center gap-2 flex-wrap pt-1">
-          <span className="rounded-lg border border-mint/20 px-2.5 py-1 text-xs text-mint/70 uppercase tracking-wide">
-            {missao.alvo}
-          </span>
-          {missao.ferramentas.map(f => (
-            <span key={f} className="rounded-lg bg-off-white/5 px-2.5 py-1 text-xs text-off-white/50">
-              {f}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Painel expansível */}
-      {painel && (
-        <div className="border-t border-mint/10 mx-5 mb-0" />
-      )}
-      {painel === "dica" && (
-        <div className="px-5 py-4 text-sm text-off-white/70 leading-relaxed bg-neon/5 border-x-0">
-          <div className="flex items-center gap-2 mb-2 text-neon font-bold uppercase tracking-wide text-xs">
-            <Lightbulb className="size-4" />
-            Dica
-          </div>
-          {missao.dica}
-        </div>
-      )}
-      {painel === "snippet" && (
-        <div className="px-5 py-4 bg-[#2a3a3a] rounded-b-none overflow-x-auto border-x-0">
-          <pre className="text-xs text-mint font-mono leading-relaxed whitespace-pre">
-            {missao.snippet}
-          </pre>
-        </div>
-      )}
-
-      {/* Footer */}
-      <div className="flex items-center gap-2 px-5 py-3 border-t border-mint/10">
-        <button
-          onClick={() => toggle("dica")}
-          className={`flex items-center gap-1.5 text-xs rounded-lg px-3 py-2 transition-all font-bold uppercase tracking-wide ${
-            painel === "dica"
-              ? "bg-neon text-[#3D5454]"
-              : "text-off-white/60 hover:bg-off-white/10 hover:text-off-white"
-          }`}
-        >
-          <Lightbulb className="size-3.5" />
-          Dica
-          {painel === "dica" ? <ChevronUp className="size-3" /> : <ChevronDown className="size-3" />}
-        </button>
-        <button
-          onClick={() => toggle("snippet")}
-          className={`flex items-center gap-1.5 text-xs rounded-lg px-3 py-2 transition-all font-bold uppercase tracking-wide ${
-            painel === "snippet"
-              ? "bg-mint text-[#3D5454]"
-              : "text-off-white/60 hover:bg-off-white/10 hover:text-off-white"
-          }`}
-        >
-          <Terminal className="size-3.5" />
-          Snippet
-          {painel === "snippet" ? <ChevronUp className="size-3" /> : <ChevronDown className="size-3" />}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-export default function MissoesPage() {
-  const [filtro, setFiltro] = useState<"todos" | Nivel>("todos");
-  const { user, completed, loading, toggle } = useMissionProgress();
-
-  const filtradas = filtro === "todos" ? missoes : missoes.filter(m => m.nivel === filtro);
-
-  const filtros: { value: "todos" | Nivel; label: string }[] = [
-    { value: "todos",         label: "Todas" },
-    { value: "iniciante",     label: "Iniciante" },
-    { value: "intermediario", label: "Intermediário" },
-  ];
-
-  return (
-    <div className="space-y-8 animate-fade-in">
-      {/* Header */}
-      <div className="space-y-4 animate-slide-in-up">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center size-10 rounded-xl bg-mint/20">
-            <Target className="size-5 text-mint" />
-          </div>
-          <div>
-            <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-wider text-mint italic">
-              MISSÕES
-            </h1>
-            <p className="text-sm text-mint/50 uppercase tracking-[0.15em]">
-              Prove bugs reais com automação
-            </p>
-          </div>
-        </div>
-        <p className="text-sm text-off-white/60 max-w-xl">
-          Cada missão tem um bug real pra você provar com automação. Escolha pelo seu nível, leia o objetivo e escreva o teste.
-        </p>
-      </div>
-
-      {/* Filtros */}
-      <div className="flex items-center gap-2">
-        {filtros.map(f => (
-          <button
-            key={f.value}
-            onClick={() => setFiltro(f.value)}
-            className={`rounded-xl px-4 py-2 text-sm font-bold uppercase tracking-wide transition-all ${
-              filtro === f.value
-                ? "bg-mint text-[#3D5454]"
-                : "text-off-white/60 hover:bg-off-white/10 hover:text-off-white border border-mint/20"
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
-        <span className="ml-auto text-xs text-off-white/40 uppercase tracking-wide">
-          {filtradas.length} missão{filtradas.length !== 1 ? "ões" : ""}
-        </span>
-        {!loading && !user && (
-          <Link
-            href="/login"
-            className="flex items-center gap-1.5 text-xs text-[#8B949E] hover:text-mint transition-colors border border-[#30363D] hover:border-mint/25 rounded-lg px-3 py-1.5"
-          >
-            <LogIn className="size-3.5" />
-            Entre para salvar progresso
-          </Link>
-        )}
-        {!loading && user && (
-          <span className="text-xs text-mint/60 font-mono">
-            {completed.size}/8 concluídas
-          </span>
-        )}
-      </div>
-
-      {/* Grid */}
-      <div className="grid gap-5 sm:grid-cols-2 stagger">
-        {filtradas.map(m => (
-          <MissaoCard
-            key={m.id}
-            missao={m}
-            completed={completed.has(m.id)}
-            onToggle={toggle}
-            loggedIn={!!user}
-          />
-        ))}
+    <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
+      <header className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.2em] text-coral">Prática guiada</p><h1 className="mt-3 text-4xl font-black tracking-tight text-off-white sm:text-5xl">Missões de QA</h1><p className="mt-4 leading-7 text-[#8B949E]">Desafios pequenos para transformar exploração em entregáveis concretos. Marque o progresso sem criar conta — ele fica salvo neste navegador.</p></header>
+      <div className="mt-8 grid gap-4 sm:grid-cols-3"><div className="rounded-xl border border-white/10 bg-[#171B21] p-4"><p className="text-xs text-[#69737E]">Progresso</p><p className="mt-1 text-2xl font-black text-mint">{completed.length}/{missions.length}</p></div><div className="rounded-xl border border-white/10 bg-[#171B21] p-4"><p className="text-xs text-[#69737E]">Níveis</p><p className="mt-1 font-bold text-off-white">Iniciante e intermediário</p></div><div className="rounded-xl border border-white/10 bg-[#171B21] p-4"><p className="text-xs text-[#69737E]">Conta necessária</p><p className="mt-1 font-bold text-off-white">Nenhuma</p></div></div>
+      <div className="mt-8 grid gap-5 md:grid-cols-2">
+        {missions.map((mission, index) => {
+          const done = completed.includes(mission.id);
+          return <article key={mission.id} className={`flex flex-col rounded-2xl border p-5 transition ${done ? "border-mint/30 bg-mint/[0.055]" : "border-white/10 bg-[#171B21]"}`}>
+            <div className="flex items-center justify-between"><span className="font-mono text-xs text-[#69737E]">#{String(index + 1).padStart(2, "0")} · {mission.level}</span><button type="button" onClick={() => toggle(mission.id)} aria-label={done ? `Desmarcar ${mission.title}` : `Concluir ${mission.title}`} className="text-[#69737E] hover:text-mint">{done ? <CheckCircle2 className="size-5 text-mint" /> : <Circle className="size-5" />}</button></div>
+            <Target className="mt-6 size-5 text-coral" /><h2 className="mt-3 text-lg font-bold text-off-white">{mission.title}</h2><p className="mt-2 flex-1 text-sm leading-6 text-[#8B949E]">{mission.description}</p>
+            <div className="mt-5 rounded-lg bg-white/[0.035] p-3"><p className="text-[10px] font-bold uppercase tracking-wider text-[#69737E]">Entregável</p><p className="mt-1 text-xs text-[#AAB2BC]">{mission.deliverable}</p></div>
+            {openHint === mission.id && <div className="mt-3 flex gap-2 rounded-lg border border-neon/15 bg-neon/[0.04] p-3 text-xs leading-5 text-[#AAB2BC]"><Lightbulb className="mt-0.5 size-4 shrink-0 text-neon" />{mission.hint}</div>}
+            <div className="mt-5 flex items-center justify-between border-t border-white/[0.08] pt-4"><button type="button" onClick={() => setOpenHint((current) => current === mission.id ? null : mission.id)} className="inline-flex items-center gap-1 text-xs font-semibold text-[#7D8793] hover:text-neon">Ver dica <ChevronDown className={`size-3.5 transition ${openHint === mission.id ? "rotate-180" : ""}`} /></button><Link href={mission.href} className="inline-flex items-center gap-1.5 text-xs font-bold text-mint hover:underline">{mission.action}<ExternalLink className="size-3.5" /></Link></div>
+          </article>;
+        })}
       </div>
     </div>
   );

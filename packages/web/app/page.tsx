@@ -1,208 +1,89 @@
 import Link from "next/link";
 import {
-  FlaskConical, LayoutGrid, ArrowRight, BookOpen,
-  CalendarDays, Wallet, Rocket, Linkedin,
-  Terminal, Bug, Zap,
+  ArrowRight, BookOpen, Bug, CalendarClock, CheckCircle2, ClipboardCheck,
+  FileCode2, FlaskConical, FolderKanban, Search, ShieldCheck, Target, Wallet,
 } from "lucide-react";
 
 const modules = [
-  {
-    href: "/elementos",
-    icon: LayoutGrid,
-    titulo: "Elementos",
-    descricao: "Tabela dinâmica, loading states e interações de UI com data-testid prontos para automação.",
-    stats: "Tabela · Loading · Interações",
-    num: "01",
-    color: "text-mint border-mint/20 bg-mint/[0.06] hover:bg-mint/[0.10]",
-    icon_color: "text-mint",
-  },
-  {
-    href: "/blog",
-    icon: BookOpen,
-    titulo: "Blog QA Lab",
-    descricao: "Artigos sobre qualidade de software, técnicas de teste e boas práticas para QAs.",
-    stats: "1 artigo publicado",
-    num: "02",
-    color: "text-neon border-neon/20 bg-neon/[0.04] hover:bg-neon/[0.08]",
-    icon_color: "text-neon",
-  },
-  {
-    href: "/datas",
-    icon: CalendarDays,
-    titulo: "Datas Bugadas",
-    descricao: "10 bugs propositais de data, hora e timezone. Encontre todos e marque no checklist.",
-    stats: "10 bugs · Calendário · Fuso",
-    num: "03",
-    color: "text-coral border-coral/20 bg-coral/[0.05] hover:bg-coral/[0.09]",
-    icon_color: "text-coral",
-  },
-  {
-    href: "/despesas",
-    icon: Wallet,
-    titulo: "Despesas",
-    descricao: "CRUD financeiro com paginação, seleção múltipla, filtros combinados e export CSV.",
-    stats: "Paginação · Bulk delete · Filtros",
-    num: "04",
-    color: "text-mint border-mint/20 bg-mint/[0.06] hover:bg-mint/[0.10]",
-    icon_color: "text-mint",
-  },
-  {
-    href: "/proximos-passos",
-    icon: Rocket,
-    titulo: "Próximos Passos",
-    descricao: "Veja o que está sendo desenvolvido e o que vem por aí no QA Lab Playground.",
-    stats: "Em construção",
-    num: "05",
-    color: "text-[#F0C040] border-[#F0C040]/20 bg-[#F0C040]/[0.04] hover:bg-[#F0C040]/[0.08]",
-    icon_color: "text-[#F0C040]",
-  },
+  { href: "/datas", icon: CalendarClock, title: "Datas Bugadas", label: "Playground", description: "Investigue formatos, cálculos, vencimentos e armadilhas de timezone em componentes interativos.", meta: "10 bugs intencionais", color: "text-coral" },
+  { href: "/despesas", icon: Wallet, title: "ExpenseFlow", label: "Playground", description: "Teste um fluxo financeiro com filtros, cadastro, edição, exclusão, paginação e exportação.", meta: "Teste exploratório", color: "text-mint" },
+  { href: "/bdd", icon: FileCode2, title: "Gerador de BDD", label: "Ferramenta", description: "Transforme uma regra de negócio em cenários Gherkin claros e prontos para refinar com o time.", meta: "Exportação .feature", color: "text-neon" },
+  { href: "/missoes", icon: Target, title: "Missões de QA", label: "Desafios", description: "Pratique investigação, escrita de casos, análise de risco e comunicação com tarefas guiadas.", meta: "Progresso local", color: "text-coral" },
+  { href: "/blog", icon: BookOpen, title: "Artigos QA Lab", label: "Conteúdo", description: "Leituras práticas para conectar estratégia de qualidade, técnica e decisões de produto.", meta: "Conteúdo gratuito", color: "text-mint" },
+  { href: "/lab", icon: FolderKanban, title: "QA Lab Workspace", label: "Conta opcional", description: "Salve projetos, rascunhos, favoritos e seu progresso em um espaço pessoal sincronizado.", meta: "Plano Free disponível", color: "text-neon" },
 ];
 
-const steps = [
-  {
-    n: "01",
-    label: "Elementos",
-    href: "/elementos",
-    desc: "Tabela com sort, filtro, paginação e loading states — tudo com data-testid para você automatizar.",
-  },
-  {
-    n: "02",
-    label: "Datas Bugadas",
-    href: "/datas",
-    desc: "10 bugs intencionais de data, hora e timezone. Cada bug tem um checklist — marque conforme for encontrando.",
-  },
-  {
-    n: "03",
-    label: "Despesas",
-    href: "/despesas",
-    desc: "CRUD real: paginação, seleção múltipla, filtros e export CSV. Cobre fluxos completos de leitura e edição.",
-  },
-  {
-    n: "04",
-    label: "Blog",
-    href: "/blog",
-    desc: "Leia um artigo, volte para o módulo e aplique. Teoria e prática juntas.",
-  },
+const practices = [
+  { icon: Search, title: "Investigue", text: "Explore fluxos reais sem depender de uma lista de respostas." },
+  { icon: ShieldCheck, title: "Pense em risco", text: "Priorize impacto para usuários, dados e negócio." },
+  { icon: ClipboardCheck, title: "Comunique", text: "Registre cenários e bugs de forma objetiva e reproduzível." },
 ];
 
-export default function DashboardPage() {
+export default function HomePage() {
   return (
-    <div className="space-y-10 animate-fade-in">
-
-      <div className="animate-slide-in-up">
-        <div className="flex items-start gap-3.5 mb-5">
-          <div className="flex items-center justify-center size-10 rounded-lg bg-mint/10 border border-mint/20 shrink-0 mt-0.5">
-            <FlaskConical className="size-5 text-mint" />
-          </div>
-          <div>
-            <div className="flex items-baseline gap-3">
-              <h1 className="font-[family-name:var(--font-display)] text-5xl md:text-6xl tracking-wider text-mint italic">
-                QA LAB
-              </h1>
-              <span className="hidden sm:block text-[10px] uppercase tracking-[0.2em] text-mint/35 pb-1">
-                Playground
-              </span>
+    <>
+      <section className="relative overflow-hidden border-b border-white/10">
+        <div className="absolute inset-0 bg-grid opacity-20 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+        <div className="absolute left-1/2 top-20 size-[38rem] -translate-x-1/2 rounded-full bg-mint/[0.08] blur-3xl" />
+        <div className="relative mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28 lg:py-36">
+          <div className="max-w-4xl">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-mint/25 bg-mint/[0.08] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-mint">
+              <FlaskConical className="size-3.5" /> Laboratório público de QA
             </div>
-            <p className="text-[11px] uppercase tracking-[0.15em] text-[#8B949E]">
-              Break things on purpose
+            <h1 className="text-balance text-5xl font-black leading-[0.98] tracking-[-0.045em] text-off-white sm:text-7xl lg:text-[5.5rem]">
+              Qualidade se aprende <span className="text-coral">praticando.</span>
+            </h1>
+            <p className="mt-7 max-w-2xl text-pretty text-base leading-7 text-[#AAB2BC] sm:text-lg">
+              Playground gratuito para praticar análise, escrita de cenários, investigação de bugs e pensamento crítico em produto — direto no navegador.
             </p>
-          </div>
-        </div>
-
-        <div className="max-w-xl space-y-3">
-          <p className="text-[#F0F6FC]/75 leading-relaxed">
-            Aprenda QA na <span className="text-neon font-semibold">prática</span> quebrando coisas de{" "}
-            <span className="text-coral font-semibold">propósito</span>.
-            Explore APIs instáveis, formulários bugados e cenários de teste reais.
-          </p>
-          <a
-            href="https://www.linkedin.com/company/qa-lab-oficial/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-[#30363D] px-3.5 py-2 text-xs font-medium text-[#8B949E] hover:border-mint/25 hover:text-mint transition-all duration-150"
-          >
-            <Linkedin className="size-3.5" />
-            Siga o QA Lab no LinkedIn
-          </a>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-3 gap-3 animate-slide-in-up" style={{ animationDelay: "60ms" }}>
-        {[
-          { label: "Módulos ativos",     value: "5",   icon: Terminal, color: "text-mint"  },
-          { label: "Bugs intencionais",  value: "15+", icon: Bug,      color: "text-coral" },
-          { label: "Artigos publicados", value: "1",   icon: Zap,      color: "text-neon"  },
-        ].map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="flex items-center gap-3 rounded-lg border border-[#30363D] bg-[#1A1D23] px-4 py-3.5">
-            <Icon className={`size-4 shrink-0 ${color}`} />
-            <div>
-              <p className={`text-lg font-black leading-none ${color}`}>{value}</p>
-              <p className="text-[10px] uppercase tracking-wide text-[#8B949E] mt-0.5 leading-none">{label}</p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link href="#playgrounds" className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-neon px-6 text-sm font-black text-[#101319] transition hover:-translate-y-0.5 hover:bg-[#E0FF7D]">
+                Explorar laboratórios <ArrowRight className="size-4" />
+              </Link>
+              <Link href="/missoes" className="inline-flex h-12 items-center justify-center rounded-lg border border-white/15 bg-white/[0.03] px-6 text-sm font-semibold text-off-white transition hover:border-mint/35 hover:text-mint">
+                Ver missões
+              </Link>
             </div>
+            <p className="mt-4 flex items-center gap-2 text-xs text-[#7D8793]"><CheckCircle2 className="size-3.5 text-mint" /> Sem cadastro · sem paywall · sem instalação</p>
           </div>
-        ))}
-      </div>
+        </div>
+      </section>
 
-      <div>
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#8B949E] mb-3">
-          Módulos disponíveis
-        </p>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 stagger-scale">
-          {modules.map((mod) => (
-            <Link key={mod.href} href={mod.href}>
-              <div className={`group relative h-full rounded-lg border bg-[#1A1D23] p-4 transition-all duration-150 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40 overflow-hidden cursor-pointer ${mod.color}`}>
-                <span className="absolute right-2 bottom-1 font-black text-7xl text-[#F0F6FC]/[0.03] leading-none select-none pointer-events-none">
-                  {mod.num}
-                </span>
-                <div className="relative">
-                  <div className="flex items-center gap-2 mb-3">
-                    <mod.icon className={`size-4 shrink-0 ${mod.icon_color}`} />
-                    <span className="text-sm font-semibold text-[#F0F6FC]">{mod.titulo}</span>
-                  </div>
-                  <p className="text-xs text-[#8B949E] leading-relaxed mb-4">{mod.descricao}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono text-[#8B949E]/60 uppercase tracking-wider">{mod.stats}</span>
-                    <ArrowRight className="size-3 text-[#8B949E] group-hover:translate-x-0.5 transition-transform duration-150" />
-                  </div>
-                </div>
-              </div>
+      <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24" id="playgrounds">
+        <div className="mb-10 max-w-2xl">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-mint">Escolha onde praticar</p>
+          <h2 className="text-3xl font-black tracking-tight text-off-white sm:text-4xl">Ferramentas e desafios gratuitos</h2>
+          <p className="mt-4 leading-7 text-[#8B949E]">Cada módulo trabalha uma habilidade diferente. Seu progresso fica no próprio navegador quando aplicável.</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {modules.map(({ href, icon: Icon, title, label, description, meta, color }) => (
+            <Link key={href} href={href} className="group flex min-h-64 flex-col rounded-2xl border border-white/10 bg-[#171B21] p-6 transition hover:-translate-y-1 hover:border-mint/30 hover:shadow-2xl hover:shadow-black/25">
+              <div className="flex items-start justify-between"><span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#69737E]">{label}</span><Icon className={`size-5 ${color}`} /></div>
+              <h3 className="mt-8 text-xl font-black text-off-white group-hover:text-mint">{title}</h3>
+              <p className="mt-3 flex-1 text-sm leading-6 text-[#8B949E]">{description}</p>
+              <div className="mt-6 flex items-center justify-between border-t border-white/[0.08] pt-4 text-xs"><span className="text-[#69737E]">{meta}</span><ArrowRight className="size-4 text-[#69737E] transition group-hover:translate-x-1 group-hover:text-mint" /></div>
             </Link>
           ))}
         </div>
-      </div>
+      </section>
 
-      <div className="rounded-lg border border-[#30363D] bg-[#1A1D23] overflow-hidden animate-slide-in-up" style={{ animationDelay: "160ms" }}>
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-[#30363D] bg-[#161B22]">
-          <div className="flex gap-1.5">
-            <span className="size-2.5 rounded-full bg-coral/60" />
-            <span className="size-2.5 rounded-full bg-[#F0C040]/60" />
-            <span className="size-2.5 rounded-full bg-neon/60" />
+      <section className="border-y border-white/10 bg-[#0D1015]">
+        <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+          <div className="grid gap-5 md:grid-cols-3">
+            {practices.map(({ icon: Icon, title, text }, index) => (
+              <div key={title} className="rounded-xl border border-white/[0.08] bg-white/[0.025] p-6"><span className="font-mono text-xs text-mint/60">0{index + 1}</span><Icon className="mt-8 size-5 text-mint" /><h2 className="mt-4 text-lg font-bold text-off-white">{title}</h2><p className="mt-2 text-sm leading-6 text-[#8B949E]">{text}</p></div>
+            ))}
           </div>
-          <Terminal className="size-3 text-[#8B949E] ml-1" />
-          <span className="text-[10px] font-mono font-medium uppercase tracking-widest text-[#8B949E]">
-            como_comecar.md
-          </span>
         </div>
-        <ol className="p-5 space-y-5">
-          {steps.map((step) => (
-            <li key={step.n} className="flex gap-4">
-              <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-mint/10 border border-mint/20 text-[11px] font-black font-mono text-mint">
-                {step.n}
-              </span>
-              <div>
-                <p className="text-sm font-semibold text-[#F0F6FC]">
-                  Explore{" "}
-                  <Link href={step.href} className="text-mint hover:underline decoration-mint/40">
-                    {step.label}
-                  </Link>
-                </p>
-                <p className="text-xs text-[#8B949E] mt-1 leading-relaxed">{step.desc}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
+      </section>
 
-    </div>
+      <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+        <div className="rounded-2xl border border-mint/20 bg-mint/[0.065] px-6 py-12 text-center sm:px-12">
+          <Bug className="mx-auto mb-5 size-8 text-coral" /><h2 className="text-3xl font-black text-off-white sm:text-4xl">Comece pelo ExpenseFlow</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#AAB2BC]">Um sistema financeiro com falhas intencionais, briefing de investigação e modelo de bug report.</p>
+          <Link href="/despesas" className="mt-7 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-neon px-6 text-sm font-black text-[#101319] transition hover:-translate-y-0.5 hover:bg-[#E0FF7D]">Abrir desafio <ArrowRight className="size-4" /></Link>
+        </div>
+      </section>
+    </>
   );
 }

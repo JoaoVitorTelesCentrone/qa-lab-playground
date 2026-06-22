@@ -18,6 +18,7 @@ npm-debug.log*
 
 # env files
 .env*
+!packages/web/.env.example
 
 # vercel
 .vercel

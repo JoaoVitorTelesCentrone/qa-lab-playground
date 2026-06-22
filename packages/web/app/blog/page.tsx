@@ -7,7 +7,7 @@ export default function BlogPage() {
   const outros = posts.filter((p) => !p.destaque);
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="mx-auto max-w-6xl space-y-8 px-5 py-12 animate-fade-in sm:px-8 sm:py-16">
 
       <div className="flex items-center gap-3 animate-slide-in-up">
         <div className="flex items-center justify-center size-9 rounded-lg bg-mint/10 border border-mint/20">

@@ -1,102 +1,79 @@
 # QA Lab Playground
 
-Plataforma educacional para treino de QA. Aprenda quebrando coisas de proposito.
+Laboratório público e gratuito para profissionais de QA praticarem investigação de bugs, análise de risco, escrita de cenários e pensamento crítico em produto.
+
+> Qualidade se aprende praticando.
+
+## Produto público
+
+- `/` — apresentação da plataforma e catálogo
+- `/datas` — Datas Bugadas, com falhas intencionais de cálculo, formato e timezone
+- `/despesas` — ExpenseFlow, desafio exploratório em um fluxo financeiro
+- `/bdd` — gerador de cenários Gherkin com cópia e exportação `.feature`
+- `/missoes` — desafios guiados com progresso salvo no navegador
+- `/blog` — artigos gratuitos sobre qualidade de software
+
+Não há cadastro ou paywall obrigatório. Os recursos free funcionam no navegador; uma conta opcional ativa o QA Lab Workspace com projetos, rascunhos, favoritos e sincronização do progresso.
+
+## QA Lab Workspace
+
+- `/login` e `/cadastro` — autenticação por e-mail/senha ou Google
+- `/lab` — projetos, rascunhos, favoritos e progresso sincronizado
+- `/perfil` — perfil profissional e gestão da conta
+- Recuperação de senha e exclusão permanente de conta
+- Plano Free limitado a três projetos ativos; estrutura preparada para Pro e Team
+
+O Workspace usa Supabase. Aplique `supabase/migrations/202606220001_workspace.sql` pelo SQL Editor ou CLI e configure as variáveis de `.env.example`. Sem essas variáveis, o produto free continua funcionando normalmente.
+
+No painel do Supabase, habilite o provedor Google se desejar OAuth e adicione estas URLs permitidas:
+
+```text
+http://localhost:3000/auth/callback
+https://seu-dominio.com.br/auth/callback
+```
 
 ## Stack
 
-- **Frontend:** Next.js 16, React 19, Tailwind CSS 4, shadcn/ui
-- **Backend:** Hono (Bun runtime)
-- **Monorepo:** Bun workspaces
-- **Containers:** Docker + docker-compose
+- Next.js 16 e React 19
+- TypeScript
+- Tailwind CSS 4
+- Bun workspaces
+- Vercel
 
-## Estrutura
+O monorepo contém módulos experimentais, API Hono e integrações Supabase legadas. Eles não fazem parte da navegação pública desta versão.
 
-```
-packages/
-  web/       → Frontend Next.js (:3000)
-  api/       → Backend Hono (:3001)
-  shared/    → Tipos e constantes compartilhadas
-```
+## Desenvolvimento
 
-## Como Rodar
-
-### Requisitos
-
-- [Bun](https://bun.sh) >= 1.0
-
-### Desenvolvimento Local
+Requisitos: Bun 1.x ou Node.js 20+.
 
 ```bash
-# Instalar dependencias
 bun install
-
-# Rodar API e frontend simultaneamente
-bun run dev
-
-# Ou separadamente
-bun run dev:api   # API em http://localhost:3001
-bun run dev:web   # Frontend em http://localhost:3000
+bun run dev:web
 ```
 
-### Docker
+Acesse `http://localhost:3000`.
+
+## Verificação
 
 ```bash
-docker-compose up --build
+bun run lint
+bun run build
 ```
 
-Frontend: http://localhost:3000
-API: http://localhost:3001
+## Publicação na Vercel
 
-## Modulos
+Importe o repositório e configure o Root Directory como `packages/web`. O `vercel.json` instala as dependências a partir da raiz do monorepo.
 
-### API Playground
-Envie requests para 10 endpoints com bugs configuraveis. Ative o **Modo Caos** para descobrir falhas como:
-- Respostas 500 aleatorias
-- Dados incorretos
-- Timeouts intermitentes
-- Paginacao inconsistente
-- Status codes mentirosos
+Variáveis:
 
-### Cenarios de Teste
-5 cenarios guiados para praticar QA:
-1. Validar listagem de usuarios
-2. Encontrar bugs no formulario
-3. Testar busca com edge cases
-4. Identificar respostas inconsistentes
-5. Validar tratamento de erros
-
-### Form Bugado
-Formulario de cadastro com 5 bugs propositais para encontrar.
-
-## Endpoints da API
-
-| Metodo | Endpoint | Bug |
-|--------|----------|-----|
-| GET | /api/users | 500 aleatorio |
-| GET | /api/users/:id | Retorna usuario errado |
-| POST | /api/users | Descarta campos silenciosamente |
-| GET | /api/products | Paginacao pula itens |
-| GET | /api/products/:id | Status 200 com body de erro |
-| POST | /api/orders | Timeout intermitente |
-| GET | /api/orders/:id | Formato muda a cada request |
-| PUT | /api/users/:id | Sucesso falso (nao atualiza) |
-| DELETE | /api/products/:id | 204 mas nao deleta |
-| GET | /api/health | Mente sobre status |
-
-### Controle de Caos
-
-```bash
-# Ver config atual
-GET /api/_chaos/config
-
-# Ativar/desativar caos em um endpoint
-POST /api/_chaos/config
-{"endpoint": "GET /api/users", "config": {"enabled": true}}
-
-# Ativar/desativar todos
-POST /api/_chaos/toggle
-{"enabled": true}
-
-# Resetar dados
-POST /api/_admin/reset
+```text
+NEXT_PUBLIC_SITE_URL=https://seu-dominio.com.br
+NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-chave-publica
 ```
+
+Somente `NEXT_PUBLIC_SITE_URL` é opcional. As variáveis Supabase ativam o Workspace.
+
+## Próxima fase
+
+A evolução planejada é uma API intencionalmente bugada dentro do próprio Next.js, permitindo práticas com payloads, contratos, status HTTP e automação via Postman, Cypress ou Playwright — ainda mantendo o núcleo gratuito.

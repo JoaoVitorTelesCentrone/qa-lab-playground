@@ -8,9 +8,9 @@ import {
   ChevronRight,
   CalendarRange,
   Timer,
-  AlarmClock,
   Zap,
 } from "lucide-react";
+import { SessionTracker } from "@/components/workspace/session-tracker";
 
 // Componentes do design system QA Lab
 const Card = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
@@ -25,10 +25,6 @@ const CardContent = ({ children, className = "" }: { children: React.ReactNode; 
   <div className={`p-6 pt-0 ${className}`}>{children}</div>
 );
 
-const CardFooter = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`p-6 pt-0 ${className}`}>{children}</div>
-);
-
 const CardTitle = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <h3 className={`text-base font-bold text-mint ${className}`}>{children}</h3>
 );
@@ -36,6 +32,11 @@ const CardTitle = ({ children, className = "" }: { children: React.ReactNode; cl
 const CardDescription = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <p className={`text-sm text-off-white/60 ${className}`}>{children}</p>
 );
+
+type PlaygroundButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "size"> & {
+  variant?: "default" | "destructive" | "outline" | "ghost" | "success";
+  size?: "default" | "sm" | "lg" | "icon";
+};
 
 const Button = ({
   children,
@@ -45,15 +46,7 @@ const Button = ({
   className = "",
   disabled = false,
   ...props
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-  variant?: "default" | "destructive" | "outline" | "ghost" | "success";
-  size?: "default" | "sm" | "lg" | "icon";
-  className?: string;
-  disabled?: boolean;
-  [key: string]: any;
-}) => {
+}: PlaygroundButtonProps) => {
   const baseClasses = "inline-flex items-center justify-center rounded-xl font-bold uppercase tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint/30 disabled:pointer-events-none disabled:opacity-50";
 
   const variants = {
@@ -83,7 +76,7 @@ const Button = ({
   );
 };
 
-const Input = ({ className = "", ...props }: { className?: string; [key: string]: any }) => (
+const Input = ({ className = "", ...props }: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input
     className={`flex h-9 w-full rounded-lg border border-mint/20 bg-dark-green/40 text-off-white px-3 py-2 text-sm placeholder:text-off-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint/30 focus-visible:border-mint/50 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
     {...props}
@@ -114,35 +107,6 @@ const Badge = ({
     </span>
   );
 };
-
-const Separator = ({ className = "" }: { className?: string }) => (
-  <div className={`h-px bg-mint/10 ${className}`} />
-);
-
-const Tabs = ({ children, value, onValueChange }: { children: React.ReactNode; value: string; onValueChange: (value: string) => void }) => {
-  return <div className="space-y-4">{children}</div>;
-};
-
-const TabsList = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`flex gap-2 border-b border-mint/10 ${className}`}>{children}</div>
-);
-
-const TabsTrigger = ({ children, value, activeValue, onClick }: { children: React.ReactNode; value: string; activeValue: string; onClick: () => void }) => (
-  <button
-    className={`px-4 py-2 text-sm font-bold uppercase tracking-wide transition-colors ${
-      activeValue === value
-        ? "border-b-2 border-mint text-mint"
-        : "text-off-white/40 hover:text-off-white/70"
-    }`}
-    onClick={onClick}
-  >
-    {children}
-  </button>
-);
-
-const TabsContent = ({ children, value, activeValue }: { children: React.ReactNode; value: string; activeValue: string }) => (
-  <div className={activeValue === value ? "block" : "hidden"}>{children}</div>
-);
 
 // Calendário customizado
 const Calendar = ({ selected, onSelect }: { selected: Date | null; onSelect: (date: Date) => void }) => {
@@ -230,70 +194,6 @@ const Calendar = ({ selected, onSelect }: { selected: Date | null; onSelect: (da
   );
 };
 
-// Bugs da página de datas
-const bugs = [
-  {
-    id: 1,
-    titulo: "Permite selecionar datas no passado para agendamento futuro",
-    categoria: "Validação",
-    severidade: "Alta",
-  },
-  {
-    id: 2,
-    titulo: "Cálculo de diferença entre datas ignora anos bissextos",
-    categoria: "Cálculo",
-    severidade: "Média",
-  },
-  {
-    id: 3,
-    titulo: "Fuso horário não é considerado ao converter datas",
-    categoria: "Timezone",
-    severidade: "Crítica",
-  },
-  {
-    id: 4,
-    titulo: "Dias da semana não correspondem à data real",
-    categoria: "Calendário",
-    severidade: "Alta",
-  },
-  {
-    id: 5,
-    titulo: "Timer continua rodando mesmo quando pausado",
-    categoria: "Timer",
-    severidade: "Média",
-  },
-  {
-    id: 6,
-    titulo: "Formatos de data inválidos são aceitos (31/02/2024)",
-    categoria: "Validação",
-    severidade: "Alta",
-  },
-  {
-    id: 7,
-    titulo: "Data de expiração calculada errada (30, 31, 28 dias)",
-    categoria: "Cálculo",
-    severidade: "Média",
-  },
-  {
-    id: 8,
-    titulo: "Horário de verão não é considerado em cálculos",
-    categoria: "Timezone",
-    severidade: "Crítica",
-  },
-  {
-    id: 9,
-    titulo: "Permite datas anteriores a 1900 ou posteriores a 2100",
-    categoria: "Limite",
-    severidade: "Baixa",
-  },
-  {
-    id: 10,
-    titulo: "Relógio digital e analógico mostram horas diferentes",
-    categoria: "Timer",
-    severidade: "Média",
-  },
-];
-
 interface Evento {
   id: number;
   titulo: string;
@@ -306,7 +206,6 @@ export default function DataBugadaPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [dateInput, setDateInput] = useState("");
-  const [timeInput, setTimeInput] = useState("");
   const [dateTimeInput, setDateTimeInput] = useState("");
   const [difference, setDifference] = useState<number | null>(null);
   const [timezone, setTimezone] = useState("America/Sao_Paulo");
@@ -328,6 +227,7 @@ export default function DataBugadaPage() {
   // BUG #1: Permite datas no passado
   function isDateValid(date: Date): boolean {
     // BUG: Não verifica se é data futura para agendamentos
+    void date;
     return true;
   }
 
@@ -343,13 +243,6 @@ export default function DataBugadaPage() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
     setDifference(diffDays);
-  }
-
-  // BUG #3: Conversão de timezone bugada
-  function convertTimezone(date: Date, fromTz: string, toTz: string): Date {
-    // BUG: Não considera diferenças reais de fuso
-    const fakeOffset = Math.random() * 3;
-    return new Date(date.getTime() + fakeOffset * 60 * 60 * 1000);
   }
 
   // BUG #5: Timer bugado
@@ -413,12 +306,6 @@ export default function DataBugadaPage() {
     setExpirationDate(date);
   }
 
-  // BUG #9: Permite datas extremas
-  function isValidYearRange(date: Date): boolean {
-    // BUG: Permite qualquer ano
-    return true;
-  }
-
   // Adicionar evento (BUG #4: Dia da semana errado)
   function addEvent() {
     if (!newEventTitle || !newEventDate) return;
@@ -463,10 +350,7 @@ export default function DataBugadaPage() {
               </p>
             </div>
           </div>
-          <Badge variant="outline" className="gap-1">
-            <CalendarIcon className="size-3" />
-            {selectedDate?.toLocaleDateString('pt-BR')}
-          </Badge>
+          <div className="flex flex-wrap items-center gap-2"><SessionTracker playgroundId="datas" /><Badge variant="outline" className="gap-1"><CalendarIcon className="size-3" />{selectedDate?.toLocaleDateString('pt-BR')}</Badge></div>
         </div>
         <p className="text-sm text-off-white/60 max-w-xl">
           Teste funcionalidades de data, hora, fuso horário e calendário.

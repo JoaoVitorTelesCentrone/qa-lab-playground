@@ -109,7 +109,7 @@ export default async function BlogPostPage({ params }: Props) {
   const related = getRelatedPosts(slug, 2);
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
+    <div className="mx-auto max-w-2xl space-y-8 px-5 py-12 animate-fade-in sm:px-8 sm:py-16">
 
       <Link href="/blog" className="inline-flex items-center gap-1.5 text-xs text-[#8B949E] hover:text-mint transition-colors duration-150">
         <ArrowLeft className="size-3.5" />

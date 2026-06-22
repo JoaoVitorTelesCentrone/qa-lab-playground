@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import {
   Plus, Search, Download, Trash2, Edit2,
   TrendingDown, TrendingUp, Wallet, BarChart2,
   List, X, Tag, AlertTriangle, CheckCircle2, Info,
 } from "lucide-react";
+import { ChallengeBrief } from "@/components/challenge/challenge-brief";
 
 // ── Toast ──────────────────────────────────────────────────────────────────────
 
@@ -14,10 +15,10 @@ interface Toast { id: number; message: string; type: ToastType; }
 
 function useToast() {
   const [toasts, setToasts] = useState<Toast[]>([]);
-  let counter = 0;
+  const counter = useRef(0);
 
   const add = useCallback((message: string, type: ToastType = "success") => {
-    const id = Date.now() + counter++;
+    const id = Date.now() + counter.current++;
     setToasts(prev => [...prev, { id, message, type }]);
     setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3200);
   }, []);
@@ -413,14 +414,16 @@ export default function DespesasPage() {
   // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="mx-auto max-w-7xl space-y-6 px-4 py-8 animate-fade-in sm:px-6 lg:px-8">
+
+      <ChallengeBrief />
 
       {/* ── Header ──────────────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4 flex-wrap animate-slide-in-up">
         <div>
-          <h1 className="font-[family-name:var(--font-display)] text-4xl tracking-wider text-mint italic">
-            FLUX
-          </h1>
+          <h2 className="font-[family-name:var(--font-display)] text-4xl tracking-wider text-mint italic">
+            EXPENSEFLOW
+          </h2>
           <p className="text-xs text-muted-foreground">
             Controle de despesas · <span className="text-coral">dados em memória</span>, sem persistência
           </p>

@@ -1,33 +1,15 @@
-import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ProfileClient } from "@/components/perfil/profile-client";
+import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 
-export const metadata = { title: "Perfil — QA Lab Playground" };
+export const metadata = { title: "Perfil", robots: { index: false, follow: false } };
 
-export default async function PerfilPage() {
+export default async function ProfilePage() {
+  if (!isSupabaseConfigured()) redirect("/login");
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login?redirect=/perfil");
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
-
-  const { data: missions } = await supabase
-    .from("mission_progress")
-    .select("mission_id, completed_at")
-    .eq("user_id", user.id)
-    .eq("status", "completed")
-    .order("completed_at", { ascending: false });
-
-  return (
-    <ProfileClient
-      user={user}
-      profile={profile}
-      completedMissions={missions ?? []}
-    />
-  );
+  if (!user) redirect("/login?next=/perfil");
+  const { data: profile } = await supabase.from("profiles").select("full_name,username,bio,linkedin_url,role,plan").eq("id", user.id).maybeSingle();
+  return <ProfileClient email={user.email ?? ""} profile={profile} />;
 }
