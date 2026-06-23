@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Inter, JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
 import { FlaskConical, Linkedin } from "lucide-react";
-import { AccountNav } from "@/components/auth/account-nav";
-import { isSupabaseConfigured } from "@/lib/supabase/config";
 import "./globals.css";
 
 const display = Bebas_Neue({ weight: "400", variable: "--font-display", subsets: ["latin"], display: "swap" });
@@ -12,15 +10,15 @@ const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], 
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app"),
-  title: { default: "QA Lab Playground — Laboratório público de QA", template: "%s | QA Lab Playground" },
-  description: "Pratique investigação de bugs, análise de risco, BDD e pensamento crítico em produto.",
+  title: { default: "QA Lab Playground — ExpenseFlow Free Challenge", template: "%s | QA Lab Playground" },
+  description: "Treine teste exploratório, análise de risco e bug report em um sistema de reembolso com falhas intencionais.",
   openGraph: {
-    title: "QA Lab Playground — Laboratório público de QA",
-    description: "Playgrounds, missões e ferramentas para praticar qualidade de software.",
+    title: "QA Lab Playground — ExpenseFlow Free Challenge",
+    description: "Treine QA em sistemas quebrados de verdade.",
     type: "website",
     locale: "pt_BR",
   },
-  twitter: { card: "summary_large_image", title: "QA Lab Playground", description: "Qualidade se aprende praticando." },
+  twitter: { card: "summary_large_image", title: "QA Lab Playground", description: "Treine QA em sistemas quebrados de verdade." },
 };
 
 export const viewport: Viewport = { themeColor: "#101319", colorScheme: "dark" };
@@ -38,21 +36,21 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             </Link>
             <nav className="flex items-center gap-2" aria-label="Navegação principal">
               <div className="hidden items-center gap-1 lg:flex">
-                <Link href="/#playgrounds" className="rounded-lg px-3 py-2 text-xs font-semibold text-[#AAB2BC] transition hover:bg-white/5 hover:text-mint">Playgrounds</Link>
-                <Link href="/missoes" className="rounded-lg px-3 py-2 text-xs font-semibold text-[#AAB2BC] transition hover:bg-white/5 hover:text-mint">Missões</Link>
-                <Link href="/bdd" className="rounded-lg px-3 py-2 text-xs font-semibold text-[#AAB2BC] transition hover:bg-white/5 hover:text-mint">Gerador BDD</Link>
-                <Link href="/blog" className="rounded-lg px-3 py-2 text-xs font-semibold text-[#AAB2BC] transition hover:bg-white/5 hover:text-mint">Artigos</Link>
+                <Link href="/#como-funciona" className="rounded-lg px-3 py-2 text-xs font-semibold text-[#AAB2BC] transition hover:bg-white/5 hover:text-mint">Conteúdo</Link>
+                <Link href="/playground" className="rounded-lg px-3 py-2 text-xs font-semibold text-[#AAB2BC] transition hover:bg-white/5 hover:text-mint">Como funciona</Link>
+                <Link href="/playground/expenseflow" className="rounded-lg px-3 py-2 text-xs font-semibold text-[#AAB2BC] transition hover:bg-white/5 hover:text-mint">Abrir ExpenseFlow</Link>
+                <Link href="/waitlist" className="rounded-lg px-3 py-2 text-xs font-semibold text-[#AAB2BC] transition hover:bg-white/5 hover:text-mint">Próximos desafios</Link>
               </div>
               <a href="https://www.linkedin.com/company/qa-lab-oficial/" target="_blank" rel="noreferrer" className="hidden size-9 items-center justify-center rounded-lg border border-white/10 text-[#8B949E] transition hover:border-mint/30 hover:text-mint sm:flex" aria-label="QA Lab no LinkedIn"><Linkedin className="size-4" /></a>
-              <AccountNav configured={isSupabaseConfigured()} />
+              <Link href="/playground" className="inline-flex h-9 items-center rounded-lg bg-neon px-3 text-xs font-black text-[#101319]">Começar desafio</Link>
             </nav>
           </div>
         </header>
         <main>{children}</main>
         <footer className="border-t border-white/10">
           <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 text-xs text-[#69737E] sm:flex-row sm:items-center sm:justify-between sm:px-8">
-            <p>QA Lab Playground · Prática real para quem trabalha com qualidade.</p>
-            <div className="flex gap-4"><Link href="/blog" className="hover:text-mint">Artigos</Link><Link href="/missoes" className="hover:text-mint">Missões</Link><p>Gratuito. Conta opcional.</p></div>
+            <p>QA Lab — Qualidade não é fase. É cultura.</p>
+            <div className="flex flex-wrap gap-4"><Link href="/playground" className="hover:text-mint">Desafio gratuito</Link><Link href="/playground/template-bug-report" className="hover:text-mint">Template de bug report</Link><Link href="/waitlist" className="hover:text-mint">Próximos desafios</Link></div>
           </div>
         </footer>
       </body>

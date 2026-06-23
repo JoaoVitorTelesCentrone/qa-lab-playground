@@ -5,10 +5,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     { url: baseUrl, changeFrequency: "monthly", priority: 1 },
-    { url: `${baseUrl}/datas`, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${baseUrl}/despesas`, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${baseUrl}/bdd`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/missoes`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/playground`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${baseUrl}/playground/expenseflow`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${baseUrl}/playground/template-bug-report`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/playground/conclusao`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/waitlist`, changeFrequency: "monthly", priority: 0.7 },
   ];
 }

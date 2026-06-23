@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QA Lab — Carousel Paletas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0D0D0B; font-family: 'Space Grotesk', sans-serif; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { DesignCanvas, DCSection, DCArtboard } = window;
+
+/* ── SCALE ───────────────────────────────────────────────── */
+const S  = 360;
+const px = n => Math.round(n * S / 1080);
+
+/* ══════════════════════════════════════════════════════════
+   PALETAS
+   Cada paleta: { bg, ink, acc, dim, mid, ctaBg, ctaInk }
+══════════════════════════════════════════════════════════ */
+
+// A — Papel claro / Âmbar
+const PA = {
+  bg:     '#F0EBD8',
+  ink:    '#1C1A14',
+  acc:    '#C8962A',
+  dim:    '#E0D8C2',
+  mid:    '#C8BEA2',
+  ctaBg:  '#1C1A14',
+  ctaInk: '#F0EBD8',
+};
+
+// B — Navy profundo / Azul elétrico
+const PB = {
+  bg:     '#0B1120',
+  ink:    '#D4E4F8',
+  acc:    '#4E92F2',
+  dim:    '#121D34',
+  mid:    '#1C2C48',
+  ctaBg:  '#4E92F2',
+  ctaInk: '#0B1120',
+};
+
+// C — Grafite puro / Verde terminal
+const PC = {
+  bg:     '#111111',
+  ink:    '#E8E8E8',
+  acc:    '#28C86A',
+  dim:    '#1C1C1C',
+  mid:    '#282828',
+  ctaBg:  '#28C86A',
+  ctaInk: '#111111',
+};
+
+/* ── PRIMITIVOS PARAMETRIZADOS ───────────────────────────── */
+
+function PBrand({ p }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span style={{
+        fontFamily: 'Barlow Condensed, sans-serif',
+        fontWeight: 900,
+        fontSize: px(36),
+        letterSpacing: '0.07em',
+        color: p.acc,
+        lineHeight: 1,
+      }}>QA LAB</span>
+      <span style={{
+        fontFamily: 'Space Grotesk, sans-serif',
+        fontWeight: 400,
+        fontSize: px(20),
+        letterSpacing: '0.18em',
+        textTransform: 'uppercase',
+        color: p.ink,
+        opacity: 0.30,
+      }}>qalab.io</span>
+    </div>
+  );
+}
+
+function PShell({ children, p, overrideBg }) {
+  return (
+    <div style={{
+      width: S, height: S,
+      background: overrideBg || p.bg,
+      display: 'flex',
+      flexDirection: 'column',
+      padding: `${px(64)}px ${px(68)}px`,
+      overflow: 'hidden',
+      position: 'relative',
+    }}>
+      {children}
+    </div>
+  );
+}
+
+/* ── TEMPLATE A · LISTA NUMERADA ────────────────────────── */
+
+function LCover({ p, count, topic, headline }) {
+  return (
+    <PShell p={p}>
+      <PBrand p={p}/>
+      <div style={{
+        position: 'absolute',
+        right: px(-10), top: px(56),
+        fontFamily: 'Barlow Condensed, sans-serif',
+        fontWeight: 900,
+        fontSize: px(320),
+        lineHeight: 1,
+        color: p.acc,
+        opacity: 0.08,
+        letterSpacing: '-0.05em',
+        userSelect: 'none',
+        pointerEvents: 'none',
+      }}>{count}</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: px(20) }}>
+        <div style={{
+          color: p.acc,
+          fontFamily: 'Space Grotesk, sans-serif',
+          fontWeight: 500,
+          fontSize: px(20),
+          letterSpacing: '0.24em',
+          textTransform: 'uppercase',
+        }}>{topic}</div>
+        <div style={{
+          color: p.ink,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900,
+          fontSize: px(106),
+          lineHeight: 0.87,
+          textTransform: 'uppercase',
+          letterSpacing: '-0.01em',
+          whiteSpace: 'pre-line',
+        }}>{headline}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(18), marginTop: px(8) }}>
+          <div style={{ width: px(44), height: px(3), background: p.acc }}></div>
+          <div style={{ color: p.ink, fontSize: px(20), opacity: 0.35, letterSpacing: '0.1em' }}>Arraste para ver →</div>
+        </div>
+      </div>
+    </PShell>
+  );
+}
+
+function LSlide({ p, num, title, body }) {
+  return (
+    <PShell p={p}>
+      <PBrand p={p}/>
+      <div style={{
+        position: 'absolute',
+        right: px(24), bottom: px(28),
+        fontFamily: 'Barlow Condensed, sans-serif',
+        fontWeight: 900,
+        fontSize: px(280),
+        lineHeight: 1,
+        color: p.acc,
+        opacity: 0.07,
+        letterSpacing: '-0.04em',
+        userSelect: 'none',
+        pointerEvents: 'none',
+      }}>{String(num).padStart(2,'0')}</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(26) }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(18) }}>
+          <div style={{
+            width: px(48), height: px(48),
+            border: `${px(3)}px solid ${p.acc}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <span style={{
+              color: p.acc,
+              fontFamily: 'Barlow Condensed, sans-serif',
+              fontWeight: 900, fontSize: px(28), lineHeight: 1,
+            }}>{String(num).padStart(2,'0')}</span>
+          </div>
+          <div style={{ flex: 1, height: px(2), background: p.mid }}></div>
+        </div>
+        <div style={{
+          color: p.ink,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900, fontSize: px(80),
+          lineHeight: 0.9,
+          textTransform: 'uppercase',
+          letterSpacing: '0.01em',
+        }}>{title}</div>
+        <div style={{
+          color: p.ink,
+          fontFamily: 'Space Grotesk, sans-serif',
+          fontSize: px(26), lineHeight: 1.65, opacity: 0.56,
+        }}>{body}</div>
+      </div>
+    </PShell>
+  );
+}
+
+/* ── TEMPLATE B · COMPARAÇÃO ─────────────────────────────── */
+
+function CCover({ p }) {
+  return (
+    <PShell p={p}>
+      <PBrand p={p}/>
+      <div style={{ height: px(3), background: p.acc, margin: `${px(30)}px 0 ${px(26)}px` }}></div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(20) }}>
+        <div style={{ color: p.acc, fontSize: px(20), letterSpacing: '0.26em', textTransform: 'uppercase', fontWeight: 500 }}>
+          Você sabe a diferença?
+        </div>
+        <div style={{
+          color: p.ink,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900, fontSize: px(92),
+          lineHeight: 0.88, textTransform: 'uppercase',
+        }}>QA<br/>≠<br/>TESTER</div>
+        <div style={{ color: p.ink, fontSize: px(24), lineHeight: 1.6, opacity: 0.46, marginTop: px(6) }}>
+          A maioria das empresas ainda<br/>confunde os dois. A diferença<br/>vale cargo e salário.
+        </div>
+        <div style={{ color: p.ink, fontSize: px(19), opacity: 0.28, letterSpacing: '0.1em' }}>Arraste para ver →</div>
+      </div>
+    </PShell>
+  );
+}
+
+function CSlide({ p, label, left, right }) {
+  return (
+    <PShell p={p}>
+      <PBrand p={p}/>
+      <div style={{
+        color: p.acc, fontFamily: 'Space Grotesk, sans-serif',
+        fontWeight: 500, fontSize: px(17), letterSpacing: '0.22em',
+        textTransform: 'uppercase', marginTop: px(20), marginBottom: px(18),
+      }}>{label}</div>
+      <div style={{ display: 'flex', flex: 1, gap: px(16) }}>
+        <div style={{
+          flex: 1, border: `${px(2)}px solid ${p.mid}`,
+          padding: `${px(22)}px ${px(20)}px`,
+          display: 'flex', flexDirection: 'column', gap: px(12),
+        }}>
+          <div style={{ color: p.ink, fontWeight: 600, fontSize: px(17), letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.32 }}>Tester</div>
+          <div style={{ color: p.ink, fontSize: px(22), lineHeight: 1.55, opacity: 0.62, flex: 1 }}>{left}</div>
+        </div>
+        <div style={{
+          flex: 1, border: `${px(2)}px solid ${p.acc}`,
+          padding: `${px(22)}px ${px(20)}px`,
+          display: 'flex', flexDirection: 'column', gap: px(12),
+        }}>
+          <div style={{ color: p.acc, fontWeight: 600, fontSize: px(17), letterSpacing: '0.12em', textTransform: 'uppercase' }}>QA Eng.</div>
+          <div style={{ color: p.ink, fontSize: px(22), lineHeight: 1.55, flex: 1 }}>{right}</div>
+        </div>
+      </div>
+    </PShell>
+  );
+}
+
+/* ── TEMPLATE C · CHECKLIST ──────────────────────────────── */
+
+function KCover({ p }) {
+  return (
+    <PShell p={p}>
+      <div style={{ position: 'absolute', left: 0, top: 0, width: px(8), height: '100%', background: p.acc }}></div>
+      <PBrand p={p}/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: px(20) }}>
+        <div style={{ color: p.acc, fontSize: px(20), letterSpacing: '0.24em', textTransform: 'uppercase', fontWeight: 500 }}>Checklist completo</div>
+        <div style={{
+          color: p.ink,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900, fontSize: px(96),
+          lineHeight: 0.88, textTransform: 'uppercase',
+        }}>PIPELINE<br/>DE QA<br/>DO ZERO</div>
+        <div style={{ color: p.ink, fontSize: px(22), opacity: 0.4, marginBottom: px(4) }}>6 passos que a maioria pula</div>
+      </div>
+    </PShell>
+  );
+}
+
+function KSlide({ p, step, total, title, items }) {
+  return (
+    <PShell p={p}>
+      <div style={{ position: 'absolute', left: 0, top: 0, width: px(8), height: '100%', background: p.mid }}></div>
+      <div style={{ position: 'absolute', left: 0, top: 0, width: px(8), height: `${(step/total)*100}%`, background: p.acc }}></div>
+      <PBrand p={p}/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(20) }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: px(10) }}>
+          <span style={{ color: p.acc, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(56), lineHeight: 1 }}>{String(step).padStart(2,'0')}</span>
+          <span style={{ color: p.ink, fontFamily: 'Barlow Condensed, sans-serif', fontSize: px(28), opacity: 0.18 }}>/ {String(total).padStart(2,'0')}</span>
+        </div>
+        <div style={{ color: p.ink, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(68), lineHeight: 0.9, textTransform: 'uppercase' }}>{title}</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: px(14) }}>
+          {items.map((item, i) => (
+            <div key={i} style={{ display: 'flex', gap: px(14), alignItems: 'flex-start' }}>
+              <div style={{ width: px(20), height: px(20), border: `${px(2)}px solid ${p.acc}`, flexShrink: 0, marginTop: px(2) }}></div>
+              <div style={{ color: p.ink, fontSize: px(23), lineHeight: 1.45, opacity: 0.58 }}>{item}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </PShell>
+  );
+}
+
+/* ── CTA GENÉRICO ────────────────────────────────────────── */
+function PCTA({ p, lines, url = 'qalab.io' }) {
+  return (
+    <PShell p={p} overrideBg={p.ctaBg}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(36), letterSpacing: '0.07em', color: p.ctaInk, lineHeight: 1 }}>QA LAB</span>
+        <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 400, fontSize: px(20), letterSpacing: '0.18em', textTransform: 'uppercase', color: p.ctaInk, opacity: 0.35 }}>qalab.io</span>
+      </div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(28) }}>
+        <div style={{
+          color: p.ctaInk,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900, fontSize: px(100),
+          lineHeight: 0.88, textTransform: 'uppercase', letterSpacing: '-0.01em',
+        }}>{lines.map((l,i) => <span key={i}>{l}<br/></span>)}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(20), marginTop: px(4) }}>
+          <div style={{ width: px(40), height: px(4), background: p.ctaInk, opacity: 0.3 }}></div>
+          <div style={{ color: p.ctaInk, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: px(22), letterSpacing: '0.16em', textTransform: 'uppercase' }}>{url}</div>
+        </div>
+      </div>
+    </PShell>
+  );
+}
+
+/* ── APP ─────────────────────────────────────────────────── */
+function App() {
+
+  // Conteúdo reutilizado
+  const listData = [
+    { num: 1, title: 'UNITÁRIO',    body: 'Testa uma função isolada. Rápido, determinístico, sem deps externas.' },
+    { num: 2, title: 'INTEGRAÇÃO',  body: 'Verifica se módulos diferentes funcionam juntos — BD, APIs, serviços.' },
+    { num: 3, title: 'END-TO-END',  body: 'Simula o fluxo real do usuário: do login ao checkout, sem atalhos.' },
+  ];
+
+  const cmpData = [
+    { label: 'Foco principal',
+      left: 'Encontrar bugs antes de entregar.',
+      right: 'Evitar que bugs existam desde o início.' },
+    { label: 'Momento de atuação',
+      left: 'Age no final do ciclo — detecta.',
+      right: 'Age desde o planejamento — previne.' },
+  ];
+
+  const chkData = [
+    { step: 1, total: 6, title: 'DEFINE O ESCOPO',   items: ['Mapeie os fluxos críticos','Liste dependências externas','Delimite o que não será testado'] },
+    { step: 2, total: 6, title: 'ESCREVE OS CASOS',  items: ['Cenários felizes primeiro','Edge cases logo depois','Dados inválidos e limites'] },
+  ];
+
+  return (
+    <DesignCanvas>
+
+      {/* ── PALETA A · PAPEL CLARO ─────────────────────── */}
+      <DCSection id="pa-lista" title="Paleta A — Papel / Âmbar · Lista Numerada">
+        <DCArtboard id="pa-l-cv" label="Capa" width={S} height={S}>
+          <LCover p={PA} count="5" topic="Tipos de Teste" headline={"QUE TODO\nDEV\nIGNORA"}/>
+        </DCArtboard>
+        {listData.map(d => (
+          <DCArtboard key={d.num} id={`pa-l-s${d.num}`} label={`Slide ${String(d.num).padStart(2,'0')}`} width={S} height={S}>
+            <LSlide p={PA} {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="pa-l-cta" label="CTA" width={S} height={S}>
+          <PCTA p={PA} lines={['DOMINA','OS TESTES.','SHIP SEM','MEDO.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="pa-cmp" title="Paleta A — Papel / Âmbar · Comparação">
+        <DCArtboard id="pa-c-cv" label="Capa" width={S} height={S}>
+          <CCover p={PA}/>
+        </DCArtboard>
+        {cmpData.map((d, i) => (
+          <DCArtboard key={i} id={`pa-c-s${i+1}`} label={`Slide ${String(i+1).padStart(2,'0')}`} width={S} height={S}>
+            <CSlide p={PA} {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="pa-c-cta" label="CTA" width={S} height={S}>
+          <PCTA p={PA} lines={['VIRE O QA','QUE SUA','SQUAD','PRECISA.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="pa-chk" title="Paleta A — Papel / Âmbar · Checklist">
+        <DCArtboard id="pa-k-cv" label="Capa" width={S} height={S}>
+          <KCover p={PA}/>
+        </DCArtboard>
+        {chkData.map((d,i) => (
+          <DCArtboard key={i} id={`pa-k-s${d.step}`} label={`Passo ${String(d.step).padStart(2,'0')}`} width={S} height={S}>
+            <KSlide p={PA} {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="pa-k-cta" label="CTA" width={S} height={S}>
+          <PCTA p={PA} lines={['PIPELINE','CERTO =','ZERO','SURPRESA.']} url="qalab.io/pipeline"/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* ── PALETA B · NAVY / AZUL ─────────────────────── */}
+      <DCSection id="pb-lista" title="Paleta B — Navy / Azul · Lista Numerada">
+        <DCArtboard id="pb-l-cv" label="Capa" width={S} height={S}>
+          <LCover p={PB} count="5" topic="Tipos de Teste" headline={"QUE TODO\nDEV\nIGNORA"}/>
+        </DCArtboard>
+        {listData.map(d => (
+          <DCArtboard key={d.num} id={`pb-l-s${d.num}`} label={`Slide ${String(d.num).padStart(2,'0')}`} width={S} height={S}>
+            <LSlide p={PB} {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="pb-l-cta" label="CTA" width={S} height={S}>
+          <PCTA p={PB} lines={['DOMINA','OS TESTES.','SHIP SEM','MEDO.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="pb-cmp" title="Paleta B — Navy / Azul · Comparação">
+        <DCArtboard id="pb-c-cv" label="Capa" width={S} height={S}>
+          <CCover p={PB}/>
+        </DCArtboard>
+        {cmpData.map((d, i) => (
+          <DCArtboard key={i} id={`pb-c-s${i+1}`} label={`Slide ${String(i+1).padStart(2,'0')}`} width={S} height={S}>
+            <CSlide p={PB} {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="pb-c-cta" label="CTA" width={S} height={S}>
+          <PCTA p={PB} lines={['VIRE O QA','QUE SUA','SQUAD','PRECISA.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="pb-chk" title="Paleta B — Navy / Azul · Checklist">
+        <DCArtboard id="pb-k-cv" label="Capa" width={S} height={S}>
+          <KCover p={PB}/>
+        </DCArtboard>
+        {chkData.map((d,i) => (
+          <DCArtboard key={i} id={`pb-k-s${d.step}`} label={`Passo ${String(d.step).padStart(2,'0')}`} width={S} height={S}>
+            <KSlide p={PB} {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="pb-k-cta" label="CTA" width={S} height={S}>
+          <PCTA p={PB} lines={['PIPELINE','CERTO =','ZERO','SURPRESA.']} url="qalab.io/pipeline"/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* ── PALETA C · GRAFITE / VERDE TERMINAL ─────────── */}
+      <DCSection id="pc-lista" title="Paleta C — Grafite / Verde Terminal · Lista Numerada">
+        <DCArtboard id="pc-l-cv" label="Capa" width={S} height={S}>
+          <LCover p={PC} count="5" topic="Tipos de Teste" headline={"QUE TODO\nDEV\nIGNORA"}/>
+        </DCArtboard>
+        {listData.map(d => (
+          <DCArtboard key={d.num} id={`pc-l-s${d.num}`} label={`Slide ${String(d.num).padStart(2,'0')}`} width={S} height={S}>
+            <LSlide p={PC} {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="pc-l-cta" label="CTA" width={S} height={S}>
+          <PCTA p={PC} lines={['DOMINA','OS TESTES.','SHIP SEM','MEDO.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="pc-cmp" title="Paleta C — Grafite / Verde Terminal · Comparação">
+        <DCArtboard id="pc-c-cv" label="Capa" width={S} height={S}>
+          <CCover p={PC}/>
+        </DCArtboard>
+        {cmpData.map((d, i) => (
+          <DCArtboard key={i} id={`pc-c-s${i+1}`} label={`Slide ${String(i+1).padStart(2,'0')}`} width={S} height={S}>
+            <CSlide p={PC} {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="pc-c-cta" label="CTA" width={S} height={S}>
+          <PCTA p={PC} lines={['VIRE O QA','QUE SUA','SQUAD','PRECISA.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="pc-chk" title="Paleta C — Grafite / Verde Terminal · Checklist">
+        <DCArtboard id="pc-k-cv" label="Capa" width={S} height={S}>
+          <KCover p={PC}/>
+        </DCArtboard>
+        {chkData.map((d,i) => (
+          <DCArtboard key={i} id={`pc-k-s${d.step}`} label={`Passo ${String(d.step).padStart(2,'0')}`} width={S} height={S}>
+            <KSlide p={PC} {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="pc-k-cta" label="CTA" width={S} height={S}>
+          <PCTA p={PC} lines={['PIPELINE','CERTO =','ZERO','SURPRESA.']} url="qalab.io/pipeline"/>
+        </DCArtboard>
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>

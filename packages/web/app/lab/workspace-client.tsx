@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Archive, ArrowRight, BookOpen, CheckCircle2, FileText, FolderKanban, Heart, LogOut, Plus, Sparkles, Target, Trash2 } from "lucide-react";
+import { Archive, ArrowRight, BookOpen, CheckCircle2, Code2, FileText, FolderKanban, Heart, LogOut, Plus, Sparkles, Target, Trash2 } from "lucide-react";
 import { archiveProject, createDraft, createProject, deleteDraft, signOut, syncLocalProgress, toggleFavorite } from "./actions";
 
 type Project = { id: string; title: string; description: string; status: string; color: string; updated_at: string };
@@ -58,7 +58,7 @@ export function WorkspaceClient({ name, email, plan, projects, drafts, favorites
 
       <section className="mt-10"><div className="flex items-end justify-between"><div><h2 className="text-xl font-black text-off-white">Acesso rápido</h2><p className="mt-1 text-sm text-[#8B949E]">Favorite os recursos que mais usa.</p></div><span className="text-xs text-[#69737E]">{email}</span></div><div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{catalog.map((item) => { const active = favoriteIds.has(`${item.type}:${item.id}`); return <article key={item.id} className="rounded-xl border border-white/10 bg-[#171B21] p-4"><form action={toggleFavorite.bind(null, item.type, item.id, item.title, item.href)} className="flex justify-end"><button aria-label={`${active ? "Desfavoritar" : "Favoritar"} ${item.title}`}><Heart className={`size-4 ${active ? "fill-coral text-coral" : "text-[#69737E] hover:text-coral"}`} /></button></form><Link href={item.href} className="group mt-6 flex items-end justify-between"><div><p className="text-sm font-bold text-off-white">{item.title}</p><p className="mt-1 text-[10px] uppercase text-[#69737E]">{item.type}</p></div><ArrowRight className="size-4 text-[#69737E] group-hover:translate-x-1 group-hover:text-mint" /></Link></article>; })}</div></section>
 
-      <section className="mt-10 rounded-2xl border border-neon/20 bg-neon/[0.05] p-6"><Sparkles className="size-5 text-neon" /><h2 className="mt-4 text-lg font-bold text-off-white">Test Design Studio</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#8B949E]">O próximo produto do Workspace reunirá riscos, cenários, planos e exportações em um único fluxo. Sua base de projetos já está preparada para recebê-lo.</p></section>
+      <div className="mt-10 grid gap-4 md:grid-cols-2"><Link href="/lab/studio" className="group block rounded-2xl border border-neon/20 bg-neon/[0.05] p-6 transition hover:border-neon/40"><div className="flex items-start justify-between"><Sparkles className="size-5 text-neon" /><ArrowRight className="size-4 text-[#69737E] transition group-hover:translate-x-1 group-hover:text-neon" /></div><h2 className="mt-4 text-lg font-bold text-off-white">Test Design Studio</h2><p className="mt-2 text-sm leading-6 text-[#8B949E]">Estruture requisitos, riscos, casos, plano de teste e rastreabilidade.</p></Link><Link href="/api-playground" className="group block rounded-2xl border border-mint/20 bg-mint/[0.04] p-6 transition hover:border-mint/40"><div className="flex items-start justify-between"><Code2 className="size-5 text-mint" /><ArrowRight className="size-4 text-[#69737E] transition group-hover:translate-x-1 group-hover:text-mint" /></div><h2 className="mt-4 text-lg font-bold text-off-white">API Lab</h2><p className="mt-2 text-sm leading-6 text-[#8B949E]">Investigue respostas e transforme falhas em bug reports do projeto.</p></Link></div>
     </div>
   );
 }

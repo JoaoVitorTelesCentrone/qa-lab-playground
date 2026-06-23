@@ -1,48 +1,21 @@
-# QA Lab Playground
+# QA Lab Playground — ExpenseFlow Free Challenge
 
-Laboratório público e gratuito para profissionais de QA praticarem investigação de bugs, análise de risco, escrita de cenários e pensamento crítico em produto.
+MVP público e gratuito para profissionais de QA praticarem teste exploratório, análise de risco e documentação de bugs em um sistema de reembolso com falhas intencionais.
 
-> Qualidade se aprende praticando.
+> Treine QA em sistemas quebrados de verdade.
 
-## Produto público
+## Jornada principal
 
-- `/` — apresentação da plataforma e catálogo
-- `/datas` — Datas Bugadas, com falhas intencionais de cálculo, formato e timezone
-- `/despesas` — ExpenseFlow, desafio exploratório em um fluxo financeiro
-- `/bdd` — gerador de cenários Gherkin com cópia e exportação `.feature`
-- `/missoes` — desafios guiados com progresso salvo no navegador
-- `/blog` — artigos gratuitos sobre qualidade de software
+- `/` — landing page do desafio
+- `/playground` — briefing, regras de negócio e missão
+- `/playground/expenseflow` — sistema fake ExpenseFlow
+- `/playground/template-bug-report` — visualização e download do template
+- `/playground/conclusao` — checklist, compartilhamento e próximos desafios
+- `/waitlist` — conteúdo dos produtos e inscrição opcional para novidades
 
-Não há cadastro ou paywall obrigatório. Os recursos free funcionam no navegador; uma conta opcional ativa o QA Lab Workspace com projetos, rascunhos, favoritos e sincronização do progresso.
+O sistema usa dados mockados e `localStorage`. Não exige login, backend, banco de dados ou pagamento. O gabarito interno está em `docs/QA_LAB_FREE_CHALLENGE_GABARITO.md` e não é exposto na interface.
 
-## QA Lab Workspace
-
-- `/login` e `/cadastro` — autenticação por e-mail/senha ou Google
-- `/lab` — projetos, rascunhos, favoritos e progresso sincronizado
-- `/perfil` — perfil profissional e gestão da conta
-- Recuperação de senha e exclusão permanente de conta
-- Plano Free limitado a três projetos ativos; estrutura preparada para Pro e Team
-
-O Workspace usa Supabase. Aplique `supabase/migrations/202606220001_workspace.sql` pelo SQL Editor ou CLI e configure as variáveis de `.env.example`. Sem essas variáveis, o produto free continua funcionando normalmente.
-
-No painel do Supabase, habilite o provedor Google se desejar OAuth e adicione estas URLs permitidas:
-
-```text
-http://localhost:3000/auth/callback
-https://seu-dominio.com.br/auth/callback
-```
-
-## Stack
-
-- Next.js 16 e React 19
-- TypeScript
-- Tailwind CSS 4
-- Bun workspaces
-- Vercel
-
-O monorepo contém módulos experimentais, API Hono e integrações Supabase legadas. Eles não fazem parte da navegação pública desta versão.
-
-## Desenvolvimento
+## Rodar localmente
 
 Requisitos: Bun 1.x ou Node.js 20+.
 
@@ -60,20 +33,25 @@ bun run lint
 bun run build
 ```
 
-## Publicação na Vercel
+## Variáveis opcionais
 
-Importe o repositório e configure o Root Directory como `packages/web`. O `vercel.json` instala as dependências a partir da raiz do monorepo.
-
-Variáveis:
+Copie `packages/web/.env.example` para `packages/web/.env.local` quando necessário.
 
 ```text
 NEXT_PUBLIC_SITE_URL=https://seu-dominio.com.br
-NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-chave-publica
+NEXT_PUBLIC_LEAD_FORM_URL=https://seu-formulario-de-leads.example
 ```
 
-Somente `NEXT_PUBLIC_SITE_URL` é opcional. As variáveis Supabase ativam o Workspace.
+Sem `NEXT_PUBLIC_LEAD_FORM_URL`, a conclusão apenas informa que o cadastro estará disponível em breve.
 
-## Próxima fase
+## Deploy na Vercel
 
-A evolução planejada é uma API intencionalmente bugada dentro do próprio Next.js, permitindo práticas com payloads, contratos, status HTTP e automação via Postman, Cypress ou Playwright — ainda mantendo o núcleo gratuito.
+1. Importe o repositório.
+2. Configure `packages/web` como Root Directory.
+3. Use o framework Next.js.
+4. Adicione somente as variáveis opcionais desejadas.
+5. Publique. Nenhum serviço externo é obrigatório.
+
+## Bugs plantados
+
+O desafio possui exatamente sete falhas intencionais: valor negativo, título em branco, autoaprovação, filtro de status, divergência de relatório, data futura e comprovante inválido. Os detalhes de reprodução ficam apenas no gabarito interno.

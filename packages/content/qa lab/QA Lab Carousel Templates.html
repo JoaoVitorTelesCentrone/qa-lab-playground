@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QA Lab — Carousel Templates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0D0D0B; font-family: 'Space Grotesk', sans-serif; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { DesignCanvas, DCSection, DCArtboard } = window;
+
+/* ── TOKENS ─────────────────────────────────────────────── */
+const BG    = '#111110';
+const AMBER = '#C8962A';
+const CREAM = '#F3EDD8';
+const DIM   = '#1E1E1A';
+const MID   = '#2C2C24';
+
+/* ── SCALE: slides at 360px = 1/3 of 1080px ─────────────── */
+const S  = 360;
+const sc = S / 1080;
+const px = n => Math.round(n * sc);
+
+/* ── BRAND STAMP ─────────────────────────────────────────── */
+function Brand({ dark = false }) {
+  const fg = dark ? BG : CREAM;
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span style={{
+        fontFamily: 'Barlow Condensed, sans-serif',
+        fontWeight: 900,
+        fontSize: px(36),
+        letterSpacing: '0.07em',
+        color: AMBER,
+        lineHeight: 1,
+      }}>QA LAB</span>
+      <span style={{
+        fontFamily: 'Space Grotesk, sans-serif',
+        fontWeight: 400,
+        fontSize: px(20),
+        letterSpacing: '0.18em',
+        textTransform: 'uppercase',
+        color: fg,
+        opacity: 0.32,
+      }}>qalab.io</span>
+    </div>
+  );
+}
+
+/* ── SLIDE SHELL ──────────────────────────────────────────── */
+function Shell({ children, bg = BG, pad = true }) {
+  return (
+    <div style={{
+      width: S, height: S,
+      background: bg,
+      display: 'flex',
+      flexDirection: 'column',
+      padding: pad ? `${px(64)}px ${px(68)}px` : 0,
+      overflow: 'hidden',
+      position: 'relative',
+    }}>
+      {children}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   TEMPLATE 01 — LISTA NUMERADA
+   "5 Tipos de Teste que Todo Dev Ignora"
+══════════════════════════════════════════════════════════ */
+
+function T1Cover() {
+  return (
+    <Shell>
+      <Brand/>
+      {/* Ghost number */}
+      <div style={{
+        position: 'absolute',
+        right: px(-10),
+        top: px(60),
+        fontFamily: 'Barlow Condensed, sans-serif',
+        fontWeight: 900,
+        fontSize: px(320),
+        lineHeight: 1,
+        color: AMBER,
+        opacity: 0.07,
+        letterSpacing: '-0.05em',
+        userSelect: 'none',
+        pointerEvents: 'none',
+      }}>5</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: px(20) }}>
+        <div style={{
+          color: AMBER,
+          fontFamily: 'Space Grotesk, sans-serif',
+          fontWeight: 500,
+          fontSize: px(22),
+          letterSpacing: '0.24em',
+          textTransform: 'uppercase',
+        }}>Tipos de Teste</div>
+        <div style={{
+          color: CREAM,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900,
+          fontSize: px(108),
+          lineHeight: 0.87,
+          textTransform: 'uppercase',
+          letterSpacing: '-0.01em',
+        }}>QUE TODO<br/>DEV<br/>IGNORA</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(18), marginTop: px(8) }}>
+          <div style={{ width: px(44), height: px(3), background: AMBER }}></div>
+          <div style={{ color: CREAM, fontSize: px(20), opacity: 0.38, letterSpacing: '0.1em' }}>
+            Arraste para ver →
+          </div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+function T1Slide({ num, title, body }) {
+  return (
+    <Shell>
+      <Brand/>
+      {/* Ghost number bg */}
+      <div style={{
+        position: 'absolute',
+        right: px(28),
+        bottom: px(32),
+        fontFamily: 'Barlow Condensed, sans-serif',
+        fontWeight: 900,
+        fontSize: px(280),
+        lineHeight: 1,
+        color: AMBER,
+        opacity: 0.06,
+        letterSpacing: '-0.04em',
+        userSelect: 'none',
+        pointerEvents: 'none',
+      }}>{String(num).padStart(2,'0')}</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(28) }}>
+        {/* Number badge */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(20) }}>
+          <div style={{
+            width: px(48), height: px(48),
+            border: `${px(3)}px solid ${AMBER}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <span style={{
+              color: AMBER,
+              fontFamily: 'Barlow Condensed, sans-serif',
+              fontWeight: 900,
+              fontSize: px(28),
+              lineHeight: 1,
+            }}>{String(num).padStart(2,'0')}</span>
+          </div>
+          <div style={{ flex: 1, height: px(2), background: MID }}></div>
+        </div>
+        {/* Title */}
+        <div style={{
+          color: CREAM,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900,
+          fontSize: px(80),
+          lineHeight: 0.9,
+          textTransform: 'uppercase',
+          letterSpacing: '0.01em',
+        }}>{title}</div>
+        {/* Body */}
+        <div style={{
+          color: CREAM,
+          fontFamily: 'Space Grotesk, sans-serif',
+          fontWeight: 400,
+          fontSize: px(26),
+          lineHeight: 1.65,
+          opacity: 0.55,
+        }}>{body}</div>
+      </div>
+    </Shell>
+  );
+}
+
+function T1CTA() {
+  return (
+    <Shell bg={AMBER}>
+      <Brand dark/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(28) }}>
+        <div style={{
+          color: BG,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900,
+          fontSize: px(100),
+          lineHeight: 0.88,
+          textTransform: 'uppercase',
+          letterSpacing: '-0.01em',
+        }}>DOMINA<br/>OS TESTES.<br/>SHIP SEM<br/>MEDO.</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(20), marginTop: px(8) }}>
+          <div style={{ width: px(40), height: px(4), background: BG, opacity: 0.35 }}></div>
+          <div style={{
+            color: BG,
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontWeight: 600,
+            fontSize: px(22),
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+          }}>qalab.io</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   TEMPLATE 02 — COMPARAÇÃO
+   "QA vs. Tester: a diferença real"
+══════════════════════════════════════════════════════════ */
+
+function T2Cover() {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ height: px(3), background: AMBER, margin: `${px(32)}px 0 ${px(28)}px` }}></div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(22) }}>
+        <div style={{
+          color: AMBER,
+          fontFamily: 'Space Grotesk, sans-serif',
+          fontWeight: 500,
+          fontSize: px(20),
+          letterSpacing: '0.26em',
+          textTransform: 'uppercase',
+        }}>Você sabe a diferença?</div>
+        <div style={{
+          color: CREAM,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900,
+          fontSize: px(88),
+          lineHeight: 0.88,
+          textTransform: 'uppercase',
+        }}>QA<br/>≠<br/>TESTER</div>
+        <div style={{
+          color: CREAM,
+          fontFamily: 'Space Grotesk, sans-serif',
+          fontSize: px(24),
+          lineHeight: 1.6,
+          opacity: 0.48,
+          marginTop: px(8),
+        }}>A maioria das empresas ainda<br/>confunde os dois. A diferença<br/>vale cargo e salário.</div>
+        <div style={{ color: CREAM, fontSize: px(20), opacity: 0.3, letterSpacing: '0.1em' }}>
+          Arraste para ver →
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+function T2Slide({ label, left, right }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{
+        color: AMBER,
+        fontFamily: 'Space Grotesk, sans-serif',
+        fontWeight: 500,
+        fontSize: px(18),
+        letterSpacing: '0.22em',
+        textTransform: 'uppercase',
+        marginTop: px(22),
+        marginBottom: px(20),
+      }}>{label}</div>
+      <div style={{ display: 'flex', flex: 1, gap: px(18) }}>
+        {/* Tester */}
+        <div style={{
+          flex: 1,
+          border: `${px(2)}px solid ${MID}`,
+          padding: `${px(24)}px ${px(22)}px`,
+          display: 'flex', flexDirection: 'column', gap: px(14),
+        }}>
+          <div style={{
+            color: CREAM,
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontWeight: 600,
+            fontSize: px(18),
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            opacity: 0.35,
+          }}>Tester</div>
+          <div style={{
+            color: CREAM,
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontSize: px(23),
+            lineHeight: 1.55,
+            opacity: 0.7,
+            flex: 1,
+          }}>{left}</div>
+        </div>
+        {/* QA */}
+        <div style={{
+          flex: 1,
+          border: `${px(2)}px solid ${AMBER}`,
+          padding: `${px(24)}px ${px(22)}px`,
+          display: 'flex', flexDirection: 'column', gap: px(14),
+        }}>
+          <div style={{
+            color: AMBER,
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontWeight: 600,
+            fontSize: px(18),
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+          }}>QA Eng.</div>
+          <div style={{
+            color: CREAM,
+            fontFamily: 'Space Grotesk, sans-serif',
+            fontSize: px(23),
+            lineHeight: 1.55,
+            flex: 1,
+          }}>{right}</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+function T2CTA() {
+  return (
+    <Shell>
+      <Brand/>
+      {/* Amber accent bar left */}
+      <div style={{
+        position: 'absolute',
+        left: 0, top: 0,
+        width: px(8), height: '100%',
+        background: AMBER,
+      }}></div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(28), paddingLeft: px(20) }}>
+        <div style={{
+          color: CREAM,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900,
+          fontSize: px(86),
+          lineHeight: 0.9,
+          textTransform: 'uppercase',
+        }}>VIRE O QA<br/>QUE SUA<br/>SQUAD<br/>PRECISA.</div>
+        <div style={{
+          display: 'inline-flex',
+          padding: `${px(16)}px ${px(28)}px`,
+          background: AMBER,
+          color: BG,
+          fontFamily: 'Space Grotesk, sans-serif',
+          fontWeight: 700,
+          fontSize: px(20),
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          alignSelf: 'flex-start',
+        }}>Começar agora →</div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   TEMPLATE 03 — CHECKLIST / PROCESSO
+   "Pipeline de QA do Zero"
+══════════════════════════════════════════════════════════ */
+
+function T3Cover() {
+  return (
+    <Shell>
+      {/* Left progress bar bg */}
+      <div style={{
+        position: 'absolute', left: 0, top: 0,
+        width: px(8), height: '100%',
+        background: AMBER, opacity: 0.15,
+      }}></div>
+      <div style={{
+        position: 'absolute', left: 0, top: 0,
+        width: px(8), height: '100%',
+        background: AMBER,
+      }}></div>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: px(20) }}>
+        <div style={{
+          color: AMBER,
+          fontFamily: 'Space Grotesk, sans-serif',
+          fontWeight: 500,
+          fontSize: px(20),
+          letterSpacing: '0.24em',
+          textTransform: 'uppercase',
+        }}>Checklist completo</div>
+        <div style={{
+          color: CREAM,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900,
+          fontSize: px(96),
+          lineHeight: 0.88,
+          textTransform: 'uppercase',
+        }}>PIPELINE<br/>DE QA<br/>DO ZERO</div>
+        <div style={{
+          color: CREAM,
+          fontFamily: 'Space Grotesk, sans-serif',
+          fontSize: px(22),
+          opacity: 0.4,
+          marginBottom: px(4),
+        }}>6 passos que a maioria pula</div>
+      </div>
+    </Shell>
+  );
+}
+
+function T3Step({ step, total, title, items }) {
+  const progress = step / total;
+  return (
+    <Shell>
+      {/* Progress bar left */}
+      <div style={{
+        position: 'absolute', left: 0, top: 0,
+        width: px(8), height: '100%',
+        background: MID,
+      }}></div>
+      <div style={{
+        position: 'absolute', left: 0, top: 0,
+        width: px(8), height: `${progress * 100}%`,
+        background: AMBER,
+      }}></div>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(22) }}>
+        {/* Step counter */}
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: px(10) }}>
+          <span style={{
+            color: AMBER,
+            fontFamily: 'Barlow Condensed, sans-serif',
+            fontWeight: 900,
+            fontSize: px(56),
+            lineHeight: 1,
+          }}>{String(step).padStart(2,'0')}</span>
+          <span style={{
+            color: CREAM,
+            fontFamily: 'Barlow Condensed, sans-serif',
+            fontSize: px(28),
+            opacity: 0.2,
+          }}>/ {String(total).padStart(2,'0')}</span>
+        </div>
+        {/* Title */}
+        <div style={{
+          color: CREAM,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900,
+          fontSize: px(68),
+          lineHeight: 0.9,
+          textTransform: 'uppercase',
+          letterSpacing: '0.01em',
+        }}>{title}</div>
+        {/* Checklist items */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: px(14), marginTop: px(4) }}>
+          {items.map((item, i) => (
+            <div key={i} style={{ display: 'flex', gap: px(14), alignItems: 'flex-start' }}>
+              <div style={{
+                width: px(20), height: px(20),
+                border: `${px(2)}px solid ${AMBER}`,
+                flexShrink: 0,
+                marginTop: px(2),
+              }}></div>
+              <div style={{
+                color: CREAM,
+                fontFamily: 'Space Grotesk, sans-serif',
+                fontSize: px(23),
+                lineHeight: 1.45,
+                opacity: 0.62,
+              }}>{item}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+function T3CTA() {
+  return (
+    <Shell>
+      <div style={{
+        position: 'absolute', left: 0, top: 0,
+        width: px(8), height: '100%',
+        background: AMBER,
+      }}></div>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(28) }}>
+        <div style={{
+          color: CREAM,
+          fontFamily: 'Barlow Condensed, sans-serif',
+          fontWeight: 900,
+          fontSize: px(86),
+          lineHeight: 0.9,
+          textTransform: 'uppercase',
+        }}>PIPELINE<br/>CERTO =<br/>ZERO<br/>SURPRESA.</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: px(12) }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: px(16) }}>
+            <div style={{ width: px(36), height: px(3), background: AMBER }}></div>
+            <div style={{
+              color: AMBER,
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontWeight: 600,
+              fontSize: px(22),
+              letterSpacing: '0.12em',
+            }}>qalab.io/pipeline</div>
+          </div>
+          <div style={{ color: CREAM, fontSize: px(20), opacity: 0.35, paddingLeft: px(52) }}>
+            Curso completo + template gratuito
+          </div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   TEMPLATE 04 — ESTATÍSTICAS
+══════════════════════════════════════════════════════════ */
+function T4Cover() {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: px(20) }}>
+        <div style={{ color: AMBER, fontSize: px(20), letterSpacing: '0.26em', textTransform: 'uppercase', fontWeight: 500 }}>Dados & Evidência</div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(108), lineHeight: 0.87, textTransform: 'uppercase' }}>OS<br/>NÚMEROS<br/>NÃO<br/>MENTEM</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(18), marginTop: px(8) }}>
+          <div style={{ width: px(44), height: px(3), background: AMBER }}></div>
+          <div style={{ color: CREAM, fontSize: px(20), opacity: 0.38, letterSpacing: '0.1em' }}>Arraste para ver →</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+function T4Stat({ value, unit, label, context }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(14) }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: px(4) }}>
+          <span style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(196), lineHeight: 0.85, letterSpacing: '-0.04em' }}>{value}</span>
+          <span style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: px(72), lineHeight: 1, marginTop: px(22) }}>{unit}</span>
+        </div>
+        <div style={{ height: px(3), background: DIM }}><div style={{ width: '58%', height: '100%', background: AMBER }}></div></div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: px(42), textTransform: 'uppercase', lineHeight: 1.0, marginTop: px(6) }}>{label}</div>
+        <div style={{ color: CREAM, fontSize: px(22), lineHeight: 1.6, opacity: 0.5 }}>{context}</div>
+      </div>
+    </Shell>
+  );
+}
+function T4CTA() {
+  return (
+    <Shell bg={AMBER}>
+      <Brand dark/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(24) }}>
+        <div style={{ color: BG, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(92), lineHeight: 0.88, textTransform: 'uppercase' }}>QA NÃO<br/>É CUSTO.<br/>É DADO<br/>DE NEGÓCIO.</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(20), marginTop: px(8) }}>
+          <div style={{ width: px(40), height: px(4), background: BG, opacity: 0.3 }}></div>
+          <div style={{ color: BG, fontWeight: 600, fontSize: px(22), letterSpacing: '0.16em', textTransform: 'uppercase' }}>qalab.io</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   TEMPLATE 05 — INSIGHT CARD
+══════════════════════════════════════════════════════════ */
+function T5Cover() {
+  return (
+    <Shell>
+      <div style={{ position: 'absolute', left: 0, top: 0, right: 0, height: px(8), background: AMBER }}></div>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: px(18) }}>
+        <div style={{ color: AMBER, fontSize: px(20), letterSpacing: '0.26em', textTransform: 'uppercase', fontWeight: 500 }}>Insights QA</div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(90), lineHeight: 0.88, textTransform: 'uppercase' }}>VERDADES<br/>QUE TODO<br/>QA SABE<br/>(E NINGUÉM<br/>OUVE)</div>
+        <div style={{ color: CREAM, fontSize: px(20), opacity: 0.3, letterSpacing: '0.1em' }}>Arraste para ver →</div>
+      </div>
+    </Shell>
+  );
+}
+function T5Insight({ num, total, statement, sub }) {
+  return (
+    <Shell>
+      <div style={{ position: 'absolute', left: 0, top: 0, right: 0, height: px(8), background: AMBER }}></div>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(22) }}>
+        <div style={{ color: AMBER, fontSize: px(16), letterSpacing: '0.24em', textTransform: 'uppercase', opacity: 0.7 }}>{String(num).padStart(2,'0')} / {String(total).padStart(2,'0')}</div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(70), lineHeight: 0.9, textTransform: 'uppercase' }}>{statement}</div>
+        {sub && <div style={{ borderLeft: `${px(4)}px solid ${AMBER}`, paddingLeft: px(20), color: CREAM, fontSize: px(22), lineHeight: 1.6, opacity: 0.52, marginTop: px(8) }}>{sub}</div>}
+      </div>
+    </Shell>
+  );
+}
+function T5CTA() {
+  return (
+    <Shell>
+      <div style={{ position: 'absolute', left: 0, top: 0, right: 0, height: px(8), background: AMBER }}></div>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(28) }}>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(82), lineHeight: 0.9, textTransform: 'uppercase' }}>SE VOCÊ<br/>SABIA DISSO<br/>TUDO —<br/>ENSINA AGORA.</div>
+        <div style={{ display: 'inline-flex', padding: `${px(16)}px ${px(28)}px`, background: AMBER, color: BG, fontWeight: 700, fontSize: px(20), letterSpacing: '0.14em', textTransform: 'uppercase', alignSelf: 'flex-start' }}>Começar no QA Lab →</div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   TEMPLATE 06 — ERRO vs. CERTO
+══════════════════════════════════════════════════════════ */
+function T6Cover() {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: px(18) }}>
+        <div style={{ color: AMBER, fontSize: px(20), letterSpacing: '0.26em', textTransform: 'uppercase', fontWeight: 500 }}>Má prática → Boa prática</div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(92), lineHeight: 0.87, textTransform: 'uppercase' }}>ERROS<br/>QUE VOCÊ<br/>COMETE<br/>NOS TESTES</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(18), marginTop: px(8) }}>
+          <div style={{ width: px(44), height: px(3), background: AMBER }}></div>
+          <div style={{ color: CREAM, fontSize: px(20), opacity: 0.38, letterSpacing: '0.1em' }}>Arraste para ver →</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+function T6Versus({ num, topic, wrong, right }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ color: AMBER, fontSize: px(17), letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 500, marginTop: px(16), marginBottom: px(12) }}>{String(num).padStart(2,'0')} · {topic}</div>
+      <div style={{ flex: 1, border: `${px(2)}px solid ${MID}`, padding: `${px(14)}px ${px(18)}px`, display: 'flex', flexDirection: 'column', gap: px(8), marginBottom: px(10) }}>
+        <div style={{ color: '#AA4444', fontSize: px(16), fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' }}>✕  Errado</div>
+        <div style={{ color: CREAM, fontSize: px(22), lineHeight: 1.5, opacity: 0.58, flex: 1 }}>{wrong}</div>
+      </div>
+      <div style={{ flex: 1, border: `${px(2)}px solid ${AMBER}`, padding: `${px(14)}px ${px(18)}px`, display: 'flex', flexDirection: 'column', gap: px(8) }}>
+        <div style={{ color: AMBER, fontSize: px(16), fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' }}>✓  Certo</div>
+        <div style={{ color: CREAM, fontSize: px(22), lineHeight: 1.5, flex: 1 }}>{right}</div>
+      </div>
+    </Shell>
+  );
+}
+function T6CTA() {
+  return (
+    <Shell bg={AMBER}>
+      <Brand dark/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(24) }}>
+        <div style={{ color: BG, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(92), lineHeight: 0.88, textTransform: 'uppercase' }}>PARA DE<br/>ERRAR NOS<br/>TESTES.<br/>APRENDE<br/>CERTO.</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(20) }}>
+          <div style={{ width: px(40), height: px(4), background: BG, opacity: 0.3 }}></div>
+          <div style={{ color: BG, fontWeight: 600, fontSize: px(22), letterSpacing: '0.16em', textTransform: 'uppercase' }}>qalab.io</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   TEMPLATE 07 — TIMELINE
+══════════════════════════════════════════════════════════ */
+function T7Cover() {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: px(20) }}>
+        <div style={{ color: AMBER, fontSize: px(20), letterSpacing: '0.26em', textTransform: 'uppercase', fontWeight: 500 }}>Jornada do QA</div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(100), lineHeight: 0.87, textTransform: 'uppercase' }}>DE ZERO<br/>A SENIOR<br/>EM QA</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(18), marginTop: px(8) }}>
+          <div style={{ width: px(44), height: px(3), background: AMBER }}></div>
+          <div style={{ color: CREAM, fontSize: px(20), opacity: 0.38, letterSpacing: '0.1em' }}>Arraste para ver →</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+function T7Node({ step, total, title, body }) {
+  const dots = Array.from({ length: total }, (_, i) => i + 1);
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ display: 'flex', alignItems: 'center', gap: px(8), marginTop: px(20), marginBottom: px(22) }}>
+        {dots.map(d => (
+          <React.Fragment key={d}>
+            <div style={{ width: d === step ? px(26) : px(12), height: d === step ? px(26) : px(12), borderRadius: '50%', background: d <= step ? AMBER : MID, flexShrink: 0 }}></div>
+            {d < total && <div style={{ flex: 1, height: px(2), background: d < step ? AMBER : MID }}></div>}
+          </React.Fragment>
+        ))}
+      </div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(18) }}>
+        <div style={{ color: AMBER, fontSize: px(16), letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 500 }}>Fase {String(step).padStart(2,'0')}</div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(74), lineHeight: 0.9, textTransform: 'uppercase', whiteSpace: 'pre-line' }}>{title}</div>
+        <div style={{ color: CREAM, fontSize: px(24), lineHeight: 1.65, opacity: 0.55 }}>{body}</div>
+      </div>
+    </Shell>
+  );
+}
+function T7CTA() {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(24) }}>
+        <div style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(90), lineHeight: 0.88, textTransform: 'uppercase' }}>A JORNADA<br/>TEM UM<br/>ATALHO.</div>
+        <div style={{ color: CREAM, fontSize: px(23), lineHeight: 1.6, opacity: 0.52 }}>QA Lab estrutura os 5 estágios em trilhas práticas com projetos reais.</div>
+        <div style={{ display: 'inline-flex', padding: `${px(16)}px ${px(28)}px`, border: `${px(2)}px solid ${AMBER}`, color: AMBER, fontWeight: 700, fontSize: px(20), letterSpacing: '0.14em', textTransform: 'uppercase', alignSelf: 'flex-start' }}>Ver trilha completa →</div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   TEMPLATE 08 — SNIPPET / CÓDIGO
+══════════════════════════════════════════════════════════ */
+function T8Cover() {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ position: 'absolute', right: px(40), top: px(80), color: AMBER, fontFamily: 'monospace', fontSize: px(160), lineHeight: 1, opacity: 0.05, userSelect: 'none' }}>{'</>'}</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: px(18) }}>
+        <div style={{ color: AMBER, fontSize: px(20), letterSpacing: '0.26em', textTransform: 'uppercase', fontWeight: 500 }}>Na prática</div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(90), lineHeight: 0.87, textTransform: 'uppercase' }}>PADRÕES<br/>DE TESTE<br/>QUE<br/>FUNCIONAM</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(18), marginTop: px(8) }}>
+          <div style={{ width: px(44), height: px(3), background: AMBER }}></div>
+          <div style={{ color: CREAM, fontSize: px(20), opacity: 0.38, letterSpacing: '0.1em' }}>Arraste para ver →</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+function T8Snippet({ num, pattern, lines, note }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ color: AMBER, fontSize: px(15), letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 500, marginTop: px(12), marginBottom: px(10) }}>{String(num).padStart(2,'0')} · {pattern}</div>
+      <div style={{ background: '#0A0A08', border: `${px(2)}px solid ${DIM}`, padding: `${px(16)}px ${px(18)}px`, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(3) }}>
+        {lines.map((line, i) => {
+          const isComment = line.trimStart().startsWith('//');
+          const isKeyword = /^(describe|it\(|test\(|expect|function|const|async|await)/.test(line.trimStart());
+          const clr = isComment ? '#5A7A5A' : isKeyword ? AMBER : CREAM;
+          return <div key={i} style={{ fontFamily: 'monospace', fontSize: px(19), lineHeight: 1.55, color: clr, whiteSpace: 'pre' }}>{line || '\u00A0'}</div>;
+        })}
+      </div>
+      {note && <div style={{ color: CREAM, fontSize: px(18), lineHeight: 1.5, opacity: 0.42, marginTop: px(8) }}>{note}</div>}
+    </Shell>
+  );
+}
+function T8CTA() {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ position: 'absolute', right: px(36), bottom: px(56), color: AMBER, fontFamily: 'monospace', fontSize: px(120), lineHeight: 1, opacity: 0.05, userSelect: 'none' }}>{'</>'}</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(24) }}>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(82), lineHeight: 0.9, textTransform: 'uppercase' }}>ESCREVE<br/>CÓDIGO QUE<br/>VOCÊ PODE<br/>TESTAR.</div>
+        <div style={{ display: 'inline-flex', padding: `${px(16)}px ${px(28)}px`, background: AMBER, color: BG, fontWeight: 700, fontSize: px(20), letterSpacing: '0.14em', textTransform: 'uppercase', alignSelf: 'flex-start' }}>Ver exemplos →</div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ── APP ─────────────────────────────────────────────────── */
+function App() {
+  const t1Data = [
+    { num: 1, title: 'UNITÁRIO',     body: 'Testa uma função isolada. Rápido, determinístico, sem dependências externas.' },
+    { num: 2, title: 'INTEGRAÇÃO',   body: 'Verifica se módulos diferentes funcionam juntos — BD, APIs, serviços.' },
+    { num: 3, title: 'END-TO-END',   body: 'Simula o fluxo real do usuário: do login ao checkout, sem atalhos.' },
+    { num: 4, title: 'CONTRATO',     body: 'Garante que sua API não quebre o consumidor silenciosamente.' },
+    { num: 5, title: 'PERFORMANCE',  body: 'Seu sistema aguenta o volume real? Teste antes do usuário descobrir.' },
+  ];
+
+  const t2Data = [
+    { label: 'Foco principal',
+      left:  'Encontrar bugs antes de entregar.',
+      right: 'Evitar que bugs existam desde o início.' },
+    { label: 'Momento de atuação',
+      left:  'Age no final do ciclo — detecta.',
+      right: 'Age desde o planejamento — previne.' },
+    { label: 'Entregável',
+      left:  'Lista de bugs encontrados.',
+      right: 'Estratégia de qualidade do produto.' },
+    { label: 'Visão do sistema',
+      left:  'Caixa preta — comportamento visível.',
+      right: 'Caixa branca — arquitetura e risco.' },
+  ];
+
+  const t3Data = [
+    { step: 1, total: 6, title: 'DEFINE O ESCOPO',     items: ['Mapeie os fluxos críticos do produto','Liste dependências externas e integrações','Delimite explicitamente o que não será testado'] },
+    { step: 2, total: 6, title: 'ESCREVE OS CASOS',    items: ['Cenários felizes primeiro, edge cases logo depois','Inclua dados inválidos e valores limite','Documente pré-condições e resultado esperado'] },
+    { step: 3, total: 6, title: 'AUTOMATIZA O CORE',   items: ['Unitários: 100% dos caminhos críticos','Integração: fluxos de alto risco de negócio','E2E: apenas os happy paths principais'] },
+    { step: 4, total: 6, title: 'ENTRA NO PIPELINE',   items: ['CI bloqueia merge se teste falhar','Coverage gate configurado no PR','Relatório de falhas notifica o time em tempo real'] },
+  ];
+
+  return (
+    <DesignCanvas>
+
+      <DCSection id="t1" title="Template 01 — Lista Numerada">
+        <DCArtboard id="t1-capa" label="Capa" width={S} height={S}>
+          <T1Cover/>
+        </DCArtboard>
+        {t1Data.map(d => (
+          <DCArtboard key={d.num} id={`t1-s${d.num}`} label={`Slide ${String(d.num).padStart(2,'0')}`} width={S} height={S}>
+            <T1Slide {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="t1-cta" label="CTA" width={S} height={S}>
+          <T1CTA/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="t2" title="Template 02 — Comparação">
+        <DCArtboard id="t2-capa" label="Capa" width={S} height={S}>
+          <T2Cover/>
+        </DCArtboard>
+        {t2Data.map((d, i) => (
+          <DCArtboard key={i} id={`t2-s${i+1}`} label={`Slide ${String(i+1).padStart(2,'0')}`} width={S} height={S}>
+            <T2Slide {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="t2-cta" label="CTA" width={S} height={S}>
+          <T2CTA/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="t3" title="Template 03 — Checklist / Processo">
+        <DCArtboard id="t3-capa" label="Capa" width={S} height={S}>
+          <T3Cover/>
+        </DCArtboard>
+        {t3Data.map((d, i) => (
+          <DCArtboard key={i} id={`t3-s${d.step}`} label={`Passo ${String(d.step).padStart(2,'0')}`} width={S} height={S}>
+            <T3Step {...d}/>
+          </DCArtboard>
+        ))}
+        <DCArtboard id="t3-cta" label="CTA" width={S} height={S}>
+          <T3CTA/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="t4" title="Template 04 — Estatísticas">
+        <DCArtboard id="t4-capa" label="Capa" width={S} height={S}><T4Cover/></DCArtboard>
+        <DCArtboard id="t4-s1" label="Stat 01" width={S} height={S}>
+          <T4Stat value="70" unit="%" label="dos bugs são encontrados em produção" context="Sem QA estruturado, o custo de correção é 10× maior do que durante o desenvolvimento."/>
+        </DCArtboard>
+        <DCArtboard id="t4-s2" label="Stat 02" width={S} height={S}>
+          <T4Stat value="4×" unit="" label="mais rápido com testes automatizados" context="Times que automatizam o core suite entregam features com menos regressão e mais frequência."/>
+        </DCArtboard>
+        <DCArtboard id="t4-s3" label="Stat 03" width={S} height={S}>
+          <T4Stat value="30" unit="%" label="do tempo de dev é retrabalho por bugs" context="Bugs que escapam do QA custam em média 30% do tempo total da squad em correções."/>
+        </DCArtboard>
+        <DCArtboard id="t4-cta" label="CTA" width={S} height={S}><T4CTA/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="t5" title="Template 05 — Insight Card">
+        <DCArtboard id="t5-capa" label="Capa" width={S} height={S}><T5Cover/></DCArtboard>
+        <DCArtboard id="t5-s1" label="Insight 01" width={S} height={S}>
+          <T5Insight num={1} total={3} statement="TESTE QUE NÃO FALHA NÃO ESTÁ TESTANDO NADA." sub="Um bom teste deve quebrar quando o comportamento muda. Se nunca falha, está dando falsa confiança."/>
+        </DCArtboard>
+        <DCArtboard id="t5-s2" label="Insight 02" width={S} height={S}>
+          <T5Insight num={2} total={3} statement="COBERTURA ALTA ≠ QUALIDADE ALTA." sub="100% de coverage com assertions vazias é pior que 60% com casos reais e significativos."/>
+        </DCArtboard>
+        <DCArtboard id="t5-s3" label="Insight 03" width={S} height={S}>
+          <T5Insight num={3} total={3} statement="QA QUE CHEGA NO FINAL DO SPRINT JÁ CHEGOU TARDE." sub="Qualidade é decisão de arquitetura, não etapa final. Se você só entra no fim, você documenta problemas."/>
+        </DCArtboard>
+        <DCArtboard id="t5-cta" label="CTA" width={S} height={S}><T5CTA/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="t6" title="Template 06 — Erro vs. Certo">
+        <DCArtboard id="t6-capa" label="Capa" width={S} height={S}><T6Cover/></DCArtboard>
+        <DCArtboard id="t6-s1" label="Slide 01" width={S} height={S}>
+          <T6Versus num={1} topic="Nomenclatura" wrong="test1(), testFinal(), testV2() — nomes que não dizem o que testam." right="should_return_404_when_user_not_found() — descritivo, legível como documentação."/>
+        </DCArtboard>
+        <DCArtboard id="t6-s2" label="Slide 02" width={S} height={S}>
+          <T6Versus num={2} topic="Assertions" wrong="Tudo num único it() com 30 expects encadeados. Quando falha, não sabe o quê." right="Um comportamento por teste. Falha rápida, causa clara, fix direto."/>
+        </DCArtboard>
+        <DCArtboard id="t6-s3" label="Slide 03" width={S} height={S}>
+          <T6Versus num={3} topic="Dados de teste" wrong="Usar dados reais de produção nos testes. Instável, perigoso e não reproduzível." right="Factories e fixtures controladas. Ambiente isolado, resultado determinístico."/>
+        </DCArtboard>
+        <DCArtboard id="t6-cta" label="CTA" width={S} height={S}><T6CTA/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="t7" title="Template 07 — Timeline">
+        <DCArtboard id="t7-capa" label="Capa" width={S} height={S}><T7Cover/></DCArtboard>
+        <DCArtboard id="t7-s1" label="Fase 01" width={S} height={S}>
+          <T7Node step={1} total={5} title={"TESTER\nMANUAL"} body="Você executa casos de teste manualmente. Aprende o produto, documenta bugs, entende os fluxos."/>
+        </DCArtboard>
+        <DCArtboard id="t7-s2" label="Fase 02" width={S} height={S}>
+          <T7Node step={2} total={5} title={"AUTOMATION\nJR"} body="Escreve os primeiros scripts. Cypress, Playwright. Aprende a manter e não só criar."/>
+        </DCArtboard>
+        <DCArtboard id="t7-s3" label="Fase 03" width={S} height={S}>
+          <T7Node step={3} total={5} title={"QA\nENGINEER"} body="Integra testes no CI/CD. Define estratégia, não só executa. Fala de risco com o time."/>
+        </DCArtboard>
+        <DCArtboard id="t7-cta" label="CTA" width={S} height={S}><T7CTA/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="t8" title="Template 08 — Snippet / Código">
+        <DCArtboard id="t8-capa" label="Capa" width={S} height={S}><T8Cover/></DCArtboard>
+        <DCArtboard id="t8-s1" label="Pattern 01" width={S} height={S}>
+          <T8Snippet num={1} pattern="AAA Pattern"
+            lines={['// Arrange','const user = createUser({ role: "admin" })','','// Act','const result = getPermissions(user)','','// Assert',"expect(result).toContain('delete')"]}
+            note="Arrange → Act → Assert. Cada etapa separada e legível."
+          />
+        </DCArtboard>
+        <DCArtboard id="t8-s2" label="Pattern 02" width={S} height={S}>
+          <T8Snippet num={2} pattern="Happy + Edge"
+            lines={["describe('checkout()', () => {","  it('processa pagamento válido', ...)","  it('rejeita cartão expirado', ...)","  it('lida com timeout de gateway', ...)","  it('retorna erro em valor zero', ...)",'})']} 
+            note="Cubra o caminho feliz e os edge cases no mesmo describe."
+          />
+        </DCArtboard>
+        <DCArtboard id="t8-s3" label="Pattern 03" width={S} height={S}>
+          <T8Snippet num={3} pattern="Contract Test"
+            lines={['// Verifica contrato da API',"test('GET /users/:id', async () => {","  const res = await api.get('/users/42')",'  expect(res.status).toBe(200)','  expect(res.body).toMatchSchema(','    userSchema','  )','})']}
+            note="Schema validation garante que mudanças na API não quebrem silenciosamente."
+          />
+        </DCArtboard>
+        <DCArtboard id="t8-cta" label="CTA" width={S} height={S}><T8CTA/></DCArtboard>
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>

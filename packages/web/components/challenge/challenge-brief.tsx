@@ -79,12 +79,12 @@ export function ChallengeBrief() {
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-2xl">
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-coral/25 bg-coral/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-coral">Free Challenge</span>
+            <span className="rounded-full border border-coral/25 bg-coral/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-coral">Free Challenge · Parte 1</span>
             <span className="flex items-center gap-1.5 text-xs text-[#7D8793]"><Clock3 className="size-3.5" /> Timebox sugerido: 30 min</span>
           </div>
           <h1 id="challenge-title" className="text-3xl font-black tracking-tight text-off-white sm:text-4xl">ExpenseFlow</h1>
           <p className="mt-3 text-sm leading-6 text-[#AAB2BC]">
-            Você entrou em um sistema financeiro antes de uma entrega. Explore os fluxos, identifique riscos e documente os problemas que considerar mais relevantes.
+            Parte 1 do desafio gratuito. Explore os fluxos, identifique bugs, escreva cenários de regressão em BDD e marque o que vale automatizar para proteger a entrega.
           </p>
         </div>
         <div className="flex flex-wrap gap-2"><SessionTracker playgroundId="expenseflow" /><button type="button" onClick={shareChallenge} className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg border border-white/15 px-3.5 text-xs font-semibold text-[#AAB2BC] transition hover:border-mint/35 hover:text-mint"><Share2 className="size-3.5" /> Compartilhar desafio</button></div>
@@ -93,18 +93,18 @@ export function ChallengeBrief() {
       <div className="mt-6 grid gap-3 md:grid-cols-3">
         <div className="rounded-xl border border-white/[0.08] bg-white/[0.025] p-4">
           <Target className="mb-3 size-4 text-mint" />
-          <h2 className="text-xs font-bold uppercase tracking-wider text-off-white">Sua missão</h2>
-          <p className="mt-2 text-xs leading-5 text-[#8B949E]">Avalie os fluxos mais críticos e encontre comportamentos que ameaçam a confiança nos dados.</p>
+          <h2 className="text-xs font-bold uppercase tracking-wider text-off-white">Caça aos bugs</h2>
+          <p className="mt-2 text-xs leading-5 text-[#8B949E]">Avalie os fluxos mais críticos e registre problemas com impacto, severidade e evidência.</p>
         </div>
         <div className="rounded-xl border border-white/[0.08] bg-white/[0.025] p-4">
           <Lightbulb className="mb-3 size-4 text-neon" />
-          <h2 className="text-xs font-bold uppercase tracking-wider text-off-white">Ponto de partida</h2>
-          <p className="mt-2 text-xs leading-5 text-[#8B949E]">Pense em consistência, limites, estados da interface e combinação de operações. Não há roteiro obrigatório.</p>
+          <h2 className="text-xs font-bold uppercase tracking-wider text-off-white">BDD de regressão</h2>
+          <p className="mt-2 text-xs leading-5 text-[#8B949E]">Converta os fluxos estáveis em cenários claros, negativos e de limite para a regressão.</p>
         </div>
         <div className="rounded-xl border border-white/[0.08] bg-white/[0.025] p-4">
           <FileText className="mb-3 size-4 text-coral" />
-          <h2 className="text-xs font-bold uppercase tracking-wider text-off-white">Entregável</h2>
-          <p className="mt-2 text-xs leading-5 text-[#8B949E]">Registre título, passos, atual vs. esperado, impacto, severidade e evidência para cada achado.</p>
+          <h2 className="text-xs font-bold uppercase tracking-wider text-off-white">Automação</h2>
+          <p className="mt-2 text-xs leading-5 text-[#8B949E]">Automatize a regressão dos fluxos mais estáveis e deixe explícito o que ficou manual.</p>
         </div>
       </div>
 

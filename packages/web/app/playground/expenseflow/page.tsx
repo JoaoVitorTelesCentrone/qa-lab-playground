@@ -1,0 +1,1 @@
+import{ExpenseFlowApp}from"@/components/expenseflow/expenseflow-app";export const metadata={title:"ExpenseFlow Free Challenge",robots:{index:false,follow:false}};export default function Page(){return <ExpenseFlowApp/>}
