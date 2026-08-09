@@ -1,19 +1,8 @@
-# QA Lab Playground — ExpenseFlow Free Challenge
+# QA Lab Playground
 
-MVP público e gratuito para profissionais de QA praticarem teste exploratório, análise de risco e documentação de bugs em um sistema de reembolso com falhas intencionais.
+Playground proprio da QA Lab para treinar QA manual, automacao, API, exploratorio, acessibilidade e produto sem depender de sites externos.
 
-> Treine QA em sistemas quebrados de verdade.
-
-## Jornada principal
-
-- `/` — landing page do desafio
-- `/playground` — briefing, regras de negócio e missão
-- `/playground/expenseflow` — sistema fake ExpenseFlow
-- `/playground/template-bug-report` — visualização e download do template
-- `/playground/conclusao` — checklist, compartilhamento e próximos desafios
-- `/waitlist` — conteúdo dos produtos e inscrição opcional para novidades
-
-O sistema usa dados mockados e `localStorage`. Não exige login, backend, banco de dados ou pagamento. O gabarito interno está em `docs/QA_LAB_FREE_CHALLENGE_GABARITO.md` e não é exposto na interface.
+A primeira tela (`/`) e o hub de labs. Ele lista 100 ideias navegaveis em seis trilhas, com dificuldade, tempo, entrega esperada, criterios de aceite, tags e prompt de post LinkedIn.
 
 ## Rodar localmente
 
@@ -26,32 +15,75 @@ bun run dev:web
 
 Acesse `http://localhost:3000`.
 
-## Verificação
+## Rotas principais
+
+- `/` e `/labs`: hub com 100 labs.
+- `/labs/login`: Projeto 1, login quebravel.
+- `/labs/waits`: Projeto 5, waits inteligentes.
+- `/labs/api-crud`: Projeto 21, CRUD completo de API.
+- `/labs/exploratorio`: Projeto 41, charter exploratorio.
+- `/labs/acessibilidade`: Projeto 89, acessibilidade por teclado.
+- `/labs/1` ate `/labs/100`: registros navegaveis dos labs planejados/parciais/prontos.
+- `/shop/products`, `/shop/cart`, `/shop/checkout`, `/shop/orders/:id`: QA Lab Shop.
+- `/playground/elements`, `/playground/tables`, `/playground/dialogs`, `/playground/frames`, `/playground/shadow-dom`, `/playground/files`: microdesafios isolados.
+- `/api/docs`: contrato JSON da API.
+
+## Dados de teste
+
+Senha padrao: `qa_lab_secret`.
+
+- `standard_user`: fluxo normal.
+- `locked_out_user`: bloqueado.
+- `problem_user`: comportamento inconsistente.
+- `performance_user`: atrasos artificiais.
+- `error_user`: erros controlados.
+- `visual_user`: problemas visuais.
+- `keyboard_user`: fluxo pensado para teclado.
+
+## API
+
+Endpoints principais:
+
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `GET /api/products?search=&category=&sort=`
+- `GET /api/cart`
+- `POST /api/cart/items`
+- `PATCH /api/cart/items/:id`
+- `DELETE /api/cart/items/:id`
+- `GET /api/bookings?firstname=&lastname=&checkin=&page=&perPage=&sort=`
+- `POST /api/bookings`
+- `GET /api/bookings/:id`
+- `PUT /api/bookings/:id`
+- `PATCH /api/bookings/:id`
+- `DELETE /api/bookings/:id`
+- `POST /api/test/reset`
+- `GET /api/health`
+
+`PUT`, `PATCH` e `DELETE` de reservas exigem `Authorization: Bearer <token>`. Gere o token com:
 
 ```bash
-bun run lint
-bun run build
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "content-type: application/json" \
+  -d "{\"username\":\"standard_user\",\"password\":\"qa_lab_secret\"}"
 ```
 
-## Variáveis opcionais
+## Modo bugado
 
-Copie `packages/web/.env.example` para `packages/web/.env.local` quando necessário.
+Bugs controlados por query param:
 
-```text
-NEXT_PUBLIC_SITE_URL=https://seu-dominio.com.br
-NEXT_PUBLIC_LEAD_FORM_URL=https://seu-formulario-de-leads.example
+- `/labs/login?bug=locked-message`
+- `/labs/waits?bug=infinite-loading`
+- `/shop/checkout?bug=wrong-total`
+- `/labs/acessibilidade?bug=missing-focus`
+- `/api/bookings/1?bug=delete-without-auth`
+- `/api/bookings/1?bug=contract-broken`
+
+## Verificacao
+
+```bash
+bun test packages/web
+bun run --filter '@qa-lab/web' build
 ```
 
-Sem `NEXT_PUBLIC_LEAD_FORM_URL`, a conclusão apenas informa que o cadastro estará disponível em breve.
-
-## Deploy na Vercel
-
-1. Importe o repositório.
-2. Configure `packages/web` como Root Directory.
-3. Use o framework Next.js.
-4. Adicione somente as variáveis opcionais desejadas.
-5. Publique. Nenhum serviço externo é obrigatório.
-
-## Bugs plantados
-
-O desafio possui exatamente sete falhas intencionais: valor negativo, título em branco, autoaprovação, filtro de status, divergência de relatório, data futura e comprovante inválido. Os detalhes de reprodução ficam apenas no gabarito interno.
+O projeto tambem preserva os modulos anteriores do QA Lab, incluindo ExpenseFlow, blog, pesquisa e labs ja existentes.

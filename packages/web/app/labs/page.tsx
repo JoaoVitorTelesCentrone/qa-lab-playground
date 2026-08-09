@@ -1,5 +1,7 @@
 import { LabHub } from "@/components/playground/lab-hub";
 
-export default function Home() {
+export const metadata = { title: "Labs" };
+
+export default function LabsPage() {
   return <LabHub />;
 }
