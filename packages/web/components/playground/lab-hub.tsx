@@ -26,11 +26,12 @@ export function LabHub() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="qa-simple">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <section className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-mint">QA Lab Playground</p>
-          <h1 className="mt-3 font-[family-name:var(--font-display)] text-5xl leading-none text-off-white sm:text-6xl">Hub de labs praticos</h1>
+          <p className="text-sm font-semibold text-mint">QA Lab Playground</p>
+          <h1 className="mt-3 text-4xl font-black leading-tight text-off-white sm:text-5xl">Hub de labs praticos</h1>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-[#AAB2BC]">Escolha um desafio, execute no produto simulado, registre evidencia e transforme o aprendizado em portfolio ou post.</p>
         </div>
         <div className="rounded-lg border border-white/10 bg-card p-5">
@@ -46,7 +47,7 @@ export function LabHub() {
       <section className="mt-8 grid gap-4 md:grid-cols-5">
         {featured.map((lab) => (
           <Link key={lab.number} href={lab.route} className="rounded-lg border border-white/10 bg-[#161B22] p-4 transition hover:-translate-y-0.5 hover:border-mint/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint">
-            <span className="font-mono text-xs text-mint">#{lab.number}</span>
+            <span className="text-xs font-semibold text-mint">Lab {lab.number}</span>
             <h2 className="mt-2 text-base font-black text-off-white">{lab.title}</h2>
             <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#AAB2BC]">{lab.objective}</p>
             <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-neon">Iniciar <ArrowRight className="size-3" /></span>
@@ -74,7 +75,7 @@ export function LabHub() {
             <article key={lab.number} className="rounded-lg border border-white/10 bg-[#161B22] p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-mono text-xs text-mint">#{lab.number} | {lab.track}</p>
+                  <p className="text-xs font-semibold text-mint">Lab {lab.number} | {lab.track}</p>
                   <h3 className="mt-2 text-lg font-black text-off-white">{lab.title}</h3>
                 </div>
                 <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold uppercase text-[#AAB2BC]">{lab.status}</span>
@@ -93,6 +94,7 @@ export function LabHub() {
           ))}
         </div>
       </section>
+      </div>
     </div>
   );
 }

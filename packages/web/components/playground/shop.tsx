@@ -168,11 +168,12 @@ export function OrderPage({ id }: { id: string }) {
 
 function ShopShell({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="qa-simple">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <Link href="/labs" className="text-sm font-bold text-mint">QA Lab Playground</Link>
-          <h1 className="mt-3 font-[family-name:var(--font-display)] text-5xl leading-none text-off-white">{title}</h1>
+          <h1 className="mt-3 text-4xl font-black leading-tight text-off-white">{title}</h1>
         </div>
         {action}
       </div>
@@ -182,6 +183,7 @@ function ShopShell({ title, action, children }: { title: string; action?: React.
         <Link className="rounded-lg border border-white/10 px-3 py-2 text-[#AAB2BC]" href="/shop/checkout">Checkout</Link>
       </nav>
       <div className="mt-6">{children}</div>
+      </div>
     </div>
   );
 }

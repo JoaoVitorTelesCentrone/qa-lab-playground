@@ -75,11 +75,13 @@ export function LoginLab() {
 
 export function LabShell({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="qa-simple">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <Link href="/labs" className="text-sm font-bold text-mint">Voltar para labs</Link>
-      <h1 className="mt-4 font-[family-name:var(--font-display)] text-5xl leading-none text-off-white">{title}</h1>
+      <h1 className="mt-4 text-4xl font-black leading-tight text-off-white">{title}</h1>
       <p className="mt-3 max-w-3xl text-sm leading-7 text-[#AAB2BC]">{description}</p>
       <div className="mt-8">{children}</div>
+      </div>
     </div>
   );
 }

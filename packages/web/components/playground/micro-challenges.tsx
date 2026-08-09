@@ -23,9 +23,10 @@ export function MicroChallengePage({ kind }: { kind: "elements" | "tables" | "di
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="qa-simple">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <Link href="/labs" className="text-sm font-bold text-mint">Voltar para labs</Link>
-      <h1 className="mt-4 font-[family-name:var(--font-display)] text-5xl leading-none text-off-white">Microdesafio: {kind}</h1>
+      <h1 className="mt-4 text-4xl font-black leading-tight text-off-white">Microdesafio: {kind}</h1>
       <p className="mt-3 text-sm leading-7 text-[#AAB2BC]">Pagina isolada com objetivo tecnico, seletores bons e ruins, criterios de aceite e bugs opcionais.</p>
       <section className="mt-6 rounded-lg border border-white/10 bg-card p-5">
         {kind === "elements" && (
@@ -63,6 +64,7 @@ export function MicroChallengePage({ kind }: { kind: "elements" | "tables" | "di
         <p><strong className="text-off-white">Criterios:</strong> usar role/data-testid, validar estado final e evitar seletor visual fragil.</p>
         <p><strong className="text-off-white">Bugs opcionais:</strong> ID dinamico, overlay, foco ausente, status errado e imagem quebrada.</p>
       </section>
+      </div>
     </div>
   );
 }
