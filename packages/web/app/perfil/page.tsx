@@ -13,7 +13,7 @@ export default async function ProfilePage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=/perfil");
   const [{ data: profile }, journey, submissions] = await Promise.all([
-    supabase.from("profiles").select("full_name,username,bio,linkedin_url,role,plan").eq("id", user.id).maybeSingle(),
+    supabase.from("profiles").select("full_name,username,bio,linkedin_url,role,plan,portfolio_public,portfolio_headline").eq("id", user.id).maybeSingle(),
     getJourney(user.id),
     listSubmissions(user.id),
   ]);

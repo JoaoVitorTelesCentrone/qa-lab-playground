@@ -26,6 +26,8 @@ export type Submission = {
   severity: Severity;
   /** Critérios de aceite que o aluno confirmou ao entregar. */
   checklist: string[];
+  /** Publicada no portfólio público do aluno. Privada por padrão. */
+  published: boolean;
   createdAt: string;
 };
 

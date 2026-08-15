@@ -9,6 +9,7 @@
 // para o aluno investigar sem saber a resposta.
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2, RotateCcw, ShieldAlert, UserCog } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -79,7 +80,10 @@ export function EnvironmentBar({ appId, settings }: { appId: PracticeAppId; sett
     <div className="mt-4 border-t border-border pt-4">
       {settings.instructor
         ? <>
-            <p className="text-xs font-medium text-muted-foreground">Desvios plantados neste ambiente</p>
+            <p className="flex flex-wrap items-center justify-between gap-2 text-xs font-medium text-muted-foreground">
+              Desvios plantados neste ambiente
+              <Link href="/lab/instrutor" className="font-normal text-primary">Console do instrutor →</Link>
+            </p>
             <ul className="mt-2 grid gap-2">{bugs.map((bug) => {
               const active = settings.activeBugs.includes(bug.id);
               return <li key={bug.id}>

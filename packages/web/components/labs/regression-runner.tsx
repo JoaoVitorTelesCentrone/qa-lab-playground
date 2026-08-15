@@ -84,6 +84,7 @@ export function RegressionRunner({ signedIn, initialRuns, instructor = false }: 
           {regressionLayers.map((item) => <option key={item} value={item}>{item}</option>)}
         </select>
       </label>
+      {instructor && <Link href="/lab/instrutor" className="text-sm text-primary">Console do instrutor →</Link>}
       <nav aria-label="Ir para um ambiente" className="ml-auto flex flex-wrap gap-2">
         {regressionPacks.map((pack) => <a key={pack.id} href={`#${pack.id}`} className="rounded-md border border-border px-2.5 py-1.5 text-xs hover:bg-accent">{pack.name}</a>)}
       </nav>

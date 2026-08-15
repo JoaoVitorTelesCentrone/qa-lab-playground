@@ -5,7 +5,7 @@
 // e a mensagem de erro em português faz parte do produto (o aluno também testa
 // esta API).
 
-import { getSessionUser, type SessionUser } from "./store";
+import { getSessionUser, trackEvent, type SessionUser } from "./store";
 
 export function ok<T>(data: T, status = 200) {
   return Response.json({ data }, { status });
@@ -22,7 +22,11 @@ export async function withUser(handler: (user: SessionUser) => Promise<Response>
   try {
     return await handler(user);
   } catch (error) {
-    return fail(error instanceof Error ? error.message : "Erro inesperado.", 500);
+    // O 500 vira evento: sem isso, o painel de métricas não teria como mostrar
+    // taxa de erro, e o produto descobriria a falha pelo aluno.
+    const message = error instanceof Error ? error.message : "Erro inesperado.";
+    await trackEvent(user.id, "api_error", { message });
+    return fail(message, 500);
   }
 }
 

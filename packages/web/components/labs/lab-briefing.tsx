@@ -151,6 +151,7 @@ export function LabBriefing({ challenge, signedIn, status, submissions, trackPro
             : trackProgress
               ? <p className="mt-2 text-sm text-muted-foreground">Você concluiu todos os Labs da trilha {trackProgress.track.name}.</p>
               : <Button asChild size="sm" variant="outline" className="mt-3"><Link href="/labs">Escolher o próximo Lab</Link></Button>}
+          <p className="mt-3 text-xs text-muted-foreground">Esta evidência entra no seu histórico como privada. <Link href="/perfil" className="text-primary">Publique no seu portfólio</Link> quando quiser mostrá-la.</p>
         </div>}
       </CardContent>
     </Card>

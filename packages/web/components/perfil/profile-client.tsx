@@ -7,13 +7,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Check, Loader2, Save, Trash2, User } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { PortfolioPanel } from "./portfolio-panel";
 import type { Journey, Submission } from "@/lib/product/journey";
 import type { TrackProgress } from "@/lib/product/tracks";
 
-type Profile = { full_name?: string | null; username?: string | null; bio?: string | null; linkedin_url?: string | null; role?: string | null; plan?: string | null } | null;
+type Profile = { full_name?: string | null; username?: string | null; bio?: string | null; linkedin_url?: string | null; role?: string | null; plan?: string | null; portfolio_public?: boolean | null; portfolio_headline?: string | null } | null;
 const roles = ["QA Iniciante", "QA Pleno", "QA Sênior", "QA Lead", "Dev que testa", "Tech Lead", "Estudante"];
 
 export function ProfileClient({ email, profile, journey, tracks, submissions }: { email: string; profile: Profile; journey: Journey; tracks: TrackProgress[]; submissions: Submission[] }) {
@@ -71,15 +71,11 @@ export function ProfileClient({ email, profile, journey, tracks, submissions }: 
       </div>)}</div>
     </section>
 
-    <section className="mt-10" aria-labelledby="portfolio-title">
-      <h2 id="portfolio-title" className="text-lg font-semibold">Portfólio de evidências</h2>
-      {submissions.length === 0
-        ? <p className="mt-3 text-sm text-muted-foreground">Nenhuma evidência registrada ainda. <Link href="/labs" className="text-primary">Escolha um Lab</Link> e conclua sua primeira entrega.</p>
-        : <ul className="mt-4 divide-y divide-border border-y border-border">{submissions.map((item) => <li key={item.id} className="py-4">
-            <div className="flex flex-wrap items-center gap-2.5"><span className="font-mono text-xs text-primary">{item.labSlug}</span><Badge variant="secondary" className="font-normal">severidade {item.severity}</Badge><span className="text-xs text-muted-foreground">{new Date(item.createdAt).toLocaleDateString("pt-BR")}</span></div>
-            <p className="mt-2 text-sm">{item.result}</p>
-          </li>)}</ul>}
-    </section>
+    <PortfolioPanel
+      submissions={submissions}
+      name={fullName || username || "QA Lab"}
+      profile={{ username: profile?.username ?? "", portfolioPublic: Boolean(profile?.portfolio_public), portfolioHeadline: profile?.portfolio_headline ?? "" }}
+    />
 
     <section className="mt-10" aria-labelledby="account-title">
       <h2 id="account-title" className="text-lg font-semibold">Dados da conta</h2>
