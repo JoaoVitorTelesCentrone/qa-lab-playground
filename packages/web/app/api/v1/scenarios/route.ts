@@ -1,5 +1,5 @@
 import { FieldReader, fail, ok, readJson, validated, withUser } from "@/lib/product/api";
-import { getJourney, recordScenarioRun } from "@/lib/product/store";
+import { clearScenarioRun, getJourney, recordScenarioRun } from "@/lib/product/store";
 import { isPracticeAppId } from "@/lib/product/apps";
 import { regressionPacks } from "@/lib/regression-packs";
 
@@ -31,4 +31,18 @@ export function POST(request: Request) {
       return ok({ appId, scenarioId, status }, 201);
     }),
   );
+}
+
+// DELETE /api/v1/scenarios?appId=&scenarioId= — desfaz a marcação.
+export function DELETE(request: Request) {
+  return withUser(async (user) => {
+    const params = new URL(request.url).searchParams;
+    const appId = params.get("appId") ?? "";
+    const scenarioId = params.get("scenarioId") ?? "";
+    if (!isPracticeAppId(appId)) return fail("Ambiente de prática não encontrado.", 404);
+    if (!scenarioId) return fail("Informe o cenário.", 400);
+
+    await clearScenarioRun(user.id, appId, scenarioId);
+    return ok({ appId, scenarioId, status: null });
+  });
 }

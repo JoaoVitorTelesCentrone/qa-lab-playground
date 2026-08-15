@@ -115,6 +115,13 @@ export async function recordScenarioRun(userId: string, run: ScenarioRun & { not
   if (error) throw new Error(error.message);
 }
 
+/** Desfaz a marcação de um cenário — o aluno pode ter clicado no resultado errado. */
+export async function clearScenarioRun(userId: string, appId: string, scenarioId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("scenario_runs").delete().eq("user_id", userId).eq("app_id", appId).eq("scenario_id", scenarioId);
+  if (error) throw new Error(error.message);
+}
+
 /** Telemetria de ativação. Nunca deve quebrar o fluxo do aluno. */
 async function track(supabase: SupabaseClient, userId: string, name: string, props: Record<string, unknown>) {
   await supabase.from("activity_events").insert({ user_id: userId, name, props }).then(undefined, () => undefined);

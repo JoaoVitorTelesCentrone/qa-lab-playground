@@ -16,6 +16,7 @@ import { EnvironmentShell } from "@/components/practice/environment-shell";
 import { ResourceForm } from "@/components/practice/resource-form";
 import { RecordTable } from "@/components/practice/record-table";
 import { useListControls } from "@/components/practice/list-controls";
+import { ExportCsv } from "@/components/practice/export-csv";
 import { PracticeSection, StatGrid } from "@/components/practice/ui";
 import { usePracticeApp, type AppRows } from "@/components/practice/use-practice-app";
 import { findPracticeApp } from "@/lib/product/apps";
@@ -124,7 +125,7 @@ export function AppointmentsApp({ initial, settings, signedIn }: { initial: AppR
           />
         </PracticeSection>
 
-        <PracticeSection id="agenda" title="Agenda" description="Todos os agendamentos, do mais próximo ao mais distante.">
+        <PracticeSection id="agenda" title="Agenda" description="Todos os agendamentos, do mais próximo ao mais distante." action={<ExportCsv resource={bookings.resource} rows={list.filtered} columns={["date", "time", "customer", "service", "status"]} filename="agenda" />}>
           {list.ui}
           <div className="mt-4">
             <RecordTable

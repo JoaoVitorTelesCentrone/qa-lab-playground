@@ -14,6 +14,7 @@ import { EnvironmentShell } from "@/components/practice/environment-shell";
 import { ResourceForm } from "@/components/practice/resource-form";
 import { RecordTable } from "@/components/practice/record-table";
 import { useListControls } from "@/components/practice/list-controls";
+import { ExportCsv } from "@/components/practice/export-csv";
 import { PracticeSection, StatGrid } from "@/components/practice/ui";
 import { usePracticeApp, type AppRows } from "@/components/practice/use-practice-app";
 import { findPracticeApp } from "@/lib/product/apps";
@@ -110,7 +111,7 @@ export function CrmApp({ initial, settings, signedIn }: { initial: AppRows; sett
 
     <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
       <div className="grid gap-6">
-        <PracticeSection id="oportunidades" title="Oportunidades" description="Cadastro completo do funil.">
+        <PracticeSection id="oportunidades" title="Oportunidades" description="Cadastro completo do funil." action={<ExportCsv resource={deals.resource} rows={dealList.filtered} columns={["title", "company", "stage", "amount"]} filename="oportunidades" />}>
           <ResourceForm handle={deals} defaults={{ stage: "novo" }} suggestions={{ company: companyNames }} />
           <div className="mt-6 border-t border-border pt-5">{dealList.ui}</div>
           <div className="mt-4">
@@ -125,7 +126,7 @@ export function CrmApp({ initial, settings, signedIn }: { initial: AppRows; sett
           </div>
         </PracticeSection>
 
-        <PracticeSection id="contatos" title="Contatos" description="Busque por nome, e-mail ou empresa.">
+        <PracticeSection id="contatos" title="Contatos" description="Busque por nome, e-mail ou empresa." action={<ExportCsv resource={contacts.resource} rows={foundContacts as unknown as typeof contacts.rows} columns={["name", "email", "company", "role"]} filename="contatos" />}>
           <ResourceForm handle={contacts} suggestions={{ company: companyNames }} />
           <div className="mt-6 border-t border-border pt-5">
             <label className="grid max-w-xs gap-1.5">

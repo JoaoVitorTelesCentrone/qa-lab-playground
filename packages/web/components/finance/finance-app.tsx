@@ -13,6 +13,7 @@ import { EnvironmentShell } from "@/components/practice/environment-shell";
 import { ResourceForm } from "@/components/practice/resource-form";
 import { RecordTable } from "@/components/practice/record-table";
 import { useListControls } from "@/components/practice/list-controls";
+import { ExportCsv } from "@/components/practice/export-csv";
 import { PracticeSection, ProgressBar, StatGrid } from "@/components/practice/ui";
 import { usePracticeApp, type AppRows } from "@/components/practice/use-practice-app";
 import { findPracticeApp } from "@/lib/product/apps";
@@ -69,7 +70,7 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
 
     <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="grid gap-6">
-        <PracticeSection id="lancamentos" title="Lançamentos" description="Receitas e despesas do período. Recorrentes se repetem todo mês.">
+        <PracticeSection id="lancamentos" title="Lançamentos" description="Receitas e despesas do período. Recorrentes se repetem todo mês." action={<ExportCsv resource={transactions.resource} rows={list.filtered} columns={["date", "description", "category", "kind", "amount", "recurring"]} filename="lancamentos" />}>
           <ResourceForm
             handle={transactions}
             defaults={{ date: "2026-08-15", kind: "despesa" }}
