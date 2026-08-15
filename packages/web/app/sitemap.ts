@@ -1,18 +1,21 @@
 import type { MetadataRoute } from "next";
 import { posts } from "@/lib/blog-posts";
+import { practiceApps } from "@/lib/product/apps";
+import { labs } from "@/lib/playground/catalog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app";
 
-  // Lançamento enxuto: só as rotas públicas (Home + Blog + Referências) entram no sitemap.
+  // Superfície pública do produto: home, catálogo de Labs, ambientes de
+  // prática e conteúdo. Rotas de conta e de progresso ficam de fora.
   return [
-    { url: baseUrl, changeFrequency: "monthly", priority: 1 },
+    { url: baseUrl, changeFrequency: "weekly", priority: 1 },
+    { url: `${baseUrl}/labs`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/labs/regressao`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/pesquisa`, changeFrequency: "weekly", priority: 0.8 },
-    ...posts.map((post) => ({
-      url: `${baseUrl}/blog/${post.slug}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    })),
+    ...practiceApps.map((app) => ({ url: `${baseUrl}${app.route}`, changeFrequency: "monthly" as const, priority: 0.8 })),
+    ...labs.filter((lab) => lab.status === "liberado").map((lab) => ({ url: `${baseUrl}/labs/${lab.number}`, changeFrequency: "monthly" as const, priority: 0.6 })),
+    ...posts.map((post) => ({ url: `${baseUrl}/blog/${post.slug}`, changeFrequency: "monthly" as const, priority: 0.7 })),
   ];
 }

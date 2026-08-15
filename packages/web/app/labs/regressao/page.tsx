@@ -1,4 +1,10 @@
-import Link from "next/link";
-import { regressionPacks } from "@/lib/regression-packs";
-export const metadata={title:"Packs de regressão"};
-export default function Page(){return <main className="qa-system"><div className="mx-auto max-w-6xl px-5 py-10 sm:px-8"><p className="qa-eyebrow">Qualidade contínua</p><h1 className="mt-2 text-4xl font-semibold">Packs de regressão</h1><p className="mt-3 text-muted-foreground">35 cenários completos por Lab.</p><div className="mt-8 grid gap-5">{regressionPacks.map(pack=><section key={pack.id} className="rounded-xl border border-border p-5"><div className="flex flex-wrap justify-between gap-3"><div><h2 className="text-2xl font-semibold">{pack.name}</h2><p className="text-sm text-muted-foreground">{pack.scenarios.length} cenários</p></div><Link href={pack.route} className="text-primary">Abrir Lab →</Link></div><div className="mt-5 grid gap-3 md:grid-cols-2">{pack.scenarios.map(s=><article key={s.id} className="rounded border p-3 text-sm"><strong>{s.id} · {s.title}</strong><p className="mt-1 text-muted-foreground">{s.layer} · {s.precondition}</p><ol className="mt-2 list-decimal pl-4">{s.steps.map(x=><li key={x}>{x}</li>)}</ol><p className="mt-2"><b>Esperado:</b> {s.expected}</p></article>)}</div></section>)}</div></div></main>}
+import { RegressionRunner } from "@/components/labs/regression-runner";
+import { getScenarioRuns, getSessionUser } from "@/lib/product/store";
+
+export const metadata = { title: "Packs de regressão | QA Lab" };
+
+export default async function Page() {
+  const user = await getSessionUser();
+  const runs = user ? await getScenarioRuns(user.id) : {};
+  return <RegressionRunner signedIn={Boolean(user)} initialRuns={runs} />;
+}

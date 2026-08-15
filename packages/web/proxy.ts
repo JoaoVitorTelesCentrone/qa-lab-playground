@@ -2,15 +2,22 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { findLabByNumber, isLabReleased } from "./lib/playground/catalog";
 
-// --- Lançamento enxuto -------------------------------------------------------
-// No lançamento o site público expõe apenas o Blog e a Biblioteca de
-// referências científicas (/pesquisa). O LinkedIn é um link externo no header.
+// --- Superfície pública ------------------------------------------------------
+// A home é o produto: jornada do aluno, os quatro ambientes de prática e o
+// catálogo de Labs. Conta (login, cadastro, recuperação, perfil) está aberta
+// porque sem ela não há progresso salvo — o backend é a fonte de verdade.
 //
-// Todo o resto do produto (lab, playground, cursos, estudos, login, cadastro,
-// home institucional, etc.) continua no código, mas fica bloqueado: qualquer
-// rota fora da allowlist é redirecionada para o Blog. Para reabrir uma página
-// no futuro, basta adicionar o prefixo em PUBLIC_PREFIXES.
-const PUBLIC_PREFIXES = ["/api", "/api-docs", "/blog", "/labs", "/pesquisa", "/playground", "/shop", "/financas", "/agendamentos", "/crm"];
+// Rotas fora desta allowlist continuam bloqueadas e redirecionam para o Blog.
+// Para reabrir uma página, basta acrescentar o prefixo aqui.
+const PUBLIC_PREFIXES = [
+  "/api", "/api-docs", "/blog", "/pesquisa",
+  // Labs e desafios
+  "/labs", "/playground",
+  // Ambientes de prática (lib/product/apps.ts)
+  "/shop", "/financas", "/agendamentos", "/crm",
+  // Conta
+  "/auth", "/login", "/cadastro", "/recuperar", "/perfil", "/waitlist",
+];
 
 const labRouteNumbers: Record<string, number> = {
   "/labs/login": 4,
@@ -18,10 +25,9 @@ const labRouteNumbers: Record<string, number> = {
   "/labs/api-crud": 21,
 };
 
-// Rotas que exigem login quando o produto estiver totalmente liberado. Enquanto
-// o lançamento estiver enxuto elas ficam bloqueadas pelo gate acima, então esta
-// lista só volta a valer quando PUBLIC_PREFIXES for ampliado. /pesquisa é
-// pública no lançamento e por isso não aparece aqui.
+// Rotas que exigem login. A home, o catálogo e os ambientes de prática são
+// abertos de propósito: dá para experimentar antes de criar conta. O que
+// depende de estado do aluno (perfil, entregas, conclusão) exige sessão.
 const protectedRoutes = ["/lab", "/perfil", "/estudos", "/cursos", "/playground/entregas", "/playground/conclusao", "/lab/refinamento", "/lab/triagem", "/lab/logs", "/lab/criterios"];
 
 export async function proxy(request: NextRequest) {
