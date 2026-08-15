@@ -38,20 +38,26 @@ const sum = (items: Array<{ amount: number }>) => items.reduce((total, item) => 
 // --- Agendamentos -----------------------------------------------------------
 
 /** Agendamento existente que ocupa o mesmo horário, ou null quando está livre. */
-export function findConflict(bookings: Booking[], candidate: { date: string; time: string; id?: string }, activeBugs: string[]): Booking | null {
-  // Bug plantado 1: a comparação ignora a data, então qualquer horário repetido
-  // no calendário inteiro parece conflito — e datas diferentes se bloqueiam.
-  const ignoresDate = isBugActive(activeBugs, "agendamentos.conflito-permitido");
+export function findConflict(bookings: Booking[], candidate: { date: string; time: string; id?: string; customer?: string }, activeBugs: string[]): Booking | null {
+  // Bug plantado 1: a comparação exige que o cliente também seja o mesmo, então
+  // dois clientes diferentes ocupam o mesmo horário sem erro nenhum. Marcar
+  // duas vezes para a mesma pessoa continua barrado — é o que faz o desvio
+  // passar despercebido em um teste apressado.
+  const sameCustomerOnly = isBugActive(activeBugs, "agendamentos.conflito-permitido");
   // Bug plantado 2: cancelados continuam ocupando o horário.
   const ignoresStatus = isBugActive(activeBugs, "agendamentos.cancelado-ocupa-horario");
 
   return bookings.find((booking) =>
     booking.id !== candidate.id
     && (ignoresStatus || booking.status === "confirmado")
-    && booking.time === candidate.time
-    && (ignoresDate ? true : booking.date === candidate.date),
+    && booking.date === candidate.date
+    && sameTime(booking.time, candidate.time)
+    && (sameCustomerOnly ? booking.customer === candidate.customer : true),
   ) ?? null;
 }
+
+// O Postgres devolve `10:00:00` onde o formulário manda `10:00`.
+const sameTime = (left: string, right: string) => String(left).slice(0, 5) === String(right).slice(0, 5);
 
 // --- CRM --------------------------------------------------------------------
 

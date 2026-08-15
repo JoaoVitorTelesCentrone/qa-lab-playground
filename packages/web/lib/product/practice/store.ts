@@ -6,10 +6,15 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { sanitizeBugIds } from "./bugs";
+import { domainErrors } from "./domain";
 import { can, defaultPersonaId, findPersona, type PracticeAction } from "./personas";
 import { findResource, parseRecord, practiceResources, resourcesForApp, type PracticeResource } from "./resources";
 import { seedRows } from "./seed";
 import type { PracticeAppId } from "../apps";
+
+/** Linha de qualquer recurso de prática. O id vem do banco (ou do seed local). */
+export type PracticeRow = Record<string, unknown> & { id: string };
+export type PracticeRows = Record<string, PracticeRow[]>;
 
 export type PracticeSettings = { personaId: string; activeBugs: string[]; instructor: boolean; seededAt: string | null };
 
@@ -48,7 +53,7 @@ export async function loadApp(userId: string, appId: PracticeAppId) {
   const supabase = await createClient();
   const resources = resourcesForApp(appId);
   const results = await Promise.all(resources.map((resource) => supabase.from(resource.table).select("*").eq("user_id", userId).order(resource.order.column, { ascending: resource.order.ascending })));
-  return Object.fromEntries(resources.map((resource, index) => [resource.id, results[index].error ? [] : (results[index].data ?? [])])) as Record<string, Array<Record<string, unknown>>>;
+  return Object.fromEntries(resources.map((resource, index) => [resource.id, results[index].error ? [] : (results[index].data ?? [])])) as PracticeRows;
 }
 
 async function authorize(userId: string, resource: PracticeResource, action: PracticeAction) {
@@ -64,9 +69,13 @@ const actionLabel = (action: PracticeAction) => ({ read: "consultar", create: "c
 
 export async function createRecord(userId: string, resourceId: string, body: Record<string, unknown>) {
   const resource = requireResource(resourceId);
-  await authorize(userId, resource, "create");
+  const settings = await authorize(userId, resource, "create");
   const { values, errors } = parseRecord(resource, body);
   if (Object.keys(errors).length > 0) throw new PracticeError("Verifique os campos destacados.", 422, errors);
+
+  const rows = await loadApp(userId, resource.appId);
+  const conflicts = domainErrors(resource.id, values, { rows, activeBugs: settings.activeBugs });
+  if (Object.keys(conflicts).length > 0) throw new PracticeError("Verifique os campos destacados.", 422, conflicts);
 
   const supabase = await createClient();
   const { data, error } = await supabase.from(resource.table).insert({ ...values, user_id: userId }).select("*").single();
@@ -76,10 +85,18 @@ export async function createRecord(userId: string, resourceId: string, body: Rec
 
 export async function updateRecord(userId: string, resourceId: string, id: string, body: Record<string, unknown>) {
   const resource = requireResource(resourceId);
-  await authorize(userId, resource, "update");
+  const settings = await authorize(userId, resource, "update");
   const { values, errors } = parseRecord(resource, body, { partial: true });
   if (Object.keys(errors).length > 0) throw new PracticeError("Verifique os campos destacados.", 422, errors);
   if (Object.keys(values).length === 0) throw new PracticeError("Nenhum campo para atualizar.", 422);
+
+  // As regras de domínio valem sobre o registro depois da edição, não só sobre
+  // os campos que vieram no PATCH.
+  const rows = await loadApp(userId, resource.appId);
+  const current = (rows[resource.id] ?? []).find((row) => String(row.id) === id);
+  if (!current) throw new PracticeError("Registro não encontrado.", 404);
+  const conflicts = domainErrors(resource.id, { ...current, ...values }, { rows, activeBugs: settings.activeBugs, recordId: id });
+  if (Object.keys(conflicts).length > 0) throw new PracticeError("Verifique os campos destacados.", 422, conflicts);
 
   const supabase = await createClient();
   const { data, error } = await supabase.from(resource.table).update(values).eq("user_id", userId).eq("id", id).select("*").maybeSingle();

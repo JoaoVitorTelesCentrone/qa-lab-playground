@@ -6,6 +6,8 @@
 // valores aleatórios, senão dois alunos veem cenários diferentes.
 
 import type { PracticeAppId } from "../apps";
+import { resourcesForApp } from "./resources";
+import type { PracticeRows } from "./store";
 
 export const seedRows: Record<string, Array<Record<string, unknown>>> = {
   "financas.accounts": [
@@ -75,3 +77,15 @@ export const seedRows: Record<string, Array<Record<string, unknown>>> = {
 };
 
 export const seedAppIds: PracticeAppId[] = ["financas", "agendamentos", "crm"];
+
+/**
+ * Mesma massa, mas com id, para quem está deslogado praticar sem banco. O id é
+ * derivado da posição de propósito: recarregar a página não embaralha os
+ * registros, então o cenário continua repetível mesmo no modo efêmero.
+ */
+export function localSeed(appId: PracticeAppId): PracticeRows {
+  return Object.fromEntries(resourcesForApp(appId).map((resource) => [
+    resource.id,
+    (seedRows[resource.id] ?? []).map((row, index) => ({ ...row, id: `${resource.id}-${index + 1}` })),
+  ]));
+}

@@ -1,31 +1,45 @@
 // Registro dos recursos de prática.
 //
 // Um recurso descreve uma entidade de um dos ambientes: onde ela mora, quais
-// campos aceita e como validá-los. A API `/api/v1/practice/[resource]` atende
-// todos a partir daqui, em vez de um endpoint escrito à mão por entidade.
+// campos aceita, como validá-los e como rotulá-los. A API
+// `/api/v1/practice/[resource]` valida a partir daqui e os formulários da
+// interface são gerados daqui — o rótulo e a lista de opções não são
+// redeclarados em componente nenhum.
 //
 // Módulo puro: sem React e sem Supabase, para poder ser testado direto.
 
 import type { PracticeAppId } from "../apps";
 
+type BaseField = {
+  /** Rótulo do campo na interface. Também usado nas mensagens de erro. */
+  label: string;
+  required?: boolean;
+  /** Texto de apoio abaixo do campo. */
+  hint?: string;
+};
+
 export type FieldSpec =
-  | { type: "text"; required?: boolean; max?: number }
-  | { type: "number"; required?: boolean; min?: number; max?: number }
-  | { type: "date"; required?: boolean }
-  | { type: "time"; required?: boolean }
-  | { type: "boolean"; required?: boolean }
-  | { type: "enum"; values: readonly string[]; required?: boolean };
+  | (BaseField & { type: "text"; max?: number; multiline?: boolean; placeholder?: string })
+  // `options` transforma o número em uma lista fechada (dia da semana), sem
+  // deixar de ser um número na validação e na coluna.
+  | (BaseField & { type: "number"; min?: number; max?: number; money?: boolean; options?: Record<string, string> })
+  | (BaseField & { type: "date" })
+  | (BaseField & { type: "time" })
+  | (BaseField & { type: "boolean" })
+  | (BaseField & { type: "enum"; values: readonly string[]; optionLabels?: Record<string, string> });
 
 export type PracticeResource = {
   id: string;
   appId: PracticeAppId;
   table: string;
   label: string;
+  /** Nome no singular, usado nos botões e confirmações ("Excluir lançamento"). */
+  singular: string;
   fields: Record<string, FieldSpec>;
   order: { column: string; ascending: boolean };
 };
 
-const money = { type: "number", required: true, min: 0, max: 9_999_999 } as const;
+const money = (label: string) => ({ type: "number", label, required: true, min: 0, max: 9_999_999, money: true }) as const;
 
 export const practiceResources: PracticeResource[] = [
   {
@@ -33,7 +47,12 @@ export const practiceResources: PracticeResource[] = [
     appId: "financas",
     table: "practice_finance_accounts",
     label: "Contas",
-    fields: { name: { type: "text", required: true, max: 60 }, kind: { type: "enum", values: ["corrente", "poupanca", "carteira"], required: true }, balance: money },
+    singular: "conta",
+    fields: {
+      name: { type: "text", label: "Nome", required: true, max: 60, placeholder: "Conta corrente" },
+      kind: { type: "enum", label: "Tipo", values: ["corrente", "poupanca", "carteira"], required: true, optionLabels: { corrente: "Conta corrente", poupanca: "Poupança", carteira: "Carteira" } },
+      balance: money("Saldo"),
+    },
     order: { column: "name", ascending: true },
   },
   {
@@ -41,13 +60,14 @@ export const practiceResources: PracticeResource[] = [
     appId: "financas",
     table: "practice_finance_transactions",
     label: "Lançamentos",
+    singular: "lançamento",
     fields: {
-      description: { type: "text", required: true, max: 80 },
-      amount: money,
-      kind: { type: "enum", values: ["receita", "despesa"], required: true },
-      category: { type: "text", required: true, max: 40 },
-      date: { type: "date", required: true },
-      recurring: { type: "boolean" },
+      description: { type: "text", label: "Descrição", required: true, max: 80, placeholder: "Mercado" },
+      amount: money("Valor"),
+      kind: { type: "enum", label: "Tipo", values: ["receita", "despesa"], required: true, optionLabels: { receita: "Receita", despesa: "Despesa" } },
+      category: { type: "text", label: "Categoria", required: true, max: 40, placeholder: "Alimentação" },
+      date: { type: "date", label: "Data", required: true },
+      recurring: { type: "boolean", label: "Lançamento recorrente", hint: "Repete todo mês." },
     },
     order: { column: "date", ascending: false },
   },
@@ -56,7 +76,11 @@ export const practiceResources: PracticeResource[] = [
     appId: "financas",
     table: "practice_finance_budgets",
     label: "Orçamentos",
-    fields: { category: { type: "text", required: true, max: 40 }, limit_amount: money },
+    singular: "orçamento",
+    fields: {
+      category: { type: "text", label: "Categoria", required: true, max: 40, placeholder: "Moradia" },
+      limit_amount: money("Limite mensal"),
+    },
     order: { column: "category", ascending: true },
   },
   {
@@ -64,7 +88,12 @@ export const practiceResources: PracticeResource[] = [
     appId: "financas",
     table: "practice_finance_goals",
     label: "Metas",
-    fields: { name: { type: "text", required: true, max: 60 }, target_amount: money, saved_amount: { type: "number", required: true, min: 0, max: 9_999_999 } },
+    singular: "meta",
+    fields: {
+      name: { type: "text", label: "Nome", required: true, max: 60, placeholder: "Reserva de emergência" },
+      target_amount: money("Valor alvo"),
+      saved_amount: { type: "number", label: "Já guardado", required: true, min: 0, max: 9_999_999, money: true },
+    },
     order: { column: "name", ascending: true },
   },
   {
@@ -72,7 +101,12 @@ export const practiceResources: PracticeResource[] = [
     appId: "agendamentos",
     table: "practice_booking_services",
     label: "Serviços",
-    fields: { name: { type: "text", required: true, max: 60 }, duration_minutes: { type: "number", required: true, min: 15, max: 480 }, price: money },
+    singular: "serviço",
+    fields: {
+      name: { type: "text", label: "Nome", required: true, max: 60, placeholder: "Consulta inicial" },
+      duration_minutes: { type: "number", label: "Duração (minutos)", required: true, min: 15, max: 480 },
+      price: money("Preço"),
+    },
     order: { column: "name", ascending: true },
   },
   {
@@ -80,7 +114,12 @@ export const practiceResources: PracticeResource[] = [
     appId: "agendamentos",
     table: "practice_booking_availability",
     label: "Disponibilidade",
-    fields: { weekday: { type: "number", required: true, min: 0, max: 6 }, start_time: { type: "time", required: true }, end_time: { type: "time", required: true } },
+    singular: "faixa de disponibilidade",
+    fields: {
+      weekday: { type: "number", label: "Dia da semana", required: true, min: 0, max: 6, options: { "0": "Domingo", "1": "Segunda-feira", "2": "Terça-feira", "3": "Quarta-feira", "4": "Quinta-feira", "5": "Sexta-feira", "6": "Sábado" } },
+      start_time: { type: "time", label: "Abre às", required: true },
+      end_time: { type: "time", label: "Fecha às", required: true },
+    },
     order: { column: "weekday", ascending: true },
   },
   {
@@ -88,12 +127,13 @@ export const practiceResources: PracticeResource[] = [
     appId: "agendamentos",
     table: "practice_bookings",
     label: "Agendamentos",
+    singular: "agendamento",
     fields: {
-      customer: { type: "text", required: true, max: 60 },
-      service: { type: "text", required: true, max: 60 },
-      date: { type: "date", required: true },
-      time: { type: "time", required: true },
-      status: { type: "enum", values: ["confirmado", "cancelado"], required: true },
+      customer: { type: "text", label: "Cliente", required: true, max: 60, placeholder: "Ana Costa" },
+      service: { type: "text", label: "Serviço", required: true, max: 60 },
+      date: { type: "date", label: "Data", required: true },
+      time: { type: "time", label: "Horário", required: true },
+      status: { type: "enum", label: "Situação", values: ["confirmado", "cancelado"], required: true, optionLabels: { confirmado: "Confirmado", cancelado: "Cancelado" } },
     },
     order: { column: "date", ascending: true },
   },
@@ -102,7 +142,12 @@ export const practiceResources: PracticeResource[] = [
     appId: "crm",
     table: "practice_crm_companies",
     label: "Empresas",
-    fields: { name: { type: "text", required: true, max: 80 }, segment: { type: "text", required: true, max: 40 }, size: { type: "enum", values: ["pequena", "media", "grande"], required: true } },
+    singular: "empresa",
+    fields: {
+      name: { type: "text", label: "Nome", required: true, max: 80, placeholder: "Norte Digital" },
+      segment: { type: "text", label: "Segmento", required: true, max: 40, placeholder: "Tecnologia" },
+      size: { type: "enum", label: "Porte", values: ["pequena", "media", "grande"], required: true, optionLabels: { pequena: "Pequena", media: "Média", grande: "Grande" } },
+    },
     order: { column: "name", ascending: true },
   },
   {
@@ -110,7 +155,13 @@ export const practiceResources: PracticeResource[] = [
     appId: "crm",
     table: "practice_crm_contacts",
     label: "Contatos",
-    fields: { name: { type: "text", required: true, max: 80 }, email: { type: "text", required: true, max: 120 }, company: { type: "text", required: true, max: 80 }, role: { type: "text", max: 60 } },
+    singular: "contato",
+    fields: {
+      name: { type: "text", label: "Nome", required: true, max: 80, placeholder: "Marina Costa" },
+      email: { type: "text", label: "E-mail", required: true, max: 120, placeholder: "marina@empresa.com" },
+      company: { type: "text", label: "Empresa", required: true, max: 80 },
+      role: { type: "text", label: "Cargo", max: 60, placeholder: "Head de Produto" },
+    },
     order: { column: "name", ascending: true },
   },
   {
@@ -118,11 +169,12 @@ export const practiceResources: PracticeResource[] = [
     appId: "crm",
     table: "practice_crm_deals",
     label: "Oportunidades",
+    singular: "oportunidade",
     fields: {
-      title: { type: "text", required: true, max: 80 },
-      company: { type: "text", required: true, max: 80 },
-      amount: money,
-      stage: { type: "enum", values: ["novo", "qualificado", "proposta", "ganho", "perdido"], required: true },
+      title: { type: "text", label: "Título", required: true, max: 80, placeholder: "Implantação do módulo fiscal" },
+      company: { type: "text", label: "Empresa", required: true, max: 80 },
+      amount: money("Valor"),
+      stage: { type: "enum", label: "Estágio", values: ["novo", "qualificado", "proposta", "ganho", "perdido"], required: true, optionLabels: { novo: "Novo", qualificado: "Qualificado", proposta: "Proposta", ganho: "Ganho", perdido: "Perdido" } },
     },
     order: { column: "amount", ascending: false },
   },
@@ -131,7 +183,12 @@ export const practiceResources: PracticeResource[] = [
     appId: "crm",
     table: "practice_crm_activities",
     label: "Atividades",
-    fields: { deal: { type: "text", required: true, max: 80 }, kind: { type: "enum", values: ["ligacao", "email", "reuniao"], required: true }, summary: { type: "text", required: true, max: 200 } },
+    singular: "atividade",
+    fields: {
+      deal: { type: "text", label: "Oportunidade", required: true, max: 80 },
+      kind: { type: "enum", label: "Tipo", values: ["ligacao", "email", "reuniao"], required: true, optionLabels: { ligacao: "Ligação", email: "E-mail", reuniao: "Reunião" } },
+      summary: { type: "text", label: "Resumo", required: true, max: 200, multiline: true, placeholder: "O que aconteceu nesse contato?" },
+    },
     order: { column: "created_at", ascending: false },
   },
 ];
@@ -142,6 +199,11 @@ export function findResource(id: string) {
 
 export function resourcesForApp(appId: PracticeAppId) {
   return practiceResources.filter((resource) => resource.appId === appId);
+}
+
+/** Valor inicial de um formulário de criação, a partir dos campos do recurso. */
+export function emptyRecord(resource: PracticeResource): Record<string, string | boolean> {
+  return Object.fromEntries(Object.entries(resource.fields).map(([name, spec]) => [name, spec.type === "boolean" ? false : ""]));
 }
 
 export type ParseResult = { values: Record<string, unknown>; errors: Record<string, string> };
@@ -164,7 +226,7 @@ export function parseRecord(resource: PracticeResource, body: Record<string, unk
 
     if (absent) {
       if (partial) continue;
-      if ("required" in spec && spec.required) errors[name] = "Campo obrigatório.";
+      if (spec.required) errors[name] = "Campo obrigatório.";
       else if (spec.type === "boolean") values[name] = false;
       continue;
     }
@@ -190,8 +252,10 @@ export function parseRecord(resource: PracticeResource, body: Record<string, unk
         else values[name] = String(raw);
         break;
       case "time":
-        if (!timeFormat.test(String(raw))) errors[name] = "Use um horário no formato HH:MM.";
-        else values[name] = String(raw);
+        // O input nativo devolve HH:MM:SS quando o passo inclui segundos, e o
+        // Postgres devolve a mesma coisa ao ler de volta — normalizamos os dois.
+        if (!timeFormat.test(String(raw).slice(0, 5))) errors[name] = "Use um horário no formato HH:MM.";
+        else values[name] = String(raw).slice(0, 5);
         break;
       case "boolean":
         values[name] = raw === true || raw === "true";

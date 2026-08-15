@@ -1,7 +1,156 @@
 "use client";
-import { useMemo, useState } from "react";
-import { ArrowDownCircle, ArrowUpCircle, PiggyBank, Plus } from "lucide-react";
-type Transaction={id:string;description:string;amount:number;kind:"income"|"expense";category:string;date:string;recurring:boolean};
-const money=(value:number)=>value.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const initial:Transaction[]=[{id:"1",description:"Salario",amount:6800,kind:"income",category:"Trabalho",date:"2026-08-05",recurring:true},{id:"2",description:"Aluguel",amount:1850,kind:"expense",category:"Moradia",date:"2026-08-08",recurring:true},{id:"3",description:"Mercado",amount:430,kind:"expense",category:"Alimentacao",date:"2026-08-10",recurring:false}];
-export function FinanceApp(){const[items,setItems]=useState(initial);const[budget,setBudget]=useState(1600);const[goal,setGoal]=useState(5000);const[form,setForm]=useState({description:"",amount:"",kind:"expense" as Transaction["kind"],category:"Alimentacao",date:new Date().toISOString().slice(0,10),recurring:false});const totals=useMemo(()=>({income:items.filter(x=>x.kind==="income").reduce((s,x)=>s+x.amount,0),expense:items.filter(x=>x.kind==="expense").reduce((s,x)=>s+x.amount,0)}),[items]);const balance=totals.income-totals.expense;return <main className="min-h-screen bg-muted/30"><div className="mx-auto max-w-6xl p-5 sm:p-8"><header><p className="qa-eyebrow">Segundo app</p><h1 className="mt-2 text-4xl font-semibold">Finanças</h1><p className="mt-2 text-muted-foreground">Controle suas contas, orçamento e metas em um só lugar.</p></header><section className="mt-8 grid gap-4 sm:grid-cols-3">{[["Saldo",balance],["Receitas",totals.income],["Despesas",totals.expense]].map(([label,value])=><div key={String(label)} className="rounded-xl border bg-background p-5"><p className="text-sm text-muted-foreground">{label}</p><strong className="mt-2 block text-2xl">{money(Number(value))}</strong></div>)}</section><div className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px]"><section className="rounded-xl border bg-background p-5"><h2 className="text-xl font-semibold">Lançamentos</h2><form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={e=>{e.preventDefault();if(!form.description||!Number(form.amount))return;setItems([{id:String(Date.now()),description:form.description,amount:Number(form.amount),kind:form.kind,category:form.category,date:form.date,recurring:form.recurring},...items]);setForm({...form,description:"",amount:""})}}><input className="input" value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="Descrição"/><input className="input" type="number" value={form.amount} onChange={e=>setForm({...form,amount:e.target.value})} placeholder="Valor"/><select className="input" value={form.kind} onChange={e=>setForm({...form,kind:e.target.value as Transaction["kind"]})}><option value="expense">Despesa</option><option value="income">Receita</option></select><input className="input" value={form.category} onChange={e=>setForm({...form,category:e.target.value})} placeholder="Categoria"/><input className="input" type="date" value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/><label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.recurring} onChange={e=>setForm({...form,recurring:e.target.checked})}/> Recorrente</label><button className="rounded-md bg-primary px-4 py-2 text-primary-foreground sm:col-span-2"><Plus className="mr-2 inline size-4"/>Adicionar lançamento</button></form><div className="mt-6 divide-y">{items.map(item=><div key={item.id} className="flex items-center justify-between py-3 text-sm"><span><strong>{item.description}</strong><small className="ml-2 text-muted-foreground">{item.category} {item.recurring?"· recorrente":""}</small></span><span className={item.kind==="income"?"text-primary":"text-destructive"}>{item.kind==="income"?"+":"-"}{money(item.amount)}</span></div>)}</div></section><aside className="grid gap-4"><div className="rounded-xl border bg-background p-5"><h2 className="font-semibold">Orçamento mensal</h2><input className="input mt-3" type="number" value={budget} onChange={e=>setBudget(Number(e.target.value))}/><p className="mt-3 text-sm">Usado: {money(totals.expense)} de {money(budget)}</p><div className="mt-2 h-2 rounded bg-muted"><div className="h-full rounded bg-primary" style={{width:`${Math.min(100,totals.expense/budget*100)}%`}}/></div></div><div className="rounded-xl border bg-background p-5"><h2 className="font-semibold">Meta de reserva</h2><input className="input mt-3" type="number" value={goal} onChange={e=>setGoal(Number(e.target.value))}/><p className="mt-3 text-sm">Progresso: {money(Math.max(0,balance))} de {money(goal)}</p></div></aside></div></div></main>}
+
+// Ambiente de prática Finanças.
+//
+// Os dados vêm do servidor e voltam para ele: nada aqui é fonte de verdade. Os
+// totais, o uso de orçamento e o progresso das metas saem de
+// lib/product/practice/views.ts, que é onde os desvios plantados agem — a tela
+// só mostra o que o cálculo compartilhado devolveu.
+
+import { AlertTriangle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { EnvironmentShell } from "@/components/practice/environment-shell";
+import { ResourceForm } from "@/components/practice/resource-form";
+import { RecordTable } from "@/components/practice/record-table";
+import { useListControls } from "@/components/practice/list-controls";
+import { PracticeSection, ProgressBar, StatGrid } from "@/components/practice/ui";
+import { usePracticeApp, type AppRows } from "@/components/practice/use-practice-app";
+import { findPracticeApp } from "@/lib/product/apps";
+import { fold, money } from "@/lib/product/practice/format";
+import { financeSummary, goalProgress, knownCategories, type Account, type Budget, type Goal } from "@/lib/product/practice/views";
+import type { Transaction } from "@/lib/product/practice/rules";
+import type { PracticeSettings } from "@/lib/product/practice/store";
+
+const app = findPracticeApp("financas")!;
+
+export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; settings: PracticeSettings; signedIn: boolean }) {
+  const practice = usePracticeApp(initial, { persist: signedIn, activeBugs: settings.activeBugs });
+  const transactions = practice.use("financas.transactions");
+  const budgets = practice.use("financas.budgets");
+  const goals = practice.use("financas.goals");
+  const accounts = practice.use("financas.accounts");
+
+  const rows = {
+    transactions: transactions.rows as unknown as Transaction[],
+    budgets: budgets.rows as unknown as Budget[],
+    goals: goals.rows as unknown as Goal[],
+    accounts: accounts.rows as unknown as Account[],
+  };
+  const summary = financeSummary(rows, settings.activeBugs);
+  const categories = knownCategories(rows.transactions, rows.budgets);
+
+  const list = useListControls(transactions.rows, {
+    searchLabel: "Buscar lançamento",
+    searchPlaceholder: "Descrição ou categoria",
+    search: (items, query) => {
+      const needle = fold(query);
+      return items.filter((item) => fold(`${item.description} ${item.category}`).includes(needle));
+    },
+    filters: [
+      { field: "kind", label: "Tipo", options: [{ value: "receita", label: "Receita" }, { value: "despesa", label: "Despesa" }] },
+      { field: "category", label: "Categoria", options: categories.map((category) => ({ value: category, label: category })) },
+    ],
+    sorts: [
+      { id: "date-desc", label: "Data (mais recente)", compare: (a, b) => String(b.date).localeCompare(String(a.date)) },
+      { id: "date-asc", label: "Data (mais antiga)", compare: (a, b) => String(a.date).localeCompare(String(b.date)) },
+      { id: "amount-desc", label: "Valor (maior)", compare: (a, b) => Number(b.amount) - Number(a.amount) },
+      { id: "amount-asc", label: "Valor (menor)", compare: (a, b) => Number(a.amount) - Number(b.amount) },
+    ],
+  });
+
+  return <EnvironmentShell app={app} settings={settings} signedIn={signedIn}>
+    <div className="mt-8">
+      <StatGrid items={[
+        { label: "Saldo do período", value: money(summary.totals.balance), tone: summary.totals.balance < 0 ? "negative" : "positive", hint: `${money(summary.accountsTotal)} distribuídos nas contas` },
+        { label: "Receitas", value: money(summary.totals.income) },
+        { label: "Despesas", value: money(summary.totals.expense) },
+      ]} />
+    </div>
+
+    <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="grid gap-6">
+        <PracticeSection id="lancamentos" title="Lançamentos" description="Receitas e despesas do período. Recorrentes se repetem todo mês.">
+          <ResourceForm
+            handle={transactions}
+            defaults={{ date: "2026-08-15", kind: "despesa" }}
+            suggestions={{ category: categories }}
+          />
+          <div className="mt-6 border-t border-border pt-5">{list.ui}</div>
+          <div className="mt-4">
+            <RecordTable
+              handle={transactions}
+              rows={list.visible}
+              columns={["date", "description", "category", "kind", "amount", "recurring"]}
+              suggestions={{ category: categories }}
+              empty={list.hasFilters ? "Nenhum lançamento encontrado com esses filtros." : "Nenhum lançamento registrado. Adicione o primeiro acima."}
+              renderCell={(row, field) => field === "amount"
+                ? <span className={row.kind === "receita" ? "text-primary" : "text-destructive"}>{row.kind === "receita" ? "+" : "−"} {money(Number(row.amount))}</span>
+                : undefined}
+            />
+          </div>
+        </PracticeSection>
+
+        <PracticeSection id="contas" title="Contas" description="Onde o dinheiro está hoje.">
+          <ResourceForm handle={accounts} columns={2} />
+          <div className="mt-5">
+            <RecordTable handle={accounts} columns={["name", "kind", "balance"]} empty="Nenhuma conta cadastrada." />
+          </div>
+        </PracticeSection>
+      </div>
+
+      <div className="grid gap-6">
+        <PracticeSection id="orcamentos" title="Orçamento por categoria" description="O limite mensal de cada categoria de despesa.">
+          <ResourceForm handle={budgets} columns={1} suggestions={{ category: categories }} />
+          <ul className="mt-5 grid gap-4">
+            {summary.budgets.length === 0 && <li className="rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">Nenhum orçamento definido.</li>}
+            {summary.budgets.map((line) => <li key={line.id}>
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <span className="text-sm font-medium">{line.category}</span>
+                <span className="font-mono text-xs text-muted-foreground">{money(line.used)} de {money(line.limit)}</span>
+              </div>
+              <ProgressBar percent={line.percent} label={`Uso do orçamento de ${line.category}`} danger={line.exceeded} />
+              <p className="mt-1.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+                {line.exceeded
+                  ? <><AlertTriangle className="size-3.5 text-destructive" aria-hidden="true" /><span className="text-destructive">Orçamento estourado em {money(line.used - line.limit)}.</span></>
+                  : <>{line.percent}% do limite usado</>}
+              </p>
+            </li>)}
+          </ul>
+          <div className="mt-5 border-t border-border pt-5">
+            <RecordTable handle={budgets} columns={["category", "limit_amount"]} empty="Nenhum orçamento cadastrado." suggestions={{ category: categories }} />
+          </div>
+        </PracticeSection>
+
+        <PracticeSection id="metas" title="Metas" description="Quanto falta para cada objetivo.">
+          <ResourceForm handle={goals} columns={1} />
+          <ul className="mt-5 grid gap-4">
+            {rows.goals.length === 0 && <li className="rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">Nenhuma meta definida.</li>}
+            {rows.goals.map((goal) => {
+              const progress = goalProgress(goal);
+              return <li key={goal.id}>
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <span className="text-sm font-medium">{goal.name}</span>
+                  {progress.reached ? <Badge className="font-normal">Meta alcançada</Badge> : <span className="font-mono text-xs text-muted-foreground">faltam {money(progress.remaining)}</span>}
+                </div>
+                <ProgressBar percent={progress.percent} label={`Progresso da meta ${goal.name}`} />
+                <p className="mt-1.5 text-xs text-muted-foreground">{money(goal.saved_amount)} de {money(goal.target_amount)} · {progress.percent}%</p>
+              </li>;
+            })}
+          </ul>
+          <div className="mt-5 border-t border-border pt-5">
+            <RecordTable handle={goals} columns={["name", "saved_amount", "target_amount"]} empty="Nenhuma meta cadastrada." />
+          </div>
+        </PracticeSection>
+
+        <PracticeSection id="gastos" title="Gastos por categoria" description="Para conferir se o total do topo bate com a soma da lista.">
+          {summary.spendByCategory.length === 0
+            ? <p className="rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">Nenhuma despesa registrada.</p>
+            : <ul className="grid gap-2.5">{summary.spendByCategory.map((item) => <li key={item.category} className="flex items-baseline justify-between gap-3 text-sm">
+                <span>{item.category}</span>
+                <span className="font-mono text-muted-foreground">{money(item.total)}</span>
+              </li>)}</ul>}
+        </PracticeSection>
+      </div>
+    </div>
+  </EnvironmentShell>;
+}

@@ -1,3 +1,10 @@
-import { CrmLab } from "@/components/playground/crm-lab";
-export const metadata={title:"CRM | QA Lab"};
-export default function Page(){return <CrmLab/>}
+import { CrmApp } from "@/components/practice/crm-app";
+import { loadPracticeEnvironment } from "@/lib/product/practice/environment";
+
+export const metadata = { title: "CRM | QA Lab" };
+export const dynamic = "force-dynamic";
+
+export default async function CrmPage() {
+  const { rows, settings, signedIn } = await loadPracticeEnvironment("crm");
+  return <CrmApp initial={rows} settings={settings} signedIn={signedIn} />;
+}
