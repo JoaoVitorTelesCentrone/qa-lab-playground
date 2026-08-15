@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, type ReactNode, useEffect, useState } from "react";
-import { ArrowRight, Bot, Bug, CheckCircle2, Clipboard, ClipboardList, Code2, Download, Github, Plus, Trash2 } from "lucide-react";
+import { ArrowRight, Bot, Bug, CheckCircle2, Clipboard, ClipboardList, Code2, Download, Github, Plus, ShieldCheck, Trash2 } from "lucide-react";
 import { ChallengeStepper } from "@/components/challenge/challenge-stepper";
 import {
   countCompletedStages,
@@ -13,14 +13,20 @@ import {
   type BddScenario,
   type BugReport,
   type ChallengeDeliverables,
+  ciGates,
+  type CiGateName,
+  type CiGateStatus,
   type E2eCandidate,
+  type ReleaseDecision,
 } from "@/lib/challenge-deliverables";
 
-type Stage = "bugs" | "bdd" | "e2e";
+type Stage = "bugs" | "bdd" | "e2e" | "release";
+type DeliverableStage = Exclude<Stage, "release">;
 const stages: { id: Stage; label: string; hint: string }[] = [
   { id: "bugs", label: "1. Bug reports", hint: "Registre risco e evidência" },
   { id: "bdd", label: "2. Cenários BDD", hint: "Modele a regressão" },
   { id: "e2e", label: "3. Plano E2E", hint: "Decida o que automatizar" },
+  { id: "release", label: "4. Release", hint: "Registre CI e a decisão" },
 ];
 
 function newId() {
@@ -48,7 +54,7 @@ export function DeliverablesWorkbench() {
 
   function downloadPortfolio() {
     const files = exportDeliverables(data);
-    const content = `${files.bugReports}\n---\n\n${files.bdd}\n---\n\n${files.e2e}`;
+    const content = `${files.bugReports}\n---\n\n${files.bdd}\n---\n\n${files.e2e}\n---\n\n${files.release}`;
     const url = URL.createObjectURL(new Blob([content], { type: "text/markdown;charset=utf-8" }));
     const anchor = document.createElement("a");
     anchor.href = url;
@@ -57,7 +63,7 @@ export function DeliverablesWorkbench() {
     URL.revokeObjectURL(url);
   }
 
-  function remove(group: Stage, id: string) {
+  function remove(group: DeliverableStage, id: string) {
     setData((current) => ({ ...current, [group]: current[group].filter((item) => item.id !== id) }));
   }
 
@@ -71,14 +77,14 @@ export function DeliverablesWorkbench() {
           <p className="mt-4 max-w-3xl leading-7 text-[#8B949E]">Documente sua investigação, converta riscos em exemplos executáveis e justifique o que merece cobertura E2E. O conteúdo fica salvo somente neste navegador.</p>
         </div>
         <div className="rounded-xl border border-neon/20 bg-neon/[.05] px-5 py-4 text-right">
-          <strong className="text-2xl font-black text-neon">{completed}/3</strong>
+          <strong className="text-2xl font-black text-neon">{completed}/4</strong>
           <p className="text-xs text-[#8B949E]">etapas com entregas</p>
         </div>
       </header>
 
-      <nav className="mt-8 grid gap-3 md:grid-cols-3" aria-label="Etapas do desafio">
+      <nav className="mt-8 grid gap-3 md:grid-cols-4" aria-label="Etapas do desafio">
         {stages.map((item) => {
-          const count = data[item.id].length;
+          const count = item.id === "release" ? Number(Boolean(data.release)) : data[item.id].length;
           return <button key={item.id} type="button" onClick={() => setStage(item.id)} className={`rounded-xl border p-4 text-left transition ${stage === item.id ? "border-mint/45 bg-mint/[.07]" : "border-white/10 bg-[#171B21] hover:border-white/20"}`}>
             <span className="flex items-center justify-between text-sm font-black text-off-white">{item.label}{count > 0 && <span className="inline-flex size-6 items-center justify-center rounded-full bg-neon text-[11px] text-[#101319]">{count}</span>}</span>
             <span className="mt-1 block text-xs text-[#69737E]">{item.hint}</span>
@@ -90,6 +96,7 @@ export function DeliverablesWorkbench() {
         {stage === "bugs" && <BugStage items={data.bugs} add={(item) => setData((value) => ({ ...value, bugs: [...value.bugs, item] }))} remove={(id) => remove("bugs", id)} />}
         {stage === "bdd" && <BddStage items={data.bdd} add={(item) => setData((value) => ({ ...value, bdd: [...value.bdd, item] }))} remove={(id) => remove("bdd", id)} />}
         {stage === "e2e" && <E2eStage items={data.e2e} add={(item) => setData((value) => ({ ...value, e2e: [...value.e2e, item] }))} remove={(id) => remove("e2e", id)} />}
+        {stage === "release" && <ReleaseStage value={data.release} save={(release) => setData((value) => ({ ...value, release }))} />}
       </section>
 
       <PortfolioGuide />
@@ -199,6 +206,33 @@ function E2eStage({ items, add, remove }: { items: E2eCandidate[]; add: (item: E
     add({ id: newId(), flow: String(form.get("flow")), priority: String(form.get("priority")) as E2eCandidate["priority"], decision: String(form.get("decision")) as E2eCandidate["decision"], reason: String(form.get("reason")), assertions: String(form.get("assertions")) }); event.currentTarget.reset();
   }
   return <><SectionTitle icon={Bot} title="Plano de automação E2E" text="Automação é uma decisão de risco e retorno. Priorize fluxos estáveis, críticos e repetíveis." /><form onSubmit={submit} className="grid gap-3"><input required name="flow" className="field" placeholder="Fluxo candidato" /><div className="grid gap-3 md:grid-cols-2"><select name="priority" className="field"><option>Baixa</option><option>Média</option><option>Alta</option></select><select name="decision" className="field"><option>Automatizar</option><option>Manter manual</option></select></div><textarea required name="reason" rows={3} className="field" placeholder="Por que esta decisão faz sentido?" /><textarea required name="assertions" rows={3} className="field" placeholder="Quais resultados e estados o teste deve validar?" /><SaveButton label="Adicionar decisão E2E" /></form><ItemList items={items} remove={remove} render={(item) => <><strong>{item.flow}</strong><span>{item.decision} · Prioridade {item.priority} · {item.reason}</span></>} /></>;
+}
+
+function ReleaseStage({ value, save }: { value: ReleaseDecision | null | undefined; save: (value: ReleaseDecision) => void }) {
+  const defaults: Record<CiGateName, CiGateStatus> = Object.fromEntries(ciGates.map((gate) => [gate, "not-run"])) as Record<CiGateName, CiGateStatus>;
+  const [gates, setGates] = useState<Record<CiGateName, CiGateStatus>>(value?.gates ?? defaults);
+  const [decision, setDecision] = useState<ReleaseDecision["decision"]>(value?.decision ?? "Bloquear");
+  const [rationale, setRationale] = useState(value?.rationale ?? "");
+  const [residualRisk, setResidualRisk] = useState(value?.residualRisk ?? "");
+  const [monitoring, setMonitoring] = useState(value?.monitoring ?? "");
+  const failed = Object.entries(gates).filter(([, status]) => status === "failed").map(([gate]) => gate);
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    save({ decision, rationale, residualRisk, monitoring, gates });
+  }
+
+  return <><SectionTitle icon={ShieldCheck} title="Gates de CI e decisão de release" text="Uma release não é aprovada por parecer pronta. Registre o sinal de cada gate, o risco residual e a ação depois da publicação." />
+    <form onSubmit={submit} className="grid gap-5">
+      <div className="grid gap-3 md:grid-cols-5">{ciGates.map((gate) => <label key={gate} className="grid gap-2 rounded-xl border border-white/10 bg-[#101319] p-3 text-xs font-bold text-[#AAB2BC]">{gate}<select value={gates[gate]} onChange={(event) => setGates((current) => ({ ...current, [gate]: event.target.value as CiGateStatus }))} className="field h-9 text-xs"><option value="not-run">não executado</option><option value="passed">passou</option><option value="failed">falhou</option></select></label>)}</div>
+      {failed.length > 0 && <p role="status" className="rounded-lg border border-coral/25 bg-coral/[.06] p-3 text-sm text-coral">Gate(s) falhando: {failed.join(", ")}. Se decidir liberar, explique por que o risco é aceitável e como será contido.</p>}
+      <div className="grid gap-3 md:grid-cols-2"><label className="grid gap-2 text-sm font-bold text-off-white">Decisão<select value={decision} onChange={(event) => setDecision(event.target.value as ReleaseDecision["decision"])} className="field"><option>Liberar</option><option>Liberar com ressalvas</option><option>Bloquear</option></select></label><Link href="/lab/cicd" className="flex items-end rounded-lg border border-mint/25 px-4 py-3 text-sm font-bold text-mint">Praticar gates no CI/CD Lab <ArrowRight className="ml-2 size-4" /></Link></div>
+      <textarea required minLength={80} value={rationale} onChange={(event) => setRationale(event.target.value)} rows={4} className="field" placeholder="Justifique a decisão com os bugs, cobertura e resultado dos gates (mínimo de 80 caracteres)." />
+      <textarea required value={residualRisk} onChange={(event) => setResidualRisk(event.target.value)} rows={3} className="field" placeholder="Qual risco permanece se a release seguir? Quem o aceita?" />
+      <textarea required value={monitoring} onChange={(event) => setMonitoring(event.target.value)} rows={3} className="field" placeholder="O que será monitorado após a release e qual sinal dispara rollback ou investigação?" />
+      <SaveButton label="Salvar decisão de release" />
+    </form>
+  </>;
 }
 
 function SaveButton({ label }: { label: string }) { return <button className="mt-1 inline-flex h-10 w-fit items-center gap-2 rounded-lg bg-mint px-4 text-xs font-black text-[#101319]"><Plus className="size-4" />{label}</button>; }

@@ -69,47 +69,33 @@ type SemanticScholarPaper = {
 
 const outputPath = resolve(process.cwd(), "data", "research-library.generated.json");
 const queries = [
+  "software product quality",
   "software quality assurance",
-  "software testing quality assurance",
-  "test automation software quality",
-  "defect prediction software quality",
-  "requirements quality assurance software",
+  "software quality model",
+  "software quality measurement",
+  "software maintainability reliability",
+  "software defect prediction",
 ];
 
-const qaTerms = [
+const softwareQualityTerms = [
   "software quality",
+  "quality of software",
+  "software quality assurance",
+  "software quality engineering",
   "software testing",
-  "test automation",
+  "software test automation",
+  "software defect",
   "defect prediction",
   "defect detection",
-  "software defect",
+  "software reliability",
+  "software maintainability",
+  "code quality",
   "bug report",
-  "verification and validation",
   "software verification",
   "software validation",
-  "requirements engineering",
-  "software reliability",
-  "regression testing",
-  "quality engineering",
-  "test case",
-  "mutation testing",
-  "fault localization",
-];
-
-const softwareContextTerms = [
-  "software engineering",
-  "software development",
-  "software project",
-  "software repository",
-  "source code",
-  "code quality",
-  "ci/cd",
-  "devops",
-  "mlops",
-  "programming language",
-  "repository",
-  "static analysis",
-  "continuous integration",
+  "software regression testing",
+  "software mutation testing",
+  "software fault localization",
 ];
 
 function normalizeKey(value: string) {
@@ -155,11 +141,12 @@ function compactAuthors(authors: Array<string | null | undefined>) {
 }
 
 function isRelevantText(parts: Array<string | null | undefined>) {
+  const normalizedTitle = parts[0]?.toLowerCase() ?? "";
   const haystack = parts.filter(Boolean).join(" ").toLowerCase();
-  return (
-    qaTerms.some((term) => haystack.includes(term)) ||
-    (haystack.includes("quality assurance") && softwareContextTerms.some((term) => haystack.includes(term)))
-  );
+
+  // The title must explicitly name a software-quality concern. Abstract-only
+  // matches are commonly incidental mentions in work from unrelated fields.
+  return normalizedTitle.includes("software") && softwareQualityTerms.some((term) => normalizedTitle.includes(term));
 }
 
 function isRelevant(work: OpenAlexWork) {
@@ -175,7 +162,9 @@ function isRelevantLibraryItem(item: ResearchWork, today: string) {
   if (item.source === "Curated") return true;
   if (item.publishedAt > today) return false;
 
-  return isRelevantText([item.title, item.abstract, item.venue, ...item.topics]);
+  // Do not use query or topics here: source APIs may echo our query as a topic,
+  // which would let unrelated works pass the inclusion gate.
+  return isRelevantText([item.title, item.abstract, item.venue]);
 }
 
 function toResearchWork(work: OpenAlexWork, query: string, discoveredAt: string): ResearchWork | null {

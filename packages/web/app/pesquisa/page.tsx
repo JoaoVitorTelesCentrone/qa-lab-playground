@@ -39,8 +39,8 @@ export default function PesquisaPage() {
             Biblioteca cientifica para estudar qualidade de software.
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-8 text-[#AAB2BC]">
-            Um espaco para artigos, standards, proceedings e textos academicos sobre QA, teste de software,
-            qualidade, defeitos, automacao, risco e engenharia de qualidade.
+            Um espaco dedicado exclusivamente a trabalhos sobre qualidade de software: modelos de qualidade,
+            garantia da qualidade, testes, defeitos, confiabilidade e manutenibilidade.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a href="#trabalhos" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-neon px-5 text-sm font-black text-[#101319]">
@@ -63,7 +63,7 @@ export default function PesquisaPage() {
             </div>
           </div>
           <p className="mt-4 text-sm leading-7 text-[#AAB2BC]">
-            Um workflow diario consulta indices academicos, cruza fontes top da area, deduplica por DOI/URL/titulo e grava novos achados nesta biblioteca.
+            Um workflow diario consulta indices academicos, valida o foco em qualidade de software, deduplica por DOI/URL/titulo e grava novos achados nesta biblioteca.
           </p>
         </aside>
       </section>

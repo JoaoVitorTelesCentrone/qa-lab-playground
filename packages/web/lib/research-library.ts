@@ -75,27 +75,62 @@ export const researchSources = [
 ] as const;
 
 export const researchQueries = [
+  "software product quality",
   "software quality assurance",
-  "software testing quality assurance",
-  "test automation software quality",
-  "defect prediction software quality",
-  "requirements quality assurance software",
+  "software quality model",
+  "software quality measurement",
+  "software maintainability reliability",
+  "software defect prediction",
 ] as const;
 
 export const researchLibrary = generatedLibrary as ResearchLibrary;
 
+const softwareQualityTerms = [
+  "software quality",
+  "quality of software",
+  "software quality assurance",
+  "software quality engineering",
+  "software testing",
+  "software test automation",
+  "software defect",
+  "defect prediction",
+  "defect detection",
+  "software reliability",
+  "software maintainability",
+  "code quality",
+  "static analysis",
+  "software verification",
+  "software validation",
+  "software regression testing",
+  "software mutation testing",
+  "software fault localization",
+];
+
+function isSoftwareQualityWork(work: ResearchWork) {
+  if (work.source === "Curated") return true;
+
+  const title = work.title.toLowerCase();
+  const text = [title, work.abstract, work.venue].join(" ").toLowerCase();
+  return title.includes("software") && softwareQualityTerms.some((term) => title.includes(term));
+}
+
+export function getSoftwareQualityResearch() {
+  return researchLibrary.items.filter(isSoftwareQualityWork);
+}
+
 export function getRecentResearch(limit = 12) {
-  return [...researchLibrary.items]
+  return [...getSoftwareQualityResearch()]
     .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
     .slice(0, limit);
 }
 
 export function getResearchStats() {
-  const topics = new Set(researchLibrary.items.flatMap((item) => item.topics));
+  const items = getSoftwareQualityResearch();
+  const topics = new Set(items.flatMap((item) => item.topics));
   const newest = getRecentResearch(1)[0];
 
   return {
-    total: researchLibrary.items.length,
+    total: items.length,
     topics: topics.size,
     sources: researchSources.length,
     newestDate: newest?.publishedAt ?? researchLibrary.updatedAt,

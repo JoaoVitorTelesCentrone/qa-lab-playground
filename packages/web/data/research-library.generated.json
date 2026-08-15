@@ -1,527 +1,138 @@
 {
-  "updatedAt": "2026-06-26T01:04:15.988Z",
+  "updatedAt": "2026-08-15T22:39:04.896Z",
   "items": [
     {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-06",
-      "title": "Single-Stacked Support Vector Regression-Bayesian-Based Models for Unemployment Trend Analysis in Malaysia's Youth Labor Market",
+      "id": "doi-doi-org-10-1007-s11219-026-09784-1",
+      "title": "Adaptive Just-in-Time software defect prediction using unsupervised concept drift detection",
       "abstract": "Resumo nao disponivel na fonte indexada.",
       "authors": [
-        "Autor nao informado"
+        "Aditya Pote",
+        "Santosh Singh Rathore",
+        "Joydip Dhar"
       ],
       "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.06",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.06",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-18",
-      "title": "Comparative Analysis of Mathematical Models for Estimating Discharge Ratio in Trapezoidal Cross-Section Open-Channel Dividing Flow",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.18",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.18",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-1108-ijicc-02-2026-0148",
-      "title": "Research on intelligent assessment of teaching quality in high-density classrooms based on improved WM-YOLO",
-      "abstract": "Purpose This paper addresses challenges in high-density higher education classrooms, including severe occlusion and concealed disciplinary behaviors. It aims to propose the WM-YOLO network and a vision-based quality evaluation system for precise micro-behavior detection and macro-quality assessment. Design/methodology/approach We propose an improved WM-YOLO network that integrates Weighted Convolution (wConv2d) and a Multi-scale Attention Network (MANet). wConv2d suppresses occlusion noise, while MANet improves small-target detection. To validate this architecture, the research utilizes a self-constructed High-Density Classroom Behavior dataset (avg. 51 students/frame). Furthermore, the study redefines the Effective Heads-up Rate (HuR, denoted R_eff) and Negative Engagement Index (I_neg) to analyze classroom state dynamics. Findings Experiments show that WM-YOLO achieves an mAP@50 of 92.3%, outperforming baselines by 1.4% with 27% lower computation. Empirical analysis reveals a “Negative Scissors Difference” (heads-down exceeding heads-up) during non-teaching periods, validating the model’s ability to distinguish classroom states. Practical implications The proposed evaluation model effectively supports higher education administration. By identifying abnormal fluctuations in I_neg and the “Scissors Difference” phenomenon, administrators can automatically filter out non-teaching durations, enabling automated attendance tracking and precise teaching quality warnings, thus promoting a shift from “experience-based management” to “data-driven governance”. Originality/value This paper innovatively applies wConv2d and MANet to high-density scenes. It establishes a quantitative link between micro-behaviors and macro-evaluation via the “Scissors Difference” principle, offering a new paradigm for smart education.",
-      "authors": [
-        "Jing Liao",
-        "Yikun Huang",
-        "Zhihao Chen"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "International Journal of Intelligent Computing and Cybernetics",
-      "doi": "https://doi.org/10.1108/ijicc-02-2026-0148",
-      "url": "https://doi.org/10.1108/ijicc-02-2026-0148",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-4018-979-8-2600-2373-0-ch008",
-      "title": "A Computational Study on Text Quality and Citation Frequency in Research Papers",
-      "abstract": "The abstract and conclusions are the important sections of the published paper. Based on the comprehension of the content written in these sections, other sections of the paper are read by researchers. Various factors, such as the number of citations, social transformations, and intellectual property rights, are considered indicators of research impact. This study utilizes Natural Language Processing techniques to analyze a dataset of 50 highly cited research papers from 2020, aiming to understand the relationship between text quality and citation count. The correlation coefficient indicates that high-citation papers tend to have longer abstracts and shorter conclusions. The results show that when the citation of the paper is low, the words used in the abstract and conclusion have high similarity. As citations are increasing, the similarity of the words used in the abstract and conclusion is reducing. This indicates that those articles with a higher Type Token Ratio (TTR) in the abstract and a unique number of words used in conclusion have high citations.",
-      "authors": [
-        "Manoj Himmatrao Devare",
-        "Debesh Das",
-        "Anita Manoj Devare",
-        "Pravin Laxmikant Yannawar"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Advances in Computational Intelligence and Robotics",
-      "doi": "https://doi.org/10.4018/979-8-2600-2373-0.ch008",
-      "url": "https://doi.org/10.4018/979-8-2600-2373-0.ch008",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-16",
-      "title": "Statistical Analysis of Rainfall Variability and Water Balance Components in Johor Districts Using Seasonal Ornstein-Uhlenbeck",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.16",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.16",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-1515-jpem-2026-0064",
-      "title": "Larks vs. owls: exploring chronotype, glycaemic control, and quality of life in paediatric type 1 diabetes",
-      "abstract": "Abstract Objectives Chronotype reflects individual circadian preferences and may influence metabolic regulation and daily functioning. This study aimed to investigate the association between chronotype and glycaemic control, assessed by HbA 1c , as well as health-related quality of life in children and adolescents with type 1 diabetes mellitus. Methods This cross-sectional study included 84 children and adolescents aged 8–18 years with type 1 diabetes of at least one year’s duration. Chronotype was assessed using the Munich Chronotype Questionnaire. Health-related quality of life was evaluated using age-appropriate versions of the Pediatric Quality of Life Inventory (PedsQL™). Glycaemic control was assessed using the mean HbA 1c value from the most recent three months. Results Chronotype distribution was 19.0 % morning, 44.0 % intermediate, and 36.9 % evening. HbA 1c levels differed significantly among chronotype groups (p=0.003), with higher levels observed in participants with an evening chronotype compared with those with a morning chronotype. Total PedsQL scores also differed significantly across chronotype groups (p=0.007), with lower scores in the evening chronotype group. Social and school functioning subscale scores were significantly lower in participants with an evening chronotype. HbA 1c levels were positively correlated with age and diabetes duration, while total PedsQL scores showed a moderate negative correlation with age. Conclusions Chronotype was associated with both glycaemic control and quality of life in children and adolescents with type 1 diabetes. Evening chronotype was linked to higher HbA 1c levels and poorer psychosocial functioning, particularly in social and school domains. These findings suggest that circadian preferences may be relevant when interpreting metabolic and quality of life outcomes in paediatric type 1 diabetes.",
-      "authors": [
-        "Dilek Bingöl Aydın",
-        "Berivan Uruç",
-        "Engin Aydın",
-        "Fatma Özgüç Çömlek",
-        "Yavuz Özer"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Pediatric Endocrinology and Metabolism",
-      "doi": "https://doi.org/10.1515/jpem-2026-0064",
-      "url": "https://doi.org/10.1515/jpem-2026-0064",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-10",
-      "title": "Quarter-Sweep Iterative Methods for Fuzzy Fredholm Integral Equations of the Second Kind",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.10",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.10",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-07",
-      "title": "Odd-Even Clique Equality in the Coprime Graph of the Generalised Quaternion Group",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.07",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.07",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-12",
-      "title": "A Probabilistic Age-and-Gender Specific Malaysian Population Projection: Integrating Mortality, Fertility and Net Migration",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.12",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.12",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-1097-jmq-0000000000000306",
-      "title": "Intersectionality: Race, Place, and Dead Ends",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Meghan B. Brennan"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "American Journal of Medical Quality",
-      "doi": "https://doi.org/10.1097/jmq.0000000000000306",
-      "url": "https://doi.org/10.1097/jmq.0000000000000306",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-17",
-      "title": "Comparing Emotional Signatures in Tamil Indie and Mainstream Songs Using Neuro Symbolic AI",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.17",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.17",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-11",
-      "title": "Ranking Students Preferences for Mathematics Mobile Applications Using Fuzzy Grade Matrix with Degree of Optimism and Statistical Analysis Approach",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.11",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.11",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-13",
-      "title": "Strategic Management of Palm Oil Price Dynamics Using a Game-Theoretical Approach",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.13",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.13",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-08",
-      "title": "Design of the Multivariate Side-Sensitive Synthetic Coefficient of Variation Chart Based on the Median Run Length",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.08",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.08",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-14",
-      "title": "Simulation of Time-Dependent Enzyme Kinetics by Multistage Picard Iterative Method",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.14",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.14",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-09",
-      "title": "An Ezekiel’s Adjusted R-Squared-Based Decision Rulefor Regression Hypothesis Testing",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.09",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.09",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-04",
-      "title": "Bivariate Modeling of Tennis First Serve Dependence Using Copula Approach: Insights from Grand Slam Tournaments",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.04",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.04",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-03",
-      "title": "Gegenbauer Polynomials and Inequality for Analytic Bi-Univalent Functions",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.03",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.03",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-17576-jqma-2202-2026-15",
-      "title": "Hybrid Nanofluid Flow Over a Cylindrical Surface with the Double Stratification Effects",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Quality Measurement and Analysis",
-      "doi": "https://doi.org/10.17576/jqma.2202.2026.15",
-      "url": "https://doi.org/10.17576/jqma.2202.2026.15",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-1253-circrep-cr-26-0152",
-      "title": "Regional Intensity of Outpatient Cardiovascular Testing and Cardiac-Origin Out-of-Hospital Cardiac Arrest ― A 10-Year Nationwide Ecological Study Using the All-Japan Utstein Registry ―",
-      "abstract": "Resumo nao disponivel na fonte indexada.",
-      "authors": [
-        "Hiroki Sato",
-        "Naohiko Takahashi",
-        "Naohiro Yonemoto",
-        "Tetsuya Matoba",
-        "Yoshio Tahara",
-        "for the Japanese Circulation Society Resuscitation Science Study (JCS-ReSS) Group"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Circulation Reports",
-      "doi": "https://doi.org/10.1253/circrep.cr-26-0152",
-      "url": "https://doi.org/10.1253/circrep.cr-26-0152",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software testing quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-1515-mt-2026-0002",
-      "title": "Interface-engineered jute/sisal fibers and silicon nitride nanoparticle reinforced epoxy composites: mechanical, tribological, and thermal performance",
-      "abstract": "Abstract Natural fiber–based hybrid composites have gained increasing attention due to their sustainability, low density, and potential to replace synthetic reinforcements in engineering applications. However, their wider adoption is limited by inadequate interfacial bonding and inferior wear and thermal performance. In this context, the present study aims to enhance the performance of jute/sisal fiber reinforced epoxy composites through the incorporation of silicon nitride (Si 3 N 4 ) nanoparticles. Hybrid composites containing 15 wt.% jute and 15 wt.% sisal fibers with varying Si 3 N 4 content (0–4 wt.%) were fabricated using a hand lay-up technique. The composites were evaluated for hardness, impact, tensile, flexural, shear, wear, and thermal conductivity properties, supported by scanning electron microscopy. The results revealed a systematic improvement in mechanical and tribological properties with increasing Si 3 N 4 content up to 3 wt.%, where the composite exhibited maximum tensile strength (55.85 MPa), flexural strength (84.67 MPa), reduced wear rate, and lower coefficient of friction. SEM analysis confirmed uniform nanoparticle dispersion, improved fiber–matrix adhesion, and effective crack suppression. The findings demonstrate that Si 3 N 4 -filled jute/sisal/epoxy hybrid composites offer a promising, eco-friendly solution for lightweight structural and tribological applications.",
-      "authors": [
-        "Sudarsan Deenadayalan",
-        "Karthick Rasu",
-        "Thanga Kasi Rajan Selvaraj",
-        "Karthikeyan Samayan"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Materials Testing",
-      "doi": "https://doi.org/10.1515/mt-2026-0002",
-      "url": "https://doi.org/10.1515/mt-2026-0002",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "software testing quality assurance",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-52923-vmfs-jstm-062026-124-02",
-      "title": "Flow Mechanism Analysis and Gate–Overflow Optimization for Defect Reduction in ADC12 High-Pressure Die Casting",
-      "abstract": "n high-pressure die casting (HPDC) of ADC12 aluminum alloy, defects such as surface wrinkles, cold shuts, and gas porosity frequently occur in thin-walled components with complex geometries, resulting in reduced product quality and production efficiency. In this study, the defect formation mechanisms in a guide roller component were investigated through a combination of experimental observations and numerical simulations using JSCAST software. Inspection of actual castings revealed that defects were mainly concentrated in regions where molten metal flow fronts converged. Simulation results showed that the original gating design produced an unstable flow pattern characterized by strong flow-front convergence, extremely high local gate velocities, and significant air entrainment during mold filling. The predicted regions with high risks of cold shut, gas porosity, and temperature reduction corresponded well with the defect locations observed in the actual castings. Based on the flow mechanism analysis, a series of sequential optimization schemes involving modifications of gate thickness and overflow dimensions were implemented to regulate melt flow velocity, reduce flow-front convergence, and improve gas evacuation. The results demonstrated that increasing the gate thickness effectively reduced local flow velocity and improved filling stability, whereas optimizing the overflow system enhanced the evacuation of entrapped air and redirected turbulent flow and entrained gas toward sacrificial regions. The final optimized design significantly reduced the risks of cold shut and gas porosity while improving temperature uniformity within the cavity compared with the original design. The findings indicate that flow mechanism analysis provides an effective basis for gate–overflow system optimization and quality improvement of ADC12 castings produced by the HPDC process.",
-      "authors": [
-        "Autor nao informado"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Journal of Science and Technology of Metal",
-      "doi": "https://doi.org/10.52923/vmfs.jstm.062026.124.02",
-      "url": "https://doi.org/10.52923/vmfs.jstm.062026.124.02",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "defect prediction software quality",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-54251-2522-4026-2026-2-6au",
-      "title": "ЖАРАҚАТТАРДЫ БОЛЖАУ: ЖАСАНДЫ ИНТЕЛЛЕКТТІҢ СТУДЕНТ-СПОРТШЫЛАРДАҒЫ ЖАРАҚАТТАРДЫҢ АЛДЫН АЛУДАҒЫ МҮМКІНДІКТЕРІ",
-      "abstract": "Бұл мақалада жоғары оқу орнының спортшы-студенттері арасындағы жарақаттануды алдын алудың заманауи технологиялық әдісі ретінде жасанды интеллект (ЖИ) негізіндегі предиктивті модельдердің қолданылуы қарастырылады. Зерттеудің мақсаты – жарақат тәуекелін болжаудың теориялық негіздерін түсіндіру және жаттықтырушы-оқытушыларға бұл әдістемені тәжірибеде енгізу үшін практикалық нұсқаулық ұсыну. Автор ЖИ-тің жарақатты болжау үдерісіндегі үш негізгі кезеңін сипаттайды: көпфакторлы деректерді жинақтау, тәуекел моделін құру және алдын алу шараларын ұсыну. Мақалада жарақат алдындағы негізгі белгілер (жүктеме мен қалпына келу арақатынасының бұзылуы, биомеханикалық өзгерістер, физиологиялық стрестер) талданады. Жаттықтырушының нақты әрекеттер алгоритмі (ескертуді алу, тексеру, түзету, бақылау) және этикалық аспектілер ұсынылады. Нәтиже ретінде ЖИ-тің реактивті (емдеу) тәсілден превентивті (алдын алу) тәсілге көшуге, соның ішінде жоғары оқу орнының ресурстары шектеулі жағдайында, қалай мүмкіндік беретіні көрсетіледі.",
-      "authors": [
-        "Адилбек Килибаев"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "НАУЧНЫЙ ЖУРНАЛ \"AUEZOV UNIVERSITY\"",
-      "doi": "https://doi.org/10.54251/2522-4026.2026.2.6au",
-      "url": "https://doi.org/10.54251/2522-4026.2026.2.6au",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "defect prediction software quality",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-59992-ijci-2026-v5n6p6",
-      "title": "SQLEM++: An Explainable Hybrid Learning Framework for SQL Query Cost Prediction and Optimization",
-      "abstract": "While relational database systems can process billions of queries per day with SQL, their cost-based optimizers use hand-crafted heuristics and simplified cardinality estimators that can lead to large estimation errors. These errors creep up into the query plan selection, often leading to poor or even disastrous performance when the query is executed. In this paper, new framework for SQL query cost prediction and recommendation of optimize SQL query, named as SQLEM++ (SQL Query Learning and Embedding Model). SQLEM++ is a dual-encoder architecture consisting of a domain-adapted transformer (SQL-BERT) and a structural Graph Neural Network (GNN) over query Abstract Syntax Trees to encode queries in semantically rich representations. The framework also includes heterogenous feature extraction of join complexity, filter selectivity, index coverage, and schema-level statistics. A multi-task prediction module is used to estimate the execution cost along with providing the classification of query quality into actionable levels, using the asymmetric Huber loss. Further, an explainability layer, derived from explainability with SHAP attribution and attention roll-out, converts model predictions to interpretable optimization recommendations. On top of this, SQLEM++ is introduced as an adaptive extension that fuses a learned cost model with the traditional optimizers in a hybrid manner, an uncertainty aware decision algorithm for reliability control, and a reinforcement learning feedback loop for continuous self-improvement. The results of an extensive evaluation on TPC-H (scale factors 1–100), and TPC-DS show that SQLEM achieves an average speed-up of query execution by 3.24 times compared to the PostgreSQL 16 optimizer and a mean absolute prediction error reduction of 71.4%, with an R² of 0.94. Ablation studies validate that both semantic and structural encoders support each other.",
-      "authors": [
-        "Hanan Abedallah"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "International Journal of Computers and Informatics",
-      "doi": "https://doi.org/10.59992/ijci.2026.v5n6p6",
-      "url": "https://doi.org/10.59992/ijci.2026.v5n6p6",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "defect prediction software quality",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-56964-pidspj20262701006",
-      "title": "\"Development of a Clinical Prediction Tool for Detecting Hospital-acquired Extended-spectrum β-lactamase-Producing Gram-Negative Bacteria in Pediatric Patients \"",
-      "abstract": "Objectives: Extended-spectrum β-lactamase (ESBL)-producing bacteria are important causes of hospital-acquired infections. While prediction tools exist for adults, limited data are available in children. This study aimed to develop a simple tool to identify pediatric patients at risk for ESBL-producing bacteria. Methodology: A retrospective study was conducted in a tertiary government hospital involving pediatric inpatients. Risk factors were analyzed using logistic regression to derive a scoring system based on independent predictors. Model performance was evaluated using the area under the curve, the Hosmer–Lemeshow test and internal validation. Results: Among 389 pediatric patients, three risk factors were independently associated with ESBL production: prior cephalosporin use within 3 months, mechanical ventilation, and indwelling urinary catheterization. These were incorporated into a 4-point scoring system. The model demonstrated moderate discrimination (AUC 0.70, Hosmer-Lemeshow p=0.0805) and correctly classi!ed 74.8% cases as low (0-1) and high risk (2-4). Bootstrapped validation accuracy was 63.2%, showing good internal stability. Conclusion: This practical tool, based on readily available clinical data, may aid early risk strati!cation for ESBL production and guide antibiotic therapy in children, supporting antimicrobial stewardship. Prospective validation in diverse pediatric populations is recommended.",
-      "authors": [
-        "Esther Ann B. Nacita",
-        "Carmina A. Delos Reyes"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-26",
-      "source": "Crossref",
-      "venue": "Pediatric Infectious Disease Society of the Philippines Journal",
-      "doi": "https://doi.org/10.56964/pidspj20262701006",
-      "url": "https://doi.org/10.56964/pidspj20262701006",
-      "topics": [
-        "software quality assurance"
-      ],
-      "query": "defect prediction software quality",
-      "discoveredAt": "2026-06-26T01:02:43.819Z"
-    },
-    {
-      "id": "doi-doi-org-10-14278-rodare-4729",
-      "title": "Multiphase Python Repository by HZDR",
-      "abstract": "The <code>multiphasepy</code> package is a Python toolkit for building, running, and maintaining CFD simulation case collections for the software released by the OpenFOAM Foundation (but also others, like Ansys Fluent or Siemens Simcenter Star-CCM). It combines reusable library modules with practical command-line tools to cover the full simulation lifecycle: case templating, batch execution, monitoring, post-processing, validation support, repository comparison, and publication workflows. At its core, <code>multiphasepy</code> helps teams move from individual case setups to scalable, structured projects containing a large collection of setups, e.g. a validation database. Cases can be provided as templates that are parameterized at runtime, metadata can be managed in a machine-readable way and cases can be conveniently batch-processed with the workflow management tool Snakemake both on workstations and Slurm-based HPC systems. Using a container-based software environment (e.g. Apptainer or Docker) the case collection becomes fully portable. An integrated Copier template allows the creation and maintenance of multiple independent case collections. Beyond execution, the package supports quality assurance and communication of results: tools are included for automated checks, fuzzy-logic based evaluation, data conversion, visualization, and generation of artifacts suitable for reporting and dissemination. This makes multiphasepy a practical bridge between day-to-day CFD case work and long-term, reproducible research software operations in collaborative environments. Command-Line Tools The multiphasepy package provides a comprehensive suite of command-line tools for CFD workflow management, data processing, and quality assurance. All tools follow the naming convention <code>mpy&lt;function&gt;</code> and provide <code>--help</code> for detailed usage information. Workflow Management <strong>mpycopy</strong> : Copy and render templated cases <strong>mpydocker</strong> : Launch customizable Docker development environments <strong>mpywatch</strong> : Progress display and real-time data visualization <strong>mpyworkflow</strong> : Create and manage cases projects allowing batch processing Data Processing <strong>mpyconv</strong> : Convert data files between formats <strong>mpypost</strong> : Mathematical post-processing operations <strong>mpyvisualize</strong> : Visualize simulation result files Quality Assurance <strong>mpytest</strong> : Run CFD code functionality tests <strong>mpyfuzzy</strong> : Evaluate simulation goodness using fuzzy logic <strong>mpyhooks</strong> : Run git hooks for code quality checks Utilities <strong>mpyidentify</strong> : Identify file types and associate tags <strong>mpyrpdiff</strong> : Compare repositories using git diff <strong>mpyshrun</strong> : Wrap shell commands with logging Publishing <strong>mpypublish</strong> : Publish software to Rodare repository Installation The <code>multiphasepy</code> package requires Python 3.12 or newer. Install the latest release from PyPI: <pre><code class=\"language-bash\">pip install multiphasepy </code></pre> For full environment setup and platform-specific notes, see the installation guide in the documentation. How to cite us? If you find that package useful, please cite as <pre><code class=\"language-text\">Schlegel et al. (2026). Multiphase Python Repository by HZDR. Rodare. &lt;https://doi.org/10.14278/rodare.3093&gt;. </code></pre> Acknowledgements OpenFOAM® is a registered trade mark of OpenCFD Limited, producer and distributor of the OpenFOAM® software via www.openfoam.com. The Multiphase Python Repository by HZDR is not compatible with the software released by OpenCFD Limited, but is developed for the software released by the OpenFOAM Foundation via www.openfoam.org.",
-      "authors": [
-        "Schlegel, Fabian",
-        "Fombonne, Clement",
-        "Hänsch, Susann",
-        "Krull, Benjamin",
-        "Lehnigk, Ronald",
-        "Meller, Richard"
-      ],
-      "year": 2026,
-      "publishedAt": "2026-06-24",
+      "publishedAt": "2026-08-14",
       "source": "OpenAlex",
-      "venue": "RODARE",
-      "doi": "https://doi.org/10.14278/rodare.4729",
-      "url": "https://doi.org/10.14278/rodare.4729",
+      "venue": "Software Quality Journal",
+      "doi": "https://doi.org/10.1007/s11219-026-09784-1",
+      "url": "https://doi.org/10.1007/s11219-026-09784-1",
       "topics": [
-        "Workflow",
-        "Python (programming language)",
         "Computer science",
-        "Suite",
-        "Software engineering",
-        "Metadata"
+        "Concept drift",
+        "Commit",
+        "Artificial intelligence",
+        "Software",
+        "Pruning"
       ],
-      "query": "software quality assurance",
-      "discoveredAt": "2026-06-26T00:23:12.355Z"
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-14483-23448350-24627",
+      "title": "Identifying Software Quality Attributes Relevant for Very Small Entities",
+      "abstract": "Nowadays, software systems are increasingly important and are rapidly growing in complexity and size. Their development involves large, medium, small, and very small entities (VSEs). The latter play a critical role in the supply chain, so developing high-quality software in accordance with established standards is fundamental to ensure the success of their software products. Applying standards such as ISO/IEC 29110 supports VSEs by providing efficient processes and increased productivity. However, standards such as ISO/IEC 25010, which provide a quality model for software products and quality in use, are not intended for implementation in VSEs. This paper presents an exploratory study that identifies the relevant quality characteristics and sub-characteristics in VSEs, as well as the practices they use to achieve product quality.",
+      "authors": [
+        "M. Muñoz",
+        "G. García-Mireles",
+        "J. Mejía",
+        "Elizabeth Villanueva"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-23",
+      "source": "Semantic Scholar",
+      "venue": "Revista Científica",
+      "doi": "https://doi.org/10.14483/23448350.24627",
+      "url": "https://doi.org/10.14483/23448350.24627",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s11219-026-09775-2",
+      "title": "QualiTagger: automating software quality categorization in issue trackers",
+      "abstract": "Managing software quality is crucial for maintainable software systems, yet understanding how quality attributes are discussed within the informal, noisy context of issue trackers remains a significant challenge. Current automatic approaches for categorizing quality concerns often falter, as they are typically validated on small domain-specific datasets and are ill-equipped to parse the conversational language of developer discourse. This hinders effective prioritization and technical debt management. This paper introduces QualiTagger, an automated approach for classifying seven distinct software quality attributes from issue tracker text, and QualiDataSet, a novel, curated dataset of over 700,000 labeled GitHub issues that underpins this work. We demonstrate that an ensemble of specialized binary classifiers, built upon the DistilRoBERTa architecture, significantly outperforms a single multiclass model and shows superior or comparable efficacy to a general-purpose Large Language Model (GPT-4o) for this task. The model’s real-world applicability is further validated through an industrial case study at Visma focusing on security issues) and a user study with software engineering students. Our evaluation confirms that QualiTagger achieves high classification accuracy and, crucially, generalizes effectively to previously unseen (Out-of-Distribution) projects, a key indicator of its practical utility. By providing both a robust classification tool and a large-scale public dataset, this research enables a more nuanced, data-driven understanding of how software quality is managed in practice, offering valuable insights for project management and future empirical software engineering research",
+      "authors": [
+        "Karthik Shivashankar",
+        "R. Capilla",
+        "Maren Maritsdatter Kruke",
+        "Mili Orucevic",
+        "Antonio Martini"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-17",
+      "source": "Semantic Scholar",
+      "venue": "Software quality journal",
+      "doi": "https://doi.org/10.1007/s11219-026-09775-2",
+      "url": "https://doi.org/10.1007/s11219-026-09775-2",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-65237-2336-3630-2026-7-1-8",
+      "title": "SOFTWARE QUALITY MODEL FOR TUNING THE CLASS OF POLYHARMONIC ACOUSTIC SIGNAL GENERATION SYSTEMS",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Vitalii S. Sychkov"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-10",
+      "source": "Semantic Scholar",
+      "venue": "STREDOEVROPSKY VESTNiK PRO VEDU А VYZKUM",
+      "doi": "https://doi.org/10.65237/2336-3630-2026-7(1)-8",
+      "url": "https://doi.org/10.65237/2336-3630-2026-7(1)-8",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-1145-3803437-3805580",
+      "title": "Rethinking Software Quality Measurement: A Vision for AI-Assisted Triangulation in the Post-Metrics Era",
+      "abstract": "ISO/IEC 25010 defines eight product quality characteristics, yet after decades of research, a persistent gap remains between quality definitions and practical measurement. We argue this gap exists not because the problem is intractable, but because previous approaches relied primarily on structural metrics, which struggle to capture semantic dimensions of quality. This paper articulates a vision for closing this gap through triangulation: combining evolutionary signals from repository mining, semantic interpretation from LLM agents, and structural analysis from validated metrics. Central to this vision is a formalized concept: when signals disagree, the disagreement becomes a typed diagnostic signal, revealing not just uncertainty, but which quality dimension requires attention and what action is appropriate. We present an initial formalization of disagreement as calibrated, confidence-aware divergence across signals, an ISO mapping mechanism that combines rules with constrained LLM judgments and abstention, and a triangulation architecture that integrates with verification and repair workflows. Triangulation serves as a Verification-Repair substrate: an evidence layer that gates verification tasks and guides repair actions. If this vision succeeds, quality assessment transforms from opaque numbers to actionable, uncertainty-aware guidance.",
+      "authors": [
+        "Jomar Thomas Almonte",
+        "Nathalia Moraes do Nascimento"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-05",
+      "source": "Semantic Scholar",
+      "venue": "SIGSOFT FSE Companion",
+      "doi": "https://doi.org/10.1145/3803437.3805580",
+      "url": "https://doi.org/10.1145/3803437.3805580",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software quality measurement",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2607-01842v1",
+      "title": "Understanding Software Defect Prediction: A Large-scale Empirical Study Across Uncertainty Quantification and Performance Evaluation",
+      "abstract": "Software defect prediction (SDP) classifiers produce probabilities used for inspection prioritization, threshold tuning, and risk communication. Probability-based uncertainty quantification (UQ) characterizes prediction confidence, but whether common UQ metrics reliably indicate performance and calibration remains unclear. We conducted a large-scale empirical study of probability-based UQ for SDP. We evaluated five UQ metrics, six performance metrics, and three calibration metrics for 16 representative classifiers. We analyzed these relationships under two prediction settings: within-project defect prediction (WPDP), using 36 benchmark datasets, and cross-project defect prediction (CPDP), using 32 feature-compatible datasets. Results showed that UQ was highly context-dependent. Under WPDP, UQ correlated more consistently with false positive rate and AUC than with MCC, F1 score, and other metrics; these correlations also varied across classifier categories and dataset collections. Performance and calibration were related but not interchangeable; classifiers with strong discrimination could still exhibit large calibration error. Under CPDP, several UQ-performance and UQ-calibration correlations weakened or reversed, indicating that uncertainty signals do not reliably transfer across projects. Thus, UQ should be evaluated against specific performance objectives. Calibration should be assessed independently using multiple metrics. Transferred probabilities should be revalidated before guiding quality-assurance decisions.",
+      "authors": [
+        "Ranjun Peng",
+        "Xuan Xie",
+        "Rubing Huang",
+        "Wenbin He",
+        "Zhijie Wang"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-02",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2607.01842v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
     },
     {
       "id": "doi-doi-org-10-37965-jait-2026-0878",
@@ -549,28 +160,701 @@
       "discoveredAt": "2026-06-26T00:21:15.678Z"
     },
     {
-      "id": "doi-doi-org-10-17683-ijomam-issue24-10",
-      "title": "AUTOMATIC GENERATION OF SOFTWARE ENGINEERING TEST CASES AND CONSTRUCTION OF COVERAGE IMPROVEMENT MODEL BASED ON GENETIC ALGORITHM OPTIMIZING NEURAL NETWORK",
-      "abstract": "The scale of software system continues to expand, and the limitations of manual writing of test cases are gradually exposed in terms of coverage integrity and resource consumption.Focusing on the requirements of automatic test case generation and coverage improvement, this paper constructs a test case generation model based on genetic algorithm optimization neural network, which combines coverage behavior prediction with search optimization process.The model uses vectorization test case coding method, and uses neural network to predict the coverage trend of sentences and branches, thus guiding the evolution of genetic search in high-value input areas.Experiments are carried out on software modules with the scale of 120,000 to 180,000 lines of code, and the test time is limited to 60 minutes.The experimental results show that the effective ratio of test cases generated by the model is stable above 70%, the sentence coverage is maintained in the range of 82% to 83%, the branch coverage is about 70%, and the coverage fluctuation is controlled within 0.4%.The results show that the model has good coverage improvement ability and running stability under the condition of limited test resources, and is suitable for software test scenarios with complex control logic.",
+      "id": "arxiv-arxiv-org-abs-2606-24968v1",
+      "title": "Training Dynamics of Neural Software Defect Predictors under Coupled Data-Quality Issues",
+      "abstract": "Context: Software defect prediction supports maintenance decisions such as testing prioritization, release-risk assessment, and quality monitoring. However, metric-based SDP datasets often contain coupled data-quality issues, especially class imbalance and class overlap. Prior work has mainly measured their impact through endpoint performance, while recent evidence suggests that such issues may also appear in neural training dynamics (gradients, weights, biases, error trajectories). However, these studies examine issues in isolation, leaving open how internal neural network training patterns manifest when data quality issues are coupled. Objective: We investigate how training-dynamics patterns from class imbalance, overlap, and their coupling can be characterized under interaction-aware conditions in deep learning-based SDP. Method: We conduct a controlled intervention study on class-level UBD datasets, training a fixed MLP under imbalance-only, overlap-only, and joint conditions across five seeds. Training dynamics are logged per epoch; fidelity is monitored via coupling ratios. Patterns are characterized using effect sizes, trajectories, sensitivity analyses, and rule-based classification. Expected contribution: The study will produce an interaction-aware empirical protocol and a candidate taxonomy of training-dynamics patterns for coupled data-quality issues in metric-based SDP.",
       "authors": [
-        "Autor nao informado"
+        "Emmanuel Charleson Dapaah",
+        "Philip Makedonski",
+        "Jens Grabowski"
       ],
       "year": 2026,
       "publishedAt": "2026-06-23",
-      "source": "OpenAlex",
-      "venue": "International Journal of Mechatronics and Applied Mechanics",
-      "doi": "https://doi.org/10.17683/ijomam/issue24.10",
-      "url": "https://doi.org/10.17683/ijomam/issue24.10",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2606.24968v1",
       "topics": [
-        "Computer science",
-        "Artificial neural network",
-        "Test case",
-        "Software",
-        "Genetic algorithm",
-        "Code coverage"
+        "cs.LG"
       ],
-      "query": "defect prediction software quality",
-      "discoveredAt": "2026-06-26T00:23:12.355Z"
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-48550-arxiv-2606-08793",
+      "title": "AI-Augmented Closed-Loop Quality Engineering: A Reference Architecture for Continuous Software Quality Intelligence",
+      "abstract": "The quality of software engineering is still under a challenge due to disjointed processes between requirements, testing, and production, which hinders the opportunity to implement quality strategies in consecutive releases. Existing approaches tend to be fixed-model or single-optimization approaches and lack production feedback learning mechanisms. The paper at hand proposes a closed-loop reference architecture of continuous software quality intelligence with AI enhancements. The model synthesizes requirement feature mining, risk-based test prioritization, defect prediction, and production incident analysis as an element of a feedback-based pipeline. A limited feedback learning model is introduced that is used to propagate the production signal-based on defect severity and incident impact- to the following release to ensure stability, and the time. The method is evaluated using a semi-synthetic test dataset of 4,500 requirements, 27,049 test cases, 13,089 defects and 7,841 incidents in six release cycles. The experimental results show that the proposed system reduces the defect leakage by 0.19 to 0.13, increases the effectiveness of the detection system to 0.72 to 0.84, and shortens the test execution by up to 35 percent compared to the non-adaptive baselines. The changes are stable release to release. The findings indicate that through the integration of feedback-based learning in a closed-loop architecture, it can be continued to enhance quality process, which offers practical foundation of adaptive quality engineering of software.",
+      "authors": [
+        "D. Bajaj"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-07",
+      "source": "Semantic Scholar",
+      "venue": "arXiv.org",
+      "doi": "https://doi.org/10.48550/arXiv.2606.08793",
+      "url": "https://doi.org/10.48550/arXiv.2606.08793",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2605-20788v1",
+      "title": "BioDefect: The First Dataset for Defect Detection in Bioinformatics Software",
+      "abstract": "Software defect detection is a critical task in software engineering. However, no prior studies have specifically addressed defect detection in bioinformatics software. Given that the performance of defect detection tasks is primarily influenced by both models and datasets, our experiments controlled for model-related factors and confirmed the limitations of existing datasets in bioinformatics software. To address this issue, we introduce BioDefect, the first dataset specifically designed for defect detection in bioinformatics software, aiming to overcome the limitations of existing datasets in this context. Unlike prior datasets, BioDefect includes complete source code repositories, preserving the actual contextual information of defective code, thereby more accurately reflecting real-world defect scenarios in bioinformatics software. Additionally, BioDefect mitigates issues related to label inconsistency and data leakage, ensuring high data quality and experimental reliability. To evaluate the effectiveness of BioDefect, we conduct a systematic assessment on nine language models (LMs), including DeepSeek-R1. The results demonstrate that BioDefect significantly enhances defect detection performance for bioinformatics software. Compared to existing datasets, BioDefect achieves an average F1-score improvement of 29.61% to 38.04% across all models, highlighting its superior advantages. This study fills a critical research gap in bioinformatics software defect detection, laying a foundation for future studies in this field and offering new insights for improving bioinformatics software quality assurance.",
+      "authors": [
+        "Tianxiang Xu",
+        "Xiaoyan Zhu",
+        "Xin Lai",
+        "Xin Lian",
+        "Hangyu Cheng",
+        "Jiayin Wang"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-20",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2605.20788v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-icieam69213-2026-11549731",
+      "title": "Integrated Methodological Model for Software Quality Assessment for Systems Important to NPP Safety: From Theory to Implementation Practice",
+      "abstract": "This article introduces an integrated methodological model (IMM) for assessing the software quality of systems important to nuclear power plant safety. The model integrates five interrelated components: formal verification and model checking, AI/ML-based anomaly detection, digital twin modeling, DevSecOps/CI/CD practices, and independent V&V audit, within a unified framework covering all software lifecycle stages. A fivelevel qualitative scale of organizational and technological maturity and a mathematical framework for integrated quality assessment with differentiated weighting factors by safety category, in accordance with IAEA SSG-39 guidelines, are presented. Experimental testing in an NPP information and control systems modernization project resulted in a $\\mathbf{2 7} \\boldsymbol{-} \\mathbf{4 5} \\boldsymbol{\\%}$ increase in identified defects, a 28% increase in requirement coverage, a 32% reduction in defect identification labor intensity, and a twofold increase in early-stage defect detection.",
+      "authors": [
+        "Elena Jharko"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-18",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Industrial Engineering, Applications and Manufacturing",
+      "doi": "https://doi.org/10.1109/ICIEAM69213.2026.11549731",
+      "url": "https://doi.org/10.1109/ICIEAM69213.2026.11549731",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-icieam69213-2026-11549592",
+      "title": "Methods and Tools for Engineering Management of Software Quality Level",
+      "abstract": "This work conducts a systematic investigation of models, methodologies, and tools for engineering-based quality management of software during its design and development. The research is aimed at identifying the principal stages of business processes for software quality assurance through the application of the IDEF0 functional modeling methodology. The paper discusses how verification, validation, testing, and usability evaluation are integrated into the overall framework of software engineering project management. A comparison is made of the effectiveness of various methods and tools that support these processes, and current trends in software quality assurance are summarized. In line with international software engineering standards, the main criteria and indicators for software quality assessment are defined. A comprehensive software evaluation technique is proposed, which enables the determination of a software product’s quality level using parameters and criteria selected by experts. A mathematical model for computing an integral software quality indicator is developed. The final quality level is derived by aggregating controlled values, which include both expert-assessed and qualimetrically measured indicators identified during acceptance testing. The proposed approach can be used to assess software quality, detect problematic characteristics, and formulate recommendations for further correction and enhancement of the software product.",
+      "authors": [
+        "S. V. Tarkhov",
+        "L. M. Tarkhova",
+        "Anastasiya Sh. Minasova"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-18",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Industrial Engineering, Applications and Manufacturing",
+      "doi": "https://doi.org/10.1109/ICIEAM69213.2026.11549592",
+      "url": "https://doi.org/10.1109/ICIEAM69213.2026.11549592",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-ms-2026-3662321",
+      "title": "Trends in Software Quality in Embedded Systems: Are We Getting Any Better?",
+      "abstract": "Software quality is and remains an important topic, for which there is no clear definition or method of measurement. This column discusses a measurement model based on selected software metrics, in which measured trends are discussed across a very large code base.",
+      "authors": [
+        "Hans Sassenburg",
+        "P. Jansen",
+        "L. Jansen",
+        "M. van Genuchten",
+        "Les Hatton"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-01",
+      "source": "Semantic Scholar",
+      "venue": "IEEE Software",
+      "doi": "https://doi.org/10.1109/MS.2026.3662321",
+      "url": "https://doi.org/10.1109/MS.2026.3662321",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2604-20742v1",
+      "title": "Evaluating Software Defect Prediction Models via the Area Under the ROC Curve Can Be Misleading",
+      "abstract": "Background: Receiver Operating Characteristic (ROC) curves are widely used to evaluate the performance of Software Defect Prediction (SDP) models that estimate module fault-proneness, i.e., the probability that a module is faulty. A ROC curve maps a model's performance in terms of True Positive Rate and False Positive Rate for any possible threshold set on fault-proneness. The Area Under the ROC Curve (AUC) summarizes the performance of a model across all possible thresholds. Traditionally, ROC curves completely above the bisector of the ROC space are considered better than random, and high AUC values are associated with good performance. Aim: We investigate whether these beliefs are correct, hence if SDP model evaluation based on ROC curves and AUC is reliable. Method: We decorate ROC curves by highlighting the points corresponding to threshold values. We also represent True Positive Rate and False Positive Rate as functions of the threshold. Thus, we can evaluate whether a model classifies both faulty and non-faulty modules better than the random model. Results: We show that commonly used evaluation criteria may lead to wrong conclusions. Conclusions: A high value of AUC does not guarantee that both the True Positive Rate and the False Positive Rate of a model are better than the random model's for all possible thresholds. Either decorated ROC curves or alternative representations are needed to appreciate all the relevant aspects of SDP models.",
+      "authors": [
+        "Luigi Lavazza",
+        "Gabriele Rotoloni",
+        "Sandro Morasca"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-22",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2604.20742v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-56961-mejeit-v5i1-1443",
+      "title": "Designing a Requirements Engineering Model to Achieve Software Quality",
+      "abstract": "One of the key issues addressed in this study is the ambiguity surrounding the understanding of software project requirements. Many users and clients often lack a clear vision of what they expect from the system or the purpose behind its development, which inevitably hinders the success of software projects. A primary objective of the researcher in this study was to establish a practical approach for writing requirements based on specific standards and a proposed model. This model consists of a structured and organized sequence of steps designed to facilitate accurate and effective requirement specification. Among the most significant findings of the study—based on a series of questionnaires distributed to various software companies and individuals—was the contribution of the survey in analyzing the current state of requirements engineering within software institutions and assessing the extent to which practical standards are applied. The survey revealed numerous insights, most notably the widespread absence of a standardized model for requirements gathering among both organizations and individual practitioners.",
+      "authors": [
+        "Mohammed Ali Badawy Alawad Kenen"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-21",
+      "source": "Semantic Scholar",
+      "venue": "مجلة منار الشرق للتربية و تكنولوجيا التعليم",
+      "doi": "https://doi.org/10.56961/mejeit.v5i1.1443",
+      "url": "https://doi.org/10.56961/mejeit.v5i1.1443",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-1016-j-cola-2026-101400",
+      "title": "A multi-level complexity metric suite for software quality measurement and machine learning-based software defect prediction",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Manpreet Singh",
+        "J. Chhabra"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-01",
+      "source": "Semantic Scholar",
+      "venue": "Journal of Computer Languages",
+      "doi": "https://doi.org/10.1016/j.cola.2026.101400",
+      "url": "https://doi.org/10.1016/j.cola.2026.101400",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software quality measurement",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-64612-ijiv-v2i3-72",
+      "title": "Evaluating the Effectiveness of Barangay Management System for Local Governance using Software Quality Model of ISO 25010:2011",
+      "abstract": "This research evaluated the effectiveness of the Barangay Management System (BMS) developed for Barangay Macapso, Vallehermoso, Negros Oriental, Philippines. The study aimed to address gaps in the barangay’s manual administrative processes and improve service delivery through an automated system. A descriptive–developmental research design was employed, integrating system development with empirical evaluation. Data were collected using surveys and structured interviews from end-users, including the Barangay Chairman, Kagawad, Secretary, and staff, while IT experts assessed technical quality based on the ISO/IEC 25010:2011 software quality model. The findings reveal that end-users rated the system highly in functional suitability, usability, reliability, and performance efficiency, while IT experts reported favorable results for maintainability, compatibility, and security. The results indicate that the BMS effectively supports operational tasks, enhances service delivery, and meets essential software quality standards. Gaps identified include varying digital proficiency among users and areas for ongoing system optimization. The study recommends targeted user training, continuous system maintenance, and potential expansion to other barangays to ensure scalability and sustained adoption. These findings provide practical insights for improving local government information systems and promoting efficient, technology-driven governance.",
+      "authors": [
+        "Dexter Dandan",
+        "M. M. Cruz",
+        "Alejando Soriano",
+        "Ken Balogo"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-03-30",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Interdisciplinary Viewpoints",
+      "doi": "https://doi.org/10.64612/ijiv.v2i3.72",
+      "url": "https://doi.org/10.64612/ijiv.v2i3.72",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-63163-jpehss-v4i1-1640",
+      "title": "ENHANCING SOFTWARE QUALITY THROUGH MACHINE LEARNING DRIVEN DEFECT PREDICTION MODEL",
+      "abstract": "Software defects are among the key problems in software engineering as it compromises software reliability, boosts up maintenance expenses and impacts software quality. Traditionally, defects are discovered using a time-consuming technique and, in a large and complex software system, it is not so efficient. This study was interested in software defect prediction application of machine learning techniques to improve software quality assurance in the early stage in this regard. Designing a machine learning model that can predict and detect the defect prone software modules at an early stage of Software Development Life Cycle (SDLC) is the prime objective of research. Historical Software Defect Data sets from PROMISE repository were used in the study. To improve data quality, the following data cleaning, class balancing, data normalization and missing value imputation techniques were employed. The most relevant software metrics were also selected using feature selection techniques like Principal Component Analysis (PCA). Different machine learning algorithms were implemented and tested including Random Forest, Support Vector Machine (SVM) and Naïve Bayes with the performance metrics of accuracy, precision, recall, and F1-score. The outcomes of the experiments showed that the use of machine learning technique had a positive impact on the software defect detection prediction accuracy. Among the models implemented the complex and elaborated models gave better results, with the best model being the Random Forest model. The study shows that machine learning defect prediction models could be beneficial for software developers to reduce the amount of software testing and software maintenance cost, software reliability and software quality as well as at the early stage of software development to identify software components that may be at risk of failure. Moreover, the study emphasized on data pre-processing and feature selection approaches to boost the prediction accuracy and to perform successful software quality assurance procedures.",
+      "authors": [
+        "Asma Hameed",
+        "M. Khan"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-03-26",
+      "source": "Semantic Scholar",
+      "venue": "Physical Education, Health and Social Sciences",
+      "doi": "https://doi.org/10.63163/jpehss.v4i1.1640",
+      "url": "https://doi.org/10.63163/jpehss.v4i1.1640",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-37012-jtik-v12i1-3294",
+      "title": "Implementation of Information System and Software Quality Testing in Company Operational Applications Based on ISO/IEC 25010 (Case Study: PT Snapdev Digital Indonesia)",
+      "abstract": "Implementation of information system quality testing is an important factor in supporting the effectiveness and efficiency of company operations. This study aims to implement an information system and conduct software quality testing based on the ISO/IEC 25010 standard at PT Snapdev Digital Indonesia. Quality testing is carried out by measuring seven main characteristics, namely Performance Efficiency, Compatibility, Usability, Reliability, Security, Maintainability, and Portability. The research methods used include observation, data collection, and analysis of test results based on indicators in each ISO/IEC 25010 characteristic. The measurement results show that the percentage value for each aspect of system quality is in the range of 79%–83%, which indicates that the system has met most of the established quality criteria. The overall average value of 80.97% places the system quality in the very good category. This indicates that the system has efficient performance, adequate levels of security and reliability, good ease of use, and can be maintained and run in various environments. However, there are still opportunities for improvement in several aspects to improve system quality to be more optimal. Overall, the implemented information system is considered suitable for use and complies with international software quality standards.",
+      "authors": [
+        "Chairul Anwar"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-02-25",
+      "source": "Semantic Scholar",
+      "venue": "Jurnal Teknologi Informatika dan Komputer",
+      "doi": "https://doi.org/10.37012/jtik.v12i1.3294",
+      "url": "https://doi.org/10.37012/jtik.v12i1.3294",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality measurement",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2602-22403v2",
+      "title": "XMENTOR: A Rank-Aware Aggregation Approach for Human-Centered Explainable AI in Just-in-Time Software Defect Prediction",
+      "abstract": "Machine learning (ML)-based defect prediction models can improve software quality. However, their opaque reasoning creates an HCI challenge because developers struggle to trust models they cannot interpret. Explainable AI (XAI) methods such as LIME, SHAP, and BreakDown aim to provide transparency, but when used together, they often produce conflicting explanations that increase confusion, frustration, and cognitive load. To address this usability challenge, we introduce XMENTOR, a human-centered, rank-aware aggregation method implemented as a VS Code plugin. XMENTOR unifies multiple post-hoc explanations into a single, coherent view by applying adaptive thresholding, rank and sign agreement, and fallback strategies to preserve clarity without overwhelming users. In a user study, nearly 90% of the participants preferred aggregated explanations, citing reduced confusion and stronger support for daily tasks of debugging and review of defects. Our findings show how combining explanations and embedding them into developer workflows can enhance interpretability, usability, and trust.",
+      "authors": [
+        "Saumendu Roy",
+        "Banani Roy",
+        "Chanchal Roy",
+        "Richard Bassey"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-02-25",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2602.22403v2",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-55041-ijsrem56830",
+      "title": "Automated Software Quality Assurance Using CI/CD Tools",
+      "abstract": "Abstract - Modern software development environments require fast delivery with the retention of high quality standards. Continuous Integration and Continuous Delivery (CI/CD) pipelines have greatly enhanced automation in software development; however, the current pipelines are dependent on isolated quality checks using predefined thresholds, which do not offer a holistic assessment of the readiness of the software. Software quality is a multidimensional concept that considers parameters such as reliability, security, maintainability, testing efficiency, and code duplication. The assessment of these parameters individually often results in subjective and unreliable release decisions.\n\nThis study presents a comprehensive CI/CD-based automated software quality scoring and release decisioning framework that uses a holistic model to assess multiple software quality parameters together. The framework uses a weighted multi-criteria assessment approach to normalize the parameters and calculate a Final Quality Score (FQS), which is an objective measure of software readiness. The framework automatically approves or rejects software releases based on predefined quality gate rules. Experimental results on real-world software projects show that the proposed framework is able to distinguish between high-quality and low-quality software builds effectively, enhance decision accuracy, and reduce manual effort required for release decisioning in contemporary DevOps environments.\n\nKey Words:  CI/CD Pipeline, Software Quality Evaluation, Automated Quality Gate, DevOps, Multi-Criteria Scoring Model, Software Release Decision",
+      "authors": [
+        "Amol D. Wakhare",
+        "Tanay D. Jaybhaye"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-02-23",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Scientific Research in Engineering and Management",
+      "doi": "https://doi.org/10.55041/ijsrem56830",
+      "url": "https://doi.org/10.55041/ijsrem56830",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-southeastcon63549-2026-11476717",
+      "title": "Engineering Management for AI-Driven Software Quality Assurance: Practices, Challenges, and Future Direction",
+      "abstract": "The integration of Artificial Intelligence (AI) into software systems has introduced unprecedented complexities and opportunities for quality assurance. This paper explores the evolving landscape of software quality engineering management in the age of AI. It examines the critical challenges and best practices for managing the quality of AI-driven software, from data acquisition to model deployment and maintenance. We present a comprehensive framework that synthesizes established software engineering principles with emerging machine learning (ML) development lifecycles. The paper analyzes key engineering management practices, including automated test generation, defect prediction, and continuous model validation, drawing on case studies and industry research. Furthermore, it discusses the future of AI in quality assurance, highlighting the potential of Large Language Models (LLMs) and knowledge graphs to enable more autonomous and intelligent testing paradigms. This paper aims to provide a valuable resource for engineering managers, QA professionals, and researchers navigating the transition to AI-centric software development.",
+      "authors": [
+        "Srinivas Reddy Kosna",
+        "Subba Rao Katragadda"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-02-20",
+      "source": "Semantic Scholar",
+      "venue": "SoutheastCon",
+      "doi": "https://doi.org/10.1109/SoutheastCon63549.2026.11476717",
+      "url": "https://doi.org/10.1109/SoutheastCon63549.2026.11476717",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2601-18477v1",
+      "title": "An Audit of Machine Learning Experiments on Software Defect Prediction",
+      "abstract": "Background: Machine learning algorithms are widely used to predict defect prone software components. In this literature, computational experiments are the main means of evaluation, and the credibility of results depends on experimental design and reporting. Objective: This paper audits recent software defect prediction (SDP) studies by assessing their experimental design, analysis, and reporting practices against accepted norms from statistics, machine learning, and empirical software engineering. The aim is to characterise current practice and assess the reproducibility of published results. Method: We audited SDP studies indexed in SCOPUS between 2019 and 2023, focusing on design and analysis choices such as outcome measures, out of sample validation strategies, and the use of statistical inference. Nine study issues were evaluated. Reproducibility was assessed using the instrument proposed by González Barahona and Robles. Results: The search identified approximately 1,585 SDP experiments published during the period. From these, we randomly sampled 101 papers, including 61 journal and 40 conference publications, with almost 50 percent behind paywalls. We observed substantial variation in research practice. The number of datasets ranged from 1 to 365, learners or learner variants from 1 to 34, and performance measures from 1 to 9. About 45 percent of studies applied formal statistical inference. Across the sample, we identified 427 issues, with a median of four per paper, and only one paper without issues. Reproducibility ranged from near complete to severely limited. We also identified two cases of tortured phrases and possible paper mill activity. Conclusions: Experimental design and reporting practices vary widely, and almost half of the studies provide insufficient detail to support reproduction. The audit indicates substantial scope for improvement.",
+      "authors": [
+        "Giuseppe Destefanis",
+        "Leila Yousefi",
+        "Martin Shepperd",
+        "Allan Tucker",
+        "Stephen Swift",
+        "Steve Counsell",
+        "Mahir Arzoky"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-26",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2601.18477v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-23960-jitet-v14i1-8585",
+      "title": "ANALISIS KUALITAS DAN PENERAPAN SOFTWARE QUALITY ASSURANCE PADA APLIKASI CAPCUT MENGGUNAKAN MODEL ISO/IEC 9126",
+      "abstract": "Di era digital seperti sekarang ini sebuah perangkat lunak memegang peranan penting dalam memastikan keberhasilan suatu aplikasi, apalagi untuk aplikasi seluler yang memiliki pengguna sebanyak CapCut. Untuk menjamin mutunya selaras dengan tolok ukur industri, penerapan Software Quality Assurance (SQA) dan pemakaian model penaksiran mutu perangkat lunak yang terukur adalah suatu keharusan. Kajian ini menitikberatkan pada evaluasi kualitas aplikasi CapCut menggunakan kerangka ISO/IEC 9126, yang mencakup enam karakteristik inti, yaitu fungsi yang disediakan, tingkat keandalan, keringanan dalam penggunaan, efisiensi kinerja, kemudahan pemeliharaan, serta kemampuan beroperasi lintas platform. Pendekatan yang digunakan dalam riset ini melibatkan penelusuran pustaka, penguraian data lewat angket, pengamatan fitur, serta pemetaan mutu aplikasi menurut tolok ukur ISO/IEC 9126. Hasil kajian memperlihatkan bahwa secara umum CapCut mempunyai mutu yang sangat baik dalam hal usability dan functionality, namun masih memerlukan peningkatan pada sisi efficiency dan maintainability. Penerapan praktik SQA terbukti menolong mendongkrak mutu aplikasi serta menawarkan landasan penaksiran yang lebih terstruktur. Dengan begitu, model ISO/IEC 9126 dapat dipakai sebagai acuan lengkap untuk menaksir mutu aplikasi penyuntingan video semacam CapCut.",
+      "authors": [
+        "Siska Puspitarani"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-18",
+      "source": "Semantic Scholar",
+      "venue": "Jurnal Informatika dan Teknik Elektro Terapan",
+      "doi": "https://doi.org/10.23960/jitet.v14i1.8585",
+      "url": "https://doi.org/10.23960/jitet.v14i1.8585",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-23960-jitet-v14i1-8462",
+      "title": "ANALISIS KUALITAS DAN PENERAPAN SOFTWARE QUALITY ASSURANCE PADA WEBSITE PORTAL KATINGAN MENGGUNAKAN MODEL ISOIEC 9126",
+      "abstract": "Portal Katingan memegang peran strategis sebagai gerbang utama layanan digital dan informasi publik di Kabupaten Katingan. Penelitian ini bertujuan untuk menganalisis kualitas perangkat lunak website tersebut menggunakan standar ISO/IEC 9126 dan memberikan evaluasi berbasis Software Quality Assurance (SQA). Metode penelitian menggunakan pendekatan kuantitatif deskriptif dengan menyebarkan kuesioner kepada 50 responden, serta divalidasi melalui pengujian teknis Black Box Testing dan GTmetrix. Hasil penelitian menunjukkan bahwa secara keseluruhan kualitas Website Portal Katingan masuk dalam kategori Sangat Baik dengan skor rata-rata 4.63. Aspek Portability menjadi karakteristik paling unggul (4.74), sedangkan aspek Functionality memperoleh skor terendah (4.53) karena adanya temuan tautan layanan yang tidak aktif. Pada aspek Efficiency, ditemukan perbedaan signifikan di mana halaman utama sangat efisien (Grade A), namun halaman berita memerlukan optimasi (Grade F). Kesimpulannya, Portal Katingan telah memenuhi standar kelayakan perangkat lunak yang baik, namun memerlukan pemeliharaan berkala pada tautan dan kompresi aset gambar berita.",
+      "authors": [
+        "Paska Prima Ginting",
+        "Yosua Alexandro",
+        "Widiatry"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-17",
+      "source": "Semantic Scholar",
+      "venue": "Jurnal Informatika dan Teknik Elektro Terapan",
+      "doi": "https://doi.org/10.23960/jitet.v14i1.8462",
+      "url": "https://doi.org/10.23960/jitet.v14i1.8462",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2601-02454v1",
+      "title": "The Rise of Agentic Testing: Multi-Agent Systems for Robust Software Quality Assurance",
+      "abstract": "Software testing has progressed toward intelligent automation, yet current AI-based test generators still suffer from static, single-shot outputs that frequently produce invalid, redundant, or non-executable tests due to the lack of execution aware feedback. This paper introduces an agentic multi-model testing framework a closed-loop, self-correcting system in which a Test Generation Agent, an Execution and Analysis Agent, and a Review and Optimization Agent collaboratively generate, execute, analyze, and refine tests until convergence. By using sandboxed execution, detailed failure reporting, and iterative regeneration or patching of failing tests, the framework autonomously improves test quality and expands coverage. Integrated into a CI/CD-compatible pipeline, it leverages reinforcement signals from coverage metrics and execution outcomes to guide refinement. Empirical evaluations on microservice based applications show up to a 60% reduction in invalid tests, 30% coverage improvement, and significantly reduced human effort compared to single-model baselines demonstrating that multi-agent, feedback-driven loops can evolve software testing into an autonomous, continuously learning quality assurance ecosystem for self-healing, high-reliability codebases.",
+      "authors": [
+        "Saba Naqvi",
+        "Mohammad Baqar",
+        "Nawaz Ali Mohammad"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-05",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2601.02454v1",
+      "topics": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-access-2026-3712592",
+      "title": "Explainable AI-Driven Metrics for Transparent Software Quality Prediction",
+      "abstract": "Accurate software quality prediction is critical for early defect identification and effective allocation of testing resources. Although machine learning (ML) and deep learning (DL) models have significantly improved defect prediction performance, their opaque nature limits transparency, interpretability, and practitioner trust. This study presents an Explainable Artificial Intelligence (XAI) driven framework for developing composite, transparent software quality metrics that integrate predictive accuracy with multi-level interpretability. The framework has been implemented and empirically validated using multiple real-world datasets. The framework combines static code metrics, process metrics, and developer activity metrics to construct robust defect prediction models using Random Forest, Gradient Boosted Trees (e.g., via the XGBoost implementation), Support Vector Machines (SVM), Logistic Regression, and attention-based Neural Networks. To enhance transparency, model agnostic explanation techniques, including SHAP and LIME, are integrated with in-model attention mechanisms to provide global and local explanations of predictions. Experiments conducted on PROMISE, open-source, and industrial datasets demonstrate that the proposed composite explainable metric achieves superior performance on the PROMISE (NASA-JM1) dataset, with the Gradient Boosted Trees model reaching an Accuracy of 0.85 and an AUC of 0.88, and consistently outperforms traditional and opaque baselines across the Eclipse JDT, Apache Commons, and Industrial datasets. Quantitative faithfulness analysis shows strong alignment between SHAP explanations and model behavior (Pearson’s r= 0.81). A controlled user study involving software developers reports a 14% improvement in decision accuracy and significantly higher confidence levels (p< 0.01) when using explainable metrics. The framework further incorporates interactive visual dashboards and textual summaries to support actionable decision-making during quality assurance processes. By bridging the gap between predictive performance and interpretability, this research demonstrates that explainability not only enhances trust but also improves the effectiveness of practical defect triage. The methodology provides a scalable and extensible foundation for transparent AI-driven software engineering tools.",
+      "authors": [
+        "Abdulaziz Attaallah",
+        "Khalil Al Sulbi"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "IEEE Access",
+      "doi": "https://doi.org/10.1109/ACCESS.2026.3712592",
+      "url": "https://doi.org/10.1109/ACCESS.2026.3712592",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2512-23875v1",
+      "title": "From Illusion to Insight: Change-Aware File-Level Software Defect Prediction Using Agentic AI",
+      "abstract": "Much of the reported progress in file-level software defect prediction (SDP) is, in reality, nothing but an illusion of accuracy. Over the last decades, machine learning and deep learning models have reported increasing performance across software versions. However, since most files persist across releases and retain their defect labels, standard evaluation rewards label-persistence bias rather than reasoning about code changes. To address this issue, we reformulate SDP as a change-aware prediction task, in which models reason over code changes of a file within successive project versions, rather than relying on static file snapshots. Building on this formulation, we propose an LLM-driven, change-aware, multi-agent debate framework. Our experiments on multiple PROMISE projects show that traditional models achieve inflated F1, while failing on rare but critical defect-transition cases. In contrast, our change-aware reasoning and multi-agent debate framework yields more balanced performance across evolution subsets and significantly improves sensitivity to defect introductions. These results highlight fundamental flaws in current SDP evaluation practices and emphasize the need for change-aware reasoning in practical defect prediction. The source code is publicly available.",
+      "authors": [
+        "Mohsen Hesamolhokama",
+        "Behnam Rohani",
+        "Amirahmad Shafiee",
+        "MohammadAmin Fazli",
+        "Jafar Habibi"
+      ],
+      "year": 2025,
+      "publishedAt": "2025-12-29",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2512.23875v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2512-17460v1",
+      "title": "When Data Quality Issues Collide: A Large-Scale Empirical Study of Co-Occurring Data Quality Issues in Software Defect Prediction",
+      "abstract": "Software Defect Prediction (SDP) models are central to proactive software quality assurance, yet their effectiveness is often constrained by the quality of available datasets. Prior research has typically examined single issues such as class imbalance or feature irrelevance in isolation, overlooking that real-world data problems frequently co-occur and interact. This study presents, to our knowledge, the first large-scale empirical analysis in SDP that simultaneously examines five co-occurring data quality issues (class imbalance, class overlap, irrelevant features, attribute noise, and outliers) across 374 datasets and five classifiers. We employ Explainable Boosting Machines together with stratified interaction analysis to quantify both direct and conditional effects under default hyperparameter settings, reflecting practical baseline usage. Our results show that co-occurrence is nearly universal: even the least frequent issue (attribute noise) appears alongside others in more than 93% of datasets. Irrelevant features and imbalance are nearly ubiquitous, while class overlap is the most consistently harmful issue. We identify stable tipping points around 0.20 for class overlap, 0.65-0.70 for imbalance, and 0.94 for irrelevance, beyond which most models begin to degrade. We also uncover counterintuitive patterns, such as outliers improving performance when irrelevant features are low, underscoring the importance of context-aware evaluation. Finally, we expose a performance-robustness trade-off: no single learner dominates under all conditions. By jointly analyzing prevalence, co-occurrence, thresholds, and conditional effects, our study directly addresses a persistent gap in SDP research. Hence, moving beyond isolated analyses to provide a holistic, data-aware understanding of how quality issues shape model performance in real-world settings.",
+      "authors": [
+        "Emmanuel Charleson Dapaah",
+        "Jens Grabowski"
+      ],
+      "year": 2025,
+      "publishedAt": "2025-12-19",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2512.17460v1",
+      "topics": [
+        "cs.SE",
+        "cs.LG"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2512-14861v2",
+      "title": "Industry Expectations and Skill Demands in Quantum Software Testing",
+      "abstract": "Quantum software testing introduces new challenges that differ fundamentally from those in classical software engineering. Aims: This study investigates how the quantum software industry defines testing roles and what skills are expected from professionals in these positions. Method: We analyzed 110 job postings from organizations involved in quantum software and hardware development, identifying activities, competencies, and skill requirements related to testing. Results: The findings show that testing in quantum contexts combines traditional software quality assurance with experimental validation, emphasizing calibration, control, and hybrid quantum-classical verification. Employers seek professionals who integrate programming and automation expertise with quantum-specific technical knowledge and interdisciplinary collaboration skills. Conclusions: Quantum software testing remains at an early but rapidly evolving stage that bridges software engineering and experimental physics, highlighting the need for educational and research efforts that align testing practices with industrial realities.",
+      "authors": [
+        "Ronnie de Souza Santos",
+        "Maria Teresa Baldassarre",
+        "Cesar França"
+      ],
+      "year": 2025,
+      "publishedAt": "2025-12-16",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2512.14861v2",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2510-16665v1",
+      "title": "Contrasting the Hyperparameter Tuning Impact Across Software Defect Prediction Scenarios",
+      "abstract": "Software defect prediction (SDP) is crucial for delivering high-quality software products. Recent research has indicated that prediction performance improvements in SDP are achievable by applying hyperparameter tuning to a particular SDP scenario. However, the positive impact resulting from the hyperparameter tuning step may differ based on the targeted SDP scenario. Comparing the impact of hyperparameter tuning across SDP scenarios is necessary to provide comprehensive insights and enhance the robustness, generalizability, and, eventually, the practicality of SDP modeling for quality assurance. Therefore, in this study, we contrast the impact of hyperparameter tuning across two pivotal and consecutive SDP scenarios: (1) Inner Version Defect Prediction (IVDP) and (2) Cross Version Defect Prediction (CVDP). The main distinctions between the two scenarios lie in the scope of defect prediction and the selected evaluation setups. This study's experiments use common evaluation setups, 28 machine learning (ML) algorithms, 53 post-release software datasets, two tuning algorithms, and five optimization metrics. We apply statistical analytics to compare the SDP performance impact differences by investigating the overall impact, the single ML algorithm impact, and variations across different software dataset sizes. The results indicate that the SDP gains within the IVDP scenario are significantly larger than those within the CVDP scenario. The results reveal that asserting performance gains for up to 24 out of 28 ML algorithms may not hold across multiple SDP scenarios. Furthermore, we found that small software datasets are more susceptible to larger differences in performance impacts. Overall, the study findings recommend software engineering researchers and practitioners to consider the effect of the selected SDP scenario when expecting performance gains from hyperparameter tuning.",
+      "authors": [
+        "Mohamed Sami Rakha",
+        "Andriy Miranskyy",
+        "Daniel Alencar da Costa"
+      ],
+      "year": 2025,
+      "publishedAt": "2025-10-18",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2510.16665v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2510-10840v1",
+      "title": "Software Defect Prediction using Autoencoder Transformer Model",
+      "abstract": "An AI-ML-powered quality engineering approach uses AI-ML to enhance software quality assessments by predicting defects. Existing ML models struggle with noisy data types, imbalances, pattern recognition, feature extraction, and generalization. To address these challenges, we develop a new model, Adaptive Differential Evolution (ADE) based Quantum Variational Autoencoder-Transformer (QVAET) Model (ADE-QVAET). ADE combines with QVAET to obtain high-dimensional latent features and maintain sequential dependencies, resulting in enhanced defect prediction accuracy. ADE optimization enhances model convergence and predictive performance. ADE-QVAET integrates AI-ML techniques such as tuning hyperparameters for scalable and accurate software defect prediction, representing an AI-ML-driven technology for quality engineering. During training with a 90% training percentage, ADE-QVAET achieves high accuracy, precision, recall, and F1-score of 98.08%, 92.45%, 94.67%, and 98.12%, respectively, when compared to the Differential Evolution (DE) ML model.",
+      "authors": [
+        "Seshu Barma",
+        "Mohanakrishnan Hariharan",
+        "Satish Arvapalli"
+      ],
+      "year": 2025,
+      "publishedAt": "2025-10-12",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2510.10840v1",
+      "topics": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2509-09192v2",
+      "title": "ReDef: Do Code Language Models Truly Understand Code Changes for Just-in-Time Software Defect Prediction?",
+      "abstract": "Just-in-Time software defect prediction (JIT-SDP) plays a critical role in prioritizing risky code changes during code review and continuous integration. However, existing datasets often suffer from noisy labels and low precision in identifying bug-inducing commits. To address this, we present ReDef (Revert-based Defect dataset), a high-confidence benchmark of function-level modifications curated from 22 large-scale C/C++ projects. Defective cases are anchored by revert commits, while clean cases are validated through post-hoc history checks. Ambiguous instances are conservatively filtered out via a GPT-assisted triage process involving multiple votes and audits. This pipeline yields 3,164 defective and 10,268 clean modifications, offering substantially more reliable labels than prior resources. Beyond dataset construction, we provide a systematic evaluation of how Code Language Models (CLMs)-specifically CodeBERT, CodeT5+, UniXcoder, and Qwen2.5-reason about code modifications. We first investigate which input encodings most effectively expose change information under five different strategies. We then design four counterfactual perturbation strategies (e.g., swapping added/deleted blocks, inverting diff polarity) to serve as diagnostic probes. We posit that if models genuinely capture change semantics, such distortions should lead to a clear decline in predictive performance. Our results show that compact diff-style encodings consistently outperform whole-function formats across all CLMs, supported by rigorous statistical confirmation. However, under counterfactual tests, performance remains effectively stable, revealing that what appears to be robustness in fact reflects a reliance on superficial cues rather than true semantic understanding.",
+      "authors": [
+        "Doha Nam",
+        "Taehyoun Kim",
+        "Duksan Ryu",
+        "Jongmoon Baik"
+      ],
+      "year": 2025,
+      "publishedAt": "2025-09-11",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2509.09192v2",
+      "topics": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2508-04408v1",
+      "title": "Breaking New Ground in Software Defect Prediction: Introducing Practical and Actionable Metrics with Superior Predictive Power for Enhanced Decision-Making",
+      "abstract": "Software defect prediction using code metrics has been extensively researched over the past five decades. However, prediction harnessing non-software metrics is under-researched. Considering that the root cause of software defects is often attributed to human error, human factors theory might offer key forecasting metrics for actionable insights. This paper explores automated software defect prediction at the method level based on the developers' coding habits. First, we propose a framework for deciding the metrics to conduct predictions. Next, we compare the performance of our metrics to that of the code and commit history metrics shown by research to achieve the highest performance to date. Finally, we analyze the prediction importance of each metric. As a result of our analyses of twenty-one critical infrastructure large-scale open-source software projects, we have presented: (1) a human error-based framework with metrics useful for defect prediction at method level; (2) models using our proposed metrics achieve better average prediction performance than the state-of-the-art code metrics and history measures; (3) the prediction importance of all metrics distributes differently with each of the novel metrics having better average importance than code and history metrics; (4) the novel metrics dramatically enhance the explainability, practicality, and actionability of software defect prediction models, significantly advancing the field. We present a systematic approach to forecasting defect-prone software methods via a human error framework. This work empowers practitioners to act on predictions, empirically demonstrating how developer coding habits contribute to defects in software systems.",
+      "authors": [
+        "Carlos Andrés Ramírez Cataño",
+        "Makoto Itoh"
+      ],
+      "year": 2025,
+      "publishedAt": "2025-08-06",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2508.04408v1",
+      "topics": [
+        "cs.SE",
+        "cs.HC"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2504-19181v1",
+      "title": "Critical Considerations on Effort-aware Software Defect Prediction Metrics",
+      "abstract": "Background. Effort-aware metrics (EAMs) are widely used to evaluate the effectiveness of software defect prediction models, while accounting for the effort needed to analyze the software modules that are estimated defective. The usual underlying assumption is that this effort is proportional to the modules' size measured in LOC. However, the research on module analysis (including code understanding, inspection, testing, etc.) suggests that module analysis effort may be better correlated to code attributes other than size. Aim. We investigate whether assuming that module analysis effort is proportional to other code metrics than LOC leads to different evaluations. Method. We show mathematically that the choice of the code measure used as the module effort driver crucially influences the resulting evaluations. To illustrate the practical consequences of this, we carried out a demonstrative empirical study, in which the same model was evaluated via EAMs, assuming that effort is proportional to either McCabe's complexity or LOC. Results. The empirical study showed that EAMs depend on the underlying effort model, and can give quite different indications when effort is modeled differently. It is also apparent that the extent of these differences varies widely. Conclusions. Researchers and practitioners should be aware that the reliability of the indications provided by EAMs depend on the nature of the underlying effort model. The EAMs used until now appear to be actually size-aware, rather than effort-aware: when analysis effort does not depend on size, these EAMs can be misleading.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2025,
+      "publishedAt": "2025-04-27",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2504.19181v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2503-16335v1",
+      "title": "Enhancing Software Quality Assurance with an Adaptive Differential Evolution based Quantum Variational Autoencoder-Transformer Model",
+      "abstract": "An AI-powered quality engineering platform uses artificial intelligence to boost software quality assessments through automated defect prediction and optimized performance alongside improved feature extraction. Existing models result in difficulties addressing noisy data types together with imbalances, pattern recognition complexities, ineffective feature extraction, and generalization weaknesses. To overcome those existing challenges in this research, we develop a new model Adaptive Differential Evolution based Quantum Variational Autoencoder-Transformer Model (ADE-QVAET), that combines a Quantum Variational Autoencoder-Transformer (QVAET) to obtain high-dimensional latent features and maintain sequential dependencies together with contextual relationships, resulting in superior defect prediction accuracy. Adaptive Differential Evolution (ADE) Optimization utilizes an adaptive parameter tuning method that enhances model convergence and predictive performance. ADE-QVAET integrates advanced AI techniques to create a robust solution for scalable and accurate software defect prediction that represents a top-level AI-driven technology for quality engineering applications. The proposed ADE-QVAET model attains high accuracy, precision, recall, and f1-score during the training percentage (TP) 90 of 98.08%, 92.45%, 94.67%, and 98.12%.",
+      "authors": [
+        "Seshu Babu Barma",
+        "Mohanakrishnan Hariharan",
+        "Satish Arvapalli"
+      ],
+      "year": 2025,
+      "publishedAt": "2025-03-20",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2503.16335v1",
+      "topics": [
+        "cs.AI",
+        "cs.ET"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2502-20806v1",
+      "title": "Multimodal Learning for Just-In-Time Software Defect Prediction in Autonomous Driving Systems",
+      "abstract": "In recent years, the rise of autonomous driving technologies has highlighted the critical importance of reliable software for ensuring safety and performance. This paper proposes a novel approach for just-in-time software defect prediction (JIT-SDP) in autonomous driving software systems using multimodal learning. The proposed model leverages the multimodal transformers in which the pre-trained transformers and a combining module deal with the multiple data modalities of the software system datasets such as code features, change metrics, and contextual information. The key point for adapting multimodal learning is to utilize the attention mechanism between the different data modalities such as text, numerical, and categorical. In the combining module, the output of a transformer model on text data and tabular features containing categorical and numerical data are combined to produce the predictions using the fully connected layers. Experiments conducted on three open-source autonomous driving system software projects collected from the GitHub repository (Apollo, Carla, and Donkeycar) demonstrate that the proposed approach significantly outperforms state-of-the-art deep learning and machine learning models regarding evaluation metrics. Our findings highlight the potential of multimodal learning to enhance the reliability and safety of autonomous driving software through improved defect prediction.",
+      "authors": [
+        "Faisal Mohammad",
+        "Duksan Ryu"
+      ],
+      "year": 2025,
+      "publishedAt": "2025-02-28",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2502.20806v1",
+      "topics": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2412-07927v2",
+      "title": "SDPERL: A Framework for Software Defect Prediction Using Ensemble Feature Extraction and Reinforcement Learning",
+      "abstract": "Ensuring software quality remains a critical challenge in complex and dynamic development environments, where software defects can result in significant operational and financial risks. This paper proposes an innovative framework for software defect prediction that combines ensemble feature extraction with reinforcement learning (RL)--based feature selection. We claim that this work is among the first in recent efforts to address this challenge at the file-level granularity. The framework extracts diverse semantic and structural features from source code using five code-specific pre-trained models. Feature selection is enhanced through a custom-defined embedding space tailored to represent feature interactions, coupled with a pheromone table mechanism inspired by Ant Colony Optimization (ACO) to guide the RL agent effectively. Using the Proximal Policy Optimization (PPO) algorithm, the proposed method dynamically identifies the most predictive features for defect detection. Experimental evaluations conducted on the PROMISE dataset highlight the framework's superior performance on the F1-Score metric, achieving an average improvement of $6.25\\%$ over traditional methods and baseline models across diverse datasets. This study underscores the potential for integrating ensemble learning and RL for adaptive and scalable defect prediction in modern software systems.",
+      "authors": [
+        "Mohsen Hesamolhokama",
+        "Amirahmad Shafiee",
+        "Mohammadreza Ahmaditeshnizi",
+        "Mohammadamin Fazli",
+        "Jafar Habibi"
+      ],
+      "year": 2024,
+      "publishedAt": "2024-12-10",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2412.07927v2",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2412-07698v1",
+      "title": "Quantum vs. Classical Machine Learning Algorithms for Software Defect Prediction: Challenges and Opportunities",
+      "abstract": "Software defect prediction is a critical aspect of software quality assurance, as it enables early identification and mitigation of defects, thereby reducing the cost and impact of software failures. Over the past few years, quantum computing has risen as an exciting technology capable of transforming multiple domains; Quantum Machine Learning (QML) is one of them. QML algorithms harness the power of quantum computing to solve complex problems with better efficiency and effectiveness than their classical counterparts. However, research into its application in software engineering to predict software defects still needs to be explored. In this study, we worked to fill the research gap by comparing the performance of three QML and five classical machine learning (CML) algorithms on the 20 software defect datasets. Our investigation reports the comparative scenarios of QML vs. CML algorithms and identifies the better-performing and consistent algorithms to predict software defects. We also highlight the challenges and future directions of employing QML algorithms in real software defect datasets based on the experience we faced while performing this investigation. The findings of this study can help practitioners and researchers further progress in this research domain by making software systems reliable and bug-free.",
+      "authors": [
+        "Md Nadim",
+        "Mohammad Hassan",
+        "Ashis Kumar Mandal",
+        "Chanchal K. Roy"
+      ],
+      "year": 2024,
+      "publishedAt": "2024-12-10",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2412.07698v1",
+      "topics": [
+        "cs.SE",
+        "cs.LG"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2411-05230v1",
+      "title": "Feature Importance in the Context of Traditional and Just-In-Time Software Defect Prediction Models",
+      "abstract": "Software defect prediction models can assist software testing initiatives by prioritizing testing error-prone modules. In recent years, in addition to the traditional defect prediction model approach of predicting defects from class, modules, etc., Just-In-Time defect prediction research, which focuses on the change history of software products is getting prominent. For building these defect prediction models, it is important to understand which features are primary contributors to these classifiers. This study considered developing defect prediction models incorporating the traditional and the Just-In-Time approaches from the publicly available dataset of the Apache Camel project. A multi-layer deep learning algorithm was applied to these datasets in comparison with machine learning algorithms. The deep learning algorithm achieved accuracies of 80% and 86%, with the area under receiving operator curve (AUC) scores of 66% and 78% for traditional and Just-In-Time defect prediction, respectively. Finally, the feature importance of these models was identified using a model-specific integrated gradient method and a model-agnostic Shapley Additive Explanation (SHAP) technique.",
+      "authors": [
+        "Susmita Haldar",
+        "Luiz Fernando Capretz"
+      ],
+      "year": 2024,
+      "publishedAt": "2024-11-07",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2411.05230v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
     },
     {
       "id": "seed-swebok-v4-software-quality",
@@ -617,6 +901,47 @@
       "discoveredAt": "2026-06-25T00:00:00.000Z"
     },
     {
+      "id": "arxiv-arxiv-org-abs-2107-13687v1",
+      "title": "Qualities of Quality: A Tertiary Review of Software Quality Measurement Research",
+      "abstract": "This paper presents a tertiary review of software quality measurement research. To conduct this review, we examined an initial dataset of 7,811 articles and found 75 relevant and high-quality secondary analyses of software quality research. Synthesizing this body of work, we offer an overview of perspectives, measurement approaches, and trends. We identify five distinct perspectives that conceptualize quality as heuristic, as maintainability, as a holistic concept, as structural features of software, and as dependability. We also identify three key challenges. First, we find widespread evidence of validity questions with common measures. Second, we observe the application of machine learning methods without adequate evaluation. Third, we observe the use of aging datasets. Finally, from these observations, we sketch a path toward a theoretical framework that will allow software engineering researchers to systematically confront these weaknesses while remaining grounded in the experiences of developers and the real world in which code is ultimately deployed.",
+      "authors": [
+        "Kaylea Champion",
+        "Sejal Khatri",
+        "Benjamin Mako Hill"
+      ],
+      "year": 2021,
+      "publishedAt": "2021-07-29",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2107.13687v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software quality measurement",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2101-03669v1",
+      "title": "A Systematic Mapping Study on Dynamic Metrics and Software Quality",
+      "abstract": "Several important aspects of software product quality can be evaluated using dynamic metrics that effectively capture and reflect the software's true runtime behavior. While the extent of research in this field is still relatively limited, particularly when compared to research on static metrics, the field is growing, given the inherent advantages of dynamic metrics. The aim of this work is to systematically investigate the body of research on dynamic software metrics to identify issues associated with their selection, design and implementation. Mapping studies are being increasingly used in software engineering to characterize an emerging body of research and to identify gaps in the field under investigation. In this study we identified and evaluated 60 works based on a set of defined selection criteria. These studies were further classified and analyzed to identify their relativity to future dynamic metrics research. The classification was based on three different facets: research focus, research type and contribution type. We found a strong body of research related to dynamic coupling and cohesion metrics, with most works also addressing the abstract notion of software complexity. Specific opportunities for future work relate to a much broader range of quality dimensions.",
+      "authors": [
+        "Amjed Tahir",
+        "Stephen G. MacDonell"
+      ],
+      "year": 2021,
+      "publishedAt": "2021-01-11",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2101.03669v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
       "id": "seed-tmap-quality-engineering",
       "title": "Quality Engineering for Agile and DevOps teams",
       "abstract": "Applied reference on modern quality engineering practices, including shift-left, test strategy, risk-based quality, automation, exploratory testing, and continuous feedback.",
@@ -637,6 +962,112 @@
       ],
       "query": "quality engineering software testing",
       "discoveredAt": "2026-06-25T00:00:00.000Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-1802-05865v1",
+      "title": "Statistical Analysis of Metrics for Software Quality Improvement",
+      "abstract": "Software product quality can be defined as the features and characteristics of the product that meet the user needs. The quality of any software can be achieved by following a well defined software process. These software process results into various metrics like Project metrics, Product metrics and Process metrics. Software quality depends on the process which is carried out to design and develop software. Even though the process can be carried out with utmost care, still it can introduce some error and defects. Process metrics are very useful from management point of view. Process metrics can be used for improving the software development and maintenance process for defect removal and also for reducing the response time. This paper describes the importance of capturing the Process metrics during the quality audit process and also attempts to categorize them based on the nature of error captured. To reduce such errors and defects found, steps for corrective actions are recommended.",
+      "authors": [
+        "Karuna Prasad",
+        "MG Divya",
+        "N Mangala"
+      ],
+      "year": 2018,
+      "publishedAt": "2018-02-16",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/1802.05865v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-1503-06934v1",
+      "title": "Measuring Software Quality in Use: State-of-the-Art and Research Challenges",
+      "abstract": "Software quality in use comprises quality from the user's perspective. It has gained its importance in e-government applications, mobile-based applications, embedded systems, and even business process development. User's decisions on software acquisitions are often ad hoc or based on preference due to difficulty in quantitatively measuring software quality in use. But, why is quality-in-use measurement difficult? Although there are many software quality models, to the authors' knowledge no works survey the challenges related to software quality-in-use measurement. This article has two main contributions: 1) it identifies and explains major issues and challenges in measuring software quality in use in the context of the ISO SQuaRE series and related software quality models and highlights open research areas; and 2) it sheds light on a research direction that can be used to predict software quality in use. In short, the quality-in-use measurement issues are related to the complexity of the current standard models and the limitations and incompleteness of the customized software quality models. A sentiment analysis of software reviews is proposed to deal with these issues.",
+      "authors": [
+        "Issa Atoum",
+        "Chih How Bong"
+      ],
+      "year": 2015,
+      "publishedAt": "2015-03-24",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/1503.06934v1",
+      "topics": [
+        "cs.SE",
+        "cs.CL"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-1501-07676v1",
+      "title": "Towards Resolving Software Quality-in-Use Measurement Challenges",
+      "abstract": "Software quality-in-use comprehends the quality from user's perspectives. It has gained its importance in e-learning applications, mobile service based applications and project management tools. User's decisions on software acquisitions are often ad hoc or based on preference due to difficulty in quantitatively measure software quality-in-use. However, why quality-in-use measurement is difficult? Although there are many software quality models to our knowledge, no works surveys the challenges related to software quality-in-use measurement. This paper has two main contributions; 1) presents major issues and challenges in measuring software quality-in-use in the context of the ISO SQuaRE series and related software quality models, 2) Presents a novel framework that can be used to predict software quality-in-use, and 3) presents preliminary results of quality-in-use topic prediction. Concisely, the issues are related to the complexity of the current standard models and the limitations and incompleteness of the customized software quality models. The proposed framework employs sentiment analysis techniques to predict software quality-in-use.",
+      "authors": [
+        "Issa Atoum",
+        "Chih How Bong",
+        "Narayanan Kulathuramaiyer"
+      ],
+      "year": 2015,
+      "publishedAt": "2015-01-30",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/1501.07676v1",
+      "topics": [
+        "cs.SE",
+        "cs.CL"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-1412-2977v1",
+      "title": "A Review of Software Quality Models for the Evaluation of Software Products",
+      "abstract": "Actually, software products are increasing in a fast way and are used in almost all activities of human life. Consequently measuring and evaluating the quality of a software product has become a critical task for many companies. Several models have been proposed to help diverse types of users with quality issues. The development of techniques for building software has influenced the creation of models to assess the quality. Since 2000 the construction of software started to depend on generated or manufactured components and gave rise to new challenges for assessing quality. These components introduce new concepts such as configurability, reusability, availability, better quality and lower cost. Consequently the models are classified in basic models which were developed until 2000, and those based on components called tailored quality models. The purpose of this article is to describe the main models with their strengths and point out some deficiencies. In this work, we conclude that in the present age, aspects of communications play an important factor in the quality of software",
+      "authors": [
+        "Jose P. Miguel",
+        "David Mauricio",
+        "Glen Rodriguez"
+      ],
+      "year": 2014,
+      "publishedAt": "2014-12-09",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/1412.2977v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-1312-1042v1",
+      "title": "Adapting Software Quality Models: Practical Challenges, Approach, and First Empirical Results",
+      "abstract": "Measuring and evaluating software quality has become a fundamental task. Many models have been proposed to support stakeholders in dealing with software quality. However, in most cases, quality models do not fit perfectly for the target application context. Since approaches for efficiently adapting quality models are largely missing, many quality models in practice are built from scratch or reuse only high-level concepts of existing models. We present a tool-supported approach for the efficient adaptation of quality models. An initial empirical investigation indicates that the quality models obtained applying the proposed approach are considerably more consistently and appropriately adapted than those obtained following an ad-hoc approach. Further, we could observe that model adaptation is significantly more efficient (~factor 8) when using this approach.",
+      "authors": [
+        "Michael Kläs",
+        "Constanza Lampasona",
+        "Jürgen Münch"
+      ],
+      "year": 2013,
+      "publishedAt": "2013-12-04",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/1312.1042v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-15T22:36:58.611Z"
     }
   ]
 }
