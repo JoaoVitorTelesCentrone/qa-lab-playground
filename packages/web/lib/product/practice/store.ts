@@ -139,6 +139,13 @@ export async function seedApps(userId: string, appIds: PracticeAppId[]) {
     if (error) throw new PracticeError(error.message, 500);
   }
 
+  // O QA Lab não tem massa autoral para recriar: restaurar ali significa
+  // esvaziar carrinho e pedidos, que é o estado conhecido de quem chega na loja.
+  if (appIds.includes("qa-lab")) {
+    await supabase.from("practice_carts").delete().eq("user_id", userId);
+    await supabase.from("practice_orders").delete().eq("user_id", userId);
+  }
+
   await supabase.from("practice_settings").upsert({ user_id: userId, seeded_at: new Date().toISOString() }, { onConflict: "user_id" });
 }
 

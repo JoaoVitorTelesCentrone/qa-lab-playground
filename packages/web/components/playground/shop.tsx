@@ -10,23 +10,59 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { shopProducts, type ShopProduct } from "@/lib/playground/shop-data";
 import { systemApi } from "@/lib/api-client";
-
-type CartItem = { productId: number; quantity: number };
+import { normalizeCart, priceCart, priceLines, type CartItem, type Order, type OrderStatus } from "@/lib/product/practice/shop";
 
 function money(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-function useCart() {
-  const [items, setItems] = useState<CartItem[]>(() => {
-    if (typeof window === "undefined") return [];
-    return JSON.parse(localStorage.getItem("qa-lab-cart") ?? "[]") as CartItem[];
-  });
-  function save(next: CartItem[]) {
-    setItems(next);
-    localStorage.setItem("qa-lab-cart", JSON.stringify(next));
+function readLocalCart(): CartItem[] {
+  if (typeof window === "undefined") return [];
+  try {
+    return normalizeCart(JSON.parse(localStorage.getItem("qa-lab-cart") ?? "[]"));
+  } catch {
+    return [];
   }
-  return { items, save };
+}
+
+/**
+ * Carrinho do aluno. Logado, a fonte de verdade é o servidor
+ * (/api/v1/shop/cart); deslogado, a compra continua possível com o carrinho
+ * vivendo só nesta sessão — login protege a persistência, não o experimentar.
+ *
+ * `activeBugs` vem junto do carrinho remoto porque o preço é recalculado na
+ * tela com a mesma função pura que o servidor usa para cobrar.
+ */
+function useCart() {
+  const [items, setItems] = useState<CartItem[]>(readLocalCart);
+  const [remote, setRemote] = useState(false);
+  const [activeBugs, setActiveBugs] = useState<string[]>([]);
+
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/v1/shop/cart")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((body) => {
+        if (!alive || !body?.data) return;
+        setRemote(true);
+        setActiveBugs(body.data.activeBugs ?? []);
+        setItems(normalizeCart(body.data.items));
+      })
+      .catch(() => undefined);
+    return () => { alive = false; };
+  }, []);
+
+  function save(next: CartItem[]) {
+    const normalized = normalizeCart(next);
+    setItems(normalized);
+    if (remote) {
+      void fetch("/api/v1/shop/cart", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ items: normalized }) });
+      return;
+    }
+    localStorage.setItem("qa-lab-cart", JSON.stringify(normalized));
+  }
+
+  return { items, save, remote, activeBugs };
 }
 
 export function ProductsPage() {
@@ -125,10 +161,10 @@ export function ProductDetailPage({ product }: { product: ShopProduct }) {
 }
 
 export function CartPage() {
-  const { items, save } = useCart();
-  const rows = items.map((item) => ({ ...item, product: shopProducts.find((product) => product.id === item.productId)! }));
-  const subtotal = rows.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const [coupon, setCoupon] = useState(""); const [appliedCoupon, setAppliedCoupon] = useState(""); const [couponMessage, setCouponMessage] = useState(""); const discount = appliedCoupon === "QA10" ? subtotal * 0.1 : 0; const shipping = subtotal - discount >= 200 || !rows.length ? 0 : 19.9;
+  const { items, save, activeBugs } = useCart();
+  const rows = items.map((item) => ({ ...item, product: shopProducts.find((product) => product.id === item.productId)! })).filter((item) => item.product);
+  const [coupon, setCoupon] = useState(""); const [appliedCoupon, setAppliedCoupon] = useState(""); const [couponMessage, setCouponMessage] = useState("");
+  const { subtotal, discount, shipping } = priceCart(priceLines(items, shopProducts), { coupon: appliedCoupon }, activeBugs);
   function change(productId: number, delta: number) {
     save(items.map((item) => item.productId === productId ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item));
   }
@@ -163,13 +199,17 @@ export function CheckoutPage() {
   const bug = useSearchParams().get("bug");
   const router = useRouter();
   const instanceId = useId().replace(/\W/g, "").slice(0, 6);
-  const { items, save } = useCart();
-  const rows = items.map((item) => ({ ...item, product: shopProducts.find((product) => product.id === item.productId)! }));
-  const subtotal = rows.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const [coupon, setCoupon] = useState(""); const [zip, setZip] = useState(""); const [delivery, setDelivery] = useState("padrao"); const discount = coupon.trim().toUpperCase() === "QA10" ? subtotal * .1 : 0; const zipValid = /^\d{5}-?\d{3}$/.test(zip); const shipping = subtotal - discount >= 200 || !rows.length ? 0 : !zipValid ? 0 : delivery === "expressa" ? 34.9 : 19.9;
-  const tax = (subtotal - discount) * 0.08;
-  const total = bug === "wrong-total" ? subtotal - discount + shipping + tax + 9.99 : subtotal - discount + shipping + tax;
+  const { items, save, remote, activeBugs } = useCart();
+  const rows = items.map((item) => ({ ...item, product: shopProducts.find((product) => product.id === item.productId)! })).filter((item) => item.product);
+  const [coupon, setCoupon] = useState(""); const [zip, setZip] = useState(""); const [delivery, setDelivery] = useState<"padrao" | "expressa">("padrao");
+  const zipValid = /^\d{5}-?\d{3}$/.test(zip);
+  // O desvio continua acessível pelo atalho ?bug=wrong-total, que os Labs mais
+  // antigos citam, além da flag da conta.
+  const bugs = bug === "wrong-total" ? [...activeBugs, "qa-lab.wrong-total"] : activeBugs;
+  // O frete só entra depois do CEP válido: antes disso não há como calcular.
+  const { subtotal, discount, shipping, tax, total } = priceCart(priceLines(items, shopProducts), { coupon, delivery, chargeShipping: zipValid }, bugs);
   const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -178,14 +218,25 @@ export function CheckoutPage() {
       setMessage("Preencha nome, sobrenome, CEP valido, endereco, cidade e estado.");
       return;
     }
-    const accountId = localStorage.getItem("qa-lab-session");
-    if (!accountId) { setMessage("Faca login antes de finalizar o pedido."); return; }
-    try {
-      const order = await systemApi<{ id: string; total: number }>("/orders", { method: "POST", body: JSON.stringify({ accountId, items: rows.map((item) => ({ productId: item.productId, quantity: item.quantity, unitPrice: item.product.price })) }) });
-      localStorage.setItem("qa-lab-last-order", JSON.stringify({ id: order.id, subtotal, tax, total: order.total, items: rows }));
+    if (rows.length === 0) { setMessage("Carrinho vazio: adicione um produto antes de finalizar."); return; }
+
+    // Logado, quem fecha o pedido e decide o valor cobrado é o servidor.
+    if (remote) {
+      setSending(true);
+      const response = await fetch("/api/v1/shop/orders", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ coupon, delivery }) });
+      const body = await response.json().catch(() => null);
+      setSending(false);
+      if (!response.ok) { setMessage(body?.error?.message ?? "Nao foi possivel criar o pedido."); return; }
       save([]);
-      router.push(`/shop/orders/${order.id}`);
-    } catch (error) { setMessage(error instanceof Error ? error.message : "Nao foi possivel criar o pedido."); }
+      router.push(`/shop/orders/${body.data.reference}`);
+      return;
+    }
+
+    // Deslogado, o pedido existe só nesta sessão.
+    const reference = `QL-LOCAL-${Date.now().toString().slice(-6)}`;
+    localStorage.setItem("qa-lab-last-order", JSON.stringify({ id: reference, total, status: "Confirmado", createdAt: new Date().toISOString(), items: items }));
+    save([]);
+    router.push(`/shop/orders/${reference}`);
   }
 
   return (
@@ -203,11 +254,11 @@ export function CheckoutPage() {
               <label className="grid gap-2 text-sm font-medium text-foreground">CEP<Input name="zip" value={zip} onChange={(event) => setZip(event.target.value)} inputMode="numeric" placeholder="00000-000" data-testid="checkout-zip" /></label>
             </div>
             <div className="mt-5 grid gap-4 sm:grid-cols-2"><label className="grid gap-2 text-sm font-medium">E-mail<Input name="email" required type="email" placeholder="voce@email.com" /></label><label className="grid gap-2 text-sm font-medium">Telefone<Input name="phone" inputMode="tel" placeholder="(00) 00000-0000" /></label><label className="grid gap-2 text-sm font-medium sm:col-span-2">Endereço<Input name="address" required placeholder="Rua, número e complemento" /></label><label className="grid gap-2 text-sm font-medium">Cidade<Input name="city" required /></label><label className="grid gap-2 text-sm font-medium">Estado<Input name="state" required maxLength={2} placeholder="SP" /></label></div>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2"><label className="grid gap-2 text-sm font-medium">Entrega<select name="delivery" value={delivery} onChange={(event) => setDelivery(event.target.value)} className="input"><option value="padrao">Entrega padrão · 3 a 5 dias</option><option value="expressa">Expressa · 1 a 2 dias</option></select></label><label className="grid gap-2 text-sm font-medium">Pagamento<select name="payment" className="input"><option>Cartão de crédito</option><option>PIX</option><option>Boleto</option></select></label></div>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2"><label className="grid gap-2 text-sm font-medium">Entrega<select name="delivery" value={delivery} onChange={(event) => setDelivery(event.target.value === "expressa" ? "expressa" : "padrao")} className="input"><option value="padrao">Entrega padrão · 3 a 5 dias</option><option value="expressa">Expressa · 1 a 2 dias</option></select></label><label className="grid gap-2 text-sm font-medium">Pagamento<select name="payment" className="input"><option>Cartão de crédito</option><option>PIX</option><option>Boleto</option></select></label></div>
             <p role="status" aria-live="polite" className="mt-4 text-sm text-destructive">{message}</p>
           </CardContent>
           <CardFooter>
-            <Button data-testid="finish-order">Finalizar pedido</Button>
+            <Button data-testid="finish-order" disabled={sending}>{sending ? "Finalizando…" : "Finalizar pedido"}</Button>
           </CardFooter>
         </Card>
         <Card>
@@ -227,14 +278,44 @@ export function CheckoutPage() {
 }
 
 type StoredOrder = { id: string; total: number; status: "Confirmado" | "Enviado" | "Entregue" | "Cancelado"; createdAt: string; items: CartItem[] };
+
+const statusLabels: Record<OrderStatus, StoredOrder["status"]> = { confirmado: "Confirmado", enviado: "Enviado", entregue: "Entregue", cancelado: "Cancelado" };
+const statusValues = Object.fromEntries(Object.entries(statusLabels).map(([value, label]) => [label, value])) as Record<StoredOrder["status"], OrderStatus>;
+
 function readOrders(): StoredOrder[] { if (typeof window === "undefined") return []; const saved = JSON.parse(localStorage.getItem("qa-lab-orders") ?? "[]") as StoredOrder[]; const last = JSON.parse(localStorage.getItem("qa-lab-last-order") ?? "null") as StoredOrder | null; return last && !saved.some((order) => order.id === last.id) ? [{ ...last, status: "Confirmado", createdAt: new Date().toISOString() }, ...saved] : saved; }
 function saveOrders(orders: StoredOrder[]) { localStorage.setItem("qa-lab-orders", JSON.stringify(orders)); }
 
+/**
+ * Pedidos do aluno. Logado, vem de /api/v1/shop/orders com o valor que o
+ * servidor cobrou; deslogado, do pedido efemero guardado nesta sessao.
+ */
+function useOrders() {
+  const [orders, setOrders] = useState<StoredOrder[]>([]);
+  const [remote, setRemote] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/v1/shop/orders")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((body) => {
+        if (!alive) return;
+        if (!body?.data) { setOrders(readOrders()); return; }
+        setRemote(true);
+        setOrders((body.data as Order[]).map((order) => ({ id: order.reference, total: order.total, status: statusLabels[order.status], createdAt: order.createdAt, items: order.items })));
+      })
+      .catch(() => { if (alive) setOrders(readOrders()); })
+      .finally(() => { if (alive) setLoading(false); });
+    return () => { alive = false; };
+  }, []);
+
+  return { orders, setOrders, remote, loading };
+}
+
 export function OrdersPage() {
-  const [orders, setOrders] = useState<StoredOrder[]>([]); const [query, setQuery] = useState(""); const [status, setStatus] = useState("todos");
-  useEffect(() => { const accountId = localStorage.getItem("qa-lab-session"); if (!accountId) { setOrders(readOrders()); return; } systemApi<Array<{ id: string; total: number; status: "confirmed" | "cancelled"; createdAt: string; items: CartItem[] }>>(`/orders/${accountId}`).then((remote) => setOrders(remote.map((order) => ({ ...order, status: order.status === "confirmed" ? "Confirmado" : "Cancelado" })))).catch(() => setOrders(readOrders())); }, []);
+  const { orders, loading } = useOrders(); const [query, setQuery] = useState(""); const [status, setStatus] = useState("todos");
   const shown = orders.filter((order) => (!query || order.id.toLowerCase().includes(query.toLowerCase())) && (status === "todos" || order.status === status));
-  return <ShopShell title="Historico de pedidos" subtitle="Busque e acompanhe suas compras."><div className="grid gap-3 sm:grid-cols-2"><Input value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Buscar pedido" placeholder="Buscar por codigo" /><Select label="Status do pedido" value={status} onChange={setStatus} values={["todos", "Confirmado", "Enviado", "Entregue", "Cancelado"]} /></div><div className="mt-5 grid gap-3">{shown.map((order) => <Card key={order.id}><CardContent className="flex flex-wrap items-center justify-between gap-3"><div><strong className="font-mono">{order.id}</strong><p className="text-sm text-muted-foreground">{order.status} · {money(order.total)}</p></div><Button asChild variant="outline"><Link href={`/shop/orders/${order.id}`}>Ver pedido</Link></Button></CardContent></Card>)}{!shown.length && <Card><CardContent><p role="status" className="text-sm text-muted-foreground">Nenhum pedido encontrado.</p></CardContent></Card>}</div></ShopShell>;
+  return <ShopShell title="Historico de pedidos" subtitle="Busque e acompanhe suas compras."><div className="grid gap-3 sm:grid-cols-2"><Input value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Buscar pedido" placeholder="Buscar por codigo" /><Select label="Status do pedido" value={status} onChange={setStatus} values={["todos", "Confirmado", "Enviado", "Entregue", "Cancelado"]} /></div><div className="mt-5 grid gap-3">{shown.map((order) => <Card key={order.id}><CardContent className="flex flex-wrap items-center justify-between gap-3"><div><strong className="font-mono">{order.id}</strong><p className="text-sm text-muted-foreground">{order.status} · {money(order.total)}</p></div><Button asChild variant="outline"><Link href={`/shop/orders/${order.id}`}>Ver pedido</Link></Button></CardContent></Card>)}{!shown.length && <Card><CardContent><p role="status" className="text-sm text-muted-foreground">{loading ? "Carregando pedidos..." : "Nenhum pedido encontrado."}</p></CardContent></Card>}</div></ShopShell>;
 }
 
 type Account = { email: string; name: string; password: string; addresses: string[]; communications: boolean; reducedMotion: boolean; mfa: boolean; sessions: string[] };
@@ -257,12 +338,30 @@ export function OperationsPage() {
 }
 
 export function OrderPage({ id }: { id: string }) {
-  const [orders, setOrders] = useState<StoredOrder[]>([]); const [notice, setNotice] = useState(""); const [reason, setReason] = useState(""); const [survey, setSurvey] = useState(0);
-  useEffect(() => { setOrders(readOrders()); }, []);
+  const { orders, setOrders, remote } = useOrders(); const [notice, setNotice] = useState(""); const [reason, setReason] = useState(""); const [survey, setSurvey] = useState(0);
   const order = orders.find((item) => item.id === id) ?? { id, total: 0, status: "Confirmado" as const, createdAt: new Date().toISOString(), items: [] };
-  function update(status: StoredOrder["status"], message: string) { const next = orders.some((item) => item.id === id) ? orders.map((item) => item.id === id ? { ...item, status } : item) : [{ ...order, status }, ...orders]; setOrders(next); saveOrders(next); setNotice(message); }
-  function reorder() { localStorage.setItem("qa-lab-cart", JSON.stringify(order.items)); setNotice("Itens adicionados novamente ao carrinho."); }
-  return <ShopShell title="Detalhe do pedido" subtitle={`Pedido ${id}`} action={<Button asChild variant="outline"><Link href="/shop/orders">Historico</Link></Button>}><div className="grid gap-5 lg:grid-cols-[1fr_320px]"><div className="grid gap-5"><Card><CardHeader><CardDescription>Status atual</CardDescription><CardTitle className="font-mono text-2xl text-primary" data-testid="order-id">{id}</CardTitle></CardHeader><CardContent><p className="font-medium">{order.status}</p><ol className="mt-5 grid gap-3 text-sm">{["Confirmado", "Pagamento aprovado", "Enviado", "Entregue"].map((step, index) => <li key={step} className={index === 0 || order.status === "Enviado" || order.status === "Entregue" ? "text-primary" : "text-muted-foreground"}>{index + 1}. {step}</li>)}</ol><p className="mt-5 rounded-md bg-muted p-3 text-sm">Rastreio: <strong className="font-mono">BR-QL-{id.slice(-6)}</strong> · Atualizacao simulada em transito.</p></CardContent></Card><Card><CardHeader><CardTitle>Pos-venda</CardTitle></CardHeader><CardContent className="flex flex-wrap gap-2"><Button variant="outline" onClick={() => update("Cancelado", `Pedido cancelado. Motivo: ${reason || "nao informado"}.`)}>Cancelar</Button><Button variant="outline" onClick={() => setNotice("Solicitacao de devolucao aberta.")}>Solicitar devolucao</Button><Button variant="outline" onClick={() => setNotice("Reembolso total solicitado.")}>Solicitar reembolso</Button><Button variant="outline" onClick={() => { const blob = new Blob([`Nota fiscal simulada do pedido ${id}`], { type: "text/plain" }); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = `${id}-nota-fiscal.txt`; link.click(); URL.revokeObjectURL(url); }}>Baixar nota fiscal</Button><Button variant="outline" onClick={reorder}>Comprar novamente</Button></CardContent></Card></div><aside className="grid gap-5"><Card><CardHeader><CardTitle>Motivo do cancelamento</CardTitle></CardHeader><CardContent><Input value={reason} onChange={(event) => setReason(event.target.value)} placeholder="Ex.: desisti da compra" /></CardContent></Card><Card><CardHeader><CardTitle>Satisfacao</CardTitle><CardDescription>Como foi sua experiencia?</CardDescription></CardHeader><CardContent><div className="flex gap-2">{[1,2,3,4,5].map((value) => <Button key={value} type="button" variant={survey === value ? "default" : "outline"} size="sm" onClick={() => { setSurvey(value); setNotice(`Pesquisa registrada: ${value}/5.`); }}>{value}</Button>)}</div></CardContent></Card></aside></div>{notice && <p role="status" aria-live="polite" className="mt-5 rounded-md border border-primary/30 p-3 text-sm text-primary">{notice}</p>}</ShopShell>;
+
+  async function update(status: StoredOrder["status"], message: string) {
+    // Logado, quem muda o status e o servidor: a linha do tempo do pedido nao
+    // pode depender do que esta aba acha que aconteceu.
+    if (remote) {
+      const response = await fetch(`/api/v1/shop/orders?reference=${encodeURIComponent(id)}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ status: statusValues[status] }) });
+      if (!response.ok) { const body = await response.json().catch(() => null); setNotice(body?.error?.message ?? "Nao foi possivel atualizar o pedido."); return; }
+      setOrders(orders.map((item) => (item.id === id ? { ...item, status } : item)));
+      setNotice(message);
+      return;
+    }
+    const next = orders.some((item) => item.id === id) ? orders.map((item) => item.id === id ? { ...item, status } : item) : [{ ...order, status }, ...orders];
+    setOrders(next); saveOrders(next); setNotice(message);
+  }
+
+  async function reorder() {
+    const items = normalizeCart(order.items);
+    if (remote) await fetch("/api/v1/shop/cart", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ items }) });
+    else localStorage.setItem("qa-lab-cart", JSON.stringify(items));
+    setNotice("Itens adicionados novamente ao carrinho.");
+  }
+  return <ShopShell title="Detalhe do pedido" subtitle={`Pedido ${id}`} action={<Button asChild variant="outline"><Link href="/shop/orders">Historico</Link></Button>}><div className="grid gap-5 lg:grid-cols-[1fr_320px]"><div className="grid gap-5"><Card><CardHeader><CardDescription>Status atual</CardDescription><CardTitle className="font-mono text-2xl text-primary" data-testid="order-id">{id}</CardTitle></CardHeader><CardContent><p className="font-medium">{order.status}</p><ol className="mt-5 grid gap-3 text-sm">{["Confirmado", "Pagamento aprovado", "Enviado", "Entregue"].map((step, index) => <li key={step} className={index === 0 || order.status === "Enviado" || order.status === "Entregue" ? "text-primary" : "text-muted-foreground"}>{index + 1}. {step}</li>)}</ol><p className="mt-5 rounded-md bg-muted p-3 text-sm">Rastreio: <strong className="font-mono">BR-QL-{id.slice(-6)}</strong> · Atualizacao simulada em transito.</p></CardContent></Card><Card><CardHeader><CardTitle>Pos-venda</CardTitle></CardHeader><CardContent className="flex flex-wrap gap-2"><Button variant="outline" onClick={() => void update("Cancelado", `Pedido cancelado. Motivo: ${reason || "nao informado"}.`)}>Cancelar</Button><Button variant="outline" onClick={() => setNotice("Solicitacao de devolucao aberta.")}>Solicitar devolucao</Button><Button variant="outline" onClick={() => setNotice("Reembolso total solicitado.")}>Solicitar reembolso</Button><Button variant="outline" onClick={() => { const blob = new Blob([`Nota fiscal simulada do pedido ${id}`], { type: "text/plain" }); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = `${id}-nota-fiscal.txt`; link.click(); URL.revokeObjectURL(url); }}>Baixar nota fiscal</Button><Button variant="outline" onClick={() => void reorder()}>Comprar novamente</Button></CardContent></Card></div><aside className="grid gap-5"><Card><CardHeader><CardTitle>Motivo do cancelamento</CardTitle></CardHeader><CardContent><Input value={reason} onChange={(event) => setReason(event.target.value)} placeholder="Ex.: desisti da compra" /></CardContent></Card><Card><CardHeader><CardTitle>Satisfacao</CardTitle><CardDescription>Como foi sua experiencia?</CardDescription></CardHeader><CardContent><div className="flex gap-2">{[1,2,3,4,5].map((value) => <Button key={value} type="button" variant={survey === value ? "default" : "outline"} size="sm" onClick={() => { setSurvey(value); setNotice(`Pesquisa registrada: ${value}/5.`); }}>{value}</Button>)}</div></CardContent></Card></aside></div>{notice && <p role="status" aria-live="polite" className="mt-5 rounded-md border border-primary/30 p-3 text-sm text-primary">{notice}</p>}</ShopShell>;
 }
 
 function ShopShell({ title, subtitle, action, children }: { title: string; subtitle?: string; action?: React.ReactNode; children: React.ReactNode }) {
