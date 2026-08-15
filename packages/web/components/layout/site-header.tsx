@@ -34,7 +34,7 @@ function useSession() {
   useEffect(() => {
     if (!isSupabaseConfigured()) { setSignedIn(false); return; }
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setSignedIn(Boolean(data.user)));
+    supabase.auth.getUser().then(({ data }) => setSignedIn(Boolean(data.user))).catch(() => setSignedIn(false));
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => setSignedIn(Boolean(session?.user)));
     return () => subscription.subscription.unsubscribe();
   }, []);

@@ -10,7 +10,7 @@ export function AccountNav({ configured }: { configured: boolean }) {
   useEffect(() => {
     if (!configured) return;
     const supabase = createClient();
-    void supabase.auth.getUser().then(({ data }) => setAuthenticated(Boolean(data.user)));
+    void supabase.auth.getUser().then(({ data }) => setAuthenticated(Boolean(data.user))).catch(() => setAuthenticated(false));
     const { data } = supabase.auth.onAuthStateChange((_event, session) => setAuthenticated(Boolean(session?.user)));
     return () => data.subscription.unsubscribe();
   }, [configured]);

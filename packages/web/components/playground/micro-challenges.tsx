@@ -50,7 +50,7 @@ export function MicroChallengePage({ kind }: { kind: "elements" | "tables" | "di
             {dialog && <div role="dialog" aria-modal="true" className="mt-4 w-full rounded-lg border border-mint/30 bg-[#101319] p-4"><p>Dialog ativo: {dialog}</p><button onClick={() => setDialog("")} className="mt-3 rounded bg-mint px-3 py-2 text-[#101319]">Fechar</button></div>}
           </div>
         )}
-        {kind === "frames" && <iframe title="Frame de treino" srcDoc="<button data-testid='inside-frame'>Botao no iframe</button><p>Iframe aninhado simulado</p>" className="h-56 w-full rounded-lg bg-white text-black" />}
+        {kind === "frames" && <iframe title="Frame de treino" srcDoc="<style>body{margin:0;padding:16px;background:#181B1F;color:#F8FBF9;font-family:system-ui,sans-serif}button{background:#4CAF72;color:#0C160F;border:0;border-radius:6px;padding:8px 12px;font-weight:700}</style><button data-testid='inside-frame'>Botao no iframe</button><p>Iframe aninhado simulado</p>" className="h-56 w-full rounded-lg border border-[#2B3136]" />}
         {kind === "shadow-dom" && <div ref={shadowHost} className="rounded-lg border border-white/10 bg-[#101319] p-5" data-testid="shadow-host" />}
         {kind === "files" && (
           <div className="grid gap-4">

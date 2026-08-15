@@ -136,16 +136,49 @@ export function pipelineByStage(deals: Deal[]): StageColumn[] {
   });
 }
 
+/** Etapas do funil, sem "perdido": perdido é saída do funil, não um passo dele. */
+export const funnelStages: Deal["stage"][] = ["novo", "qualificado", "proposta", "ganho"];
+
+export function funnelByStage(deals: Deal[]) {
+  return funnelStages.map((stage) => {
+    const items = deals.filter((deal) => deal.stage === stage);
+    return { stage, count: items.length, total: items.reduce((sum, deal) => sum + Number(deal.amount), 0) };
+  });
+}
+
+/** Valor por empresa, maior primeiro. Perdidas ficam de fora do valor em jogo. */
+export function valueByCompany(deals: Deal[]) {
+  const totals = new Map<string, number>();
+  for (const deal of deals) {
+    if (deal.stage === "perdido") continue;
+    totals.set(deal.company, (totals.get(deal.company) ?? 0) + Number(deal.amount));
+  }
+  return [...totals.entries()].map(([company, total]) => ({ company, total })).sort((a, b) => b.total - a.total);
+}
+
+export type Activity = { id: string; deal: string; kind: string; summary: string };
+
+export function activitiesByKind(activities: Activity[]) {
+  const totals = new Map<string, number>();
+  for (const activity of activities) totals.set(activity.kind, (totals.get(activity.kind) ?? 0) + 1);
+  return [...totals.entries()].map(([kind, total]) => ({ kind, total })).sort((a, b) => b.total - a.total);
+}
+
 export function crmSummary(deals: Deal[], activeBugs: string[]) {
   const won = deals.filter((deal) => deal.stage === "ganho");
   const lost = deals.filter((deal) => deal.stage === "perdido");
   const closed = won.length + lost.length;
+  const open = deals.filter((deal) => openStages.includes(deal.stage));
   return {
     pipeline: pipelineValue(deals, activeBugs),
-    open: deals.filter((deal) => openStages.includes(deal.stage)).length,
+    open: open.length,
     won: won.length,
     wonValue: won.reduce((sum, deal) => sum + Number(deal.amount), 0),
+    lost: lost.length,
+    lostValue: lost.reduce((sum, deal) => sum + Number(deal.amount), 0),
     /** Percentual de negócios fechados que foram ganhos. Sem fechados, 0. */
     winRate: closed === 0 ? 0 : Math.round((won.length / closed) * 100),
+    /** Valor médio das oportunidades em aberto. Sem nenhuma, 0. */
+    averageOpen: open.length === 0 ? 0 : Math.round(open.reduce((sum, deal) => sum + Number(deal.amount), 0) / open.length),
   };
 }

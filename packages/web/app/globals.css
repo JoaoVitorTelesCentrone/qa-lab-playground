@@ -249,9 +249,9 @@
   .stagger-scale > *:nth-child(7) { animation-delay: 360ms; }
   .stagger-scale > *:nth-child(8) { animation-delay: 420ms; }
 
-  .bg-gradient-subtle { background: #F3F4F6; }
+  .bg-gradient-subtle { background: var(--background); }
 
-  .bg-qalab-pattern { background: #F3F4F6; }
+  .bg-qalab-pattern { background: var(--background); }
 
   .bg-grid {
     background-image:
@@ -281,82 +281,38 @@
     background-clip: text;
   }
 
+  /* Os Labs e microdesafios usam a mesma base escura do resto do produto. As
+     peças dentro deles já nascem escuras (bg-[#161B22], text-off-white,
+     border-white/10), então aqui basta o fundo — sem override de paleta. */
   .qa-simple {
     min-height: calc(100vh - 4rem);
-    background: #F3F4F6;
-    color: #111827;
-  }
-
-  .qa-simple .bg-card,
-  .qa-simple .bg-\[\#161B22\],
-  .qa-simple .bg-\[\#101319\] {
-    background-color: #FFFFFF !important;
-  }
-
-  .qa-simple .border-white\/10,
-  .qa-simple .border-white\/15 {
-    border-color: #D1D5DB !important;
-  }
-
-  .qa-simple .text-off-white,
-  .qa-simple .text-\[\#DDE6EE\] {
-    color: #111827 !important;
-  }
-
-  .qa-simple .text-\[\#AAB2BC\],
-  .qa-simple .text-\[\#8B949E\],
-  .qa-simple .text-\[\#69737E\] {
-    color: #6B7280 !important;
-  }
-
-  .qa-simple .text-mint,
-  .qa-simple .text-neon {
-    color: #15803D !important;
-  }
-
-  .qa-simple .text-coral {
-    color: #B42318 !important;
-  }
-
-  .qa-simple .bg-neon,
-  .qa-simple .bg-mint {
-    background-color: #15803D !important;
-    color: #FFFFFF !important;
-  }
-
-  .qa-simple .bg-neon\/10,
-  .qa-simple .bg-mint\/10,
-  .qa-simple .bg-white\/5,
-  .qa-simple .bg-white\/10 {
-    background-color: #DCFCE7 !important;
-  }
-
-  .qa-simple .border-neon\/30,
-  .qa-simple .border-mint\/20,
-  .qa-simple .border-mint\/30 {
-    border-color: #86EFAC !important;
+    background: #111315;
+    color: #F8FBF9;
   }
 
   .qa-simple .field {
-    border-color: #C9D3DF;
-    background: #FFFFFF;
-    color: #17202A;
+    border-color: var(--input);
+    background: var(--background);
+    color: var(--foreground);
   }
 
   .qa-simple .field::placeholder {
-    color: #7A8794;
+    color: var(--muted-foreground);
   }
 
   .qa-simple pre {
-    background: #F1F5F9 !important;
-    color: #243447 !important;
+    background: #0C0E10 !important;
+    color: #D9E3DC !important;
   }
 }
 
 @layer utilities {
   .qa-home { min-height: calc(100vh - 4rem); background: #111315; color: #F8FBF9; }
   .qa-challenge { min-height: calc(100vh - 4rem); background: #111315; color: #F8FBF9; }
-  .qa-store { min-height: calc(100vh - 4rem); background: #F5F6F4; color: #18201B; }
+  /* A loja é um dos quatro ambientes de prática e usa o mesmo fundo dos
+     outros: o aluno alterna entre eles o tempo todo e a troca de tema
+     atrapalhava a leitura. */
+  .qa-store { min-height: calc(100vh - 4rem); background: #16181C; color: #F4F6F5; }
   .qa-system { min-height: calc(100vh - 4rem); background: #16181C; color: #F4F6F5; }
   .qa-system-hero { padding: clamp(2rem, 6vw, 5rem); border: 1px solid #343941; border-radius: 1rem; background: #20242A; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
   .qa-system-hero h1, .qa-module-detail h1 { margin-top: .8rem; font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 650; letter-spacing: -.07em; line-height: .95; }
@@ -368,6 +324,11 @@
   .qa-blog-intro { display: flex; align-items: end; justify-content: space-between; gap: 2rem; padding: clamp(2rem, 5vw, 4rem); border: 1px solid var(--border); border-radius: .9rem; background: #181B1F; }
   .qa-blog-intro h1 { max-width: 760px; margin-top: .75rem; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 650; letter-spacing: -.065em; line-height: .98; }
   .qa-blog-intro p:not(.qa-eyebrow) { max-width: 540px; margin-top: 1.25rem; color: var(--muted-foreground); font-size: 1.05rem; line-height: 1.7; }
+  .qa-blog-collab { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; padding: clamp(1.75rem, 4vw, 2.75rem); border: 1px solid rgba(76,175,114,.35); border-radius: .9rem; background: linear-gradient(140deg, #1b2820, #181B1F); }
+  .qa-blog-collab h2 { margin-top: .75rem; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 650; letter-spacing: -.04em; }
+  .qa-blog-collab p:not(.qa-eyebrow) { max-width: 560px; margin-top: .75rem; color: var(--muted-foreground); line-height: 1.7; }
+  .qa-blog-collab-action { display: inline-flex; align-items: center; gap: .55rem; padding: .8rem 1.25rem; border-radius: .55rem; background: var(--primary); color: var(--primary-foreground); font-size: .9rem; font-weight: 700; white-space: nowrap; transition: filter .18s ease, transform .18s ease; }
+  .qa-blog-collab-action:hover { filter: brightness(1.08); transform: translateY(-1px); }
   .qa-blog-feature { display: flex; justify-content: space-between; gap: 2rem; padding: clamp(1.75rem, 4vw, 3rem); border: 1px solid rgba(76,175,114,.3); border-radius: .9rem; background: linear-gradient(140deg, #1b2820, #181B1F); transition: transform .2s ease, border-color .2s ease; }
   .qa-blog-feature:hover { border-color: var(--primary); transform: translateY(-3px); }
   .qa-blog-feature h2 { max-width: 700px; margin-top: .75rem; font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 650; letter-spacing: -.045em; }
@@ -397,18 +358,15 @@
   .qa-article-body li { display: flex; gap: .8rem; }.qa-article-body li span { color: var(--primary); font-family: var(--font-jetbrains); font-size: .78rem; font-weight: 700; }
   .qa-blog-callout { padding: 1.25rem; border: 1px solid var(--border); border-radius: .6rem; background: #181B1F; }.qa-blog-callout.tip { border-color: rgba(76,175,114,.35); }.qa-blog-callout.warning { border-color: rgba(224,166,61,.4); }.qa-blog-callout.danger { border-color: rgba(180,35,24,.5); }
   .qa-article-body blockquote { padding-left: 1.25rem; border-left: 2px solid var(--primary); color: var(--muted-foreground); font-style: italic; }.qa-article-body pre { overflow-x: auto; padding: 1.25rem; border: 1px solid var(--border); border-radius: .6rem; background: #0c0e10; color: #d9e3dc; font-size: .8rem; }
-  .qa-store .bg-card { background: #FFFFFF !important; }
-  .qa-store .text-foreground { color: #18201B !important; }
-  .qa-store .text-muted-foreground { color: #5F6A63 !important; }
-  .qa-store .bg-background, .qa-store select { background: #FFFFFF !important; color: #18201B !important; }
-  .qa-store .border-border, .qa-store .border-input { border-color: #DCE2DD !important; }
-  .store-highlight { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin: 1.5rem 0; border: 1px solid #D7E5D8; border-radius: .85rem; background: #E9F3EA; padding: clamp(1.5rem, 4vw, 2.5rem); color: #18201B; }
+  /* Sem override de paleta: a loja usa os tokens do design system, que já são
+     escuros. O que sobra aqui é só a forma de cada peça da vitrine. */
+  .store-highlight { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin: 1.5rem 0; border: 1px solid rgba(76,175,114,.28); border-radius: .85rem; background: #1A211C; padding: clamp(1.5rem, 4vw, 2.5rem); color: var(--foreground); }
   .store-highlight h2 { margin-top: .5rem; font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 650; letter-spacing: -.045em; }
-  .store-highlight p:not(.store-kicker) { margin-top: .5rem; color: #526057; }
-  .store-kicker { color: #34724A; font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-  .store-product-image, .store-detail-image { background: linear-gradient(145deg, #EAF2EB, #D5E8D8); color: #34724A; transition: transform .18s ease, background .18s ease; }
-  .store-product-image:hover { background: #CBE7D0; transform: translateY(-2px); }
-  .store-summary, .store-detail { border: 1px solid #DCE2DD; border-radius: .75rem; background: #FFF; padding: 1.25rem; }
+  .store-highlight p:not(.store-kicker) { margin-top: .5rem; color: var(--muted-foreground); }
+  .store-kicker { color: var(--primary); font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .store-product-image, .store-detail-image { background: linear-gradient(145deg, #1E2622, #172019); color: var(--primary); transition: transform .18s ease, background .18s ease; }
+  .store-product-image:hover { background: #232D27; transform: translateY(-2px); }
+  .store-summary, .store-detail { border: 1px solid var(--border); border-radius: .75rem; background: var(--card); padding: 1.25rem; }
   .store-detail-image { display: grid; min-height: 330px; place-items: center; border-radius: .9rem; font-family: var(--font-jetbrains); font-size: 4rem; font-weight: 700; }
   .qa-eyebrow { color: var(--primary); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
   .qa-next-lab {

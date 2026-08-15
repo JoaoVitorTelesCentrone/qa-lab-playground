@@ -12,6 +12,7 @@
 // aluno vê deslogado é o que ele veria logado — menos o "some ao sair".
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 import { domainErrors } from "@/lib/product/practice/domain";
 import { findResource, parseRecord, type PracticeResource } from "@/lib/product/practice/resources";
 import type { PracticeRow, PracticeRows } from "@/lib/product/practice/store";
@@ -62,8 +63,14 @@ export function usePracticeApp(initial: AppRows, { persist, activeBugs }: { pers
 
     const setBusy = (id: string) => setPending((state) => ({ ...state, [resourceId]: id }));
     const stop = () => setPending((state) => ({ ...state, [resourceId]: "" }));
-    const setError = (value: Feedback) => setFeedback((state) => ({ ...state, [resourceId]: value }));
-    const announce = (message: string) => setNotice((state) => ({ ...state, [resourceId]: message }));
+    const setError = (value: Feedback) => {
+      setFeedback((state) => ({ ...state, [resourceId]: value }));
+      if (value.message) toast.error(value.message, { description: describeFields(value.fields) });
+    };
+    const announce = (message: string) => {
+      setNotice((state) => ({ ...state, [resourceId]: message }));
+      if (message) toast.success(message);
+    };
 
     /** Validação local: mesma regra do servidor, só que sem esperar a rede. */
     function check(values: Record<string, unknown>, { partial = false, recordId = "" } = {}) {
@@ -167,5 +174,12 @@ function sortRows(resource: PracticeResource, rows: Row[]) {
 }
 
 const localId = () => `local-${Math.random().toString(36).slice(2, 10)}`;
+
+/** Campos recusados, resumidos para o corpo do toast. */
+function describeFields(fields: Record<string, string>) {
+  const names = Object.keys(fields);
+  if (names.length === 0) return undefined;
+  return names.length === 1 ? fields[names[0]] : `${names.length} campos precisam de ajuste.`;
+}
 
 const capitalize = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);

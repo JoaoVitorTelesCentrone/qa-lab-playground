@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { agendaSummary, bookingsByDate, crmSummary, financeSummary, goalProgress, isWithinAvailability, knownCategories, pipelineByStage, slotsForDate, windowsForDate } from "./views";
+import { activitiesByKind, agendaSummary, bookingsByDate, crmSummary, financeSummary, funnelByStage, goalProgress, isWithinAvailability, knownCategories, pipelineByStage, slotsForDate, valueByCompany, windowsForDate } from "./views";
 import type { Booking, Deal, Transaction } from "./rules";
 
 const transactions: Transaction[] = [
@@ -141,5 +141,34 @@ describe("crm", () => {
 
   test("sem negócio fechado a taxa de ganho é zero, não divisão por zero", () => {
     expect(crmSummary([deals[0]], []).winRate).toBe(0);
+  });
+
+  test("o funil não inclui perdido: perdido é saída, não etapa", () => {
+    expect(funnelByStage(deals).map((item) => item.stage)).toEqual(["novo", "qualificado", "proposta", "ganho"]);
+    expect(funnelByStage(deals).reduce((sum, item) => sum + item.count, 0)).toBe(2);
+  });
+
+  test("valor por empresa soma as oportunidades vivas, maior primeiro", () => {
+    expect(valueByCompany(deals)).toEqual([{ company: "X", total: 3000 }]);
+  });
+
+  test("perdidas e ticket médio das abertas entram no resumo", () => {
+    const summary = crmSummary(deals, []);
+    expect(summary.lost).toBe(1);
+    expect(summary.lostValue).toBe(500);
+    expect(summary.averageOpen).toBe(1000);
+  });
+
+  test("sem oportunidade aberta o ticket médio é zero", () => {
+    expect(crmSummary([deals[1]], []).averageOpen).toBe(0);
+  });
+
+  test("atividades por tipo contam e ordenam da mais frequente", () => {
+    const activities = [
+      { id: "1", deal: "A", kind: "email", summary: "" },
+      { id: "2", deal: "A", kind: "reuniao", summary: "" },
+      { id: "3", deal: "B", kind: "email", summary: "" },
+    ];
+    expect(activitiesByKind(activities)).toEqual([{ kind: "email", total: 2 }, { kind: "reuniao", total: 1 }]);
   });
 });

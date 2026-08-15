@@ -23,7 +23,7 @@ export const practiceApps: PracticeApp[] = [
   {
     id: "qa-lab",
     name: "QA Lab",
-    route: "/shop",
+    route: "/shop/products",
     summary: "Loja completa: catálogo, carrinho, checkout, pedidos, conta e operação.",
     entity: "produto, carrinho e pedido",
     flows: ["Catálogo e busca", "Carrinho e checkout", "Pedidos e pós-venda", "Conta e sessão", "Operação e governança"],
@@ -48,9 +48,9 @@ export const practiceApps: PracticeApp[] = [
     id: "crm",
     name: "CRM",
     route: "/crm",
-    summary: "Funil comercial com contatos, oportunidades, atividades e métricas.",
-    entity: "lead e oportunidade",
-    flows: ["Contatos", "Funil e estágios", "Oportunidades", "Atividades", "Métricas"],
+    summary: "Painel comercial: funil por estágio, valor por conta e as métricas que dependem deles.",
+    entity: "indicador do funil",
+    flows: ["Funil por estágio", "Valor por empresa", "Atividades", "Taxa de ganho", "Gráfico versus tabela"],
   },
 ];
 

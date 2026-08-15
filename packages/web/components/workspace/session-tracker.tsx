@@ -19,7 +19,7 @@ export function SessionTracker({ playgroundId }: { playgroundId: string }) {
       setUserId(data.user.id);
       const { data: latest } = await supabase.from("playground_sessions").select("id,status").eq("user_id", data.user.id).eq("playground_id", playgroundId).order("started_at", { ascending: false }).limit(1).maybeSingle();
       if (latest) setSession(latest as Session);
-    });
+    }).catch(() => undefined);
   }, [playgroundId]);
 
   if (!userId) return null;

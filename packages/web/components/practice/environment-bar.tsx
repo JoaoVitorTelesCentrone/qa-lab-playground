@@ -12,6 +12,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2, RotateCcw, ShieldAlert, UserCog } from "lucide-react";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { personas } from "@/lib/product/practice/personas";
@@ -26,11 +27,16 @@ export function EnvironmentBar({ appId, settings }: { appId: PracticeAppId; sett
   const bugs = bugsForApp(appId);
   const activeHere = bugs.filter((bug) => settings.activeBugs.includes(bug.id));
 
-  async function patch(body: Record<string, unknown>) {
+  async function patch(body: Record<string, unknown>, done?: string) {
     setBusy("settings"); setError("");
     const response = await fetch("/api/v1/practice/settings", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
     setBusy("");
-    if (!response.ok) { setError("Não foi possível atualizar o ambiente."); return; }
+    if (!response.ok) {
+      setError("Não foi possível atualizar o ambiente.");
+      toast.error("Não foi possível atualizar o ambiente.");
+      return;
+    }
+    if (done) toast.success(done);
     router.refresh();
   }
 
@@ -38,20 +44,27 @@ export function EnvironmentBar({ appId, settings }: { appId: PracticeAppId; sett
   const othersActive = settings.activeBugs.filter((id) => !bugs.some((bug) => bug.id === id));
 
   function toggleBug(id: string) {
-    const next = settings.activeBugs.includes(id) ? settings.activeBugs.filter((item) => item !== id) : [...settings.activeBugs, id];
-    patch({ activeBugs: next });
+    const active = settings.activeBugs.includes(id);
+    const next = active ? settings.activeBugs.filter((item) => item !== id) : [...settings.activeBugs, id];
+    patch({ activeBugs: next }, `Desvio ${active ? "desligado" : "ligado"}: ${bugs.find((bug) => bug.id === id)?.title}.`);
   }
 
   function shuffle() {
     const picked = bugs.filter(() => Math.random() < 0.5);
-    patch({ activeBugs: [...othersActive, ...picked.map((bug) => bug.id)] });
+    // Quantos, nunca quais: no modo aluno o toast não pode entregar a resposta.
+    patch({ activeBugs: [...othersActive, ...picked.map((bug) => bug.id)] }, `Desvios sorteados: ${picked.length} ativo(s) neste ambiente.`);
   }
 
   async function restore() {
     setBusy("reset"); setError("");
     const response = await fetch("/api/v1/practice/settings", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ apps: [appId] }) });
     setBusy("");
-    if (!response.ok) { setError("Não foi possível restaurar a massa de teste."); return; }
+    if (!response.ok) {
+      setError("Não foi possível restaurar a massa de teste.");
+      toast.error("Não foi possível restaurar a massa de teste.");
+      return;
+    }
+    toast.success("Massa de teste restaurada.", { description: "O ambiente voltou ao estado conhecido do seed." });
     router.refresh();
   }
 
@@ -59,13 +72,13 @@ export function EnvironmentBar({ appId, settings }: { appId: PracticeAppId; sett
     <div className="flex flex-wrap items-end gap-4">
       <label className="grid gap-1.5">
         <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"><UserCog className="size-3.5" /> Perfil de teste</span>
-        <select value={settings.personaId} onChange={(event) => patch({ personaId: event.target.value })} className="input w-56" disabled={busy !== ""}>
+        <select value={settings.personaId} onChange={(event) => patch({ personaId: event.target.value }, `Perfil de teste: ${personas.find((persona) => persona.id === event.target.value)?.name}.`)} className="input w-56" disabled={busy !== ""}>
           {personas.map((persona) => <option key={persona.id} value={persona.id}>{persona.name}</option>)}
         </select>
       </label>
 
       <label className="flex items-center gap-2 pb-2.5 text-sm">
-        <input type="checkbox" checked={settings.instructor} onChange={(event) => patch({ instructor: event.target.checked })} disabled={busy !== ""} />
+        <input type="checkbox" checked={settings.instructor} onChange={(event) => patch({ instructor: event.target.checked }, event.target.checked ? "Modo instrutor ligado: os desvios ficam visíveis." : "Modo instrutor desligado.")} disabled={busy !== ""} />
         Modo instrutor
       </label>
 

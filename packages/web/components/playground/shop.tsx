@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { shopProducts, type ShopProduct } from "@/lib/playground/shop-data";
 import { systemApi } from "@/lib/api-client";
+import { toast } from "sonner";
 import { normalizeCart, priceCart, priceLines, type CartItem, type Order, type OrderStatus } from "@/lib/product/practice/shop";
 
 function money(value: number) {
@@ -97,6 +98,10 @@ export function ProductsPage() {
   function add(product: ShopProduct) {
     const current = items.find((item) => item.productId === product.id);
     save(current ? items.map((item) => item.productId === product.id ? { ...item, quantity: item.quantity + 1 } : item) : [...items, { productId: product.id, quantity: 1 }]);
+    toast.success(`${product.name} no carrinho.`, {
+      description: current ? `Quantidade: ${current.quantity + 1}.` : money(product.price),
+      action: { label: "Ver carrinho", onClick: () => { window.location.href = "/shop/cart"; } },
+    });
   }
   function toggleFavorite(id: number) {
     const next = favorites.includes(id) ? favorites.filter((favorite) => favorite !== id) : [...favorites, id];
@@ -156,7 +161,7 @@ export function ProductDetailPage({ product }: { product: ShopProduct }) {
   const { items, save } = useCart();
   const [review, setReview] = useState("");
   const [notice, setNotice] = useState("");
-  function add() { const current = items.find((item) => item.productId === product.id); save(current ? items.map((item) => item.productId === product.id ? { ...item, quantity: item.quantity + 1 } : item) : [...items, { productId: product.id, quantity: 1 }]); }
+  function add() { const current = items.find((item) => item.productId === product.id); save(current ? items.map((item) => item.productId === product.id ? { ...item, quantity: item.quantity + 1 } : item) : [...items, { productId: product.id, quantity: 1 }]); toast.success(`${product.name} no carrinho.`, { description: current ? `Quantidade: ${current.quantity + 1}.` : money(product.price) }); }
   return <ShopShell title={product.name} subtitle={product.category} action={<Button asChild variant="outline"><Link href="/shop/cart"><ShoppingCart className="size-4" /> Carrinho</Link></Button>}><div className="grid gap-8 lg:grid-cols-[1fr_.85fr]"><div className="store-detail-image">{product.image}</div><section className="store-detail"><Badge>{product.category}</Badge><h2 className="mt-5 text-3xl font-semibold">{product.name}</h2><div className="mt-4 flex items-center gap-3"><span className="text-2xl font-semibold">{money(product.price)}</span><span className="inline-flex items-center gap-1 text-sm text-muted-foreground"><Star className="size-4 fill-primary text-primary" /> {product.rating} / 5</span></div><p className="mt-6 leading-7 text-muted-foreground">{product.description} Criado para transformar conceitos de qualidade em decisoes de produto mais claras.</p><div className="mt-7 grid gap-3 text-sm text-muted-foreground"><p className="flex gap-2"><PackageCheck className="size-4 text-primary" /> Envio rastreado para todo o Brasil</p><p className="flex gap-2"><Truck className="size-4 text-primary" /> Frete gratis em pedidos acima de R$ 200</p><p className={product.stock ? "text-primary" : "text-destructive"}>{product.stock ? `${product.stock} unidades disponiveis` : "Produto indisponivel"}</p></div><Button disabled={!product.stock} className="mt-8 w-full" size="lg" onClick={add}><Plus className="size-4" /> Adicionar ao carrinho</Button>{!product.stock && <Button type="button" variant="outline" className="mt-3 w-full" onClick={() => { localStorage.setItem(`qa-lab-restock-${product.id}`, "true"); setNotice("Aviso de reposicao ativado."); }}>Avisar quando chegar</Button>}</section></div><Card className="mt-8"><CardHeader><CardTitle>Avaliacoes</CardTitle><CardDescription>Compartilhe uma avaliacao do produto.</CardDescription></CardHeader><CardContent><form className="flex flex-wrap gap-2" onSubmit={(event) => { event.preventDefault(); if (review.trim().length < 10) return setNotice("Escreva ao menos 10 caracteres na avaliacao."); const reviews = JSON.parse(localStorage.getItem(`qa-lab-reviews-${product.id}`) ?? "[]") as string[]; localStorage.setItem(`qa-lab-reviews-${product.id}`, JSON.stringify([...reviews, review])); setReview(""); setNotice("Avaliacao enviada com sucesso."); }}><Input value={review} onChange={(event) => setReview(event.target.value)} aria-label="Comentario da avaliacao" placeholder="Conte sua experiencia" /><Button>Enviar avaliacao</Button></form>{notice && <p role="status" aria-live="polite" className="mt-3 text-sm text-primary">{notice}</p>}</CardContent></Card></ShopShell>;
 }
 
@@ -167,6 +172,12 @@ export function CartPage() {
   const { subtotal, discount, shipping } = priceCart(priceLines(items, shopProducts), { coupon: appliedCoupon }, activeBugs);
   function change(productId: number, delta: number) {
     save(items.map((item) => item.productId === productId ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item));
+  }
+
+  function removeItem(productId: number) {
+    const gone = rows.find((item) => item.productId === productId);
+    save(items.filter((cart) => cart.productId !== productId));
+    if (gone) toast.success(`${gone.product.name} removido do carrinho.`);
   }
   return (
     <ShopShell title="Carrinho" subtitle="Revise seus itens antes de finalizar." action={<Button asChild><Link href="/shop/checkout">Ir para checkout</Link></Button>}>
@@ -182,14 +193,14 @@ export function CartPage() {
                 <Button aria-label="Diminuir quantidade" onClick={() => change(item.productId, -1)} variant="outline" size="icon-sm"><Minus className="size-4" /></Button>
                 <span className="w-8 text-center font-mono" data-testid={`qty-${item.productId}`}>{item.quantity}</span>
                 <Button aria-label="Aumentar quantidade" onClick={() => change(item.productId, 1)} variant="outline" size="icon-sm"><Plus className="size-4" /></Button>
-                <Button aria-label="Remover item" onClick={() => save(items.filter((cart) => cart.productId !== item.productId))} variant="outline" size="icon-sm"><Trash2 className="size-4 text-destructive" /></Button>
+                <Button aria-label="Remover item" onClick={() => removeItem(item.productId)} variant="outline" size="icon-sm"><Trash2 className="size-4 text-destructive" /></Button>
               </div>
               <p className="font-mono text-sm font-medium text-primary">{money(item.product.price * item.quantity)}</p>
             </CardContent>
           </Card>
         ))}
         {!rows.length && <Card><CardContent><p className="text-sm text-muted-foreground">Carrinho vazio.</p></CardContent></Card>}
-        <section className="store-summary"><label className="text-sm font-medium">Cupom de desconto<div className="mt-2 flex gap-2"><Input value={coupon} onChange={(event) => setCoupon(event.target.value)} placeholder="Ex.: QA10" /><Button type="button" variant="outline" onClick={() => { const next = coupon.trim().toUpperCase(); if (next === "QA10") { setAppliedCoupon(next); setCouponMessage("Cupom QA10 aplicado: 10% de desconto."); } else setCouponMessage("Cupom invalido."); }}>Aplicar</Button>{appliedCoupon && <Button type="button" variant="ghost" onClick={() => { setAppliedCoupon(""); setCouponMessage("Cupom removido."); }}>Remover</Button>}</div></label><p role="status" aria-live="polite" className="mt-2 text-sm text-primary">{couponMessage}</p><dl className="mt-5 grid gap-2 text-sm"><div className="flex justify-between"><dt>Subtotal</dt><dd>{money(subtotal)}</dd></div><div className="flex justify-between"><dt>Desconto</dt><dd className="text-primary">-{money(discount)}</dd></div><div className="flex justify-between"><dt>Frete</dt><dd>{shipping ? money(shipping) : "Grátis"}</dd></div><div className="flex justify-between border-t pt-3 text-base font-semibold"><dt>Total</dt><dd>{money(subtotal - discount + shipping)}</dd></div></dl></section><p className="text-right font-mono text-lg font-semibold text-foreground" data-testid="cart-subtotal">Subtotal: {money(subtotal)}</p>
+        <section className="store-summary"><label className="text-sm font-medium">Cupom de desconto<div className="mt-2 flex gap-2"><Input value={coupon} onChange={(event) => setCoupon(event.target.value)} placeholder="Ex.: QA10" /><Button type="button" variant="outline" onClick={() => { const next = coupon.trim().toUpperCase(); if (next === "QA10") { setAppliedCoupon(next); setCouponMessage("Cupom QA10 aplicado: 10% de desconto."); toast.success("Cupom QA10 aplicado.", { description: "10% de desconto no subtotal." }); } else { setCouponMessage("Cupom invalido."); toast.error("Cupom invalido.", { description: `Nao encontramos o cupom "${next}".` }); } }}>Aplicar</Button>{appliedCoupon && <Button type="button" variant="ghost" onClick={() => { setAppliedCoupon(""); setCouponMessage("Cupom removido."); toast.info("Cupom removido."); }}>Remover</Button>}</div></label><p role="status" aria-live="polite" className="mt-2 text-sm text-primary">{couponMessage}</p><dl className="mt-5 grid gap-2 text-sm"><div className="flex justify-between"><dt>Subtotal</dt><dd>{money(subtotal)}</dd></div><div className="flex justify-between"><dt>Desconto</dt><dd className="text-primary">-{money(discount)}</dd></div><div className="flex justify-between"><dt>Frete</dt><dd>{shipping ? money(shipping) : "Grátis"}</dd></div><div className="flex justify-between border-t pt-3 text-base font-semibold"><dt>Total</dt><dd>{money(subtotal - discount + shipping)}</dd></div></dl></section><p className="text-right font-mono text-lg font-semibold text-foreground" data-testid="cart-subtotal">Subtotal: {money(subtotal)}</p>
       </div>
     </ShopShell>
   );
@@ -216,9 +227,10 @@ export function CheckoutPage() {
     const data = new FormData(event.currentTarget);
     if (!data.get("firstName") || !data.get("lastName") || !zipValid || !data.get("address") || !data.get("city") || !data.get("state")) {
       setMessage("Preencha nome, sobrenome, CEP valido, endereco, cidade e estado.");
+      toast.error("Faltam dados para fechar o pedido.", { description: "Nome, sobrenome, CEP valido, endereco, cidade e estado." });
       return;
     }
-    if (rows.length === 0) { setMessage("Carrinho vazio: adicione um produto antes de finalizar."); return; }
+    if (rows.length === 0) { setMessage("Carrinho vazio: adicione um produto antes de finalizar."); toast.error("Carrinho vazio."); return; }
 
     // Logado, quem fecha o pedido e decide o valor cobrado é o servidor.
     if (remote) {
@@ -226,7 +238,13 @@ export function CheckoutPage() {
       const response = await fetch("/api/v1/shop/orders", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ coupon, delivery }) });
       const body = await response.json().catch(() => null);
       setSending(false);
-      if (!response.ok) { setMessage(body?.error?.message ?? "Nao foi possivel criar o pedido."); return; }
+      if (!response.ok) {
+        const erro = body?.error?.message ?? "Nao foi possivel criar o pedido.";
+        setMessage(erro);
+        toast.error(erro);
+        return;
+      }
+      toast.success(`Pedido ${body.data.reference} confirmado.`, { description: `Total: ${money(body.data.total)}.` });
       save([]);
       router.push(`/shop/orders/${body.data.reference}`);
       return;
@@ -234,6 +252,7 @@ export function CheckoutPage() {
 
     // Deslogado, o pedido existe só nesta sessão.
     const reference = `QL-LOCAL-${Date.now().toString().slice(-6)}`;
+    toast.success(`Pedido ${reference} confirmado.`, { description: `Total: ${money(total)}. Sem conta, ele vive so nesta sessao.` });
     localStorage.setItem("qa-lab-last-order", JSON.stringify({ id: reference, total, status: "Confirmado", createdAt: new Date().toISOString(), items: items }));
     save([]);
     router.push(`/shop/orders/${reference}`);
@@ -346,13 +365,20 @@ export function OrderPage({ id }: { id: string }) {
     // pode depender do que esta aba acha que aconteceu.
     if (remote) {
       const response = await fetch(`/api/v1/shop/orders?reference=${encodeURIComponent(id)}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ status: statusValues[status] }) });
-      if (!response.ok) { const body = await response.json().catch(() => null); setNotice(body?.error?.message ?? "Nao foi possivel atualizar o pedido."); return; }
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        const erro = body?.error?.message ?? "Nao foi possivel atualizar o pedido.";
+        setNotice(erro);
+        toast.error(erro);
+        return;
+      }
       setOrders(orders.map((item) => (item.id === id ? { ...item, status } : item)));
       setNotice(message);
+      toast.success(message);
       return;
     }
     const next = orders.some((item) => item.id === id) ? orders.map((item) => item.id === id ? { ...item, status } : item) : [{ ...order, status }, ...orders];
-    setOrders(next); saveOrders(next); setNotice(message);
+    setOrders(next); saveOrders(next); setNotice(message); toast.success(message);
   }
 
   async function reorder() {
@@ -360,6 +386,7 @@ export function OrderPage({ id }: { id: string }) {
     if (remote) await fetch("/api/v1/shop/cart", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ items }) });
     else localStorage.setItem("qa-lab-cart", JSON.stringify(items));
     setNotice("Itens adicionados novamente ao carrinho.");
+    toast.success("Itens adicionados novamente ao carrinho.");
   }
   return <ShopShell title="Detalhe do pedido" subtitle={`Pedido ${id}`} action={<Button asChild variant="outline"><Link href="/shop/orders">Historico</Link></Button>}><div className="grid gap-5 lg:grid-cols-[1fr_320px]"><div className="grid gap-5"><Card><CardHeader><CardDescription>Status atual</CardDescription><CardTitle className="font-mono text-2xl text-primary" data-testid="order-id">{id}</CardTitle></CardHeader><CardContent><p className="font-medium">{order.status}</p><ol className="mt-5 grid gap-3 text-sm">{["Confirmado", "Pagamento aprovado", "Enviado", "Entregue"].map((step, index) => <li key={step} className={index === 0 || order.status === "Enviado" || order.status === "Entregue" ? "text-primary" : "text-muted-foreground"}>{index + 1}. {step}</li>)}</ol><p className="mt-5 rounded-md bg-muted p-3 text-sm">Rastreio: <strong className="font-mono">BR-QL-{id.slice(-6)}</strong> · Atualizacao simulada em transito.</p></CardContent></Card><Card><CardHeader><CardTitle>Pos-venda</CardTitle></CardHeader><CardContent className="flex flex-wrap gap-2"><Button variant="outline" onClick={() => void update("Cancelado", `Pedido cancelado. Motivo: ${reason || "nao informado"}.`)}>Cancelar</Button><Button variant="outline" onClick={() => setNotice("Solicitacao de devolucao aberta.")}>Solicitar devolucao</Button><Button variant="outline" onClick={() => setNotice("Reembolso total solicitado.")}>Solicitar reembolso</Button><Button variant="outline" onClick={() => { const blob = new Blob([`Nota fiscal simulada do pedido ${id}`], { type: "text/plain" }); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = `${id}-nota-fiscal.txt`; link.click(); URL.revokeObjectURL(url); }}>Baixar nota fiscal</Button><Button variant="outline" onClick={() => void reorder()}>Comprar novamente</Button></CardContent></Card></div><aside className="grid gap-5"><Card><CardHeader><CardTitle>Motivo do cancelamento</CardTitle></CardHeader><CardContent><Input value={reason} onChange={(event) => setReason(event.target.value)} placeholder="Ex.: desisti da compra" /></CardContent></Card><Card><CardHeader><CardTitle>Satisfacao</CardTitle><CardDescription>Como foi sua experiencia?</CardDescription></CardHeader><CardContent><div className="flex gap-2">{[1,2,3,4,5].map((value) => <Button key={value} type="button" variant={survey === value ? "default" : "outline"} size="sm" onClick={() => { setSurvey(value); setNotice(`Pesquisa registrada: ${value}/5.`); }}>{value}</Button>)}</div></CardContent></Card></aside></div>{notice && <p role="status" aria-live="polite" className="mt-5 rounded-md border border-primary/30 p-3 text-sm text-primary">{notice}</p>}</ShopShell>;
 }

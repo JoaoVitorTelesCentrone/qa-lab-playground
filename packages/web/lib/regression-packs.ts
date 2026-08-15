@@ -158,7 +158,7 @@ const crm: Draft[] = [
 ];
 
 const qaLab: Draft[] = [
-  { title: "Acesso inicial", layer: "UI", precondition: "Loja aberta em sessão nova, sem carrinho.", steps: ["Abra /shop.", "Percorra as chamadas e os acessos aos módulos.", "Chegue ao catálogo pelo caminho principal."], expected: "A loja abre orientando o próximo passo e o catálogo é alcançável em um clique.", at: "" },
+  { title: "Acesso inicial", layer: "UI", precondition: "Loja aberta em sessão nova, sem carrinho.", steps: ["Abra a loja pela primeira vez.", "Confira se o catálogo aparece já na primeira tela.", "Percorra a navegação até carrinho e pedidos."], expected: "A loja abre no catálogo e todas as áreas são alcançáveis em um clique.", at: "" },
   { title: "Carregamento da página", layer: "UI", precondition: "Catálogo disponível.", steps: ["Atualize /shop/products com cache desabilitado.", "Observe imagens, preços e filtros enquanto carregam.", "Confira se algum preço aparece divergente antes de estabilizar."], expected: "O catálogo carrega sem exibir preço ou estoque intermediário incorreto.", at: "/shop/products" },
   { title: "Estado vazio", layer: "UI", precondition: "Catálogo disponível.", steps: ["Busque por um termo sem resultado no catálogo.", "Confira a mensagem e as ações oferecidas.", "Abra o carrinho vazio."], expected: "Busca sem resultado e carrinho vazio têm mensagem própria e caminho de volta.", at: "/shop/products" },
   { title: "Busca por texto", layer: "UI", precondition: "Catálogo disponível.", steps: ["Busque por um produto existente.", "Busque com caixa diferente e com acento.", "Busque por um trecho parcial do nome."], expected: "A busca encontra por trecho, ignorando caixa e acento, e informa quando não há resultado.", at: "/shop/products" },

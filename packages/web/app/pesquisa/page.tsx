@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, BookMarked, CalendarClock, DatabaseZap, ExternalLink, Microscope, SearchCheck } from "lucide-react";
+import { ArrowRight, BookMarked, CalendarClock, ExternalLink, Microscope } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { getRecentResearch, getResearchStats, researchLibrary, researchQueries, researchSources } from "@/lib/research-library";
+import { getRecentResearch, getResearchStats, researchLibrary } from "@/lib/research-library";
 
 export const metadata = {
   title: "Pesquisa Cientifica",
@@ -79,46 +79,6 @@ export default function PesquisaPage() {
             <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-[#8B949E]">{label}</p>
           </div>
         ))}
-      </section>
-
-      <section className="mt-14 grid gap-5 lg:grid-cols-[1fr_22rem]">
-        <div className="rounded-lg border border-white/10 bg-[#171B21] p-6">
-          <div className="flex items-start gap-3">
-            <DatabaseZap className="mt-1 size-5 shrink-0 text-neon" />
-            <div>
-              <h2 className="text-2xl font-black text-off-white">Como a busca diaria funciona</h2>
-              <p className="mt-3 text-sm leading-7 text-[#AAB2BC]">
-                A rotina procura novos trabalhos publicados recentemente no OpenAlex, Crossref, Semantic Scholar e arXiv.
-                IEEE, ACM, Springer, ScienceDirect e standards entram por metadados desses indices e por curadoria quando sao referencias essenciais.
-              </p>
-            </div>
-          </div>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {researchQueries.map((query) => (
-              <Badge key={query} variant="secondary" className="normal-case tracking-normal">
-                {query}
-              </Badge>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-lg border border-white/10 bg-[#171B21] p-6">
-          <div className="flex items-center gap-3">
-            <SearchCheck className="size-5 text-mint" />
-            <h2 className="text-xl font-black text-off-white">Fontes</h2>
-          </div>
-          <div className="mt-5 space-y-4">
-            {researchSources.map((source) => (
-              <a key={source.name} href={source.url} target={source.url.startsWith("http") ? "_blank" : undefined} rel={source.url.startsWith("http") ? "noreferrer" : undefined} className="block rounded-lg border border-white/10 p-4 transition hover:border-mint/30">
-                <div className="flex items-center justify-between gap-3">
-                  <h3 className="font-black text-off-white">{source.name}</h3>
-                  {source.url.startsWith("http") && <ExternalLink className="size-4 text-mint" />}
-                </div>
-                <p className="mt-2 text-sm leading-6 text-[#8B949E]">{source.description}</p>
-              </a>
-            ))}
-          </div>
-        </div>
       </section>
 
       <section id="trabalhos" className="mt-14 scroll-mt-24">
