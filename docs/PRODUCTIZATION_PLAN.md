@@ -70,6 +70,10 @@ Os apps são ambientes que o aluno testa. Os Labs são missões sobre esses ambi
 
 ## 5. Fases de entrega
 
+> **Estado em 2026-08-15:** Fases 0 a 4 implementadas, mais uma trilha por
+> ambiente (extensão da Fase 2 para os apps da Fase 3). O que falta para o plano
+> estar de fato entregue está em **Pendências** ao final deste documento.
+
 ### Fase 0 — Reorganização (1 semana)
 
 - Definir a home como produto e os apps como ambientes de prática.
@@ -131,3 +135,45 @@ Os apps são ambientes que o aluno testa. Os Labs são missões sobre esses ambi
 - Dados de prática podem ser restaurados para garantir repetibilidade.
 - Bugs plantados são explícitos no modo instrutor, ocultos no modo aluno.
 - A fonte de verdade é o backend; `localStorage` só pode apoiar cache de interface.
+
+## 8. Onde cada coisa mora
+
+| Assunto | Arquivo |
+| --- | --- |
+| Ambientes de prática (fonte única) | `packages/web/lib/product/apps.ts` |
+| Recursos, campos e validação | `packages/web/lib/product/practice/resources.ts` |
+| Regras de domínio no servidor | `packages/web/lib/product/practice/domain.ts` |
+| Cálculos compartilhados com a tela | `packages/web/lib/product/practice/{rules,views,shop}.ts` |
+| Desvios plantados | `packages/web/lib/product/practice/bugs.ts` |
+| Perfis de teste | `packages/web/lib/product/practice/personas.ts` |
+| Massa de teste | `packages/web/lib/product/practice/seed.ts` |
+| Packs de regressão (35 × 4) | `packages/web/lib/regression-packs.ts` |
+| Labs e desafios | `packages/web/lib/system-challenges.ts` |
+| Trilhas | `packages/web/lib/product/tracks.ts` |
+| Jornada, evidências e progresso | `packages/web/lib/product/{journey,store}.ts` |
+| Portfólio público | `packages/web/lib/product/portfolio{,-format}.ts` |
+| Métricas | `packages/web/lib/product/metrics{,-store}.ts` |
+| API do produto | `packages/web/app/api/v1/**` |
+| Console do instrutor | `/lab/instrutor` |
+| Painel de métricas | `/lab/metricas` (só `QALAB_ADMIN_EMAILS`) |
+
+`packages/api` (Hono) **não** é a API do produto: é um alvo de teste para os
+alunos, usado pelos Labs de API.
+
+## 9. Pendências
+
+1. **Aplicar as migrações no Supabase**, na ordem: `0004_product_core.sql`,
+   `0005_submission_checklist.sql`, `0006_practice_data.sql`,
+   `0007_qa_lab_state.sql` e `0008_portfolio.sql`. São aplicadas à mão pelo SQL
+   Editor (não há CLI configurada) e todas são idempotentes. Sem elas o produto
+   abre, mas nada persiste: cada leitura cai no fallback vazio de propósito,
+   para a home não quebrar.
+2. **Validar o caminho autenticado ponta a ponta** depois das migrações. Só o
+   comportamento deslogado foi exercitado rodando o app.
+3. **Auditoria de alterações** nos três ambientes novos: hoje o cenário 31 de
+   cada pack existe para o aluno *provar a ausência* de trilha. Se virar
+   requisito, precisa de tabela própria.
+4. **Acessibilidade e responsividade** foram construídas com rótulo
+   programático, `aria-live`, `aria-invalid` associado ao campo, alvo de
+   teclado na grade de horários e tabela com rolagem própria — mas não foram
+   validadas com leitor de tela real nem em dispositivo físico.

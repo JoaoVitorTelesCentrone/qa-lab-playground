@@ -17,6 +17,9 @@ const PUBLIC_PREFIXES = [
   "/shop", "/financas", "/agendamentos", "/crm",
   // Conta
   "/auth", "/login", "/cadastro", "/recuperar", "/perfil", "/waitlist",
+  // Portfólio público do aluno: precisa abrir para quem não tem conta, senão o
+  // link que ele compartilha cai no Blog.
+  "/portfolio",
 ];
 
 const labRouteNumbers: Record<string, number> = {
