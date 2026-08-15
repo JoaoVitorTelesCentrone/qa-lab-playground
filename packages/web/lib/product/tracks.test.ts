@@ -11,13 +11,29 @@ function progress(labNumber: number, status: LabProgress["status"]): LabProgress
 }
 
 describe("trilha de aprendizagem", () => {
-  test("a trilha de fluxos críticos tem 10 Labs, todos no catálogo", () => {
-    expect(track.labNumbers).toHaveLength(10);
-    expect(track.labNumbers.every((number) => labs.some((lab) => lab.number === number))).toBe(true);
+  test("há uma trilha por ambiente de prática", () => {
+    expect(learningTracks.map((item) => item.appId).sort()).toEqual(["agendamentos", "crm", "financas", "qa-lab"]);
+    expect(new Set(learningTracks.map((item) => item.slug)).size).toBe(learningTracks.length);
   });
 
-  test("não repete Lab dentro da trilha", () => {
-    expect(new Set(track.labNumbers).size).toBe(track.labNumbers.length);
+  test("toda trilha tem 10 Labs, todos no catálogo e sem repetir", () => {
+    for (const item of learningTracks) {
+      expect(item.labNumbers).toHaveLength(10);
+      expect(item.labNumbers.every((number) => labs.some((lab) => lab.number === number))).toBe(true);
+      expect(new Set(item.labNumbers).size).toBe(item.labNumbers.length);
+    }
+  });
+
+  test("um Lab não aparece em duas trilhas", () => {
+    const all = learningTracks.flatMap((item) => item.labNumbers);
+    expect(new Set(all).size).toBe(all.length);
+  });
+
+  test("os Labs da trilha apontam para o ambiente da trilha", () => {
+    for (const item of learningTracks.filter((candidate) => candidate.appId !== "qa-lab")) {
+      const routes = item.labNumbers.map((number) => labs.find((lab) => lab.number === number)!.route);
+      expect(routes.every((route) => route.startsWith(`/${item.appId}`))).toBe(true);
+    }
   });
 
   test("começa zerada e aponta para o primeiro passo", () => {

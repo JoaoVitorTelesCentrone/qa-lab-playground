@@ -14,6 +14,9 @@ import type { TrackProgress } from "@/lib/product/tracks";
 
 const appIcons: Record<PracticeAppId, typeof Boxes> = { "qa-lab": Boxes, financas: WalletCards, agendamentos: CalendarDays, crm: Users };
 
+/** Trilha curada daquele ambiente, quando existe. */
+const trackFor = (tracks: TrackProgress[], appId: PracticeAppId) => tracks.find((item) => item.track.appId === appId) ?? null;
+
 const statusLabels: Record<LabProgress["status"], string> = { started: "em andamento", completed: "concluído", abandoned: "abandonado", "nao-iniciado": "não iniciado" };
 
 export function ProductHome({ journey, tracks, signedIn }: { journey: Journey; tracks: TrackProgress[]; signedIn: boolean }) {
@@ -62,7 +65,7 @@ export function ProductHome({ journey, tracks, signedIn }: { journey: Journey; t
     <section className="mt-16" aria-labelledby="apps-title">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
         <div><p className="qa-eyebrow">Ambientes de prática</p><h2 id="apps-title" className="mt-2 text-2xl font-semibold">Quatro aplicações para testar</h2></div>
-        <p className="text-sm text-muted-foreground">35 cenários de regressão por ambiente</p>
+        <p className="text-sm text-muted-foreground">35 cenários de regressão e uma trilha por ambiente</p>
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         {practiceApps.map((app) => {
@@ -76,6 +79,7 @@ export function ProductHome({ journey, tracks, signedIn }: { journey: Journey; t
             {signedIn && coverage && <Coverage coverage={coverage} />}
             <div className="mt-5 flex flex-wrap gap-2 pt-1">
               <Button asChild size="sm"><Link href={app.route}>Abrir ambiente</Link></Button>
+              {trackFor(tracks, app.id) && <Button asChild size="sm" variant="outline"><Link href={`/labs/trilhas/${trackFor(tracks, app.id)!.track.slug}`}>Trilha</Link></Button>}
               <Button asChild size="sm" variant="ghost"><Link href={`/labs/regressao#${app.id}`}>Pack de regressão</Link></Button>
             </div>
           </article>;

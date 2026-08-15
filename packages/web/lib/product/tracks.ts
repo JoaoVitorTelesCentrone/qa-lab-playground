@@ -32,7 +32,38 @@ const criticalFlows: Track = {
   labNumbers: [1, 11, 21, 23, 29, 33, 35, 39, 41, 43],
 };
 
-export const learningTracks: Track[] = [criticalFlows];
+// Uma trilha por ambiente de prática, com os 10 Labs daquele ambiente na ordem
+// em que o aluno precisa entender o domínio: primeiro validar o fluxo normal,
+// depois investigar onde ele quebra. Os números vêm do catálogo — Finanças
+// 101-110, Agendamentos 111-120 e CRM 121-130.
+const financeFlows: Track = {
+  slug: "financas-do-zero",
+  name: "Finanças ponta a ponta",
+  appId: "financas",
+  objective: "Testar um controle financeiro completo: lançamento, orçamento, meta e o total que precisa fechar com a lista.",
+  outcome: "Você consegue provar que um cálculo exibido diverge dos dados que o alimentam, com evidência reproduzível.",
+  labNumbers: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
+};
+
+const bookingFlows: Track = {
+  slug: "agenda-sem-conflito",
+  name: "Agenda sem conflito",
+  appId: "agendamentos",
+  objective: "Testar disponibilidade, conflito de horário, reagendamento e cancelamento em uma agenda de serviços.",
+  outcome: "Você consegue cobrir regras de disponibilidade e concorrência, e mostrar quando a interface e o servidor discordam.",
+  labNumbers: [111, 112, 113, 114, 115, 116, 117, 118, 119, 120],
+};
+
+const crmFlows: Track = {
+  slug: "funil-comercial",
+  name: "Funil comercial",
+  appId: "crm",
+  objective: "Testar um funil de vendas: contatos, oportunidades, mudança de estágio e as métricas que dependem disso.",
+  outcome: "Você consegue rastrear um número de painel até o dado que o origina e provar onde a conta não fecha.",
+  labNumbers: [121, 122, 123, 124, 125, 126, 127, 128, 129, 130],
+};
+
+export const learningTracks: Track[] = [criticalFlows, financeFlows, bookingFlows, crmFlows];
 
 export function findTrack(slug: string) {
   return learningTracks.find((track) => track.slug === slug);
