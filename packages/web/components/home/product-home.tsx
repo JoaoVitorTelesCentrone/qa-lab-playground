@@ -10,13 +10,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { practiceApps, type PracticeAppId } from "@/lib/product/apps";
 import type { AppCoverage, Journey, LabProgress } from "@/lib/product/journey";
+import type { TrackProgress } from "@/lib/product/tracks";
 
 const appIcons: Record<PracticeAppId, typeof Boxes> = { "qa-lab": Boxes, financas: WalletCards, agendamentos: CalendarDays, crm: Users };
 
 const statusLabels: Record<LabProgress["status"], string> = { started: "em andamento", completed: "concluído", abandoned: "abandonado", "nao-iniciado": "não iniciado" };
 
-export function ProductHome({ journey, signedIn }: { journey: Journey; signedIn: boolean }) {
-  const nextLab = journey.nextLab;
+export function ProductHome({ journey, tracks, signedIn }: { journey: Journey; tracks: TrackProgress[]; signedIn: boolean }) {
+  // A trilha é o caminho recomendado; o Lab solto da jornada é o plano B para
+  // quem já terminou o percurso curado.
+  const track = tracks.find((item) => item.nextLab) ?? tracks[0] ?? null;
+  const nextLab = track?.nextLab ?? journey.nextLab;
 
   return <div className="qa-home"><div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-14">
     <section className="qa-next-lab" aria-labelledby="home-title">
@@ -35,6 +39,25 @@ export function ProductHome({ journey, signedIn }: { journey: Journey; signedIn:
     </section>
 
     <JourneyPanel journey={journey} signedIn={signedIn} />
+
+    <section className="mt-16" aria-labelledby="tracks-title">
+      <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+        <div><p className="qa-eyebrow">Percurso guiado</p><h2 id="tracks-title" className="mt-2 text-2xl font-semibold">Trilhas</h2></div>
+        <p className="text-sm text-muted-foreground">Labs em sequência, do primeiro passo ao fluxo completo</p>
+      </div>
+      <div className="mt-6 grid gap-4">{tracks.map((item) => <article key={item.track.slug} className="rounded-xl border border-border p-5 sm:p-6">
+        <h3 className="text-lg font-semibold">{item.track.name}</h3>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.track.objective}</p>
+        <p className="mt-3 text-sm leading-6"><strong className="font-medium">Ao terminar:</strong> <span className="text-muted-foreground">{item.track.outcome}</span></p>
+        {signedIn
+          ? <div className="mt-5">
+              <div className="flex items-center justify-between text-xs text-muted-foreground"><span>{item.completed} de {item.total} Labs concluídos</span><span className="font-mono">{item.percent}%</span></div>
+              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted" role="img" aria-label={`${item.percent}% da trilha ${item.track.name} concluída`}><div className="h-full rounded-full bg-primary" style={{ width: `${item.percent}%` }} /></div>
+            </div>
+          : <p className="mt-5 text-sm text-muted-foreground">{item.total} Labs em sequência.</p>}
+        <Button asChild className="mt-5" variant="outline"><Link href={`/labs/trilhas/${item.track.slug}`}>Ver a trilha <ArrowRight className="size-4" /></Link></Button>
+      </article>)}</div>
+    </section>
 
     <section className="mt-16" aria-labelledby="apps-title">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">

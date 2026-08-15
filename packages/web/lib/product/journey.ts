@@ -5,6 +5,7 @@
 
 import { labs, type Lab } from "@/lib/playground/catalog";
 import { practiceApps, type PracticeAppId } from "./apps";
+import type { Severity } from "./evaluation";
 import { regressionPacks } from "@/lib/regression-packs";
 
 export type EnrollmentStatus = "started" | "completed" | "abandoned";
@@ -22,7 +23,9 @@ export type Submission = {
   labSlug: string;
   result: string;
   reproduction: string;
-  severity: "baixa" | "media" | "alta" | "critica";
+  severity: Severity;
+  /** Critérios de aceite que o aluno confirmou ao entregar. */
+  checklist: string[];
   createdAt: string;
 };
 

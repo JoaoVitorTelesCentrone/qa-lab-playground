@@ -11,7 +11,7 @@ function enrollment(overrides: Partial<Enrollment> & { labSlug: string }): Enrol
 }
 
 function submission(labSlug: string): Submission {
-  return { id: crypto.randomUUID(), labSlug, result: "Total divergente", reproduction: "1. Abrir\n2. Somar", severity: "alta", createdAt: "2026-08-01T10:00:00Z" };
+  return { id: crypto.randomUUID(), labSlug, result: "Total divergente", reproduction: "1. Abrir\n2. Somar", severity: "alta", checklist: [], createdAt: "2026-08-01T10:00:00Z" };
 }
 
 describe("minha jornada", () => {

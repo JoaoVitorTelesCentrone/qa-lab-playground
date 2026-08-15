@@ -11,11 +11,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import type { Journey, Submission } from "@/lib/product/journey";
+import type { TrackProgress } from "@/lib/product/tracks";
 
 type Profile = { full_name?: string | null; username?: string | null; bio?: string | null; linkedin_url?: string | null; role?: string | null; plan?: string | null } | null;
 const roles = ["QA Iniciante", "QA Pleno", "QA Sênior", "QA Lead", "Dev que testa", "Tech Lead", "Estudante"];
 
-export function ProfileClient({ email, profile, journey, submissions }: { email: string; profile: Profile; journey: Journey; submissions: Submission[] }) {
+export function ProfileClient({ email, profile, journey, tracks, submissions }: { email: string; profile: Profile; journey: Journey; tracks: TrackProgress[]; submissions: Submission[] }) {
   const [fullName, setFullName] = useState(profile?.full_name ?? "");
   const [username, setUsername] = useState(profile?.username ?? "");
   const [bio, setBio] = useState(profile?.bio ?? "");
@@ -56,7 +57,15 @@ export function ProfileClient({ email, profile, journey, submissions }: { email:
         <Stat label="Evidências" value={journey.evidence} />
         <Stat label="Taxa de conclusão" value={`${journey.completionRate}%`} />
       </div>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2">{journey.coverage.map((item) => <div key={item.id} className="rounded-lg border border-border p-4">
+      <h3 className="mt-6 text-sm font-medium text-muted-foreground">Trilhas</h3>
+      <div className="mt-3 grid gap-3">{tracks.map((item) => <div key={item.track.slug} className="rounded-lg border border-border p-4">
+        <div className="flex items-center justify-between text-sm"><Link href={`/labs/trilhas/${item.track.slug}`} className="font-medium transition hover:text-primary">{item.track.name}</Link><span className="font-mono text-xs text-muted-foreground">{item.completed}/{item.total}</span></div>
+        <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted" role="img" aria-label={`${item.percent}% da trilha ${item.track.name} concluída`}><div className="h-full rounded-full bg-primary" style={{ width: `${item.percent}%` }} /></div>
+        {item.nextLab && <p className="mt-3 text-xs text-muted-foreground">Próximo: <Link href={`/labs/${item.nextLab.number}`} className="text-primary">{item.nextLab.title}</Link></p>}
+      </div>)}</div>
+
+      <h3 className="mt-6 text-sm font-medium text-muted-foreground">Cobertura de regressão</h3>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">{journey.coverage.map((item) => <div key={item.id} className="rounded-lg border border-border p-4">
         <div className="flex items-center justify-between text-sm"><Link href={item.route} className="font-medium transition hover:text-primary">{item.name}</Link><span className="font-mono text-xs text-muted-foreground">{item.executed}/{item.total}</span></div>
         <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted" role="img" aria-label={`${item.percent}% dos cenários executados em ${item.name}`}><div className="h-full rounded-full bg-primary" style={{ width: `${item.percent}%` }} /></div>
       </div>)}</div>

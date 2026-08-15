@@ -10,6 +10,8 @@ import { buildJourney, emptyJourney, type Enrollment, type Journey, type Scenari
 
 type SupabaseClient = Awaited<ReturnType<typeof createClient>>;
 
+const SUBMISSION_COLUMNS = "id,lab_slug,result,reproduction,severity,checklist,created_at";
+
 export type SessionUser = { id: string; email: string };
 
 /** Usuário da sessão atual, ou null quando não há login (ou Supabase não configurado). */
@@ -24,7 +26,7 @@ export async function getJourney(userId: string): Promise<Journey> {
   const supabase = await createClient();
   const [enrollments, submissions, runs] = await Promise.all([
     supabase.from("lab_enrollments").select("lab_slug,status,started_at,completed_at,updated_at").eq("user_id", userId),
-    supabase.from("lab_submissions").select("id,lab_slug,result,reproduction,severity,created_at").eq("user_id", userId).order("created_at", { ascending: false }),
+    supabase.from("lab_submissions").select(SUBMISSION_COLUMNS).eq("user_id", userId).order("created_at", { ascending: false }),
     supabase.from("scenario_runs").select("app_id,scenario_id,status").eq("user_id", userId),
   ]);
   // Tabela ausente (migração 0004 ainda não aplicada) não pode derrubar a home:
@@ -35,7 +37,7 @@ export async function getJourney(userId: string): Promise<Journey> {
 
 export async function listSubmissions(userId: string, labSlug?: string): Promise<Submission[]> {
   const supabase = await createClient();
-  let query = supabase.from("lab_submissions").select("id,lab_slug,result,reproduction,severity,created_at").eq("user_id", userId).order("created_at", { ascending: false });
+  let query = supabase.from("lab_submissions").select(SUBMISSION_COLUMNS).eq("user_id", userId).order("created_at", { ascending: false });
   if (labSlug) query = query.eq("lab_slug", labSlug);
   const { data, error } = await query;
   return error ? [] : toSubmissions(data);
@@ -67,6 +69,8 @@ export type EvidenceInput = {
   result: string;
   reproduction: string;
   severity: Submission["severity"];
+  /** Critérios de aceite confirmados. A API só chega aqui se todos estiverem marcados. */
+  checklist: string[];
   notes?: string;
   attachments?: Array<{ name: string; url: string }>;
 };
@@ -80,8 +84,8 @@ export async function submitEvidence(userId: string, input: EvidenceInput) {
   const supabase = await createClient();
   const { data: submission, error } = await supabase
     .from("lab_submissions")
-    .insert({ user_id: userId, lab_slug: input.labSlug, result: input.result, reproduction: input.reproduction, severity: input.severity, notes: input.notes ?? null, attachments: input.attachments ?? [] })
-    .select("id,lab_slug,result,reproduction,severity,created_at")
+    .insert({ user_id: userId, lab_slug: input.labSlug, result: input.result, reproduction: input.reproduction, severity: input.severity, checklist: input.checklist, notes: input.notes ?? null, attachments: input.attachments ?? [] })
+    .select(SUBMISSION_COLUMNS)
     .single();
   if (error || !submission) throw new Error(error?.message ?? "Não foi possível salvar a evidência.");
 
@@ -117,7 +121,7 @@ async function track(supabase: SupabaseClient, userId: string, name: string, pro
 }
 
 type EnrollmentRow = { lab_slug: string; status: string; started_at: string; completed_at: string | null; updated_at: string };
-type SubmissionRow = { id: string; lab_slug: string; result: string; reproduction: string; severity: string; created_at: string };
+type SubmissionRow = { id: string; lab_slug: string; result: string; reproduction: string; severity: string; checklist: unknown; created_at: string };
 type RunRow = { app_id: string; scenario_id: string; status: string };
 
 function toEnrollments(rows: EnrollmentRow[] | null): Enrollment[] {
@@ -125,7 +129,9 @@ function toEnrollments(rows: EnrollmentRow[] | null): Enrollment[] {
 }
 
 function toSubmissions(rows: SubmissionRow[] | null): Submission[] {
-  return (rows ?? []).map((row) => ({ id: row.id, labSlug: row.lab_slug, result: row.result, reproduction: row.reproduction, severity: row.severity as Submission["severity"], createdAt: row.created_at }));
+  // `checklist` é jsonb: uma migração pendente ou uma linha antiga chegam como
+  // null, e nesse caso o histórico só não mostra os critérios confirmados.
+  return (rows ?? []).map((row) => ({ id: row.id, labSlug: row.lab_slug, result: row.result, reproduction: row.reproduction, severity: row.severity as Submission["severity"], checklist: Array.isArray(row.checklist) ? row.checklist.filter((item): item is string => typeof item === "string") : [], createdAt: row.created_at }));
 }
 
 function toRuns(rows: RunRow[] | null): ScenarioRun[] {

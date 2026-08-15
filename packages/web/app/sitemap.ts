@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { posts } from "@/lib/blog-posts";
 import { practiceApps } from "@/lib/product/apps";
 import { labs } from "@/lib/playground/catalog";
+import { learningTracks } from "@/lib/product/tracks";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app";
@@ -12,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: baseUrl, changeFrequency: "weekly", priority: 1 },
     { url: `${baseUrl}/labs`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/labs/regressao`, changeFrequency: "monthly", priority: 0.6 },
+    ...learningTracks.map((track) => ({ url: `${baseUrl}/labs/trilhas/${track.slug}`, changeFrequency: "monthly" as const, priority: 0.8 })),
     { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/pesquisa`, changeFrequency: "weekly", priority: 0.8 },
     ...practiceApps.map((app) => ({ url: `${baseUrl}${app.route}`, changeFrequency: "monthly" as const, priority: 0.8 })),

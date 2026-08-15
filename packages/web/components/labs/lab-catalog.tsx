@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { labs, tracks, type LabDifficulty, type LabStatus, type LabTrack } from "@/lib/playground/catalog";
 import type { LabProgress } from "@/lib/product/journey";
+import { learningTracks } from "@/lib/product/tracks";
 
 const difficulties: Array<LabDifficulty | "todas"> = ["todas", "iniciante", "intermediario", "avancado"];
 const statuses: Array<LabStatus | "todos"> = ["todos", "liberado", "agendado"];
@@ -28,6 +29,13 @@ export function LabCatalog({ progress = [] }: { progress?: Array<Pick<LabProgres
 
   return <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-14">
     <header className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><p className="qa-eyebrow">Catálogo</p><h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">Labs e desafios</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">Cada Lab parte de um risco real dentro de um dos ambientes de prática. Escolha pelo que você quer treinar e saia com evidência registrada.</p></div><p className="text-sm text-muted-foreground">{filtered.length} de {labs.length} desafios</p></header>
+
+    <section className="mt-8 grid gap-3 sm:grid-cols-2" aria-label="Trilhas">{learningTracks.map((track) => <article key={track.slug} className="rounded-xl border border-border p-4">
+      <p className="qa-eyebrow">Trilha</p>
+      <h2 className="mt-2 font-semibold">{track.name}</h2>
+      <p className="mt-1.5 text-sm leading-6 text-muted-foreground">{track.objective}</p>
+      <Link href={`/labs/trilhas/${track.slug}`} className="mt-3 inline-block text-sm font-medium text-primary">Ver os {track.labNumbers.length} Labs em sequência →</Link>
+    </article>)}</section>
 
     <div className="mt-8 grid gap-3 border-y border-border py-4 lg:grid-cols-[1fr_190px_170px_150px]">
       <label className="relative"><span className="sr-only">Buscar desafio</span><Search className="pointer-events-none absolute left-3 top-3 size-4 text-muted-foreground" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar por título, objetivo ou tag" className="pl-10" /></label>
