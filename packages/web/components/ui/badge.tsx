@@ -5,22 +5,22 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center justify-center rounded-lg border px-3 py-1 text-xs font-bold uppercase tracking-wider w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1.5 [&>svg]:pointer-events-none focus-visible:ring-2 focus-visible:ring-ring/50 transition-all duration-200 overflow-hidden",
+  "inline-flex items-center justify-center rounded-md border px-2.5 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1.5 [&>svg]:pointer-events-none focus-visible:ring-2 focus-visible:ring-ring/40 transition-colors overflow-hidden",
   {
     variants: {
       variant: {
         default:
-          "bg-mint/20 text-mint border-mint/30 [a&]:hover:bg-mint/30",
+          "bg-primary/10 text-primary border-primary/20 [a&]:hover:bg-primary/15",
         secondary:
-          "bg-off-white/10 text-off-white/80 border-off-white/20 [a&]:hover:bg-off-white/20",
+          "bg-secondary text-secondary-foreground border-transparent [a&]:hover:bg-secondary/80",
         destructive:
-          "bg-coral/20 text-coral border-coral/30 [a&]:hover:bg-coral/30",
+          "bg-destructive/10 text-destructive border-destructive/20 [a&]:hover:bg-destructive/15",
         outline:
-          "border-mint/40 text-mint [a&]:hover:bg-mint/10",
+          "border-border text-foreground [a&]:hover:bg-accent",
         neon:
-          "bg-neon/20 text-neon border-neon/40 [a&]:hover:bg-neon/30",
+          "bg-primary/10 text-primary border-primary/20 [a&]:hover:bg-primary/15",
         ghost:
-          "border-transparent text-off-white/60 [a&]:hover:bg-off-white/10 [a&]:hover:text-off-white",
+          "border-transparent text-muted-foreground [a&]:hover:bg-accent [a&]:hover:text-foreground",
       },
     },
     defaultVariants: {

@@ -3,7 +3,7 @@ import { store } from "../data/store";
 import { chaosMiddleware } from "../middleware/chaos";
 import { getEndpointChaos } from "../config/chaos-config";
 
-const users = new Hono();
+const users = new Hono<{ Variables: { chaosTriggered: boolean } }>();
 
 // GET /api/users - Lista usuarios paginados
 // Bug: retorna 500 aleatorio, delay configuravel

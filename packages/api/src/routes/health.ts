@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { chaosMiddleware } from "../middleware/chaos";
 
-const health = new Hono();
+const health = new Hono<{ Variables: { chaosTriggered: boolean } }>();
 
 // GET /api/health - Verifica status
 // Bug: mente sobre status real

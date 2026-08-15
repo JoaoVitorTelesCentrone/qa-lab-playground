@@ -1,0 +1,5 @@
+import { LogsLabClient } from "./logs-lab-client";
+import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+export const metadata = { title: "Log Investigation Lab", robots: { index: false, follow: false } };
+export default async function Page({ searchParams }: { searchParams: Promise<{ incident?: string; saved?: string; error?: string }> }) { const params = await searchParams; let completedIds: string[] = []; if (isSupabaseConfigured()) { const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser(); if (user) { const { data } = await supabase.from("mission_progress").select("mission_id").eq("user_id", user.id).like("mission_id", "logs:%"); completedIds = (data ?? []).map((row) => row.mission_id.replace("logs:", "")); } } return <LogsLabClient initialIncidentId={params.incident} completedIds={completedIds} saved={params.saved === "1"} error={Boolean(params.error)} />; }

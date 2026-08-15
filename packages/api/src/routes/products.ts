@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { store } from "../data/store";
 import { chaosMiddleware } from "../middleware/chaos";
 
-const products = new Hono();
+const products = new Hono<{ Variables: { chaosTriggered: boolean } }>();
 
 // GET /api/products - Lista produtos paginados
 // Bug: paginacao pula itens

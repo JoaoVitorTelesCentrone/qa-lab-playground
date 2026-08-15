@@ -3,7 +3,7 @@ import { store } from "../data/store";
 import { chaosMiddleware } from "../middleware/chaos";
 import type { Order } from "@qa-lab/shared";
 
-const orders = new Hono();
+const orders = new Hono<{ Variables: { chaosTriggered: boolean } }>();
 
 // Helper: convert order to different formats for the chaos bug
 function orderToCamelCase(order: Order) {

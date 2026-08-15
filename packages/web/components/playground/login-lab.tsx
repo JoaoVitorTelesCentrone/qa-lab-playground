@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { LogIn } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { shopUsers } from "@/lib/playground/shop-data";
 
 export function LoginLab() {
@@ -46,27 +50,35 @@ export function LoginLab() {
   return (
     <LabShell title="Lab 1: login quebravel" description="Valide campos obrigatorios, credenciais invalidas, usuario bloqueado, foco em erro e rota protegida.">
       <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
-        <form onSubmit={submit} className="rounded-lg border border-white/10 bg-card p-5" aria-describedby="login-feedback">
-          <label className="grid gap-2 text-sm font-bold text-off-white">
+        <Card>
+          <CardHeader>
+            <CardTitle>Formulario de login</CardTitle>
+            <CardDescription>Use os usuarios de teste do hub para validar estados.</CardDescription>
+          </CardHeader>
+          <CardContent>
+        <form onSubmit={submit} aria-describedby="login-feedback">
+          <label className="grid gap-2 text-sm font-medium text-foreground">
             Usuario
-            <input ref={usernameRef} value={username} onChange={(event) => setUsername(event.target.value)} className="field" data-testid="username" autoComplete="username" />
+            <Input ref={usernameRef} value={username} onChange={(event) => setUsername(event.target.value)} data-testid="username" autoComplete="username" />
           </label>
-          <label className="mt-4 grid gap-2 text-sm font-bold text-off-white">
+          <label className="mt-4 grid gap-2 text-sm font-medium text-foreground">
             Senha
-            <input ref={passwordRef} value={password} onChange={(event) => setPassword(event.target.value)} className="field" data-testid="password" type="password" autoComplete="current-password" />
+            <Input ref={passwordRef} value={password} onChange={(event) => setPassword(event.target.value)} data-testid="password" type="password" autoComplete="current-password" />
           </label>
-          <label className="mt-4 flex items-center gap-2 text-sm text-[#AAB2BC]">
+          <label className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
             <input checked={remember} onChange={(event) => setRemember(event.target.checked)} type="checkbox" data-testid="remember-user" />
             Lembrar usuario
           </label>
-          <button type="submit" className="mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-neon px-4 text-sm font-black text-[#101319]" data-testid="login-button">
+          <Button type="submit" className="mt-5 w-full" data-testid="login-button">
             <LogIn className="size-4" /> Entrar
-          </button>
-          <p id="login-feedback" role="status" aria-live="polite" className={`mt-4 rounded-lg border p-3 text-sm ${logged ? "border-neon/30 bg-neon/10 text-neon" : "border-coral/30 bg-coral/10 text-coral"}`} data-testid="login-message">
+          </Button>
+          <p id="login-feedback" role="status" aria-live="polite" className={`mt-4 rounded-md border p-3 text-sm ${logged ? "border-primary/30 bg-primary/10 text-primary" : "border-destructive/30 bg-destructive/10 text-destructive"}`} data-testid="login-message">
             {message || "Aguardando tentativa de login."}
           </p>
-          {logged && <Link href="/shop/products" className="mt-4 inline-flex text-sm font-bold text-mint">Abrir loja protegida</Link>}
+          {logged && <Button asChild variant="link" className="mt-2 px-0"><Link href="/shop/products">Abrir loja protegida</Link></Button>}
         </form>
+          </CardContent>
+        </Card>
         <LabBrief items={["standard_user / qa_lab_secret deve logar.", "locked_out_user deve exibir Usuario bloqueado.", "Campo vazio deve mover foco para o campo com erro.", "Mensagens devem ser anunciadas por aria-live."]} />
       </div>
     </LabShell>
@@ -76,10 +88,10 @@ export function LoginLab() {
 export function LabShell({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
   return (
     <div className="qa-simple">
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <Link href="/labs" className="text-sm font-bold text-mint">Voltar para labs</Link>
-      <h1 className="mt-4 text-4xl font-black leading-tight text-off-white">{title}</h1>
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-[#AAB2BC]">{description}</p>
+      <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
+      <Button asChild variant="link" className="h-auto px-0"><Link href="/labs">Voltar para labs</Link></Button>
+      <h1 className="mt-4 text-4xl font-semibold tracking-tight text-foreground">{title}</h1>
+      <p className="mt-3 max-w-3xl text-base leading-7 text-muted-foreground">{description}</p>
       <div className="mt-8">{children}</div>
       </div>
     </div>
@@ -88,11 +100,15 @@ export function LabShell({ title, description, children }: { title: string; desc
 
 export function LabBrief({ items }: { items: string[] }) {
   return (
-    <aside className="rounded-lg border border-white/10 bg-[#161B22] p-5">
-      <h2 className="text-sm font-black uppercase tracking-wide text-off-white">Criterios de aceite</h2>
-      <ul className="mt-4 grid gap-3 text-sm leading-6 text-[#AAB2BC]">
-        {items.map((item) => <li key={item}>- {item}</li>)}
-      </ul>
-    </aside>
+    <Card>
+      <CardHeader>
+        <Badge variant="outline">Criterios de aceite</Badge>
+      </CardHeader>
+      <CardContent>
+        <ul className="grid gap-3 text-sm leading-6 text-muted-foreground">
+          {items.map((item) => <li key={item}>- {item}</li>)}
+        </ul>
+      </CardContent>
+    </Card>
   );
 }

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QA Lab — 4 Paletas de Cor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0D0D0B; font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { DesignCanvas, DCSection, DCArtboard } = window;
+
+const S = 360;
+const px = n => Math.round(n * S / 1080);
+const SERIF = "'Playfair Display', Georgia, serif";
+const SANS = "'Inter', system-ui, sans-serif";
+
+/* ═══════════════════════════════════════════════════════
+   PALETTE DEFINITIONS
+   ═══════════════════════════════════════════════════════ */
+
+const PALETTES = {
+  light: {
+    name: 'Light Mode',
+    bg: '#F4F5F7',
+    card: '#FFFFFF',
+    border: '#E2E4E9',
+    accent: '#16A34A',
+    accentBg: 'rgba(22,163,74,0.08)',
+    accentBorder: 'rgba(22,163,74,0.2)',
+    white: '#111318',
+    gray: '#5F6570',
+    dgray: '#D1D5DB',
+    red: '#DC2626',
+  },
+  navy: {
+    name: 'Deep Navy',
+    bg: '#0A0E1A',
+    card: '#121828',
+    border: '#1E2640',
+    accent: '#38BDF8',
+    accentBg: 'rgba(56,189,248,0.08)',
+    accentBorder: 'rgba(56,189,248,0.2)',
+    white: '#E8EDF5',
+    gray: '#7A86A0',
+    dgray: '#2A3550',
+    red: '#F87171',
+  },
+  paper: {
+    name: 'Paper White',
+    bg: '#FAFAF8',
+    card: '#FFFFFF',
+    border: '#E8E8E4',
+    accent: '#0D9488',
+    accentBg: 'rgba(13,148,136,0.07)',
+    accentBorder: 'rgba(13,148,136,0.2)',
+    white: '#1A1A1A',
+    gray: '#6B7280',
+    dgray: '#D4D4D0',
+    red: '#E11D48',
+  },
+  warm: {
+    name: 'Warm Dark',
+    bg: '#151210',
+    card: '#1E1A17',
+    border: '#302A24',
+    accent: '#F59E0B',
+    accentBg: 'rgba(245,158,11,0.08)',
+    accentBorder: 'rgba(245,158,11,0.2)',
+    white: '#F5F0E8',
+    gray: '#9A8E80',
+    dgray: '#3D352C',
+    red: '#EF4444',
+  },
+};
+
+/* ═══════════════════════════════════════════════════════
+   THEMED COMPONENTS
+   ═══════════════════════════════════════════════════════ */
+
+function Stamp({ p }) {
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap:px(12) }}>
+      <div style={{ width:px(36), height:px(36), borderRadius:px(10), background: p.card, border:`1px solid ${p.border}`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+        <svg width={px(20)} height={px(20)} viewBox="0 0 24 24" fill="none" stroke={p.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 2L15 2"/><path d="M12 2L12 6"/><path d="M5 10L5 22"/><path d="M19 10L19 22"/><path d="M5 10L19 10"/><path d="M8 14L16 14"/><path d="M8 18L16 18"/>
+        </svg>
+      </div>
+      <span style={{ fontFamily:SANS, fontWeight:800, fontSize:px(24), color:p.accent, letterSpacing:'0.05em' }}>QA LAB</span>
+      <div style={{ flex:1 }}></div>
+      <span style={{ fontFamily:SANS, fontSize:px(16), color:p.gray, opacity:0.5 }}>qalab.io</span>
+    </div>
+  );
+}
+
+function Sl({ children, p }) {
+  return (
+    <div style={{ width:S, height:S, background:p.bg, display:'flex', flexDirection:'column', padding:`${px(52)}px ${px(56)}px`, overflow:'hidden', position:'relative', fontFamily:SANS }}>
+      {children}
+    </div>
+  );
+}
+
+function Crd({ children, p, accent }) {
+  return (
+    <div style={{ background: accent ? 'transparent' : p.card, border:`1px solid ${accent ? p.accent : p.border}`, borderRadius:px(14), padding:`${px(18)}px ${px(20)}px`, display:'flex', flexDirection:'column', gap:px(10) }}>
+      {children}
+    </div>
+  );
+}
+
+function Chk({ p }) {
+  return (
+    <div style={{ width:px(22), height:px(22), borderRadius:'50%', background:p.accentBg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+      <svg width={px(12)} height={px(12)} viewBox="0 0 24 24" fill="none" stroke={p.accent} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+  );
+}
+
+/* ── Cover ─────────────────────────────────────────── */
+function TCov({ p, eyebrow, headline, sub }) {
+  return (
+    <Sl p={p}>
+      <Stamp p={p}/>
+      <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center', gap:px(18) }}>
+        {eyebrow && <div style={{ color:p.accent, fontSize:px(16), letterSpacing:'0.18em', textTransform:'uppercase', fontWeight:600 }}>{eyebrow}</div>}
+        <div style={{ color:p.white, fontFamily:SERIF, fontWeight:900, fontStyle:'italic', fontSize:px(80), lineHeight:0.92 }}>{headline}</div>
+        {sub && <div style={{ color:p.gray, fontSize:px(24), lineHeight:1.6 }}>{sub}</div>}
+        <div style={{ display:'flex', alignItems:'center', gap:px(14), marginTop:px(6) }}>
+          <div style={{ width:px(36), height:px(2), background:p.accent, opacity:0.5 }}></div>
+          <div style={{ color:p.gray, fontSize:px(16), opacity:0.45 }}>Arraste para ver →</div>
+        </div>
+      </div>
+    </Sl>
+  );
+}
+
+/* ── Checklist ────────────────────────────────────── */
+function TCheck({ p, heading, items }) {
+  return (
+    <Sl p={p}>
+      <Stamp p={p}/>
+      <div style={{ color:p.white, fontSize:px(24), fontWeight:700, marginTop:px(18), marginBottom:px(14) }}>{heading}</div>
+      <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center', gap:px(11) }}>
+        {items.map((item,i) => (
+          <div key={i} style={{ display:'flex', gap:px(12), alignItems:'flex-start' }}>
+            <Chk p={p}/>
+            <div style={{ color:p.gray, fontSize:px(21), lineHeight:1.5 }}>{item}</div>
+          </div>
+        ))}
+      </div>
+    </Sl>
+  );
+}
+
+/* ── ListItem ────────────────────────────────────── */
+function TList({ p, num, title, body }) {
+  return (
+    <Sl p={p}>
+      <Stamp p={p}/>
+      <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center', gap:px(18) }}>
+        <div style={{ display:'flex', alignItems:'center', gap:px(16) }}>
+          <div style={{ width:px(48), height:px(48), borderRadius:px(12), background:p.accentBg, border:`1px solid ${p.accentBorder}`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <span style={{ color:p.accent, fontWeight:800, fontSize:px(24) }}>{String(num).padStart(2,'0')}</span>
+          </div>
+          <div style={{ flex:1, height:1, background:p.border }}></div>
+        </div>
+        <div style={{ color:p.white, fontFamily:SERIF, fontWeight:900, fontStyle:'italic', fontSize:px(56), lineHeight:0.92 }}>{title}</div>
+        <div style={{ color:p.gray, fontSize:px(24), lineHeight:1.6 }}>{body}</div>
+      </div>
+    </Sl>
+  );
+}
+
+/* ── ListItem Accent ─────────────────────────────── */
+function TListAccent({ p, num, title, body }) {
+  return (
+    <Sl p={p}>
+      <Stamp p={p}/>
+      <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center', gap:px(16) }}>
+        <div style={{ display:'flex', alignItems:'center', gap:px(16) }}>
+          <div style={{ width:px(48), height:px(48), borderRadius:px(12), background:p.accent, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <span style={{ color:p.bg, fontWeight:800, fontSize:px(24) }}>{String(num).padStart(2,'0')}</span>
+          </div>
+          <div style={{ flex:1, height:1, background:p.border }}></div>
+        </div>
+        <Crd p={p}>
+          <div style={{ color:p.white, fontFamily:SERIF, fontWeight:900, fontStyle:'italic', fontSize:px(48), lineHeight:0.92 }}>{title}</div>
+          <div style={{ color:p.gray, fontSize:px(22), lineHeight:1.6 }}>{body}</div>
+        </Crd>
+      </div>
+    </Sl>
+  );
+}
+
+/* ── Quote ────────────────────────────────────────── */
+function TQuote({ p, text, attribution }) {
+  return (
+    <Sl p={p}>
+      <Stamp p={p}/>
+      <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center' }}>
+        <Crd p={p}>
+          <div style={{ display:'flex', gap:px(16) }}>
+            <div style={{ width:px(4), background:p.accent, borderRadius:2, flexShrink:0 }}></div>
+            <div style={{ display:'flex', flexDirection:'column', gap:px(16) }}>
+              <div style={{ color:p.white, fontFamily:SERIF, fontWeight:700, fontStyle:'italic', fontSize:px(40), lineHeight:1.0 }}>"{text}"</div>
+              {attribution && <div style={{ display:'flex', alignItems:'center', gap:px(10) }}>
+                <div style={{ width:px(8), height:px(8), borderRadius:'50%', background:p.accent }}></div>
+                <div style={{ color:p.accent, fontSize:px(18), fontWeight:600 }}>{attribution}</div>
+              </div>}
+            </div>
+          </div>
+        </Crd>
+      </div>
+    </Sl>
+  );
+}
+
+/* ── Versus ───────────────────────────────────────── */
+function TVersus({ p, topic, wrong, right }) {
+  return (
+    <Sl p={p}>
+      <Stamp p={p}/>
+      <div style={{ color:p.accent, fontSize:px(14), letterSpacing:'0.16em', textTransform:'uppercase', fontWeight:600, marginTop:px(16), marginBottom:px(14) }}>{topic}</div>
+      <div style={{ flex:1, display:'flex', flexDirection:'column', gap:px(10) }}>
+        <Crd p={p}>
+          <div style={{ color:p.red, fontSize:px(14), fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase' }}>✕ Errado</div>
+          <div style={{ color:p.gray, fontSize:px(22), lineHeight:1.5 }}>{wrong}</div>
+        </Crd>
+        <Crd p={p} accent>
+          <div style={{ color:p.accent, fontSize:px(14), fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase' }}>✓ Certo</div>
+          <div style={{ color:p.white, fontSize:px(22), lineHeight:1.5 }}>{right}</div>
+        </Crd>
+      </div>
+    </Sl>
+  );
+}
+
+/* ── Grid Cards ──────────────────────────────────── */
+function TGrid({ p, heading, items }) {
+  return (
+    <Sl p={p}>
+      <Stamp p={p}/>
+      <div style={{ color:p.white, fontSize:px(22), fontWeight:700, marginTop:px(16), marginBottom:px(14) }}>{heading}</div>
+      <div style={{ flex:1, display:'grid', gridTemplateColumns:'1fr 1fr', gap:px(8) }}>
+        {items.map((item,i) => (
+          <div key={i} style={{ background:p.card, border:`1px solid ${p.border}`, borderRadius:px(12), padding:`${px(14)}px ${px(14)}px`, display:'flex', alignItems:'center', gap:px(10) }}>
+            <Chk p={p}/>
+            <span style={{ color:p.white, fontSize:px(17), fontWeight:500, lineHeight:1.25 }}>{item}</span>
+          </div>
+        ))}
+      </div>
+    </Sl>
+  );
+}
+
+/* ── CTA ──────────────────────────────────────────── */
+function TCTA({ p, lines }) {
+  return (
+    <Sl p={p}>
+      <Stamp p={p}/>
+      <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center', gap:px(28) }}>
+        <div style={{ color:p.white, fontFamily:SERIF, fontWeight:900, fontStyle:'italic', fontSize:px(78), lineHeight:0.92 }}>{lines.map((l,i)=><span key={i}>{l}<br/></span>)}</div>
+        <div style={{ display:'inline-flex', padding:`${px(14)}px ${px(28)}px`, background:p.accent, color: p.bg, fontWeight:700, fontSize:px(18), letterSpacing:'0.06em', borderRadius:px(10), alignSelf:'flex-start' }}>Começar agora →</div>
+      </div>
+    </Sl>
+  );
+}
+
+/* ── Insight card ────────────────────────────────── */
+function TInsight({ p, headline, body }) {
+  return (
+    <Sl p={p}>
+      <Stamp p={p}/>
+      <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center', gap:px(20) }}>
+        <div style={{ color:p.white, fontFamily:SERIF, fontWeight:900, fontStyle:'italic', fontSize:px(56), lineHeight:0.95 }}>{headline}</div>
+        <div style={{ height:px(2), background:p.border }}><div style={{ width:'60%', height:'100%', background:p.accent, borderRadius:1 }}></div></div>
+        <div style={{ color:p.gray, fontSize:px(26), lineHeight:1.6 }}>{body}</div>
+      </div>
+    </Sl>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   APP — All 4 palettes
+   ═══════════════════════════════════════════════════════ */
+
+function PaletteSection({ id, palette }) {
+  const p = PALETTES[id];
+  return (
+    <DCSection id={id} title={`Paleta — ${p.name}`}>
+      <DCArtboard id={`${id}-cv`} label="Capa" width={S} height={S}>
+        <TCov p={p} eyebrow="Carreira QA" headline={"Como ser\nvalorizado\nsendo QA"} sub="Não é sobre achar bug. É sobre gerar decisões melhores."/>
+      </DCArtboard>
+      <DCArtboard id={`${id}-vs`} label="Versus" width={S} height={S}>
+        <TVersus p={p} topic="A diferença que muda tudo"
+          wrong='"Tem um bug aqui."'
+          right='"Se isso for pra produção assim, podemos impactar o usuário diretamente."'/>
+      </DCArtboard>
+      <DCArtboard id={`${id}-cl`} label="Checklist" width={S} height={S}>
+        <TCheck p={p} heading="O QA valorizado..."
+          items={['Entende o produto, não só a tela', 'Sabe explicar o risco de uma entrega ruim', 'Antecipa problemas antes do dev terminar', 'Ajuda o time a decidir o que testar primeiro', 'Comunica problemas sem criar guerra']}/>
+      </DCArtboard>
+      <DCArtboard id={`${id}-l1`} label="ListItem" width={S} height={S}>
+        <TList p={p} num={1} title={"Entender\no negócio"} body="Não teste só botão, tela e campo. Entenda por que aquilo existe e qual problema resolve."/>
+      </DCArtboard>
+      <DCArtboard id={`${id}-l2`} label="ListItem Accent" width={S} height={S}>
+        <TListAccent p={p} num={2} title={"Antecipar\nriscos"} body="Não espere o bug no final. Questione regra, fluxo e impacto desde o refinamento."/>
+      </DCArtboard>
+      <DCArtboard id={`${id}-qt`} label="Quote" width={S} height={S}>
+        <TQuote p={p} text="QA bom testa software. QA valorizado protege negócio, usuário e entrega." attribution="QA Lab"/>
+      </DCArtboard>
+      <DCArtboard id={`${id}-gd`} label="Grid" width={S} height={S}>
+        <TGrid p={p} heading="Antes da automação vem:"
+          items={['Análise', 'Estratégia', 'Produto', 'Critérios', 'Priorização', 'Comunicação']}/>
+      </DCArtboard>
+      <DCArtboard id={`${id}-in`} label="Insight" width={S} height={S}>
+        <TInsight p={p} headline={"Automação\né ferramenta.\nNão é objetivo."} body="Automação não salva uma estratégia ruim. Ela só acelera o que já existe."/>
+      </DCArtboard>
+      <DCArtboard id={`${id}-ct`} label="CTA" width={S} height={S}>
+        <TCTA p={p} lines={['Para de','achar bug.','Começa a','proteger.']}/>
+      </DCArtboard>
+    </DCSection>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas>
+      <PaletteSection id="light"/>
+      <PaletteSection id="navy"/>
+      <PaletteSection id="paper"/>
+      <PaletteSection id="warm"/>
+    </DesignCanvas>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>

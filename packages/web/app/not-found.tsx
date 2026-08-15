@@ -25,12 +25,10 @@ export default function NotFound() {
             Em breve.
           </h1>
           <p className="text-off-white/60 leading-relaxed">
-            Esta página ainda está sendo construída ou foi temporariamente desativada.
-            Confira os{" "}
-            <Link href="/proximos-passos" className="text-mint hover:underline font-semibold">
-              Próximos Passos
-            </Link>{" "}
-            para saber o que vem por aí.
+            Esta página não existe ou foi movida. Volte ao início ou comece pela{" "}
+            <Link href="/playground" className="text-mint hover:underline font-semibold">
+              prática no Playground
+            </Link>.
           </p>
         </div>
 
@@ -43,9 +41,9 @@ export default function NotFound() {
             </Link>
           </Button>
           <Button asChild className="gap-2">
-            <Link href="/proximos-passos">
+            <Link href="/playground">
               <FlaskConical className="size-4" />
-              Próximos Passos
+              Ir ao Playground
             </Link>
           </Button>
         </div>

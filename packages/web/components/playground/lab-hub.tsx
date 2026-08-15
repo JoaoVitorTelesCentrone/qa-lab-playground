@@ -2,110 +2,28 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowRight, Clipboard, Filter, Search } from "lucide-react";
+import { ArrowRight, Clipboard, Clock3, FileCheck2, Play, ScanSearch, Search, Target } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { featuredLabNumbers, labs, tracks, type LabDifficulty, type LabStatus, type LabTrack } from "@/lib/playground/catalog";
 
 const difficulties: Array<LabDifficulty | "todas"> = ["todas", "iniciante", "intermediario", "avancado"];
-const statuses: Array<LabStatus | "todos"> = ["todos", "pronto", "parcial", "planejado"];
+const statuses: Array<LabStatus | "todos"> = ["todos", "liberado", "agendado"];
 
 export function LabHub() {
-  const [query, setQuery] = useState("");
-  const [track, setTrack] = useState<LabTrack | "todas">("todas");
-  const [difficulty, setDifficulty] = useState<LabDifficulty | "todas">("todas");
-  const [status, setStatus] = useState<LabStatus | "todos">("todos");
-  const featured = labs.filter((lab) => featuredLabNumbers.includes(lab.number));
-
+  const [query, setQuery] = useState(""); const [track, setTrack] = useState<LabTrack | "todas">("todas"); const [difficulty, setDifficulty] = useState<LabDifficulty | "todas">("todas"); const [status, setStatus] = useState<LabStatus | "todos">("todos");
+  const nextLab = labs.find((lab) => lab.status === "liberado") ?? labs[0];
+  const featured = labs.filter((lab) => featuredLabNumbers.includes(lab.number) && lab.number !== nextLab.number).slice(0, 3);
   const term = query.trim().toLowerCase();
-  const filtered = labs.filter((lab) => {
-    const text = [lab.title, lab.objective, lab.delivery, lab.track, ...lab.tags].join(" ").toLowerCase();
-    return (!term || text.includes(term)) && (track === "todas" || lab.track === track) && (difficulty === "todas" || lab.difficulty === difficulty) && (status === "todos" || lab.status === status);
-  });
-
-  async function copy(text: string) {
-    await navigator.clipboard?.writeText(text);
-  }
-
-  return (
-    <div className="qa-simple">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <section className="grid gap-6 lg:grid-cols-[1fr_360px]">
-        <div>
-          <p className="text-sm font-semibold text-mint">QA Lab Playground</p>
-          <h1 className="mt-3 text-4xl font-black leading-tight text-off-white sm:text-5xl">Hub de labs praticos</h1>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-[#AAB2BC]">Escolha um desafio, execute no produto simulado, registre evidencia e transforme o aprendizado em portfolio ou post.</p>
-        </div>
-        <div className="rounded-lg border border-white/10 bg-card p-5">
-          <p className="text-sm font-bold text-off-white">Dados de teste</p>
-          <dl className="mt-4 grid gap-3 text-sm">
-            <div className="flex justify-between gap-4"><dt className="text-[#8B949E]">Senha padrao</dt><dd className="font-mono text-neon">qa_lab_secret</dd></div>
-            <div className="flex justify-between gap-4"><dt className="text-[#8B949E]">Usuario feliz</dt><dd className="font-mono text-mint">standard_user</dd></div>
-            <div className="flex justify-between gap-4"><dt className="text-[#8B949E]">Usuario bloqueado</dt><dd className="font-mono text-coral">locked_out_user</dd></div>
-          </dl>
-        </div>
-      </section>
-
-      <section className="mt-8 grid gap-4 md:grid-cols-5">
-        {featured.map((lab) => (
-          <Link key={lab.number} href={lab.route} className="rounded-lg border border-white/10 bg-[#161B22] p-4 transition hover:-translate-y-0.5 hover:border-mint/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint">
-            <span className="text-xs font-semibold text-mint">Lab {lab.number}</span>
-            <h2 className="mt-2 text-base font-black text-off-white">{lab.title}</h2>
-            <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#AAB2BC]">{lab.objective}</p>
-            <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-neon">Iniciar <ArrowRight className="size-3" /></span>
-          </Link>
-        ))}
-      </section>
-
-      <section className="mt-8 rounded-lg border border-white/10 bg-card p-4">
-        <div className="grid gap-3 lg:grid-cols-[1fr_220px_170px_150px]">
-          <label className="relative">
-            <span className="sr-only">Buscar lab</span>
-            <Search className="pointer-events-none absolute left-3 top-3 size-4 text-[#8B949E]" />
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar por titulo, tag ou objetivo" className="field w-full pl-10" data-testid="lab-search" />
-          </label>
-          <Select label="Trilha" value={track} onChange={(value) => setTrack(value as LabTrack | "todas")} values={["todas", ...tracks]} />
-          <Select label="Dificuldade" value={difficulty} onChange={(value) => setDifficulty(value as LabDifficulty | "todas")} values={difficulties} />
-          <Select label="Status" value={status} onChange={(value) => setStatus(value as LabStatus | "todos")} values={statuses} />
-        </div>
-      </section>
-
-      <section className="mt-6">
-        <div className="mb-3 flex items-center gap-2 text-sm font-bold text-[#AAB2BC]"><Filter className="size-4" /> {filtered.length} labs encontrados</div>
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((lab) => (
-            <article key={lab.number} className="rounded-lg border border-white/10 bg-[#161B22] p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-xs font-semibold text-mint">Lab {lab.number} | {lab.track}</p>
-                  <h3 className="mt-2 text-lg font-black text-off-white">{lab.title}</h3>
-                </div>
-                <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold uppercase text-[#AAB2BC]">{lab.status}</span>
-              </div>
-              <p className="mt-3 text-sm leading-6 text-[#AAB2BC]">{lab.objective}</p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <span className="rounded-md bg-mint/10 px-2 py-1 text-xs text-mint">{lab.difficulty}</span>
-                <span className="rounded-md bg-neon/10 px-2 py-1 text-xs text-neon">{lab.minutes} min</span>
-                {lab.tags.slice(0, 3).map((tag) => <span key={tag} className="rounded-md bg-white/5 px-2 py-1 text-xs text-[#AAB2BC]">{tag}</span>)}
-              </div>
-              <div className="mt-5 flex flex-wrap gap-2">
-                <Link href={lab.route} className="inline-flex h-9 items-center gap-2 rounded-lg bg-neon px-3 text-xs font-black text-[#101319]">Iniciar lab <ArrowRight className="size-3" /></Link>
-                <button type="button" onClick={() => copy(lab.postPrompt)} className="inline-flex h-9 items-center gap-2 rounded-lg border border-white/10 px-3 text-xs font-bold text-off-white"><Clipboard className="size-3" /> Copiar post</button>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-      </div>
-    </div>
-  );
+  const filtered = labs.filter((lab) => (!term || [lab.title, lab.objective, lab.track, ...lab.tags].join(" ").toLowerCase().includes(term)) && (track === "todas" || lab.track === track) && (difficulty === "todas" || lab.difficulty === difficulty) && (status === "todos" || lab.status === status));
+  const copy = async (text: string) => navigator.clipboard?.writeText(text);
+  return <div className="qa-home"><div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-14">
+    <section className="qa-next-lab" aria-labelledby="next-lab-title"><p className="qa-watermark" aria-hidden="true">Seu laboratório prático de qualidade de software.</p><div className="qa-next-content max-w-2xl"><div className="flex flex-wrap items-center gap-3"><p className="qa-eyebrow">Desafio da semana</p><span className="qa-status">Disponível agora</span></div><div className="mt-8 flex items-center gap-4"><span className="qa-lab-number flex size-12 items-center justify-center rounded-full bg-primary font-mono text-sm font-bold text-primary-foreground">{String(nextLab.number).padStart(2, "0")}</span><div><p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">{nextLab.track}</p><p className="mt-1 text-sm text-muted-foreground">{nextLab.minutes} minutos de prática</p></div></div><h1 id="next-lab-title" className="mt-7 text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-6xl">{nextLab.title}</h1><p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">{nextLab.objective}</p><div className="mt-9 flex flex-wrap items-center gap-3"><Button asChild size="lg"><Link href={`/labs/${nextLab.number}`}>Ver instruções <ArrowRight className="size-4" /></Link></Button><span className="inline-flex items-center gap-2 px-2 text-sm text-muted-foreground"><Clock3 className="size-4" /> Prepare sua evidência</span></div></div><div className="qa-next-content qa-delivery qa-hero-delivery mt-12 text-sm text-muted-foreground"><FileCheck2 className="mt-0.5 size-4 shrink-0 text-primary" /><div><p className="text-xs font-semibold uppercase tracking-[0.11em] text-primary">Entrega esperada</p><p className="mt-1 leading-6">{nextLab.delivery}</p></div></div></section>
+    <section className="qa-process-grid" aria-label="Como o QA Lab funciona"><Process icon={Target} index="01" title="Escolha um risco" text="Cada desafio parte de um problema real de produto." /><Process icon={ScanSearch} index="02" title="Investigue" text="Teste o comportamento e registre o que importa." /><Process icon={FileCheck2} index="03" title="Construa evidência" text="Saia com uma entrega útil para seu portfólio." /></section>
+    <section className="mt-12"><div className="mb-5 flex items-center justify-between"><h2 className="text-lg font-semibold">Outros desafios</h2><span className="text-sm text-muted-foreground">Escolha pelo que quer praticar</span></div><div className="grid divide-y divide-border border-y border-border md:grid-cols-3 md:divide-x md:divide-y-0">{featured.map((lab) => <article key={lab.number} className="py-5 md:px-6 md:first:pl-0 md:last:pr-0"><p className="font-mono text-xs text-primary">LAB {String(lab.number).padStart(2, "0")}</p><h3 className="mt-3 font-semibold">{lab.title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{lab.objective}</p><Link href={`/labs/${lab.number}`} className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary">Ver instruções <ArrowRight className="size-3.5" /></Link></article>)}</div></section>
+    <section className="mt-16"><div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><p className="qa-eyebrow">Catálogo</p><h2 className="mt-2 text-2xl font-semibold">Todos os desafios</h2></div><p className="text-sm text-muted-foreground">{filtered.length} desafios para explorar</p></div><div className="mt-6 grid gap-3 border-y border-border py-4 lg:grid-cols-[1fr_190px_170px_150px]"><label className="relative"><span className="sr-only">Buscar desafio</span><Search className="pointer-events-none absolute left-3 top-3 size-4 text-muted-foreground" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar por título, objetivo ou tag" className="pl-10" /></label><Select label="Trilha" value={track} setValue={setTrack} values={["todas", ...tracks]} /><Select label="Nível" value={difficulty} setValue={setDifficulty} values={difficulties} /><Select label="Status" value={status} setValue={setStatus} values={statuses} /></div><div className="mt-2 divide-y divide-border border-b border-border">{filtered.map((lab) => <article key={lab.number} className="grid gap-4 py-5 md:grid-cols-[52px_1fr_auto] md:items-center"><span className="font-mono text-sm text-muted-foreground">{String(lab.number).padStart(2, "0")}</span><div><div className="flex flex-wrap items-center gap-3"><h3 className="font-semibold">{lab.title}</h3>{lab.status === "agendado" && <Badge variant="secondary">em breve</Badge>}</div><p className="mt-1 text-sm leading-6 text-muted-foreground">{lab.objective}</p><p className="mt-2 text-xs text-muted-foreground">{lab.track} · {lab.difficulty} · {lab.minutes} min</p></div><div className="flex gap-2"><Button asChild variant="outline" size="sm"><Link href={`/labs/${lab.number}`}>Instruções <Play className="size-3" /></Link></Button><Button variant="ghost" size="icon-sm" onClick={() => copy(lab.postPrompt)} aria-label={`Copiar post do lab ${lab.number}`}><Clipboard className="size-4" /></Button></div></article>)}</div></section>
+  </div></div>;
 }
-
-function Select({ label, value, values, onChange }: { label: string; value: string; values: string[]; onChange: (value: string) => void }) {
-  return (
-    <label>
-      <span className="sr-only">{label}</span>
-      <select value={value} onChange={(event) => onChange(event.target.value)} className="field w-full" aria-label={label}>
-        {values.map((item) => <option key={item} value={item}>{item}</option>)}
-      </select>
-    </label>
-  );
-}
+function Process({ icon: Icon, index, title, text }: { icon: typeof Target; index: string; title: string; text: string }) { return <article className="qa-process"><div className="flex items-center justify-between"><Icon className="size-4 text-primary" /><span className="font-mono text-xs text-muted-foreground">{index}</span></div><h2 className="mt-6 font-semibold">{title}</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">{text}</p></article>; }
+function Select<T extends string>({ label, value, setValue, values }: { label: string; value: T; setValue: (value: T) => void; values: T[] }) { return <label><span className="sr-only">{label}</span><select value={value} onChange={(event) => setValue(event.target.value as T)} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none focus:border-primary" aria-label={label}>{values.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>; }

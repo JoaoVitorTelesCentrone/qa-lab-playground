@@ -19,5 +19,8 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "registries": {}
+  "registries": {
+    "@cult-ui": "https://cult-ui.com/r/{name}.json",
+    "@watermelon": "https://registry.watermelon.sh/r/{name}.json"
+  }
 }

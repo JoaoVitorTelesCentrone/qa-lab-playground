@@ -1,25 +1,78 @@
 import { NextResponse } from "next/server";
 import { orders, products, users } from "./data";
-import { createToken, initialBookings, shopProducts, shopUsers, validateToken, type Booking } from "@/lib/playground/shop-data";
+import { createToken, validateToken } from "./auth-token";
+import { checkApiRateLimit } from "./rate-limit";
+import { initialBookings, shopProducts, shopUsers, type Booking } from "@/lib/playground/shop-data";
 
 type Params = { segments?: string[] };
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-QA-Lab-Scenario, Idempotency-Key",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-QA-Lab-Scenario, X-QALab-Session, Idempotency-Key",
   "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
 };
 
-let bookings: Booking[] = initialBookings.map((booking) => ({ ...booking, bookingdates: { ...booking.bookingdates } }));
-let nextBookingId = 4;
+const sessionCookie = "qalab_session";
+const sessionHeader = "x-qalab-session";
+const sessionTtlMs = 24 * 60 * 60 * 1000;
+
+type SessionState = {
+  id: string;
+  bookings: Booking[];
+  nextBookingId: number;
+  expiresAt: number;
+};
+
+const sessions = new Map<string, SessionState>();
+
+function cloneBookings() {
+  return initialBookings.map((booking) => ({ ...booking, bookingdates: { ...booking.bookingdates } }));
+}
+
+function parseCookies(value: string | null) {
+  return Object.fromEntries((value ?? "").split(";").map((part) => part.trim().split("=")).filter(([key, item]) => key && item).map(([key, item]) => [key, decodeURIComponent(item)]));
+}
+
+function createSession(id = crypto.randomUUID()): SessionState {
+  const state = { id, bookings: cloneBookings(), nextBookingId: initialBookings.length + 1, expiresAt: Date.now() + sessionTtlMs };
+  sessions.set(id, state);
+  return state;
+}
+
+function resolveSession(request: Request) {
+  const requested = request.headers.get(sessionHeader) ?? parseCookies(request.headers.get("cookie"))[sessionCookie];
+  const existing = requested ? sessions.get(requested) : null;
+  const state = existing && existing.expiresAt > Date.now() ? existing : createSession(requested || undefined);
+  state.expiresAt = Date.now() + sessionTtlMs;
+  return state;
+}
 
 function scenario(request: Request) {
   const url = new URL(request.url);
   return request.headers.get("x-qa-lab-scenario") ?? url.searchParams.get("scenario") ?? "normal";
 }
 
-function json(body: unknown, status = 200, selected = "normal") {
-  return NextResponse.json(body, { status, headers: { ...cors, "X-QA-Lab-Scenario": selected, "Cache-Control": "no-store" } });
+function json(body: unknown, status = 200, selected = "normal", session?: SessionState) {
+  const headers = { ...cors, "X-QA-Lab-Scenario": selected, "Cache-Control": "no-store", ...(session ? { "X-QALab-Session": session.id, "Set-Cookie": `${sessionCookie}=${encodeURIComponent(session.id)}; Path=/; Max-Age=86400; SameSite=Lax` } : {}) };
+  return NextResponse.json(body, { status, headers });
+}
+
+function rateLimited(limit: ReturnType<typeof checkApiRateLimit>, selected: string) {
+  return NextResponse.json(
+    { error: "Rate Limit", message: "Muitas requisicoes. Aguarde antes de tentar de novo.", statusCode: 429 },
+    {
+      status: 429,
+      headers: {
+        ...cors,
+        "X-QA-Lab-Scenario": selected,
+        "Cache-Control": "no-store",
+        "Retry-After": String(Math.ceil((limit.resetAt - Date.now()) / 1000)),
+        "X-RateLimit-Limit": String(limit.limit),
+        "X-RateLimit-Remaining": String(limit.remaining),
+        "X-RateLimit-Reset": String(Math.ceil(limit.resetAt / 1000)),
+      },
+    },
+  );
 }
 
 function id(value?: string) {
@@ -53,9 +106,9 @@ function hasAuth(request: Request) {
   return Boolean(validateToken(request.headers.get("authorization")));
 }
 
-function resetBookings() {
-  bookings = initialBookings.map((booking) => ({ ...booking, bookingdates: { ...booking.bookingdates } }));
-  nextBookingId = 4;
+function resetBookings(session: SessionState) {
+  session.bookings = cloneBookings();
+  session.nextBookingId = initialBookings.length + 1;
 }
 
 function validateBooking(input: Record<string, unknown> | null, partial = false) {
@@ -76,10 +129,16 @@ export async function handleApiLab(request: Request, method: string, params: Par
   const segments = params.segments ?? [];
   const [resource, rawId, nested] = segments;
   const selected = scenario(request);
+  const session = resolveSession(request);
   const url = new URL(request.url);
   const bugId = url.searchParams.get("bug");
   const bug = selected === "bug" || Boolean(bugId);
   const resourceId = id(rawId);
+
+  if (["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+    const limit = checkApiRateLimit(request);
+    if (!limit.allowed) return rateLimited(limit, selected);
+  }
 
   if (!resource) return json({ error: "Not Found", message: "Consulte /api-docs para conhecer os endpoints.", statusCode: 404 }, 404, selected);
 
@@ -114,8 +173,8 @@ export async function handleApiLab(request: Request, method: string, params: Par
   }
 
   if (resource === "test" && rawId === "reset" && method === "POST") {
-    resetBookings();
-    return json({ data: { reset: true, bookings: bookings.length } }, 200, selected);
+    resetBookings(session);
+    return json({ data: { reset: true, bookings: session.bookings.length } }, 200, selected, session);
   }
 
   if (resource === "users") {
@@ -207,12 +266,12 @@ export async function handleApiLab(request: Request, method: string, params: Par
 
   if (resource === "bookings") {
     if (method === "GET" && rawId) {
-      const found = bookings.find((booking) => booking.id === resourceId);
-      if (!found) return json({ error: "Not Found", message: "Reserva nao encontrada.", statusCode: 404 }, 404, selected);
-      return json({ data: bugId === "contract-broken" ? { booking_id: found.id, first_name: found.firstname } : found }, 200, selected);
+      const found = session.bookings.find((booking) => booking.id === resourceId);
+      if (!found) return json({ error: "Not Found", message: "Reserva nao encontrada.", statusCode: 404 }, 404, selected, session);
+      return json({ data: bugId === "contract-broken" ? { booking_id: found.id, first_name: found.firstname } : found }, 200, selected, session);
     }
     if (method === "GET") {
-      let result = [...bookings];
+      let result = [...session.bookings];
       const firstname = url.searchParams.get("firstname")?.toLowerCase();
       const lastname = url.searchParams.get("lastname")?.toLowerCase();
       const checkin = url.searchParams.get("checkin");
@@ -223,32 +282,32 @@ export async function handleApiLab(request: Request, method: string, params: Par
       if (sort === "firstname") result.sort((a, b) => a.firstname.localeCompare(b.firstname));
       if (sort === "totalprice") result.sort((a, b) => a.totalprice - b.totalprice);
       const { page, perPage } = pagination(request);
-      return json(paged(result, page, perPage, null), 200, selected);
+      return json(paged(result, page, perPage, null), 200, selected, session);
     }
     if (method === "POST") {
       const input = await body(request);
       const validationError = validateBooking(input);
-      if (validationError) return json({ error: "Validation Error", message: validationError, statusCode: 400 }, 400, selected);
-      const duplicate = bookings.some((booking) => booking.firstname === input?.firstname && booking.lastname === input?.lastname && booking.bookingdates.checkin === (input.bookingdates as { checkin: string }).checkin);
-      if (duplicate) return json({ error: "Conflict", message: "Ja existe reserva para esse hospede e data.", statusCode: 409 }, 409, selected);
-      const created = { id: nextBookingId++, ...(input as Omit<Booking, "id">) };
-      bookings.push(created);
-      return json({ data: created }, 201, selected);
+      if (validationError) return json({ error: "Validation Error", message: validationError, statusCode: 400 }, 400, selected, session);
+      const duplicate = session.bookings.some((booking) => booking.firstname === input?.firstname && booking.lastname === input?.lastname && booking.bookingdates.checkin === (input.bookingdates as { checkin: string }).checkin);
+      if (duplicate) return json({ error: "Conflict", message: "Ja existe reserva para esse hospede e data.", statusCode: 409 }, 409, selected, session);
+      const created = { id: session.nextBookingId++, ...(input as Omit<Booking, "id">) };
+      session.bookings.push(created);
+      return json({ data: created }, 201, selected, session);
     }
-    if ((method === "PUT" || method === "PATCH" || method === "DELETE") && bugId !== "delete-without-auth" && !hasAuth(request)) return json({ error: "Unauthorized", message: "Token obrigatorio.", statusCode: 401 }, 401, selected);
-    const index = bookings.findIndex((booking) => booking.id === resourceId);
-    if (index < 0) return json({ error: "Not Found", message: "Reserva nao encontrada.", statusCode: 404 }, 404, selected);
+    if ((method === "PUT" || method === "PATCH" || method === "DELETE") && bugId !== "delete-without-auth" && !hasAuth(request)) return json({ error: "Unauthorized", message: "Token obrigatorio.", statusCode: 401 }, 401, selected, session);
+    const index = session.bookings.findIndex((booking) => booking.id === resourceId);
+    if (index < 0) return json({ error: "Not Found", message: "Reserva nao encontrada.", statusCode: 404 }, 404, selected, session);
     if (method === "DELETE") {
-      bookings.splice(index, 1);
-      return new NextResponse(null, { status: 204, headers: cors });
+      session.bookings.splice(index, 1);
+      return new NextResponse(null, { status: 204, headers: { ...cors, "X-QALab-Session": session.id, "Set-Cookie": `${sessionCookie}=${encodeURIComponent(session.id)}; Path=/; Max-Age=86400; SameSite=Lax` } });
     }
     const input = await body(request);
     const validationError = validateBooking(input, method === "PATCH");
-    if (validationError) return json({ error: "Validation Error", message: validationError, statusCode: 400 }, 400, selected);
-    bookings[index] = method === "PUT"
-      ? { id: bookings[index].id, ...(input as Omit<Booking, "id">) }
-      : { ...bookings[index], ...input, bookingdates: { ...bookings[index].bookingdates, ...((input?.bookingdates as object | undefined) ?? {}) } };
-    return json({ data: bookings[index] }, 200, selected);
+    if (validationError) return json({ error: "Validation Error", message: validationError, statusCode: 400 }, 400, selected, session);
+    session.bookings[index] = method === "PUT"
+      ? { id: session.bookings[index].id, ...(input as Omit<Booking, "id">) }
+      : { ...session.bookings[index], ...input, bookingdates: { ...session.bookings[index].bookingdates, ...((input?.bookingdates as object | undefined) ?? {}) } };
+    return json({ data: session.bookings[index] }, 200, selected, session);
   }
 
   if (resource === "auth" && rawId === "logout" && method === "POST") return json({ data: { loggedOut: true } }, 200, selected);
@@ -261,7 +320,8 @@ export async function handleApiLab(request: Request, method: string, params: Par
       const user = shopUsers.find((candidate) => candidate.username === username);
       if (!user || input.password !== user.password) return json({ error: "Unauthorized", message: "Credenciais invalidas.", statusCode: 401 }, 401, selected);
       if (user.state === "locked") return json({ error: "Forbidden", message: bugId === "locked-message" ? "Credenciais invalidas." : "Usuario bloqueado.", statusCode: 403 }, 403, selected);
-      return json({ data: { token: createToken(user.username), user: { username: user.username, role: user.role, state: user.state } } }, 200, selected);
+      const ttl = Number(url.searchParams.get("ttl"));
+      return json({ data: { token: createToken(user.username, Number.isFinite(ttl) && ttl > 0 ? ttl : undefined), user: { username: user.username, role: user.role, state: user.state } } }, 200, selected, session);
     }
     const email = String(input?.email ?? "");
     const exists = users.some((user) => user.email === email);

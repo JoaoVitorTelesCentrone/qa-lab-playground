@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { findLabByNumber, isLabReleased } from "./lib/playground/catalog";
 
 // --- Lançamento enxuto -------------------------------------------------------
 // No lançamento o site público expõe apenas o Blog e a Biblioteca de
@@ -9,7 +10,13 @@ import { NextResponse, type NextRequest } from "next/server";
 // home institucional, etc.) continua no código, mas fica bloqueado: qualquer
 // rota fora da allowlist é redirecionada para o Blog. Para reabrir uma página
 // no futuro, basta adicionar o prefixo em PUBLIC_PREFIXES.
-const PUBLIC_PREFIXES = ["/api", "/api-docs", "/blog", "/labs", "/pesquisa", "/playground", "/shop"];
+const PUBLIC_PREFIXES = ["/api", "/api-docs", "/blog", "/labs", "/pesquisa", "/playground", "/shop", "/financas", "/agendamentos", "/crm"];
+
+const labRouteNumbers: Record<string, number> = {
+  "/labs/login": 4,
+  "/labs/waits": 5,
+  "/labs/api-crud": 21,
+};
 
 // Rotas que exigem login quando o produto estiver totalmente liberado. Enquanto
 // o lançamento estiver enxuto elas ficam bloqueadas pelo gate acima, então esta
@@ -28,6 +35,19 @@ export async function proxy(request: NextRequest) {
     blog.pathname = "/blog";
     blog.search = "";
     return NextResponse.redirect(blog);
+  }
+
+  if (pathname.startsWith("/labs/")) {
+    const explicitNumber = Number(pathname.split("/")[2]);
+    const labNumber = Number.isInteger(explicitNumber) ? explicitNumber : labRouteNumbers[pathname];
+    const lab = labNumber ? findLabByNumber(labNumber) : null;
+    if (lab && !isLabReleased(lab)) {
+      const waitlist = request.nextUrl.clone();
+      waitlist.pathname = "/waitlist";
+      waitlist.search = "";
+      waitlist.searchParams.set("lab", String(lab.number));
+      return NextResponse.redirect(waitlist);
+    }
   }
 
   // Páginas públicas do lançamento (Blog e /pesquisa) não exigem login, então

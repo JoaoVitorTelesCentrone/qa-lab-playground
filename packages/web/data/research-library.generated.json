@@ -1,0 +1,642 @@
+{
+  "updatedAt": "2026-06-26T01:04:15.988Z",
+  "items": [
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-06",
+      "title": "Single-Stacked Support Vector Regression-Bayesian-Based Models for Unemployment Trend Analysis in Malaysia's Youth Labor Market",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.06",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.06",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-18",
+      "title": "Comparative Analysis of Mathematical Models for Estimating Discharge Ratio in Trapezoidal Cross-Section Open-Channel Dividing Flow",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.18",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.18",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-1108-ijicc-02-2026-0148",
+      "title": "Research on intelligent assessment of teaching quality in high-density classrooms based on improved WM-YOLO",
+      "abstract": "Purpose This paper addresses challenges in high-density higher education classrooms, including severe occlusion and concealed disciplinary behaviors. It aims to propose the WM-YOLO network and a vision-based quality evaluation system for precise micro-behavior detection and macro-quality assessment. Design/methodology/approach We propose an improved WM-YOLO network that integrates Weighted Convolution (wConv2d) and a Multi-scale Attention Network (MANet). wConv2d suppresses occlusion noise, while MANet improves small-target detection. To validate this architecture, the research utilizes a self-constructed High-Density Classroom Behavior dataset (avg. 51 students/frame). Furthermore, the study redefines the Effective Heads-up Rate (HuR, denoted R_eff) and Negative Engagement Index (I_neg) to analyze classroom state dynamics. Findings Experiments show that WM-YOLO achieves an mAP@50 of 92.3%, outperforming baselines by 1.4% with 27% lower computation. Empirical analysis reveals a “Negative Scissors Difference” (heads-down exceeding heads-up) during non-teaching periods, validating the model’s ability to distinguish classroom states. Practical implications The proposed evaluation model effectively supports higher education administration. By identifying abnormal fluctuations in I_neg and the “Scissors Difference” phenomenon, administrators can automatically filter out non-teaching durations, enabling automated attendance tracking and precise teaching quality warnings, thus promoting a shift from “experience-based management” to “data-driven governance”. Originality/value This paper innovatively applies wConv2d and MANet to high-density scenes. It establishes a quantitative link between micro-behaviors and macro-evaluation via the “Scissors Difference” principle, offering a new paradigm for smart education.",
+      "authors": [
+        "Jing Liao",
+        "Yikun Huang",
+        "Zhihao Chen"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "International Journal of Intelligent Computing and Cybernetics",
+      "doi": "https://doi.org/10.1108/ijicc-02-2026-0148",
+      "url": "https://doi.org/10.1108/ijicc-02-2026-0148",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-4018-979-8-2600-2373-0-ch008",
+      "title": "A Computational Study on Text Quality and Citation Frequency in Research Papers",
+      "abstract": "The abstract and conclusions are the important sections of the published paper. Based on the comprehension of the content written in these sections, other sections of the paper are read by researchers. Various factors, such as the number of citations, social transformations, and intellectual property rights, are considered indicators of research impact. This study utilizes Natural Language Processing techniques to analyze a dataset of 50 highly cited research papers from 2020, aiming to understand the relationship between text quality and citation count. The correlation coefficient indicates that high-citation papers tend to have longer abstracts and shorter conclusions. The results show that when the citation of the paper is low, the words used in the abstract and conclusion have high similarity. As citations are increasing, the similarity of the words used in the abstract and conclusion is reducing. This indicates that those articles with a higher Type Token Ratio (TTR) in the abstract and a unique number of words used in conclusion have high citations.",
+      "authors": [
+        "Manoj Himmatrao Devare",
+        "Debesh Das",
+        "Anita Manoj Devare",
+        "Pravin Laxmikant Yannawar"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Advances in Computational Intelligence and Robotics",
+      "doi": "https://doi.org/10.4018/979-8-2600-2373-0.ch008",
+      "url": "https://doi.org/10.4018/979-8-2600-2373-0.ch008",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-16",
+      "title": "Statistical Analysis of Rainfall Variability and Water Balance Components in Johor Districts Using Seasonal Ornstein-Uhlenbeck",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.16",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.16",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-1515-jpem-2026-0064",
+      "title": "Larks vs. owls: exploring chronotype, glycaemic control, and quality of life in paediatric type 1 diabetes",
+      "abstract": "Abstract Objectives Chronotype reflects individual circadian preferences and may influence metabolic regulation and daily functioning. This study aimed to investigate the association between chronotype and glycaemic control, assessed by HbA 1c , as well as health-related quality of life in children and adolescents with type 1 diabetes mellitus. Methods This cross-sectional study included 84 children and adolescents aged 8–18 years with type 1 diabetes of at least one year’s duration. Chronotype was assessed using the Munich Chronotype Questionnaire. Health-related quality of life was evaluated using age-appropriate versions of the Pediatric Quality of Life Inventory (PedsQL™). Glycaemic control was assessed using the mean HbA 1c value from the most recent three months. Results Chronotype distribution was 19.0 % morning, 44.0 % intermediate, and 36.9 % evening. HbA 1c levels differed significantly among chronotype groups (p=0.003), with higher levels observed in participants with an evening chronotype compared with those with a morning chronotype. Total PedsQL scores also differed significantly across chronotype groups (p=0.007), with lower scores in the evening chronotype group. Social and school functioning subscale scores were significantly lower in participants with an evening chronotype. HbA 1c levels were positively correlated with age and diabetes duration, while total PedsQL scores showed a moderate negative correlation with age. Conclusions Chronotype was associated with both glycaemic control and quality of life in children and adolescents with type 1 diabetes. Evening chronotype was linked to higher HbA 1c levels and poorer psychosocial functioning, particularly in social and school domains. These findings suggest that circadian preferences may be relevant when interpreting metabolic and quality of life outcomes in paediatric type 1 diabetes.",
+      "authors": [
+        "Dilek Bingöl Aydın",
+        "Berivan Uruç",
+        "Engin Aydın",
+        "Fatma Özgüç Çömlek",
+        "Yavuz Özer"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Pediatric Endocrinology and Metabolism",
+      "doi": "https://doi.org/10.1515/jpem-2026-0064",
+      "url": "https://doi.org/10.1515/jpem-2026-0064",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-10",
+      "title": "Quarter-Sweep Iterative Methods for Fuzzy Fredholm Integral Equations of the Second Kind",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.10",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.10",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-07",
+      "title": "Odd-Even Clique Equality in the Coprime Graph of the Generalised Quaternion Group",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.07",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.07",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-12",
+      "title": "A Probabilistic Age-and-Gender Specific Malaysian Population Projection: Integrating Mortality, Fertility and Net Migration",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.12",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.12",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-1097-jmq-0000000000000306",
+      "title": "Intersectionality: Race, Place, and Dead Ends",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Meghan B. Brennan"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "American Journal of Medical Quality",
+      "doi": "https://doi.org/10.1097/jmq.0000000000000306",
+      "url": "https://doi.org/10.1097/jmq.0000000000000306",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-17",
+      "title": "Comparing Emotional Signatures in Tamil Indie and Mainstream Songs Using Neuro Symbolic AI",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.17",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.17",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-11",
+      "title": "Ranking Students Preferences for Mathematics Mobile Applications Using Fuzzy Grade Matrix with Degree of Optimism and Statistical Analysis Approach",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.11",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.11",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-13",
+      "title": "Strategic Management of Palm Oil Price Dynamics Using a Game-Theoretical Approach",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.13",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.13",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-08",
+      "title": "Design of the Multivariate Side-Sensitive Synthetic Coefficient of Variation Chart Based on the Median Run Length",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.08",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.08",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-14",
+      "title": "Simulation of Time-Dependent Enzyme Kinetics by Multistage Picard Iterative Method",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.14",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.14",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-09",
+      "title": "An Ezekiel’s Adjusted R-Squared-Based Decision Rulefor Regression Hypothesis Testing",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.09",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.09",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-04",
+      "title": "Bivariate Modeling of Tennis First Serve Dependence Using Copula Approach: Insights from Grand Slam Tournaments",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.04",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.04",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-03",
+      "title": "Gegenbauer Polynomials and Inequality for Analytic Bi-Univalent Functions",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.03",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.03",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-17576-jqma-2202-2026-15",
+      "title": "Hybrid Nanofluid Flow Over a Cylindrical Surface with the Double Stratification Effects",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Quality Measurement and Analysis",
+      "doi": "https://doi.org/10.17576/jqma.2202.2026.15",
+      "url": "https://doi.org/10.17576/jqma.2202.2026.15",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-1253-circrep-cr-26-0152",
+      "title": "Regional Intensity of Outpatient Cardiovascular Testing and Cardiac-Origin Out-of-Hospital Cardiac Arrest ― A 10-Year Nationwide Ecological Study Using the All-Japan Utstein Registry ―",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Hiroki Sato",
+        "Naohiko Takahashi",
+        "Naohiro Yonemoto",
+        "Tetsuya Matoba",
+        "Yoshio Tahara",
+        "for the Japanese Circulation Society Resuscitation Science Study (JCS-ReSS) Group"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Circulation Reports",
+      "doi": "https://doi.org/10.1253/circrep.cr-26-0152",
+      "url": "https://doi.org/10.1253/circrep.cr-26-0152",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software testing quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-1515-mt-2026-0002",
+      "title": "Interface-engineered jute/sisal fibers and silicon nitride nanoparticle reinforced epoxy composites: mechanical, tribological, and thermal performance",
+      "abstract": "Abstract Natural fiber–based hybrid composites have gained increasing attention due to their sustainability, low density, and potential to replace synthetic reinforcements in engineering applications. However, their wider adoption is limited by inadequate interfacial bonding and inferior wear and thermal performance. In this context, the present study aims to enhance the performance of jute/sisal fiber reinforced epoxy composites through the incorporation of silicon nitride (Si 3 N 4 ) nanoparticles. Hybrid composites containing 15 wt.% jute and 15 wt.% sisal fibers with varying Si 3 N 4 content (0–4 wt.%) were fabricated using a hand lay-up technique. The composites were evaluated for hardness, impact, tensile, flexural, shear, wear, and thermal conductivity properties, supported by scanning electron microscopy. The results revealed a systematic improvement in mechanical and tribological properties with increasing Si 3 N 4 content up to 3 wt.%, where the composite exhibited maximum tensile strength (55.85 MPa), flexural strength (84.67 MPa), reduced wear rate, and lower coefficient of friction. SEM analysis confirmed uniform nanoparticle dispersion, improved fiber–matrix adhesion, and effective crack suppression. The findings demonstrate that Si 3 N 4 -filled jute/sisal/epoxy hybrid composites offer a promising, eco-friendly solution for lightweight structural and tribological applications.",
+      "authors": [
+        "Sudarsan Deenadayalan",
+        "Karthick Rasu",
+        "Thanga Kasi Rajan Selvaraj",
+        "Karthikeyan Samayan"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Materials Testing",
+      "doi": "https://doi.org/10.1515/mt-2026-0002",
+      "url": "https://doi.org/10.1515/mt-2026-0002",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "software testing quality assurance",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-52923-vmfs-jstm-062026-124-02",
+      "title": "Flow Mechanism Analysis and Gate–Overflow Optimization for Defect Reduction in ADC12 High-Pressure Die Casting",
+      "abstract": "n high-pressure die casting (HPDC) of ADC12 aluminum alloy, defects such as surface wrinkles, cold shuts, and gas porosity frequently occur in thin-walled components with complex geometries, resulting in reduced product quality and production efficiency. In this study, the defect formation mechanisms in a guide roller component were investigated through a combination of experimental observations and numerical simulations using JSCAST software. Inspection of actual castings revealed that defects were mainly concentrated in regions where molten metal flow fronts converged. Simulation results showed that the original gating design produced an unstable flow pattern characterized by strong flow-front convergence, extremely high local gate velocities, and significant air entrainment during mold filling. The predicted regions with high risks of cold shut, gas porosity, and temperature reduction corresponded well with the defect locations observed in the actual castings. Based on the flow mechanism analysis, a series of sequential optimization schemes involving modifications of gate thickness and overflow dimensions were implemented to regulate melt flow velocity, reduce flow-front convergence, and improve gas evacuation. The results demonstrated that increasing the gate thickness effectively reduced local flow velocity and improved filling stability, whereas optimizing the overflow system enhanced the evacuation of entrapped air and redirected turbulent flow and entrained gas toward sacrificial regions. The final optimized design significantly reduced the risks of cold shut and gas porosity while improving temperature uniformity within the cavity compared with the original design. The findings indicate that flow mechanism analysis provides an effective basis for gate–overflow system optimization and quality improvement of ADC12 castings produced by the HPDC process.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Journal of Science and Technology of Metal",
+      "doi": "https://doi.org/10.52923/vmfs.jstm.062026.124.02",
+      "url": "https://doi.org/10.52923/vmfs.jstm.062026.124.02",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "defect prediction software quality",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-54251-2522-4026-2026-2-6au",
+      "title": "ЖАРАҚАТТАРДЫ БОЛЖАУ: ЖАСАНДЫ ИНТЕЛЛЕКТТІҢ СТУДЕНТ-СПОРТШЫЛАРДАҒЫ ЖАРАҚАТТАРДЫҢ АЛДЫН АЛУДАҒЫ МҮМКІНДІКТЕРІ",
+      "abstract": "Бұл мақалада жоғары оқу орнының спортшы-студенттері арасындағы жарақаттануды алдын алудың заманауи технологиялық әдісі ретінде жасанды интеллект (ЖИ) негізіндегі предиктивті модельдердің қолданылуы қарастырылады. Зерттеудің мақсаты – жарақат тәуекелін болжаудың теориялық негіздерін түсіндіру және жаттықтырушы-оқытушыларға бұл әдістемені тәжірибеде енгізу үшін практикалық нұсқаулық ұсыну. Автор ЖИ-тің жарақатты болжау үдерісіндегі үш негізгі кезеңін сипаттайды: көпфакторлы деректерді жинақтау, тәуекел моделін құру және алдын алу шараларын ұсыну. Мақалада жарақат алдындағы негізгі белгілер (жүктеме мен қалпына келу арақатынасының бұзылуы, биомеханикалық өзгерістер, физиологиялық стрестер) талданады. Жаттықтырушының нақты әрекеттер алгоритмі (ескертуді алу, тексеру, түзету, бақылау) және этикалық аспектілер ұсынылады. Нәтиже ретінде ЖИ-тің реактивті (емдеу) тәсілден превентивті (алдын алу) тәсілге көшуге, соның ішінде жоғары оқу орнының ресурстары шектеулі жағдайында, қалай мүмкіндік беретіні көрсетіледі.",
+      "authors": [
+        "Адилбек Килибаев"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "НАУЧНЫЙ ЖУРНАЛ \"AUEZOV UNIVERSITY\"",
+      "doi": "https://doi.org/10.54251/2522-4026.2026.2.6au",
+      "url": "https://doi.org/10.54251/2522-4026.2026.2.6au",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "defect prediction software quality",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-59992-ijci-2026-v5n6p6",
+      "title": "SQLEM++: An Explainable Hybrid Learning Framework for SQL Query Cost Prediction and Optimization",
+      "abstract": "While relational database systems can process billions of queries per day with SQL, their cost-based optimizers use hand-crafted heuristics and simplified cardinality estimators that can lead to large estimation errors. These errors creep up into the query plan selection, often leading to poor or even disastrous performance when the query is executed. In this paper, new framework for SQL query cost prediction and recommendation of optimize SQL query, named as SQLEM++ (SQL Query Learning and Embedding Model). SQLEM++ is a dual-encoder architecture consisting of a domain-adapted transformer (SQL-BERT) and a structural Graph Neural Network (GNN) over query Abstract Syntax Trees to encode queries in semantically rich representations. The framework also includes heterogenous feature extraction of join complexity, filter selectivity, index coverage, and schema-level statistics. A multi-task prediction module is used to estimate the execution cost along with providing the classification of query quality into actionable levels, using the asymmetric Huber loss. Further, an explainability layer, derived from explainability with SHAP attribution and attention roll-out, converts model predictions to interpretable optimization recommendations. On top of this, SQLEM++ is introduced as an adaptive extension that fuses a learned cost model with the traditional optimizers in a hybrid manner, an uncertainty aware decision algorithm for reliability control, and a reinforcement learning feedback loop for continuous self-improvement. The results of an extensive evaluation on TPC-H (scale factors 1–100), and TPC-DS show that SQLEM achieves an average speed-up of query execution by 3.24 times compared to the PostgreSQL 16 optimizer and a mean absolute prediction error reduction of 71.4%, with an R² of 0.94. Ablation studies validate that both semantic and structural encoders support each other.",
+      "authors": [
+        "Hanan Abedallah"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "International Journal of Computers and Informatics",
+      "doi": "https://doi.org/10.59992/ijci.2026.v5n6p6",
+      "url": "https://doi.org/10.59992/ijci.2026.v5n6p6",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "defect prediction software quality",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-56964-pidspj20262701006",
+      "title": "\"Development of a Clinical Prediction Tool for Detecting Hospital-acquired Extended-spectrum β-lactamase-Producing Gram-Negative Bacteria in Pediatric Patients \"",
+      "abstract": "Objectives: Extended-spectrum β-lactamase (ESBL)-producing bacteria are important causes of hospital-acquired infections. While prediction tools exist for adults, limited data are available in children. This study aimed to develop a simple tool to identify pediatric patients at risk for ESBL-producing bacteria. Methodology: A retrospective study was conducted in a tertiary government hospital involving pediatric inpatients. Risk factors were analyzed using logistic regression to derive a scoring system based on independent predictors. Model performance was evaluated using the area under the curve, the Hosmer–Lemeshow test and internal validation. Results: Among 389 pediatric patients, three risk factors were independently associated with ESBL production: prior cephalosporin use within 3 months, mechanical ventilation, and indwelling urinary catheterization. These were incorporated into a 4-point scoring system. The model demonstrated moderate discrimination (AUC 0.70, Hosmer-Lemeshow p=0.0805) and correctly classi!ed 74.8% cases as low (0-1) and high risk (2-4). Bootstrapped validation accuracy was 63.2%, showing good internal stability. Conclusion: This practical tool, based on readily available clinical data, may aid early risk strati!cation for ESBL production and guide antibiotic therapy in children, supporting antimicrobial stewardship. Prospective validation in diverse pediatric populations is recommended.",
+      "authors": [
+        "Esther Ann B. Nacita",
+        "Carmina A. Delos Reyes"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-26",
+      "source": "Crossref",
+      "venue": "Pediatric Infectious Disease Society of the Philippines Journal",
+      "doi": "https://doi.org/10.56964/pidspj20262701006",
+      "url": "https://doi.org/10.56964/pidspj20262701006",
+      "topics": [
+        "software quality assurance"
+      ],
+      "query": "defect prediction software quality",
+      "discoveredAt": "2026-06-26T01:02:43.819Z"
+    },
+    {
+      "id": "doi-doi-org-10-14278-rodare-4729",
+      "title": "Multiphase Python Repository by HZDR",
+      "abstract": "The <code>multiphasepy</code> package is a Python toolkit for building, running, and maintaining CFD simulation case collections for the software released by the OpenFOAM Foundation (but also others, like Ansys Fluent or Siemens Simcenter Star-CCM). It combines reusable library modules with practical command-line tools to cover the full simulation lifecycle: case templating, batch execution, monitoring, post-processing, validation support, repository comparison, and publication workflows. At its core, <code>multiphasepy</code> helps teams move from individual case setups to scalable, structured projects containing a large collection of setups, e.g. a validation database. Cases can be provided as templates that are parameterized at runtime, metadata can be managed in a machine-readable way and cases can be conveniently batch-processed with the workflow management tool Snakemake both on workstations and Slurm-based HPC systems. Using a container-based software environment (e.g. Apptainer or Docker) the case collection becomes fully portable. An integrated Copier template allows the creation and maintenance of multiple independent case collections. Beyond execution, the package supports quality assurance and communication of results: tools are included for automated checks, fuzzy-logic based evaluation, data conversion, visualization, and generation of artifacts suitable for reporting and dissemination. This makes multiphasepy a practical bridge between day-to-day CFD case work and long-term, reproducible research software operations in collaborative environments. Command-Line Tools The multiphasepy package provides a comprehensive suite of command-line tools for CFD workflow management, data processing, and quality assurance. All tools follow the naming convention <code>mpy&lt;function&gt;</code> and provide <code>--help</code> for detailed usage information. Workflow Management <strong>mpycopy</strong> : Copy and render templated cases <strong>mpydocker</strong> : Launch customizable Docker development environments <strong>mpywatch</strong> : Progress display and real-time data visualization <strong>mpyworkflow</strong> : Create and manage cases projects allowing batch processing Data Processing <strong>mpyconv</strong> : Convert data files between formats <strong>mpypost</strong> : Mathematical post-processing operations <strong>mpyvisualize</strong> : Visualize simulation result files Quality Assurance <strong>mpytest</strong> : Run CFD code functionality tests <strong>mpyfuzzy</strong> : Evaluate simulation goodness using fuzzy logic <strong>mpyhooks</strong> : Run git hooks for code quality checks Utilities <strong>mpyidentify</strong> : Identify file types and associate tags <strong>mpyrpdiff</strong> : Compare repositories using git diff <strong>mpyshrun</strong> : Wrap shell commands with logging Publishing <strong>mpypublish</strong> : Publish software to Rodare repository Installation The <code>multiphasepy</code> package requires Python 3.12 or newer. Install the latest release from PyPI: <pre><code class=\"language-bash\">pip install multiphasepy </code></pre> For full environment setup and platform-specific notes, see the installation guide in the documentation. How to cite us? If you find that package useful, please cite as <pre><code class=\"language-text\">Schlegel et al. (2026). Multiphase Python Repository by HZDR. Rodare. &lt;https://doi.org/10.14278/rodare.3093&gt;. </code></pre> Acknowledgements OpenFOAM® is a registered trade mark of OpenCFD Limited, producer and distributor of the OpenFOAM® software via www.openfoam.com. The Multiphase Python Repository by HZDR is not compatible with the software released by OpenCFD Limited, but is developed for the software released by the OpenFOAM Foundation via www.openfoam.org.",
+      "authors": [
+        "Schlegel, Fabian",
+        "Fombonne, Clement",
+        "Hänsch, Susann",
+        "Krull, Benjamin",
+        "Lehnigk, Ronald",
+        "Meller, Richard"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-24",
+      "source": "OpenAlex",
+      "venue": "RODARE",
+      "doi": "https://doi.org/10.14278/rodare.4729",
+      "url": "https://doi.org/10.14278/rodare.4729",
+      "topics": [
+        "Workflow",
+        "Python (programming language)",
+        "Computer science",
+        "Suite",
+        "Software engineering",
+        "Metadata"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-26T00:23:12.355Z"
+    },
+    {
+      "id": "doi-doi-org-10-37965-jait-2026-0878",
+      "title": "Hybrid Approach to Software Defect Prediction and Classification using a Variational Autoencoder and Scalable Graph Attention Network",
+      "abstract": "Software performance, security, and dependability depend on software defect prediction (SDP) and classification. Class imbalance, a lack of high-quality labeled data, overfitting in small or skewed datasets, poor interpretability, and the dynamic nature of software systems are among the issues that SDP classification faces. This research proposes an SDP with a classification framework that combines the scalable graph relearn attention network (SGRAN) and the optimized variational autoencoder (VAE) to tackle these challenges. Learning-to-rank under-sampling (LTRUS) selectively eliminates less-relevant majority-class instances of the majority class to reduce class imbalance. After learning structured latent representations, the VAE model improves generalization by identifying significant defect patterns. To further normalize the dataset by reducing undersampling effects and guaranteeing balanced representation between defective and non-defective modules, particle swarm optimization (PSO) is combined with crayfish bobcat optimization algorithm (CBOA) to dynamically optimize the termination condition. The expected defective modules are fed into the SGRAN for classification, ensuring unique and consistent defect categorization. The VAE-CBOA achieves 99.07% prediction accuracy and a high F1-score of 99.01%, outperforming previous studies. Using traditional methods, the proposed work achieved 98.2% recall and 98.02% accuracy. In each prediction and class responsibility, the proposed model’s efficiency and values are highlighted.",
+      "authors": [
+        "Rajesh Kumar Udumu",
+        "Vasumathi D"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-24",
+      "source": "OpenAlex",
+      "venue": "Journal of Artificial Intelligence and Technology",
+      "doi": "https://doi.org/10.37965/jait.2026.0878",
+      "url": "https://doi.org/10.37965/jait.2026.0878",
+      "topics": [
+        "Autoencoder",
+        "Overfitting",
+        "Computer science",
+        "Machine learning",
+        "Software bug",
+        "Artificial intelligence"
+      ],
+      "query": "defect prediction software quality",
+      "discoveredAt": "2026-06-26T00:21:15.678Z"
+    },
+    {
+      "id": "doi-doi-org-10-17683-ijomam-issue24-10",
+      "title": "AUTOMATIC GENERATION OF SOFTWARE ENGINEERING TEST CASES AND CONSTRUCTION OF COVERAGE IMPROVEMENT MODEL BASED ON GENETIC ALGORITHM OPTIMIZING NEURAL NETWORK",
+      "abstract": "The scale of software system continues to expand, and the limitations of manual writing of test cases are gradually exposed in terms of coverage integrity and resource consumption.Focusing on the requirements of automatic test case generation and coverage improvement, this paper constructs a test case generation model based on genetic algorithm optimization neural network, which combines coverage behavior prediction with search optimization process.The model uses vectorization test case coding method, and uses neural network to predict the coverage trend of sentences and branches, thus guiding the evolution of genetic search in high-value input areas.Experiments are carried out on software modules with the scale of 120,000 to 180,000 lines of code, and the test time is limited to 60 minutes.The experimental results show that the effective ratio of test cases generated by the model is stable above 70%, the sentence coverage is maintained in the range of 82% to 83%, the branch coverage is about 70%, and the coverage fluctuation is controlled within 0.4%.The results show that the model has good coverage improvement ability and running stability under the condition of limited test resources, and is suitable for software test scenarios with complex control logic.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-23",
+      "source": "OpenAlex",
+      "venue": "International Journal of Mechatronics and Applied Mechanics",
+      "doi": "https://doi.org/10.17683/ijomam/issue24.10",
+      "url": "https://doi.org/10.17683/ijomam/issue24.10",
+      "topics": [
+        "Computer science",
+        "Artificial neural network",
+        "Test case",
+        "Software",
+        "Genetic algorithm",
+        "Code coverage"
+      ],
+      "query": "defect prediction software quality",
+      "discoveredAt": "2026-06-26T00:23:12.355Z"
+    },
+    {
+      "id": "seed-swebok-v4-software-quality",
+      "title": "Guide to the Software Engineering Body of Knowledge: Software Quality",
+      "abstract": "Reference material for software quality fundamentals, including quality assurance, verification, validation, reviews, audits, measurement, and defect management.",
+      "authors": [
+        "IEEE Computer Society"
+      ],
+      "year": 2024,
+      "publishedAt": "2024-01-01",
+      "source": "Curated",
+      "venue": "SWEBOK Guide",
+      "doi": "",
+      "url": "https://www.computer.org/education/bodies-of-knowledge/software-engineering",
+      "topics": [
+        "software quality",
+        "quality assurance",
+        "verification",
+        "validation"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-06-25T00:00:00.000Z"
+    },
+    {
+      "id": "seed-iso-25010",
+      "title": "Systems and software Quality Requirements and Evaluation: Product quality model",
+      "abstract": "Standard reference for software product quality characteristics such as functional suitability, reliability, usability, performance efficiency, maintainability, portability, security, and compatibility.",
+      "authors": [
+        "ISO/IEC"
+      ],
+      "year": 2023,
+      "publishedAt": "2023-01-01",
+      "source": "Curated",
+      "venue": "ISO/IEC 25010",
+      "doi": "",
+      "url": "https://iso25000.com/index.php/en/iso-25000-standards/iso-25010",
+      "topics": [
+        "quality model",
+        "software quality",
+        "requirements",
+        "evaluation"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-06-25T00:00:00.000Z"
+    },
+    {
+      "id": "seed-tmap-quality-engineering",
+      "title": "Quality Engineering for Agile and DevOps teams",
+      "abstract": "Applied reference on modern quality engineering practices, including shift-left, test strategy, risk-based quality, automation, exploratory testing, and continuous feedback.",
+      "authors": [
+        "Sogeti"
+      ],
+      "year": 2020,
+      "publishedAt": "2020-01-01",
+      "source": "Curated",
+      "venue": "TMap body of knowledge",
+      "doi": "",
+      "url": "https://www.tmap.net/",
+      "topics": [
+        "quality engineering",
+        "shift-left",
+        "agile testing",
+        "devops"
+      ],
+      "query": "quality engineering software testing",
+      "discoveredAt": "2026-06-25T00:00:00.000Z"
+    }
+  ]
+}

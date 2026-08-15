@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QA Lab — Single Posts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0D0D0B; font-family: 'Space Grotesk', sans-serif; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { DesignCanvas, DCSection, DCArtboard } = window;
+
+const BG    = '#111110';
+const AMBER = '#C8962A';
+const CREAM = '#F3EDD8';
+const DIM   = '#1E1E1A';
+const MID   = '#2C2C24';
+const S     = 400;
+const px    = n => Math.round(n * S / 1080);
+
+function Stamp({ dark = false }) {
+  const c = dark ? BG : CREAM;
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(34), letterSpacing: '0.07em', color: AMBER, lineHeight: 1 }}>QA LAB</span>
+      <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: px(18), letterSpacing: '0.18em', textTransform: 'uppercase', color: c, opacity: 0.3 }}>qalab.io</span>
+    </div>
+  );
+}
+
+function Post({ children, bg = BG }) {
+  return (
+    <div style={{ width: S, height: S, background: bg, overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+      {children}
+    </div>
+  );
+}
+
+/* ── POST 01: Headline Máxima ───────────────────────────
+   Layout: tipografia como elemento visual principal
+   Tema: manifesto / anti-hype                          */
+function Post01() {
+  return (
+    <Post>
+      <div style={{ padding: `${px(56)}px ${px(60)}px`, display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Stamp/>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(148), lineHeight: 0.82, textTransform: 'uppercase', letterSpacing: '-0.02em', marginBottom: px(28) }}>
+            SHIP<br/>WITH<br/>CON-<br/>FIDENCE.
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: px(16) }}>
+            <div style={{ width: px(48), height: px(3), background: CREAM, opacity: 0.3 }}></div>
+            <div style={{ color: CREAM, fontSize: px(22), opacity: 0.45, letterSpacing: '0.1em' }}>Isso é QA. Isso é o que ensinamos.</div>
+          </div>
+        </div>
+      </div>
+    </Post>
+  );
+}
+
+/* ── POST 02: Split Vertical ───────────────────────────
+   Layout: metade âmbar / metade escura
+   Tema: dica do dia                                    */
+function Post02() {
+  return (
+    <Post>
+      <div style={{ display: 'flex', height: '100%' }}>
+        {/* Left amber block */}
+        <div style={{ width: '42%', background: AMBER, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: `${px(52)}px ${px(40)}px` }}>
+          <div style={{ color: BG, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: px(16), letterSpacing: '0.2em', textTransform: 'uppercase' }}>Dica do dia</div>
+          <div style={{ color: BG, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(82), lineHeight: 0.85, textTransform: 'uppercase', letterSpacing: '-0.01em' }}>TEST<br/>EARLY</div>
+          <div style={{ color: BG, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: px(18), letterSpacing: '0.1em', opacity: 0.55 }}>qalab.io</div>
+        </div>
+        {/* Right dark block */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: `${px(52)}px ${px(40)}px`, gap: px(24) }}>
+          <div style={{ color: AMBER, fontSize: px(18), letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 500 }}>Por quê?</div>
+          <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: px(38), lineHeight: 0.95, textTransform: 'uppercase' }}>BUGS EM PROD CUSTAM 10× MAIS</div>
+          <div style={{ height: px(1), background: MID }}></div>
+          <div style={{ color: CREAM, fontSize: px(20), lineHeight: 1.6, opacity: 0.52 }}>Quanto antes o bug é encontrado, menor o custo de corrigir.</div>
+        </div>
+      </div>
+    </Post>
+  );
+}
+
+/* ── POST 03: Stat Gigante ─────────────────────────────
+   Layout: número ocupa 70% do espaço
+   Tema: dado de mercado impactante                     */
+function Post03() {
+  return (
+    <Post>
+      <div style={{ padding: `${px(52)}px ${px(60)}px`, display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Stamp/>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(0) }}>
+          <div style={{ color: AMBER, fontSize: px(20), letterSpacing: '0.24em', textTransform: 'uppercase', fontWeight: 500, marginBottom: px(8) }}>No mercado hoje</div>
+          <div style={{ display: 'flex', alignItems: 'flex-start', lineHeight: 1 }}>
+            <span style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(230), lineHeight: 0.82, letterSpacing: '-0.05em' }}>83</span>
+            <span style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(80), lineHeight: 1, marginTop: px(20) }}>%</span>
+          </div>
+          <div style={{ height: px(3), background: MID, marginBottom: px(20) }}>
+            <div style={{ width: '83%', height: '100%', background: AMBER }}></div>
+          </div>
+          <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: px(38), textTransform: 'uppercase', lineHeight: 0.95, marginBottom: px(12) }}>das vagas sênior exigem experiência em automação</div>
+          <div style={{ color: CREAM, fontSize: px(19), opacity: 0.4, letterSpacing: '0.08em' }}>Fonte: LinkedIn Jobs BR · Jun 2025</div>
+        </div>
+      </div>
+    </Post>
+  );
+}
+
+/* ── POST 04: Editorial Invertido ──────────────────────
+   Layout: fundo creme, tinta escura — elegante e clean
+   Tema: princípio fundamental                          */
+function Post04() {
+  return (
+    <Post bg={CREAM}>
+      <div style={{ padding: `${px(56)}px ${px(60)}px`, display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Stamp dark/>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(26) }}>
+          <div style={{ color: AMBER, fontSize: px(18), letterSpacing: '0.26em', textTransform: 'uppercase', fontWeight: 500 }}>Princípio #1</div>
+          <div style={{ color: BG, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(110), lineHeight: 0.85, textTransform: 'uppercase', letterSpacing: '-0.01em' }}>QUALIDADE NÃO SE TESTA. SE CONSTRÓI.</div>
+          <div style={{ height: px(2), background: BG, opacity: 0.12 }}></div>
+          <div style={{ color: BG, fontSize: px(23), lineHeight: 1.65, opacity: 0.58 }}>Testar ao final revela os problemas. Construir com qualidade desde o início elimina a maioria deles.</div>
+        </div>
+      </div>
+    </Post>
+  );
+}
+
+/* ── POST 05: Grade de Checklist ───────────────────────
+   Layout: grid 2×3 de items rápidos
+   Tema: o que um QA sênior domina                     */
+function Post05() {
+  const items = [
+    { n: '01', label: 'Contract Testing' },
+    { n: '02', label: 'Performance Load' },
+    { n: '03', label: 'CI/CD Pipelines' },
+    { n: '04', label: 'API Mocking' },
+    { n: '05', label: 'Chaos Eng.' },
+    { n: '06', label: 'Observability' },
+  ];
+  return (
+    <Post>
+      <div style={{ padding: `${px(52)}px ${px(56)}px`, display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Stamp/>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(52), lineHeight: 0.9, textTransform: 'uppercase', margin: `${px(24)}px 0 ${px(20)}px` }}>O QA SÊNIOR DOMINA:</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: px(10), flex: 1 }}>
+          {items.map(({ n, label }) => (
+            <div key={n} style={{ border: `${px(1)}px solid ${MID}`, padding: `${px(16)}px ${px(18)}px`, display: 'flex', alignItems: 'center', gap: px(12) }}>
+              <span style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(24), lineHeight: 1, flexShrink: 0 }}>{n}</span>
+              <span style={{ color: CREAM, fontSize: px(20), fontWeight: 500, lineHeight: 1.2 }}>{label}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ color: CREAM, fontSize: px(17), opacity: 0.32, letterSpacing: '0.12em', marginTop: px(16) }}>Aprenda tudo em qalab.io</div>
+      </div>
+    </Post>
+  );
+}
+
+/* ── POST 06: Pergunta de Engajamento ──────────────────
+   Layout: centered, espaçoso, questão dominante
+   Tema: gerar discussão nos comentários               */
+function Post06() {
+  return (
+    <Post>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        {/* Top amber bar */}
+        <div style={{ height: px(7), background: AMBER }}></div>
+        <div style={{ padding: `${px(48)}px ${px(60)}px`, display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Stamp/>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: px(28) }}>
+            <div style={{ color: AMBER, fontSize: px(18), letterSpacing: '0.24em', textTransform: 'uppercase', fontWeight: 500 }}>Discussão aberta</div>
+            <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(96), lineHeight: 0.88, textTransform: 'uppercase' }}>VOCÊ RODA OS TESTES ANTES DE FAZER MERGE?</div>
+            <div style={{ display: 'flex', gap: px(14) }}>
+              {['Sempre', 'Às vezes', 'CI faz isso', 'Nunca'].map(opt => (
+                <div key={opt} style={{ padding: `${px(10)}px ${px(16)}px`, border: `${px(1)}px solid ${MID}`, color: CREAM, fontSize: px(18), opacity: 0.55 }}>{opt}</div>
+              ))}
+            </div>
+            <div style={{ color: CREAM, fontSize: px(18), opacity: 0.3, letterSpacing: '0.1em' }}>Responde nos comentários 👇</div>
+          </div>
+        </div>
+      </div>
+    </Post>
+  );
+}
+
+/* ── POST 07: Tipografia Pura ──────────────────────────
+   Layout: a frase É o design. Sem elementos extra.
+   Tema: frase de impacto / repostável               */
+function Post07() {
+  return (
+    <Post>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
+        {/* Vertical amber left stripe */}
+        <div style={{ position: 'absolute', left: 0, top: 0, width: px(7), height: '100%', background: AMBER }}></div>
+        <div style={{ padding: `${px(52)}px ${px(60)}px`, paddingLeft: px(72), display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Stamp/>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(22) }}>
+            <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(118), lineHeight: 0.85, textTransform: 'uppercase', letterSpacing: '-0.01em' }}>
+              "SE VOCÊ NÃO TESTOU, VOCÊ ESTÁ ESPERANDO O USUÁRIO TESTAR."
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: px(16) }}>
+              <div style={{ width: px(36), height: px(3), background: AMBER }}></div>
+              <div style={{ color: AMBER, fontSize: px(19), fontWeight: 500, letterSpacing: '0.1em' }}>QA Lab</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Post>
+  );
+}
+
+/* ── POST 08: Comparação Horizontal ───────────────────
+   Layout: 3 colunas: antes / divider / depois
+   Tema: antes e depois de implementar QA             */
+function Post08() {
+  const bef = ['Deploy com medo', 'Regressão surpresa', 'Bug em produção', 'Rollback manual'];
+  const aft = ['Deploy com dados', 'Suite protege', 'Bug no PR', 'CI bloqueia'];
+  return (
+    <Post>
+      <div style={{ padding: `${px(50)}px ${px(52)}px`, display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Stamp/>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(44), textTransform: 'uppercase', lineHeight: 0.9, margin: `${px(20)}px 0 ${px(18)}px` }}>Antes e depois do QA estruturado:</div>
+        <div style={{ flex: 1, display: 'flex', gap: px(16) }}>
+          {/* Before */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: px(8) }}>
+            <div style={{ color: '#AA5050', fontSize: px(16), fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: px(4) }}>Sem QA</div>
+            {bef.map((t, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: px(10), padding: `${px(10)}px ${px(12)}px`, background: DIM }}>
+                <span style={{ color: '#AA5050', fontSize: px(16), fontWeight: 700 }}>✕</span>
+                <span style={{ color: CREAM, fontSize: px(19), opacity: 0.55 }}>{t}</span>
+              </div>
+            ))}
+          </div>
+          {/* Divider */}
+          <div style={{ width: px(2), background: MID, flexShrink: 0 }}></div>
+          {/* After */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: px(8) }}>
+            <div style={{ color: AMBER, fontSize: px(16), fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: px(4) }}>Com QA</div>
+            {aft.map((t, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: px(10), padding: `${px(10)}px ${px(12)}px`, border: `${px(1)}px solid ${MID}` }}>
+                <span style={{ color: AMBER, fontSize: px(16), fontWeight: 700 }}>✓</span>
+                <span style={{ color: CREAM, fontSize: px(19) }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Post>
+  );
+}
+
+/* ── POST 09: Lançamento de Módulo ─────────────────────
+   Layout: announcement card com destaque de módulo
+   Tema: novo conteúdo / lançamento                   */
+function Post09() {
+  return (
+    <Post>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        {/* Top amber full block */}
+        <div style={{ background: AMBER, padding: `${px(48)}px ${px(56)}px ${px(36)}px`, display: 'flex', flexDirection: 'column', gap: px(14) }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(30), letterSpacing: '0.07em', color: BG }}>QA LAB</span>
+            <span style={{ color: BG, fontSize: px(16), letterSpacing: '0.16em', textTransform: 'uppercase', opacity: 0.45 }}>Novo módulo</span>
+          </div>
+          <div style={{ color: BG, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(108), lineHeight: 0.85, textTransform: 'uppercase', letterSpacing: '-0.01em' }}>API<br/>TESTING<br/>PRO</div>
+        </div>
+        {/* Bottom dark block */}
+        <div style={{ flex: 1, padding: `${px(28)}px ${px(56)}px ${px(40)}px`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div style={{ color: CREAM, fontSize: px(22), lineHeight: 1.6, opacity: 0.55 }}>Contract testing, mocks, schema validation e tudo que você precisa para testar APIs em produção.</div>
+          <div style={{ display: 'flex', gap: px(24), alignItems: 'center' }}>
+            {[['6h', 'conteúdo'], ['18', 'lições'], ['4', 'projetos']].map(([v, l]) => (
+              <div key={l}>
+                <div style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(36), lineHeight: 1 }}>{v}</div>
+                <div style={{ color: CREAM, fontSize: px(16), opacity: 0.4, letterSpacing: '0.1em' }}>{l}</div>
+              </div>
+            ))}
+            <div style={{ flex: 1 }}></div>
+            <div style={{ padding: `${px(13)}px ${px(22)}px`, background: AMBER, color: BG, fontWeight: 700, fontSize: px(18), letterSpacing: '0.12em', textTransform: 'uppercase' }}>Inscreva-se →</div>
+          </div>
+        </div>
+      </div>
+    </Post>
+  );
+}
+
+/* ── POST 10: Manifesto de Marca ───────────────────────
+   Layout: pôster tipográfico, sem margem, full bleed
+   Tema: identidade / valores do QA Lab               */
+function Post10() {
+  const lines = [
+    { text: 'PRECISÃO', size: px(110), color: CREAM },
+    { text: 'SOBRE', size: px(76), color: AMBER, opacity: 0.6 },
+    { text: 'CERIMÔNIA.', size: px(100), color: CREAM },
+    { text: 'CÓDIGO', size: px(80), color: AMBER, opacity: 0.6 },
+    { text: 'SOBRE', size: px(72), color: CREAM, opacity: 0.35 },
+    { text: 'DISCURSO.', size: px(104), color: AMBER },
+    { text: 'QA LAB.', size: px(86), color: CREAM, opacity: 0.45 },
+  ];
+  return (
+    <Post>
+      <div style={{ padding: `${px(44)}px ${px(52)}px`, display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center' }}>
+        {lines.map((l, i) => (
+          <div key={i} style={{
+            fontFamily: 'Barlow Condensed, sans-serif',
+            fontWeight: 900,
+            fontSize: l.size,
+            lineHeight: 0.87,
+            textTransform: 'uppercase',
+            letterSpacing: '-0.02em',
+            color: l.color,
+            opacity: l.opacity || 1,
+          }}>{l.text}</div>
+        ))}
+      </div>
+    </Post>
+  );
+}
+
+/* ── APP ─────────────────────────────────────────────── */
+function App() {
+  const posts = [
+    { id: 'p01', label: 'Post 01 — Headline Máxima',       component: <Post01/> },
+    { id: 'p02', label: 'Post 02 — Split Vertical',         component: <Post02/> },
+    { id: 'p03', label: 'Post 03 — Stat Gigante',           component: <Post03/> },
+    { id: 'p04', label: 'Post 04 — Editorial Invertido',    component: <Post04/> },
+    { id: 'p05', label: 'Post 05 — Grade Checklist',        component: <Post05/> },
+    { id: 'p06', label: 'Post 06 — Engajamento / Enquete',  component: <Post06/> },
+    { id: 'p07', label: 'Post 07 — Tipografia Pura',        component: <Post07/> },
+    { id: 'p08', label: 'Post 08 — Antes vs. Depois',       component: <Post08/> },
+    { id: 'p09', label: 'Post 09 — Lançamento de Módulo',   component: <Post09/> },
+    { id: 'p10', label: 'Post 10 — Manifesto de Marca',     component: <Post10/> },
+  ];
+  return (
+    <DesignCanvas>
+      <DCSection id="singles" title="Single Posts — 1080 × 1080">
+        {posts.map(({ id, label, component }) => (
+          <DCArtboard key={id} id={id} label={label} width={S} height={S}>
+            {component}
+          </DCArtboard>
+        ))}
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>

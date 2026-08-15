@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { buildEvolutionLabDraft, getEvolutionEvidenceDraft, getEvolutionStepDefinition, toEvolutionMissionId } from "@/lib/evolution-plan";
 
 async function authenticated() {
   const supabase = await createClient();
@@ -72,6 +73,66 @@ export async function syncLocalProgress(ids: string[]) {
   revalidatePath("/lab");
 }
 
+
+export async function completeEvolutionStep(formData: FormData) {
+  const { supabase, user } = await authenticated();
+  const stepId = text(formData.get("step_id"), 80);
+  const step = getEvolutionStepDefinition(stepId);
+  if (!step) return;
+  const { error } = await supabase.from("mission_progress").upsert({
+    user_id: user.id,
+    mission_id: toEvolutionMissionId(step.id),
+    status: "completed",
+    completed_at: new Date().toISOString(),
+  }, { onConflict: "user_id,mission_id" });
+  ensure(error);
+  revalidatePath("/lab");
+  revalidatePath("/lab/competencias");
+}
+
+export async function createEvolutionEvidenceDraft(formData: FormData) {
+  const { supabase, user } = await authenticated();
+  const stepId = text(formData.get("step_id"), 80);
+  const draft = getEvolutionEvidenceDraft(stepId);
+  if (!draft) return;
+  const { error } = await supabase.from("drafts").insert({
+    user_id: user.id,
+    title: draft.title,
+    content: draft.content,
+    kind: draft.kind,
+  });
+  ensure(error);
+  revalidatePath("/lab");
+}
+
+export async function submitEvolutionLab(formData: FormData) {
+  const { supabase, user } = await authenticated();
+  const stepId = text(formData.get("step_id"), 80);
+  const response = text(formData.get("response"), 20000);
+  const draft = buildEvolutionLabDraft(stepId, response);
+  if (!draft || response.length < 120) return;
+
+  const { error: draftError } = await supabase.from("drafts").insert({
+    user_id: user.id,
+    title: draft.title,
+    content: draft.content,
+    kind: draft.kind,
+  });
+  ensure(draftError);
+
+  const { error: progressError } = await supabase.from("mission_progress").upsert({
+    user_id: user.id,
+    mission_id: toEvolutionMissionId(stepId),
+    status: "completed",
+    completed_at: new Date().toISOString(),
+  }, { onConflict: "user_id,mission_id" });
+  ensure(progressError);
+
+  revalidatePath("/lab");
+  revalidatePath(`/lab/evolucao/${stepId}`);
+  revalidatePath("/lab/competencias");
+  redirect("/lab");
+}
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();

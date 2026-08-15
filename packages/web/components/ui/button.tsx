@@ -5,35 +5,35 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-bold uppercase tracking-wide transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 cursor-pointer box-text",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-ring/40 cursor-pointer",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-[#A8C5C3] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20",
+          "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
-          "bg-coral text-[#3D5454] hover:bg-[#F4A8A3] hover:-translate-y-0.5 animate-coral-glow",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border-2 border-mint/30 bg-transparent text-mint hover:bg-mint/10 hover:border-mint/50",
+          "border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[#657578] hover:-translate-y-0.5",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
-          "hover:bg-off-white/10 hover:text-off-white text-off-white/70",
+          "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
         link: "text-mint underline-offset-4 hover:underline hover:text-[#A8C5C3]",
         neon:
-          "bg-neon text-[#3D5454] hover:bg-[#C8E85F] hover:-translate-y-0.5 animate-neon-glow font-extrabold",
+          "bg-primary text-primary-foreground hover:bg-primary/90",
         coral:
-          "bg-coral text-[#3D5454] hover:bg-[#F4A8A3] hover:-translate-y-0.5 font-extrabold",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
       },
       size: {
-        default: "h-10 px-5 py-2 has-[>svg]:px-4",
-        xs: "h-7 gap-1 rounded-lg px-3 text-xs has-[>svg]:px-2 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-9 rounded-lg gap-1.5 px-4 has-[>svg]:px-3",
-        lg: "h-12 rounded-xl px-8 has-[>svg]:px-6 text-base",
+        default: "h-10 px-4 py-2 has-[>svg]:px-3",
+        xs: "h-7 gap-1 rounded-md px-2.5 text-xs has-[>svg]:px-2 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-9 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-11 rounded-md px-6 has-[>svg]:px-5 text-base",
         icon: "size-10",
-        "icon-xs": "size-7 rounded-lg [&_svg:not([class*='size-'])]:size-3",
+        "icon-xs": "size-7 rounded-md [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-9",
-        "icon-lg": "size-12 rounded-xl",
+        "icon-lg": "size-11 rounded-md",
       },
     },
     defaultVariants: {

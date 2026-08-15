@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QA Lab — Carousel Templates 09–18</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0D0D0B; font-family: 'Space Grotesk', sans-serif; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { DesignCanvas, DCSection, DCArtboard } = window;
+
+const BG    = '#111110';
+const AMBER = '#C8962A';
+const CREAM = '#F3EDD8';
+const DIM   = '#1E1E1A';
+const MID   = '#2C2C24';
+const S     = 360;
+const px    = n => Math.round(n * S / 1080);
+
+function Brand() {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(36), letterSpacing: '0.07em', color: AMBER, lineHeight: 1 }}>QA LAB</span>
+      <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: px(20), letterSpacing: '0.18em', textTransform: 'uppercase', color: CREAM, opacity: 0.28 }}>qalab.io</span>
+    </div>
+  );
+}
+function BrandDark() {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(36), letterSpacing: '0.07em', color: BG, lineHeight: 1 }}>QA LAB</span>
+      <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: px(20), letterSpacing: '0.18em', textTransform: 'uppercase', color: BG, opacity: 0.35 }}>qalab.io</span>
+    </div>
+  );
+}
+
+function Shell({ children, bg = BG }) {
+  return (
+    <div style={{ width: S, height: S, background: bg, display: 'flex', flexDirection: 'column', padding: `${px(64)}px ${px(68)}px`, overflow: 'hidden', position: 'relative' }}>
+      {children}
+    </div>
+  );
+}
+
+function Cover({ eyebrow, headline, sub }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: px(18) }}>
+        <div style={{ color: AMBER, fontSize: px(20), letterSpacing: '0.24em', textTransform: 'uppercase', fontWeight: 500 }}>{eyebrow}</div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(96), lineHeight: 0.88, textTransform: 'uppercase' }}>{headline}</div>
+        {sub && <div style={{ color: CREAM, fontSize: px(22), opacity: 0.38, letterSpacing: '0.08em' }}>{sub}</div>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(16), marginTop: px(6) }}>
+          <div style={{ width: px(40), height: px(3), background: AMBER }}></div>
+          <div style={{ color: CREAM, fontSize: px(19), opacity: 0.35, letterSpacing: '0.1em' }}>Arraste para ver →</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+function DarkCTA({ lines }) {
+  return (
+    <Shell bg={AMBER}>
+      <BrandDark/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(24) }}>
+        <div style={{ color: BG, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(96), lineHeight: 0.88, textTransform: 'uppercase' }}>{lines.map((l,i) => <span key={i}>{l}<br/></span>)}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(18) }}>
+          <div style={{ width: px(38), height: px(4), background: BG, opacity: 0.28 }}></div>
+          <div style={{ color: BG, fontWeight: 600, fontSize: px(22), letterSpacing: '0.16em', textTransform: 'uppercase' }}>qalab.io</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+function LightCTA({ lines }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(24) }}>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(96), lineHeight: 0.88, textTransform: 'uppercase' }}>{lines.map((l,i) => <span key={i}>{l}<br/></span>)}</div>
+        <div style={{ display: 'inline-flex', padding: `${px(15)}px ${px(26)}px`, background: AMBER, color: BG, fontWeight: 700, fontSize: px(20), letterSpacing: '0.14em', textTransform: 'uppercase', alignSelf: 'flex-start' }}>qalab.io →</div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ T09 — GLOSSÁRIO ══════════════════════════════════════ */
+function T9Def({ term, type, definition, example }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ position: 'absolute', right: px(40), top: px(56), color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(200), lineHeight: 1, opacity: 0.05, userSelect: 'none', letterSpacing: '-0.04em' }}>def</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(20) }}>
+        <div style={{ display: 'inline-flex', padding: `${px(6)}px ${px(14)}px`, border: `${px(2)}px solid ${MID}`, color: AMBER, fontSize: px(17), letterSpacing: '0.18em', textTransform: 'uppercase', alignSelf: 'flex-start' }}>{type}</div>
+        <div style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(88), lineHeight: 0.88, textTransform: 'uppercase', letterSpacing: '0.01em' }}>{term}</div>
+        <div style={{ height: px(2), background: MID }}></div>
+        <div style={{ color: CREAM, fontSize: px(26), lineHeight: 1.6 }}>{definition}</div>
+        {example && (
+          <div style={{ background: DIM, padding: `${px(14)}px ${px(18)}px`, borderLeft: `${px(3)}px solid ${AMBER}` }}>
+            <div style={{ color: AMBER, fontSize: px(15), letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: px(6) }}>Ex.</div>
+            <div style={{ color: CREAM, fontSize: px(21), lineHeight: 1.5, opacity: 0.7, fontFamily: 'monospace' }}>{example}</div>
+          </div>
+        )}
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ T10 — MITO vs. REALIDADE ═════════════════════════════ */
+function T10Myth({ num, myth, reality }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ color: AMBER, fontSize: px(17), letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 500, marginTop: px(18), marginBottom: px(16) }}>Mito {String(num).padStart(2,'0')}</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: px(12) }}>
+        <div style={{ flex: 1, background: DIM, padding: `${px(16)}px ${px(18)}px`, display: 'flex', flexDirection: 'column', gap: px(10), position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', left: px(16), top: px(12), color: '#8A3A3A', fontSize: px(52), fontWeight: 900, fontFamily: 'Barlow Condensed, sans-serif', opacity: 0.18, lineHeight: 1 }}>✕</div>
+          <div style={{ color: '#AA5050', fontSize: px(16), fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' }}>Mito</div>
+          <div style={{ color: CREAM, fontSize: px(23), lineHeight: 1.5, opacity: 0.58, flex: 1 }}>{myth}</div>
+        </div>
+        <div style={{ flex: 1, border: `${px(2)}px solid ${AMBER}`, padding: `${px(16)}px ${px(18)}px`, display: 'flex', flexDirection: 'column', gap: px(10) }}>
+          <div style={{ color: AMBER, fontSize: px(16), fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' }}>Realidade</div>
+          <div style={{ color: CREAM, fontSize: px(23), lineHeight: 1.5, flex: 1 }}>{reality}</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ T11 — FERRAMENTA ══════════════════════════════════════ */
+function T11Tool({ name, category, purpose, useFor, avoid }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(18) }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(14) }}>
+          <div style={{ padding: `${px(6)}px ${px(14)}px`, background: AMBER, color: BG, fontSize: px(16), fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' }}>{category}</div>
+        </div>
+        <div style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(96), lineHeight: 0.88, textTransform: 'uppercase' }}>{name}</div>
+        <div style={{ color: CREAM, fontSize: px(24), lineHeight: 1.55, opacity: 0.55 }}>{purpose}</div>
+        <div style={{ height: px(1), background: MID }}></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: px(10) }}>
+          <div style={{ display: 'flex', gap: px(12), alignItems: 'flex-start' }}>
+            <div style={{ color: AMBER, fontSize: px(18), fontWeight: 700, width: px(80), flexShrink: 0, letterSpacing: '0.1em' }}>USE</div>
+            <div style={{ color: CREAM, fontSize: px(21), lineHeight: 1.4, opacity: 0.65 }}>{useFor}</div>
+          </div>
+          <div style={{ display: 'flex', gap: px(12), alignItems: 'flex-start' }}>
+            <div style={{ color: '#AA5050', fontSize: px(18), fontWeight: 700, width: px(80), flexShrink: 0, letterSpacing: '0.1em' }}>EVITE</div>
+            <div style={{ color: CREAM, fontSize: px(21), lineHeight: 1.4, opacity: 0.5 }}>{avoid}</div>
+          </div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ T12 — REGRA DE OURO ══════════════════════════════════ */
+function T12Rule({ num, total, rule, why }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ position: 'absolute', right: px(36), bottom: px(40), fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(260), lineHeight: 1, color: AMBER, opacity: 0.05, letterSpacing: '-0.04em', userSelect: 'none' }}>{String(num).padStart(2,'0')}</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(22) }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(14) }}>
+          <div style={{ width: px(36), height: px(36), border: `${px(2)}px solid ${AMBER}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(22) }}>{String(num).padStart(2,'0')}</span>
+          </div>
+          <div style={{ flex: 1, height: px(1), background: MID }}></div>
+          <div style={{ color: CREAM, fontSize: px(16), opacity: 0.22, letterSpacing: '0.1em' }}>/ {String(total).padStart(2,'0')}</div>
+        </div>
+        <div style={{ color: AMBER, fontFamily: 'Space Grotesk, sans-serif', fontSize: px(16), letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 500 }}>Regra de Ouro</div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(72), lineHeight: 0.9, textTransform: 'uppercase' }}>{rule}</div>
+        <div style={{ borderLeft: `${px(3)}px solid ${AMBER}`, paddingLeft: px(18), color: CREAM, fontSize: px(23), lineHeight: 1.6, opacity: 0.52 }}>{why}</div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ T13 — ENTREVISTA QA ══════════════════════════════════ */
+function T13QA({ num, question, answer, tip }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ color: AMBER, fontSize: px(16), letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 500, marginTop: px(18), marginBottom: px(14) }}>Pergunta {String(num).padStart(2,'0')}</div>
+      <div style={{ background: DIM, padding: `${px(18)}px ${px(20)}px`, marginBottom: px(12) }}>
+        <div style={{ color: AMBER, fontSize: px(15), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: px(8) }}>Entrevistador pergunta:</div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: px(34), lineHeight: 1.0, textTransform: 'uppercase' }}>{question}</div>
+      </div>
+      <div style={{ flex: 1, border: `${px(2)}px solid ${AMBER}`, padding: `${px(16)}px ${px(18)}px`, display: 'flex', flexDirection: 'column', gap: px(10) }}>
+        <div style={{ color: AMBER, fontSize: px(15), letterSpacing: '0.14em', textTransform: 'uppercase' }}>Resposta certa:</div>
+        <div style={{ color: CREAM, fontSize: px(22), lineHeight: 1.55, flex: 1 }}>{answer}</div>
+        {tip && <div style={{ color: AMBER, fontSize: px(18), opacity: 0.6, marginTop: px(4) }}>★ {tip}</div>}
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ T14 — MICRO-LIÇÃO ════════════════════════════════════ */
+function T14Lesson({ num, topic, concept, example, takeaway }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ color: AMBER, fontSize: px(16), letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 500, marginTop: px(16), marginBottom: px(14) }}>Lição {String(num).padStart(2,'0')} · {topic}</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: px(8) }}>
+        <div style={{ flex: 1, background: DIM, padding: `${px(14)}px ${px(16)}px`, display: 'flex', flexDirection: 'column', gap: px(6) }}>
+          <div style={{ color: AMBER, fontSize: px(14), letterSpacing: '0.16em', textTransform: 'uppercase' }}>Conceito</div>
+          <div style={{ color: CREAM, fontSize: px(22), lineHeight: 1.5, flex: 1 }}>{concept}</div>
+        </div>
+        <div style={{ flex: 1, background: '#0A0A08', padding: `${px(14)}px ${px(16)}px`, display: 'flex', flexDirection: 'column', gap: px(6), borderLeft: `${px(3)}px solid ${MID}` }}>
+          <div style={{ color: MID, fontSize: px(14), letterSpacing: '0.16em', textTransform: 'uppercase', color: AMBER, opacity: 0.5 }}>Exemplo</div>
+          <div style={{ color: CREAM, fontSize: px(20), lineHeight: 1.5, flex: 1, fontFamily: 'monospace', opacity: 0.8 }}>{example}</div>
+        </div>
+        <div style={{ flex: 1, border: `${px(2)}px solid ${AMBER}`, padding: `${px(14)}px ${px(16)}px`, display: 'flex', flexDirection: 'column', gap: px(6) }}>
+          <div style={{ color: AMBER, fontSize: px(14), letterSpacing: '0.16em', textTransform: 'uppercase' }}>Takeaway</div>
+          <div style={{ color: CREAM, fontSize: px(22), lineHeight: 1.5, flex: 1, fontWeight: 500 }}>{takeaway}</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ T15 — RANKING ════════════════════════════════════════ */
+function T15Rank({ title, items }) {
+  const maxScore = Math.max(...items.map(i => i.score));
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ color: AMBER, fontSize: px(17), letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 500, marginTop: px(18), marginBottom: px(14) }}>{title}</div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(14) }}>
+        {items.map((item, i) => (
+          <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: px(6) }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: px(12) }}>
+                <span style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(28), lineHeight: 1, opacity: i === 0 ? 1 : 0.5 }}>{String(i+1).padStart(2,'0')}</span>
+                <span style={{ color: CREAM, fontSize: px(22), fontWeight: i === 0 ? 600 : 400 }}>{item.label}</span>
+              </div>
+              <span style={{ color: AMBER, fontSize: px(18), fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700 }}>{item.value}</span>
+            </div>
+            <div style={{ height: px(4), background: MID }}>
+              <div style={{ width: `${(item.score/maxScore)*100}%`, height: '100%', background: i === 0 ? AMBER : `${AMBER}55` }}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ T16 — FLASHCARD / DEFINIÇÃO RÁPIDA ══════════════════ */
+function T16Flash({ num, total, word, definition, usage }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(0) }}>
+        <div style={{ color: AMBER, fontSize: px(14), letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: px(14), opacity: 0.7 }}>{String(num).padStart(2,'0')} / {String(total).padStart(2,'0')}</div>
+        <div style={{ color: AMBER, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(100), lineHeight: 0.85, textTransform: 'uppercase', letterSpacing: '-0.01em', marginBottom: px(20) }}>{word}</div>
+        <div style={{ height: px(3), background: AMBER, marginBottom: px(22) }}></div>
+        <div style={{ color: CREAM, fontSize: px(28), lineHeight: 1.6, marginBottom: px(20) }}>{definition}</div>
+        <div style={{ display: 'flex', gap: px(10), alignItems: 'flex-start' }}>
+          <div style={{ width: px(3), height: '100%', background: MID, flexShrink: 0, alignSelf: 'stretch' }}></div>
+          <div style={{ color: CREAM, fontSize: px(21), lineHeight: 1.5, opacity: 0.48, fontStyle: 'italic' }}>{usage}</div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ T17 — CARREIRA QA ════════════════════════════════════ */
+function T17Career({ role, level, skills, salary, demand }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(16) }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: px(12) }}>
+          <div style={{ padding: `${px(5)}px ${px(12)}px`, border: `${px(2)}px solid ${AMBER}`, color: AMBER, fontSize: px(15), letterSpacing: '0.16em', textTransform: 'uppercase' }}>{level}</div>
+        </div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(72), lineHeight: 0.9, textTransform: 'uppercase' }}>{role}</div>
+        <div style={{ height: px(1), background: MID }}></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: px(10) }}>
+          <div style={{ display: 'flex', gap: px(12) }}>
+            <div style={{ color: AMBER, fontSize: px(18), fontWeight: 600, width: px(90), flexShrink: 0 }}>Stack</div>
+            <div style={{ color: CREAM, fontSize: px(20), lineHeight: 1.4, opacity: 0.65 }}>{skills}</div>
+          </div>
+          <div style={{ display: 'flex', gap: px(12) }}>
+            <div style={{ color: AMBER, fontSize: px(18), fontWeight: 600, width: px(90), flexShrink: 0 }}>Salário</div>
+            <div style={{ color: CREAM, fontSize: px(20), lineHeight: 1.4 }}>{salary}</div>
+          </div>
+          <div style={{ display: 'flex', gap: px(12) }}>
+            <div style={{ color: AMBER, fontSize: px(18), fontWeight: 600, width: px(90), flexShrink: 0 }}>Mercado</div>
+            <div style={{ color: CREAM, fontSize: px(20), lineHeight: 1.4, opacity: 0.65 }}>{demand}</div>
+          </div>
+        </div>
+        <div style={{ height: px(4), background: MID, marginTop: px(4) }}>
+          <div style={{ width: demand === 'Alta' ? '90%' : demand === 'Muito alta' ? '100%' : '65%', height: '100%', background: AMBER }}></div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ T18 — CASE STUDY ════════════════════════════════════ */
+function T18Case({ tag, title, problem, approach, result }) {
+  return (
+    <Shell>
+      <Brand/>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: px(14) }}>
+        <div style={{ display: 'flex', gap: px(10), alignItems: 'center' }}>
+          <div style={{ padding: `${px(5)}px ${px(12)}px`, background: AMBER, color: BG, fontSize: px(15), fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' }}>{tag}</div>
+        </div>
+        <div style={{ color: CREAM, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: px(58), lineHeight: 0.92, textTransform: 'uppercase' }}>{title}</div>
+        <div style={{ height: px(1), background: MID }}></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: px(10) }}>
+          <div style={{ display: 'flex', gap: px(12), alignItems: 'flex-start' }}>
+            <div style={{ color: '#AA5050', fontSize: px(16), fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', width: px(90), flexShrink: 0, marginTop: px(2) }}>Problema</div>
+            <div style={{ color: CREAM, fontSize: px(21), lineHeight: 1.45, opacity: 0.6 }}>{problem}</div>
+          </div>
+          <div style={{ display: 'flex', gap: px(12), alignItems: 'flex-start' }}>
+            <div style={{ color: AMBER, fontSize: px(16), fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', width: px(90), flexShrink: 0, marginTop: px(2) }}>Ação</div>
+            <div style={{ color: CREAM, fontSize: px(21), lineHeight: 1.45, opacity: 0.6 }}>{approach}</div>
+          </div>
+          <div style={{ display: 'flex', gap: px(12), alignItems: 'flex-start' }}>
+            <div style={{ color: '#4A9A6A', fontSize: px(16), fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', width: px(90), flexShrink: 0, marginTop: px(2) }}>Resultado</div>
+            <div style={{ color: CREAM, fontSize: px(21), lineHeight: 1.45 }}>{result}</div>
+          </div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ══ APP ═════════════════════════════════════════════════ */
+function App() {
+  return (
+    <DesignCanvas>
+
+      {/* T09 GLOSSÁRIO */}
+      <DCSection id="t9" title="Template 09 — Glossário">
+        <DCArtboard id="t9-cv" label="Capa" width={S} height={S}>
+          <Cover eyebrow="Vocabulário QA" headline={"APRENDE\nO LÉXICO\nDO QA"} sub="Um termo por slide"/>
+        </DCArtboard>
+        <DCArtboard id="t9-s1" label="Def 01" width={S} height={S}>
+          <T9Def term="FLAKY TEST" type="Substantivo" definition="Teste que ora passa, ora falha sem mudança no código. Destrói a confiança na suite." example="expect(loadTime).toBeLessThan(200) // timing-dependent"/>
+        </DCArtboard>
+        <DCArtboard id="t9-s2" label="Def 02" width={S} height={S}>
+          <T9Def term="SMOKE TEST" type="Substantivo" definition="Conjunto mínimo de testes para verificar se o build básico funciona antes de ir mais fundo." example="login → home → checkout → logout"/>
+        </DCArtboard>
+        <DCArtboard id="t9-s3" label="Def 03" width={S} height={S}>
+          <T9Def term="REGRESSION" type="Substantivo" definition="Bug que reaparece em algo que já funcionava. Indica falta de cobertura automatizada." example="feature A quebra depois de merge da feature B"/>
+        </DCArtboard>
+        <DCArtboard id="t9-cta" label="CTA" width={S} height={S}>
+          <DarkCTA lines={['FALA O','IDIOMA','DO QA.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* T10 MITO vs REALIDADE */}
+      <DCSection id="t10" title="Template 10 — Mito vs. Realidade">
+        <DCArtboard id="t10-cv" label="Capa" width={S} height={S}>
+          <Cover eyebrow="Desmistificando QA" headline={"MITOS\nQUE\nPERSISTEM"} sub="3 crenças que travam o time"/>
+        </DCArtboard>
+        <DCArtboard id="t10-s1" label="Mito 01" width={S} height={S}>
+          <T10Myth num={1} myth='"QA só atrasa o desenvolvimento."' reality="QA que entra cedo acelera. O custo de um bug em produção é 10× maior que em desenvolvimento."/>
+        </DCArtboard>
+        <DCArtboard id="t10-s2" label="Mito 02" width={S} height={S}>
+          <T10Myth num={2} myth='"100% de cobertura significa produto sem bugs."' reality="Coverage mede linhas executadas, não comportamentos testados. É necessário mas não suficiente."/>
+        </DCArtboard>
+        <DCArtboard id="t10-s3" label="Mito 03" width={S} height={S}>
+          <T10Myth num={3} myth='"Testes automatizados substituem o QA manual."' reality="Automação escala o que já funciona. Exploração manual descobre o que ninguém imaginou testar."/>
+        </DCArtboard>
+        <DCArtboard id="t10-cta" label="CTA" width={S} height={S}>
+          <LightCTA lines={['MENOS','MITO.','MAIS','MÉTODO.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* T11 FERRAMENTA */}
+      <DCSection id="t11" title="Template 11 — Ferramenta">
+        <DCArtboard id="t11-cv" label="Capa" width={S} height={S}>
+          <Cover eyebrow="Arsenal do QA" headline={"ESCOLHE\nA FERRA-\nMENTA\nCERTA"} sub="Uma tool por slide"/>
+        </DCArtboard>
+        <DCArtboard id="t11-s1" label="Tool 01" width={S} height={S}>
+          <T11Tool name="PLAYWRIGHT" category="E2E" purpose="Automação de browser multi-plataforma. Chrome, Firefox e Safari em um só script." useFor="Testes E2E em SPAs modernas, fluxos críticos de usuário." avoid="Testes unitários e de API — há ferramentas melhores para isso."/>
+        </DCArtboard>
+        <DCArtboard id="t11-s2" label="Tool 02" width={S} height={S}>
+          <T11Tool name="PACT.IO" category="Contrato" purpose="Consumer-driven contract testing. Garante que provider e consumer falem a mesma língua." useFor="Microserviços com múltiplos times. Evita regressão silenciosa de API." avoid="Monolitos pequenos onde um único teste integrado já cobre o contrato."/>
+        </DCArtboard>
+        <DCArtboard id="t11-s3" label="Tool 03" width={S} height={S}>
+          <T11Tool name="K6" category="Performance" purpose="Load testing orientado a devs. Scripts em JS, métricas em tempo real, CI-friendly." useFor="Simular carga antes do lançamento. Testar SLAs em endpoints críticos." avoid="Testes funcionais. K6 mede timing, não comportamento de UI."/>
+        </DCArtboard>
+        <DCArtboard id="t11-cta" label="CTA" width={S} height={S}>
+          <DarkCTA lines={['DOMINA','AS TOOLS.','DOMINA','O PIPELINE.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* T12 REGRA DE OURO */}
+      <DCSection id="t12" title="Template 12 — Regra de Ouro">
+        <DCArtboard id="t12-cv" label="Capa" width={S} height={S}>
+          <Cover eyebrow="Princípios QA" headline={"AS REGRAS\nQUE\nNINGUÉM\nTE CONTA"} sub="Aprenda uma por vez"/>
+        </DCArtboard>
+        <DCArtboard id="t12-s1" label="Regra 01" width={S} height={S}>
+          <T12Rule num={1} total={5} rule={"TESTE O\nCOMPOR-\nTAMENTO,\nNÃO O CÓDIGO."} why="Se o teste quebra por refactoring sem mudança de comportamento, ele está testando implementação. Isso é ruído."/>
+        </DCArtboard>
+        <DCArtboard id="t12-s2" label="Regra 02" width={S} height={S}>
+          <T12Rule num={2} total={5} rule={"TESTES\nLENTOS\nNÃO SÃO\nEXECUTADOS."} why="Suite que demora 30 min roda só no CI. Ninguém roda local. Mantenha o feedback loop abaixo de 3 minutos."/>
+        </DCArtboard>
+        <DCArtboard id="t12-s3" label="Regra 03" width={S} height={S}>
+          <T12Rule num={3} total={5} rule={"TODO BUG\nÉ UM TESTE\nQUE FALTAVA."} why="Quando um bug chega em produção, a primeira ação é escrever o teste que o teria capturado. Depois corrigir."/>
+        </DCArtboard>
+        <DCArtboard id="t12-cta" label="CTA" width={S} height={S}>
+          <LightCTA lines={['PRINCÍPIOS','SÓLIDOS.','PRODUTO','SÓLIDO.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* T13 ENTREVISTA */}
+      <DCSection id="t13" title="Template 13 — Entrevista QA">
+        <DCArtboard id="t13-cv" label="Capa" width={S} height={S}>
+          <Cover eyebrow="Prep de entrevista" headline={"PASSA\nNA ENTRE-\nVISTA\nDE QA"} sub="Perguntas reais + respostas certas"/>
+        </DCArtboard>
+        <DCArtboard id="t13-s1" label="Q 01" width={S} height={S}>
+          <T13QA num={1} question='"Qual a diferença entre verificação e validação?"' answer="Verificação: estamos construindo o produto certo? (requisitos). Validação: estamos construindo o produto corretamente? (implementação)." tip="Cite um exemplo de cada no projeto atual"/>
+        </DCArtboard>
+        <DCArtboard id="t13-s2" label="Q 02" width={S} height={S}>
+          <T13QA num={2} question='"Como você decide o que automatizar?"' answer="Priorizo alta frequência de execução, estabilidade do feature, risco de regressão alto e custo de manutenção baixo." tip="Mencione a Pirâmide de Testes"/>
+        </DCArtboard>
+        <DCArtboard id="t13-s3" label="Q 03" width={S} height={S}>
+          <T13QA num={3} question='"Como lidar com um prazo impossível?"' answer="Priorizo risco. Identifico os fluxos críticos de negócio, documento o escopo reduzido e alinho expectativas com o time." tip="Demonstre pensamento de risco, não heroísmo"/>
+        </DCArtboard>
+        <DCArtboard id="t13-cta" label="CTA" width={S} height={S}>
+          <DarkCTA lines={['ENTRA','PREPARADO.','SAI','CONTRATADO.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* T14 MICRO-LIÇÃO */}
+      <DCSection id="t14" title="Template 14 — Micro-Lição">
+        <DCArtboard id="t14-cv" label="Capa" width={S} height={S}>
+          <Cover eyebrow="3 minutos de QA" headline={"UMA\nLIÇÃO\nPOR DIA"} sub="Conceito · Exemplo · Takeaway"/>
+        </DCArtboard>
+        <DCArtboard id="t14-s1" label="Lição 01" width={S} height={S}>
+          <T14Lesson num={1} topic="Idempotência" concept="Um teste idempotente produz o mesmo resultado toda vez que roda, independente da ordem ou ambiente." example={"beforeEach(() => db.seed(fixtures))\nafterEach(() => db.clean())"} takeaway="Isole o estado. Testes que dependem de ordem são time bombs."/>
+        </DCArtboard>
+        <DCArtboard id="t14-s2" label="Lição 02" width={S} height={S}>
+          <T14Lesson num={2} topic="Test Double" concept="Objetos que substituem dependências reais em testes: stubs, mocks, fakes e spies têm papéis diferentes." example={"const mailer = jest.fn()\nservice.send(mailer)\nexpect(mailer).toHaveBeenCalled()"} takeaway="Use mock para verificar interação, stub para controlar retorno."/>
+        </DCArtboard>
+        <DCArtboard id="t14-s3" label="Lição 03" width={S} height={S}>
+          <T14Lesson num={3} topic="Boundary Value" concept="Erros acontecem nas bordas dos intervalos. Testar exatamente nos limites captura mais bugs por esforço." example={"// Campo aceita 1–100\ntest(0)   // inválido\ntest(1)   // válido mínimo\ntest(100) // válido máximo\ntest(101) // inválido"} takeaway="Sempre teste o valor limite, o imediatamente abaixo e acima."/>
+        </DCArtboard>
+        <DCArtboard id="t14-cta" label="CTA" width={S} height={S}>
+          <LightCTA lines={['3 MIN','POR DIA.','1 ANO.','EXPERT.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* T15 RANKING */}
+      <DCSection id="t15" title="Template 15 — Ranking">
+        <DCArtboard id="t15-cv" label="Capa" width={S} height={S}>
+          <Cover eyebrow="Os mais críticos" headline={"RANKING\nDE\nFERRAMEN-\nTAS QA"} sub="Por adoção no mercado BR"/>
+        </DCArtboard>
+        <DCArtboard id="t15-s1" label="Ranking E2E" width={S} height={S}>
+          <T15Rank title="Frameworks E2E mais usados"
+            items={[
+              { label: 'Playwright', value: '38%', score: 38 },
+              { label: 'Cypress', value: '31%', score: 31 },
+              { label: 'Selenium', value: '22%', score: 22 },
+              { label: 'Puppeteer', value: '9%', score: 9 },
+            ]}/>
+        </DCArtboard>
+        <DCArtboard id="t15-s2" label="Ranking Bug" width={S} height={S}>
+          <T15Rank title="Onde mais bugs escapam"
+            items={[
+              { label: 'Integrações de API', value: '41%', score: 41 },
+              { label: 'Edge cases de UI', value: '28%', score: 28 },
+              { label: 'Concorrência/async', value: '19%', score: 19 },
+              { label: 'Configuração de ambiente', value: '12%', score: 12 },
+            ]}/>
+        </DCArtboard>
+        <DCArtboard id="t15-cta" label="CTA" width={S} height={S}>
+          <DarkCTA lines={['DOMINA','O QUE O','MERCADO','USA.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* T16 FLASHCARD */}
+      <DCSection id="t16" title="Template 16 — Flashcard">
+        <DCArtboard id="t16-cv" label="Capa" width={S} height={S}>
+          <Cover eyebrow="Definição rápida" headline={"UM\nTERMO\nPOR\nSLIDE"} sub="Salva e revisa depois"/>
+        </DCArtboard>
+        <DCArtboard id="t16-s1" label="Flash 01" width={S} height={S}>
+          <T16Flash num={1} total={3} word="MUTATION TESTING" definition="Modifica o código fonte propositalmente para verificar se os testes detectam a mudança." usage='"Se mato a mutação, meu teste prova que funciona."'/>
+        </DCArtboard>
+        <DCArtboard id="t16-s2" label="Flash 02" width={S} height={S}>
+          <T16Flash num={2} total={3} word="SHIFT-LEFT" definition="Prática de mover testes para o início do ciclo, não o final." usage='"Shift-left transforma QA de porteiro em arquiteto de qualidade."'/>
+        </DCArtboard>
+        <DCArtboard id="t16-s3" label="Flash 03" width={S} height={S}>
+          <T16Flash num={3} total={3} word="CHAOS ENGINEERING" definition="Injeção deliberada de falhas para descobrir fraquezas antes que o usuário descubra." usage='"Netflix matou instâncias em produção para construir resiliência."'/>
+        </DCArtboard>
+        <DCArtboard id="t16-cta" label="CTA" width={S} height={S}>
+          <LightCTA lines={['VOCABULÁ-','RIO CERTO.','CONVERSAS','CERTAS.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* T17 CARREIRA */}
+      <DCSection id="t17" title="Template 17 — Carreira QA">
+        <DCArtboard id="t17-cv" label="Capa" width={S} height={S}>
+          <Cover eyebrow="Mercado QA 2025" headline={"O QUE\nO MERCADO\nESTÁ\nPAGANDO"} sub="Dados reais de vagas BR"/>
+        </DCArtboard>
+        <DCArtboard id="t17-s1" label="Pleno" width={S} height={S}>
+          <T17Career role={"QA\nENGINEER\nPLENO"} level="Pleno · 3–5 anos" skills="Playwright, Cypress, REST API, SQL, CI/CD básico" salary="R$ 8.000 – R$ 14.000/mês" demand="Alta"/>
+        </DCArtboard>
+        <DCArtboard id="t17-s2" label="Sênior" width={S} height={S}>
+          <T17Career role={"QA\nTECH\nLEAD"} level="Sênior · 6+ anos" skills="Arquitetura de testes, mentoria, observabilidade, chaos eng." salary="R$ 16.000 – R$ 28.000/mês" demand="Muito alta"/>
+        </DCArtboard>
+        <DCArtboard id="t17-cta" label="CTA" width={S} height={S}>
+          <DarkCTA lines={['VALE A','PENA. O','MERCADO','CONFIRMA.']}/>
+        </DCArtboard>
+      </DCSection>
+
+      {/* T18 CASE STUDY */}
+      <DCSection id="t18" title="Template 18 — Case Study">
+        <DCArtboard id="t18-cv" label="Capa" width={S} height={S}>
+          <Cover eyebrow="Na vida real" headline={"CASOS\nREAIS\nDE QA\nEM AÇÃO"} sub="Problema → Solução → Resultado"/>
+        </DCArtboard>
+        <DCArtboard id="t18-s1" label="Case 01" width={S} height={S}>
+          <T18Case tag="E-commerce" title={"70% DOS\nBUGS EM\nCHECKOUT"} problem="Time entregava rápido mas 70% dos bugs iam para produção na área de pagamento." approach="Criamos suite de contrato para todos os endpoints de pagamento + E2E nos 3 principais fluxos." result="Bugs em produção caíram 83% em 60 dias. Deploy frequency dobrou."/>
+        </DCArtboard>
+        <DCArtboard id="t18-s2" label="Case 02" width={S} height={S}>
+          <T18Case tag="Fintech" title={"SUITE QUE\nDEMORAVA\n47 MIN"} problem="CI rodava 47 minutos. Ninguém esperava. PRs ficavam horas na fila sem feedback." approach="Paralelizamos a suite, removemos 200 testes flaky e migramos E2E lentos para testes de contrato." result="CI caiu para 8 minutos. Satisfação do time subiu. Regressões detectadas 3× mais rápido."/>
+        </DCArtboard>
+        <DCArtboard id="t18-cta" label="CTA" width={S} height={S}>
+          <DarkCTA lines={['SEU CASO','PODE SER','O PRÓXIMO','AQUI.']}/>
+        </DCArtboard>
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>
