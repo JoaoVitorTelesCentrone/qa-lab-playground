@@ -1,6 +1,29 @@
 {
-  "updatedAt": "2026-08-15T22:39:04.896Z",
+  "updatedAt": "2026-08-16T09:44:06.931Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-35882-ijeeemi-v8i3-351",
+      "title": "Comparative Evaluation of TabKANet with Oversampling and Feature Selection Ablation for Software Defect Prediction",
+      "abstract": "Software defect prediction (SDP) focuses limited testing resources on the modules most likely to fail, but real-world software metric data are tabular, noisy, and severely class-imbalanced, which degrades conventional learners. The Kolmogorov-Arnold Network (KAN) and Transformer architectures recently achieved strong results on tabular data, yet their combined form, TabKANet, has not been evaluated for SDP, nor has the contribution of common preprocessing techniques been quantified. This study adapts and comparatively evaluates TabKANet against established baselines and measures the contribution of oversampling and feature selection through a structured ablation. Twelve all-numerical NASA Metrics Data Program datasets were used. The pipeline applied duplicate removal, MinMax normalization, effective class weighting, and stratified five-fold cross-validation, with oversampling (SMOTE) and Recursive Feature Elimination (RFE) inserted inside the training folds. Four TabKANet variants (A: base, B: +SMOTE, C: +RFE, D: +SMOTE+RFE) were compared with Multi-Layer Perceptron (MLP), standalone KAN, and TabNet, and differences were tested with the Wilcoxon signed-rank test at a 0.05 significance level. The base TabKANet (variant A) achieved the highest mean AUC of 0.7603, slightly ahead of MLP (0.7594) and KAN (0.7583) and well above TabNet (0.7092). Its advantage over TabNet was significant (p = 0.002), whereas it was statistically equivalent to MLP and KAN (p = 0.733). TabNet attained the highest recall (0.739) but the lowest precision (0.228), indicating over-prediction of defects, while TabKANet kept precision and recall balanced. In the ablation, SMOTE significantly reduced AUC (p = 0.042), RFE caused no significant change (p = 0.733), and their combination stayed neutral (p = 0.266). TabKANet therefore performed best without additional resampling. TabKANet is thus a competitive architecture for all-numerical, highly imbalanced SDP, matching strong neural baselines and surpassing TabNet, where effective class weighting alone suffices and SMOTE is counter-productive.",
+      "authors": [
+        "Muhammad Faza Azhiman Saputra",
+        "Setyo Wahyu Saputro",
+        "Mohammad Reza Faisal",
+        "Radityo Adi Nugroho",
+        "Andi Farmadi"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-16",
+      "source": "Crossref",
+      "venue": "Indonesian Journal of Electronics, Electromedical Engineering, and Medical Informatics",
+      "doi": "https://doi.org/10.35882/ijeeemi.v8i3.351",
+      "url": "https://doi.org/10.35882/ijeeemi.v8i3.351",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-08-16T09:44:06.931Z"
+    },
     {
       "id": "doi-doi-org-10-1007-s11219-026-09784-1",
       "title": "Adaptive Just-in-Time software defect prediction using unsupervised concept drift detection",
