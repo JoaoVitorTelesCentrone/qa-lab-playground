@@ -1,6 +1,27 @@
 {
-  "updatedAt": "2026-08-16T09:44:06.931Z",
+  "updatedAt": "2026-08-17T09:59:29.667Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1002-stvr-70028",
+      "title": "DSC‐SRGM: A Deep Synthetic Cross‐Project Software Reliability Growth Model",
+      "abstract": "ABSTRACT Software reliability growth models (SRGMs) are widely used to predict software reliability based on defect discovery data collected during testing or operational phases. However, their predictive accuracy often degrades in data‐scarce environments, such as early‐stage testing or safety‐critical systems. Although cross‐project transfer learning has been explored to mitigate this issue by leveraging data from past projects, its applicability remains limited due to the scarcity and confidentiality of real‐world datasets. To overcome these limitations, we propose deep synthetic cross‐project SRGM (DSC‐SRGM), a novel approach that integrates synthetic data generation with cross‐project transfer learning. Synthetic datasets are generated using widely validated traditional SRGMs to represent defect discovery trends. A cross‐correlation‐based clustering method is applied to identify synthetic datasets with patterns similar to the target project. These datasets are then used to train a deep learning model for reliability prediction. The proposed method is evaluated on 60 real‐world datasets, and its performance is compared with both traditional SRGMs and cross‐project deep learning models trained on real‐world datasets. DSC‐SRGM achieves improvements of up to 98.3% over traditional SRGMs and up to 41.3% over cross‐project deep learning models trained on real‐world datasets across evaluation metrics. However, excessive use of synthetic data or a naive combination of synthetic and real‐world data may degrade prediction performance, highlighting the importance of maintaining an appropriate data balance. These findings indicate that DSC‐SRGM is a promising approach for software reliability prediction in data‐scarce environments.",
+      "authors": [
+        "Taehyoun Kim",
+        "Duksan Ryu",
+        "Jongmoon Baik"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-17",
+      "source": "Crossref",
+      "venue": "Software Testing, Verification and Reliability",
+      "doi": "https://doi.org/10.1002/stvr.70028",
+      "url": "https://doi.org/10.1002/stvr.70028",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-08-17T09:59:29.667Z"
+    },
     {
       "id": "doi-doi-org-10-35882-ijeeemi-v8i3-351",
       "title": "Comparative Evaluation of TabKANet with Oversampling and Feature Selection Ablation for Software Defect Prediction",
