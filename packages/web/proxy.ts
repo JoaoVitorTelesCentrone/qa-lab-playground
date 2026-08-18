@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { findLabByNumber, isLabReleased } from "./lib/playground/catalog";
+import { isAdminEmail } from "./lib/product/admin";
 
 // --- Superfície pública ------------------------------------------------------
 // A home é o produto: jornada do aluno, os quatro ambientes de prática e o
@@ -20,6 +21,9 @@ const PUBLIC_PREFIXES = [
   // Portfólio público do aluno: precisa abrir para quem não tem conta, senão o
   // link que ele compartilha cai no Blog.
   "/portfolio",
+  // Ferramenta interna (gerador de carrosséis). Fica pública no gate de
+  // lançamento, mas exige login + e-mail admin abaixo — ver ADMIN_EMAILS.
+  "/admin",
 ];
 
 const labRouteNumbers: Record<string, number> = {
@@ -31,7 +35,7 @@ const labRouteNumbers: Record<string, number> = {
 // Rotas que exigem login. A home, o catálogo e os ambientes de prática são
 // abertos de propósito: dá para experimentar antes de criar conta. O que
 // depende de estado do aluno (perfil, entregas, conclusão) exige sessão.
-const protectedRoutes = ["/lab", "/perfil", "/estudos", "/cursos", "/playground/entregas", "/playground/conclusao", "/lab/refinamento", "/lab/triagem", "/lab/logs", "/lab/criterios"];
+const protectedRoutes = ["/lab", "/perfil", "/estudos", "/cursos", "/playground/entregas", "/playground/conclusao", "/lab/refinamento", "/lab/triagem", "/lab/logs", "/lab/criterios", "/admin"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -93,6 +97,12 @@ export async function proxy(request: NextRequest) {
     login.pathname = "/login";
     login.searchParams.set("next", `${request.nextUrl.pathname}${request.nextUrl.search}`);
     return NextResponse.redirect(login);
+  }
+  if (pathname.startsWith("/admin") && !isAdminEmail(user?.email)) {
+    const blog = request.nextUrl.clone();
+    blog.pathname = "/blog";
+    blog.search = "";
+    return NextResponse.redirect(blog);
   }
   return response;
 }

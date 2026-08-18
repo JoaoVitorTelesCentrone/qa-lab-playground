@@ -13,14 +13,16 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import { EnvironmentBar } from "./environment-bar";
+import { EnvironmentMenu } from "./environment-menu";
 import { bugsForApp } from "@/lib/product/practice/bugs";
 import type { PracticeApp } from "@/lib/product/apps";
 import type { PracticeSettings } from "@/lib/product/practice/store";
 
-export function EnvironmentShell({ app, settings, signedIn, children }: {
+export function EnvironmentShell({ app, settings, signedIn, screen = "overview", children }: {
   app: PracticeApp;
   settings: PracticeSettings;
   signedIn: boolean;
+  screen?: string;
   children: ReactNode;
 }) {
   const activeHere = bugsForApp(app.id).filter((bug) => settings.activeBugs.includes(bug.id)).length;
@@ -54,7 +56,10 @@ export function EnvironmentShell({ app, settings, signedIn, children }: {
             <Link href={`/login?next=${encodeURIComponent(app.route)}`} className="text-primary">Entre para salvar</Link>.
           </p>}
 
-      {children}
+      <div className="mt-6 grid gap-6 lg:grid-cols-[13rem_minmax(0,1fr)] lg:items-start">
+        <EnvironmentMenu app={app} active={screen} />
+        <div className="min-w-0">{children}</div>
+      </div>
     </div>
   </main>;
 }

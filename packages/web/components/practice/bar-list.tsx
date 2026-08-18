@@ -35,7 +35,8 @@ export const nominalHue = "#41A16A";
  */
 export const funnelRamp = ["#2C7049", "#41A16A", "#5CBB86", "#85CFA4"];
 
-export function BarList({ title, description, data, format, total, emptyMessage }: {
+export function BarList({ id: sectionId, title, description, data, format, total, emptyMessage }: {
+  id?: string;
   title: string;
   description?: string;
   data: BarDatum[];
@@ -54,7 +55,7 @@ export function BarList({ title, description, data, format, total, emptyMessage 
   const sum = total ?? data.reduce((acc, item) => acc + item.value, 0);
   const peak = Math.max(1, ...data.map((item) => item.value));
 
-  return <section aria-labelledby={`${id}-title`} className="rounded-xl border border-border bg-card p-5 sm:p-6">
+  return <section id={sectionId} aria-labelledby={`${id}-title`} className="rounded-xl border border-border bg-card p-5 sm:p-6">
     <h3 id={`${id}-title`} className="text-sm font-medium">{title}</h3>
     {description && <p className="mt-1 text-xs leading-5 text-muted-foreground">{description}</p>}
 

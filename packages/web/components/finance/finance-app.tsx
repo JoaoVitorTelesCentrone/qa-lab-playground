@@ -24,7 +24,17 @@ import type { PracticeSettings } from "@/lib/product/practice/store";
 
 const app = findPracticeApp("financas")!;
 
-export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; settings: PracticeSettings; signedIn: boolean }) {
+/** Cada tela do menu mostra um subconjunto das seções. "overview" mostra tudo. */
+const screenSections: Record<string, string[]> = {
+  transactions: ["lancamentos"],
+  accounts: ["contas"],
+  budgets: ["orcamentos"],
+  goals: ["metas"],
+  reports: ["gastos"],
+};
+
+export function FinanceApp({ initial, settings, signedIn, screen = "overview" }: { initial: AppRows; settings: PracticeSettings; signedIn: boolean; screen?: string }) {
+  const show = (id: string) => screen === "overview" || (screenSections[screen] ?? []).includes(id);
   const practice = usePracticeApp(initial, { persist: signedIn, activeBugs: settings.activeBugs });
   const transactions = practice.use("financas.transactions");
   const budgets = practice.use("financas.budgets");
@@ -59,7 +69,7 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
     ],
   });
 
-  return <EnvironmentShell app={app} settings={settings} signedIn={signedIn}>
+  return <EnvironmentShell app={app} settings={settings} signedIn={signedIn} screen={screen}>
     <div className="mt-8">
       <StatGrid items={[
         { label: "Saldo do período", value: money(summary.totals.balance), tone: summary.totals.balance < 0 ? "negative" : "positive", hint: `${money(summary.accountsTotal)} distribuídos nas contas` },
@@ -70,7 +80,7 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
 
     <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="grid gap-6">
-        <PracticeSection id="lancamentos" title="Lançamentos" description="Receitas e despesas do período. Recorrentes se repetem todo mês." action={<ExportCsv resource={transactions.resource} rows={list.filtered} columns={["date", "description", "category", "kind", "amount", "recurring"]} filename="lancamentos" />}>
+        {show("lancamentos") && <PracticeSection id="lancamentos" title="Lançamentos" description="Receitas e despesas do período. Recorrentes se repetem todo mês." action={<ExportCsv resource={transactions.resource} rows={list.filtered} columns={["date", "description", "category", "kind", "amount", "recurring"]} filename="lancamentos" />}>
           <ResourceForm
             handle={transactions}
             defaults={{ date: "2026-08-15", kind: "despesa" }}
@@ -89,18 +99,18 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
                 : undefined}
             />
           </div>
-        </PracticeSection>
+        </PracticeSection>}
 
-        <PracticeSection id="contas" title="Contas" description="Onde o dinheiro está hoje.">
+        {show("contas") && <PracticeSection id="contas" title="Contas" description="Onde o dinheiro está hoje.">
           <ResourceForm handle={accounts} columns={2} />
           <div className="mt-5">
             <RecordTable handle={accounts} columns={["name", "kind", "balance"]} empty="Nenhuma conta cadastrada." />
           </div>
-        </PracticeSection>
+        </PracticeSection>}
       </div>
 
       <div className="grid gap-6">
-        <PracticeSection id="orcamentos" title="Orçamento por categoria" description="O limite mensal de cada categoria de despesa.">
+        {show("orcamentos") && <PracticeSection id="orcamentos" title="Orçamento por categoria" description="O limite mensal de cada categoria de despesa.">
           <ResourceForm handle={budgets} columns={1} suggestions={{ category: categories }} />
           <ul className="mt-5 grid gap-4">
             {summary.budgets.length === 0 && <li className="rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">Nenhum orçamento definido.</li>}
@@ -120,9 +130,9 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
           <div className="mt-5 border-t border-border pt-5">
             <RecordTable handle={budgets} columns={["category", "limit_amount"]} empty="Nenhum orçamento cadastrado." suggestions={{ category: categories }} />
           </div>
-        </PracticeSection>
+        </PracticeSection>}
 
-        <PracticeSection id="metas" title="Metas" description="Quanto falta para cada objetivo.">
+        {show("metas") && <PracticeSection id="metas" title="Metas" description="Quanto falta para cada objetivo.">
           <ResourceForm handle={goals} columns={1} />
           <ul className="mt-5 grid gap-4">
             {rows.goals.length === 0 && <li className="rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">Nenhuma meta definida.</li>}
@@ -141,16 +151,16 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
           <div className="mt-5 border-t border-border pt-5">
             <RecordTable handle={goals} columns={["name", "saved_amount", "target_amount"]} empty="Nenhuma meta cadastrada." />
           </div>
-        </PracticeSection>
+        </PracticeSection>}
 
-        <PracticeSection id="gastos" title="Gastos por categoria" description="Para conferir se o total do topo bate com a soma da lista.">
+        {show("gastos") && <PracticeSection id="gastos" title="Gastos por categoria" description="Para conferir se o total do topo bate com a soma da lista.">
           {summary.spendByCategory.length === 0
             ? <p className="rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">Nenhuma despesa registrada.</p>
             : <ul className="grid gap-2.5">{summary.spendByCategory.map((item) => <li key={item.category} className="flex items-baseline justify-between gap-3 text-sm">
                 <span>{item.category}</span>
                 <span className="font-mono text-muted-foreground">{money(item.total)}</span>
               </li>)}</ul>}
-        </PracticeSection>
+        </PracticeSection>}
       </div>
     </div>
   </EnvironmentShell>;

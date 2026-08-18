@@ -22,7 +22,7 @@ const app = findPracticeApp("crm")!;
 const stageLabels: Record<Deal["stage"], string> = { novo: "Novo", qualificado: "Qualificado", proposta: "Proposta", ganho: "Ganho", perdido: "Perdido" };
 const kindLabels: Record<string, string> = { ligacao: "Ligação", email: "E-mail", reuniao: "Reunião" };
 
-export function CrmApp({ initial, settings, signedIn }: { initial: PracticeRows; settings: PracticeSettings; signedIn: boolean }) {
+export function CrmApp({ initial, settings, signedIn, screen = "overview" }: { initial: PracticeRows; settings: PracticeSettings; signedIn: boolean; screen?: string }) {
   const deals = (initial["crm.deals"] ?? []) as unknown as Deal[];
   const activities = (initial["crm.activities"] ?? []) as unknown as Activity[];
   const companies = initial["crm.companies"] ?? [];
@@ -31,8 +31,9 @@ export function CrmApp({ initial, settings, signedIn }: { initial: PracticeRows;
   const funnel = funnelByStage(deals);
   const byCompany = valueByCompany(deals);
   const byKind = activitiesByKind(activities);
+  const show = (id: string) => screen === "overview" || screen === id;
 
-  return <EnvironmentShell app={app} settings={settings} signedIn={signedIn}>
+  return <EnvironmentShell app={app} settings={settings} signedIn={signedIn} screen={screen}>
     <section className="mt-8" aria-labelledby="pipeline-title">
       <h2 id="pipeline-title" className="text-xs font-medium text-muted-foreground">Valor no pipeline</h2>
       {/* Figura-herói: o número que o painel lidera. Uma por tela. */}
@@ -51,7 +52,8 @@ export function CrmApp({ initial, settings, signedIn }: { initial: PracticeRows;
     </div>
 
     <div className="mt-6 grid gap-5 lg:grid-cols-2">
-      <BarList
+      {show("funnel") && <BarList
+        id="funnel"
         title="Funil por estágio"
         description="Valor parado em cada etapa. A cor acompanha o avanço no funil; perdidas ficam de fora, porque são saída e não etapa."
         data={funnel.map((item, index) => ({
@@ -62,24 +64,27 @@ export function CrmApp({ initial, settings, signedIn }: { initial: PracticeRows;
         }))}
         format="money"
         emptyMessage="Nenhuma oportunidade no funil."
-      />
+      />}
 
-      <BarList
+      {show("companies") && <BarList
+        id="companies"
         title="Valor por empresa"
         description="Quanto cada conta representa do que ainda está em jogo."
         data={byCompany.map((item) => ({ label: item.company, value: item.total, color: nominalHue }))}
         format="money"
         emptyMessage="Nenhuma oportunidade viva na carteira."
-      />
+      />}
 
-      <BarList
+      {show("activities") && <BarList
+        id="activities"
         title="Atividades por tipo"
         description="Como o time tem tocado as oportunidades."
         data={byKind.map((item) => ({ label: kindLabels[item.kind] ?? item.kind, value: item.total, color: nominalHue }))}
         emptyMessage="Nenhuma atividade registrada."
-      />
+      />}
 
-      <BarList
+      {show("deals") && <BarList
+        id="deals"
         title="Oportunidades por valor"
         description="As maiores negociações da carteira, do maior valor para o menor."
         data={[...deals]
@@ -89,7 +94,7 @@ export function CrmApp({ initial, settings, signedIn }: { initial: PracticeRows;
           .map((deal) => ({ label: deal.title, value: Number(deal.amount), color: nominalHue, note: `${deal.company} · ${stageLabels[deal.stage]}` }))}
         format="money"
         emptyMessage="Nenhuma oportunidade viva na carteira."
-      />
+      />}
     </div>
 
     <p className="mt-6 text-xs leading-5 text-muted-foreground">

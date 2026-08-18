@@ -6,5 +6,5 @@ export const dynamic = "force-dynamic";
 
 export default async function CrmPage() {
   const { rows, settings, signedIn } = await loadPracticeEnvironment("crm");
-  return <CrmApp initial={rows} settings={settings} signedIn={signedIn} />;
+  return <CrmApp initial={rows} settings={settings} signedIn={signedIn} screen="overview" />;
 }

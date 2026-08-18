@@ -31,7 +31,16 @@ const app = findPracticeApp("agendamentos")!;
 // cenário ser o mesmo para todo mundo.
 const defaultDate = "2026-08-18";
 
-export function AppointmentsApp({ initial, settings, signedIn }: { initial: AppRows; settings: PracticeSettings; signedIn: boolean }) {
+/** Cada tela do menu mostra um subconjunto das seções. "overview" mostra tudo. */
+const screenSections: Record<string, string[]> = {
+  schedule: ["grade", "nova-reserva"],
+  bookings: ["agenda", "por-dia"],
+  services: ["servicos"],
+  availability: ["disponibilidade"],
+};
+
+export function AppointmentsApp({ initial, settings, signedIn, screen = "overview" }: { initial: AppRows; settings: PracticeSettings; signedIn: boolean; screen?: string }) {
+  const show = (id: string) => screen === "overview" || (screenSections[screen] ?? []).includes(id);
   const practice = usePracticeApp(initial, { persist: signedIn, activeBugs: settings.activeBugs });
   const bookings = practice.use("agendamentos.bookings");
   const services = practice.use("agendamentos.services");
@@ -66,7 +75,7 @@ export function AppointmentsApp({ initial, settings, signedIn }: { initial: AppR
     ],
   });
 
-  return <EnvironmentShell app={app} settings={settings} signedIn={signedIn}>
+  return <EnvironmentShell app={app} settings={settings} signedIn={signedIn} screen={screen}>
     <div className="mt-8">
       <StatGrid items={[
         { label: "Agendamentos confirmados", value: summary.confirmed, tone: "positive" },
@@ -77,7 +86,7 @@ export function AppointmentsApp({ initial, settings, signedIn }: { initial: AppR
 
     <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
       <div className="grid gap-6">
-        <PracticeSection
+        {show("grade") && <PracticeSection
           id="grade"
           title="Grade do dia"
           description="Escolha um horário livre para preencher a reserva. Horário ocupado mostra de quem é."
@@ -112,9 +121,9 @@ export function AppointmentsApp({ initial, settings, signedIn }: { initial: AppR
                   </button>
                 </li>;
               })}</ul>}
-        </PracticeSection>
+        </PracticeSection>}
 
-        <PracticeSection id="nova-reserva" title="Nova reserva" description="O horário precisa estar dentro do atendimento do dia e livre.">
+        {show("nova-reserva") && <PracticeSection id="nova-reserva" title="Nova reserva" description="O horário precisa estar dentro do atendimento do dia e livre.">
           <ResourceForm
             handle={bookings}
             defaults={{ status: "confirmado" }}
@@ -123,9 +132,9 @@ export function AppointmentsApp({ initial, settings, signedIn }: { initial: AppR
             submitLabel="Agendar"
             onDone={() => setPicked("")}
           />
-        </PracticeSection>
+        </PracticeSection>}
 
-        <PracticeSection id="agenda" title="Agenda" description="Todos os agendamentos, do mais próximo ao mais distante." action={<ExportCsv resource={bookings.resource} rows={list.filtered} columns={["date", "time", "customer", "service", "status"]} filename="agenda" />}>
+        {show("agenda") && <PracticeSection id="agenda" title="Agenda" description="Todos os agendamentos, do mais próximo ao mais distante." action={<ExportCsv resource={bookings.resource} rows={list.filtered} columns={["date", "time", "customer", "service", "status"]} filename="agenda" />}>
           {list.ui}
           <div className="mt-4">
             <RecordTable
@@ -142,9 +151,9 @@ export function AppointmentsApp({ initial, settings, signedIn }: { initial: AppR
               }}
             />
           </div>
-        </PracticeSection>
+        </PracticeSection>}
 
-        <PracticeSection id="por-dia" title="Resumo por dia" description="Para conferir se cancelar libera mesmo o horário.">
+        {show("por-dia") && <PracticeSection id="por-dia" title="Resumo por dia" description="Para conferir se cancelar libera mesmo o horário.">
           {bookingsByDate(rows.bookings).length === 0
             ? <p className="rounded-md border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">Nenhum agendamento na agenda.</p>
             : <ul className="grid gap-4">{bookingsByDate(rows.bookings).map((group) => <li key={group.date}>
@@ -161,11 +170,11 @@ export function AppointmentsApp({ initial, settings, signedIn }: { initial: AppR
                     : <Badge variant="secondary" className="font-normal">Cancelado</Badge>}
                 </li>)}</ul>
               </li>)}</ul>}
-        </PracticeSection>
+        </PracticeSection>}
       </div>
 
       <div className="grid gap-6">
-        <PracticeSection id="servicos" title="Serviços" description="O que pode ser agendado, com duração e preço.">
+        {show("servicos") && <PracticeSection id="servicos" title="Serviços" description="O que pode ser agendado, com duração e preço.">
           <ResourceForm handle={services} columns={1} />
           <div className="mt-5">
             <RecordTable
@@ -175,9 +184,9 @@ export function AppointmentsApp({ initial, settings, signedIn }: { initial: AppR
               renderCell={(row, field) => field === "duration_minutes" ? `${row.duration_minutes} min` : field === "price" ? money(Number(row.price)) : undefined}
             />
           </div>
-        </PracticeSection>
+        </PracticeSection>}
 
-        <PracticeSection id="disponibilidade" title="Disponibilidade" description="As faixas de atendimento de cada dia da semana.">
+        {show("disponibilidade") && <PracticeSection id="disponibilidade" title="Disponibilidade" description="As faixas de atendimento de cada dia da semana.">
           <ResourceForm handle={availability} columns={1} />
           <div className="mt-5">
             <RecordTable
@@ -189,7 +198,7 @@ export function AppointmentsApp({ initial, settings, signedIn }: { initial: AppR
           <p className="mt-4 text-xs leading-5 text-muted-foreground">
             Dias sem faixa não aceitam agendamento: {weekdays.filter((_, index) => !rows.availability.some((item) => Number(item.weekday) === index)).join(", ") || "nenhum"}.
           </p>
-        </PracticeSection>
+        </PracticeSection>}
       </div>
     </div>
   </EnvironmentShell>;

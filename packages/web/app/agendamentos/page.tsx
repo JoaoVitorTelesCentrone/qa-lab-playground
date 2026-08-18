@@ -6,5 +6,5 @@ export const dynamic = "force-dynamic";
 
 export default async function AppointmentsPage() {
   const { rows, settings, signedIn } = await loadPracticeEnvironment("agendamentos");
-  return <AppointmentsApp initial={rows} settings={settings} signedIn={signedIn} />;
+  return <AppointmentsApp initial={rows} settings={settings} signedIn={signedIn} screen="overview" />;
 }
