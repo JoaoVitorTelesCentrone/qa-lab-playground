@@ -35,7 +35,10 @@ describe("catálogo de Labs", () => {
     expect(isLabReleased({ releaseDate: "2027-01-01" }, new Date("2026-12-31T12:00:00.000Z"))).toBe(false);
   });
 
-  test("o catálogo inteiro já está liberado", () => {
-    expect(labs.every((lab) => lab.status === "liberado")).toBe(true);
+  test("lançamento enxuto: só os 3 primeiros desafios estão liberados", () => {
+    const liberados = labs.filter((lab) => lab.status === "liberado");
+    expect(liberados).toHaveLength(3);
+    expect(liberados.map((lab) => lab.number).sort((a, b) => a - b)).toEqual([1, 2, 3]);
+    expect(labs.filter((lab) => lab.status === "agendado").length).toBe(labs.length - 3);
   });
 });

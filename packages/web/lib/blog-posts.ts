@@ -30,6 +30,8 @@ export interface BlogPost {
   tags: string[];
   tempoLeitura: number;
   destaque?: boolean;
+  /** Lançamento enxuto: só posts com publicado=true aparecem no /blog. */
+  publicado?: boolean;
   blocos: Block[];
 }
 
@@ -37,7 +39,7 @@ export interface BlogPost {
 // Posts
 // ==============================
 
-export const posts: BlogPost[] = [
+const allPosts: BlogPost[] = [
   {
     slug: "gargalo-do-teste-qa-de-bombeiro-a-parceiro-estrategico",
     titulo: "O Gargalo do Teste: de Bombeiro a Parceiro Estratégico",
@@ -48,6 +50,7 @@ export const posts: BlogPost[] = [
     tags: ["Shift-Left", "Estratégia", "Agilidade", "DevOps"],
     tempoLeitura: 6,
     destaque: true,
+    publicado: true,
     blocos: [
       {
         type: "paragraph",
@@ -200,6 +203,8 @@ export const posts: BlogPost[] = [
 // ==============================
 // Helpers
 // ==============================
+
+export const posts: BlogPost[] = allPosts.filter((post) => post.publicado);
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
   return posts.find((p) => p.slug === slug);

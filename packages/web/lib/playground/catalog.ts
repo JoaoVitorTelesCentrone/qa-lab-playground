@@ -43,6 +43,13 @@ type LabSeed = {
 export const SEMANA_1 = "2026-08-10";
 export const tracks: LabTrack[] = ["UI Automation", "API e Contrato"];
 
+// Lançamento enxuto: só os 3 primeiros desafios abrem agora. O resto fica
+// "agendado" (badge "em breve" no catálogo, redireciona pra waitlist se
+// acessado direto) até o time decidir liberar mais. Nada é deletado — só a
+// data de liberação muda. Ver [[qa-lab-lancamento-enxuto]].
+const LAUNCH_LIMIT = 3;
+const AGENDADO = "2099-01-01";
+
 export function isLabReleased(lab: Pick<Lab, "releaseDate">, now = new Date()) {
   return now >= new Date(`${lab.releaseDate}T00:00:00.000Z`);
 }
@@ -60,6 +67,8 @@ function contentFor(seed: LabSeed, number: number): LabContent {
 export const labs: Lab[] = systemChallenges.map((challenge) => {
   const track: LabTrack = challenge.area === "API" ? "API e Contrato" : "UI Automation";
   const content = contentFor({ title: challenge.title, objective: challenge.objective, requiredFeature: challenge.area, delivery: "Evidencia registrada no proprio Lab.", route: challenge.route }, challenge.number);
+  const released = challenge.number <= LAUNCH_LIMIT;
+  const status: LabStatus = released ? "liberado" : "agendado";
   return {
     number: challenge.number,
     slug: challenge.id,
@@ -68,14 +77,14 @@ export const labs: Lab[] = systemChallenges.map((challenge) => {
     difficulty: challenge.difficulty === "Basico" ? "iniciante" : challenge.difficulty === "Intermediario" ? "intermediario" : "avancado",
     minutes: challenge.difficulty === "Basico" ? 15 : challenge.difficulty === "Intermediario" ? 30 : 60,
     week: challenge.number,
-    releaseDate: SEMANA_1,
+    releaseDate: released ? SEMANA_1 : AGENDADO,
     objective: challenge.objective,
     requiredFeature: challenge.area,
     delivery: "Resultado observado, passos de reproducao e severidade registrados no Lab.",
     acceptanceCriteria: challenge.acceptance,
-    tags: [challenge.area.toLowerCase(), challenge.mode, "liberado"],
+    tags: [challenge.area.toLowerCase(), challenge.mode, status],
     route: challenge.route,
-    status: "liberado",
+    status,
     content,
     postPrompt: `${content.postSegunda}\n\n${challenge.objective}\n\n#QA #QALab`,
   };
