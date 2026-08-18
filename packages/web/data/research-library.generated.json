@@ -1,6 +1,25 @@
 {
-  "updatedAt": "2026-08-17T09:59:29.667Z",
+  "updatedAt": "2026-08-18T09:50:09.710Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-37547-tajet-volume08issue08-03",
+      "title": "AI-Powered Test Automation Frameworks for Next-Generation Software Quality Engineering",
+      "abstract": "Agile software development emphasizes rapid iteration, continuous integration, frequent releases, and incremental delivery, making regression testing a central software quality challenge. Conventional regression testing approaches often depend on manually selected test suites, static prioritization rules, and repeated execution of tests that provide limited incremental fault-detection value. This paper develops a conceptual intelligent regression testing framework that applies artificial intelligence (AI) techniques to test selection, prioritization, execution, failure classification, and continuous learning within Agile development pipelines. The methodological foundation combines supervised learning, representation learning, historical test-result analysis, change-impact assessment, and feedback-driven optimization. Because the supplied literature primarily concerns AI-based detection and classification in biomedical signal-processing applications rather than software testing, the paper explicitly treats these studies as methodological evidence for transferable AI patterns rather than direct empirical evidence for regression testing. The framework consequently emphasizes feature extraction, automated classification, adaptive prediction, and real-time decision support. A conceptual evaluation indicates that AI-assisted regression testing can improve the alignment between code changes and test execution priorities, reduce redundant execution, and create feedback loops capable of adapting to changing Agile projects. However, model drift, insufficient historical data, explainability, false prioritization, and integration complexity remain significant constraints. The analysis positions intelligent regression testing as an adaptive decision-support layer rather than a complete replacement for conventional testing practices.",
+      "authors": [
+        "Dr. Tomas Kazlauskas"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-18",
+      "source": "Crossref",
+      "venue": "The American Journal of Engineering and Technology",
+      "doi": "https://doi.org/10.37547/tajet/volume08issue08-03",
+      "url": "https://doi.org/10.37547/tajet/volume08issue08-03",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-08-18T09:50:09.710Z"
+    },
     {
       "id": "doi-doi-org-10-1002-stvr-70028",
       "title": "DSC‐SRGM: A Deep Synthetic Cross‐Project Software Reliability Growth Model",
