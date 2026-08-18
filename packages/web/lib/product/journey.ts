@@ -72,7 +72,14 @@ export type Journey = {
 
 const releasedLabs = () => labs.filter((lab) => lab.status === "liberado");
 
-export function buildJourney(enrollments: Enrollment[], submissions: Submission[], runs: ScenarioRun[]): Journey {
+export function buildJourney(rawEnrollments: Enrollment[], rawSubmissions: Submission[], runs: ScenarioRun[]): Journey {
+  // Progresso de um Lab que saiu do lançamento enxuto (ex.: testado antes de
+  // um recorte de catálogo mudar) não conta mais — ninguém consegue abri-lo
+  // pra conferir, então não pode aparecer como se fosse um Lab ativo.
+  const releasedSlugs = new Set(releasedLabs().map((lab) => lab.slug));
+  const enrollments = rawEnrollments.filter((item) => releasedSlugs.has(item.labSlug));
+  const submissions = rawSubmissions.filter((item) => releasedSlugs.has(item.labSlug));
+
   const byLab = new Map(enrollments.map((item) => [item.labSlug, item]));
   const submissionsByLab = new Map<string, number>();
   for (const submission of submissions) submissionsByLab.set(submission.labSlug, (submissionsByLab.get(submission.labSlug) ?? 0) + 1);

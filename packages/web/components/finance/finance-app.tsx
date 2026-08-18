@@ -2,166 +2,154 @@
 
 // Ambiente de prática Finanças.
 //
-// Os dados vêm do servidor e voltam para ele: nada aqui é fonte de verdade. Os
-// totais, o uso de orçamento e o progresso das metas saem de
-// lib/product/practice/views.ts, que é onde os desvios plantados agem — a tela
-// só mostra o que o cálculo compartilhado devolveu.
+// Versão enxuta do lançamento: saldo do período e a tabela de despesas, com
+// um botão para lançar uma nova. Contas, orçamentos, metas e o restante do
+// ambiente continuam em código (ver histórico), só não aparecem por enquanto.
+//
+// Os totais saem de lib/product/practice/views.ts, que é onde os desvios
+// plantados agem — a tela só mostra o que o cálculo compartilhado devolveu.
 
-import { AlertTriangle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EnvironmentShell } from "@/components/practice/environment-shell";
-import { ResourceForm } from "@/components/practice/resource-form";
-import { RecordTable } from "@/components/practice/record-table";
-import { useListControls } from "@/components/practice/list-controls";
 import { ExportCsv } from "@/components/practice/export-csv";
-import { PracticeSection, ProgressBar, StatGrid } from "@/components/practice/ui";
-import { usePracticeApp, type AppRows } from "@/components/practice/use-practice-app";
+import { ResourceForm } from "@/components/practice/resource-form";
+import { usePracticeApp, type AppRows, type Row } from "@/components/practice/use-practice-app";
 import { findPracticeApp } from "@/lib/product/apps";
-import { fold, money } from "@/lib/product/practice/format";
-import { financeSummary, goalProgress, knownCategories, type Account, type Budget, type Goal } from "@/lib/product/practice/views";
+import { money } from "@/lib/product/practice/format";
+import { financeSummary, type Account, type Budget } from "@/lib/product/practice/views";
 import type { Transaction } from "@/lib/product/practice/rules";
 import type { PracticeSettings } from "@/lib/product/practice/store";
 
 const app = findPracticeApp("financas")!;
 
-/** Cada tela do menu mostra um subconjunto das seções. "overview" mostra tudo. */
-const screenSections: Record<string, string[]> = {
-  transactions: ["lancamentos"],
-  accounts: ["contas"],
-  budgets: ["orcamentos"],
-  goals: ["metas"],
-  reports: ["gastos"],
-};
-
-export function FinanceApp({ initial, settings, signedIn, screen = "overview" }: { initial: AppRows; settings: PracticeSettings; signedIn: boolean; screen?: string }) {
-  const show = (id: string) => screen === "overview" || (screenSections[screen] ?? []).includes(id);
-  const practice = usePracticeApp(initial, { persist: signedIn, activeBugs: settings.activeBugs });
+export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; settings: PracticeSettings; signedIn: boolean }) {
+  const [creating, setCreating] = useState(false);
+  const [editing, setEditing] = useState<Row | null>(null);
+  const [deleting, setDeleting] = useState<Row | null>(null);
+  // Sem desvios ativos: o painel que ligava/desligava isso saiu de tela, então
+  // o saldo sempre bate com a soma real das despesas — é o que dá pra validar
+  // criando, editando e apagando aqui.
+  const practice = usePracticeApp(initial, { persist: signedIn, activeBugs: [] });
   const transactions = practice.use("financas.transactions");
   const budgets = practice.use("financas.budgets");
-  const goals = practice.use("financas.goals");
   const accounts = practice.use("financas.accounts");
 
   const rows = {
     transactions: transactions.rows as unknown as Transaction[],
     budgets: budgets.rows as unknown as Budget[],
-    goals: goals.rows as unknown as Goal[],
     accounts: accounts.rows as unknown as Account[],
   };
-  const summary = financeSummary(rows, settings.activeBugs);
-  const categories = knownCategories(rows.transactions, rows.budgets);
+  const summary = financeSummary(rows, []);
+  const despesas = rows.transactions.filter((item) => item.kind === "despesa").sort((a, b) => b.date.localeCompare(a.date));
 
-  const list = useListControls(transactions.rows, {
-    searchLabel: "Buscar lançamento",
-    searchPlaceholder: "Descrição ou categoria",
-    search: (items, query) => {
-      const needle = fold(query);
-      return items.filter((item) => fold(`${item.description} ${item.category}`).includes(needle));
-    },
-    filters: [
-      { field: "kind", label: "Tipo", options: [{ value: "receita", label: "Receita" }, { value: "despesa", label: "Despesa" }] },
-      { field: "category", label: "Categoria", options: categories.map((category) => ({ value: category, label: category })) },
-    ],
-    sorts: [
-      { id: "date-desc", label: "Data (mais recente)", compare: (a, b) => String(b.date).localeCompare(String(a.date)) },
-      { id: "date-asc", label: "Data (mais antiga)", compare: (a, b) => String(a.date).localeCompare(String(b.date)) },
-      { id: "amount-desc", label: "Valor (maior)", compare: (a, b) => Number(b.amount) - Number(a.amount) },
-      { id: "amount-asc", label: "Valor (menor)", compare: (a, b) => Number(a.amount) - Number(b.amount) },
-    ],
-  });
-
-  return <EnvironmentShell app={app} settings={settings} signedIn={signedIn} screen={screen}>
-    <div className="mt-8">
-      <StatGrid items={[
-        { label: "Saldo do período", value: money(summary.totals.balance), tone: summary.totals.balance < 0 ? "negative" : "positive", hint: `${money(summary.accountsTotal)} distribuídos nas contas` },
-        { label: "Receitas", value: money(summary.totals.income) },
-        { label: "Despesas", value: money(summary.totals.expense) },
-      ]} />
+  return <EnvironmentShell app={app} settings={settings} signedIn={signedIn}>
+    {/* Extrato, não dashboard: o saldo é o número que importa, então ele é o
+        maior da tela — receitas e despesas ficam como lançamentos ao lado. */}
+    <div className="mt-8 rounded-xl border border-border bg-card p-6 sm:p-8">
+      <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-6">
+        <div>
+          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">Saldo do período</p>
+          <p className={`mt-2 font-mono text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl ${summary.totals.balance < 0 ? "text-destructive" : "text-primary"}`}>{money(summary.totals.balance)}</p>
+          <p className="mt-2 text-xs text-muted-foreground">{money(summary.accountsTotal)} distribuídos nas contas</p>
+        </div>
+        <dl className="flex gap-8">
+          <div>
+            <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">Receitas</dt>
+            <dd className="mt-1.5 font-mono text-xl tabular-nums text-foreground">{money(summary.totals.income)}</dd>
+          </div>
+          <div>
+            <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">Despesas</dt>
+            <dd className="mt-1.5 font-mono text-xl tabular-nums text-foreground">{money(summary.totals.expense)}</dd>
+          </div>
+        </dl>
+      </div>
+      <div className="mt-6 h-px w-full bg-gradient-to-r from-primary/50 via-border to-transparent" aria-hidden="true" />
     </div>
 
-    <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-      <div className="grid gap-6">
-        {show("lancamentos") && <PracticeSection id="lancamentos" title="Lançamentos" description="Receitas e despesas do período. Recorrentes se repetem todo mês." action={<ExportCsv resource={transactions.resource} rows={list.filtered} columns={["date", "description", "category", "kind", "amount", "recurring"]} filename="lancamentos" />}>
+    <div className="mt-6 flex flex-wrap items-center justify-between gap-2">
+      <h2 className="text-lg font-semibold">Despesas</h2>
+      <div className="flex gap-2">
+        <ExportCsv resource={transactions.resource} rows={despesas} columns={["date", "description", "category", "amount"]} filename="despesas" />
+        <Button type="button" size="sm" onClick={() => setCreating((current) => !current)}>
+          <Plus className="size-3.5" /> Nova despesa
+        </Button>
+      </div>
+    </div>
+
+    {creating && <div className="mt-4 rounded-xl border border-border bg-card p-5">
+      <ResourceForm
+        handle={transactions}
+        fields={["date", "description", "category", "amount"]}
+        defaults={{ date: "2026-08-15", kind: "despesa" }}
+        submitLabel="Adicionar despesa"
+        onDone={() => setCreating(false)}
+      />
+    </div>}
+
+    <div className="mt-4 overflow-hidden rounded-xl border border-border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Data</TableHead>
+            <TableHead>Descrição</TableHead>
+            <TableHead>Categoria</TableHead>
+            <TableHead className="text-right">Valor</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {despesas.length === 0
+            ? <TableRow><TableCell colSpan={5} className="py-8 text-center text-sm text-muted-foreground">Nenhuma despesa registrada. Adicione a primeira acima.</TableCell></TableRow>
+            : despesas.map((item) => <TableRow key={item.id}>
+                <TableCell className="text-muted-foreground">{item.date}</TableCell>
+                <TableCell className="font-medium">{item.description}</TableCell>
+                <TableCell className="text-muted-foreground">{item.category}</TableCell>
+                <TableCell className="text-right text-destructive">− {money(Number(item.amount))}</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-1">
+                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`Editar ${item.description}`} onClick={() => setEditing(item)}><Pencil className="size-3.5" /></Button>
+                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`Apagar ${item.description}`} onClick={() => setDeleting(item)}><Trash2 className="size-3.5" /></Button>
+                  </div>
+                </TableCell>
+              </TableRow>)}
+        </TableBody>
+      </Table>
+    </div>
+
+    {editing && <div role="dialog" aria-modal="true" aria-labelledby="edit-title" className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
+      <div className="w-full max-w-md rounded-xl border border-border bg-card p-5">
+        <h2 id="edit-title" className="text-lg font-semibold">Editar despesa</h2>
+        <div className="mt-4">
           <ResourceForm
             handle={transactions}
-            defaults={{ date: "2026-08-15", kind: "despesa" }}
-            suggestions={{ category: categories }}
+            record={editing}
+            fields={["date", "description", "category", "amount"]}
+            onDone={() => setEditing(null)}
           />
-          <div className="mt-6 border-t border-border pt-5">{list.ui}</div>
-          <div className="mt-4">
-            <RecordTable
-              handle={transactions}
-              rows={list.visible}
-              columns={["date", "description", "category", "kind", "amount", "recurring"]}
-              suggestions={{ category: categories }}
-              empty={list.hasFilters ? "Nenhum lançamento encontrado com esses filtros." : "Nenhum lançamento registrado. Adicione o primeiro acima."}
-              renderCell={(row, field) => field === "amount"
-                ? <span className={row.kind === "receita" ? "text-primary" : "text-destructive"}>{row.kind === "receita" ? "+" : "−"} {money(Number(row.amount))}</span>
-                : undefined}
-            />
-          </div>
-        </PracticeSection>}
-
-        {show("contas") && <PracticeSection id="contas" title="Contas" description="Onde o dinheiro está hoje.">
-          <ResourceForm handle={accounts} columns={2} />
-          <div className="mt-5">
-            <RecordTable handle={accounts} columns={["name", "kind", "balance"]} empty="Nenhuma conta cadastrada." />
-          </div>
-        </PracticeSection>}
+        </div>
       </div>
+    </div>}
 
-      <div className="grid gap-6">
-        {show("orcamentos") && <PracticeSection id="orcamentos" title="Orçamento por categoria" description="O limite mensal de cada categoria de despesa.">
-          <ResourceForm handle={budgets} columns={1} suggestions={{ category: categories }} />
-          <ul className="mt-5 grid gap-4">
-            {summary.budgets.length === 0 && <li className="rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">Nenhum orçamento definido.</li>}
-            {summary.budgets.map((line) => <li key={line.id}>
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <span className="text-sm font-medium">{line.category}</span>
-                <span className="font-mono text-xs text-muted-foreground">{money(line.used)} de {money(line.limit)}</span>
-              </div>
-              <ProgressBar percent={line.percent} label={`Uso do orçamento de ${line.category}`} danger={line.exceeded} />
-              <p className="mt-1.5 flex items-center gap-1.5 text-xs text-muted-foreground">
-                {line.exceeded
-                  ? <><AlertTriangle className="size-3.5 text-destructive" aria-hidden="true" /><span className="text-destructive">Orçamento estourado em {money(line.used - line.limit)}.</span></>
-                  : <>{line.percent}% do limite usado</>}
-              </p>
-            </li>)}
-          </ul>
-          <div className="mt-5 border-t border-border pt-5">
-            <RecordTable handle={budgets} columns={["category", "limit_amount"]} empty="Nenhum orçamento cadastrado." suggestions={{ category: categories }} />
-          </div>
-        </PracticeSection>}
-
-        {show("metas") && <PracticeSection id="metas" title="Metas" description="Quanto falta para cada objetivo.">
-          <ResourceForm handle={goals} columns={1} />
-          <ul className="mt-5 grid gap-4">
-            {rows.goals.length === 0 && <li className="rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">Nenhuma meta definida.</li>}
-            {rows.goals.map((goal) => {
-              const progress = goalProgress(goal);
-              return <li key={goal.id}>
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <span className="text-sm font-medium">{goal.name}</span>
-                  {progress.reached ? <Badge className="font-normal">Meta alcançada</Badge> : <span className="font-mono text-xs text-muted-foreground">faltam {money(progress.remaining)}</span>}
-                </div>
-                <ProgressBar percent={progress.percent} label={`Progresso da meta ${goal.name}`} />
-                <p className="mt-1.5 text-xs text-muted-foreground">{money(goal.saved_amount)} de {money(goal.target_amount)} · {progress.percent}%</p>
-              </li>;
-            })}
-          </ul>
-          <div className="mt-5 border-t border-border pt-5">
-            <RecordTable handle={goals} columns={["name", "saved_amount", "target_amount"]} empty="Nenhuma meta cadastrada." />
-          </div>
-        </PracticeSection>}
-
-        {show("gastos") && <PracticeSection id="gastos" title="Gastos por categoria" description="Para conferir se o total do topo bate com a soma da lista.">
-          {summary.spendByCategory.length === 0
-            ? <p className="rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">Nenhuma despesa registrada.</p>
-            : <ul className="grid gap-2.5">{summary.spendByCategory.map((item) => <li key={item.category} className="flex items-baseline justify-between gap-3 text-sm">
-                <span>{item.category}</span>
-                <span className="font-mono text-muted-foreground">{money(item.total)}</span>
-              </li>)}</ul>}
-        </PracticeSection>}
+    {deleting && <div role="dialog" aria-modal="true" aria-labelledby="delete-title" className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
+      <div className="w-full max-w-sm rounded-xl border border-border bg-card p-5">
+        <h2 id="delete-title" className="text-lg font-semibold">Apagar despesa</h2>
+        <p className="mt-2 text-sm text-muted-foreground">Apagar "{String(deleting.description)}"? Essa ação não pode ser desfeita.</p>
+        <div className="mt-5 flex justify-end gap-2">
+          <Button type="button" variant="ghost" size="sm" onClick={() => setDeleting(null)}>Cancelar</Button>
+          <Button
+            type="button"
+            variant="destructive"
+            size="sm"
+            disabled={transactions.pending === deleting.id}
+            onClick={async () => { const done = await transactions.remove(deleting.id); if (done) setDeleting(null); }}
+          >
+            {transactions.pending === deleting.id && <Loader2 className="size-3.5 animate-spin" />} Apagar
+          </Button>
+        </div>
       </div>
-    </div>
+    </div>}
   </EnvironmentShell>;
 }

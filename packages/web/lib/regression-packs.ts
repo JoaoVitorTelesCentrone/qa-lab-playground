@@ -1,10 +1,11 @@
 // Packs de regressão dos ambientes de prática.
 //
-// A matriz é a mesma para os quatro ambientes — 35 verificações, das camadas de
-// UI e validação até acessibilidade, resiliência, segurança e governança — mas
-// cada cenário é escrito contra o ambiente de verdade: a pré-condição fala da
-// massa de teste do seed, os passos citam o registro que existe lá e o oráculo
-// diz o que aquele domínio deveria fazer.
+// A matriz é a mesma para três dos quatro ambientes — 35 verificações, das
+// camadas de UI e validação até acessibilidade, resiliência, segurança e
+// governança. Finanças é a exceção: só 20, um recorte da mesma matriz (ver
+// nota acima do array `financas`). Cada cenário é escrito contra o ambiente
+// de verdade: a pré-condição fala da massa de teste do seed, os passos citam
+// o registro que existe lá e o oráculo diz o que aquele domínio deveria fazer.
 //
 // `bugId` liga o cenário ao desvio plantado que costuma cair nele. É usado no
 // modo instrutor; o aluno não vê essa relação.
@@ -16,7 +17,7 @@ import { practiceApps, type PracticeAppId } from "./product/apps";
 
 export type RegressionScenario = {
   id: string;
-  /** Posição na matriz de 35 verificações, igual nos quatro ambientes. */
+  /** Posição na matriz do ambiente — 35 verificações, exceto Finanças, que roda 20. */
   number: number;
   title: string;
   layer: string;
@@ -43,41 +44,30 @@ type Draft = {
 // resultado deixa de ser repetível.
 const fresh = "Massa de teste restaurada e perfil de teste Administrador ativo.";
 
+// Finanças roda com 20 cenários, não os 35 da matriz padrão — é o único
+// ambiente liberado no lançamento enxuto, e 35 empilhados numa tela só era
+// informação demais para quem está começando. Os outros três ambientes
+// mantêm os 35 porque ainda não estão visíveis (ver [[qa-lab-lancamento-enxuto]]).
 const financas: Draft[] = [
   { title: "Acesso inicial", layer: "UI", precondition: "Sessão nova, sem massa criada ainda.", steps: ["Abra /financas pela primeira vez com a conta recém-criada.", "Observe se a massa inicial é criada sozinha.", "Confira os três cartões do topo contra a lista de lançamentos."], expected: "O ambiente abre com a massa do seed e saldo, receitas e despesas coerentes com a lista.", at: "" },
-  { title: "Carregamento da página", layer: "UI", precondition: fresh, steps: ["Atualize a página com o cache desabilitado.", "Observe o intervalo até os dados aparecerem.", "Confira se algum bloco fica vazio ou pisca com valor errado antes de estabilizar."], expected: "Os dados chegam prontos do servidor, sem estado intermediário exibindo total zerado.", at: "" },
   { title: "Estado vazio", layer: "UI", precondition: fresh, steps: ["Exclua todos os lançamentos, um a um.", "Observe a lista, os totais e o bloco de gastos por categoria.", "Restaure a massa de teste ao final."], expected: "A lista mostra a mensagem de lista vazia, os totais vão a R$ 0,00 e nada quebra.", at: "#lancamentos" },
   { title: "Busca por texto", layer: "UI", precondition: fresh, steps: ["Busque por \"Mercado\" no campo de busca de lançamentos.", "Busque por \"alimentacao\", sem acento e em minúsculas.", "Busque por \"xyz\", que não existe."], expected: "A busca ignora acento e caixa, encontra pela descrição e pela categoria, e informa quando não há resultado.", at: "#lancamentos" },
   { title: "Filtro combinado", layer: "UI", precondition: fresh, steps: ["Filtre por tipo Despesa e categoria Moradia.", "Confira o contador de registros exibido.", "Limpe os filtros pelo botão."], expected: "Os dois filtros se somam (Aluguel e Internet), o contador acompanha e limpar devolve a lista completa.", at: "#lancamentos" },
   { title: "Ordenação", layer: "UI", precondition: fresh, steps: ["Ordene por Valor (maior).", "Ordene por Data (mais antiga).", "Volte para Data (mais recente)."], expected: "Cada ordenação reordena a lista inteira, não só a página visível, e não perde nenhum registro.", at: "#lancamentos" },
-  { title: "Paginação", layer: "UI", precondition: fresh, steps: ["Ajuste itens por página para 5.", "Navegue até a última página e volte.", "Aplique um filtro estando na página 2."], expected: "A navegação respeita o total de páginas e filtrar volta para a primeira página, sem tela vazia.", at: "#lancamentos" },
   { title: "Criar registro válido", layer: "Fluxo", precondition: fresh, steps: ["Cadastre a despesa \"Academia\", R$ 120,00, categoria Saúde, data 2026-08-16.", "Confira a linha criada na lista.", "Confira o total de despesas e o uso do orçamento de Saúde."], expected: "O lançamento aparece na lista, o total de despesas sobe R$ 120,00 e o orçamento de Saúde reflete o gasto.", at: "#lancamentos" },
   { title: "Campo obrigatório", layer: "Validação", precondition: fresh, steps: ["Envie o formulário de lançamento vazio.", "Preencha só a descrição e envie de novo.", "Confira a mensagem apresentada em cada campo."], expected: "Cada campo obrigatório recebe \"Campo obrigatório.\", nada é gravado e o foco continua utilizável.", at: "#lancamentos" },
   { title: "Formato inválido", layer: "Validação", precondition: fresh, steps: ["Informe \"abc\" no valor e envie.", "Informe uma data fora do formato AAAA-MM-DD.", "Repita enviando direto para a API por DevTools."], expected: "A interface e a API recusam com a mesma mensagem de formato; a API responde 422 com o erro por campo.", at: "#lancamentos" },
   { title: "Valor limite", layer: "Validação", precondition: fresh, steps: ["Cadastre um lançamento de R$ 0,00 e outro de R$ 9.999.999,00.", "Tente R$ -1,00 e R$ 10.000.000,00.", "Confira se o saldo do topo bate com a soma da lista depois de cada operação."], expected: "Zero e o máximo são aceitos, valores fora do intervalo são recusados e o saldo continua batendo com a lista.", at: "#lancamentos", bugId: "financas.total-ignora-recorrente" },
   { title: "Duplicidade", layer: "Validação", precondition: fresh, steps: ["Cadastre um orçamento para a categoria Moradia, que já existe.", "Repita usando \" moradia \", com espaços e minúsculas.", "Cadastre uma conta com o nome \"Poupança\", que já existe."], expected: "As três tentativas são recusadas com aviso de duplicidade no campo, sem criar registro repetido.", at: "#orcamentos" },
-  { title: "Cancelar operação", layer: "Fluxo", precondition: fresh, steps: ["Comece a editar o lançamento Aluguel e altere o valor.", "Clique em Cancelar.", "Peça a exclusão de um lançamento e cancele na confirmação."], expected: "Nenhuma das duas operações canceladas altera os dados nem os totais.", at: "#lancamentos" },
   { title: "Editar registro", layer: "Fluxo", precondition: fresh, steps: ["Edite o lançamento Mercado para R$ 530,90.", "Salve e confira a linha e o total de despesas.", "Recarregue a página."], expected: "A alteração persiste depois do recarregamento e o total de despesas acompanha a diferença.", at: "#lancamentos" },
   { title: "Excluir/cancelar registro", layer: "Fluxo", precondition: fresh, steps: ["Peça a exclusão do lançamento Farmácia.", "Confirme na segunda etapa.", "Confira lista, total de despesas e gastos por categoria."], expected: "A exclusão só acontece após a confirmação e some da lista e dos três cálculos.", at: "#lancamentos" },
   { title: "Persistência", layer: "Dados", precondition: fresh, steps: ["Crie um lançamento e um orçamento novos.", "Faça logout e login de novo.", "Abra /financas em outra aba ou navegador com a mesma conta."], expected: "Os dois registros continuam lá: o backend é a fonte de verdade, não a aba.", at: "" },
   { title: "Navegação por teclado", layer: "Acessibilidade", precondition: fresh, steps: ["Percorra o formulário de lançamento só com Tab.", "Envie com Enter a partir do último campo.", "Abra a edição de uma linha e volte com Escape ou pelo botão Cancelar."], expected: "Toda ação é alcançável pelo teclado, com foco visível e ordem que segue a leitura da tela.", at: "#lancamentos" },
   { title: "Rótulos acessíveis", layer: "Acessibilidade", precondition: fresh, steps: ["Inspecione cada campo do formulário e confirme o label associado.", "Provoque um erro e confirme aria-invalid e aria-describedby.", "Confira o nome acessível dos botões de editar e excluir da tabela."], expected: "Todo campo tem rótulo programático, o erro é associado ao campo e os ícones têm nome acessível.", at: "#lancamentos" },
-  { title: "Leitor de tela", layer: "Acessibilidade", precondition: fresh, steps: ["Com o leitor de tela ativo, crie um lançamento válido.", "Provoque um erro de validação.", "Confira o anúncio das barras de orçamento e de meta."], expected: "Sucesso e erro são anunciados por aria-live e as barras informam o percentual em texto, não só na cor.", at: "#orcamentos" },
   { title: "Mobile", layer: "Responsividade", precondition: fresh, steps: ["Abra o ambiente em viewport de 375px.", "Execute o cadastro de um lançamento até o fim.", "Percorra a tabela na horizontal."], expected: "Nenhum conteúdo é cortado, a tabela rola dentro do próprio container e a página não rola na horizontal.", at: "" },
-  { title: "Tablet", layer: "Responsividade", precondition: fresh, steps: ["Abra o ambiente em viewport de 768px.", "Confira o empilhamento das colunas e dos cartões do topo.", "Execute uma edição em linha."], expected: "O layout se reorganiza sem sobreposição e a edição em linha continua utilizável.", at: "" },
-  { title: "Desktop", layer: "Responsividade", precondition: fresh, steps: ["Abra o ambiente em viewport de 1440px.", "Confira as duas colunas e o alinhamento dos cartões.", "Execute o fluxo de cadastro."], expected: "As duas colunas ficam alinhadas, sem espaço morto nem quebra de leitura.", at: "" },
-  { title: "Recarregamento no fluxo", layer: "Resiliência", precondition: fresh, steps: ["Preencha o formulário de lançamento sem enviar.", "Recarregue a página.", "Repita recarregando logo depois de enviar."], expected: "O formulário volta limpo (nada foi gravado) e o lançamento enviado antes do recarregamento está lá.", at: "#lancamentos" },
   { title: "Duplo clique", layer: "Resiliência", precondition: fresh, steps: ["Preencha um lançamento válido.", "Clique em Adicionar duas vezes rapidamente.", "Confira a lista e o total."], expected: "O botão fica indisponível durante o envio e apenas um lançamento é criado.", at: "#lancamentos" },
-  { title: "Offline/erro de rede", layer: "Resiliência", precondition: fresh, steps: ["Coloque o navegador em modo offline pelo DevTools.", "Tente criar um lançamento.", "Volte para online e tente de novo."], expected: "A falha aparece como mensagem de erro legível, nada some da tela e a nova tentativa funciona.", at: "#lancamentos" },
   { title: "Permissão de usuário", layer: "Segurança", precondition: fresh, steps: ["Troque o perfil de teste para Somente leitura.", "Tente criar, editar e excluir um lançamento.", "Repita chamando /api/v1/practice/financas.transactions direto."], expected: "As três ações são recusadas com 403 pelo servidor — esconder o botão não é o que protege.", at: "" },
-  { title: "Dados sensíveis", layer: "Segurança", precondition: "Duas contas de aluno diferentes, ambas com massa criada.", steps: ["Anote o id de um lançamento da conta A.", "Logado como conta B, tente ler e alterar esse id pela API.", "Confira o que a resposta devolve."], expected: "A conta B não enxerga nem altera dados da conta A: o isolamento é por linha, no banco.", at: "" },
-  { title: "Injeção de texto", layer: "Segurança", precondition: fresh, steps: ["Cadastre um lançamento com a descrição <b>teste</b>.", "Cadastre outro com \"; drop table --\" na categoria.", "Confira a lista, o filtro de categoria e o CSV exportado."], expected: "O conteúdo aparece como texto puro em todos os lugares, sem executar marcação nem quebrar o CSV.", at: "#lancamentos" },
-  { title: "Performance de lista", layer: "Performance", precondition: fresh, steps: ["Crie 60 lançamentos pela API em sequência.", "Filtre, ordene e navegue entre páginas.", "Meça o tempo de resposta de cada interação."], expected: "A lista continua respondendo rápido e a paginação limita o que é renderizado.", at: "#lancamentos" },
-  { title: "Performance de envio", layer: "Performance", precondition: fresh, steps: ["Envie um lançamento com a rede limitada a 3G lento.", "Observe o estado do botão durante o envio.", "Confira o resultado ao final."], expected: "Há indicação de carregamento enquanto salva e o resultado só aparece depois da confirmação do servidor.", at: "#lancamentos" },
-  { title: "Auditoria", layer: "Governança", precondition: fresh, steps: ["Exclua um lançamento e um orçamento.", "Procure na interface algum histórico dessas ações.", "Registre o que encontrou."], expected: "O ambiente ainda não guarda histórico de alterações: o esperado é provar isso e registrar como lacuna, com impacto.", at: "" },
   { title: "Exportação", layer: "Dados", precondition: fresh, steps: ["Aplique o filtro de tipo Despesa.", "Exporte o CSV de lançamentos.", "Abra o arquivo e compare linha a linha com a tela."], expected: "O CSV traz exatamente as linhas filtradas, com os mesmos rótulos e a mesma formatação de valor da tela.", at: "#lancamentos" },
-  { title: "Conflito de dados", layer: "Dados", precondition: fresh, steps: ["Abra o mesmo lançamento em duas abas.", "Edite o valor na aba 1 e salve.", "Edite o mesmo campo na aba 2 e salve."], expected: "A última gravação vence sem erro silencioso; documente se o aluno da aba 2 tem como perceber que sobrescreveu.", at: "#lancamentos" },
-  { title: "Recuperação após erro", layer: "Resiliência", precondition: fresh, steps: ["Envie um lançamento com valor inválido e receba o erro.", "Corrija apenas o campo destacado.", "Envie de novo."], expected: "Os demais campos preenchidos são preservados, o erro some ao corrigir e o envio conclui.", at: "#lancamentos" },
   { title: "Smoke final", layer: "Regressão", precondition: fresh, steps: ["Crie um orçamento, registre despesas até estourá-lo e confira o alerta.", "Edite uma meta até alcançá-la.", "Confira saldo, gastos por categoria e o CSV exportado."], expected: "Orçamento estourado alerta, meta alcançada é sinalizada e os três totais continuam coerentes entre si.", at: "#orcamentos", bugId: "financas.orcamento-sem-alerta" },
 ];
 

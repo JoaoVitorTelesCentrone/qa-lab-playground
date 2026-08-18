@@ -2,7 +2,7 @@
 -- The app can run with in-memory sessions locally, but production persistence
 -- should use this table through service-role server code only.
 
-create table if not exists public.playground_sessions (
+create table if not exists public.playground_session_cache (
   id text primary key,
   data jsonb not null default '{}'::jsonb,
   expires_at timestamptz not null,
@@ -10,11 +10,11 @@ create table if not exists public.playground_sessions (
   updated_at timestamptz not null default now()
 );
 
-create index if not exists playground_sessions_expires_idx
-  on public.playground_sessions (expires_at);
+create index if not exists playground_session_cache_expires_idx
+  on public.playground_session_cache (expires_at);
 
-alter table public.playground_sessions enable row level security;
-revoke all on public.playground_sessions from anon, authenticated;
+alter table public.playground_session_cache enable row level security;
+revoke all on public.playground_session_cache from anon, authenticated;
 
 create or replace function public.cleanup_playground_sessions()
 returns void
@@ -22,7 +22,7 @@ language sql
 security definer
 set search_path = public
 as $$
-  delete from public.playground_sessions
+  delete from public.playground_session_cache
   where expires_at < now();
 $$;
 

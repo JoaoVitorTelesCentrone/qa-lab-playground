@@ -19,3 +19,8 @@ export const practiceApps: PracticeApp[] = [
 
 export function findPracticeApp(id: string) { return practiceApps.find((app) => app.id === id); }
 export function isPracticeAppId(value: string): value is PracticeAppId { return practiceApps.some((app) => app.id === value); }
+
+// Lançamento enxuto: só Finanças tem trilha e desafios liberados, então é o
+// único ambiente que aparece na navegação e na home. Os outros continuam
+// funcionando por rota direta — só saem da vitrine. Ver [[qa-lab-lancamento-enxuto]].
+export const liveApps: PracticeApp[] = practiceApps.filter((app) => app.id === "financas");

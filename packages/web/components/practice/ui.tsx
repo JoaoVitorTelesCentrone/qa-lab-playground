@@ -14,10 +14,12 @@ export function PracticeSection({ title, description, action, children, id }: {
   id?: string;
 }) {
   const headingId = `${id ?? title.toLowerCase().replace(/\s+/g, "-")}-title`;
-  return <section id={id} aria-labelledby={headingId} className="rounded-xl border border-border bg-card p-5 sm:p-6">
+  return <section id={id} aria-labelledby={headingId} className="relative overflow-hidden rounded-xl border border-border bg-card p-5 pl-6 sm:p-6 sm:pl-7">
+    <div className="absolute inset-y-0 left-0 w-1 bg-primary/30" aria-hidden="true" />
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div>
-        <h2 id={headingId} className="text-lg font-semibold">{title}</h2>
+        {id && <p className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-primary/70">{id}</p>}
+        <h2 id={headingId} className="mt-1 text-lg font-semibold">{title}</h2>
         {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
       </div>
       {action}

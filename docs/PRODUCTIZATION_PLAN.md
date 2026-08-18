@@ -164,7 +164,8 @@ alunos, usado pelos Labs de API.
 
 1. **Aplicar as migrações no Supabase**, na ordem: `0004_product_core.sql`,
    `0005_submission_checklist.sql`, `0006_practice_data.sql`,
-   `0007_qa_lab_state.sql` e `0008_portfolio.sql`. São aplicadas à mão pelo SQL
+   `0007_qa_lab_state.sql`, `0008_portfolio.sql`, `0009_certificates.sql` e
+   `0010_profile_links.sql` (GitHub no perfil). São aplicadas à mão pelo SQL
    Editor (não há CLI configurada) e todas são idempotentes. Sem elas o produto
    abre, mas nada persiste: cada leitura cai no fallback vazio de propósito,
    para a home não quebrar.

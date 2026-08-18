@@ -41,7 +41,9 @@ export const systemChallenges: SystemChallenge[] = allFeatures.flatMap(({ area, 
     const flow = mode === "fluxo";
     return {
       id: `desafio-${String(number).padStart(3, "0")}`, number, area, mode, route,
-      title: `${flow ? "Validar" : "Quebrar"} ${String(feature).padStart(2, "0")}: ${title}`,
+      // Sem o índice da feature no título: "Validar 51: Lancamentos" mostrava ao
+      // aluno um número de catálogo que não significa nada pra ele.
+      title: `${flow ? "Validar" : "Quebrar"} ${title[0].toLowerCase()}${title.slice(1)}`,
       // Os ambientes novos entram por fora da escala da loja: validar o fluxo e
       // basico, investigar o mesmo ponto e um degrau acima.
       difficulty: sample ? (flow ? "Basico" : "Intermediario") : feature <= 15 ? "Basico" : feature <= 35 ? "Intermediario" : "Avancado",

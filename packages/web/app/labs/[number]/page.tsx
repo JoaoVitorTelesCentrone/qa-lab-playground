@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { LabBriefing } from "@/components/labs/lab-briefing";
 import { systemChallenges } from "@/lib/system-challenges";
 import { getJourney, getLabState, getSessionUser } from "@/lib/product/store";
@@ -13,12 +13,14 @@ export default async function LabPage({ params }: { params: Promise<{ number: st
   if (!challenge) notFound();
 
   const user = await getSessionUser();
-  const [state, journey] = user ? await Promise.all([getLabState(user.id, challenge.id), getJourney(user.id)]) : [null, null];
+  // As instruções do desafio (objetivo, dados, critérios) só aparecem logado —
+  // é o gancho que traz a conta antes de qualquer outra coisa.
+  if (!user) redirect(`/login?next=${encodeURIComponent(`/labs/${number}`)}`);
 
-  // O percurso aparece mesmo deslogado, só sem progresso — o aluno vê onde
-  // este Lab se encaixa antes de criar conta.
+  const [state, journey] = await Promise.all([getLabState(user.id, challenge.id), getJourney(user.id)]);
+
   const track = trackForLab(challenge.number);
-  const trackProgress = track ? buildTrackProgress(track, journey?.labs ?? []) : null;
+  const trackProgress = track ? buildTrackProgress(track, journey.labs) : null;
 
-  return <LabBriefing challenge={challenge} signedIn={Boolean(user)} status={state?.status ?? "nao-iniciado"} submissions={state?.submissions ?? []} trackProgress={trackProgress} />;
+  return <LabBriefing challenge={challenge} status={state?.status ?? "nao-iniciado"} submissions={state?.submissions ?? []} trackProgress={trackProgress} />;
 }

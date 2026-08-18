@@ -2,6 +2,10 @@
 
 // Briefing, execução e entrega de um Lab — o loop de aprendizagem completo.
 //
+// Fluxo em 4 passos horizontais (Contexto → Roteiro → Ambiente → Entrega) em
+// vez de um scroll vertical único: só o passo atual fica visível, então o
+// aluno sempre sabe onde está e o que falta.
+//
 // A evidência vai para a API v1, que avalia com `evaluateEvidence` e conclui o
 // Lab na mesma operação. O formulário roda a mesma avaliação só para dar
 // feedback antes do envio; quem decide é o servidor. Nada de progresso em
@@ -10,17 +14,26 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, CheckCircle2, Circle, ExternalLink, Loader2, Send } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, ChevronRight, Circle, ExternalLink, FlaskConical, Loader2, Send } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { SelectField } from "@/components/ui/select-field";
+import { findLabByNumber, labLabel } from "@/lib/playground/catalog";
 import type { SystemChallenge } from "@/lib/system-challenges";
 import type { EnrollmentStatus, Submission } from "@/lib/product/journey";
 import type { TrackProgress } from "@/lib/product/tracks";
 import { evaluateEvidence, MIN_LENGTH, severities, type Evaluation } from "@/lib/product/evaluation";
 
 const severityLabels: Record<(typeof severities)[number], string> = { baixa: "Baixa", media: "Média", alta: "Alta", critica: "Crítica" };
+
+const steps = [
+  { label: "Contexto" },
+  { label: "Roteiro" },
+  { label: "Ambiente" },
+  { label: "Entrega" },
+] as const;
 
 // O desafio aponta para a superfície do módulo quando a área não tem rota própria.
 function surfaceRoute(challenge: SystemChallenge) {
@@ -30,18 +43,22 @@ function surfaceRoute(challenge: SystemChallenge) {
   return challenge.route;
 }
 
-export function LabBriefing({ challenge, signedIn, status, submissions, trackProgress }: { challenge: SystemChallenge; signedIn: boolean; status: EnrollmentStatus | "nao-iniciado"; submissions: Submission[]; trackProgress: TrackProgress | null }) {
+export function LabBriefing({ challenge, status, submissions, trackProgress }: { challenge: SystemChallenge; status: EnrollmentStatus | "nao-iniciado"; submissions: Submission[]; trackProgress: TrackProgress | null }) {
   const router = useRouter();
+  const [step, setStep] = useState(0);
   const [checked, setChecked] = useState<string[]>([]);
   const [draft, setDraft] = useState({ result: "", reproduction: "", severity: "" });
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [state, setState] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState("");
 
+  const lab = findLabByNumber(challenge.number);
+  // O aluno lê o número de lançamento ("01"); a rota continua no de catálogo.
+  const label = lab ? labLabel(lab) : String(challenge.number).padStart(2, "0");
   const surface = surfaceRoute(challenge);
   const issueFor = (field: string) => evaluation?.issues.find((issue) => issue.field === field)?.message;
-  const step = trackProgress?.steps.find((item) => item.lab.slug === challenge.id);
-  const nextInTrack = trackProgress?.steps.find((item) => item.position > (step?.position ?? 0) && item.status !== "completed")?.lab ?? null;
+  const trackStep = trackProgress?.steps.find((item) => item.lab.slug === challenge.id);
+  const nextInTrack = trackProgress?.steps.find((item) => item.position > (trackStep?.position ?? 0) && item.status !== "completed")?.lab ?? null;
 
   function toggle(criterion: string) {
     setChecked((current) => (current.includes(criterion) ? current.filter((item) => item !== criterion) : [...current, criterion]));
@@ -74,102 +91,168 @@ export function LabBriefing({ challenge, signedIn, status, submissions, trackPro
     router.refresh();
   }
 
-  return <main className="qa-system"><div className="mx-auto max-w-3xl px-5 py-10 sm:px-8">
-    <Link href={trackProgress ? `/labs/trilhas/${trackProgress.track.slug}` : "/labs"} className="text-sm text-primary">← {trackProgress ? `Trilha ${trackProgress.track.name}` : "Todos os Labs"}</Link>
+  const exitHref = trackProgress ? `/labs/trilhas/${trackProgress.track.slug}` : "/labs";
 
-    {trackProgress && step && <p className="mt-3 text-xs text-muted-foreground">Passo {step.position} de {trackProgress.total} · {trackProgress.completed} concluído(s)</p>}
+  return <main className="qa-system"><div className="mx-auto max-w-4xl px-5 py-8 sm:px-8">
+    {trackProgress && trackStep && <p className="text-xs text-muted-foreground">{trackProgress.track.name} · passo {trackStep.position} de {trackProgress.total} · {trackProgress.completed} concluído(s)</p>}
 
-    <Card className="mt-6">
-      <CardHeader>
-        <CardDescription>Lab {String(challenge.number).padStart(3, "0")} · {challenge.area} · {challenge.difficulty} · {challenge.mode}</CardDescription>
-        <div className="flex flex-wrap items-center gap-3"><CardTitle className="text-2xl">{challenge.title}</CardTitle>{status === "completed" && <Badge variant="secondary" className="gap-1"><CheckCircle2 className="size-3" /> concluído</Badge>}{status === "started" && <Badge variant="secondary">em andamento</Badge>}</div>
-      </CardHeader>
-      <CardContent>
-        <p>{challenge.objective}</p>
-        <Brief label="Dados de teste" value={challenge.testData} />
-        <Brief label="Oráculo" value={challenge.expected} />
-        <Brief label="Pista de investigação" value={challenge.plantedBug} />
-        <h2 className="mt-7 font-semibold">Roteiro de execução</h2>
-        <ol className="mt-3 grid gap-3">{challenge.steps.map((item, index) => <li key={item} className="rounded border p-3 text-sm"><strong>{index + 1}.</strong> {item}</li>)}</ol>
-        <div className="mt-6 flex flex-wrap gap-2">
-          <Button asChild onClick={signedIn && status === "nao-iniciado" ? start : undefined}><Link href={surface}>Abrir ambiente do Lab <ExternalLink className="size-4" /></Link></Button>
-          {signedIn && status === "nao-iniciado" && <Button type="button" variant="outline" onClick={start}>Marcar como iniciado</Button>}
+    <Breadcrumb className="mt-2">
+      <BreadcrumbList className="gap-1.5 text-sm">
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link href="/labs" className="flex items-center gap-1.5 rounded-sm px-1 py-0.5 hover:text-foreground">
+              <FlaskConical className="size-3.5 text-muted-foreground" aria-hidden="true" />
+              Labs
+            </Link>
+          </BreadcrumbLink>
+          <BreadcrumbSeparator className="text-muted-foreground/70"><ChevronRight /></BreadcrumbSeparator>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <BreadcrumbPage className="rounded-sm px-1 py-0.5 font-medium">Lab {label}</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+
+    <header className="mt-3 flex flex-wrap items-center gap-3">
+      <h1 className="text-2xl font-semibold tracking-[-0.02em]">{challenge.title}</h1>
+      {status === "completed" && <Badge variant="secondary" className="gap-1"><CheckCircle2 className="size-3" /> concluído</Badge>}
+      {status === "started" && <Badge variant="secondary">em andamento</Badge>}
+    </header>
+    <p className="mt-1 text-xs text-muted-foreground">{challenge.area} · {challenge.difficulty} · {challenge.mode}</p>
+
+    {/* Quem volta a um Lab já entregue precisa de um caminho de uma linha até o
+        case — sem isso a entrega antiga fica enterrada no histórico. */}
+    {submissions.length > 0 && state !== "done" && <Link href={`/labs/${challenge.number}/conclusao`} className="mt-4 flex items-center justify-between gap-3 rounded-md border border-primary/30 bg-primary/[0.04] p-3 text-sm transition hover:border-primary">
+      <span>Você já entregou evidência neste Lab. <strong className="font-medium text-primary">Abrir o case e publicar</strong></span>
+      <ArrowRight className="size-4 shrink-0 text-primary" aria-hidden="true" />
+    </Link>}
+
+    {/* Passo a passo horizontal: cada etapa é um botão; só o conteúdo do passo atual aparece abaixo. */}
+    <ol className="mt-7 flex items-center gap-1.5">
+      {steps.map((item, index) => <li key={item.label} className="flex flex-1 items-center gap-1.5">
+        <button
+          type="button"
+          onClick={() => setStep(index)}
+          className={`flex shrink-0 items-center gap-2 rounded-full py-1.5 pl-1.5 pr-3 text-sm font-medium transition ${index === step ? "bg-primary text-primary-foreground" : index < step ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted"}`}
+        >
+          <span className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs ${index === step ? "bg-primary-foreground/20" : index < step ? "bg-primary/15" : "border border-border"}`}>
+            {index < step ? <Check className="size-3.5" /> : index + 1}
+          </span>
+          <span className="hidden sm:inline">{item.label}</span>
+        </button>
+        {index < steps.length - 1 && <span className={`h-px flex-1 ${index < step ? "bg-primary/40" : "bg-border"}`} />}
+      </li>)}
+    </ol>
+
+    <div className="mt-6 min-h-[380px] rounded-xl border border-border bg-card p-6">
+      {step === 0 && <section>
+        <h2 className="text-sm font-semibold text-muted-foreground">Objetivo</h2>
+        <p className="mt-2 text-base leading-7">{challenge.objective}</p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <Brief label="Dados de teste" value={challenge.testData} />
+          <Brief label="Oráculo" value={challenge.expected} />
+          <Brief label="Pista de investigação" value={challenge.plantedBug} />
         </div>
-      </CardContent>
-    </Card>
+      </section>}
 
-    <Card className="mt-5">
-      <CardHeader>
-        <CardTitle>Entrega de evidência</CardTitle>
-        <CardDescription>A entrega é avaliada automaticamente: sem os campos preenchidos e todos os critérios de aceite confirmados, o Lab continua em aberto.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {signedIn
-          ? <form className="grid gap-5" onSubmit={submit} noValidate>
-              <Field label="Resultado obtido" hint={`Mínimo de ${MIN_LENGTH} caracteres.`} error={issueFor("result")}>
-                <Textarea value={draft.result} onChange={(event) => setDraft({ ...draft, result: event.target.value })} placeholder="O que a aplicação exibiu ou fez? Inclua valores e mensagens." aria-invalid={Boolean(issueFor("result"))} />
-              </Field>
-              <Field label="Passos de reprodução" hint="Um passo por linha." error={issueFor("reproduction")}>
-                <Textarea value={draft.reproduction} onChange={(event) => setDraft({ ...draft, reproduction: event.target.value })} placeholder={"1. ...\n2. ...\n3. ..."} aria-invalid={Boolean(issueFor("reproduction"))} />
-              </Field>
-              <Field label="Severidade" error={issueFor("severity")}>
-                <select value={draft.severity} onChange={(event) => setDraft({ ...draft, severity: event.target.value })} className="input" aria-invalid={Boolean(issueFor("severity"))}>
-                  <option value="">Selecione</option>
-                  {severities.map((item) => <option key={item} value={item}>{severityLabels[item]}</option>)}
-                </select>
-              </Field>
+      {step === 1 && <section>
+        <h2 className="text-sm font-semibold text-muted-foreground">Roteiro de execução</h2>
+        <div className="mt-3 -mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2">
+          {challenge.steps.map((item, index) => <div key={item} className="w-64 shrink-0 snap-start rounded-lg border border-border bg-background p-4 text-sm">
+            <span className="font-mono text-xs text-primary">{String(index + 1).padStart(2, "0")}</span>
+            <p className="mt-2 leading-6">{item}</p>
+          </div>)}
+        </div>
+      </section>}
 
-              <fieldset>
-                <legend className="text-sm font-medium">Critérios de aceite</legend>
-                <p className="mt-1 text-xs text-muted-foreground">Confirme cada critério que você verificou de fato.</p>
-                <div className="mt-3 grid gap-2">{challenge.acceptance.map((criterion) => {
-                  const active = checked.includes(criterion);
-                  // O checkbox fica sr-only; o foco do teclado aparece no rótulo inteiro.
-                  return <label key={criterion} className="flex cursor-pointer items-start gap-2.5 rounded-md border border-border p-3 text-sm transition hover:bg-accent focus-within:ring-2 focus-within:ring-ring/40">
-                    <input type="checkbox" checked={active} onChange={() => toggle(criterion)} className="sr-only" />
-                    {active ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /> : <Circle className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />}
-                    <span>{criterion}</span>
-                  </label>;
-                })}</div>
-                {issueFor("checklist") && <p className="mt-2 text-xs text-destructive">{issueFor("checklist")}</p>}
-              </fieldset>
+      {step === 2 && <section>
+        <h2 className="text-sm font-semibold text-muted-foreground">Ambiente do Lab</h2>
+        <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">Abra o ambiente em outra aba, execute o roteiro e volte aqui para registrar a evidência.</p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <Button asChild onClick={status === "nao-iniciado" ? start : undefined}><Link href={surface} target="_blank" rel="noopener noreferrer">Abrir ambiente do Lab <ExternalLink className="size-4" /></Link></Button>
+          {status === "nao-iniciado" && <Button type="button" variant="outline" onClick={start}>Marcar como iniciado</Button>}
+        </div>
+      </section>}
 
-              <Button disabled={state === "saving"}>{state === "saving" ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />} Entregar evidência</Button>
-            </form>
-          : <div>
-              <h3 className="text-sm font-medium">Critérios para concluir</h3>
-              <ul className="mt-3 grid gap-2 text-sm">{challenge.acceptance.map((criterion) => <li key={criterion} className="rounded-md border border-border p-3">{criterion}</li>)}</ul>
-              <p className="mt-5 text-sm text-muted-foreground">Entre na sua conta para registrar evidência. O histórico fica salvo no servidor e acompanha você em qualquer dispositivo.</p>
-              <div className="mt-4 flex gap-2"><Button asChild><Link href={`/login?next=/labs/${challenge.number}`}>Entrar</Link></Button><Button asChild variant="outline"><Link href="/cadastro">Criar conta</Link></Button></div>
-            </div>}
+      {step === 3 && <section>
+        <h2 className="text-sm font-semibold text-muted-foreground">Entrega de evidência</h2>
+        <p className="mt-1 text-xs text-muted-foreground">Avaliada automaticamente: sem os campos preenchidos e todos os critérios confirmados, o Lab continua em aberto.</p>
+
+        <form className="mt-5 grid gap-5 sm:grid-cols-2" onSubmit={submit} noValidate>
+          <div className="grid gap-5">
+            <Field label="Resultado obtido" hint={`Mínimo de ${MIN_LENGTH} caracteres.`} error={issueFor("result")}>
+              <Textarea value={draft.result} onChange={(event) => setDraft({ ...draft, result: event.target.value })} placeholder="O que a aplicação exibiu ou fez? Inclua valores e mensagens." aria-invalid={Boolean(issueFor("result"))} className="min-h-24" />
+            </Field>
+            <Field label="Passos de reprodução" hint="Um passo por linha." error={issueFor("reproduction")}>
+              <Textarea value={draft.reproduction} onChange={(event) => setDraft({ ...draft, reproduction: event.target.value })} placeholder={"1. ...\n2. ...\n3. ..."} aria-invalid={Boolean(issueFor("reproduction"))} className="min-h-24" />
+            </Field>
+          </div>
+
+          <div className="grid gap-5">
+            <Field label="Severidade" error={issueFor("severity")}>
+              <SelectField
+                value={draft.severity}
+                onChange={(severity) => setDraft({ ...draft, severity })}
+                options={severities.map((item) => ({ value: item, label: severityLabels[item] }))}
+                groupLabel="Severidade"
+                aria-label="Severidade"
+                aria-invalid={Boolean(issueFor("severity"))}
+              />
+            </Field>
+            <fieldset>
+              <legend className="text-sm font-medium">Critérios de aceite</legend>
+              <div className="mt-2 grid gap-1.5 sm:max-h-32 sm:overflow-y-auto sm:pr-1">{challenge.acceptance.map((criterion) => {
+                const active = checked.includes(criterion);
+                return <label key={criterion} className="flex cursor-pointer items-start gap-2 rounded-md border border-border p-2.5 text-xs transition hover:bg-accent focus-within:ring-2 focus-within:ring-ring/40">
+                  <input type="checkbox" checked={active} onChange={() => toggle(criterion)} className="sr-only" />
+                  {active ? <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden="true" /> : <Circle className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />}
+                  <span>{criterion}</span>
+                </label>;
+              })}</div>
+              {issueFor("checklist") && <p className="mt-2 text-xs text-destructive">{issueFor("checklist")}</p>}
+            </fieldset>
+          </div>
+
+          <Button disabled={state === "saving"} className="sm:col-span-2">{state === "saving" ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />} Entregar evidência</Button>
+        </form>
 
         {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
+        {/* O destino depois da entrega é a conclusão, não o próximo Lab: é lá
+            que a evidência vira case publicável. Encadear direto no Lab seguinte
+            fazia o aluno acumular entregas sem nunca ter o que mostrar. */}
         {state === "done" && <div role="status" aria-live="polite" className="mt-5 rounded-md border border-primary/30 bg-primary/[0.04] p-4">
           <p className="text-sm font-medium text-primary">Evidência salva. Lab concluído.</p>
-          {nextInTrack
-            ? <Button asChild size="sm" className="mt-3"><Link href={`/labs/${nextInTrack.number}`}>Próximo Lab da trilha: {nextInTrack.title} <ArrowRight className="size-4" /></Link></Button>
-            : trackProgress
-              ? <p className="mt-2 text-sm text-muted-foreground">Você concluiu todos os Labs da trilha {trackProgress.track.name}.</p>
-              : <Button asChild size="sm" variant="outline" className="mt-3"><Link href="/labs">Escolher o próximo Lab</Link></Button>}
-          <p className="mt-3 text-xs text-muted-foreground">Esta evidência entra no seu histórico como privada. <Link href="/perfil" className="text-primary">Publique no seu portfólio</Link> quando quiser mostrá-la.</p>
+          <p className="mt-2 text-sm text-muted-foreground">Sua entrega virou um case: contexto do sistema, o que você provou, passos de reprodução e um post pronto para o LinkedIn.</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Button asChild size="sm"><Link href={`/labs/${challenge.number}/conclusao`}>Ver meu case <ArrowRight className="size-4" /></Link></Button>
+            {nextInTrack
+              ? <Button asChild size="sm" variant="outline"><Link href={`/labs/${nextInTrack.number}`}>Próximo Lab da trilha</Link></Button>
+              : <Button asChild size="sm" variant="outline"><Link href="/labs">Escolher o próximo Lab</Link></Button>}
+          </div>
+          {!nextInTrack && trackProgress && <p className="mt-3 text-xs text-muted-foreground">Você concluiu todos os Labs da trilha {trackProgress.track.name} — o certificado te espera na conclusão.</p>}
         </div>}
-      </CardContent>
-    </Card>
 
-    {submissions.length > 0 && <Card className="mt-5">
-      <CardHeader><CardTitle>Suas evidências</CardTitle><CardDescription>{submissions.length} entrega(s) registrada(s) neste Lab.</CardDescription></CardHeader>
-      <CardContent><ul className="grid gap-3">{submissions.map((item) => <li key={item.id} className="rounded border p-3 text-sm">
-        <p className="text-xs text-muted-foreground">{new Date(item.createdAt).toLocaleString("pt-BR")} · severidade {item.severity}</p>
-        <p className="mt-2">{item.result}</p>
-        <p className="mt-2 whitespace-pre-line text-muted-foreground">{item.reproduction}</p>
-        {item.checklist.length > 0 && <ul className="mt-3 grid gap-1">{item.checklist.map((criterion) => <li key={criterion} className="flex items-center gap-1.5 text-xs text-muted-foreground"><CheckCircle2 className="size-3 shrink-0 text-primary" aria-hidden="true" />{criterion}</li>)}</ul>}
-      </li>)}</ul></CardContent>
-    </Card>}
+        {submissions.length > 0 && <details className="mt-6 rounded-md border border-border">
+          <summary className="cursor-pointer p-3 text-xs font-medium text-muted-foreground">{submissions.length} entrega(s) já registrada(s) neste Lab</summary>
+          <ul className="grid gap-3 border-t border-border p-3">{submissions.map((item) => <li key={item.id} className="rounded border border-border p-3 text-sm">
+            <p className="text-xs text-muted-foreground">{new Date(item.createdAt).toLocaleString("pt-BR")} · severidade {item.severity}</p>
+            <p className="mt-2">{item.result}</p>
+          </li>)}</ul>
+        </details>}
+      </section>}
+    </div>
+
+    <div className="mt-4 flex items-center justify-between">
+      {step === 0
+        ? <Button asChild type="button" variant="ghost" size="sm"><Link href={exitHref}><ArrowLeft className="size-3.5" /> {trackProgress ? `Trilha ${trackProgress.track.name}` : "Todos os Labs"}</Link></Button>
+        : <Button type="button" variant="ghost" size="sm" onClick={() => setStep((current) => current - 1)}><ArrowLeft className="size-3.5" /> Voltar</Button>}
+      {step < steps.length - 1 && <Button type="button" variant="outline" size="sm" onClick={() => setStep((current) => current + 1)}>Avançar <ArrowRight className="size-3.5" /></Button>}
+    </div>
   </div></main>;
 }
 
 function Brief({ label, value }: { label: string; value: string }) {
-  return <div className="mt-5 rounded-md border bg-muted/40 p-3 text-sm"><strong>{label}</strong><p className="mt-1 text-muted-foreground">{value}</p></div>;
+  return <div className="rounded-md border border-border bg-background p-3 text-sm"><strong>{label}</strong><p className="mt-1 text-muted-foreground">{value}</p></div>;
 }
 
 function Field({ label, hint, error, children }: { label: string; hint?: string; error?: string; children: React.ReactNode }) {

@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   avatar_url   TEXT,
   bio          TEXT,
   linkedin_url TEXT,
+  github_url   TEXT,
   role         TEXT DEFAULT 'QA Iniciante',
   created_at   TIMESTAMPTZ DEFAULT NOW(),
   updated_at   TIMESTAMPTZ DEFAULT NOW()

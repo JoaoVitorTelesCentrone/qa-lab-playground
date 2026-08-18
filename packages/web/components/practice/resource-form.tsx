@@ -13,6 +13,7 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SelectField } from "@/components/ui/select-field";
 import { emptyRecord, type FieldSpec } from "@/lib/product/practice/resources";
 import type { ResourceHandle, Row } from "./use-practice-app";
 
@@ -136,10 +137,19 @@ function Field({ id, name, spec, value, error, suggestions, full, onChange }: {
       const options = spec.type === "enum"
         ? spec.values.map((option) => [option, spec.optionLabels?.[option] ?? option] as const)
         : Object.entries(spec.options ?? {});
-      return <select {...shared} value={String(value ?? "")} onChange={(event) => onChange(event.target.value)}>
-        <option value="">Selecione…</option>
-        {options.map(([option, label]) => <option key={option} value={option}>{label}</option>)}
-      </select>;
+      return <SelectField
+        id={id}
+        name={name}
+        aria-invalid={invalid}
+        aria-describedby={describedBy}
+        // Sem o `shared.className`: ele carrega a classe `.input`, que é o
+        // estilo do campo nativo e brigaria com o do gatilho do Select.
+        className={invalid ? "border-destructive focus:border-destructive" : undefined}
+        value={String(value ?? "")}
+        onChange={onChange}
+        options={options.map(([option, label]) => ({ value: option, label }))}
+        placeholder="Selecione…"
+      />;
     }
 
     if (spec.type === "text" && spec.multiline) {

@@ -5,14 +5,22 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Circle, CircleDot } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { TrackCertificate } from "./track-certificate";
 import { findPracticeApp } from "@/lib/product/apps";
+import { eligibility } from "@/lib/product/certificate";
 import type { TrackProgress, TrackStep } from "@/lib/product/tracks";
 
 const stepIcons = { completed: CheckCircle2, started: CircleDot, abandoned: Circle, "nao-iniciado": Circle } as const;
 
-export function TrackPage({ progress, signedIn }: { progress: TrackProgress; signedIn: boolean }) {
-  const { track, steps, completed, total, percent, nextLab } = progress;
+export function TrackPage({ progress, signedIn, certificateCode }: { progress: TrackProgress; signedIn: boolean; certificateCode: string | null }) {
+  const { track, nextLab } = progress;
   const app = findPracticeApp(track.appId);
+  // Passo agendado não aparece na lista — só o que já dá pra abrir de verdade.
+  const steps = progress.steps.filter((step) => step.lab.status === "liberado");
+  const completed = steps.filter((step) => step.status === "completed").length;
+  const total = steps.length;
+  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+  const status = eligibility(progress);
 
   return <main className="qa-system"><div className="mx-auto max-w-3xl px-5 py-10 sm:px-8">
     <Link href="/labs" className="text-sm text-primary">← Todos os Labs</Link>
@@ -31,6 +39,7 @@ export function TrackPage({ progress, signedIn }: { progress: TrackProgress; sig
       {nextLab
         ? <Button asChild className="mt-5"><Link href={`/labs/${nextLab.number}`}>{completed === 0 ? "Começar" : "Continuar"}: {nextLab.title} <ArrowRight className="size-4" /></Link></Button>
         : <p className="mt-5 rounded-md border border-primary/30 bg-primary/[0.04] p-4 text-sm text-primary">Trilha concluída. Todas as etapas do fluxo têm evidência registrada.</p>}
+      <TrackCertificate trackSlug={track.slug} eligible={status.eligible} missing={status.missing} code={certificateCode} />
     </section>}
 
     {!signedIn && <p className="mt-8 rounded-md border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
@@ -58,6 +67,8 @@ function Step({ step, signedIn }: { step: TrackStep; signedIn: boolean }) {
       <p className="mt-1 text-sm leading-6 text-muted-foreground">{step.lab.objective}</p>
       <p className="mt-2 text-xs text-muted-foreground">{step.lab.difficulty} · {step.lab.minutes} min{signedIn && step.submissions > 0 ? ` · ${step.submissions} evidência(s)` : ""}</p>
     </div>
-    <Button asChild variant={done ? "ghost" : "outline"} size="sm"><Link href={`/labs/${step.lab.number}`}>{done ? "Revisar" : "Abrir"}</Link></Button>
+    {/* Passo concluído leva ao case, não de volta ao briefing: quem já entregou
+        quer publicar, não reler o enunciado. */}
+    <Button asChild variant={done ? "ghost" : "outline"} size="sm"><Link href={done ? `/labs/${step.lab.number}/conclusao` : `/labs/${step.lab.number}`}>{done ? "Ver case" : "Abrir"}</Link></Button>
   </li>;
 }

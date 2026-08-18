@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SelectField, toOptions } from "@/components/ui/select-field";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Send, Plus, X } from "lucide-react";
@@ -47,20 +48,16 @@ export function RequestPanel({ onSend, loading }: RequestPanelProps) {
       {/* Method + URL + Send */}
       <div className="flex gap-2">
         <div className="relative">
-          <select
+          <SelectField
             value={method}
-            onChange={(e) => {
-              setMethod(e.target.value);
-              setShowBody(e.target.value !== "GET");
+            onChange={(next) => {
+              setMethod(next);
+              setShowBody(next !== "GET");
             }}
-            className="h-9 appearance-none rounded-md border bg-dark-green/40 px-3 pr-8 text-sm font-mono font-bold focus:outline-none focus:ring-2 focus:ring-ring"
-          >
-            {METHODS.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
+            options={toOptions(METHODS)}
+            className="h-9 w-auto font-mono font-bold"
+            aria-label="Método HTTP"
+          />
         </div>
         <Input
           value={url}

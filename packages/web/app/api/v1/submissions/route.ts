@@ -26,6 +26,7 @@ export function POST(request: Request) {
 
       const lab = labs.find((item) => item.slug === labSlug);
       if (!lab) return fail("Lab não encontrado.", 404);
+      if (lab.status !== "liberado") return fail("Este Lab ainda não foi liberado.", 409);
 
       // A avaliação é a mesma do formulário: campos obrigatórios e todos os
       // critérios de aceite do Lab confirmados. O servidor é quem decide.

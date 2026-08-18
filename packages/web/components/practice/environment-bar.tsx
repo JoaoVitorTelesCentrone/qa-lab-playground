@@ -15,6 +15,7 @@ import { Loader2, RotateCcw, ShieldAlert, UserCog } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SelectField } from "@/components/ui/select-field";
 import { personas } from "@/lib/product/practice/personas";
 import { bugsForApp } from "@/lib/product/practice/bugs";
 import type { PracticeSettings } from "@/lib/product/practice/store";
@@ -72,9 +73,13 @@ export function EnvironmentBar({ appId, settings }: { appId: PracticeAppId; sett
     <div className="flex flex-wrap items-end gap-4">
       <label className="grid gap-1.5">
         <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"><UserCog className="size-3.5" /> Perfil de teste</span>
-        <select value={settings.personaId} onChange={(event) => patch({ personaId: event.target.value }, `Perfil de teste: ${personas.find((persona) => persona.id === event.target.value)?.name}.`)} className="input w-56" disabled={busy !== ""}>
-          {personas.map((persona) => <option key={persona.id} value={persona.id}>{persona.name}</option>)}
-        </select>
+        <SelectField
+          value={settings.personaId}
+          onChange={(personaId) => patch({ personaId }, `Perfil de teste: ${personas.find((persona) => persona.id === personaId)?.name}.`)}
+          options={personas.map((persona) => ({ value: persona.id, label: persona.name }))}
+          className="w-56"
+          disabled={busy !== ""}
+        />
       </label>
 
       <label className="flex items-center gap-2 pb-2.5 text-sm">

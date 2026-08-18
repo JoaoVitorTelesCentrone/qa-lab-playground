@@ -1,9 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { labs } from "@/lib/playground/catalog";
 import type { LabProgress } from "./journey";
-import { buildTrackProgress, findTrack, learningTracks, trackForLab } from "./tracks";
+import { buildTrackProgress, findTrack, learningTracks, trackForLab, trackHasReleasedLab, TRACKS_ENABLED } from "./tracks";
 
-const track = findTrack("fluxos-criticos")!;
+// financas-do-zero, não fluxos-criticos: é a única trilha com Labs liberados
+// no lançamento enxuto (101, 103 e 105) — ver [[qa-lab-lancamento-enxuto]].
+const track = findTrack("financas-do-zero")!;
 
 function progress(labNumber: number, status: LabProgress["status"]): LabProgress {
   const lab = labs.find((item) => item.number === labNumber)!;
@@ -50,8 +52,14 @@ describe("trilha de aprendizagem", () => {
     const result = buildTrackProgress(track, [progress(track.labNumbers[0], "completed"), progress(track.labNumbers[1], "started")]);
     expect(result.completed).toBe(1);
     expect(result.percent).toBe(10);
-    expect(result.nextLab?.number).toBe(track.labNumbers[1]);
     expect(result.steps[1].status).toBe("started");
+  });
+
+  test("pula um passo agendado ao sugerir o próximo, mesmo se não concluído", () => {
+    // 101 liberado e concluído; 102 existe na trilha mas ainda não foi
+    // liberado — a sugestão precisa pular pro 103 (liberado), não pro 102.
+    const result = buildTrackProgress(track, [progress(101, "completed")]);
+    expect(result.nextLab?.number).toBe(103);
   });
 
   test("trilha inteira concluída não sugere próximo Lab", () => {
@@ -66,9 +74,20 @@ describe("trilha de aprendizagem", () => {
     expect(result.completed).toBe(0);
   });
 
-  test("encontra a trilha a partir de um Lab dela", () => {
-    expect(trackForLab(track.labNumbers[3])?.slug).toBe(track.slug);
+  // Trilha está desligada no lançamento (TRACKS_ENABLED). O teste trava esse
+  // estado: enquanto for falso, nenhuma superfície pode achar uma trilha —
+  // é o que garante que o briefing e a conclusão não voltem a mostrar percurso
+  // por descuido. Ao religar, os dois blocos abaixo trocam de lugar.
+  test("com a trilha desligada, Lab nenhum acha percurso", () => {
+    expect(TRACKS_ENABLED).toBe(false);
+    expect(trackForLab(track.labNumbers[3])).toBeUndefined();
+    expect(learningTracks.every((item) => !trackHasReleasedLab(item))).toBe(true);
+  });
+
+  test("a busca por Lab continua correta quando religada", () => {
+    const inside = learningTracks.filter((item) => item.labNumbers.includes(track.labNumbers[3]));
+    expect(inside.map((item) => item.slug)).toEqual([track.slug]);
     const outsider = labs.find((lab) => !learningTracks.some((item) => item.labNumbers.includes(lab.number)))!;
-    expect(trackForLab(outsider.number)).toBeUndefined();
+    expect(learningTracks.some((item) => item.labNumbers.includes(outsider.number))).toBe(false);
   });
 });

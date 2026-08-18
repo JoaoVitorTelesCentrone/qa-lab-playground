@@ -2,6 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { findLabByNumber, isLabReleased } from "./lib/playground/catalog";
 import { isAdminEmail } from "./lib/product/admin";
+import { practiceApps } from "./lib/product/apps";
+import { TRACKS_ENABLED } from "./lib/product/tracks";
 
 // --- Superfície pública ------------------------------------------------------
 // A home é o produto: jornada do aluno, os quatro ambientes de prática e o
@@ -19,8 +21,9 @@ const PUBLIC_PREFIXES = [
   // Conta
   "/auth", "/login", "/cadastro", "/recuperar", "/perfil", "/waitlist",
   // Portfólio público do aluno: precisa abrir para quem não tem conta, senão o
-  // link que ele compartilha cai no Blog.
-  "/portfolio",
+  // link que ele compartilha cai no Blog. O certificado de trilha segue a mesma
+  // regra — é um link verificável, colado no LinkedIn por quem não tem conta.
+  "/portfolio", "/certificado",
   // Ferramenta interna (gerador de carrosséis). Fica pública no gate de
   // lançamento, mas exige login + e-mail admin abaixo — ver ADMIN_EMAILS.
   "/admin",
@@ -31,6 +34,12 @@ const labRouteNumbers: Record<string, number> = {
   "/labs/waits": 5,
   "/labs/api-crud": 21,
 };
+
+// Lançamento enxuto: só Finanças tem trilha e desafios liberados (ver
+// lib/product/apps.ts e [[qa-lab-lancamento-enxuto]]). Os outros ambientes
+// continuam publicados no código, mas a rota redireciona pra waitlist —
+// mesmo tratamento que um Lab agendado.
+const BLOCKED_APP_PREFIXES = practiceApps.filter((app) => app.id !== "financas").map((app) => `/${app.route.split("/")[1]}`);
 
 // Rotas que exigem login. A home, o catálogo e os ambientes de prática são
 // abertos de propósito: dá para experimentar antes de criar conta. O que
@@ -48,6 +57,22 @@ export async function proxy(request: NextRequest) {
     blog.pathname = "/blog";
     blog.search = "";
     return NextResponse.redirect(blog);
+  }
+
+  if (BLOCKED_APP_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))) {
+    const waitlist = request.nextUrl.clone();
+    waitlist.pathname = "/waitlist";
+    waitlist.search = "";
+    return NextResponse.redirect(waitlist);
+  }
+
+  // Trilha desligada no lançamento (ver TRACKS_ENABLED em lib/product/tracks.ts):
+  // a rota volta pro catálogo em vez de 404, porque o link pode estar publicado.
+  if (!TRACKS_ENABLED && pathname.startsWith("/labs/trilhas")) {
+    const catalog = request.nextUrl.clone();
+    catalog.pathname = "/labs";
+    catalog.search = "";
+    return NextResponse.redirect(catalog);
   }
 
   if (pathname.startsWith("/labs/")) {

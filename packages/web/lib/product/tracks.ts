@@ -63,6 +63,17 @@ const crmFlows: Track = {
   labNumbers: [121, 122, 123, 124, 125, 126, 127, 128, 129, 130],
 };
 
+/**
+ * Trilha desligada no lançamento: por ora o produto é só o catálogo de Labs.
+ * Uma sequência curada em cima de três Labs não era um percurso, era um card a
+ * mais dizendo a mesma coisa que a lista logo abaixo.
+ *
+ * Nada foi deletado — as trilhas, o progresso e o certificado continuam no
+ * código e testados. Ligar de volta é trocar esta constante para `true`; a
+ * rota /labs/trilhas volta a abrir junto (ver proxy.ts).
+ */
+export const TRACKS_ENABLED = false;
+
 export const learningTracks: Track[] = [criticalFlows, financeFlows, bookingFlows, crmFlows];
 
 export function findTrack(slug: string) {
@@ -104,11 +115,23 @@ export function buildTrackProgress(track: Track, progress: LabProgress[]): Track
     completed,
     total: steps.length,
     percent: steps.length === 0 ? 0 : Math.round((completed / steps.length) * 100),
-    nextLab: steps.find((step) => step.status !== "completed")?.lab ?? null,
+    // Só sugere um Lab liberado: um passo agendado levaria a sugestão pra
+    // waitlist em vez do próximo passo de verdade. Ver [[qa-lab-lancamento-enxuto]].
+    nextLab: steps.find((step) => step.status !== "completed" && step.lab.status === "liberado")?.lab ?? null,
   };
 }
 
-/** Trilha a que um Lab pertence, para mostrar o percurso dentro do briefing. */
+/**
+ * Trilha a que um Lab pertence, para mostrar o percurso dentro do briefing.
+ * Ponto único de desligamento: com `TRACKS_ENABLED` falso ninguém acha trilha
+ * nenhuma, e o briefing e a conclusão voltam a falar só do Lab.
+ */
 export function trackForLab(labNumber: number) {
+  if (!TRACKS_ENABLED) return undefined;
   return learningTracks.find((track) => track.labNumbers.includes(labNumber));
+}
+
+/** A trilha tem pelo menos um Lab liberado — vale mostrar na vitrine. */
+export function trackHasReleasedLab(track: Track) {
+  return TRACKS_ENABLED && track.labNumbers.some((number) => labs.find((lab) => lab.number === number)?.status === "liberado");
 }

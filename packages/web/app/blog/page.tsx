@@ -1,9 +1,44 @@
-import Link from "next/link";
-import { ArrowRight, BookOpen, Clock3 } from "lucide-react";
-import { posts, formatDate } from "@/lib/blog-posts";
+import { Compass, Bug, ShieldCheck, type LucideIcon } from "lucide-react";
+import { posts } from "@/lib/blog-posts";
 import { CollaborateCta } from "@/components/blog/collaborate-cta";
+import {
+  BlogHighlights,
+  type BlogAccent,
+  type BlogHighlightArticle,
+} from "@/components/blog/blog-highlights";
+
+const accents: BlogAccent[] = ["violet", "green", "blue"];
+const icons: LucideIcon[] = [Compass, Bug, ShieldCheck];
 
 export default function BlogPage() {
-  const featured = posts.find((post) => post.destaque) ?? posts[0]; const rest = posts.filter((post) => post.slug !== featured?.slug);
-  return <main className="qa-blog"><div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 lg:py-20"><section className="qa-blog-intro"><div><p className="qa-eyebrow">QA Lab Journal</p><h1>Ideias para quem constrói qualidade.</h1><p>Estratégia, investigação e prática para decisões de produto melhores.</p></div><BookOpen className="size-10 text-primary" /></section>{featured && <Link href={`/blog/${featured.slug}`} className="qa-blog-feature mt-10"><div><p className="qa-eyebrow">Artigo em destaque</p><h2>{featured.titulo}</h2><p>{featured.resumo}</p><span>Ler artigo <ArrowRight className="size-4" /></span></div><div className="qa-blog-feature-meta"><p>{featured.tags.slice(0, 2).join(" · ")}</p><p><Clock3 className="size-3.5" /> {featured.tempoLeitura} min</p></div></Link>}<section className="mt-16"><div className="flex items-end justify-between"><div><p className="qa-eyebrow">Biblioteca</p><h2 className="mt-2 text-2xl font-semibold tracking-tight">Todos os artigos</h2></div><p className="text-sm text-muted-foreground">{posts.length} publicações</p></div><div className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{rest.map((post) => <Link key={post.slug} href={`/blog/${post.slug}`} className="qa-blog-card"><p className="text-xs font-medium text-primary">{post.tags[0]}</p><h3>{post.titulo}</h3><p className="flex-1">{post.resumo}</p><footer><span>{formatDate(post.data)}</span><span>{post.tempoLeitura} min <ArrowRight className="size-3.5" /></span></footer></Link>)}</div></section><CollaborateCta /></div></main>;
+  const featured = posts.find((post) => post.destaque) ?? posts[0];
+
+  const articles: BlogHighlightArticle[] = posts.map((post, index) => ({
+    category: post.tags[0] ?? "QA Lab",
+    readTime: `${post.tempoLeitura} min de leitura`,
+    title: post.titulo,
+    href: `/blog/${post.slug}`,
+    accent: accents[index % accents.length],
+    icon: icons[index % icons.length],
+  }));
+
+  return (
+    <main className="qa-blog">
+      <div className="mx-auto max-w-6xl px-5 pt-6 pb-12 sm:px-8 lg:pt-8 lg:pb-20">
+        <BlogHighlights
+          data={{
+            heading: "Ideias para quem\nconstrói qualidade.",
+            description:
+              "Estratégia, investigação e prática para decisões de produto melhores.",
+            asideText:
+              "De cultura de time a técnicas de teste, compartilhamos o que funciona no dia a dia de quem garante qualidade.",
+            viewAllLabel: featured ? "Ler o artigo em destaque" : "Ver o blog",
+            viewAllHref: featured ? `/blog/${featured.slug}` : "/blog",
+            articles,
+          }}
+        />
+        <CollaborateCta />
+      </div>
+    </main>
+  );
 }

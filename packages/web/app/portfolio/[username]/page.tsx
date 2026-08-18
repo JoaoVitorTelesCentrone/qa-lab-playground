@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PortfolioView } from "@/components/portfolio/portfolio-view";
+import { ProfileLinks } from "@/components/portfolio/profile-links";
 import { getPortfolio } from "@/lib/product/portfolio";
-import { reproductionSteps } from "@/lib/product/portfolio-format";
 
 export const dynamic = "force-dynamic";
 
@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const portfolio = await getPortfolio(username);
   if (!portfolio) return { title: "Portfólio não encontrado | QA Lab" };
   return {
-    title: `${portfolio.name} — evidências de QA | QA Lab`,
-    description: portfolio.headline || `${portfolio.entries.length} evidências registradas em ${portfolio.labsCovered} Labs do QA Lab.`,
+    title: `${portfolio.name} — portfólio de QA | QA Lab`,
+    description: portfolio.headline || `${portfolio.projects.length} projeto(s) e ${portfolio.stats.evidences} evidência(s) de teste publicadas no QA Lab.`,
   };
 }
 
@@ -27,62 +27,53 @@ export default async function PortfolioPage({ params }: Props) {
   // não dá para descobrir quem tem conta testando nomes de usuário.
   if (!portfolio) notFound();
 
-  return <main className="qa-system"><div className="mx-auto max-w-4xl px-5 py-10 sm:px-8">
-    <header>
-      <p className="qa-eyebrow">Portfólio de evidências</p>
-      <h1 className="mt-2 text-4xl font-semibold tracking-[-0.03em]">{portfolio.name}</h1>
-      {portfolio.headline && <p className="mt-3 max-w-2xl text-lg leading-7 text-muted-foreground">{portfolio.headline}</p>}
-      {portfolio.role && <p className="mt-2 text-sm text-muted-foreground">{portfolio.role}</p>}
-      {portfolio.bio && <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">{portfolio.bio}</p>}
-      {portfolio.linkedin && <p className="mt-4"><a href={portfolio.linkedin} rel="noopener noreferrer nofollow" target="_blank" className="text-sm text-primary">LinkedIn →</a></p>}
+  const { stats } = portfolio;
+
+  return <main className="qa-system"><div className="mx-auto max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
+    {/* O topo é sobre a pessoa, não sobre o produto. A versão anterior abria com
+        "PORTFÓLIO DE EVIDÊNCIAS" e gastava a área mais valiosa da página
+        explicando o QA Lab para quem veio ver o trabalho de alguém. */}
+    <header className="flex flex-wrap items-start justify-between gap-6">
+      <div className="min-w-0">
+        <h1 className="text-4xl font-semibold tracking-[-0.04em] sm:text-5xl">{portfolio.name}</h1>
+        <p className="mt-2 text-base text-primary">{portfolio.role || "Quality Assurance"}</p>
+        {portfolio.headline && <p className="mt-5 max-w-xl text-lg leading-7 text-muted-foreground">{portfolio.headline}</p>}
+      </div>
+
+      <ProfileLinks linkedin={portfolio.linkedin} github={portfolio.github} />
     </header>
 
-    <dl className="mt-8 grid divide-y divide-border rounded-xl border border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-      <div className="p-4 sm:p-5"><dt className="text-xs text-muted-foreground">Evidências publicadas</dt><dd className="mt-1.5 text-2xl font-semibold tracking-[-0.03em]">{portfolio.entries.length}</dd></div>
-      <div className="p-4 sm:p-5"><dt className="text-xs text-muted-foreground">Labs cobertos</dt><dd className="mt-1.5 text-2xl font-semibold tracking-[-0.03em]">{portfolio.labsCovered}</dd></div>
-      <div className="p-4 sm:p-5">
-        <dt className="text-xs text-muted-foreground">Por severidade</dt>
-        <dd className="mt-2 flex flex-wrap gap-1.5">
-          {portfolio.bySeverity.length === 0
-            ? <span className="text-sm text-muted-foreground">—</span>
-            : portfolio.bySeverity.map((item) => <Badge key={item.severity} variant="secondary" className="font-normal">{item.severity}: {item.total}</Badge>)}
-        </dd>
-      </div>
+    <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
+      <Stat label="Projetos" value={portfolio.projects.length} />
+      <Stat label="Evidências" value={stats.evidences} />
+      <Stat label="Bugs encontrados" value={stats.bugs} />
+      <Stat label="Critérios validados" value={stats.criteria} />
     </dl>
 
-    {portfolio.entries.length === 0
-      ? <p className="mt-8 rounded-md border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">Nenhuma evidência publicada ainda.</p>
-      : <ol className="mt-8 grid gap-4">{portfolio.entries.map((entry) => <li key={entry.id}>
-          <article className="rounded-xl border border-border p-5 sm:p-6">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <p className="font-mono text-xs text-primary">LAB {String(entry.labNumber).padStart(2, "0")} · {entry.labArea}</p>
-                <h2 className="mt-1.5 text-lg font-semibold">{entry.labTitle}</h2>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant={entry.severity === "critica" || entry.severity === "alta" ? "destructive" : "secondary"} className="font-normal">severidade {entry.severity}</Badge>
-                <time dateTime={entry.createdAt} className="text-xs text-muted-foreground">{new Date(entry.createdAt).toLocaleDateString("pt-BR")}</time>
-              </div>
-            </div>
+    <PortfolioView
+      username={portfolio.username}
+      name={portfolio.name}
+      bio={portfolio.bio}
+      role={portfolio.role}
+      linkedin={portfolio.linkedin}
+      github={portfolio.github}
+      entries={portfolio.entries}
+      projects={portfolio.projects}
+      stats={stats}
+      skills={portfolio.skills}
+      sections={portfolio.sections}
+    />
 
-            <h3 className="mt-5 text-xs font-medium uppercase tracking-wide text-muted-foreground">Resultado observado</h3>
-            <p className="mt-1.5 whitespace-pre-line text-sm leading-6">{entry.result}</p>
-
-            <h3 className="mt-4 text-xs font-medium uppercase tracking-wide text-muted-foreground">Passos de reprodução</h3>
-            <ol className="mt-1.5 list-decimal pl-5 text-sm leading-6 text-muted-foreground">
-              {reproductionSteps(entry.reproduction).map((step) => <li key={step}>{step}</li>)}
-            </ol>
-
-            {entry.checklist.length > 0 && <>
-              <h3 className="mt-4 text-xs font-medium uppercase tracking-wide text-muted-foreground">Critérios confirmados</h3>
-              <ul className="mt-1.5 grid gap-1 text-sm text-muted-foreground">{entry.checklist.map((item) => <li key={item}>✓ {item}</li>)}</ul>
-            </>}
-          </article>
-        </li>)}</ol>}
-
-    <footer className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-border pt-8 sm:flex-row sm:items-center">
+    <footer className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-border pt-8 sm:flex-row sm:items-center">
       <p className="text-sm text-muted-foreground">Evidências produzidas praticando em ambientes reais no QA Lab.</p>
       <Button asChild variant="outline"><Link href="/">Conhecer o QA Lab</Link></Button>
     </footer>
   </div></main>;
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return <div className="bg-card/40 p-4 sm:p-5">
+    <dt className="text-xs text-muted-foreground">{label}</dt>
+    <dd className="mt-1.5 text-3xl font-semibold tracking-[-0.04em]">{value}</dd>
+  </div>;
 }

@@ -5,50 +5,106 @@
 // progresso que veio do banco.
 
 import Link from "next/link";
-import { ArrowRight, Boxes, CalendarDays, CheckCircle2, Clock3, FileCheck2, ScanSearch, Target, Users, WalletCards } from "lucide-react";
+import { ArrowRight, BookOpen, Boxes, CalendarDays, CheckCircle2, Clock3, FileCheck2, FlaskConical, Library, ScanSearch, Target, Users, WalletCards } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { practiceApps, type PracticeAppId } from "@/lib/product/apps";
-import type { AppCoverage, Journey, LabProgress } from "@/lib/product/journey";
-import type { TrackProgress } from "@/lib/product/tracks";
+import { liveApps, type PracticeAppId } from "@/lib/product/apps";
+import { posts as blogPosts } from "@/lib/blog-posts";
+import { getRecentResearch } from "@/lib/research-library";
+import type { AppCoverage, Journey } from "@/lib/product/journey";
+import { trackHasReleasedLab, type TrackProgress } from "@/lib/product/tracks";
+
+const studySuggestion = blogPosts.find((post) => post.destaque) ?? blogPosts[0] ?? null;
+const referenceSuggestion = getRecentResearch(1)[0] ?? null;
 
 const appIcons: Record<PracticeAppId, typeof Boxes> = { "qa-lab": Boxes, financas: WalletCards, agendamentos: CalendarDays, crm: Users };
 
 /** Trilha curada daquele ambiente, quando existe. */
 const trackFor = (tracks: TrackProgress[], appId: PracticeAppId) => tracks.find((item) => item.track.appId === appId) ?? null;
 
-const statusLabels: Record<LabProgress["status"], string> = { started: "em andamento", completed: "concluído", abandoned: "abandonado", "nao-iniciado": "não iniciado" };
+const quickLinks = [
+  { href: "/labs", label: "Labs", icon: FlaskConical },
+  { href: "/blog", label: "Blog", icon: BookOpen },
+  { href: "/pesquisa", label: "Referências", icon: Library },
+];
 
-export function ProductHome({ journey, tracks, signedIn }: { journey: Journey; tracks: TrackProgress[]; signedIn: boolean }) {
+export function ProductHome({ journey, tracks, signedIn, name }: { journey: Journey; tracks: TrackProgress[]; signedIn: boolean; name: string }) {
   // A trilha é o caminho recomendado; o Lab solto da jornada é o plano B para
   // quem já terminou o percurso curado.
   const track = tracks.find((item) => item.nextLab) ?? tracks[0] ?? null;
   const nextLab = track?.nextLab ?? journey.nextLab;
+  // Trilha sem nenhum Lab liberado não aparece na vitrine.
+  const openTracks = tracks.filter((item) => trackHasReleasedLab(item.track));
 
   return <div className="qa-home"><div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-14">
-    <section className="qa-next-lab" aria-labelledby="home-title">
-      <p className="qa-watermark" aria-hidden="true">Seu laboratório prático de qualidade de software.</p>
-      <div className="qa-next-content max-w-2xl">
-        <p className="qa-eyebrow">QA Lab</p>
-        <h1 id="home-title" className="mt-7 text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-6xl">Pratique QA em aplicações completas.</h1>
-        <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">Quatro ambientes reais para testar, Labs que partem de riscos de produto e um registro de evidências que vira o seu portfólio. Sem precisar montar aplicação nenhuma.</p>
-        {nextLab
-          ? <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Button asChild size="lg"><Link href={`/labs/${nextLab.number}`}>{signedIn && journey.started > 0 ? "Continuar" : "Começar"}: {nextLab.title} <ArrowRight className="size-4" /></Link></Button>
-              <span className="inline-flex items-center gap-2 px-2 text-sm text-muted-foreground"><Clock3 className="size-4" /> {nextLab.minutes} minutos de prática</span>
+    {signedIn
+      // Quem já tem conta não precisa do discurso de venda: é uma saudação
+      // curta e o atalho pra continuar de onde parou, sem headline gigante
+      // nem watermark — isso é para quem ainda está decidindo entrar.
+      ? <section aria-labelledby="home-title">
+          <p className="qa-eyebrow">Bem-vindo de volta</p>
+          <h1 id="home-title" className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-foreground sm:text-6xl"><span className="text-primary">{name}</span>, bora estudar.</h1>
+
+          {/* Card do desafio em questão — grande, é a única decisão que a tela pede. */}
+          <Link href={nextLab ? `/labs/${nextLab.number}` : "/labs"} className="group mt-8 flex flex-col justify-between gap-6 rounded-2xl border border-primary/30 bg-primary/[0.05] p-6 transition hover:border-primary hover:bg-primary/[0.08] sm:flex-row sm:items-end sm:p-8">
+            <div className="min-w-0">
+              <p className="text-xs font-medium uppercase tracking-[0.16em] text-primary">{nextLab ? (journey.started > 0 ? "Continuar" : "Começar") : "Catálogo"}</p>
+              <p className="mt-2 text-2xl font-semibold leading-tight sm:text-3xl">{nextLab?.title ?? "Ver todos os Labs"}</p>
+              {nextLab && <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">{nextLab.objective}</p>}
             </div>
-          : <div className="mt-9"><Button asChild size="lg"><Link href="/labs">Ver todos os Labs <ArrowRight className="size-4" /></Link></Button></div>}
-      </div>
-    </section>
+            <span className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition group-hover:gap-3">
+              {nextLab && <><Clock3 className="size-4" /> {nextLab.minutes} min ·</>} Ir <ArrowRight className="size-4" />
+            </span>
+          </Link>
+
+          {/* Seção 1: só a rota. Seção 2, logo abaixo de cada card de rota:
+              uma indicação daquele tipo — um Lab, um post, uma referência. */}
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {quickLinks.map((item) => <Link key={item.href} href={item.href} className="flex items-center gap-3 rounded-xl border border-border bg-card p-4 transition hover:border-primary/40 hover:bg-accent">
+              <item.icon className="size-5 shrink-0 text-primary" />
+              <span className="text-sm font-medium">{item.label}</span>
+            </Link>)}
+          </div>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            <Link href={nextLab ? `/labs/${nextLab.number}` : "/labs"} className="rounded-xl border border-border bg-card p-4 transition hover:border-primary/40 hover:bg-accent">
+              <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">Sugestão de Lab</p>
+              <p className="mt-1.5 text-sm font-semibold leading-snug">{nextLab?.title ?? "Ver catálogo de Labs"}</p>
+            </Link>
+            {studySuggestion
+              ? <Link href={`/blog/${studySuggestion.slug}`} className="rounded-xl border border-border bg-card p-4 transition hover:border-primary/40 hover:bg-accent">
+                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">Sugestão de leitura</p>
+                  <p className="mt-1.5 text-sm font-semibold leading-snug">{studySuggestion.titulo}</p>
+                </Link>
+              : <div />}
+            {referenceSuggestion
+              ? <Link href="/pesquisa" className="rounded-xl border border-border bg-card p-4 transition hover:border-primary/40 hover:bg-accent">
+                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">Sugestão de referência</p>
+                  <p className="mt-1.5 line-clamp-2 text-sm font-semibold leading-snug">{referenceSuggestion.title}</p>
+                </Link>
+              : <div />}
+          </div>
+        </section>
+      : <section className="qa-next-lab" aria-labelledby="home-title">
+          <p className="qa-watermark" aria-hidden="true">Seu laboratório prático de qualidade de software.</p>
+          <div className="qa-next-content max-w-2xl">
+            <p className="qa-eyebrow">QA Lab</p>
+            <h1 id="home-title" className="mt-7 text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-6xl">Pratique QA em aplicações completas.</h1>
+            <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">Um ambiente real para testar, Labs que partem de riscos de produto e um registro de evidências que vira o seu portfólio. Sem precisar montar aplicação nenhuma.</p>
+            <div className="mt-9"><Button asChild size="lg"><Link href="/labs">Ver todos os Labs <ArrowRight className="size-4" /></Link></Button></div>
+          </div>
+        </section>}
 
     <JourneyPanel journey={journey} signedIn={signedIn} />
 
+    {/* Quem já tem conta já conhece o produto — o discurso de venda (trilhas,
+        ambientes, "como funciona", catálogo) é só pra quem ainda está decidindo. */}
+    {!signedIn && <>
     <section className="mt-16" aria-labelledby="tracks-title">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
         <div><p className="qa-eyebrow">Percurso guiado</p><h2 id="tracks-title" className="mt-2 text-2xl font-semibold">Trilhas</h2></div>
         <p className="text-sm text-muted-foreground">Labs em sequência, do primeiro passo ao fluxo completo</p>
       </div>
-      <div className="mt-6 grid gap-4">{tracks.map((item) => <article key={item.track.slug} className="rounded-xl border border-border p-5 sm:p-6">
+      <div className="mt-6 grid gap-4">{openTracks.map((item) => <article key={item.track.slug} className="rounded-xl border border-border p-5 sm:p-6">
         <h3 className="text-lg font-semibold">{item.track.name}</h3>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.track.objective}</p>
         <p className="mt-3 text-sm leading-6"><strong className="font-medium">Ao terminar:</strong> <span className="text-muted-foreground">{item.track.outcome}</span></p>
@@ -64,11 +120,11 @@ export function ProductHome({ journey, tracks, signedIn }: { journey: Journey; t
 
     <section className="mt-16" aria-labelledby="apps-title">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
-        <div><p className="qa-eyebrow">Ambientes de prática</p><h2 id="apps-title" className="mt-2 text-2xl font-semibold">Quatro aplicações para testar</h2></div>
-        <p className="text-sm text-muted-foreground">35 cenários de regressão e uma trilha por ambiente</p>
+        <div><p className="qa-eyebrow">Ambientes de prática</p><h2 id="apps-title" className="mt-2 text-2xl font-semibold">Onde você pratica</h2></div>
+        <p className="text-sm text-muted-foreground">Cenários de regressão e uma trilha guiada</p>
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        {practiceApps.map((app) => {
+        {liveApps.map((app) => {
           const Icon = appIcons[app.id];
           const coverage = journey.coverage.find((item) => item.id === app.id);
           return <article key={app.id} className="qa-process flex flex-col">
@@ -84,6 +140,10 @@ export function ProductHome({ journey, tracks, signedIn }: { journey: Journey; t
             </div>
           </article>;
         })}
+        <article className="flex flex-col items-start justify-center rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
+          <p className="font-medium text-foreground">Agendamentos, CRM e a loja QA Lab estão em desenvolvimento.</p>
+          <p className="mt-1.5">Chegam assim que tiverem trilha e cenários de regressão prontos, do mesmo jeito que Finanças.</p>
+        </article>
       </div>
     </section>
 
@@ -97,6 +157,7 @@ export function ProductHome({ journey, tracks, signedIn }: { journey: Journey; t
       <div><h2 className="text-lg font-semibold">Explore o catálogo completo</h2><p className="mt-1 text-sm text-muted-foreground">Filtre por trilha, nível e tempo de prática.</p></div>
       <Button asChild variant="outline"><Link href="/labs">Ver Labs e desafios <ArrowRight className="size-4" /></Link></Button>
     </section>
+    </>}
   </div></div>;
 }
 
@@ -122,15 +183,7 @@ function JourneyPanel({ journey, signedIn }: { journey: Journey; signedIn: boole
       <Stat label="Taxa de conclusão" value={`${journey.completionRate}%`} />
     </div>
 
-    {journey.recent.length === 0
-      ? <p className="mt-6 text-sm text-muted-foreground">Você ainda não iniciou nenhum Lab. Comece pelo desafio sugerido acima — leva poucos minutos.</p>
-      : <ul className="mt-6 divide-y divide-border border-b border-border">{journey.recent.map((item) => <li key={item.lab.slug} className="flex flex-wrap items-center justify-between gap-3 py-4">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2.5"><span className="font-mono text-xs text-primary">LAB {String(item.lab.number).padStart(2, "0")}</span><h3 className="font-medium">{item.lab.title}</h3>{item.status === "completed" && <CheckCircle2 className="size-4 text-primary" aria-hidden="true" />}</div>
-            <p className="mt-1 text-xs text-muted-foreground">{statusLabels[item.status]} · {item.submissions} evidência(s)</p>
-          </div>
-          <Button asChild variant="outline" size="sm"><Link href={`/labs/${item.lab.number}`}>{item.status === "completed" ? "Revisar" : "Continuar"}</Link></Button>
-        </li>)}</ul>}
+    {journey.recent.length === 0 && <p className="mt-6 text-sm text-muted-foreground">Você ainda não iniciou nenhum Lab. Comece pelo desafio sugerido acima — leva poucos minutos.</p>}
   </section>;
 }
 

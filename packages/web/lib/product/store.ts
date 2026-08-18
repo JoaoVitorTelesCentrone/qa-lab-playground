@@ -7,6 +7,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { buildJourney, emptyJourney, type Enrollment, type Journey, type ScenarioRun, type Submission } from "./journey";
+import { certificateCode, isCertificateCode, normalizeCode } from "./certificate";
+import { normalizeUsername } from "./username";
+import { isMissingTable, normalizeSectionBody, normalizeSectionTitle, sortSections, SECTION_LIMITS, type PortfolioSection } from "./portfolio-sections";
 
 type SupabaseClient = Awaited<ReturnType<typeof createClient>>;
 
@@ -20,6 +23,14 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   return data.user ? { id: data.user.id, email: data.user.email ?? "" } : null;
+}
+
+/** Primeiro nome do perfil, para saudação — cai pro e-mail quando ainda não foi preenchido. */
+export async function getDisplayName(userId: string, fallbackEmail: string) {
+  const supabase = await createClient();
+  const { data } = await supabase.from("profiles").select("full_name").eq("id", userId).maybeSingle();
+  const name = data?.full_name?.trim();
+  return name ? name.split(" ")[0] : fallbackEmail.split("@")[0];
 }
 
 export async function getJourney(userId: string): Promise<Journey> {
@@ -114,10 +125,7 @@ export async function setSubmissionPublished(userId: string, submissionId: strin
 
 export type PortfolioSettings = { username: string; portfolioPublic: boolean; portfolioHeadline: string };
 
-/** Nome de usuário do portfólio: minúsculas, números e hífen. */
-export function normalizeUsername(value: string) {
-  return value.trim().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 30);
-}
+export { normalizeUsername } from "./username";
 
 export async function savePortfolioSettings(userId: string, patch: Partial<PortfolioSettings>) {
   const supabase = await createClient();
@@ -131,6 +139,88 @@ export async function savePortfolioSettings(userId: string, patch: Partial<Portf
   if (error) throw new Error(error.code === "23505" ? "Este nome de usuário já está em uso." : error.message);
   if (!data) throw new Error("Perfil não encontrado.");
   return { username: data.username ?? "", portfolioPublic: Boolean(data.portfolio_public), portfolioHeadline: data.portfolio_headline ?? "" };
+}
+
+// ============================================================
+// Seções livres do portfólio
+// ============================================================
+// Enquanto a migração 0011 não sobe, a tabela não existe: a leitura devolve
+// `available: false` e o editor explica o que falta, em vez de a página inteira
+// quebrar. Ver lib/product/portfolio-sections.ts.
+
+const SECTION_COLUMNS = "id,title,body,position,visible";
+
+type SectionRow = { id: string; title: string; body: string | null; position: number | null; visible: boolean | null };
+
+function toSection(row: SectionRow): PortfolioSection {
+  return { id: row.id, title: row.title, body: row.body ?? "", position: row.position ?? 0, visible: row.visible !== false };
+}
+
+export type PortfolioSectionsResult = { sections: PortfolioSection[]; available: boolean };
+
+export async function listPortfolioSections(userId: string): Promise<PortfolioSectionsResult> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("portfolio_sections").select(SECTION_COLUMNS).eq("user_id", userId).order("position");
+  if (error) return { sections: [], available: !isMissingTable(error) };
+  return { sections: sortSections((data ?? []).map((row) => toSection(row as SectionRow))), available: true };
+}
+
+/** Seções visíveis de um portfólio público. Leitura anônima, garantida por RLS. */
+export async function listPublicPortfolioSections(userId: string): Promise<PortfolioSection[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("portfolio_sections").select(SECTION_COLUMNS).eq("user_id", userId).eq("visible", true).order("position");
+  if (error) return [];
+  return sortSections((data ?? []).map((row) => toSection(row as SectionRow)));
+}
+
+export async function createPortfolioSection(userId: string, input: { title: string; body: string }): Promise<PortfolioSection> {
+  const supabase = await createClient();
+  const { count } = await supabase.from("portfolio_sections").select("id", { count: "exact", head: true }).eq("user_id", userId);
+  if ((count ?? 0) >= SECTION_LIMITS.max) throw new Error(`Você já tem ${SECTION_LIMITS.max} seções. Apague uma para criar outra.`);
+
+  const { data, error } = await supabase
+    .from("portfolio_sections")
+    .insert({ user_id: userId, title: normalizeSectionTitle(input.title), body: normalizeSectionBody(input.body), position: count ?? 0, visible: true })
+    .select(SECTION_COLUMNS)
+    .maybeSingle();
+  if (error) throw new Error(isMissingTable(error) ? "Seções ainda não estão disponíveis: falta aplicar a migração 0011_portfolio_sections." : error.message);
+  if (!data) throw new Error("Não foi possível criar a seção.");
+  await track(supabase, userId, "portfolio_section_created", { section: (data as SectionRow).id });
+  return toSection(data as SectionRow);
+}
+
+export async function updatePortfolioSection(userId: string, id: string, patch: Partial<Pick<PortfolioSection, "title" | "body" | "visible">>): Promise<PortfolioSection> {
+  const supabase = await createClient();
+  const update: Record<string, unknown> = { updated_at: new Date().toISOString() };
+  if (patch.title !== undefined) update.title = normalizeSectionTitle(patch.title);
+  if (patch.body !== undefined) update.body = normalizeSectionBody(patch.body);
+  if (patch.visible !== undefined) update.visible = patch.visible;
+
+  const { data, error } = await supabase.from("portfolio_sections").update(update).eq("user_id", userId).eq("id", id).select(SECTION_COLUMNS).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("Seção não encontrada.");
+  if (patch.visible !== undefined) await track(supabase, userId, patch.visible ? "portfolio_section_shown" : "portfolio_section_hidden", { section: id });
+  return toSection(data as SectionRow);
+}
+
+export async function deletePortfolioSection(userId: string, id: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("portfolio_sections").delete().eq("user_id", userId).eq("id", id).select("id").maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("Seção não encontrada.");
+  await track(supabase, userId, "portfolio_section_deleted", { section: id });
+  return { id };
+}
+
+/** Grava a ordem enviada pelo editor. Ids de outra pessoa não passam pela RLS. */
+export async function reorderPortfolioSections(userId: string, ids: string[]): Promise<PortfolioSection[]> {
+  const supabase = await createClient();
+  for (const [position, id] of ids.entries()) {
+    const { error } = await supabase.from("portfolio_sections").update({ position }).eq("user_id", userId).eq("id", id);
+    if (error) throw new Error(error.message);
+  }
+  const { sections } = await listPortfolioSections(userId);
+  return sections;
 }
 
 /** Execuções de cenário do aluno, indexadas por `appId:scenarioId`. */
@@ -187,4 +277,82 @@ function toSubmissions(rows: SubmissionRow[] | null): Submission[] {
 
 function toRuns(rows: RunRow[] | null): ScenarioRun[] {
   return (rows ?? []).map((row) => ({ appId: row.app_id, scenarioId: row.scenario_id, status: row.status as ScenarioRun["status"] }));
+}
+
+// ============================================================
+// Certificados de trilha
+// ============================================================
+
+export type StoredCertificate = { code: string; trackSlug: string; holderName: string; labs: number; evidence: number; issuedAt: string };
+
+type CertificateRow = { code: string; track_slug: string; holder_name: string; labs_completed: number | null; evidence_count: number | null; issued_at: string };
+
+function toCertificate(row: CertificateRow): StoredCertificate {
+  return { code: row.code, trackSlug: row.track_slug, holderName: row.holder_name, labs: row.labs_completed ?? 0, evidence: row.evidence_count ?? 0, issuedAt: row.issued_at };
+}
+
+const CERTIFICATE_COLUMNS = "code,track_slug,holder_name,labs_completed,evidence_count,issued_at";
+
+/** Certificados já emitidos para o aluno. Tabela ausente devolve lista vazia. */
+export async function listCertificates(userId: string): Promise<StoredCertificate[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("track_certificates").select(CERTIFICATE_COLUMNS).eq("user_id", userId).order("issued_at", { ascending: false });
+  return error ? [] : (data ?? []).map(toCertificate);
+}
+
+/**
+ * Emite ou atualiza o certificado da trilha. Reemitir mantém o código: o link
+ * que o aluno já publicou no LinkedIn não pode deixar de resolver porque ele
+ * entregou mais uma evidência depois.
+ */
+export async function issueCertificate(userId: string, input: { trackSlug: string; holderName: string; labs: number; evidence: number }): Promise<StoredCertificate> {
+  const supabase = await createClient();
+
+  const { data: existing } = await supabase.from("track_certificates").select(CERTIFICATE_COLUMNS).eq("user_id", userId).eq("track_slug", input.trackSlug).maybeSingle();
+  if (existing) {
+    const { data, error } = await supabase
+      .from("track_certificates")
+      .update({ labs_completed: input.labs, evidence_count: input.evidence, holder_name: input.holderName })
+      .eq("user_id", userId)
+      .eq("track_slug", input.trackSlug)
+      .select(CERTIFICATE_COLUMNS)
+      .single();
+    if (error) throw new Error(error.message);
+    return toCertificate(data);
+  }
+
+  // Colisão de código é improvável (32^8), mas o unique existe e uma segunda
+  // tentativa custa menos que um erro na cara do aluno.
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const { data, error } = await supabase
+      .from("track_certificates")
+      .insert({ user_id: userId, track_slug: input.trackSlug, code: certificateCode(), holder_name: input.holderName, labs_completed: input.labs, evidence_count: input.evidence })
+      .select(CERTIFICATE_COLUMNS)
+      .single();
+    if (!error && data) {
+      await track(supabase, userId, "certificate_issued", { track: input.trackSlug, labs: input.labs });
+      return toCertificate(data);
+    }
+    // 42P01 = tabela ausente: a migração 0009 ainda não foi aplicada no projeto.
+    if (error?.code === "42P01") throw new Error("O certificado ainda não está disponível neste ambiente.");
+    if (error && error.code !== "23505") throw new Error(error.message);
+    // 23505 no par (user_id, track_slug) significa emissão concorrente: o
+    // certificado do outro request já vale, então devolvemos ele.
+    const { data: raced } = await supabase.from("track_certificates").select(CERTIFICATE_COLUMNS).eq("user_id", userId).eq("track_slug", input.trackSlug).maybeSingle();
+    if (raced) return toCertificate(raced);
+  }
+  throw new Error("Não foi possível emitir o certificado. Tente novamente.");
+}
+
+/**
+ * Verificação pública por código. Passa pela função `certificate_by_code`
+ * (security definer) porque a tabela não abre select para anônimo — quem tem o
+ * código lê aquele certificado, e ninguém consegue listar os demais.
+ */
+export async function getCertificateByCode(code: string): Promise<StoredCertificate | null> {
+  if (!isCertificateCode(code)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("certificate_by_code", { lookup_code: normalizeCode(code) });
+  if (error || !data || data.length === 0) return null;
+  return toCertificate(data[0] as CertificateRow);
 }

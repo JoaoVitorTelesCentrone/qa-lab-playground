@@ -13,7 +13,10 @@ export type LabContent = {
 };
 
 export type Lab = {
+  /** Identidade interna: rota /labs/[number], trilhas e `lab_slug` no banco. */
   number: number;
+  /** Número que o aluno lê, pela ordem de lançamento. `null` enquanto agendado. */
+  position: number | null;
   slug: string;
   title: string;
   track: LabTrack;
@@ -43,11 +46,27 @@ type LabSeed = {
 export const SEMANA_1 = "2026-08-10";
 export const tracks: LabTrack[] = ["UI Automation", "API e Contrato"];
 
-// Lançamento enxuto: só os 3 primeiros desafios abrem agora. O resto fica
-// "agendado" (badge "em breve" no catálogo, redireciona pra waitlist se
+// Lançamento enxuto: só o ambiente de Finanças abre agora (ver apps.ts e
+// product-home.tsx), então os 3 desafios liberados são desafios de Finanças —
+// não faz sentido liberar um desafio de um ambiente que está fechado. O resto
+// fica "agendado" (badge "em breve" no catálogo, redireciona pra waitlist se
 // acessado direto) até o time decidir liberar mais. Nada é deletado — só a
 // data de liberação muda. Ver [[qa-lab-lancamento-enxuto]].
-const LAUNCH_LIMIT = 3;
+// Números 101/103/105 = Lançamentos e saldo, Orçamento por categoria e Metas
+// de reserva (variante "fluxo" de cada um) — ver lib/system-challenges.ts.
+//
+// A ORDEM importa e a lista é APPEND-ONLY: a posição aqui é o número que o
+// aluno lê ("Lab 01"), e o número de catálogo (101) fica só como identidade
+// interna — rota, trilha e `lab_slug` no banco. Mostrar 101 num lançamento de
+// três Labs anuncia cem Labs que não existem.
+//
+// Nunca reordene nem insira no meio: o Lab 01 precisa continuar sendo o Lab 01
+// depois que alguém publicar o case dele. Lab novo entra no fim, sempre.
+const LAUNCH_ORDER = [101, 103, 105];
+const launchPosition = (number: number) => {
+  const index = LAUNCH_ORDER.indexOf(number);
+  return index === -1 ? null : index + 1;
+};
 const AGENDADO = "2099-01-01";
 
 export function isLabReleased(lab: Pick<Lab, "releaseDate">, now = new Date()) {
@@ -67,10 +86,12 @@ function contentFor(seed: LabSeed, number: number): LabContent {
 export const labs: Lab[] = systemChallenges.map((challenge) => {
   const track: LabTrack = challenge.area === "API" ? "API e Contrato" : "UI Automation";
   const content = contentFor({ title: challenge.title, objective: challenge.objective, requiredFeature: challenge.area, delivery: "Evidencia registrada no proprio Lab.", route: challenge.route }, challenge.number);
-  const released = challenge.number <= LAUNCH_LIMIT;
+  const position = launchPosition(challenge.number);
+  const released = position !== null;
   const status: LabStatus = released ? "liberado" : "agendado";
   return {
     number: challenge.number,
+    position,
     slug: challenge.id,
     title: challenge.title,
     track,
@@ -92,4 +113,9 @@ export const labs: Lab[] = systemChallenges.map((challenge) => {
 
 export function findLabByNumber(number: number) {
   return labs.find((lab) => lab.number === number);
+}
+
+/** O número que o aluno lê. Cai no de catálogo se o Lab ainda não foi lançado. */
+export function labLabel(lab: Pick<Lab, "number" | "position">) {
+  return String(lab.position ?? lab.number).padStart(2, "0");
 }

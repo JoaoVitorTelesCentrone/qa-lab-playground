@@ -6,5 +6,5 @@ export const dynamic = "force-dynamic";
 
 export default async function FinancePage() {
   const { rows, settings, signedIn } = await loadPracticeEnvironment("financas");
-  return <FinanceApp initial={rows} settings={settings} signedIn={signedIn} screen="overview" />;
+  return <FinanceApp initial={rows} settings={settings} signedIn={signedIn} />;
 }

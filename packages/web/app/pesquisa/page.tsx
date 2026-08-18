@@ -1,24 +1,35 @@
 import Link from "next/link";
-import { ArrowRight, BookMarked, CalendarClock, ExternalLink, Microscope } from "lucide-react";
+import { ArrowRight, BookMarked, CalendarClock, Microscope } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { getRecentResearch, getResearchStats, researchLibrary } from "@/lib/research-library";
+import Blog2 from "@/components/blog2";
+import { getRecentResearch, researchLibrary } from "@/lib/research-library";
 
 export const metadata = {
   title: "Pesquisa Cientifica",
   description: "Biblioteca de textos cientificos e trabalhos academicos sobre qualidade de software e QA.",
 };
 
-function formatDate(date: string) {
-  return new Date(`${date}T00:00:00`).toLocaleDateString("pt-BR", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
-
 export default function PesquisaPage() {
-  const stats = getResearchStats();
-  const works = getRecentResearch(24);
+  // Uma lista só: a grade do Blog2 é rasa de propósito (meta, título, autoria)
+  // e serve para escanear e clicar. Nada de segundo bloco de "leituras
+  // seguintes" — era a mesma biblioteca repetida em outro formato.
+  const works = getRecentResearch(12);
+  const posts = works.map((work) => ({
+    meta: `${work.year} · ${work.source}`,
+    title: work.title,
+    author: {
+      name: work.authors[0] ?? "Autoria não informada",
+      role: work.venue || "Sem venue informado",
+    },
+    href: work.url,
+  }));
+  // As estatísticas batem com os trabalhos exibidos, não com a biblioteca
+  // inteira — senão o "trabalhos indexados" mostra um número que ninguém vê.
+  const stats = {
+    total: works.length,
+    topics: new Set(works.flatMap((work) => work.topics)).size,
+    sources: new Set(works.map((work) => work.source)).size,
+  };
   const updatedAt = new Date(researchLibrary.updatedAt).toLocaleString("pt-BR", {
     day: "numeric",
     month: "short",
@@ -82,51 +93,16 @@ export default function PesquisaPage() {
       </section>
 
       <section id="trabalhos" className="mt-14 scroll-mt-24">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-mint">Biblioteca</p>
-          <h2 className="mt-3 text-3xl font-black text-off-white">Trabalhos e textos academicos</h2>
-        </div>
-
-        <div className="mt-7 grid gap-5 lg:grid-cols-2">
-          {works.map((work) => (
-            <a
-              key={work.id}
-              href={work.url}
-              target="_blank"
-              rel="noreferrer"
-              className="group flex min-h-80 flex-col rounded-lg border border-white/10 bg-[#171B21] p-6 transition duration-200 hover:-translate-y-1 hover:border-mint/40 hover:bg-[#1B2027] hover:shadow-[0_16px_40px_rgba(0,0,0,0.28)] focus-visible:ring-2 focus-visible:ring-mint/60"
-            >
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant={work.source === "Curated" ? "neon" : "outline"}>{work.source}</Badge>
-                <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#8B949E]">
-                  {formatDate(work.publishedAt)}
-                </span>
-              </div>
-              <h3 className="mt-5 text-xl font-black leading-snug text-off-white">{work.title}</h3>
-              <p className="mt-3 text-sm font-semibold text-mint">{work.venue || "Sem venue informado"}</p>
-              <p className="mt-3 flex-1 text-sm leading-7 text-[#AAB2BC]">{work.abstract}</p>
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                {work.topics.slice(0, 5).map((topic) => (
-                  <Badge key={topic} variant="secondary" className="normal-case tracking-normal">
-                    {topic}
-                  </Badge>
-                ))}
-              </div>
-
-              <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4">
-                <p className="text-xs leading-5 text-[#8B949E]">
-                  {work.authors.slice(0, 3).join(", ")}
-                  {work.authors.length > 3 ? " et al." : ""}
-                </p>
-                <span className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-mint/25 px-4 text-sm font-bold text-mint transition group-hover:border-neon/50 group-hover:text-neon">
-                  Abrir fonte
-                  <ExternalLink className="size-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </span>
-              </div>
-            </a>
-          ))}
-        </div>
+        <Blog2
+          header={{
+            heading: "Trabalhos e textos academicos",
+            description:
+              "As referências mais recentes da biblioteca, com ano, fonte, autoria e veículo de publicação. Clique para abrir o original.",
+            ctaText: "Ler o blog",
+            ctaHref: "/blog",
+          }}
+          posts={posts}
+        />
       </section>
     </div>
   );

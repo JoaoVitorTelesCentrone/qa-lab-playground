@@ -6,6 +6,7 @@ import { useEffect, useId, useMemo, useState } from "react";
 import { Heart, Minus, PackageCheck, Plus, ShoppingCart, Star, Trash2, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SelectField } from "@/components/ui/select-field";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { shopProducts, type ShopProduct } from "@/lib/playground/shop-data";
@@ -419,8 +420,11 @@ function ShopShell({ title, subtitle, action, children }: { title: string; subti
 
 function Select({ label, value, values, labels, onChange }: { label: string; value: string; values: string[]; labels?: Record<string, string>; onChange: (value: string) => void }) {
   return (
-    <select value={value} onChange={(event) => onChange(event.target.value)} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/20" aria-label={label}>
-      {values.map((item) => <option key={item} value={item}>{labels?.[item] ?? item}</option>)}
-    </select>
+    <SelectField
+      value={value}
+      onChange={onChange}
+      options={values.map((item) => ({ value: item, label: labels?.[item] ?? item }))}
+      aria-label={label}
+    />
   );
 }

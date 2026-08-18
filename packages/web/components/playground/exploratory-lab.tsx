@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Download } from "lucide-react";
 import { LabShell } from "./login-lab";
+import { SelectField, toOptions } from "@/components/ui/select-field";
 
 type NoteType = "observacao" | "hipotese" | "duvida" | "bug";
 
@@ -32,9 +33,12 @@ export function ExploratoryLab() {
             <p className="mt-2 text-sm text-[#AAB2BC]">Cubra login, busca, carrinho, checkout, mensagens de erro, refresh e rede lenta simulada.</p>
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-[160px_1fr_auto]">
-            <select value={noteType} onChange={(event) => setNoteType(event.target.value as NoteType)} className="field" aria-label="Tipo de nota">
-              <option>observacao</option><option>hipotese</option><option>duvida</option><option>bug</option>
-            </select>
+            <SelectField
+              value={noteType}
+              onChange={(next) => setNoteType(next as NoteType)}
+              options={toOptions(["observacao", "hipotese", "duvida", "bug"])}
+              aria-label="Tipo de nota"
+            />
             <input value={note} onChange={(event) => setNote(event.target.value)} className="field" placeholder="Nota da sessao" data-testid="session-note" />
             <button onClick={addNote} className="rounded-lg bg-neon px-4 text-sm font-black text-[#101319]">Adicionar</button>
           </div>
@@ -45,7 +49,7 @@ export function ExploratoryLab() {
             {(["title", "steps", "expected", "actual", "impact", "evidence"] as const).map((field) => (
               <label key={field} className="grid gap-2 text-sm font-bold text-off-white">{field}<textarea value={bug[field]} onChange={(event) => setBug({ ...bug, [field]: event.target.value })} className="field min-h-20" data-testid={`bug-${field}`} /></label>
             ))}
-            <label className="grid gap-2 text-sm font-bold text-off-white">severity<select value={bug.severity} onChange={(event) => setBug({ ...bug, severity: event.target.value })} className="field"><option>baixa</option><option>media</option><option>alta</option><option>critica</option></select></label>
+            <label className="grid gap-2 text-sm font-bold text-off-white">severity<SelectField value={bug.severity} onChange={(severity) => setBug({ ...bug, severity })} options={toOptions(["baixa", "media", "alta", "critica"])} aria-label="severity" /></label>
           </div>
         </section>
         <aside className="rounded-lg border border-white/10 bg-[#161B22] p-5">

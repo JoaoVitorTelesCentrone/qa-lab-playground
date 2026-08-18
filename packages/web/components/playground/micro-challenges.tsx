@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { SelectField, toOptions } from "@/components/ui/select-field";
 
 export function MicroChallengePage({ kind }: { kind: "elements" | "tables" | "dialogs" | "frames" | "shadow-dom" | "files" }) {
   const [tags, setTags] = useState(["qa", "playwright"]);
@@ -34,7 +35,7 @@ export function MicroChallengePage({ kind }: { kind: "elements" | "tables" | "di
             <label className="grid gap-2 text-sm font-bold">Input<input className="field" data-testid="healthy-input" placeholder="seletor saudavel" /></label>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" data-testid="terms-checkbox" /> checkbox</label>
             <fieldset className="grid gap-2 text-sm"><legend className="font-bold">Radio</legend><label><input type="radio" name="level" /> iniciante</label><label><input type="radio" name="level" /> avancado</label></fieldset>
-            <label className="grid gap-2 text-sm font-bold">Dropdown<select className="field"><option>API</option><option>UI</option></select></label>
+            <label className="grid gap-2 text-sm font-bold">Dropdown<SelectField options={toOptions(["API", "UI"])} defaultValue="API" aria-label="Dropdown" /></label>
             <label className="grid gap-2 text-sm font-bold">Date picker<input className="field" type="date" /></label>
             <label className="grid gap-2 text-sm font-bold">Slider<input type="range" value={progress} onChange={(event) => setProgress(Number(event.target.value))} /></label>
             <div><input value={tagText} onChange={(event) => setTagText(event.target.value)} className="field" placeholder="Nova tag" /><button onClick={addTag} className="mt-2 rounded-lg bg-neon px-3 py-2 text-sm font-black text-[#101319]">Adicionar tag</button><div className="mt-2 flex gap-2">{tags.map((tag) => <span key={tag} className="rounded bg-white/10 px-2 py-1 text-xs">{tag}</span>)}</div></div>

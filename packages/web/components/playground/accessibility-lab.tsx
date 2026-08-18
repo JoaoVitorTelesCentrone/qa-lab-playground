@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { LabShell } from "./login-lab";
+import { SelectField, toOptions } from "@/components/ui/select-field";
 
 export function AccessibilityLab() {
   const bug = useSearchParams().get("bug");
@@ -18,7 +19,7 @@ export function AccessibilityLab() {
       <main id="a11y-main" className={bug === "missing-focus" ? "[&_*:focus-visible]:outline-none" : ""}>
         <section className="grid gap-4 rounded-lg border border-white/10 bg-card p-5 sm:grid-cols-3">
           <label className="grid gap-2 text-sm font-bold">Email<input className="field" type="email" aria-describedby="email-help" /></label>
-          <label className="grid gap-2 text-sm font-bold">Opcao<select className="field"><option>Entrega padrao</option><option>Retirada</option></select></label>
+          <label className="grid gap-2 text-sm font-bold">Opcao<SelectField options={toOptions(["Entrega padrao", "Retirada"])} defaultValue="Entrega padrao" aria-label="Opcao" /></label>
           <button ref={triggerRef} onClick={() => setModal(true)} className="self-end rounded-lg bg-neon px-4 py-3 text-sm font-black text-[#101319]" aria-haspopup="dialog">Abrir modal</button>
           <p id="email-help" className="text-xs text-[#8B949E]">Campo usado para testar label e descricao.</p>
         </section>

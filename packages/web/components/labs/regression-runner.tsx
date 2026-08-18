@@ -15,9 +15,20 @@ import { useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SelectField } from "@/components/ui/select-field";
+
+// O Radix reserva value="" para "nada selecionado", então "todas" precisa de
+// um sentinela — convertido de volta para "" ao aplicar o filtro.
+const ALL_LAYERS = "__todas__";
 import { plantedBugs } from "@/lib/product/practice/bugs";
-import { regressionLayers, regressionPacks } from "@/lib/regression-packs";
+import { liveApps } from "@/lib/product/apps";
+import { regressionLayers, regressionPacks as allRegressionPacks } from "@/lib/regression-packs";
 import type { ScenarioRun } from "@/lib/product/journey";
+
+// Lançamento enxuto: só o pack do ambiente liberado aparece aqui — o resto
+// existe no código mas fica fora da vitrine. Ver [[qa-lab-lancamento-enxuto]].
+const liveIds = new Set(liveApps.map((app) => app.id));
+const regressionPacks = allRegressionPacks.filter((pack) => liveIds.has(pack.id));
 
 const options: Array<{ value: ScenarioRun["status"]; label: string }> = [
   { value: "passou", label: "Passou" },
@@ -71,7 +82,7 @@ export function RegressionRunner({ signedIn, initialRuns, instructor = false }: 
   return <main className="qa-system"><div className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
     <p className="qa-eyebrow">Qualidade contínua</p>
     <h1 className="mt-2 text-4xl font-semibold tracking-[-0.03em]">Packs de regressão</h1>
-    <p className="mt-3 max-w-2xl text-muted-foreground">35 cenários por ambiente de prática, das camadas de UI e validação até acessibilidade, resiliência, segurança e governança. Cada cenário parte da massa de teste restaurada e aponta para a tela onde ele roda.</p>
+    <p className="mt-3 max-w-2xl text-muted-foreground">Cenários de regressão do ambiente liberado, das camadas de UI e validação até acessibilidade, resiliência, segurança e governança. Cada cenário parte da massa de teste restaurada e aponta para a tela onde ele roda.</p>
 
     {!signedIn && <p className="mt-5 rounded-md border border-border bg-muted/40 p-4 text-sm text-muted-foreground"><Link href="/login?next=/labs/regressao" className="text-primary">Entre na sua conta</Link> para marcar cada execução e acompanhar a cobertura na sua jornada.</p>}
     {error && <p role="alert" className="mt-5 rounded-md border border-destructive/30 p-3 text-sm text-destructive">{error}</p>}
@@ -79,15 +90,18 @@ export function RegressionRunner({ signedIn, initialRuns, instructor = false }: 
     <div className="mt-8 flex flex-wrap items-end gap-3 border-y border-border py-4">
       <label className="grid gap-1.5">
         <span className="text-xs font-medium text-muted-foreground">Camada</span>
-        <select value={layer} onChange={(event) => setLayer(event.target.value)} className="input w-52">
-          <option value="">Todas as camadas</option>
-          {regressionLayers.map((item) => <option key={item} value={item}>{item}</option>)}
-        </select>
+        <SelectField
+          value={layer || ALL_LAYERS}
+          onChange={(next) => setLayer(next === ALL_LAYERS ? "" : next)}
+          options={[{ value: ALL_LAYERS, label: "Todas as camadas" }, ...regressionLayers.map((item) => ({ value: item, label: item }))]}
+          className="w-52"
+          aria-label="Camada"
+        />
       </label>
-      {instructor && <Link href="/lab/instrutor" className="text-sm text-primary">Console do instrutor →</Link>}
-      <nav aria-label="Ir para um ambiente" className="ml-auto flex flex-wrap gap-2">
+      {instructor && <Link href="/lab/instrutor" className="ml-auto text-sm text-primary">Console do instrutor →</Link>}
+      {regressionPacks.length > 1 && <nav aria-label="Ir para um ambiente" className="ml-auto flex flex-wrap gap-2">
         {regressionPacks.map((pack) => <a key={pack.id} href={`#${pack.id}`} className="rounded-md border border-border px-2.5 py-1.5 text-xs hover:bg-accent">{pack.name}</a>)}
-      </nav>
+      </nav>}
     </div>
 
     <div className="mt-8 grid gap-5">{regressionPacks.map((pack) => {

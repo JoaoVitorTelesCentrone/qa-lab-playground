@@ -8,14 +8,28 @@ describe("packs de regressão", () => {
     expect(regressionPacks.map((pack) => pack.id)).toEqual(practiceApps.map((app) => app.id));
   });
 
-  test("cada pack tem os 35 cenários da matriz", () => {
-    for (const pack of regressionPacks) expect(pack.scenarios).toHaveLength(35);
+  // Finanças roda um recorte de 20 da mesma matriz de 35 — é o único ambiente
+  // liberado no lançamento enxuto. Ver [[qa-lab-lancamento-enxuto]].
+  test("cada pack tem os cenários da matriz — 35, exceto Finanças, que roda 20", () => {
+    for (const pack of regressionPacks) expect(pack.scenarios).toHaveLength(pack.id === "financas" ? 20 : 35);
   });
 
-  test("a matriz é a mesma nos quatro ambientes, na mesma ordem", () => {
-    const reference = regressionPacks[0].scenarios.map((scenario) => `${scenario.number} ${scenario.title} ${scenario.layer}`);
-    for (const pack of regressionPacks) {
+  test("a matriz é a mesma nos ambientes de 35, na mesma ordem", () => {
+    const fullPacks = regressionPacks.filter((pack) => pack.id !== "financas");
+    const reference = fullPacks[0].scenarios.map((scenario) => `${scenario.number} ${scenario.title} ${scenario.layer}`);
+    for (const pack of fullPacks) {
       expect(pack.scenarios.map((scenario) => `${scenario.number} ${scenario.title} ${scenario.layer}`)).toEqual(reference);
+    }
+  });
+
+  test("o recorte de Finanças é um subconjunto da matriz de 35, na mesma ordem relativa", () => {
+    const full = regressionPacks.find((pack) => pack.id === "qa-lab")!.scenarios.map((scenario) => `${scenario.title} ${scenario.layer}`);
+    const financas = findRegressionPack("financas")!.scenarios.map((scenario) => `${scenario.title} ${scenario.layer}`);
+    let cursor = -1;
+    for (const scenario of financas) {
+      const at = full.indexOf(scenario, cursor + 1);
+      expect(at).toBeGreaterThan(cursor);
+      cursor = at;
     }
   });
 

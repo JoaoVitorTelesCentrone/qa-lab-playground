@@ -10,7 +10,13 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SelectField } from "@/components/ui/select-field";
 import type { Row } from "./use-practice-app";
+
+// O Radix reserva value="" para "nada selecionado" e recusa um item com esse
+// valor, então a opção "Todos" precisa de um sentinela — convertido de volta
+// para "" na hora de aplicar o filtro.
+const ALL = "__todos__";
 
 export type FilterSpec = { field: string; label: string; options: Array<{ value: string; label: string }> };
 export type SortSpec<T> = { id: string; label: string; compare: (left: T, right: T) => number };
@@ -70,17 +76,22 @@ export function useListControls<T extends Row>(rows: T[], options: {
 
       {filters.map((filter) => <label key={filter.field} className="grid gap-1.5">
         <span className="text-xs font-medium text-muted-foreground">{filter.label}</span>
-        <select value={active[filter.field] ?? ""} onChange={(event) => { setActive((state) => ({ ...state, [filter.field]: event.target.value })); setPage(1); }} className="input w-44">
-          <option value="">Todos</option>
-          {filter.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-        </select>
+        <SelectField
+          value={active[filter.field] ?? ALL}
+          onChange={(next) => { setActive((state) => ({ ...state, [filter.field]: next === ALL ? "" : next })); setPage(1); }}
+          options={[{ value: ALL, label: "Todos" }, ...filter.options]}
+          className="w-44"
+        />
       </label>)}
 
       {sorts.length > 1 && <label className="grid gap-1.5">
         <span className="text-xs font-medium text-muted-foreground">Ordenar por</span>
-        <select value={sortId} onChange={(event) => setSortId(event.target.value)} className="input w-52">
-          {sorts.map((sort) => <option key={sort.id} value={sort.id}>{sort.label}</option>)}
-        </select>
+        <SelectField
+          value={sortId}
+          onChange={setSortId}
+          options={sorts.map((sort) => ({ value: sort.id, label: sort.label }))}
+          className="w-52"
+        />
       </label>}
 
       {hasFilters && <Button type="button" variant="ghost" size="sm" onClick={clear}><X className="size-3.5" /> Limpar filtros</Button>}
@@ -91,9 +102,12 @@ export function useListControls<T extends Row>(rows: T[], options: {
       <div className="flex items-center gap-3">
         <label className="flex items-center gap-1.5">
           Itens por página
-          <select value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setPage(1); }} className="input h-8 w-16 px-2">
-            {pageSizes.map((size) => <option key={size} value={size}>{size}</option>)}
-          </select>
+          <SelectField
+            value={String(pageSize)}
+            onChange={(next) => { setPageSize(Number(next)); setPage(1); }}
+            options={pageSizes.map((size) => ({ value: String(size), label: String(size) }))}
+            className="h-8 w-[4.5rem] px-2"
+          />
         </label>
         <div className="flex items-center gap-1.5">
           <Button type="button" size="xs" variant="outline" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={page === 1}>Anterior</Button>

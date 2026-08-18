@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { SelectField } from "@/components/ui/select-field";
 import { CarouselSlideView, CAROUSEL_SLIDE_SIZE } from "./carousel-slide";
 import { buildCarouselDeck, listCarouselSources, type CarouselSlide, type CarouselSourceKind } from "@/lib/product/carousel";
 
@@ -92,16 +93,13 @@ export function CarouselStudio() {
 
           <label className="grid gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
             Item
-            <select
+            <SelectField
               value={sourceId}
-              onChange={(event) => setSourceId(event.target.value)}
-              className="field text-sm font-normal normal-case text-foreground"
-            >
-              <option value="" disabled>Escolha um item</option>
-              {optionsForKind.map((option) => (
-                <option key={option.id} value={option.id}>{option.label}</option>
-              ))}
-            </select>
+              onChange={setSourceId}
+              options={optionsForKind.map((option) => ({ value: option.id, label: option.label }))}
+              placeholder="Escolha um item"
+              className="text-sm font-normal normal-case text-foreground"
+            />
           </label>
 
           <Button onClick={() => generate()} disabled={!sourceId} className="gap-2">

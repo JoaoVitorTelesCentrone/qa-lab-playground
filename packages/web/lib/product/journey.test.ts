@@ -68,7 +68,8 @@ describe("minha jornada", () => {
     ];
     const coverage = buildJourney([], [], runs).coverage;
     expect(coverage).toHaveLength(4);
-    expect(coverage.every((item) => item.total === 35)).toBe(true);
+    // Finanças roda um recorte de 20 cenários; os outros três seguem com 35.
+    expect(coverage.every((item) => item.total === (item.id === "financas" ? 20 : 35))).toBe(true);
     const first = coverage.find((item) => item.id === pack.id)!;
     expect(first.executed).toBe(2);
     expect(first.failed).toBe(2);
