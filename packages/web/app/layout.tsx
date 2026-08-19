@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Toaster } from "@/components/ui/sonner";
+import { NavigationProgress } from "@/components/layout/navigation-progress";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap" });
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="pt-BR">
       <body className={`${inter.variable} ${mono.variable} min-h-screen bg-background font-sans text-foreground antialiased`}>
+        <NavigationProgress />
         <SiteHeader />
         <main>{children}</main>
         <Toaster />

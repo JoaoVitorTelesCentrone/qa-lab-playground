@@ -124,6 +124,28 @@ export function getRecentResearch(limit = 12) {
     .slice(0, limit);
 }
 
+/**
+ * Encurta um abstract para caber num tooltip. Os abstracts da biblioteca têm
+ * ~1850 caracteres na mediana: inteiros viram um paredão que ninguém lê.
+ *
+ * Corta na última frase que couber, para o resumo terminar em ponto final em
+ * vez de no meio de uma palavra. Se nenhuma frase couber (abstract de uma
+ * sentença longa), cai para o último espaço antes do limite.
+ */
+export function summarizeAbstract(abstract: string, maxChars = 300) {
+  const text = abstract.replace(/\s+/g, " ").trim();
+  if (text.length <= maxChars) return text;
+
+  const window = text.slice(0, maxChars);
+  const lastSentence = Math.max(window.lastIndexOf(". "), window.lastIndexOf("? "), window.lastIndexOf("! "));
+  // Só vale cortar por frase se sobrar resumo de verdade — senão fica um
+  // fragmento curto demais e o corte por palavra informa mais.
+  if (lastSentence > maxChars * 0.5) return window.slice(0, lastSentence + 1);
+
+  const lastSpace = window.lastIndexOf(" ");
+  return `${window.slice(0, lastSpace > 0 ? lastSpace : maxChars).trimEnd()}…`;
+}
+
 export function getResearchStats() {
   const items = getSoftwareQualityResearch();
   const topics = new Set(items.flatMap((item) => item.topics));

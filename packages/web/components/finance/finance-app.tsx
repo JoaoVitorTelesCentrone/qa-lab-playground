@@ -2,9 +2,13 @@
 
 // Ambiente de prática Finanças.
 //
-// Versão enxuta do lançamento: saldo do período e a tabela de despesas, com
-// um botão para lançar uma nova. Contas, orçamentos, metas e o restante do
-// ambiente continuam em código (ver histórico), só não aparecem por enquanto.
+// Duas colunas espelhadas: despesas à esquerda, receitas à direita. As duas
+// saem do mesmo recurso (`financas.transactions`) e diferem só pelo campo
+// `kind` — o que também é o exercício, porque um lançamento criado com o tipo
+// errado aparece na coluna oposta em vez de sumir.
+//
+// Contas, orçamentos e metas continuam em código (ver histórico), só não
+// aparecem por enquanto.
 //
 // Os totais saem de lib/product/practice/views.ts, que é onde os desvios
 // plantados agem — a tela só mostra o que o cálculo compartilhado devolveu.
@@ -16,7 +20,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { EnvironmentShell } from "@/components/practice/environment-shell";
 import { ExportCsv } from "@/components/practice/export-csv";
 import { ResourceForm } from "@/components/practice/resource-form";
-import { usePracticeApp, type AppRows, type Row } from "@/components/practice/use-practice-app";
+import { usePracticeApp, type AppRows, type ResourceHandle, type Row } from "@/components/practice/use-practice-app";
 import { findPracticeApp } from "@/lib/product/apps";
 import { money } from "@/lib/product/practice/format";
 import { financeSummary, type Account, type Budget } from "@/lib/product/practice/views";
@@ -25,13 +29,144 @@ import type { PracticeSettings } from "@/lib/product/practice/store";
 
 const app = findPracticeApp("financas")!;
 
-export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; settings: PracticeSettings; signedIn: boolean }) {
+const FIELDS = ["date", "description", "category", "amount"];
+
+/**
+ * Uma das duas colunas do extrato. Cada uma cuida do próprio formulário e dos
+ * próprios diálogos: com o estado no pai, abrir "editar" numa coluna piscava a
+ * outra, porque as duas liam o mesmo registro em edição.
+ */
+function LedgerColumn({
+  kind,
+  title,
+  singular,
+  rows,
+  handle,
+  sign,
+  amountClassName,
+}: {
+  kind: Transaction["kind"];
+  title: string;
+  singular: string;
+  rows: Transaction[];
+  handle: ResourceHandle;
+  sign: string;
+  amountClassName: string;
+}) {
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState<Row | null>(null);
   const [deleting, setDeleting] = useState<Row | null>(null);
+
+  return (
+    <section className="flex flex-col rounded-xl border border-border">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-5 py-4">
+        <h2 className="text-lg font-semibold">{title}</h2>
+        <div className="flex gap-2">
+          <ExportCsv resource={handle.resource} rows={rows} columns={FIELDS} filename={title.toLowerCase()} />
+          <Button type="button" size="sm" onClick={() => setCreating((current) => !current)}>
+            <Plus className="size-3.5" /> Nova {singular}
+          </Button>
+        </div>
+      </header>
+
+      {creating && (
+        <div className="border-b border-border p-5">
+          <ResourceForm
+            handle={handle}
+            fields={FIELDS}
+            defaults={{ date: "2026-08-15", kind }}
+            submitLabel={`Adicionar ${singular}`}
+            onDone={() => setCreating(false)}
+          />
+        </div>
+      )}
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Data</TableHead>
+            <TableHead>Descrição</TableHead>
+            <TableHead className="text-right">Valor</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={4} className="py-8 text-center text-sm text-muted-foreground">
+                Nenhuma {singular} registrada. Adicione a primeira acima.
+              </TableCell>
+            </TableRow>
+          ) : (
+            rows.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell className="whitespace-nowrap text-muted-foreground">{item.date}</TableCell>
+                {/* Categoria entra sob a descrição em vez de virar coluna: em
+                    meia largura, cinco colunas espremem o valor. */}
+                <TableCell>
+                  <span className="font-medium">{item.description}</span>
+                  <span className="block text-xs text-muted-foreground">{item.category}</span>
+                </TableCell>
+                <TableCell className={`whitespace-nowrap text-right tabular-nums ${amountClassName}`}>
+                  {sign} {money(Number(item.amount))}
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-1">
+                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`Editar ${item.description}`} onClick={() => setEditing(item)}>
+                      <Pencil className="size-3.5" />
+                    </Button>
+                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`Apagar ${item.description}`} onClick={() => setDeleting(item)}>
+                      <Trash2 className="size-3.5" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+
+      {editing && (
+        <div role="dialog" aria-modal="true" aria-labelledby={`edit-${kind}`} className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
+          <div className="w-full max-w-md rounded-xl border border-border bg-card p-5">
+            <h2 id={`edit-${kind}`} className="text-lg font-semibold">Editar {singular}</h2>
+            <div className="mt-4">
+              <ResourceForm handle={handle} record={editing} fields={FIELDS} onDone={() => setEditing(null)} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleting && (
+        <div role="dialog" aria-modal="true" aria-labelledby={`delete-${kind}`} className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
+          <div className="w-full max-w-sm rounded-xl border border-border bg-card p-5">
+            <h2 id={`delete-${kind}`} className="text-lg font-semibold">Apagar {singular}</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Apagar &quot;{String(deleting.description)}&quot;? Essa ação não pode ser desfeita.
+            </p>
+            <div className="mt-5 flex justify-end gap-2">
+              <Button type="button" variant="ghost" size="sm" onClick={() => setDeleting(null)}>Cancelar</Button>
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                disabled={handle.pending === deleting.id}
+                onClick={async () => { const done = await handle.remove(deleting.id); if (done) setDeleting(null); }}
+              >
+                {handle.pending === deleting.id && <Loader2 className="size-3.5 animate-spin" />} Apagar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; settings: PracticeSettings; signedIn: boolean }) {
   // Sem desvios ativos: o painel que ligava/desligava isso saiu de tela, então
-  // o saldo sempre bate com a soma real das despesas — é o que dá pra validar
-  // criando, editando e apagando aqui.
+  // o saldo sempre bate com a soma real dos lançamentos — é o que dá pra
+  // validar criando, editando e apagando aqui.
   const practice = usePracticeApp(initial, { persist: signedIn, activeBugs: [] });
   const transactions = practice.use("financas.transactions");
   const budgets = practice.use("financas.budgets");
@@ -43,11 +178,12 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
     accounts: accounts.rows as unknown as Account[],
   };
   const summary = financeSummary(rows, []);
-  const despesas = rows.transactions.filter((item) => item.kind === "despesa").sort((a, b) => b.date.localeCompare(a.date));
+  const recentFirst = (kind: Transaction["kind"]) =>
+    rows.transactions.filter((item) => item.kind === kind).sort((a, b) => b.date.localeCompare(a.date));
 
   return <EnvironmentShell app={app} settings={settings} signedIn={signedIn}>
     {/* Extrato, não dashboard: o saldo é o número que importa, então ele é o
-        maior da tela — receitas e despesas ficam como lançamentos ao lado. */}
+        maior da tela — os lançamentos ficam nas duas colunas abaixo. */}
     <div className="mt-8 rounded-xl border border-border bg-card p-6 sm:p-8">
       <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-6">
         <div>
@@ -69,87 +205,26 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
       <div className="mt-6 h-px w-full bg-gradient-to-r from-primary/50 via-border to-transparent" aria-hidden="true" />
     </div>
 
-    <div className="mt-6 flex flex-wrap items-center justify-between gap-2">
-      <h2 className="text-lg font-semibold">Despesas</h2>
-      <div className="flex gap-2">
-        <ExportCsv resource={transactions.resource} rows={despesas} columns={["date", "description", "category", "amount"]} filename="despesas" />
-        <Button type="button" size="sm" onClick={() => setCreating((current) => !current)}>
-          <Plus className="size-3.5" /> Nova despesa
-        </Button>
-      </div>
-    </div>
-
-    {creating && <div className="mt-4 rounded-xl border border-border bg-card p-5">
-      <ResourceForm
+    {/* `items-start` para uma coluna com mais lançamentos não esticar a outra. */}
+    <div className="mt-6 grid items-start gap-6 lg:grid-cols-2">
+      <LedgerColumn
+        kind="despesa"
+        title="Despesas"
+        singular="despesa"
+        rows={recentFirst("despesa")}
         handle={transactions}
-        fields={["date", "description", "category", "amount"]}
-        defaults={{ date: "2026-08-15", kind: "despesa" }}
-        submitLabel="Adicionar despesa"
-        onDone={() => setCreating(false)}
+        sign="−"
+        amountClassName="text-destructive"
       />
-    </div>}
-
-    <div className="mt-4 overflow-hidden rounded-xl border border-border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Data</TableHead>
-            <TableHead>Descrição</TableHead>
-            <TableHead>Categoria</TableHead>
-            <TableHead className="text-right">Valor</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {despesas.length === 0
-            ? <TableRow><TableCell colSpan={5} className="py-8 text-center text-sm text-muted-foreground">Nenhuma despesa registrada. Adicione a primeira acima.</TableCell></TableRow>
-            : despesas.map((item) => <TableRow key={item.id}>
-                <TableCell className="text-muted-foreground">{item.date}</TableCell>
-                <TableCell className="font-medium">{item.description}</TableCell>
-                <TableCell className="text-muted-foreground">{item.category}</TableCell>
-                <TableCell className="text-right text-destructive">− {money(Number(item.amount))}</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-1">
-                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`Editar ${item.description}`} onClick={() => setEditing(item)}><Pencil className="size-3.5" /></Button>
-                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`Apagar ${item.description}`} onClick={() => setDeleting(item)}><Trash2 className="size-3.5" /></Button>
-                  </div>
-                </TableCell>
-              </TableRow>)}
-        </TableBody>
-      </Table>
+      <LedgerColumn
+        kind="receita"
+        title="Receitas"
+        singular="receita"
+        rows={recentFirst("receita")}
+        handle={transactions}
+        sign="+"
+        amountClassName="text-primary"
+      />
     </div>
-
-    {editing && <div role="dialog" aria-modal="true" aria-labelledby="edit-title" className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
-      <div className="w-full max-w-md rounded-xl border border-border bg-card p-5">
-        <h2 id="edit-title" className="text-lg font-semibold">Editar despesa</h2>
-        <div className="mt-4">
-          <ResourceForm
-            handle={transactions}
-            record={editing}
-            fields={["date", "description", "category", "amount"]}
-            onDone={() => setEditing(null)}
-          />
-        </div>
-      </div>
-    </div>}
-
-    {deleting && <div role="dialog" aria-modal="true" aria-labelledby="delete-title" className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
-      <div className="w-full max-w-sm rounded-xl border border-border bg-card p-5">
-        <h2 id="delete-title" className="text-lg font-semibold">Apagar despesa</h2>
-        <p className="mt-2 text-sm text-muted-foreground">Apagar "{String(deleting.description)}"? Essa ação não pode ser desfeita.</p>
-        <div className="mt-5 flex justify-end gap-2">
-          <Button type="button" variant="ghost" size="sm" onClick={() => setDeleting(null)}>Cancelar</Button>
-          <Button
-            type="button"
-            variant="destructive"
-            size="sm"
-            disabled={transactions.pending === deleting.id}
-            onClick={async () => { const done = await transactions.remove(deleting.id); if (done) setDeleting(null); }}
-          >
-            {transactions.pending === deleting.id && <Loader2 className="size-3.5 animate-spin" />} Apagar
-          </Button>
-        </div>
-      </div>
-    </div>}
   </EnvironmentShell>;
 }

@@ -64,7 +64,12 @@ export function ResourceForm({
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    const payload = Object.fromEntries(names.map((name) => [name, values[name]]));
+    // Campos que vêm só de `defaults` entram no payload mesmo sem aparecer em
+    // `fields`. Sem isso, um formulário que fixa um campo obrigatório fora da
+    // tela (o `kind` das colunas de Finanças) enviava o payload sem ele e
+    // batia em "Verifique os campos destacados" sem nada destacado.
+    const hidden = Object.keys(defaults ?? {}).filter((name) => !names.includes(name));
+    const payload = Object.fromEntries([...names, ...hidden].map((name) => [name, values[name]]));
     const done = record ? await handle.update(record.id, payload) : await handle.create(payload);
     if (!done) return;
     if (!record) setValues(initial());

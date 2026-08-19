@@ -17,6 +17,7 @@
   --color-coral: var(--coral);
   --color-neon: var(--neon);
   --color-dark-green: var(--dark-green);
+  --color-steel: var(--steel);
   --color-off-white: var(--off-white);
 
   --color-sidebar-ring: var(--sidebar-ring);
@@ -78,6 +79,12 @@
 
   --dark-green: #367C52;
   --dark-green-rgb: 20, 83, 45;
+
+  /* Unico azul do tema. O restante da paleta e verde + cinza, e `--info` (que
+     o nome sugeriria) e verde tambem. Azul dessaturado de proposito: satura
+     mais que isso e ele briga com o verde da marca em vez de acompanhar. */
+  --steel: #3D7EA6;
+  --steel-rgb: 61, 126, 166;
 
   --off-white: #F5F7F6;
   --off-white-rgb: 249, 250, 251;

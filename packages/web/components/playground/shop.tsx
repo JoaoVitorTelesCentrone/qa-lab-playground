@@ -10,6 +10,7 @@ import { SelectField } from "@/components/ui/select-field";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { shopProducts, type ShopProduct } from "@/lib/playground/shop-data";
+import { startNavigationProgress } from "@/components/layout/navigation-progress";
 import { systemApi } from "@/lib/api-client";
 import { toast } from "sonner";
 import { normalizeCart, priceCart, priceLines, type CartItem, type Order, type OrderStatus } from "@/lib/product/practice/shop";
@@ -247,6 +248,7 @@ export function CheckoutPage() {
       }
       toast.success(`Pedido ${body.data.reference} confirmado.`, { description: `Total: ${money(body.data.total)}.` });
       save([]);
+      startNavigationProgress();
       router.push(`/shop/orders/${body.data.reference}`);
       return;
     }
@@ -256,6 +258,7 @@ export function CheckoutPage() {
     toast.success(`Pedido ${reference} confirmado.`, { description: `Total: ${money(total)}. Sem conta, ele vive so nesta sessao.` });
     localStorage.setItem("qa-lab-last-order", JSON.stringify({ id: reference, total, status: "Confirmado", createdAt: new Date().toISOString(), items: items }));
     save([]);
+    startNavigationProgress();
     router.push(`/shop/orders/${reference}`);
   }
 
