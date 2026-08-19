@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T09:50:09.710Z",
+  "updatedAt": "2026-08-19T09:50:36.513Z",
   "items": [
     {
       "id": "doi-doi-org-10-37547-tajet-volume08issue08-03",
@@ -19,6 +19,55 @@
       ],
       "query": "software product quality",
       "discoveredAt": "2026-08-18T09:50:09.710Z"
+    },
+    {
+      "id": "doi-doi-org-10-64917-fems-volume03issue08-04",
+      "title": "An Intelligent Framework for AI-Based Automated Software Testing and Defect Prediction",
+      "abstract": "The increasing complexity, scale, and release frequency of contemporary software systems have exposed limitations in conventional testing practices, particularly in exhaustive test execution, regression validation, and early defect identification. This research proposes an intelligent framework that integrates artificial intelligence (AI)-based test automation with software defect prediction to establish a proactive quality-engineering process. The proposed framework combines requirement and code analysis, automated test generation, execution prioritization, defect-risk estimation, feedback-driven model refinement, and quality reporting within a unified architecture. The methodological foundation is a conceptual synthesis of AI-driven test automation principles, with particular emphasis on automation, intelligent prioritization, and predictive quality assurance as discussed by Ramamurthy (2023). The supplied reference corpus also demonstrates how intelligent sensing, pattern recognition, resource optimization, and data-driven classification can conceptually inform automated quality-monitoring architectures, although most of these studies originate outside software testing. The proposed model therefore treats cross-domain evidence as methodological inspiration rather than direct empirical validation. The analysis indicates that combining predictive defect-risk scores with automated test selection can potentially reduce redundant testing, concentrate computational resources on high-risk software components, and improve feedback speed. However, model reliability depends on historical defect data, feature quality, distributional stability, explainability, and integration with existing development pipelines. The framework contributes a structured basis for AI-assisted software quality engineering while identifying empirical validation, benchmark datasets, and explainable prediction as priorities for future research.",
+      "authors": [
+        "Haruto Tanaka Tanaka",
+        "Yuki Nakamura"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-17",
+      "source": "OpenAlex",
+      "venue": "Frontiers in Emerging Multidisciplinary Sciences",
+      "doi": "https://doi.org/10.64917/fems/volume03issue08-04",
+      "url": "https://doi.org/10.64917/fems/volume03issue08-04",
+      "topics": [
+        "Computer science",
+        "Regression testing",
+        "Software quality",
+        "Automation",
+        "Software engineering",
+        "Software reliability testing"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-08-19T09:50:36.513Z"
+    },
+    {
+      "id": "doi-doi-org-10-55640-ijdsml-06-02-04",
+      "title": "Machine Learning-Driven Test Automation for Continuous Software Quality Engineering",
+      "abstract": "Continuous software quality engineering requires testing approaches that can operate with high frequency, adapt to changing software behavior, and provide actionable quality information without becoming a bottleneck in the delivery pipeline. Conventional automation improves execution speed but remains constrained when test selection, prioritization, failure interpretation, and maintenance depend heavily on manually encoded rules. This research and review paper examines a machine learning-driven approach to test automation in which learning models are integrated with test generation, execution prioritization, defect prediction, failure classification, and continuous feedback mechanisms. The methodological framework is developed by synthesizing the supplied literature on machine learning, deep learning, temporal modeling, generative adversarial networks, and sequence prediction, together with the compulsory software quality engineering study by Ramamurthy (2023). Although most of the supporting studies originate from domains such as weather forecasting, radar analysis, and medical image segmentation, their methodological contributions provide transferable principles for software testing, particularly temporal dependency modeling, automated feature learning, synthetic-data generation, and predictive decision-making. The analysis indicates that machine learning can shift test automation from static execution toward adaptive quality intelligence. However, model drift, insufficient representative test data, explainability, false positives, computational overhead, and continuous maintenance remain significant constraints. The proposed framework therefore emphasizes a closed feedback loop in which machine learning supports, rather than completely replaces, deterministic testing and human quality judgment.",
+      "authors": [
+        "Chinedu Okafor"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-17",
+      "source": "OpenAlex",
+      "venue": "International journal of data science and machine learning.",
+      "doi": "https://doi.org/10.55640/ijdsml-06-02-04",
+      "url": "https://doi.org/10.55640/ijdsml-06-02-04",
+      "topics": [
+        "Computer science",
+        "Test Management Approach",
+        "Automation",
+        "Software engineering",
+        "System under test",
+        "Software quality"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-19T09:50:36.513Z"
     },
     {
       "id": "doi-doi-org-10-1002-stvr-70028",
