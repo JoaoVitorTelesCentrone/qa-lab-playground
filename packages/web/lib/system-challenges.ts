@@ -1,3 +1,5 @@
+import { plantedBugs } from "./product/practice/bugs";
+
 export type SystemChallenge = { id: string; number: number; title: string; area: string; mode: "fluxo" | "investigacao"; difficulty: "Basico" | "Intermediario" | "Avancado"; route: string; objective: string; testData: string; expected: string; steps: string[]; acceptance: string[]; plantedBug: string };
 
 const features = [
@@ -11,30 +13,58 @@ const features = [
 // Features dos ambientes de pratica que nasceram na Fase 3. Diferente da loja,
 // cada uma traz a propria massa de teste: o dado que o aluno usa vem do seed
 // daquele ambiente (lib/product/practice/seed.ts), nao do usuario da loja.
+//
+// O quinto campo e o id do desvio plantado que cai neste ponto. Ele existe para
+// a pista dizer ONDE ligar e O QUE esperar: sem isso a dica virava a mesma
+// frase generica em todos os desafios, e o aluno nao sabia qual desvio ligar
+// nem que sintoma procurar. String vazia = ponto sem desvio proprio.
 const practiceFeatures = [
-  ["Financas", "Lancamentos e saldo do periodo", "/financas#lancamentos", "Massa restaurada: salario 6.800, aluguel 1.850 (recorrente), mercado 430,90, internet 129,90 (recorrente), freelance 1.200 e farmacia 87,40."],
-  ["Financas", "Orcamento por categoria e alerta de estouro", "/financas#orcamentos", "Orcamentos do seed: Moradia 2.200, Alimentacao 900 e Saude 300."],
-  ["Financas", "Metas de reserva", "/financas#metas", "Metas do seed: reserva de emergencia 12.300 de 20.000 e viagem 1.450 de 8.000."],
-  ["Financas", "Busca, filtro e ordenacao de lancamentos", "/financas#lancamentos", "Busque por Mercado, filtre por despesa e categoria Moradia, ordene por valor."],
-  ["Financas", "Exportacao dos lancamentos em CSV", "/financas#lancamentos", "Aplique um filtro antes de exportar e compare o arquivo com a tela."],
-  ["Agendamentos", "Grade de horarios e disponibilidade", "/agendamentos#grade", "Dia 18/08/2026 com 10:00 e 14:00 ocupados; atendimento de segunda a sexta das 09:00 as 18:00 e sabado ate as 13:00."],
-  ["Agendamentos", "Conflito de horario", "/agendamentos#nova-reserva", "Tente 10:00 de 18/08/2026, ja ocupado por Ana Costa, e o mesmo horario em 25/08/2026, livre."],
-  ["Agendamentos", "Reagendamento", "/agendamentos#agenda", "Mova Bruno Dias de 14:00 para 15:00 no mesmo dia e confira a grade antes e depois."],
-  ["Agendamentos", "Cancelamento e liberacao do horario", "/agendamentos#por-dia", "Cancele Ana Costa e tente agendar outro cliente no horario liberado."],
-  ["Agendamentos", "Atendimento fora da faixa configurada", "/agendamentos#disponibilidade", "Tente agendar as 20:00 e em um domingo, que nao tem faixa configurada."],
-  ["CRM", "Funil e valor do pipeline", "/crm#funil", "Cinco oportunidades no seed, somando 194.000 sem a perdida (consultoria pontual, 12.000)."],
-  ["CRM", "Mudanca de estagio de oportunidade", "/crm#funil", "Mova o piloto de automacao (18.000) de Novo ate Ganho e depois marque outra como Perdido."],
-  ["CRM", "Busca de contatos", "/crm#contatos", "Contatos do seed: Marina Costa, Antonio Ribeiro (com acento no cadastro) e Pedro Lima."],
-  ["CRM", "Duplicidade de contato e empresa", "/crm#contatos", "marina@nortedigital.com e a empresa Orbit SaaS ja existem na massa."],
-  ["CRM", "Atividades da oportunidade", "/crm#atividades", "Duas atividades no seed, ligadas ao modulo fiscal e a renovacao anual."],
+  ["Financas", "Lancamentos e saldo do periodo", "/financas#lancamentos", "Massa restaurada: salario 6.800, aluguel 1.850 (recorrente), mercado 430,90, internet 129,90 (recorrente), freelance 1.200 e farmacia 87,40.", "financas.total-ignora-recorrente"],
+  ["Financas", "Orcamento por categoria e alerta de estouro", "/financas#orcamentos", "Orcamentos do seed e quanto ja esta gasto: Moradia 2.200 com 1.979,90 (aluguel + internet), Alimentacao 900 com 430,90 e Saude 300 com 87,40. Para estourar Moradia falta mais de 220,10 — exatamente 220,10 fecha no limite e nao deve alertar. Lance a despesa na categoria acentuada (Alimentacao e Saude tem acento no seed): categoria diferente nao entra na conta do orcamento.", "financas.orcamento-sem-alerta"],
+  ["Financas", "Metas de reserva", "/financas#metas", "Metas do seed: reserva de emergencia 12.300 de 20.000 e viagem 1.450 de 8.000.", ""],
+  ["Financas", "Busca, filtro e ordenacao de lancamentos", "/financas#lancamentos", "Busque por Mercado, filtre por despesa e categoria Moradia, ordene por valor.", ""],
+  ["Financas", "Exportacao dos lancamentos em CSV", "/financas#lancamentos", "Aplique um filtro antes de exportar e compare o arquivo com a tela.", ""],
+  ["Agendamentos", "Grade de horarios e disponibilidade", "/agendamentos#grade", "Dia 18/08/2026 com 10:00 e 14:00 ocupados; atendimento de segunda a sexta das 09:00 as 18:00 e sabado ate as 13:00.", ""],
+  ["Agendamentos", "Conflito de horario", "/agendamentos#nova-reserva", "Tente 10:00 de 18/08/2026, ja ocupado por Ana Costa, e o mesmo horario em 25/08/2026, livre.", "agendamentos.conflito-permitido"],
+  ["Agendamentos", "Reagendamento", "/agendamentos#agenda", "Mova Bruno Dias de 14:00 para 15:00 no mesmo dia e confira a grade antes e depois.", "agendamentos.conflito-permitido"],
+  ["Agendamentos", "Cancelamento e liberacao do horario", "/agendamentos#por-dia", "Cancele Ana Costa e tente agendar outro cliente no horario liberado.", "agendamentos.cancelado-ocupa-horario"],
+  ["Agendamentos", "Atendimento fora da faixa configurada", "/agendamentos#disponibilidade", "Tente agendar as 20:00 e em um domingo, que nao tem faixa configurada.", ""],
+  ["CRM", "Funil e valor do pipeline", "/crm#funil", "Cinco oportunidades no seed, somando 194.000 sem a perdida (consultoria pontual, 12.000).", "crm.pipeline-soma-perdidos"],
+  ["CRM", "Mudanca de estagio de oportunidade", "/crm#funil", "Mova o piloto de automacao (18.000) de Novo ate Ganho e depois marque outra como Perdido.", "crm.pipeline-soma-perdidos"],
+  ["CRM", "Busca de contatos", "/crm#contatos", "Contatos do seed: Marina Costa, Antonio Ribeiro (com acento no cadastro) e Pedro Lima.", "crm.busca-ignora-acentos"],
+  ["CRM", "Duplicidade de contato e empresa", "/crm#contatos", "marina@nortedigital.com e a empresa Orbit SaaS ja existem na massa.", ""],
+  ["CRM", "Atividades da oportunidade", "/crm#atividades", "Duas atividades no seed, ligadas ao modulo fiscal e a renovacao anual.", ""],
 ] as const;
 
 const allFeatures = [
-  ...features.map(([area, title, route]) => ({ area, title, route, sample: "" })),
-  ...practiceFeatures.map(([area, title, route, sample]) => ({ area, title, route, sample })),
+  ...features.map(([area, title, route]) => ({ area, title, route, sample: "", bugId: "" })),
+  ...practiceFeatures.map(([area, title, route, sample, bugId]) => ({ area, title, route, sample, bugId })),
 ];
 
-export const systemChallenges: SystemChallenge[] = allFeatures.flatMap(({ area, title, route, sample }, index) => {
+// A pista precisa responder duas coisas: onde mexer e o que esperar depois.
+//
+// "Onde" e a barra "Controles do ambiente de pratica", no topo do ambiente —
+// e o passo do "Modo instrutor" nao pode faltar, porque a lista de desvios so
+// aparece com ele ligado (components/practice/environment-bar.tsx). Sem esse
+// detalhe o aluno abre a barra, nao acha desvio nenhum e trava.
+//
+// "O que" e o sintoma do desvio, nunca o mecanismo: `symptom` e o que viraria
+// um bug report, `mechanism` e a resposta e fica so no modo instrutor.
+function practiceHint(route: string, bugId: string) {
+  const app = route.split("#")[0];
+  const bug = plantedBugs.find((item) => item.id === bugId);
+  const setup = `Abra ${app}, ligue "Modo instrutor" na barra "Controles do ambiente de prática" (sem ele a lista de desvios fica oculta)`;
+
+  if (!bug) {
+    // Sortear usa 50% por desvio, entao pode nao ligar nada: prometer sorteio
+    // aqui faria o aluno validar contra um ambiente limpo achando que nao.
+    return `Este ponto nao tem desvio proprio: use "Restaurar massa" na barra do ambiente e valide contra o seed. Se for sortear, confira antes quantos desvios ficaram ativos — o sorteio pode nao ligar nenhum.`;
+  }
+
+  return `${setup} e marque "${bug.title}" (severidade ${bug.severity}). Com ele ligado o sintoma e: ${bug.symptom} Compare com o comportamento correto e use "Restaurar massa" para voltar ao seed antes de cada rodada.`;
+}
+
+export const systemChallenges: SystemChallenge[] = allFeatures.flatMap(({ area, title, route, sample, bugId }, index) => {
   const feature = index + 1;
   return (["fluxo", "investigacao"] as const).map((mode, variant) => {
     const number = index * 2 + variant + 1;
@@ -66,8 +96,10 @@ export const systemChallenges: SystemChallenge[] = allFeatures.flatMap(({ area, 
       acceptance: flow ? ["Passos reproduziveis", "Resultado obtido comparado ao esperado", "Evidencia com valor ou mensagem exibida"] : ["Passos minimos para reproduzir", "Impacto e severidade justificados", "Resultado esperado e real claramente separados"],
       plantedBug: flow
         ? sample
-          ? "Ligue um desvio em /lab/instrutor (ou sorteie pela barra do ambiente) antes de validar o calculo."
+          ? practiceHint(route, bugId)
           : "Ative /shop/checkout?bug=wrong-total ao testar calculos relacionados; para os demais, valide tambem foco e persistencia."
+        // Modo investigacao nao nomeia o desvio: entregar o sintoma aqui mataria
+        // o exercicio, que e justamente descobrir o que esta errado.
         : `Procure inconsistencias de validacao, estado apos recarregar, feedback acessivel e fronteiras em ${title.toLowerCase()}.`,
     };
   });

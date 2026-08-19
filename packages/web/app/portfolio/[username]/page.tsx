@@ -47,7 +47,8 @@ export default async function PortfolioPage({ params }: Props) {
       <Stat label="Projetos" value={portfolio.projects.length} />
       <Stat label="Evidências" value={stats.evidences} />
       <Stat label="Bugs encontrados" value={stats.bugs} />
-      <Stat label="Critérios validados" value={stats.criteria} />
+      <Stat label="Sistemas testados" value={stats.domains} />
+      <Stat label="Com prova anexada" value={stats.documented} />
     </dl>
 
     <PortfolioView

@@ -14,19 +14,17 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, ChevronRight, Circle, ExternalLink, FlaskConical, Loader2, Send } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, ChevronRight, ExternalLink, FlaskConical, Loader2, Send } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { SelectField } from "@/components/ui/select-field";
+import { EvidenceField } from "./evidence-field";
+import { SubmissionHistory } from "./submission-history";
 import { findLabByNumber, labLabel } from "@/lib/playground/catalog";
 import type { SystemChallenge } from "@/lib/system-challenges";
-import type { EnrollmentStatus, Submission } from "@/lib/product/journey";
+import type { Attachment, EnrollmentStatus, Submission } from "@/lib/product/journey";
 import type { TrackProgress } from "@/lib/product/tracks";
-import { evaluateEvidence, MIN_LENGTH, severities, type Evaluation } from "@/lib/product/evaluation";
-
-const severityLabels: Record<(typeof severities)[number], string> = { baixa: "Baixa", media: "Média", alta: "Alta", critica: "Crítica" };
+import { evaluateEvidence, type Evaluation } from "@/lib/product/evaluation";
 
 const steps = [
   { label: "Contexto" },
@@ -46,8 +44,8 @@ function surfaceRoute(challenge: SystemChallenge) {
 export function LabBriefing({ challenge, status, submissions, trackProgress }: { challenge: SystemChallenge; status: EnrollmentStatus | "nao-iniciado"; submissions: Submission[]; trackProgress: TrackProgress | null }) {
   const router = useRouter();
   const [step, setStep] = useState(0);
-  const [checked, setChecked] = useState<string[]>([]);
-  const [draft, setDraft] = useState({ result: "", reproduction: "", severity: "" });
+  const [evidence, setEvidence] = useState("");
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [state, setState] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState("");
@@ -60,10 +58,6 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
   const trackStep = trackProgress?.steps.find((item) => item.lab.slug === challenge.id);
   const nextInTrack = trackProgress?.steps.find((item) => item.position > (trackStep?.position ?? 0) && item.status !== "completed")?.lab ?? null;
 
-  function toggle(criterion: string) {
-    setChecked((current) => (current.includes(criterion) ? current.filter((item) => item !== criterion) : [...current, criterion]));
-  }
-
   async function start() {
     await fetch("/api/v1/progress", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ labSlug: challenge.id }) });
     router.refresh();
@@ -71,13 +65,13 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const local = evaluateEvidence({ ...draft, checklist: checked }, challenge.acceptance);
+    const local = evaluateEvidence({ evidence, attachments: attachments.length });
     setEvaluation(local);
     setError("");
     if (!local.passed) return;
 
     setState("saving");
-    const response = await fetch("/api/v1/submissions", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ labSlug: challenge.id, ...draft, checklist: checked }) });
+    const response = await fetch("/api/v1/submissions", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ labSlug: challenge.id, evidence, attachments }) });
     if (!response.ok) {
       setState("idle");
       const body = await response.json().catch(() => null);
@@ -85,8 +79,8 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
       return;
     }
     setState("done");
-    setDraft({ result: "", reproduction: "", severity: "" });
-    setChecked([]);
+    setEvidence("");
+    setAttachments([]);
     setEvaluation(null);
     router.refresh();
   }
@@ -176,44 +170,19 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
 
       {step === 3 && <section>
         <h2 className="text-sm font-semibold text-muted-foreground">Entrega de evidência</h2>
-        <p className="mt-1 text-xs text-muted-foreground">Avaliada automaticamente: sem os campos preenchidos e todos os critérios confirmados, o Lab continua em aberto.</p>
+        <p className="mt-1 text-xs text-muted-foreground">Escreva o que encontrou e anexe a prova. Sem evidência, o Lab continua em aberto.</p>
 
-        <form className="mt-5 grid gap-5 sm:grid-cols-2" onSubmit={submit} noValidate>
-          <div className="grid gap-5">
-            <Field label="Resultado obtido" hint={`Mínimo de ${MIN_LENGTH} caracteres.`} error={issueFor("result")}>
-              <Textarea value={draft.result} onChange={(event) => setDraft({ ...draft, result: event.target.value })} placeholder="O que a aplicação exibiu ou fez? Inclua valores e mensagens." aria-invalid={Boolean(issueFor("result"))} className="min-h-24" />
-            </Field>
-            <Field label="Passos de reprodução" hint="Um passo por linha." error={issueFor("reproduction")}>
-              <Textarea value={draft.reproduction} onChange={(event) => setDraft({ ...draft, reproduction: event.target.value })} placeholder={"1. ...\n2. ...\n3. ..."} aria-invalid={Boolean(issueFor("reproduction"))} className="min-h-24" />
-            </Field>
-          </div>
-
-          <div className="grid gap-5">
-            <Field label="Severidade" error={issueFor("severity")}>
-              <SelectField
-                value={draft.severity}
-                onChange={(severity) => setDraft({ ...draft, severity })}
-                options={severities.map((item) => ({ value: item, label: severityLabels[item] }))}
-                groupLabel="Severidade"
-                aria-label="Severidade"
-                aria-invalid={Boolean(issueFor("severity"))}
-              />
-            </Field>
-            <fieldset>
-              <legend className="text-sm font-medium">Critérios de aceite</legend>
-              <div className="mt-2 grid gap-1.5 sm:max-h-32 sm:overflow-y-auto sm:pr-1">{challenge.acceptance.map((criterion) => {
-                const active = checked.includes(criterion);
-                return <label key={criterion} className="flex cursor-pointer items-start gap-2 rounded-md border border-border p-2.5 text-xs transition hover:bg-accent focus-within:ring-2 focus-within:ring-ring/40">
-                  <input type="checkbox" checked={active} onChange={() => toggle(criterion)} className="sr-only" />
-                  {active ? <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden="true" /> : <Circle className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />}
-                  <span>{criterion}</span>
-                </label>;
-              })}</div>
-              {issueFor("checklist") && <p className="mt-2 text-xs text-destructive">{issueFor("checklist")}</p>}
-            </fieldset>
-          </div>
-
-          <Button disabled={state === "saving"} className="sm:col-span-2">{state === "saving" ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />} Entregar evidência</Button>
+        <form className="mt-5 grid gap-5" onSubmit={submit} noValidate>
+          <EvidenceField
+            labSlug={challenge.id}
+            value={evidence}
+            attachments={attachments}
+            onValueChange={setEvidence}
+            onAttachmentsChange={setAttachments}
+            error={issueFor("evidence")}
+            disabled={state === "saving"}
+          />
+          <Button disabled={state === "saving"} className="justify-self-start">{state === "saving" ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />} Entregar evidência</Button>
         </form>
 
         {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
@@ -232,13 +201,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
           {!nextInTrack && trackProgress && <p className="mt-3 text-xs text-muted-foreground">Você concluiu todos os Labs da trilha {trackProgress.track.name} — o certificado te espera na conclusão.</p>}
         </div>}
 
-        {submissions.length > 0 && <details className="mt-6 rounded-md border border-border">
-          <summary className="cursor-pointer p-3 text-xs font-medium text-muted-foreground">{submissions.length} entrega(s) já registrada(s) neste Lab</summary>
-          <ul className="grid gap-3 border-t border-border p-3">{submissions.map((item) => <li key={item.id} className="rounded border border-border p-3 text-sm">
-            <p className="text-xs text-muted-foreground">{new Date(item.createdAt).toLocaleString("pt-BR")} · severidade {item.severity}</p>
-            <p className="mt-2">{item.result}</p>
-          </li>)}</ul>
-        </details>}
+        <SubmissionHistory labSlug={challenge.id} submissions={submissions} />
       </section>}
     </div>
 
@@ -255,10 +218,3 @@ function Brief({ label, value }: { label: string; value: string }) {
   return <div className="rounded-md border border-border bg-background p-3 text-sm"><strong>{label}</strong><p className="mt-1 text-muted-foreground">{value}</p></div>;
 }
 
-function Field({ label, hint, error, children }: { label: string; hint?: string; error?: string; children: React.ReactNode }) {
-  return <label className="grid gap-2 text-sm font-medium">
-    <span>{label}{hint && <span className="ml-2 font-normal text-xs text-muted-foreground">{hint}</span>}</span>
-    {children}
-    {error && <span className="text-xs font-normal text-destructive">{error}</span>}
-  </label>;
-}

@@ -8,9 +8,7 @@
 // Módulo puro. A emissão e o código verificável ficam em store.ts.
 
 import type { Track, TrackProgress } from "./tracks";
-import type { Severity } from "./evaluation";
 import type { Submission } from "./journey";
-import { countBySeverity } from "./portfolio-format";
 
 export type CertificateEligibility = {
   eligible: boolean;
@@ -39,20 +37,25 @@ export function eligibility(progress: TrackProgress): CertificateEligibility {
 export type CertificateStats = {
   labs: number;
   evidence: number;
-  bySeverity: Array<{ severity: Severity; total: number }>;
-  /** Labs da trilha em que houve evidência de severidade alta ou crítica. */
-  highImpact: number;
+  /** Arquivos anexados às evidências da trilha. */
+  attachments: number;
+  /** Labs da trilha com evidência em vídeo ou imagem — a prova que dá para ver. */
+  withMedia: number;
 };
 
 export function certificateStats(track: Track, progress: TrackProgress, submissions: Submission[]): CertificateStats {
   const slugs = new Set(progress.steps.map((step) => step.lab.slug));
   const relevant = submissions.filter((item) => slugs.has(item.labSlug));
-  const highImpact = new Set(relevant.filter((item) => item.severity === "alta" || item.severity === "critica").map((item) => item.labSlug));
+  const withMedia = new Set(
+    relevant
+      .filter((item) => item.attachments.some((file) => file.type.startsWith("image/") || file.type.startsWith("video/")))
+      .map((item) => item.labSlug),
+  );
   return {
     labs: eligibility(progress).completed,
     evidence: relevant.length,
-    bySeverity: countBySeverity(relevant),
-    highImpact: highImpact.size,
+    attachments: relevant.reduce((total, item) => total + item.attachments.length, 0),
+    withMedia: withMedia.size,
   };
 }
 
@@ -89,7 +92,7 @@ export function certificateLinkedInPost(certificate: Certificate, url: string) {
   return [
     `Concluí a trilha "${certificate.trackName}" no QA Lab Playground. 🎓`,
     "",
-    `Não é certificado de assistir aula: cada um dos ${certificate.labs} Labs só fechou depois de uma evidência de teste aceita — passos de reprodução, resultado observado e critérios de aceite confirmados. Foram ${certificate.evidence} evidência(s) registradas no percurso.`,
+    `Não é certificado de assistir aula: cada um dos ${certificate.labs} Labs só fechou depois de uma evidência de teste aceita, registrada por mim contra os critérios do Lab. Foram ${certificate.evidence} evidência(s) no percurso.`,
     "",
     `O que a trilha treina: ${certificate.objective}`,
     "",

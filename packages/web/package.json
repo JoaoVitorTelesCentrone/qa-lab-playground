@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test:e2e": "playwright test",
-    "research:update": "bun scripts/update-research-library.ts"
+    "research:update": "bun scripts/update-research-library.ts",
+    "evidence:clean": "bun --env-file=.env.local scripts/clean-evidence-orphans.ts"
   },
   "dependencies": {
     "@qa-lab/shared": "workspace:*",

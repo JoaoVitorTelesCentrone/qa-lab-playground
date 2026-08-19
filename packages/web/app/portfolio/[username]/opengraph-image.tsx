@@ -16,7 +16,7 @@ export default async function Image({ params }: { params: { username: string } }
     stats: [
       { label: "evidências publicadas", value: String(portfolio.stats.evidences) },
       { label: "Labs cobertos", value: String(portfolio.stats.labs) },
-      ...(portfolio.stats.bySeverity[0] ? [{ label: `severidade ${portfolio.stats.bySeverity[0].severity}`, value: String(portfolio.stats.bySeverity[0].total) }] : []),
+      ...(portfolio.stats.documented > 0 ? [{ label: "com prova anexada", value: String(portfolio.stats.documented) }] : []),
     ],
     author: portfolio.role,
   });

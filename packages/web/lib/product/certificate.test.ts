@@ -18,14 +18,14 @@ function progress(numbers: number[]): LabProgress[] {
   }));
 }
 
-function submission(number: number, severity: Submission["severity"]): Submission {
+function submission(number: number, media?: string): Submission {
   return {
-    id: `sub-${number}-${severity}`,
+    id: `sub-${number}-${media ?? "texto"}`,
     labSlug: labs.find((item) => item.number === number)!.slug,
-    result: "resultado",
-    reproduction: "1. passo",
-    severity,
-    checklist: [],
+    evidence: "resultado observado na tela",
+    attachments: media
+      ? [{ name: "prova", url: "https://storage.test/prova", path: `p-${number}-${media}`, size: 10, type: media }]
+      : [],
     published: false,
     createdAt: "2026-08-15T10:00:00.000Z",
   };
@@ -58,15 +58,16 @@ describe("estatísticas do certificado", () => {
   test("só conta evidências dos Labs da trilha", () => {
     const complete = buildTrackProgress(track, progress(releasedNumbers));
     const stats = certificateStats(track, complete, [
-      submission(releasedNumbers[0], "alta"),
-      submission(releasedNumbers[0], "baixa"),
-      submission(releasedNumbers[1], "critica"),
-      submission(1, "critica"), // Lab de outra trilha
+      submission(releasedNumbers[0], "video/mp4"),
+      submission(releasedNumbers[0]),
+      submission(releasedNumbers[1], "image/png"),
+      submission(1, "image/png"), // Lab de outra trilha
     ]);
     expect(stats.evidence).toBe(3);
     expect(stats.labs).toBe(releasedNumbers.length);
-    expect(stats.highImpact).toBe(2);
-    expect(stats.bySeverity).toEqual([{ severity: "critica", total: 1 }, { severity: "alta", total: 1 }, { severity: "baixa", total: 1 }]);
+    expect(stats.attachments).toBe(2);
+    // Dois Labs da trilha têm mídia; o terceiro anexo é de outra trilha e não conta.
+    expect(stats.withMedia).toBe(2);
   });
 });
 

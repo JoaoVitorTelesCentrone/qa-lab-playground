@@ -1,5 +1,5 @@
 import { getPublicCase } from "@/lib/product/portfolio";
-import { headline, severityLabels } from "@/lib/product/case";
+import { headline } from "@/lib/product/case";
 import { ogContentType, ogImage, ogSize } from "@/lib/product/og";
 
 export const size = ogSize;
@@ -16,9 +16,9 @@ export default async function Image({ params }: { params: { username: string; la
     title: headline(item, 110),
     subtitle: item.objective,
     stats: [
-      { label: "severidade", value: severityLabels[item.severity] },
-      { label: "passos de reprodução", value: String(item.steps.length) },
-      { label: "critérios validados", value: String(item.criteria.length) },
+      { label: item.mode === "investigacao" ? "teste exploratório" : "validação de fluxo", value: item.area },
+      { label: "anexos", value: String(item.submission.attachments.length) },
+      { label: "critérios do Lab", value: String(item.criteria.length) },
     ],
     author: found.author.name,
   });

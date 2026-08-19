@@ -15,7 +15,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EvidenceCard } from "@/components/portfolio/evidence-card";
 import { ProjectCard } from "@/components/portfolio/project-card";
 import { ProfileLinks } from "@/components/portfolio/profile-links";
-import { severityLabels } from "@/lib/product/case";
 import type { PortfolioEntry } from "@/lib/product/portfolio-format";
 import type { PortfolioProject, PortfolioStats } from "@/lib/product/portfolio-projects";
 import type { PortfolioSection } from "@/lib/product/portfolio-sections";
@@ -36,11 +35,13 @@ type Props = {
 };
 
 export function PortfolioView(props: Props) {
-  const { username, name, bio, role, linkedin, github, entries, projects, stats, skills, sections } = props;
-  const [severity, setSeverity] = useState<string>("todas");
+  const { username, name, bio, role, linkedin, github, entries, projects, skills, sections } = props;
+  // O filtro era por severidade; sem esse campo, o recorte que ainda importa
+  // para quem varre o portfólio é o tipo de trabalho.
+  const [kind, setKind] = useState<"todas" | "investigacao" | "fluxo">("todas");
 
   const projectName = (id: string) => projects.find((project) => project.id === id)?.name ?? "";
-  const filtered = severity === "todas" ? entries : entries.filter((entry) => entry.severity === severity);
+  const filtered = kind === "todas" ? entries : entries.filter((entry) => entry.labMode === kind);
 
   if (entries.length === 0) {
     return <div className="mt-10">
@@ -81,11 +82,14 @@ export function PortfolioView(props: Props) {
 
     <TabsContent value="evidencias" className="pt-8">
       <div className="flex flex-wrap items-center gap-1.5">
-        <span className="mr-1 text-xs text-muted-foreground">Severidade</span>
-        <Chip active={severity === "todas"} onClick={() => setSeverity("todas")}>Todas ({entries.length})</Chip>
-        {stats.bySeverity.map((item) => <Chip key={item.severity} active={severity === item.severity} onClick={() => setSeverity(item.severity)}>
-          {severityLabels[item.severity]} ({item.total})
-        </Chip>)}
+        <span className="mr-1 text-xs text-muted-foreground">Tipo</span>
+        <Chip active={kind === "todas"} onClick={() => setKind("todas")}>Todas ({entries.length})</Chip>
+        <Chip active={kind === "investigacao"} onClick={() => setKind("investigacao")}>
+          Bugs ({entries.filter((entry) => entry.labMode === "investigacao").length})
+        </Chip>
+        <Chip active={kind === "fluxo"} onClick={() => setKind("fluxo")}>
+          Validações ({entries.filter((entry) => entry.labMode === "fluxo").length})
+        </Chip>
       </div>
 
       <div className="mt-5 grid gap-3">

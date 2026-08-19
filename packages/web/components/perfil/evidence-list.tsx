@@ -9,7 +9,6 @@ import { ClipboardCheck, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { labLabel, labs } from "@/lib/playground/catalog";
-import { SeverityChip } from "./severity-chip";
 import type { Portfolio } from "./use-portfolio";
 
 export function EvidenceList({ portfolio }: { portfolio: Portfolio }) {
@@ -39,14 +38,17 @@ export function EvidenceList({ portfolio }: { portfolio: Portfolio }) {
             const lab = labs.find((candidate) => candidate.slug === item.labSlug);
             return (
               <li key={item.id} className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
-                <div className="min-w-0">
+                {/* Miniatura sem quebrar a densidade da linha: só a primeira
+                    imagem, para o aluno reconhecer a entrega de relance. */}
+                <Thumb item={item} />
+                <div className="min-w-0 flex-1">
                   <span className="font-mono text-xs text-primary">{lab ? `LAB ${labLabel(lab)}` : item.labSlug}</span>
                   <p className="mt-1.5 truncate text-sm font-medium">{lab?.title ?? item.labSlug}</p>
-                  <p className="mt-1 truncate text-sm text-muted-foreground">{item.result}</p>
+                  <p className="mt-1 truncate text-sm text-muted-foreground">{item.evidence || "Evidência só em anexo."}</p>
                 </div>
 
                 <div className="flex shrink-0 flex-wrap items-center gap-2.5">
-                  <SeverityChip severity={item.severity} label={`severidade ${item.severity}`} />
+                  {item.attachments.length > 0 && <span className="text-xs text-muted-foreground">{item.attachments.length} anexo(s)</span>}
                   <span className="text-xs text-muted-foreground tabular-nums">{new Date(item.createdAt).toLocaleDateString("pt-BR")}</span>
                   <Badge variant={item.published ? "default" : "ghost"} className={item.published ? "font-normal" : "border-border font-normal"}>
                     {item.published ? "publicada" : "privada"}
@@ -68,5 +70,14 @@ export function EvidenceList({ portfolio }: { portfolio: Portfolio }) {
         </ul>
       )}
     </section>
+  );
+}
+
+function Thumb({ item }: { item: { attachments: Array<{ url: string; type: string; name: string }> } }) {
+  const image = item.attachments.find((file) => file.type.startsWith("image/"));
+  if (!image) return null;
+  return (
+    // eslint-disable-next-line @next/next/no-img-element -- anexo do aluno, fora do domínio otimizado
+    <img src={image.url} alt="" className="size-10 shrink-0 rounded border border-border object-cover" />
   );
 }

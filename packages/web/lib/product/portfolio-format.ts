@@ -5,7 +5,6 @@
 
 import { labLabel, labs } from "@/lib/playground/catalog";
 import { systemChallenges } from "@/lib/system-challenges";
-import type { Severity } from "./evaluation";
 import type { Submission } from "./journey";
 
 export type PortfolioEntry = Submission & {
@@ -48,25 +47,6 @@ export function projectIdForArea(area: string): string {
   return direct[area] ?? "qa-lab";
 }
 
-const severityOrder: Severity[] = ["critica", "alta", "media", "baixa"];
-
-export function countBySeverity(entries: Array<{ severity: Severity }>) {
-  return severityOrder
-    .map((severity) => ({ severity, total: entries.filter((entry) => entry.severity === severity).length }))
-    .filter((item) => item.total > 0);
-}
-
-/**
- * Passos de reprodução como lista. O aluno costuma numerar à mão ao escrever,
- * então tiramos a numeração dele antes de renumerar — senão sai "1. 1. Abrir".
- */
-export function reproductionSteps(reproduction: string) {
-  return reproduction
-    .split(/\r?\n/)
-    .map((line) => line.trim().replace(/^(\d+[.)]|[-*•])\s*/, "").trim())
-    .filter(Boolean);
-}
-
 /**
  * Primeira frase de um texto livre — a manchete da evidência, usada no card do
  * portfólio e no post. Frase muito curta não diz nada sozinha, então nesse caso
@@ -93,18 +73,17 @@ export function toMarkdown(entries: PortfolioEntry[], { name }: { name: string }
   const body = entries.map((entry) => [
     `## Lab ${entry.labLabel} — ${entry.labTitle}`,
     "",
-    `- **Severidade:** ${entry.severity}`,
     `- **Registrada em:** ${new Date(entry.createdAt).toLocaleDateString("pt-BR")}`,
     "",
-    "### Resultado observado",
+    "### Evidência",
     "",
-    entry.result,
+    entry.evidence.trim() || "_Sem texto: a evidência está nos anexos._",
     "",
-    "### Passos de reprodução",
-    "",
-    ...reproductionSteps(entry.reproduction).map((step, index) => `${index + 1}. ${step}`),
-    "",
-    ...(entry.checklist.length > 0 ? ["### Critérios confirmados", "", ...entry.checklist.map((item) => `- [x] ${item}`), ""] : []),
+    // Link em vez de embed: o markdown exportado é lido fora do produto, e o
+    // arquivo continua servido pelo Storage.
+    ...(entry.attachments.length > 0
+      ? ["### Anexos", "", ...entry.attachments.map((file) => `- [${file.name}](${file.url})`), ""]
+      : []),
   ].join("\n"));
 
   return [...header, ...body].join("\n");

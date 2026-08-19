@@ -1,54 +1,36 @@
 import { describe, expect, test } from "bun:test";
 import { evaluateEvidence, MIN_LENGTH } from "./evaluation";
 
-const acceptance = ["Passos reproduziveis", "Resultado obtido comparado ao esperado", "Evidencia com valor ou mensagem exibida"];
 const long = "x".repeat(MIN_LENGTH);
 
-const draft = (overrides: Partial<Parameters<typeof evaluateEvidence>[0]> = {}) => ({ result: long, reproduction: long, severity: "alta", checklist: acceptance, ...overrides });
-
 describe("avaliação automática da evidência", () => {
-  test("aprova uma entrega completa", () => {
-    const evaluation = evaluateEvidence(draft(), acceptance);
+  test("aprova texto com substância e nenhum anexo", () => {
+    const evaluation = evaluateEvidence({ evidence: long, attachments: 0 });
     expect(evaluation.passed).toBe(true);
     expect(evaluation.issues).toHaveLength(0);
-    expect(evaluation.missingCriteria).toHaveLength(0);
   });
 
-  test("reprova entrega vazia apontando todos os campos", () => {
-    const evaluation = evaluateEvidence({ result: "", reproduction: "", severity: "", checklist: [] }, acceptance);
+  test("reprova entrega sem texto e sem anexo", () => {
+    const evaluation = evaluateEvidence({ evidence: "", attachments: 0 });
     expect(evaluation.passed).toBe(false);
-    expect(evaluation.issues.map((issue) => issue.field).sort()).toEqual(["checklist", "reproduction", "result", "severity"]);
-  });
-
-  test("texto curto não passa como evidência", () => {
-    const evaluation = evaluateEvidence(draft({ result: "x".repeat(MIN_LENGTH - 1) }), acceptance);
-    expect(evaluation.passed).toBe(false);
-    expect(evaluation.issues[0].field).toBe("result");
+    expect(evaluation.issues[0].field).toBe("evidence");
   });
 
   test("espaço em branco não conta como texto", () => {
-    const evaluation = evaluateEvidence(draft({ reproduction: " ".repeat(MIN_LENGTH + 5) }), acceptance);
-    expect(evaluation.passed).toBe(false);
-    expect(evaluation.issues.some((issue) => issue.field === "reproduction")).toBe(true);
+    expect(evaluateEvidence({ evidence: " ".repeat(MIN_LENGTH + 5), attachments: 0 }).passed).toBe(false);
   });
 
-  test("severidade fora da lista é recusada", () => {
-    expect(evaluateEvidence(draft({ severity: "urgentissima" }), acceptance).passed).toBe(false);
+  test("texto curto sozinho não passa", () => {
+    expect(evaluateEvidence({ evidence: "x".repeat(MIN_LENGTH - 1), attachments: 0 }).passed).toBe(false);
   });
 
-  test("lista os critérios que faltam, na ordem do Lab", () => {
-    const evaluation = evaluateEvidence(draft({ checklist: [acceptance[1]] }), acceptance);
-    expect(evaluation.passed).toBe(false);
-    expect(evaluation.missingCriteria).toEqual([acceptance[0], acceptance[2]]);
+  // A regra que justifica o campo livre: um vídeo de reprodução é evidência
+  // legítima, e exigir redação em cima dele só criaria burocracia.
+  test("anexo sozinho vale como entrega", () => {
+    expect(evaluateEvidence({ evidence: "", attachments: 1 }).passed).toBe(true);
   });
 
-  test("marcar um critério que não é do Lab não substitui os que faltam", () => {
-    const evaluation = evaluateEvidence(draft({ checklist: ["Criterio inventado", "Outro"] }), acceptance);
-    expect(evaluation.passed).toBe(false);
-    expect(evaluation.missingCriteria).toEqual(acceptance);
-  });
-
-  test("Lab sem critérios não exige checklist", () => {
-    expect(evaluateEvidence(draft({ checklist: [] }), []).passed).toBe(true);
+  test("texto curto passa quando vem acompanhado de anexo", () => {
+    expect(evaluateEvidence({ evidence: "Vídeo da repro", attachments: 1 }).passed).toBe(true);
   });
 });

@@ -5,7 +5,6 @@
 
 import { labs, type Lab } from "@/lib/playground/catalog";
 import { practiceApps, type PracticeAppId } from "./apps";
-import type { Severity } from "./evaluation";
 import { regressionPacks } from "@/lib/regression-packs";
 
 export type EnrollmentStatus = "started" | "completed" | "abandoned";
@@ -18,14 +17,48 @@ export type Enrollment = {
   updatedAt: string;
 };
 
+/** Arquivo anexado à evidência. Vive no Storage; aqui fica só o ponteiro. */
+export type Attachment = {
+  name: string;
+  url: string;
+  /** Bytes. Usado para exibir o tamanho e para remover o arquivo do Storage. */
+  size: number;
+  /** MIME do upload — decide se renderiza como imagem, vídeo ou link. */
+  type: string;
+  /** Caminho dentro do bucket, necessário para apagar. */
+  path: string;
+};
+
+/**
+ * `attachments` é jsonb: linha antiga, migração pendente ou payload torto
+ * chegam como null ou lixo. Nesse caso a evidência continua válida — ela só
+ * não mostra anexo — então o parser descarta o que não bate em vez de estourar.
+ */
+export function toAttachments(raw: unknown): Attachment[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((item) => {
+    if (!item || typeof item !== "object") return [];
+    const file = item as Record<string, unknown>;
+    const name = typeof file.name === "string" ? file.name : "";
+    const url = typeof file.url === "string" ? file.url : "";
+    const path = typeof file.path === "string" ? file.path : "";
+    if (!name || !url) return [];
+    return [{
+      name,
+      url,
+      path,
+      size: typeof file.size === "number" && Number.isFinite(file.size) ? file.size : 0,
+      type: typeof file.type === "string" ? file.type : "application/octet-stream",
+    }];
+  });
+}
+
 export type Submission = {
   id: string;
   labSlug: string;
-  result: string;
-  reproduction: string;
-  severity: Severity;
-  /** Critérios de aceite que o aluno confirmou ao entregar. */
-  checklist: string[];
+  /** Texto livre: o aluno escreve a evidência como quiser. */
+  evidence: string;
+  attachments: Attachment[];
   /** Publicada no portfólio público do aluno. Privada por padrão. */
   published: boolean;
   createdAt: string;

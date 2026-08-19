@@ -12,10 +12,8 @@ const loja = labs.find((lab) => systemChallenges.find((item) => item.id === lab.
 const submission = (over: Partial<Submission> = {}): Submission => ({
   id: "1",
   labSlug: financas.slug,
-  result: "O saldo não atualiza. O valor anterior continua no topo depois de salvar.",
-  reproduction: "1. Abrir o dashboard\n2. Criar um lançamento",
-  severity: "media",
-  checklist: ["Passos reproduziveis", "Impacto justificado"],
+  evidence: "O saldo não atualiza. O valor anterior continua no topo depois de salvar.",
+  attachments: [{ name: "saldo.png", url: "https://storage.test/saldo.png", path: "u/l/saldo.png", size: 512, type: "image/png" }],
   published: true,
   createdAt: "2026-08-10T10:00:00Z",
   ...over,
@@ -38,12 +36,27 @@ describe("projetos do portfólio", () => {
     expect(projects[0].stats.evidences).toBe(2);
   });
 
-  test("bug é evidência de Lab de investigação; critério é o que a pessoa confirmou", () => {
+  test("bug é evidência de Lab de investigação; documentada é a que dá para auditar", () => {
     const stats = statsFor(toEntries([submission(), submission({ id: "2", labSlug: investigacao.slug })]));
     expect(stats.evidences).toBe(2);
     expect(stats.bugs).toBe(1);
-    expect(stats.criteria).toBe(4);
+    expect(stats.documented).toBe(2);
     expect(stats.labs).toBe(2);
+  });
+
+  // O número tem que dizer o que dá para conferir, não quanto arquivo subiu.
+  test("evidência sem anexo conta como documentada quando cita link externo", () => {
+    const comLink = statsFor(toEntries([submission({ attachments: [], evidence: "Repro em https://loom.com/share/abc" })]));
+    expect(comLink.documented).toBe(1);
+
+    const semNada = statsFor(toEntries([submission({ attachments: [], evidence: "Achei o bug e reproduzi na mão." })]));
+    expect(semNada.documented).toBe(0);
+  });
+
+  test("conta os domínios distintos, não as evidências", () => {
+    const stats = statsFor(toEntries([submission(), submission({ id: "2", labSlug: investigacao.slug }), submission({ id: "3", labSlug: loja.slug })]));
+    expect(stats.evidences).toBe(3);
+    expect(stats.domains).toBe(2);
   });
 
   test("competência só entra quando existe evidência dela", () => {

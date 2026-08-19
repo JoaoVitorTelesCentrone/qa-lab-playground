@@ -10,7 +10,7 @@
 // tema, e o card sairia sem cor nenhuma.
 
 import { forwardRef } from "react";
-import { headline, severityLabels, type QaCase } from "@/lib/product/case";
+import { headline, type QaCase } from "@/lib/product/case";
 
 const WIDTH = 1080;
 const HEIGHT = 1350;
@@ -21,23 +21,17 @@ const MUTED = "#CDD5D0";
 const FAINT = "rgba(248,251,249,0.45)";
 const LINE = "rgba(255,255,255,0.1)";
 
-const severityColors: Record<string, string> = {
-  critica: "#F87171",
-  alta: "#FB923C",
-  media: "#FBBF24",
-  baixa: "#94A3B8",
-};
+const modeLabels = { fluxo: "Validação de fluxo", investigacao: "Teste exploratório" } as const;
 
 /**
- * `steps` é limitado a 4 de propósito: o card é a chamada, não a entrega. Um
- * passo a passo completo em imagem fica ilegível no feed e tira o motivo de
- * clicar no link.
+ * O roteiro é limitado a 4 passos de propósito: o card é a chamada, não a
+ * entrega. Um passo a passo completo em imagem fica ilegível no feed e tira o
+ * motivo de clicar no link.
  */
 export const CaseCardView = forwardRef<HTMLDivElement, { item: QaCase; author: string }>(
   function CaseCardView({ item, author }, ref) {
-    const severityColor = severityColors[item.severity] ?? GREEN;
-    const steps = item.steps.slice(0, 4);
-    const rest = item.steps.length - steps.length;
+    const steps = item.labSteps.slice(0, 4);
+    const rest = item.labSteps.length - steps.length;
 
     return (
       <div
@@ -60,10 +54,10 @@ export const CaseCardView = forwardRef<HTMLDivElement, { item: QaCase; author: s
               Lab {item.label} · {item.area}
             </span>
             <span
-              style={{ color: severityColor, borderColor: severityColor, letterSpacing: "0.1em" }}
+              style={{ color: GREEN, borderColor: GREEN, letterSpacing: "0.1em" }}
               className="rounded-full border-2 px-6 py-2 text-[22px] font-bold uppercase"
             >
-              {severityLabels[item.severity]}
+              {modeLabels[item.mode]}
             </span>
           </div>
 
@@ -79,7 +73,7 @@ export const CaseCardView = forwardRef<HTMLDivElement, { item: QaCase; author: s
 
             <div>
               <p style={{ color: FAINT, letterSpacing: "0.14em" }} className="text-[22px] font-bold uppercase">
-                Como reproduzir
+                O que o Lab exigia
               </p>
               <ul className="mt-6 grid gap-5">
                 {steps.map((step, index) => (
@@ -105,7 +99,7 @@ export const CaseCardView = forwardRef<HTMLDivElement, { item: QaCase; author: s
                 {author}
               </p>
               <p style={{ color: FAINT }} className="mt-2 text-[24px]">
-                {item.criteria.length} critério(s) de aceite validados
+                {item.criteria.length} critério(s) de aceite{item.submission.attachments.length > 0 ? ` · ${item.submission.attachments.length} anexo(s)` : ""}
               </p>
             </div>
             <span style={{ color: GREEN }} className="text-[30px] font-black italic">

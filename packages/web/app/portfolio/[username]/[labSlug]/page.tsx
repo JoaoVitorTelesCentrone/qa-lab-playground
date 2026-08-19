@@ -54,7 +54,6 @@ export default async function CasePage({ params }: Props) {
         <Link href={`/portfolio/${author.username}/${item.labSlug}`} className="flex flex-wrap items-center gap-2.5 rounded-lg border border-border/70 p-3 text-sm transition hover:border-primary">
           <span className="font-mono text-xs text-primary">LAB {item.label}</span>
           <span className="min-w-0 flex-1 truncate">{item.title}</span>
-          <span className="text-xs text-muted-foreground">severidade {item.severity}</span>
         </Link>
       </li>)}</ul>
     </section>}
