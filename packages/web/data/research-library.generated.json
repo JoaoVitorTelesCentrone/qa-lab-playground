@@ -1,6 +1,27 @@
 {
-  "updatedAt": "2026-08-20T09:51:23.954Z",
+  "updatedAt": "2026-08-21T09:53:52.283Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1007-s10515-026-00668-z",
+      "title": "Intelligent automated code review and software quality evaluation: a survey of AutoML and large language model techniques",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Rohan Appasaheb Borgalli",
+        "Uma Raj",
+        "Shwetha Shetty"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-21",
+      "source": "Crossref",
+      "venue": "Automated Software Engineering",
+      "doi": "https://doi.org/10.1007/s10515-026-00668-z",
+      "url": "https://doi.org/10.1007/s10515-026-00668-z",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-08-21T09:53:52.283Z"
+    },
     {
       "id": "doi-doi-org-10-37547-tajet-volume08issue08-03",
       "title": "AI-Powered Test Automation Frameworks for Next-Generation Software Quality Engineering",
@@ -245,6 +266,25 @@
       ],
       "query": "software defect prediction",
       "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-48175-ijarsct-37226",
+      "title": "Machine Learning and Evolutionary Computing Techniques for Software Defect Prediction: A Systematic Review and Comparative Analysis",
+      "abstract": "Software defects remain one of the primary challenges affecting software quality, reliability, maintainability, and development cost. Early identification of defective modules through software defect prediction techniques enables developers to allocate testing resources efficiently and improve overall software quality. Over the past decade, machine learning and evolutionary computing approaches have emerged as effective solutions for software defect prediction, utilizing software metrics and historical project data to identify defect-prone components. This paper presents a systematic review and comparative analysis of machine learning and evolutionary computing techniques employed in software defect prediction. The study examines traditional machine learning algorithms, including Decision Trees, Random Forests, Naïve Bayes, Support Vector Machines, K-Nearest Neighbors, and Logistic Regression, alongside ensemble, deep learning, and evolutionary approaches such as Genetic Algorithms and hybrid rule-mining techniques. A comprehensive analysis of widely used benchmark datasets, software metrics, performance evaluation measures, and reported outcomes from existing studies is presented. Furthermore, the review identifies prevailing research trends, methodological challenges, dataset limitations, class imbalance issues, and interpretability concerns that influence prediction performance. Based on the findings, the paper highlights emerging directions for future research, including explainable artificial intelligence, hybrid optimization frameworks, automated feature engineering, and adaptive learning techniques. The study provides researchers and practitioners with a consolidated understanding of current advancements in software defect prediction and serves as a valuable reference for the development of more accurate and reliable prediction models. The review analyzes studies published between 2015 and 2026 and synthesizes findings from major software defect prediction research efforts.",
+      "authors": [
+        "Sruthi R Varrier and Jayalakshmi M"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-25",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Advanced Research in Science, Communication and Technology",
+      "doi": "https://doi.org/10.48175/ijarsct-37226",
+      "url": "https://doi.org/10.48175/ijarsct-37226",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-08-21T09:53:52.283Z"
     },
     {
       "id": "doi-doi-org-10-37965-jait-2026-0878",
@@ -582,6 +622,25 @@
       "discoveredAt": "2026-08-15T22:37:48.767Z"
     },
     {
+      "id": "doi-doi-org-10-1109-rams50514-2026-11424466",
+      "title": "Software Reliability and Availability Testing of a Kubernetes Cluster",
+      "abstract": "SUMMARY & CONCLUSIONSThis paper describes the testing of a real time data processing system built on Kubernetes, the most common orchestration (system management) platform for containerized architectures. The testing was performed using the LitmusChaos failure simulation testing framework and resulted in measurements on recovery time and recovery probability that were used as inputs to a model for predicting system reliability and availability. Systems built on Kubernetes can be developed incrementally so that executable systems with partial functionality can be tested to get early feedback on system reliability and availability performance.The innovation in this work is a data-driven testing and analysis approach for containerized architectures that enables better design decisions. As an example, the work here describes how the benefits of additional redundancy on system availability could be assessed using data gathered from early testing, which, in turn, was enabled by containerized architectures and Kubernetes clusters. These constructs facilitate incremental development and Continuous Integration/Continuous Deployment (CI/CD) thereby enabling early testing and measurement of recovery rates and probabilities. This testing can continue throughout the software development process and the results can be incorporated into the model.",
+      "authors": [
+        "Myron Hecht"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-26",
+      "source": "Semantic Scholar",
+      "venue": "Reliability and Maintainability Symposium",
+      "doi": "https://doi.org/10.1109/RAMS50514.2026.11424466",
+      "url": "https://doi.org/10.1109/RAMS50514.2026.11424466",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-08-21T09:53:52.283Z"
+    },
+    {
       "id": "arxiv-arxiv-org-abs-2601-18477v1",
       "title": "An Audit of Machine Learning Experiments on Software Defect Prediction",
       "abstract": "Background: Machine learning algorithms are widely used to predict defect prone software components. In this literature, computational experiments are the main means of evaluation, and the credibility of results depends on experimental design and reporting. Objective: This paper audits recent software defect prediction (SDP) studies by assessing their experimental design, analysis, and reporting practices against accepted norms from statistics, machine learning, and empirical software engineering. The aim is to characterise current practice and assess the reproducibility of published results. Method: We audited SDP studies indexed in SCOPUS between 2019 and 2023, focusing on design and analysis choices such as outcome measures, out of sample validation strategies, and the use of statistical inference. Nine study issues were evaluated. Reproducibility was assessed using the instrument proposed by González Barahona and Robles. Results: The search identified approximately 1,585 SDP experiments published during the period. From these, we randomly sampled 101 papers, including 61 journal and 40 conference publications, with almost 50 percent behind paywalls. We observed substantial variation in research practice. The number of datasets ranged from 1 to 365, learners or learner variants from 1 to 34, and performance measures from 1 to 9. About 45 percent of studies applied formal statistical inference. Across the sample, we identified 427 issues, with a median of four per paper, and only one paper without issues. Reproducibility ranged from near complete to severely limited. We also identified two cases of tortured phrases and possible paper mill activity. Conclusions: Experimental design and reporting practices vary widely, and almost half of the studies provide insufficient detail to support reproduction. The audit indicates substantial scope for improvement.",
@@ -605,6 +664,27 @@
       ],
       "query": "software defect prediction",
       "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-36040-jati-v10i1-16613",
+      "title": "ANALISIS KUALITAS DAN PENERAPAN SOFTWARE QUALITY ASSURANCE MENGGUNAKAN MODEL ISO/IEC 9126 PADA APLIKASI WEB EXPLORE PALANGKA RAYA",
+      "abstract": "Perkembangan teknologi informasi menuntut layanan pariwisata untuk mampu menyediakan informasi yang cepat, akurat, dan mudah diakses secara digital. Website Explore Palangka Raya dikembangkan sebagai media informasi wisata Kota Palangka Raya, namun kualitas perangkat lunaknya perlu dievaluasi secara sistematis agar dapat memenuhi kebutuhan pengguna. Penelitian ini bertujuan untuk menganalisis kualitas website Explore Palangka Raya serta menerapkan prinsip Software Quality Assurance (SQA) menggunakan standar ISO/IEC 9126. Metode penelitian meliputi Black Box Testing untuk menguji fungsi sistem dan survei pengguna menggunakan kuesioner skala Likert yang disebarkan kepada 36 responden. Data dianalisis secara deskriptif untuk memperoleh total skor pada setiap atribut kualitas perangkat lunak. Hasil penelitian menunjukkan bahwa seluruh atribut, yaitu Functionality, Reliability, Usability, Efficiency, Maintainability, dan Portability memperoleh kategori sangat baik, dengan perolehan skor masing-masing 549, 452, 612, 468, 289, dan 319. Temuan ini menunjukkan bahwa website Explore Palangka Raya telah memenuhi standar kualitas perangkat lunak dan mampu memberikan pengalaman penggunaan yang optimal. Penelitian ini memberikan rekomendasi untuk pengembangan lanjutan agar website semakin informatif, stabil, dan sesuai kebutuhan pengguna",
+      "authors": [
+        "Amelda Malia Hermawan",
+        "Azizah Shafa Budiman",
+        "Widiatry Widiatry"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-23",
+      "source": "Semantic Scholar",
+      "venue": "JATI (Jurnal Mahasiswa Teknik Informatika)",
+      "doi": "https://doi.org/10.36040/jati.v10i1.16613",
+      "url": "https://doi.org/10.36040/jati.v10i1.16613",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-08-21T09:53:52.283Z"
     },
     {
       "id": "doi-doi-org-10-23960-jitet-v14i1-8585",
