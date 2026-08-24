@@ -1,6 +1,76 @@
 {
-  "updatedAt": "2026-08-23T09:44:56.835Z",
+  "updatedAt": "2026-08-24T10:06:10.409Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-67728-eci-2026-002",
+      "title": "Deep Learning vs. Traditional Machine Learning for Software Defect Prediction: A Meta-Analysis",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Autor nao informado"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-24",
+      "source": "Crossref",
+      "venue": "Engineering and Computing Insights",
+      "doi": "https://doi.org/10.67728/eci.2026.002",
+      "url": "https://doi.org/10.67728/eci.2026.002",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-08-24T10:06:10.409Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s44427-026-00038-3",
+      "title": "ET-SDP: Enhancing Code Embeddings with Effort-Related and Test Coverage Metrics for Improved Software Defect Prediction",
+      "abstract": "Abstract Software defect prediction (SDP) aims to identify defect-prone code modules in order to optimize testing resources and improve software quality. While traditional approaches rely on software metrics derived from code structure, this paper proposes , an approach that enhances code embeddings using effort-related and test coverage metrics. We introduce three feature sets: the top-30 software metrics selected through clustering relevance ranking, 170 effort-related metrics capturing development process characteristics, and five test coverage metrics derived from unit tests. Our evaluation on 15 releases of Apache Calcite and 6 releases of Apache Ant-Ivy demonstrates that effort-related and test coverage metrics provide better defect prediction performance with far fewer features than traditional software metrics. In unsupervised clustering experiments, effort-based embeddings achieve better alignment with defect labels. In supervised classification, effort-related features achieve an AUC of 0.932 on Calcite and 0.883 on Ant-Ivy, outperforming the top-30 software metrics at comparable feature count (AUC of 0.632 and 0.587, respectively). Feature importance analysis reveals that test coverage metrics are the strongest predictors of defect proneness. These findings suggest that process-oriented metrics, particularly those related to code testing and development history, capture defect patterns more effectively per feature than static code structure metrics, offering practical guidance for software quality assurance.",
+      "authors": [
+        "Ioana-Gabriela Chelaru",
+        "Gabriela Czibula",
+        "Zsuzsanna Marian",
+        "Istvan-Gergely Czibula"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-24",
+      "source": "OpenAlex",
+      "venue": "Acta Universitatis Sapientiae Informatica",
+      "doi": "https://doi.org/10.1007/s44427-026-00038-3",
+      "url": "https://doi.org/10.1007/s44427-026-00038-3",
+      "topics": [
+        "Computer science",
+        "Software bug",
+        "Feature (linguistics)",
+        "Data mining",
+        "Software",
+        "Cluster analysis"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-08-24T10:06:10.409Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s11219-026-09786-z",
+      "title": "HGFE: A plug-and-play heterogeneous graph feature enhancement framework for software fault localization",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Wei Zheng",
+        "Ang Xu",
+        "Xin Fan",
+        "Hao Pan",
+        "Fengyu Yang",
+        "Peng Xiao"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-24",
+      "source": "Crossref",
+      "venue": "Software Quality Journal",
+      "doi": "https://doi.org/10.1007/s11219-026-09786-z",
+      "url": "https://doi.org/10.1007/s11219-026-09786-z",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-08-24T10:06:10.409Z"
+    },
     {
       "id": "doi-doi-org-10-1007-s10515-026-00668-z",
       "title": "Intelligent automated code review and software quality evaluation: a survey of AutoML and large language model techniques",
