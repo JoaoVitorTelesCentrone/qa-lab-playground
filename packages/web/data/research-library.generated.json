@@ -1,6 +1,25 @@
 {
-  "updatedAt": "2026-08-24T10:06:10.409Z",
+  "updatedAt": "2026-08-25T09:52:53.604Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1007-s11219-026-09785-0",
+      "title": "AI-as-a-Judge for software quality assessment: Consistency, attitude effects, and complexity sensitivity in multi-agent code evaluation",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Sherlinford Chou"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-25",
+      "source": "Crossref",
+      "venue": "Software Quality Journal",
+      "doi": "https://doi.org/10.1007/s11219-026-09785-0",
+      "url": "https://doi.org/10.1007/s11219-026-09785-0",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-08-25T09:52:53.604Z"
+    },
     {
       "id": "doi-doi-org-10-67728-eci-2026-002",
       "title": "Deep Learning vs. Traditional Machine Learning for Software Defect Prediction: A Meta-Analysis",
@@ -357,6 +376,26 @@
       "discoveredAt": "2026-08-21T09:53:52.283Z"
     },
     {
+      "id": "doi-doi-org-10-3390-info17070624",
+      "title": "A Multidimensional Decision-Support Framework for Software Quality Assessment in Agile Projects",
+      "abstract": "Software quality assessment in agile projects remains fragmented. Technical, process-related, and team-related indicators are often evaluated through separate models, tools, and reports. This fragmentation limits cross-project comparability and weakens evidence-based decisions for software quality improvement. To address this problem, this study proposes the Overall Software Quality Index (OSQI), a multidimensional decision-support framework for software quality assessment in agile projects. OSQI integrates code quality, process quality, and team quality into a single project-level assessment model. The framework was initially grounded in ISO/IEC 25010:2011 and is discussed in relation to the ISO/IEC 25010:2023 revision, particularly its explicit inclusion of Safety as a product quality characteristic. Since the industrial datasets used in this study were not collected from safety-critical systems, Safety was not modeled as a separate OSQI dimension in the current version; instead, it is addressed as a scope limitation and future extension. The measurement structure was defined using the Goal–Question–Metric (GQM) approach. An initial set of 49 candidate metrics was reduced to 15 core indicators. This reduction was performed using dimension-specific strategies: Random Forest-based feature importance for code quality, Delphi and Analytic Hierarchy Process (AHP) for process quality, and thematic consolidation for team quality. The selected indicators were normalized and integrated through entropy-based weighting. This process generates an interpretable composite quality score. The main contribution of OSQI is not the isolated use of these methods, but their integration into a reproducible and tool-supported framework. The framework converts heterogeneous software engineering signals into a unified decision-support index. OSQI was evaluated using industrial agile project data. The data included static code analysis outputs, issue-tracking records, team assessment results, and product outcome indicators. In an exploratory validation across five industrial projects, OSQI showed a strong positive association with Net Promoter Score (r=0.97, p=0.0076) and a strong negative association with churn rate (r=−0.97, p=0.0061). A supporting software tool was also developed to automate data integration, score calculation, visualization, and project-level comparison. The findings suggest that OSQI can support quality monitoring, project benchmarking, and evidence-based improvement decisions in agile software engineering contexts.",
+      "authors": [
+        "Nurdan Canbaz Horozlu",
+        "T. Serif"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-24",
+      "source": "Semantic Scholar",
+      "venue": "Inf.",
+      "doi": "https://doi.org/10.3390/info17070624",
+      "url": "https://doi.org/10.3390/info17070624",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-25T09:52:53.604Z"
+    },
+    {
       "id": "doi-doi-org-10-37965-jait-2026-0878",
       "title": "Hybrid Approach to Software Defect Prediction and Classification using a Variational Autoencoder and Scalable Graph Attention Network",
       "abstract": "Software performance, security, and dependability depend on software defect prediction (SDP) and classification. Class imbalance, a lack of high-quality labeled data, overfitting in small or skewed datasets, poor interpretability, and the dynamic nature of software systems are among the issues that SDP classification faces. This research proposes an SDP with a classification framework that combines the scalable graph relearn attention network (SGRAN) and the optimized variational autoencoder (VAE) to tackle these challenges. Learning-to-rank under-sampling (LTRUS) selectively eliminates less-relevant majority-class instances of the majority class to reduce class imbalance. After learning structured latent representations, the VAE model improves generalization by identifying significant defect patterns. To further normalize the dataset by reducing undersampling effects and guaranteeing balanced representation between defective and non-defective modules, particle swarm optimization (PSO) is combined with crayfish bobcat optimization algorithm (CBOA) to dynamically optimize the termination condition. The expected defective modules are fed into the SGRAN for classification, ensuring unique and consistent defect categorization. The VAE-CBOA achieves 99.07% prediction accuracy and a high F1-score of 99.01%, outperforming previous studies. Using traditional methods, the proposed work achieved 98.2% recall and 98.02% accuracy. In each prediction and class responsibility, the proposed model’s efficiency and values are highlighted.",
@@ -446,6 +485,30 @@
       "discoveredAt": "2026-08-15T22:36:58.611Z"
     },
     {
+      "id": "doi-doi-org-10-1109-icstw72326-2026-00035",
+      "title": "CodeQual-Agent: An Intelligent LLM-Agent Framework for Automated Software Quality Assessment with Explainable Predictions and Real-Time Analysis",
+      "abstract": "Software quality assurance requires scalable solutions combining the deterministic precision of static analysis with the contextual reasoning of semantic understanding. This paper presents CodeQual-Agent, a hybrid neural-symbolic framework bridging traditional metrics-based assessment with Large Language Model (LLM) capabilities through an intelligent orchestration architecture. The framework addresses three fundamental challenges: (1) integration of symbolic features with neural reasoning, (2) efficient distillation of quality-assessment expertise from high-capacity teacher models into deployable student agents, and (3) explainable predictions that build developer trust. CodeQual-Agent employs a Virtual SonarQube Instance as its symbolic foundation, extracting objective metrics (cyclomatic complexity, code duplication, maintainability indices) that serve as attention-weighted anchors grounding LLM reasoning. Through knowledge distillation from GPT-4 and Gemini Pro teachers to a Gemini 2.5 Flash student, the framework achieves 94.0% precision at 450ms inference latency, maintaining 96.8% of teacher accuracy while delivering a 2.6× speedup. A Human-in-the-Loop (HITL) active learning pipeline reduces false positives by 17% over three update cycles. SHAP-based explainability achieves 87% alignment with developer intuition. Evaluated on 150,000 samples across three complementary datasets, real-world deployment demonstrates a 14% reduction in production defect escape rates and 83% developer adoption.",
+      "authors": [
+        "Faisal Mohammad",
+        "J. K. Kakar",
+        "D. R. Bekale",
+        "Be Ndong",
+        "Mot Chas",
+        "Duksan Ryu"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-18",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Software Testing, Verification and Validation Workshops",
+      "doi": "https://doi.org/10.1109/ICSTW72326.2026.00035",
+      "url": "https://doi.org/10.1109/ICSTW72326.2026.00035",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-25T09:52:53.604Z"
+    },
+    {
       "id": "doi-doi-org-10-1109-icieam69213-2026-11549731",
       "title": "Integrated Methodological Model for Software Quality Assessment for Systems Important to NPP Safety: From Theory to Implementation Practice",
       "abstract": "This article introduces an integrated methodological model (IMM) for assessing the software quality of systems important to nuclear power plant safety. The model integrates five interrelated components: formal verification and model checking, AI/ML-based anomaly detection, digital twin modeling, DevSecOps/CI/CD practices, and independent V&V audit, within a unified framework covering all software lifecycle stages. A fivelevel qualitative scale of organizational and technological maturity and a mathematical framework for integrated quality assessment with differentiated weighting factors by safety category, in accordance with IAEA SSG-39 guidelines, are presented. Experimental testing in an NPP information and control systems modernization project resulted in a $\\mathbf{2 7} \\boldsymbol{-} \\mathbf{4 5} \\boldsymbol{\\%}$ increase in identified defects, a 28% increase in requirement coverage, a 32% reduction in defect identification labor intensity, and a twofold increase in early-stage defect detection.",
@@ -484,6 +547,28 @@
       ],
       "query": "software quality model",
       "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-30572-2018-kje-170209",
+      "title": "Enhancing Software Quality through Dynamic Optimization-Based Latent Dirichlet Allocation and Indexive Regression (DOLDIR)",
+      "abstract": "This paper proposes DOLDIR, a Dynamic Online Learning, based Defect Identification and Reliability framework, that helps to predict software quality and risk much more effectively.  Positioned as an alternative to existing static online reliability models, DOLDIR is able to take into account that the changes in software version through detection of feature drift, optimal selection of test cases, latent topic modelling and combination of reliability scores is possible. The algorithm devised used cosine similarity to trace feature drift in consecutive software versions, Latent Dirichlet Allocation (LDA) to model the failure density and a combined reliability score which is a function of previous reliability, structural attributes of the software modules and training failure indices.  Extensive experiments have been carried out using standard benchmark datasets like NASA PROMISE and SoftRel Bench. The effectiveness of the proposed framework has been tested using DOLDER and Reduckum, and experimental results in terms of RMSE, MAE and prediction accuracy proved that DOLDIR outperform the models. The classification accuracy for failure risk, reached 92.8%. DOLDIR has proved to be better than six recently published models in a cross examination",
+      "authors": [
+        "Nasurulla I",
+        "Chennappan Rajendran",
+        "S. C. Bose",
+        "R. K"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-02",
+      "source": "Semantic Scholar",
+      "venue": "Kufa journal of Engineering",
+      "doi": "https://doi.org/10.30572/2018/kje/170209",
+      "url": "https://doi.org/10.30572/2018/kje/170209",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-08-25T09:52:53.604Z"
     },
     {
       "id": "doi-doi-org-10-1109-ms-2026-3662321",
