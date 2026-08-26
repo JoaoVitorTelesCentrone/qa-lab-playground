@@ -24,6 +24,7 @@ import {
   SearchCode,
   Sparkles,
   Target,
+  TestTube2,
   Trash2,
   Users,
   Workflow,
@@ -72,7 +73,8 @@ const labModules = [
   { id: "execution", title: "Execution & Defect Hub", description: "Execute casos do Studio, registre evidencias e acompanhe defeitos.", href: "/lab/execution", icon: Target, tone: "mint", status: "Hub", category: "Defeitos e investigacao", outcome: "Evidencia e defeitos" },
   { id: "api", title: "API Lab", description: "Teste endpoints, leia respostas e transforme falhas em bug reports.", href: "/api-playground", icon: Code2, tone: "mint", status: "Ferramenta", category: "Defeitos e investigacao", outcome: "Teste de API" },
   { id: "playground", title: "Playground", description: "Pratique em sistemas com falhas intencionais e gere seus primeiros entregaveis.", href: "/playground", icon: PlayCircle, tone: "coral", status: "Aberto", category: "Entrega e automacao", outcome: "Pratica completa" },
-  { id: "cicd", title: "CI/CD Lab", description: "Diagnostique pipelines, quality gates, rollback e decisoes de entrega.", href: "/lab/cicd", icon: Workflow, tone: "coral", status: "Lab", category: "Entrega e automacao", outcome: "Decisao de release" },
+  { id: "test-suite", title: "Test Suite", description: "Organize pastas, specs, fixtures, page objects e massas de teste em um workspace pessoal.", href: "/test-suite", icon: TestTube2, tone: "neon", status: "Ferramenta", category: "Entrega e automacao", outcome: "Automacao organizada" },
+  { id: "cicd", title: "Trilha CI/CD", description: "Percorra Labs de pipeline, quality gates, rollback e decisões de entrega.", href: "/trilhas/cicd", icon: Workflow, tone: "coral", status: "Trilha", category: "Entrega e automacao", outcome: "Decisão de release" },
   { id: "people", title: "People Lab", description: "Treine comunicacao, conflito, alinhamento e decisoes dificeis de QA.", href: "/lab/pessoas", icon: Users, tone: "blue", status: "Lab", category: "Carreira e operacao", outcome: "Comunicacao" },
   { id: "skills", title: "Competencias", description: "Veja sinais de progresso por pratica, entregaveis, execucao e colaboracao.", href: "/lab/competencias", icon: CheckCircle2, tone: "mint", status: "Progresso", category: "Carreira e operacao", outcome: "Mapa de evolucao" },
 ] satisfies LabModule[];

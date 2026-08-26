@@ -42,7 +42,7 @@ describe("trilha de aprendizagem", () => {
     const result = buildTrackProgress(track, []);
     expect(result.completed).toBe(0);
     expect(result.percent).toBe(0);
-    expect(result.total).toBe(10);
+    expect(result.total).toBe(3);
     expect(result.nextLab?.number).toBe(track.labNumbers[0]);
     expect(result.steps[0].position).toBe(1);
     expect(result.steps.every((step) => step.status === "nao-iniciado")).toBe(true);
@@ -51,13 +51,12 @@ describe("trilha de aprendizagem", () => {
   test("pula os concluídos ao sugerir o próximo", () => {
     const result = buildTrackProgress(track, [progress(track.labNumbers[0], "completed"), progress(track.labNumbers[1], "started")]);
     expect(result.completed).toBe(1);
-    expect(result.percent).toBe(10);
+    expect(result.percent).toBe(33);
     expect(result.steps[1].status).toBe("started");
   });
 
   test("pula um passo agendado ao sugerir o próximo, mesmo se não concluído", () => {
-    // 101 liberado e concluído; 102 existe na trilha mas ainda não foi
-    // liberado — a sugestão precisa pular pro 103 (liberado), não pro 102.
+    // 101 liberado e concluído; o próximo passo disponível é o 103.
     const result = buildTrackProgress(track, [progress(101, "completed")]);
     expect(result.nextLab?.number).toBe(103);
   });
@@ -74,14 +73,17 @@ describe("trilha de aprendizagem", () => {
     expect(result.completed).toBe(0);
   });
 
-  // Trilha está desligada no lançamento (TRACKS_ENABLED). O teste trava esse
-  // estado: enquanto for falso, nenhuma superfície pode achar uma trilha —
-  // é o que garante que o briefing e a conclusão não voltem a mostrar percurso
-  // por descuido. Ao religar, os dois blocos abaixo trocam de lugar.
-  test("com a trilha desligada, Lab nenhum acha percurso", () => {
-    expect(TRACKS_ENABLED).toBe(false);
-    expect(trackForLab(track.labNumbers[3])).toBeUndefined();
-    expect(learningTracks.every((item) => !trackHasReleasedLab(item))).toBe(true);
+  test("com as trilhas ligadas, cada Lab encontra seu percurso", () => {
+    expect(TRACKS_ENABLED).toBe(true);
+    expect(trackForLab(track.labNumbers[3])?.slug).toBe(track.slug);
+    expect(trackHasReleasedLab(track)).toBe(true);
+  });
+
+  test("Labs liberados ocupam os primeiros passos sem buracos", () => {
+    const result = buildTrackProgress(track, []);
+    const released = result.steps.filter((step) => step.lab.status === "liberado");
+    expect(released.map((step) => step.lab.number)).toEqual([101, 103, 105]);
+    expect(released.map((step) => step.position)).toEqual([1, 2, 3]);
   });
 
   test("a busca por Lab continua correta quando religada", () => {

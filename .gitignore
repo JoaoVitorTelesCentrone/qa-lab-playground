@@ -16,12 +16,11 @@ dist/
 # debug
 npm-debug.log*
 .next-dev-*.log
+.api-dev*.log
+.web-dev*.log
 
 # scraping cache
 .firecrawl/
-
-# repositorio separado, versionado por conta propria
-packages/BDD-GENERATOR/
 
 # env files
 .env*

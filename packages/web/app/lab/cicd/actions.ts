@@ -27,7 +27,7 @@ export async function markCicdSolved(missionId: string) {
     { onConflict: "user_id,mission_id" },
   );
   if (error) throw new Error(error.message);
-  revalidatePath("/lab/cicd");
+  revalidatePath("/trilhas/cicd");
 }
 
 export async function resetCicdProgress() {
@@ -35,5 +35,5 @@ export async function resetCicdProgress() {
   if (!ctx) return;
   const { error } = await ctx.supabase.from("mission_progress").delete().eq("user_id", ctx.user.id).like("mission_id", `${PREFIX}%`);
   if (error) throw new Error(error.message);
-  revalidatePath("/lab/cicd");
+  revalidatePath("/trilhas/cicd");
 }

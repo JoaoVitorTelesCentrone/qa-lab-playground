@@ -43,7 +43,7 @@ export function TrackPage({ progress, signedIn, certificateCode }: { progress: T
     </section>}
 
     {!signedIn && <p className="mt-8 rounded-md border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
-      <Link href={`/login?next=/labs/trilhas/${track.slug}`} className="text-primary">Entre na sua conta</Link> para salvar o progresso da trilha. Os Labs abaixo podem ser abertos mesmo sem login.
+      <Link href={`/login?next=/trilhas/${track.slug}`} className="text-primary">Entre na sua conta</Link> para salvar o progresso da trilha. Os Labs abaixo podem ser abertos mesmo sem login.
     </p>}
 
     <ol className="mt-10 grid gap-3">{steps.map((step) => <Step key={step.lab.slug} step={step} signedIn={signedIn} />)}</ol>

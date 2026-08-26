@@ -5,6 +5,8 @@ import {
   cicdMissions,
   cicdModules,
   cicdProgressPercent,
+  cicdTrackLabs,
+  findCicdTrackLab,
   firstUnsolvedMission,
   isCicdComplete,
   isChoiceCorrect,
@@ -26,6 +28,13 @@ describe("CI/CD Lab", () => {
     expect(new Set(cicdMissions.map((mission) => mission.id)).size).toBe(cicdMissions.length);
     const moduleIds = new Set(cicdModules.map((cicdModule) => cicdModule.id));
     expect(cicdMissions.every((mission) => moduleIds.has(mission.moduleId))).toBe(true);
+  });
+
+  test("expõe os dez módulos como Labs da trilha CI/CD", () => {
+    expect(cicdTrackLabs).toHaveLength(10);
+    expect(cicdTrackLabs).toBe(cicdModules);
+    expect(findCicdTrackLab("gates")?.name).toContain("quality gates");
+    expect(findCicdTrackLab("inexistente")).toBeUndefined();
   });
 
   test("todos os dez módulos têm ao menos uma missão", () => {

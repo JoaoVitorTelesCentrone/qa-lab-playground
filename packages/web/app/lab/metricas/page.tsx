@@ -1,18 +1,11 @@
-import { notFound, redirect } from "next/navigation";
-import { getSessionUser } from "@/lib/product/store";
-import { isAdmin, loadMetrics, metricsAvailable } from "@/lib/product/metrics-store";
+import { loadMetrics, metricsAvailable } from "@/lib/product/metrics-store";
+import { buildMetrics } from "@/lib/product/metrics";
 
 export const metadata = { title: "Métricas | QA Lab", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 
 export default async function MetricsPage() {
-  const user = await getSessionUser();
-  if (!user) redirect("/login?next=/lab/metricas");
-  // Quem não é administrador recebe 404, não 403: a existência do painel não
-  // precisa ser anunciada.
-  if (!isAdmin(user.email) || !metricsAvailable()) notFound();
-
-  const metrics = await loadMetrics(30);
+  const metrics = metricsAvailable() ? await loadMetrics(30) : buildMetrics([]);
   const peak = Math.max(1, ...metrics.daily.map((item) => item.events));
 
   return <main className="qa-system"><div className="mx-auto max-w-5xl px-5 py-10 sm:px-8">

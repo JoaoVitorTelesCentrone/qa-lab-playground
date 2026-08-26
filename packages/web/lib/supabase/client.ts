@@ -25,7 +25,9 @@ function offlineResponse(reason: string) {
   });
 }
 
-const resilientFetch: typeof fetch = async (input, init) => {
+// Não usamos `typeof fetch` aqui: o Next 16 adiciona `preconnect` ao fetch global,
+// enquanto o Supabase precisa apenas da assinatura chamável.
+const resilientFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
   // Depois de uma falha, segura as próximas por um tempo em vez de repetir a
   // tentativa a cada render — é o que fazia a navegação ficar lenta.
   if (unreachableSince && Date.now() - unreachableSince < COOLDOWN_MS) {
@@ -50,5 +52,5 @@ export function createClient() {
   // As telas de conta verificam a configuração antes de executar chamadas.
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co";
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "placeholder-anon-key";
-  return createBrowserClient(url, key, { global: { fetch: resilientFetch } });
+  return createBrowserClient(url, key, { global: { fetch: resilientFetch as typeof fetch } });
 }

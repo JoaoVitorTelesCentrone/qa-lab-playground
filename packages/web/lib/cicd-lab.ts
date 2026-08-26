@@ -1,4 +1,4 @@
-// CI/CD Lab — ambiente simulado de pipeline com missões determinísticas.
+// Trilha CI/CD — dez Labs com missões determinísticas em um pipeline simulado.
 // Cada missão treina uma decisão real de entrega: ordenar etapas, diagnosticar
 // logs, escolher quality gates, decidir sobre falhas e corrigir YAML.
 
@@ -23,6 +23,18 @@ export const cicdModules: CicdModule[] = [
   { id: "observabilidade", index: 9, name: "Observabilidade e pós-release", summary: "Validar em produção com sinais, não com torcida." },
   { id: "metricas", index: 10, name: "Métricas de fluxo e confiabilidade", summary: "Medir velocidade e estabilidade sem otimizar vaidade." },
 ];
+
+/**
+ * Na hierarquia de aprendizagem, cada módulo de CI/CD é um Lab da trilha.
+ * O alias preserva os consumidores antigos enquanto a UI passa a usar a
+ * nomenclatura Trilha -> Labs -> missões.
+ */
+export type CicdTrackLab = CicdModule;
+export const cicdTrackLabs: CicdTrackLab[] = cicdModules;
+
+export function findCicdTrackLab(id: string) {
+  return cicdTrackLabs.find((lab) => lab.id === id);
+}
 
 export type OrderStep = { id: string; label: string; hint: string };
 export type Choice = { id: string; label: string; feedback: string };
@@ -407,14 +419,14 @@ export function buildReliabilityReport(solvedIds: string[], date = new Date()): 
   const moduleName = (id: string) => cicdModules.find((module) => module.id === id)?.name ?? id;
 
   const lines: string[] = [
-    "# Relatório de Confiabilidade — CI/CD Lab",
+    "# Relatório de Confiabilidade — Trilha CI/CD",
     "",
     `Data: ${date.toLocaleDateString("pt-BR")}`,
     `Missões resolvidas: ${done.length}/${cicdMissions.length}`,
-    `Módulos concluídos: ${modules.filter((module) => module.complete).length}/${cicdModules.length}`,
+    `Labs concluídos: ${modules.filter((module) => module.complete).length}/${cicdModules.length}`,
     "",
     "## Trilha percorrida",
-    ...modules.map((module) => `- [${module.complete ? "x" : " "}] Módulo ${module.module.index} — ${module.module.name} (${module.solved}/${module.total})`),
+    ...modules.map((module) => `- [${module.complete ? "x" : " "}] Lab ${module.module.index} — ${module.module.name} (${module.solved}/${module.total})`),
     "",
     "## Decisões de entrega demonstradas",
     ...done.map((mission) => `- ${mission.title} · ${moduleName(mission.moduleId)}`),
@@ -425,7 +437,7 @@ export function buildReliabilityReport(solvedIds: string[], date = new Date()): 
     "## Competências exercitadas",
     competencies.length ? competencies.join(", ") : "—",
     "",
-    "_Gerado no QA Lab · CI/CD Lab._",
+    "_Gerado no QA Lab · Trilha CI/CD._",
   ];
 
   return lines.join("\n");

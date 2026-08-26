@@ -85,7 +85,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
     router.refresh();
   }
 
-  const exitHref = trackProgress ? `/labs/trilhas/${trackProgress.track.slug}` : "/labs";
+  const exitHref = trackProgress ? `/trilhas/${trackProgress.track.slug}` : "/labs";
 
   return <main className="qa-system"><div className="mx-auto max-w-4xl px-5 py-8 sm:px-8">
     {trackProgress && trackStep && <p className="text-xs text-muted-foreground">{trackProgress.track.name} · passo {trackStep.position} de {trackProgress.total} · {trackProgress.completed} concluído(s)</p>}

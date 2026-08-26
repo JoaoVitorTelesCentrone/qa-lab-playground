@@ -18,8 +18,6 @@ const nextConfig: NextConfig = {
       { source: "/missoes/:path*", destination: "/playground", permanent: true },
       { source: "/datas/:path*", destination: "/playground", permanent: true },
       { source: "/despesas", destination: "/playground/expenseflow", permanent: true },
-      // BDD work now lives inside Test Design Studio.
-      { source: "/bdd/:path*", destination: "/lab/studio", permanent: true },
       ...legacyRoutes.map((source) => ({ source: `${source}/:path*`, destination: "/", permanent: false })),
     ];
   },
