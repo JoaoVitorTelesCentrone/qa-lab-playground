@@ -24,3 +24,29 @@ export function isPracticeAppId(value: string): value is PracticeAppId { return 
 // único ambiente que aparece na navegação e na home. Os outros continuam
 // funcionando por rota direta — só saem da vitrine. Ver [[qa-lab-lancamento-enxuto]].
 export const liveApps: PracticeApp[] = practiceApps.filter((app) => app.id === "financas");
+
+export type RoadmapEnvironment = { id: string; name: string; route: string; summary: string };
+
+// Ambientes usados pelas tarefas práticas do roadmap. Esta lista é de
+// navegação; `liveApps` continua representando os apps do lançamento na home e
+// nos packs de regressão.
+export const roadmapEnvironments: RoadmapEnvironment[] = [
+  { id: "shop", name: "QA Lab Shop", route: "/shop/products", summary: "Catálogo, carrinho, checkout, pedidos e operação." },
+  { id: "financas", name: "Finanças", route: "/financas", summary: "Lançamentos, indicadores, regras e persistência." },
+  { id: "agendamentos", name: "Agendamentos", route: "/agendamentos/schedule", summary: "Disponibilidade, conflito, reagendamento e cancelamento." },
+  { id: "crm", name: "CRM", route: "/crm/funnel", summary: "Funil, oportunidades, empresas e atividades." },
+  { id: "web", name: "Web Playground", route: "/playground/elements", summary: "Elementos, tabelas, arquivos, frames e Shadow DOM." },
+  { id: "api", name: "API Playground", route: "/api-playground", summary: "Contratos, payloads, autenticação e respostas controladas." },
+  { id: "expenseflow", name: "ExpenseFlow", route: "/playground/expenseflow", summary: "Fluxo financeiro responsivo com falhas reproduzíveis." },
+  { id: "waits", name: "Waits Lab", route: "/labs/waits", summary: "Carregamento, sincronização e comportamento assíncrono." },
+  { id: "cicd", name: "Trilha CI/CD", route: "/trilhas/cicd", summary: "Dez Labs sobre pipeline, quality gates, deploy e rollback." },
+  { id: "people", name: "People Lab", route: "/lab/pessoas", summary: "Comunicação, negociação, conflito e liderança." },
+  { id: "refinement", name: "Refinement Lab", route: "/lab/refinamento", summary: "Histórias, ambiguidades, riscos e perguntas." },
+  { id: "criterios", name: "Critérios Lab", route: "/lab/criterios", summary: "Critérios de aceite testáveis e exemplos." },
+  { id: "triagem", name: "Bug Triage", route: "/lab/triagem", summary: "Severidade, prioridade e decisão de risco." },
+  { id: "logs", name: "Logs Investigation", route: "/lab/logs", summary: "Incidentes, hipóteses, logs e causa provável." },
+  { id: "regressao", name: "Pack de regressão", route: "/labs/regressao", summary: "Execução sistemática dos cenários por ambiente." },
+  { id: "execution", name: "Execution Hub", route: "/lab/execution", summary: "Projetos, estratégia, execução e evidências." },
+  { id: "competencias", name: "Mapa de competências", route: "/lab/competencias", summary: "Evolução profissional baseada em evidências." },
+  { id: "portfolio", name: "Portfólio", route: "/perfil", summary: "Perfil, projetos e entregas compartilháveis." },
+];

@@ -12,8 +12,7 @@ import { useEffect, useState } from "react";
 import { Check, Copy, Download, ExternalLink, Globe, Loader2, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { countBySeverity, toEntries, toMarkdown } from "@/lib/product/portfolio-format";
-import { SeverityChip } from "./severity-chip";
+import { toEntries, toMarkdown } from "@/lib/product/portfolio-format";
 import type { Portfolio } from "./use-portfolio";
 
 function download(filename: string, content: string, type: string) {
@@ -153,12 +152,10 @@ export function PublicPortfolioCard({ portfolio, username, onUsername, name }: {
 
       {items.length > 0 && (
         <div className="mt-5 border-t border-border pt-5">
-          <p className="text-xs font-medium text-muted-foreground">Severidades registradas</p>
-          <div className="mt-2.5 flex flex-wrap gap-1.5">
-            {countBySeverity(items).map((item) => (
-              <SeverityChip key={item.severity} severity={item.severity} label={`${item.severity}: ${item.total}`} />
-            ))}
-          </div>
+          <p className="text-xs font-medium text-muted-foreground">Evidências registradas</p>
+          <p className="mt-2.5 text-sm text-muted-foreground">
+            {items.length} entrega(s) · {items.reduce((total, item) => total + item.attachments.length, 0)} arquivo(s) anexado(s)
+          </p>
         </div>
       )}
     </section>

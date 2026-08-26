@@ -1,16 +1,16 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { ArrowLeft, Bug, CheckCircle2, CircleDot, ListChecks, PlayCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { completeRun, createDefect, createRun, updateDefectStatus, updateExecution } from "../actions";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
-  if (!isSupabaseConfigured()) redirect("/lab");
   const { projectId } = await params;
+  if (!isSupabaseConfigured()) return <GuestExecution projectId={projectId} />;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/login?next=/lab/execution/${projectId}`);
+  if (!user) return <GuestExecution projectId={projectId} />;
   const { data: workspace } = await supabase.from("studio_workspaces").select("id,projects(title)").eq("project_id", projectId).eq("user_id", user.id).maybeSingle();
   if (!workspace) notFound();
   const [{ data: cases }, { data: runs }, { data: defects }] = await Promise.all([
@@ -38,6 +38,16 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <section className="rounded-2xl border border-white/10 bg-[#171B21] p-5"><h2 className="font-bold text-off-white">Defeitos</h2><div className="mt-3 space-y-3">{(defects ?? []).map((defect) => <details key={defect.id} className="rounded-lg border border-white/[0.08] p-3"><summary className="cursor-pointer text-sm font-bold">{defect.title}<span className="ml-2 text-[9px] uppercase text-coral">{defect.severity}</span></summary><p className="mt-2 text-xs text-[#8B949E]">{defect.actual_result || "Sem resultado observado"}</p><form action={updateDefectStatus} className="mt-3 grid gap-2"><input type="hidden" name="id" value={defect.id} /><select name="status" defaultValue={defect.status} className="field"><option value="open">Aberto</option><option value="in_progress">Em andamento</option><option value="fixed">Corrigido</option><option value="retest">Reteste</option><option value="closed">Fechado</option><option value="reopened">Reaberto</option><option value="rejected">Rejeitado</option></select><input name="comment" placeholder="Comentário da transição" className="field" /><button className="inline-flex h-8 items-center justify-center gap-1 rounded border border-neon/20 text-xs text-neon"><CheckCircle2 className="size-3" />Atualizar</button></form></details>)}</div>{!defects?.length && <p className="mt-4 text-xs text-[#69737E]">Nenhum defeito registrado.</p>}</section>
     </aside></div>
   </div>;
+}
+
+function GuestExecution({ projectId }: { projectId: string }) {
+  return <main className="mx-auto max-w-5xl px-5 py-12">
+    <Link href="/lab/execution" className="text-xs text-[#8B949E]"><ArrowLeft className="mr-1 inline size-3" />Execution Hub</Link>
+    <p className="mt-8 text-xs font-bold uppercase tracking-[.2em] text-mint">Produto 03 · demonstração</p>
+    <h1 className="mt-3 text-4xl font-black text-off-white">Projeto {projectId}</h1>
+    <p className="mt-4 max-w-2xl leading-7 text-[#8B949E]">A rota está aberta. Crie casos no Test Design Studio para iniciar rodadas, registrar evidências e acompanhar defeitos aqui.</p>
+    <section className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><Metric icon={ListChecks} label="Execuções" value={0} /><Metric icon={CheckCircle2} label="Aprovadas" value={0} tone="neon" /><Metric icon={CircleDot} label="Falhas" value={0} tone="coral" /><Metric icon={Bug} label="Defeitos abertos" value={0} tone="coral" /></section>
+  </main>;
 }
 
 function Metric({ icon: Icon, label, value, tone = "mint" }: { icon: typeof Bug; label: string; value: number; tone?: "mint" | "neon" | "coral" }) { const color = tone === "coral" ? "text-coral" : tone === "neon" ? "text-neon" : "text-mint"; return <div className="rounded-xl border border-white/10 bg-[#171B21] p-4"><Icon className={`size-4 ${color}`} /><p className="mt-4 text-2xl font-black text-off-white">{value}</p><p className="mt-1 text-xs text-[#69737E]">{label}</p></div>; }

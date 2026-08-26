@@ -42,7 +42,9 @@ const financeFlows: Track = {
   appId: "financas",
   objective: "Testar um controle financeiro completo: lançamento, orçamento, meta e o total que precisa fechar com a lista.",
   outcome: "Você consegue provar que um cálculo exibido diverge dos dados que o alimentam, com evidência reproduzível.",
-  labNumbers: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
+  // Os três Labs já liberados formam o primeiro bloco contínuo da trilha.
+  // Os demais preservam a sequência planejada depois desse bloco.
+  labNumbers: [101, 103, 105, 102, 104, 106, 107, 108, 109, 110],
 };
 
 const bookingFlows: Track = {
@@ -64,15 +66,11 @@ const crmFlows: Track = {
 };
 
 /**
- * Trilha desligada no lançamento: por ora o produto é só o catálogo de Labs.
- * Uma sequência curada em cima de três Labs não era um percurso, era um card a
- * mais dizendo a mesma coisa que a lista logo abaixo.
- *
- * Nada foi deletado — as trilhas, o progresso e o certificado continuam no
- * código e testados. Ligar de volta é trocar esta constante para `true`; a
- * rota /labs/trilhas volta a abrir junto (ver proxy.ts).
+ * Trilhas são a navegação principal do aprendizado: cada uma organiza Labs
+ * em uma ordem intencional e reaproveita o progresso existente no catálogo.
+ * A flag permanece exportada para os consumidores que controlam a vitrine.
  */
-export const TRACKS_ENABLED = false;
+export const TRACKS_ENABLED = true;
 
 export const learningTracks: Track[] = [criticalFlows, financeFlows, bookingFlows, crmFlows];
 
@@ -108,13 +106,14 @@ export function buildTrackProgress(track: Track, progress: LabProgress[]): Track
     return [{ lab, position: index + 1, status: current?.status ?? "nao-iniciado", submissions: current?.submissions ?? 0 }];
   });
 
-  const completed = steps.filter((step) => step.status === "completed").length;
+  const released = steps.filter((step) => step.lab.status === "liberado");
+  const completed = released.filter((step) => step.status === "completed").length;
   return {
     track,
     steps,
     completed,
-    total: steps.length,
-    percent: steps.length === 0 ? 0 : Math.round((completed / steps.length) * 100),
+    total: released.length,
+    percent: released.length === 0 ? 0 : Math.round((completed / released.length) * 100),
     // Só sugere um Lab liberado: um passo agendado levaria a sugestão pra
     // waitlist em vez do próximo passo de verdade. Ver [[qa-lab-lancamento-enxuto]].
     nextLab: steps.find((step) => step.status !== "completed" && step.lab.status === "liberado")?.lab ?? null,
@@ -123,8 +122,7 @@ export function buildTrackProgress(track: Track, progress: LabProgress[]): Track
 
 /**
  * Trilha a que um Lab pertence, para mostrar o percurso dentro do briefing.
- * Ponto único de desligamento: com `TRACKS_ENABLED` falso ninguém acha trilha
- * nenhuma, e o briefing e a conclusão voltam a falar só do Lab.
+ * Um Lab encontra a trilha que o contextualiza no percurso completo.
  */
 export function trackForLab(labNumber: number) {
   if (!TRACKS_ENABLED) return undefined;

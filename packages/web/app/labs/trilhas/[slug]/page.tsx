@@ -1,31 +1,5 @@
-import { notFound, redirect } from "next/navigation";
-import type { Metadata } from "next";
-import { TrackPage } from "@/components/labs/track-page";
-import { buildTrackProgress, findTrack, learningTracks, trackHasReleasedLab } from "@/lib/product/tracks";
-import { getJourney, getSessionUser, listCertificates } from "@/lib/product/store";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-export function generateStaticParams() { return learningTracks.filter(trackHasReleasedLab).map((track) => ({ slug: track.slug })); }
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const track = findTrack((await params).slug);
-  return track ? { title: `Trilha ${track.name} | QA Lab`, description: track.objective } : {};
-}
-
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const track = findTrack(slug);
-  if (!track) notFound();
-  // Mesmo tratamento de um Lab agendado: trilha sem nenhum passo liberado
-  // não existe pra quem visita direto pela URL.
-  if (!trackHasReleasedLab(track)) redirect("/waitlist");
-
-  const user = await getSessionUser();
-  const journey = user ? await getJourney(user.id) : null;
-  const certificates = user ? await listCertificates(user.id) : [];
-  return <TrackPage
-    progress={buildTrackProgress(track, journey?.labs ?? [])}
-    signedIn={Boolean(user)}
-    certificateCode={certificates.find((certificate) => certificate.trackSlug === track.slug)?.code ?? null}
-  />;
+export default async function LegacyLearningTrackPage({ params }: { params: Promise<{ slug: string }> }) {
+  redirect(`/trilhas/${(await params).slug}`);
 }

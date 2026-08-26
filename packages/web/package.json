@@ -8,9 +8,13 @@
     "start": "next start",
     "lint": "eslint",
     "test:e2e": "playwright test",
-    "research:update": "bun scripts/update-research-library.ts"
+    "research:update": "bun scripts/update-research-library.ts",
+    "evidence:clean": "bun --env-file=.env.local scripts/clean-evidence-orphans.ts"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@qa-lab/shared": "workspace:*",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.1",

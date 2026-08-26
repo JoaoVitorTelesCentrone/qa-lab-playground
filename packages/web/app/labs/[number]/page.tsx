@@ -1,8 +1,9 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { LabBriefing } from "@/components/labs/lab-briefing";
 import { systemChallenges } from "@/lib/system-challenges";
 import { getJourney, getLabState, getSessionUser } from "@/lib/product/store";
 import { buildTrackProgress, trackForLab } from "@/lib/product/tracks";
+import { emptyJourney } from "@/lib/product/journey";
 
 export const dynamic = "force-dynamic";
 export function generateStaticParams() { return systemChallenges.map((challenge) => ({ number: String(challenge.number) })); }
@@ -13,11 +14,9 @@ export default async function LabPage({ params }: { params: Promise<{ number: st
   if (!challenge) notFound();
 
   const user = await getSessionUser();
-  // As instruções do desafio (objetivo, dados, critérios) só aparecem logado —
-  // é o gancho que traz a conta antes de qualquer outra coisa.
-  if (!user) redirect(`/login?next=${encodeURIComponent(`/labs/${number}`)}`);
-
-  const [state, journey] = await Promise.all([getLabState(user.id, challenge.id), getJourney(user.id)]);
+  const [state, journey] = user
+    ? await Promise.all([getLabState(user.id, challenge.id), getJourney(user.id)])
+    : [{ status: "nao-iniciado" as const, submissions: [] }, emptyJourney];
 
   const track = trackForLab(challenge.number);
   const trackProgress = track ? buildTrackProgress(track, journey.labs) : null;

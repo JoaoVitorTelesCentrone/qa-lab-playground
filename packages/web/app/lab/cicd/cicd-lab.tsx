@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Award, Check, CheckCircle2, ChevronRight, CircleDot, Copy, Download, GitBranch, Lock, PartyPopper, RotateCcw, ShieldCheck, Terminal, Workflow } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { AnimatedNumber } from "@/components/ui/animated-number";
@@ -45,10 +46,12 @@ function shuffle<T>(items: T[]): T[] {
   return copy;
 }
 
-export function CicdLab({ initialSolved = [], authed = false }: { initialSolved?: string[]; authed?: boolean }) {
+export function CicdLab({ initialSolved = [], authed = false, initialLabId }: { initialSolved?: string[]; authed?: boolean; initialLabId?: string }) {
+  const router = useRouter();
+  const initialLabMissions = initialLabId ? getModuleMissions(initialLabId) : [];
   const [solved, setSolved] = useState<string[]>(initialSolved);
-  const [view, setView] = useState<View>("map");
-  const [activeId, setActiveId] = useState<string>(cicdMissions[0].id);
+  const [view, setView] = useState<View>(initialLabMissions.length > 0 ? "mission" : "map");
+  const [activeId, setActiveId] = useState<string>(() => initialLabMissions.find((mission) => !initialSolved.includes(mission.id))?.id ?? initialLabMissions[0]?.id ?? cicdMissions[0].id);
   const [showGate, setShowGate] = useState(false);
 
   function markSolved(id: string) {
@@ -60,8 +63,23 @@ export function CicdLab({ initialSolved = [], authed = false }: { initialSolved?
   function enterModule(moduleId: string) {
     const missions = getModuleMissions(moduleId);
     const next = missions.find((mission) => !solved.includes(mission.id)) ?? missions[0];
+    if (!next) return;
     setActiveId(next.id);
     setView("mission");
+    router.push(`/trilhas/cicd/labs/${moduleId}`);
+  }
+
+  function selectMission(missionId: string) {
+    const mission = cicdMissions.find((item) => item.id === missionId);
+    if (!mission) return;
+    setActiveId(mission.id);
+    setView("mission");
+    router.replace(`/trilhas/cicd/labs/${mission.moduleId}`, { scroll: false });
+  }
+
+  function showTrack() {
+    setView("map");
+    router.push("/trilhas/cicd");
   }
 
   function continueTrilha() {
@@ -69,12 +87,14 @@ export function CicdLab({ initialSolved = [], authed = false }: { initialSolved?
     if (!next) { setView("done"); return; }
     setActiveId(next.id);
     setView("mission");
+    router.push(`/trilhas/cicd/labs/${next.moduleId}`);
   }
 
   function resetProgress() {
     setSolved([]);
     setActiveId(cicdMissions[0].id);
     setView("map");
+    router.replace("/trilhas/cicd");
     if (authed) void resetCicdProgress();
   }
 
@@ -86,11 +106,11 @@ export function CicdLab({ initialSolved = [], authed = false }: { initialSolved?
     <div className="min-h-[calc(100vh-4rem)] bg-[#0D1117]">
       <div className="border-b border-white/10 bg-[#12161C]">
         <div className="mx-auto flex max-w-[1500px] flex-col gap-4 px-5 py-4 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
-          <button onClick={() => setView("map")} className="flex items-center gap-3 text-left">
+          <button onClick={showTrack} className="flex items-center gap-3 text-left">
             <span className="flex size-10 items-center justify-center rounded-xl bg-neon text-[#101319]"><Workflow className="size-5" /></span>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-off-white">CI/CD Lab</span>
+                <span className="text-sm font-black text-off-white">Trilha CI/CD</span>
                 <span className="rounded bg-white/5 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#8B949E]">Delivery sandbox</span>
               </div>
               <p className="mt-0.5 text-[11px] text-[#69737E]">Pipeline simulado · decisões reais de build, teste e deploy</p>
@@ -114,10 +134,10 @@ export function CicdLab({ initialSolved = [], authed = false }: { initialSolved?
       </div>
 
       {view === "map" && <TrilhaMap solved={solved} percent={percent} complete={complete} onContinue={continueTrilha} onOpenModule={enterModule} onSeeReport={() => setView("done")} />}
-      {view === "mission" && <Workspace active={active} solved={solved} onSelectMission={setActiveId} onSolve={markSolved} onBack={() => setView("map")} complete={complete} onSeeReport={() => setView("done")} />}
-      {view === "done" && <Completion solved={solved} onBack={() => setView("map")} onReset={resetProgress} />}
+      {view === "mission" && <Workspace active={active} solved={solved} onSelectMission={selectMission} onSolve={markSolved} onBack={showTrack} complete={complete} onSeeReport={() => setView("done")} />}
+      {view === "done" && <Completion solved={solved} onBack={showTrack} onReset={resetProgress} />}
 
-      <SaveGate show={showGate} next="/lab/cicd" onDismiss={() => setShowGate(false)} />
+      <SaveGate show={showGate} next="/trilhas/cicd" onDismiss={() => setShowGate(false)} />
     </div>
   );
 }
@@ -133,13 +153,13 @@ function TrilhaMap({ solved, percent, complete, onContinue, onOpenModule, onSeeR
 
   return (
     <main className="mx-auto max-w-5xl px-5 py-10 sm:px-8">
-      <Link href="/" className="inline-flex items-center gap-2 text-xs text-[#8B949E] hover:text-mint"><ArrowLeft className="size-3.5" />QA Lab</Link>
+      <Link href="/trilhas" className="inline-flex items-center gap-2 text-xs text-[#8B949E] hover:text-mint"><ArrowLeft className="size-3.5" />Todas as trilhas</Link>
 
       <header className="mt-8 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
           <p className="text-xs font-bold uppercase tracking-[.2em] text-neon">Trilha · entrega de software</p>
-          <TextAnimate text="CI/CD Lab" type="whipInUp" className="mt-3 text-4xl font-black text-off-white sm:text-5xl" />
-          <p className="mt-4 max-w-2xl leading-7 text-[#AAB2BC]">Dez módulos que percorrem um pipeline de ponta a ponta: do esqueleto do build à validação pós-release. Em cada um você toma uma decisão real de entrega e recebe a leitura de um mentor.</p>
+          <TextAnimate text="Trilha CI/CD" type="whipInUp" className="mt-3 text-4xl font-black text-off-white sm:text-5xl" />
+          <p className="mt-4 max-w-2xl leading-7 text-[#AAB2BC]">Dez Labs que percorrem um pipeline de ponta a ponta: do esqueleto do build à validação pós-release. Cada Lab reúne missões práticas e uma leitura de mentor.</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.96 }} onClick={complete ? onSeeReport : onContinue} className="inline-flex h-11 items-center gap-2 rounded-lg bg-neon px-5 text-sm font-black text-[#101319]">
               {complete ? <><Award className="size-4" />Ver relatório de confiabilidade</> : <>{started ? "Continuar trilha" : "Começar trilha"}<ArrowRight className="size-4" /></>}
@@ -168,6 +188,7 @@ function TrilhaMap({ solved, percent, complete, onContinue, onOpenModule, onSeeR
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
+                    <p className="text-[10px] font-black uppercase tracking-wider text-neon">Lab {String(entry.module.index).padStart(2, "0")}</p>
                     <h2 className="text-base font-black text-off-white">{entry.module.name}</h2>
                     {status === "progress" && <span className="rounded-full bg-[#9BC0F5]/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#9BC0F5]">Em curso</span>}
                   </div>
@@ -199,7 +220,7 @@ function Workspace({ active, solved, onSelectMission, onSolve, onBack, complete,
   return (
     <main className="mx-auto grid max-w-[1500px] gap-6 px-5 py-7 sm:px-8 lg:grid-cols-[280px_1fr]">
       <aside className="space-y-2 lg:max-h-[calc(100vh-9rem)] lg:overflow-y-auto lg:pr-1">
-        <button onClick={onBack} className="mb-2 inline-flex items-center gap-2 text-xs text-[#8B949E] hover:text-mint"><ArrowLeft className="size-3.5" />Trilha</button>
+        <button onClick={onBack} className="mb-2 inline-flex items-center gap-2 text-xs text-[#8B949E] hover:text-mint"><ArrowLeft className="size-3.5" />Trilha CI/CD</button>
         {modules.map((entry) => {
           const isActive = entry.module.id === active.moduleId;
           return (
@@ -218,7 +239,7 @@ function Workspace({ active, solved, onSelectMission, onSolve, onBack, complete,
       <section className="min-w-0">
         {moduleMissions.length > 1 && (
           <div className="mb-4 flex flex-wrap items-center gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#69737E]">Módulo {activeModule?.index} · {moduleMissions.length} missões</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#69737E]">Lab {String(activeModule?.index ?? 0).padStart(2, "0")} · {moduleMissions.length} missões</span>
             <div className="flex flex-wrap gap-1.5">
               {moduleMissions.map((mission, index) => (
                 <button key={mission.id} onClick={() => onSelectMission(mission.id)} className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-bold transition ${mission.id === active.id ? "border-neon/40 bg-neon/[.06] text-neon" : "border-white/10 text-[#AAB2BC] hover:border-white/25"}`}>
@@ -310,16 +331,16 @@ function Completion({ solved, onBack, onReset }: { solved: string[]; onBack: () 
 
   return (
     <main className="mx-auto max-w-4xl px-5 py-12 sm:px-8">
-      <button onClick={onBack} className="inline-flex items-center gap-2 text-xs text-[#8B949E] hover:text-mint"><ArrowLeft className="size-3.5" />Trilha</button>
+      <button onClick={onBack} className="inline-flex items-center gap-2 text-xs text-[#8B949E] hover:text-mint"><ArrowLeft className="size-3.5" />Trilha CI/CD</button>
 
       <motion.header initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="mt-8 rounded-3xl border border-neon/20 bg-neon/[.04] p-8 text-center">
         <motion.span initial={{ scale: 0, rotate: -25 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: "spring", damping: 12, stiffness: 220, delay: 0.1 }} className="inline-flex size-14 items-center justify-center rounded-2xl bg-neon text-[#101319]">{complete ? <PartyPopper className="size-7" /> : <Award className="size-7" />}</motion.span>
-        <TextAnimate text={complete ? "Trilha CI/CD concluída" : "Seu progresso no CI/CD Lab"} type="calmInUp" className="mt-5 flex-wrap justify-center text-3xl font-black text-off-white sm:text-4xl" />
+        <TextAnimate text={complete ? "Trilha CI/CD concluída" : "Seu progresso na Trilha CI/CD"} type="calmInUp" className="mt-5 flex-wrap justify-center text-3xl font-black text-off-white sm:text-4xl" />
         <p className="mx-auto mt-3 max-w-xl leading-7 text-[#AAB2BC]">{complete ? "Você percorreu o pipeline de ponta a ponta. Abaixo está o relatório de confiabilidade — sua evidência de que sabe tomar decisões de entrega." : "Conclua todas as missões para fechar a trilha. Você já pode exportar o que demonstrou até aqui."}</p>
       </motion.header>
 
       <motion.div variants={listContainer} initial="hidden" animate="show" className="mt-6 grid gap-4 sm:grid-cols-3">
-        <Stat value={<><AnimatedNumber value={modules.filter((m) => m.complete).length} />/{cicdModules.length}</>} label="Módulos concluídos" />
+        <Stat value={<><AnimatedNumber value={modules.filter((m) => m.complete).length} />/{cicdModules.length}</>} label="Labs concluídos" />
         <Stat value={<><AnimatedNumber value={solved.length} />/{cicdMissions.length}</>} label="Missões resolvidas" />
         <Stat value={<AnimatedNumber value={competencies.length} />} label="Competências exercitadas" />
       </motion.div>

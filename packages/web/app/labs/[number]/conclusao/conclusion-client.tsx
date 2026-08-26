@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { CaseView } from "@/components/portfolio/case-view";
 import { CaseCardView, CASE_CARD_SIZE } from "@/components/portfolio/case-card";
-import { caseSkills, linkedInPost, severityLabels, type QaCase } from "@/lib/product/case";
+import { caseSkills, linkedInPost, type QaCase } from "@/lib/product/case";
 import { normalizeUsername } from "@/lib/product/username";
 
 const PREVIEW_WIDTH = 224;
@@ -35,7 +35,7 @@ type TrackSummary = {
   required: number;
   completed: number;
   missing: number;
-  stats: { labs: number; evidence: number; highImpact: number };
+  stats: { labs: number; evidence: number; attachments: number; withMedia: number };
   certificateCode: string | null;
 };
 
@@ -188,7 +188,7 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
     const content = [
       `# ${item.title}`,
       "",
-      `**Lab ${item.label} · ${item.area} · severidade ${severityLabels[item.severity]}**`,
+      `**Lab ${item.label} · ${item.area}**`,
       "",
       "## Objetivo",
       "",
@@ -198,14 +198,17 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
       "",
       item.expected,
       "",
-      "## Resultado observado",
+      "## Evidência",
       "",
-      item.submission.result,
+      item.submission.evidence.trim() || "_A evidência deste case está nos anexos._",
+      ...(item.submission.attachments.length > 0
+        ? ["", "## Anexos", "", ...item.submission.attachments.map((file) => `- [${file.name}](${file.url})`)]
+        : []),
       "",
-      "## Passos de reprodução",
+      "## Roteiro do Lab",
       "",
-      ...item.steps.map((step, index) => `${index + 1}. ${step}`),
-      ...(item.criteria.length > 0 ? ["", "## Critérios de aceite confirmados", "", ...item.criteria.map((criterion) => `- [x] ${criterion}`)] : []),
+      ...item.labSteps.map((step, index) => `${index + 1}. ${step}`),
+      ...(item.criteria.length > 0 ? ["", "## Critérios de aceite do Lab", "", ...item.criteria.map((criterion) => `- ${criterion}`)] : []),
       "",
       "## Competências comprovadas",
       "",

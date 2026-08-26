@@ -5,15 +5,16 @@
 // verdade: nenhuma dessas funções lê ou escreve em localStorage.
 
 import { createClient } from "@/lib/supabase/server";
+import { removeEvidenceFiles, signOwnAttachments } from "./evidence-storage";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
-import { buildJourney, emptyJourney, type Enrollment, type Journey, type ScenarioRun, type Submission } from "./journey";
+import { buildJourney, emptyJourney, toAttachments, type Attachment, type Enrollment, type Journey, type ScenarioRun, type Submission } from "./journey";
 import { certificateCode, isCertificateCode, normalizeCode } from "./certificate";
 import { normalizeUsername } from "./username";
 import { isMissingTable, normalizeSectionBody, normalizeSectionTitle, sortSections, SECTION_LIMITS, type PortfolioSection } from "./portfolio-sections";
 
 type SupabaseClient = Awaited<ReturnType<typeof createClient>>;
 
-const SUBMISSION_COLUMNS = "id,lab_slug,result,reproduction,severity,checklist,published,created_at";
+const SUBMISSION_COLUMNS = "id,lab_slug,evidence,attachments,published,created_at";
 
 export type SessionUser = { id: string; email: string };
 
@@ -51,7 +52,20 @@ export async function listSubmissions(userId: string, labSlug?: string): Promise
   let query = supabase.from("lab_submissions").select(SUBMISSION_COLUMNS).eq("user_id", userId).order("created_at", { ascending: false });
   if (labSlug) query = query.eq("lab_slug", labSlug);
   const { data, error } = await query;
-  return error ? [] : toSubmissions(data);
+  if (error) return [];
+
+  // O bucket é privado: o que está gravado é o caminho, e a URL vale por uma
+  // hora. Uma assinatura em lote para a lista inteira, não uma por anexo.
+  const submissions = toSubmissions(data);
+  const files = submissions.flatMap((item) => item.attachments);
+  if (files.length === 0) return submissions;
+
+  const signed = await signOwnAttachments(files);
+  let cursor = 0;
+  return submissions.map((item) => ({
+    ...item,
+    attachments: item.attachments.map(() => signed[cursor++]),
+  }));
 }
 
 /** Estado de um Lab para o aluno: status da matrícula e evidências já entregues. */
@@ -77,13 +91,9 @@ export async function startLab(userId: string, labSlug: string) {
 
 export type EvidenceInput = {
   labSlug: string;
-  result: string;
-  reproduction: string;
-  severity: Submission["severity"];
-  /** Critérios de aceite confirmados. A API só chega aqui se todos estiverem marcados. */
-  checklist: string[];
-  notes?: string;
-  attachments?: Array<{ name: string; url: string }>;
+  /** Texto livre da evidência. Pode vir vazio quando há anexo. */
+  evidence: string;
+  attachments: Attachment[];
 };
 
 /**
@@ -95,7 +105,7 @@ export async function submitEvidence(userId: string, input: EvidenceInput) {
   const supabase = await createClient();
   const { data: submission, error } = await supabase
     .from("lab_submissions")
-    .insert({ user_id: userId, lab_slug: input.labSlug, result: input.result, reproduction: input.reproduction, severity: input.severity, checklist: input.checklist, notes: input.notes ?? null, attachments: input.attachments ?? [] })
+    .insert({ user_id: userId, lab_slug: input.labSlug, evidence: input.evidence, attachments: input.attachments })
     .select(SUBMISSION_COLUMNS)
     .single();
   if (error || !submission) throw new Error(error?.message ?? "Não foi possível salvar a evidência.");
@@ -106,8 +116,89 @@ export async function submitEvidence(userId: string, input: EvidenceInput) {
     .upsert({ user_id: userId, lab_slug: input.labSlug, status: "completed", submission_id: submission.id, completed_at: completedAt }, { onConflict: "user_id,lab_slug" });
   if (enrollmentError) throw new Error(enrollmentError.message);
 
-  await track(supabase, userId, "lab_completed", { lab: input.labSlug, severity: input.severity });
+  await track(supabase, userId, "lab_completed", { lab: input.labSlug, attachments: input.attachments.length });
   return toSubmissions([submission])[0];
+}
+
+/**
+ * Corrige uma entrega já registrada. A evidência virou um campo livre grande
+ * com arquivos: sem edição, um typo ou um print errado ficaria para sempre no
+ * que o recrutador abre, e o aluno só teria a saída de empilhar outra entrega.
+ *
+ * Não mexe em `published` nem em `created_at` — corrigir não é republicar, e a
+ * data continua sendo a de quando o trabalho foi feito.
+ */
+export async function updateSubmission(userId: string, submissionId: string, input: { evidence: string; attachments: Attachment[] }) {
+  const supabase = await createClient();
+
+  // Os anexos que sumiram da lista saem do Storage junto: editar tirando um
+  // print não pode deixar o arquivo pago para trás.
+  const { data: current } = await supabase
+    .from("lab_submissions")
+    .select("attachments")
+    .eq("user_id", userId)
+    .eq("id", submissionId)
+    .maybeSingle();
+  if (!current) throw new Error("Evidência não encontrada.");
+
+  const kept = new Set(input.attachments.map((file) => file.path));
+  const dropped = toAttachments(current.attachments).filter((file) => file.path && !kept.has(file.path));
+
+  const { data, error } = await supabase
+    .from("lab_submissions")
+    .update({ evidence: input.evidence, attachments: input.attachments })
+    .eq("user_id", userId)
+    .eq("id", submissionId)
+    .select(SUBMISSION_COLUMNS)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("Evidência não encontrada.");
+
+  if (dropped.length > 0) await removeEvidenceFiles(dropped.map((file) => file.path));
+  await track(supabase, userId, "evidence_updated", { submission: submissionId });
+  return toSubmissions([data])[0];
+}
+
+/**
+ * Apaga uma entrega e os arquivos dela.
+ *
+ * Se era a última daquele Lab, a matrícula volta para "started": a regra do
+ * produto é que nenhum Lab fica concluído sem evidência, então deixar o status
+ * em "completed" com zero entregas mentiria no progresso e no certificado.
+ */
+export async function deleteSubmission(userId: string, submissionId: string) {
+  const supabase = await createClient();
+
+  const { data: current } = await supabase
+    .from("lab_submissions")
+    .select("id,lab_slug,attachments")
+    .eq("user_id", userId)
+    .eq("id", submissionId)
+    .maybeSingle();
+  if (!current) throw new Error("Evidência não encontrada.");
+
+  const { error } = await supabase.from("lab_submissions").delete().eq("user_id", userId).eq("id", submissionId);
+  if (error) throw new Error(error.message);
+
+  const files = toAttachments(current.attachments).map((file) => file.path).filter(Boolean);
+  if (files.length > 0) await removeEvidenceFiles(files);
+
+  const { count } = await supabase
+    .from("lab_submissions")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .eq("lab_slug", current.lab_slug);
+
+  if ((count ?? 0) === 0) {
+    await supabase
+      .from("lab_enrollments")
+      .update({ status: "started", completed_at: null, submission_id: null })
+      .eq("user_id", userId)
+      .eq("lab_slug", current.lab_slug);
+  }
+
+  await track(supabase, userId, "evidence_deleted", { lab: current.lab_slug });
+  return { id: submissionId, labSlug: current.lab_slug as string, labReopened: (count ?? 0) === 0 };
 }
 
 /**
@@ -262,7 +353,7 @@ export async function trackEvent(userId: string, name: string, props: Record<str
 }
 
 type EnrollmentRow = { lab_slug: string; status: string; started_at: string; completed_at: string | null; updated_at: string };
-type SubmissionRow = { id: string; lab_slug: string; result: string; reproduction: string; severity: string; checklist: unknown; published?: boolean | null; created_at: string };
+type SubmissionRow = { id: string; lab_slug: string; evidence: string | null; attachments: unknown; published?: boolean | null; created_at: string };
 type RunRow = { app_id: string; scenario_id: string; status: string };
 
 function toEnrollments(rows: EnrollmentRow[] | null): Enrollment[] {
@@ -270,9 +361,7 @@ function toEnrollments(rows: EnrollmentRow[] | null): Enrollment[] {
 }
 
 function toSubmissions(rows: SubmissionRow[] | null): Submission[] {
-  // `checklist` é jsonb: uma migração pendente ou uma linha antiga chegam como
-  // null, e nesse caso o histórico só não mostra os critérios confirmados.
-  return (rows ?? []).map((row) => ({ id: row.id, labSlug: row.lab_slug, result: row.result, reproduction: row.reproduction, severity: row.severity as Submission["severity"], checklist: Array.isArray(row.checklist) ? row.checklist.filter((item): item is string => typeof item === "string") : [], createdAt: row.created_at, published: Boolean(row.published) }));
+  return (rows ?? []).map((row) => ({ id: row.id, labSlug: row.lab_slug, evidence: row.evidence ?? "", attachments: toAttachments(row.attachments), createdAt: row.created_at, published: Boolean(row.published) }));
 }
 
 function toRuns(rows: RunRow[] | null): ScenarioRun[] {

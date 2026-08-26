@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: baseUrl, changeFrequency: "weekly", priority: 1 },
     { url: `${baseUrl}/labs`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/labs/regressao`, changeFrequency: "monthly", priority: 0.6 },
-    ...learningTracks.filter(trackHasReleasedLab).map((track) => ({ url: `${baseUrl}/labs/trilhas/${track.slug}`, changeFrequency: "monthly" as const, priority: 0.8 })),
+    ...learningTracks.filter(trackHasReleasedLab).map((track) => ({ url: `${baseUrl}/trilhas/${track.slug}`, changeFrequency: "monthly" as const, priority: 0.8 })),
     { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/pesquisa`, changeFrequency: "weekly", priority: 0.8 },
     ...liveApps.map((app) => ({ url: `${baseUrl}${app.route}`, changeFrequency: "monthly" as const, priority: 0.8 })),

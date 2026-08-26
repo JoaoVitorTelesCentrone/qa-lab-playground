@@ -1,25 +1,18 @@
 // Card de evidência na listagem do portfólio.
 //
-// Raso de propósito: manchete, uma linha de contexto, severidade e data. Passos
-// de reprodução, resultado esperado e critérios ficam na página da evidência —
-// despejar tudo aqui faz cada card crescer meia tela e mata a leitura em
-// varredura, que é como um recrutador olha portfólio.
+// Raso de propósito: manchete, uma linha de contexto e data. A evidência
+// inteira, os anexos e os critérios ficam na página da evidência — despejar
+// tudo aqui faz cada card crescer meia tela e mata a leitura em varredura, que
+// é como um recrutador olha portfólio.
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { severityLabels } from "@/lib/product/case";
 import { summarize, summaryRest, type PortfolioEntry } from "@/lib/product/portfolio-format";
-
-const severityTone: Record<string, string> = {
-  critica: "text-red-400",
-  alta: "text-orange-400",
-  media: "text-amber-400",
-  baixa: "text-muted-foreground",
-};
 
 export function EvidenceCard({ entry, username, showProject }: { entry: PortfolioEntry; username: string; showProject?: string }) {
   const isBug = entry.labMode === "investigacao";
-  const rest = summaryRest(entry.result);
+  const text = entry.evidence.trim();
+  const rest = summaryRest(text);
 
   return <Link
     href={`/portfolio/${username}/${entry.labSlug}`}
@@ -34,16 +27,13 @@ export function EvidenceCard({ entry, username, showProject }: { entry: Portfoli
     </div>
 
     <h3 className="mt-2.5 text-base font-medium leading-6 tracking-[-0.01em] group-hover:text-primary">
-      {summarize(entry.result, 110)}
+      {text ? summarize(text, 110) : `Evidência em ${entry.attachments.length} arquivo(s)`}
     </h3>
     {rest && <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-muted-foreground">{rest}</p>}
 
     <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border/60 pt-3 text-xs text-muted-foreground">
       <span className="flex flex-wrap items-center gap-3">
-        <span className={`flex items-center gap-1.5 ${severityTone[entry.severity] ?? ""}`}>
-          <span aria-hidden="true">●</span> {severityLabels[entry.severity]}
-        </span>
-        {entry.checklist.length > 0 && <span>{entry.checklist.length} critério(s)</span>}
+        {entry.attachments.length > 0 && <span>{entry.attachments.length} anexo(s)</span>}
       </span>
       <span className="flex items-center gap-3">
         <time dateTime={entry.createdAt}>{new Date(entry.createdAt).toLocaleDateString("pt-BR")}</time>

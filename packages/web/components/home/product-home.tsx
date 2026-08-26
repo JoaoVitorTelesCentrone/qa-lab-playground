@@ -90,7 +90,7 @@ export function ProductHome({ journey, tracks, signedIn, name }: { journey: Jour
             <p className="qa-eyebrow">QA Lab</p>
             <h1 id="home-title" className="mt-7 text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-6xl">Pratique QA em aplicações completas.</h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">Um ambiente real para testar, Labs que partem de riscos de produto e um registro de evidências que vira o seu portfólio. Sem precisar montar aplicação nenhuma.</p>
-            <div className="mt-9"><Button asChild size="lg"><Link href="/labs">Ver todos os Labs <ArrowRight className="size-4" /></Link></Button></div>
+            <div className="mt-9 flex flex-wrap gap-3"><Button asChild size="lg"><Link href="/labs/101">Testar o Lab gratuito <ArrowRight className="size-4" /></Link></Button><Button asChild size="lg" variant="outline"><Link href="/planos">Conhecer o QA Lab Pro</Link></Button></div>
           </div>
         </section>}
 
@@ -114,7 +114,7 @@ export function ProductHome({ journey, tracks, signedIn, name }: { journey: Jour
               <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted" role="img" aria-label={`${item.percent}% da trilha ${item.track.name} concluída`}><div className="h-full rounded-full bg-primary" style={{ width: `${item.percent}%` }} /></div>
             </div>
           : <p className="mt-5 text-sm text-muted-foreground">{item.total} Labs em sequência.</p>}
-        <Button asChild className="mt-5" variant="outline"><Link href={`/labs/trilhas/${item.track.slug}`}>Ver a trilha <ArrowRight className="size-4" /></Link></Button>
+        <Button asChild className="mt-5" variant="outline"><Link href={`/trilhas/${item.track.slug}`}>Ver a trilha <ArrowRight className="size-4" /></Link></Button>
       </article>)}</div>
     </section>
 
@@ -135,7 +135,7 @@ export function ProductHome({ journey, tracks, signedIn, name }: { journey: Jour
             {signedIn && coverage && <Coverage coverage={coverage} />}
             <div className="mt-5 flex flex-wrap gap-2 pt-1">
               <Button asChild size="sm"><Link href={app.route}>Abrir ambiente</Link></Button>
-              {trackFor(tracks, app.id) && <Button asChild size="sm" variant="outline"><Link href={`/labs/trilhas/${trackFor(tracks, app.id)!.track.slug}`}>Trilha</Link></Button>}
+              {trackFor(tracks, app.id) && <Button asChild size="sm" variant="outline"><Link href={`/trilhas/${trackFor(tracks, app.id)!.track.slug}`}>Trilha</Link></Button>}
               <Button asChild size="sm" variant="ghost"><Link href={`/labs/regressao#${app.id}`}>Pack de regressão</Link></Button>
             </div>
           </article>;

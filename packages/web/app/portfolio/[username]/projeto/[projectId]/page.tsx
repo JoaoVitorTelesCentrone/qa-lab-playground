@@ -56,7 +56,7 @@ export default async function ProjectPage({ params }: Props) {
         <Stat label="Labs cobertos" value={stats.labs} />
         <Stat label="Evidências" value={stats.evidences} />
         <Stat label="Bugs encontrados" value={stats.bugs} />
-        <Stat label="Critérios validados" value={stats.criteria} />
+        <Stat label="Com prova anexada" value={stats.documented} />
       </dl>
     </section>
 

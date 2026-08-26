@@ -28,7 +28,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { liveApps } from "@/lib/product/apps";
+import { roadmapEnvironments } from "@/lib/product/apps";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -37,8 +37,18 @@ const LINKEDIN_URL = "https://www.linkedin.com/company/qa-lab-oficial/";
 
 const nav = [
   { label: "Labs", href: "/labs" },
+  { label: "Trilhas", href: "/trilhas" },
   { label: "Blog", href: "/blog" },
   { label: "Referências", href: "/pesquisa" },
+];
+
+const workspaceTools = [
+  {
+    id: "test-suite",
+    name: "Test Suite",
+    route: "/test-suite",
+    summary: "Crie pastas e arquivos de automação em uma suíte privada da sua conta.",
+  },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -89,7 +99,7 @@ export function SiteHeader() {
 
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
-  const appsActive = liveApps.some((app) => isActive(pathname, app.route));
+  const appsActive = [...roadmapEnvironments, ...workspaceTools].some((app) => isActive(pathname, app.route));
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 py-3 sm:px-6 sm:py-4">
@@ -106,13 +116,26 @@ export function SiteHeader() {
                 Ambientes
               </NavigationMenuTrigger>
               <NavigationMenuContent className="rounded-2xl border border-border bg-popover p-2 shadow-2xl">
-                <ul className="grid w-80 gap-1">
-                  {liveApps.map((app) => (
+                <ul className="grid max-h-[70vh] w-[42rem] grid-cols-2 gap-1 overflow-y-auto p-1">
+                  {roadmapEnvironments.map((app) => (
                     <li key={app.id}>
                       <NavigationMenuLink asChild>
                         <Link href={app.route} className={cn("block rounded-xl px-3 py-2.5 transition hover:bg-accent", isActive(pathname, app.route) && "bg-accent")}>
                           <span className="text-sm font-medium">{app.name}</span>
                           <span className="mt-0.5 block text-xs leading-5 text-muted-foreground">{app.summary}</span>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  ))}
+                  <li className="col-span-2 mt-1 border-t border-border px-3 pt-3 text-[10px] font-bold uppercase tracking-[.15em] text-muted-foreground">
+                    Ferramentas pessoais
+                  </li>
+                  {workspaceTools.map((tool) => (
+                    <li key={tool.id}>
+                      <NavigationMenuLink asChild>
+                        <Link href={tool.route} className={cn("block rounded-xl px-3 py-2.5 transition hover:bg-accent", isActive(pathname, tool.route) && "bg-accent")}>
+                          <span className="text-sm font-medium">{tool.name}</span>
+                          <span className="mt-0.5 block text-xs leading-5 text-muted-foreground">{tool.summary}</span>
                         </Link>
                       </NavigationMenuLink>
                     </li>
@@ -164,11 +187,17 @@ export function SiteHeader() {
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="ambientes" className="border-none">
                     <AccordionTrigger className="justify-between py-0 text-base font-medium hover:no-underline">Ambientes</AccordionTrigger>
-                    <AccordionContent className="mt-1 ml-2 flex flex-col gap-3 border-l border-border pb-0 pl-4">
+                    <AccordionContent className="mt-1 ml-2 max-h-[60vh] overflow-y-auto border-l border-border pb-0 pl-4">
                       <div className="flex flex-col gap-2 pt-4">
-                        {liveApps.map((app) => (
+                        {roadmapEnvironments.map((app) => (
                           <Link key={app.id} href={app.route} className={cn("text-sm font-medium tracking-tight text-muted-foreground transition hover:text-primary", isActive(pathname, app.route) && "text-primary")}>
                             {app.name}
+                          </Link>
+                        ))}
+                        <span className="mt-2 border-t border-border pt-3 text-[10px] font-bold uppercase tracking-[.15em] text-muted-foreground">Ferramentas pessoais</span>
+                        {workspaceTools.map((tool) => (
+                          <Link key={tool.id} href={tool.route} className={cn("text-sm font-medium tracking-tight text-muted-foreground transition hover:text-primary", isActive(pathname, tool.route) && "text-primary")}>
+                            {tool.name}
                           </Link>
                         ))}
                       </div>

@@ -8,7 +8,8 @@ import { createClient } from "@/lib/supabase/server";
 import { labLabel, labs } from "@/lib/playground/catalog";
 import { systemChallenges } from "@/lib/system-challenges";
 import { buildCase, type QaCase } from "./case";
-import type { Severity } from "./evaluation";
+import { toAttachments } from "./journey";
+import { signPublicAttachments } from "./evidence-storage";
 import { projectIdForArea, toEntries, type PortfolioEntry } from "./portfolio-format";
 import { normalizeProfileLink } from "./profile-links";
 import { visibleSections, type PortfolioSection } from "./portfolio-sections";
@@ -34,7 +35,7 @@ export type Portfolio = {
   sections: PortfolioSection[];
 };
 
-const SUBMISSION_COLUMNS = "id,lab_slug,result,reproduction,severity,checklist,created_at";
+const SUBMISSION_COLUMNS = "id,lab_slug,evidence,attachments,created_at";
 
 // `github_url` nasceu na migração 0010 e as migrações sobem à mão. Enquanto ela
 // não é aplicada, pedir a coluna faria o perfil vir nulo e a página pública
@@ -79,13 +80,18 @@ export async function getPortfolio(username: string): Promise<Portfolio | null> 
   const entries = toEntries((data ?? []).map((row) => ({
     id: row.id,
     labSlug: row.lab_slug,
-    result: row.result,
-    reproduction: row.reproduction,
-    severity: row.severity as Severity,
-    checklist: Array.isArray(row.checklist) ? (row.checklist as string[]) : [],
+    evidence: row.evidence ?? "",
+    attachments: toAttachments(row.attachments),
     published: true,
     createdAt: row.created_at,
   })));
+
+  // Bucket privado: quem abre esta página é anônimo, então a URL do anexo é
+  // assinada aqui. Só chega neste ponto o que já passou pelo filtro de
+  // publicado, logo a assinatura não vaza rascunho.
+  const signedEntries = await Promise.all(
+    entries.map(async (entry) => ({ ...entry, attachments: await signPublicAttachments(entry.attachments) })),
+  );
 
   return {
     username: profile.username,
@@ -95,10 +101,10 @@ export async function getPortfolio(username: string): Promise<Portfolio | null> 
     role: profile.role ?? "",
     linkedin: normalizeProfileLink(profile.linkedin_url ?? "", "linkedin"),
     github: normalizeProfileLink(profile.github_url ?? "", "github"),
-    entries,
-    projects: buildProjects(entries),
-    stats: statsFor(entries),
-    skills: portfolioSkills(entries),
+    entries: signedEntries,
+    projects: buildProjects(signedEntries),
+    stats: statsFor(signedEntries),
+    skills: portfolioSkills(signedEntries),
     sections: visibleSections(sections),
   };
 }
@@ -113,7 +119,7 @@ export async function getPortfolioProject(username: string, projectId: string): 
   return project ? { portfolio, project } : null;
 }
 
-export { countBySeverity, toEntries, toMarkdown, type PortfolioEntry } from "./portfolio-format";
+export { toEntries, toMarkdown, type PortfolioEntry } from "./portfolio-format";
 export { type PortfolioProject, type PortfolioStats } from "./portfolio-projects";
 
 export type PublicCase = {
@@ -122,7 +128,7 @@ export type PublicCase = {
   project: { id: string; name: string };
   author: { username: string; name: string; headline: string; role: string; linkedin: string; github: string };
   /** Outros cases publicados da mesma pessoa, para quem chegou pelo link não sair no vazio. */
-  more: Array<{ labSlug: string; label: string; title: string; severity: Severity }>;
+  more: Array<{ labSlug: string; label: string; title: string }>;
 };
 
 /**
@@ -151,10 +157,8 @@ export async function getPublicCase(username: string, labSlug: string): Promise<
     {
       id: row.id,
       labSlug: row.lab_slug,
-      result: row.result,
-      reproduction: row.reproduction,
-      severity: row.severity as Severity,
-      checklist: Array.isArray(row.checklist) ? (row.checklist as string[]) : [],
+      evidence: row.evidence ?? "",
+      attachments: await signPublicAttachments(toAttachments(row.attachments)),
       published: true,
       createdAt: row.created_at,
     },
@@ -171,7 +175,7 @@ export async function getPublicCase(username: string, labSlug: string): Promise<
     const lab = labs.find((candidate) => candidate.slug === item.lab_slug);
     if (!lab) return [];
     seen.add(item.lab_slug);
-    return [{ labSlug: lab.slug, label: labLabel(lab), title: lab.title, severity: item.severity as Severity }];
+    return [{ labSlug: lab.slug, label: labLabel(lab), title: lab.title }];
   });
 
   const projectId = projectIdForArea(built.area);

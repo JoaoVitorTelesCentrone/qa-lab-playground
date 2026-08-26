@@ -189,32 +189,6 @@ Nenhum deles é óbvio. Todos aparecem em sistemas reais.
 
 ---
 
-### Post 3 — BDD Generator (funcionalidade nova)
-```
-Quantas vezes você já travou na hora de escrever um cenário BDD?
-
-Não porque não sabe o que testar.
-Mas porque a sintaxe do Gherkin parece emperrar o raciocínio.
-
-Adicionamos um Gerador de BDD no QA Lab.
-
-Você preenche:
-→ Feature (o que está testando)
-→ Como / Quero / Para (a user story)
-→ Given, When, Then (em campos separados)
-
-E ele gera o Gherkin formatado, pronto para copiar.
-
-Nada de IA. Só estrutura.
-Porque às vezes você não precisa de ajuda para pensar — só para organizar.
-
-Acesse em: linkedin.com/company/qa-lab-oficial
-
-#BDD #Gherkin #QA #TesteSoftware #Automação
-```
-
----
-
 ### Post 4 — Provocação (alto engajamento)
 ```
 "Você fez o curso de Playwright?"

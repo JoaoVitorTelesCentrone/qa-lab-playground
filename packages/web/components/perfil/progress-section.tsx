@@ -33,7 +33,7 @@ export function ProgressSection({ tracks, coverage }: { tracks: TrackProgress[];
             {tracks.map((item) => (
               <li key={item.track.slug} className="rounded-lg border border-border bg-background/40 p-4">
                 <div className="flex items-center justify-between gap-3 text-sm">
-                  <Link href={`/labs/trilhas/${item.track.slug}`} className="truncate font-medium transition hover:text-primary">
+                  <Link href={`/trilhas/${item.track.slug}`} className="truncate font-medium transition hover:text-primary">
                     {item.track.name}
                   </Link>
                   <span className="shrink-0 font-mono text-xs text-muted-foreground tabular-nums">{item.completed}/{item.total}</span>

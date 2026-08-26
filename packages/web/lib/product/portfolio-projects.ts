@@ -14,8 +14,8 @@
 // Módulo puro: nenhuma leitura de banco.
 
 import { practiceApps } from "./apps";
-import type { Severity } from "./evaluation";
 import type { PortfolioEntry } from "./portfolio-format";
+import { countLinks } from "./evidence-text";
 
 export type PortfolioProject = {
   id: string;
@@ -38,10 +38,21 @@ export type PortfolioStats = {
   bugs: number;
   /** Labs distintos: quantos recortes do sistema ela cobriu. */
   labs: number;
-  /** Critérios de aceite confirmados, somados. */
-  criteria: number;
-  bySeverity: Array<{ severity: Severity; total: number }>;
+  /**
+   * Evidências que alguém de fora consegue auditar: têm print, vídeo ou link
+   * externo junto. Substitui a contagem de anexos, que dizia quanto arquivo
+   * foi subido e não o que isso prova — dez prints num case só não valem mais
+   * que um print em dez cases.
+   */
+  documented: number;
+  /** Domínios distintos testados. Diz a amplitude, não só o volume. */
+  domains: number;
 };
+
+/** Uma evidência é auditável quando traz arquivo ou link para conferir. */
+function isDocumented(entry: PortfolioEntry) {
+  return entry.attachments.length > 0 || countLinks(entry.evidence) > 0;
+}
 
 const modeTags = { fluxo: "Validação de fluxo", investigacao: "Teste exploratório" } as const;
 
@@ -93,17 +104,9 @@ export function statsFor(entries: PortfolioEntry[]): PortfolioStats {
     evidences: entries.length,
     bugs: entries.filter((entry) => entry.labMode === "investigacao").length,
     labs: new Set(entries.map((entry) => entry.labSlug)).size,
-    criteria: entries.reduce((total, entry) => total + entry.checklist.length, 0),
-    bySeverity: countSeverity(entries),
+    documented: entries.filter(isDocumented).length,
+    domains: new Set(entries.map((entry) => entry.projectId)).size,
   };
-}
-
-const severityOrder: Severity[] = ["critica", "alta", "media", "baixa"];
-
-function countSeverity(entries: PortfolioEntry[]) {
-  return severityOrder
-    .map((severity) => ({ severity, total: entries.filter((entry) => entry.severity === severity).length }))
-    .filter((item) => item.total > 0);
 }
 
 /**
@@ -113,10 +116,14 @@ function countSeverity(entries: PortfolioEntry[]) {
  */
 export function portfolioSkills(entries: PortfolioEntry[]): string[] {
   if (entries.length === 0) return [];
-  const skills = ["Documentação de evidência", "Classificação de severidade"];
+  const skills = ["Documentação de evidência"];
   if (entries.some((entry) => entry.labMode === "investigacao")) skills.push("Teste exploratório");
   if (entries.some((entry) => entry.labMode === "fluxo")) skills.push("Validação de fluxo ponta a ponta");
-  if (entries.some((entry) => entry.checklist.length >= 3)) skills.push("Critérios de aceite");
+  if (entries.some((entry) => entry.attachments.some((file) => file.type.startsWith("video/")))) skills.push("Evidência em vídeo");
+  else if (entries.some((entry) => entry.attachments.length > 0)) skills.push("Evidência visual");
+  // Documentar sempre é diferente de documentar uma vez: só entra quando é
+  // hábito, não exceção.
+  if (entries.length >= 3 && entries.every(isDocumented)) skills.push("Rastreabilidade de evidência");
   if (new Set(entries.map((entry) => entry.projectId)).size > 1) skills.push("Cobertura de múltiplos domínios");
   if (entries.some((entry) => entry.labArea === "API")) skills.push("Teste de API");
   return skills;
