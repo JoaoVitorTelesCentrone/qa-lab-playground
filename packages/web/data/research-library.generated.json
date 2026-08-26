@@ -1,6 +1,45 @@
 {
-  "updatedAt": "2026-08-25T09:52:53.604Z",
+  "updatedAt": "2026-08-26T09:59:35.201Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-21203-rs-3-rs-10812592-v1",
+      "title": "Policy-Gated Firmware Trust and Anti-Rollback Resilience for Autonomous UAV Edge Platforms: A Formal Security and Software Validation",
+      "abstract": "Abstract Autonomous unmanned aerial vehicles (UAVs) increasingly rely on software-defined sensing, estimation, networking, and decision pipelines, making firmware integrity a prerequisite for trustworthy autonomy. A compromised or downgraded firmware image can silently alter safety constraints, navigation logic, command authorization, or telemetry behavior even when higher-layer cryptographic communication remains intact. This paper studies a policy-gated firmware trust mechanism implemented in an open GPS-denied UAV swarm research platform and develops a formal model for its anti-rollback and fail-closed properties. The implementation represents each firmware image through a manifest containing semantic version, measurement, signer, keyed-digest field, secure-boot claim, bootloader-lock claim, and monotonic rollback counter. Field and production profiles require secure-boot and bootloader predicates, non-regression of both version and rollback counter, trusted signer membership, keyed manifest integrity, and an admissible firmware measurement before node startup is permitted. Accepted state is persisted only after validation. The paper formalizes these predicates, derives monotonicity and rejection properties, maps threat classes to enforcement paths, and distinguishes source-verified behavior from assumptions that require a hardware root of trust. Repository evidence includes a registered native boot-trust test target with cases for trusted production acceptance, rollback rejection, and unauthorized maintenance rejection; the repository validation report records the native test suite as green at the studied commit. The analysis also exposes two important trust-boundary conditions: rollback protection depends on integrity of the persistent state record, and current secure-boot/bootloader values are externally supplied claims rather than independently measured hardware evidence. The result is a reproducible software-level firmware resilience baseline and a precise roadmap toward hardware-backed attestation.",
+      "authors": [
+        "Md Shahanur Islam Shagor"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-26",
+      "source": "Crossref",
+      "venue": "",
+      "doi": "https://doi.org/10.21203/rs.3.rs-10812592/v1",
+      "url": "https://doi.org/10.21203/rs.3.rs-10812592/v1",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-21203-rs-3-rs-10572455-v1",
+      "title": "A Validated Measurement Protocol for Comparable, Cost-Aware Software Testing Evaluation: A Reproducible Benchmark, an Oracle Sampling-Budget Guarantee, and a Real-Fault Validity Study, Instantiated for Quantum Programs",
+      "abstract": "Abstract Testing-technique evaluations are comparable only under a shared, fixed measurement protocol; published results in emerging domains are usually incompatible, so effectiveness claims accumulate without becoming comparable. We contribute a fixed, executable protocol making competing test-generation and oracle techniques comparable; a validated statistical guarantee on the sampling budget a probabilistic test oracle needs before its verdicts can be trusted; and a construct-validity study measuring how well mutation testing predicts detection of real developer faults. We built a benchmark and protocol, QSQ-Bench and Q-EVAL, with a canonical mutation-operator set and fixed oracle, budget, and statistics, instantiated on quantum programs, whose test oracle is inherently statistical. We validate the sampling-budget bound, compare four test-generation strategies on 15 programs, sweep three oracle families over a full program-budget grid, measure oracle behaviour under device noise, and execute 52 real bug/fixed-version pairs through the harness used for synthetic mutants. All validation checks pass; no oracle family dominates the grid; parameter-perturbation mutants are markedly harder to kill than other classes (62% versus 89–100%); the oracle statistic converges to a device-imposed noise floor rather than zero; and 81% of executable real bugs are detected, with every miss provably invisible to any output-based oracle. Comparability, cost-awareness, and construct validity can be delivered as properties of a fixed protocol; we confirm this domain-generality directly by re-executing the identical, unmodified protocol code on a classical feature-flag bucketing system, where every headline finding replicates. A reproducibility package is available on request.",
+      "authors": [
+        "Bhanwar Gupta",
+        "Sanjeev Rana"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-26",
+      "source": "Crossref",
+      "venue": "",
+      "doi": "https://doi.org/10.21203/rs.3.rs-10572455/v1",
+      "url": "https://doi.org/10.21203/rs.3.rs-10572455/v1",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
     {
       "id": "doi-doi-org-10-1007-s11219-026-09785-0",
       "title": "AI-as-a-Judge for software quality assessment: Consistency, attitude effects, and complexity sensitivity in multi-agent code evaluation",
@@ -19,6 +58,30 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-08-25T09:52:53.604Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s44196-026-01540-4",
+      "title": "Agentic AI for Early Bug Detection and Software Quality Assurance: A Multi-Agent Collaborative Framework",
+      "abstract": "The modern software systems requires a proactive, scalable, and continuously adaptive quality assurance techniques to maintain the pace with iterative Agile workflows and CI/CD pipelines. Conventional static and dynamic analysis tools remain largely reactive, isolated, and that might lead to a high false positive rates (FPR). To address all such challenges, the current study has proposed an Agentic Artificial Intelligence (AAI) framework that is collaborative, multi-agent architecture designed for early software defect prediction (SDP) and continuous quality monitoring. The framework orchestrates specialized, autonomous agents dedicated to static-semantic code analysis, defect prediction, automated test generation, patch synthesis, and quality assessment. Code representations are constructed using Graph Attention Networks (GAT) on Abstract Syntax Trees (AST) combined with CodeBERT semantic embeddings and BiLSTM temporal evolution modeling. Furthermore, a reinforcement learning (RL) feedback mechanism dynamically adapts agent policies using sprint-level performance signals. Evaluated across standard PROMISE (JM1, KC1, PC1) and Defects4J benchmark datasets, the proposed framework achieves an average accuracy of 0.87, a recall of 0.87, and reduces the false positive rate to 0.12–0.15. Additionally, automated test generation improves code coverage up to 82% while lowering the mean time to bug detection (MTTD) to 10.5–12.1 hours. These results demonstrate that multi-agent collaborative reasoning significantly enhances early defect localization and provides continuous quality assurance in modern software engineering.",
+      "authors": [
+        "Abdulaziz Alhumam"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-24",
+      "source": "OpenAlex",
+      "venue": "International Journal of Computational Intelligence Systems",
+      "doi": "https://doi.org/10.1007/s44196-026-01540-4",
+      "url": "https://doi.org/10.1007/s44196-026-01540-4",
+      "topics": [
+        "Computer science",
+        "Software quality assurance",
+        "Agile software development",
+        "Software quality",
+        "Artificial intelligence",
+        "Benchmark (surveying)"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
       "id": "doi-doi-org-10-67728-eci-2026-002",
@@ -357,6 +420,26 @@
       "discoveredAt": "2026-08-15T22:36:58.611Z"
     },
     {
+      "id": "doi-doi-org-10-1109-compsac69091-2026-00072",
+      "title": "Balancing Accuracy and Cost: An Adaptive Hybrid Framework for Feature Selection in Software Defect Prediction",
+      "abstract": "High-dimensional feature spaces in software defect prediction (SDP) often contain redundant and irrelevant features that degrade classifier performance and increase computational overhead. Current multi-objective feature selection approaches struggle with search efficiency and premature convergence when navigating these complex, discrete solution spaces. To address this, we propose AHMOFS-TLM, an adaptive hybrid multi-objective framework that integrates a Token-Grant initialization strategy to generate high-quality diverse solutions, a mask-based decoding reduction mechanism to dynamically prune low-contribution features, and a lane-based crossover-mutation operator to sustain population diversity. Experiments using five classifiers across twelve public datasets demonstrate that AHMOFS-TLM outperforms state-of-the-art baselines, improving classification accuracy by $\\mathbf{1. 3 \\% - 1 1. 5 \\%}$ while reducing training/prediction time by 80.4%-98.5%.",
+      "authors": [
+        "Xuanyan Li",
+        "Dongcheng Li"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-01",
+      "source": "Semantic Scholar",
+      "venue": "Annual International Computer Software and Applications Conference",
+      "doi": "https://doi.org/10.1109/COMPSAC69091.2026.00072",
+      "url": "https://doi.org/10.1109/COMPSAC69091.2026.00072",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
       "id": "doi-doi-org-10-48175-ijarsct-37226",
       "title": "Machine Learning and Evolutionary Computing Techniques for Software Defect Prediction: A Systematic Review and Comparative Analysis",
       "abstract": "Software defects remain one of the primary challenges affecting software quality, reliability, maintainability, and development cost. Early identification of defective modules through software defect prediction techniques enables developers to allocate testing resources efficiently and improve overall software quality. Over the past decade, machine learning and evolutionary computing approaches have emerged as effective solutions for software defect prediction, utilizing software metrics and historical project data to identify defect-prone components. This paper presents a systematic review and comparative analysis of machine learning and evolutionary computing techniques employed in software defect prediction. The study examines traditional machine learning algorithms, including Decision Trees, Random Forests, Naïve Bayes, Support Vector Machines, K-Nearest Neighbors, and Logistic Regression, alongside ensemble, deep learning, and evolutionary approaches such as Genetic Algorithms and hybrid rule-mining techniques. A comprehensive analysis of widely used benchmark datasets, software metrics, performance evaluation measures, and reported outcomes from existing studies is presented. Furthermore, the review identifies prevailing research trends, methodological challenges, dataset limitations, class imbalance issues, and interpretability concerns that influence prediction performance. Based on the findings, the paper highlights emerging directions for future research, including explainable artificial intelligence, hybrid optimization frameworks, automated feature engineering, and adaptive learning techniques. The study provides researchers and practitioners with a consolidated understanding of current advancements in software defect prediction and serves as a valuable reference for the development of more accurate and reliable prediction models. The review analyzes studies published between 2015 and 2026 and synthesizes findings from major software defect prediction research efforts.",
@@ -459,6 +542,26 @@
       ],
       "query": "software quality model",
       "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-9734-jamcs-2026-v41i62161",
+      "title": "Evaluating SMOTE-based Class Imbalance Handling in Software Defect Prediction",
+      "abstract": "Class imbalance remains a persistent challenge in software defect prediction because defective modules are usually much fewer than non-defective modules. This imbalance can reduce a model's ability to identify the minority class and can also make performance interpretation misleading when evaluation relies on unsuitable measures. This paper evaluates the effect of the Synthetic Minority Over-sampling Technique (SMOTE) on defect prediction performance in a focused and leakage-safe empirical setting. The study compares Logistic Regression, Random Forest and k-Nearest Neighbors on the AEEEM_JDT benchmark dataset using imbalance-aware metrics. The findings show that SMOTE improved threshold-based performance for Random Forest and k-Nearest Neighbors, while Logistic Regression showed almost no improvement in F1-score and a decline in MCC. Random Forest improved from 0.566 to 0.627 in F1-score and from 0.499 to 0.535 in MCC, while k-Nearest Neighbors improved from 0.533 to 0.628 in F1-score and from 0.476 to 0.523 in MCC. However, PR-AUC decreased for all three models after SMOTE, indicating that better classification at a selected operating point did not necessarily produce better ranking quality across thresholds. The results suggest that SMOTE should be treated as a conditional imbalance-handling technique rather than a universally beneficial preprocessing step. Its usefulness depends on the classifier and on whether the practical objective is fixed-threshold defect detection or risk ranking.",
+      "authors": [
+        "Abdulbari Alamri",
+        "Muhammad Bilal"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-04",
+      "source": "Semantic Scholar",
+      "venue": "Journal of Advances in Mathematics and Computer Science",
+      "doi": "https://doi.org/10.9734/jamcs/2026/v41i62161",
+      "url": "https://doi.org/10.9734/jamcs/2026/v41i62161",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
       "id": "arxiv-arxiv-org-abs-2605-20788v1",
@@ -571,6 +674,29 @@
       "discoveredAt": "2026-08-25T09:52:53.604Z"
     },
     {
+      "id": "doi-doi-org-10-1109-iotaai70471-2026-11607716",
+      "title": "A Bayesian-Optimized Multi-Scale Oversampling Method for Imbalanced Software Defect Prediction",
+      "abstract": "Software Defect Prediction (SDP) plays an important role in optimizing the allocation of testing resources. However, in real-world software projects, defective samples are usually far fewer than non-defective samples, which can bias models toward the majority class.To address the limitations of existing class imbalance methods in SDP, which fail to adequately capture program semantics and complexity, this paper proposes a Bayesian Optimization-based Semantic and Complexity-Aware Oversampling (BO-SCAO) method. BO-SCAO first employs CodeT5+ to extract semantic representations and uses expert metrics to construct complexity features. It then integrates semantic and complexity distances into a multi-scale distance to guide neighbor selection and synthetic sample generation for minority-class instances. Finally, Bayesian optimization is used to adaptively search distance weights, leading to more effective weight configurations. Experiments are conducted on six imbalanced projects from the PROMISE dataset, using AUC as the evaluation metric, and BO-SCAO is compared with four baseline methods, including LTRUS. The results show that BO-SCAO can more effectively improve prediction performance across three SDP classifiers.",
+      "authors": [
+        "Yue Qiu",
+        "Qian Chen",
+        "JunJian Liu",
+        "Boyan Su",
+        "Fanqiang Zeng"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-01",
+      "source": "Semantic Scholar",
+      "venue": "2026 8th International Conference on Internet of Things, Automation and Artificial Intelligence (IoTAAI)",
+      "doi": "https://doi.org/10.1109/IoTAAI70471.2026.11607716",
+      "url": "https://doi.org/10.1109/IoTAAI70471.2026.11607716",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
       "id": "doi-doi-org-10-1109-ms-2026-3662321",
       "title": "Trends in Software Quality in Embedded Systems: Are We Getting Any Better?",
       "abstract": "Software quality is and remains an important topic, for which there is no clear definition or method of measurement. This column discusses a measurement model based on selected software metrics, in which measured trends are discussed across a very large code base.",
@@ -634,6 +760,88 @@
       "discoveredAt": "2026-08-15T22:37:48.767Z"
     },
     {
+      "id": "doi-doi-org-10-1145-3793302-3793359",
+      "title": "An Empirical Study on Deep Learning-based Line-Level Software Defect Prediction",
+      "abstract": "Line-level software defect prediction (LLDP) is crucial for locating and modifying defective code and has drawn increasing attention from both academic and industrial communities. Recently, a series of deep learning-based LLDP models have been proposed. However, there is no systematic comparison of these LLDP models. In this paper, we aim to compare the performance of these models, evaluate their consistency in different scenarios, and investigate whether fusing handcrafted features can improve the prediction performance. To this end, we conducted a comprehensive empirical study on eight recent state-of-the-art models using 32 benchmark datasets from nine software projects’ releases. We evaluated them in both cross-version and cross-project scenarios with four widely used performance metrics, including AUC, Recall@Top20%LOC, Effort@Top20%Recall, and IFA. Moreover, we investigated the impact of handcrafted features on LLDP models based on two different fusion strategies. The results show that 1) the difference among these models is statistically significant; 2) no model is always superior across all performance metrics but Bugsplorer generally performs best except IFA; 3) model performance rankings are inconsistent between cross-version and cross-project scenarios, revealing that a model’s effectiveness is highly scenario-dependent; 4) furthermore, fusing handcrafted features significantly improves model prediction performance, and the fusion strategy also matters. In conclusion, the selection of an LLDP model should be guided by specific scenarios and performance metrics, and the hybrid model that combines deep learning representations with handcrafted features is a promising alternative for LLDP.",
+      "authors": [
+        "Enci Zhang",
+        "Yutong Jiang",
+        "Tianmeng Zhang",
+        "H. Tong"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-13",
+      "source": "Semantic Scholar",
+      "venue": "IEEE Working Conference on Mining Software Repositories",
+      "doi": "https://doi.org/10.1145/3793302.3793359",
+      "url": "https://doi.org/10.1145/3793302.3793359",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-25258-ijddt-16-10s-4",
+      "title": "An Explainable Transformer-Based Framework for Software Defect Prediction Using QLoRA and Semantic Evaluation",
+      "abstract": "Software Defect Prediction (SDP) is critical to improving software reliability by identifying fault-prone components during development. Despite progress in deep learning, current models often lack interpretability and require substantial computational resources. This study proposes an explainable, Transformer-based framework fine-tuned using Quantized Low-Rank Adaptation (QLoRA) to enhance both efficiency and transparency in defect prediction. The model leverages a custom dataset comprising over 2.3 million labeled code lines—including 292,064 faulty lines—collected from real-world software projects. Byte Pair Encoding (BPE) tokenization and static metric extraction were applied to build a unified feature representation, enabling line-level classification. The Transformer backbone, adapted from the LLaMA model, was fine-tuned using 4-bit quantization for parameter-efficient training. Semantic evaluation was performed using BERTScore to quantify alignment between predicted and actual defect explanations. Experimental results demonstrate that the proposed model achieves a BERTScore of 0.82 and outperforms baseline BiLSTM and vanilla Transformer architectures in both Recall and F1-score, while operating efficiently on consumer-grade hardware. The findings confirm that integrating QLoRA and semantic interpretability mechanisms enables scalable, explainable defect prediction suitable for modern software engineering pipelines.",
+      "authors": [
+        "Vijya Tulsani",
+        "Kinjal Patni",
+        "Dr. Prashant Sahatiya"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-10",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Drug Delivery Technology",
+      "doi": "https://doi.org/10.25258/ijddt.16.10s.4",
+      "url": "https://doi.org/10.25258/ijddt.16.10s.4",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-1038-s41598-026-41981-7",
+      "title": "A novel generative oversampling for software defect prediction",
+      "abstract": "Software defect prediction is one of the highly active research areas as it allows to focus the testing efforts on the defective modules and reduce the cost of development. The imbalanced nature of defect data poses a threat to the performance of software defect predictors. This study proposes a novel Generative oversampling-based Software Defect Prediction naming GeNSDP. It oversamples defect data by generating synthetic minority instances utilizing lightweight generative model, then the oversampled data is used for defect prediction using deep network. NASA and PROMISE datasets are used for experimentation, for which GeNSDP achieves a remarkable average score of 99.1% for Area Under the Curve, and 0.92 for F-measure. The proposed model outperforms the traditional oversampling methods (including ROS, SMOTE, COSTE) by 30.1%, and selected baseline models by 14.1%. From the statistical evidence obtained by conducting the Anova Test with Bonferroni Post-hoc test at the confidence level of 95%, it is concluded that the proposed model is effective to handle class imbalance and achieve stable defect prediction.",
+      "authors": [
+        "Somya R. Goyal"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-03",
+      "source": "Semantic Scholar",
+      "venue": "Scientific Reports",
+      "doi": "https://doi.org/10.1038/s41598-026-41981-7",
+      "url": "https://doi.org/10.1038/s41598-026-41981-7",
+      "topics": [
+        "Medicine"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-1002-smr-70116",
+      "title": "DP‐GCN: Integrating GraphCodeBERT and GCN With Contrastive Learning for Software Defect Prediction",
+      "abstract": "Software defect prediction identifies high‐risk code early, reducing development costs and improving software quality. Early studies primarily relied on handcrafted features, which struggled to capture semantic differences and structural information within programs. Later research fused semantic features extracted from abstract syntax trees (ASTs) or graph structures with handcrafted features, improving prediction performance. However, existing fusion methods still face challenges such as insufficient deep semantic mining, inadequate global dependency capture, and weak cross‐project generalization. To address these limitations, this paper proposes DP‐GCN, a defect prediction model integrating GraphCodeBERT, graph convolutional network (GCN), and contrastive learning. Specifically, GraphCodeBERT extracts semantic and structural code representations, GCN captures global dependencies among code elements, and contrastive learning optimizes the feature space distribution to enhance discriminability. The optimized deep features are then fused with handcrafted features and fed into a logistic regression classifier for defect prediction. Experiments on 10 projects from the PROMISE dataset show that DP‐GCN outperforms existing methods in both within‐project and cross‐project scenarios, validating its effectiveness and the synergistic advantages of the three integrated techniques.",
+      "authors": [
+        "Xueting Liu",
+        "Haibo Jin"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-01",
+      "source": "Semantic Scholar",
+      "venue": "Journal of Software: Evolution and Process",
+      "doi": "https://doi.org/10.1002/smr.70116",
+      "url": "https://doi.org/10.1002/smr.70116",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
       "id": "doi-doi-org-10-1016-j-cola-2026-101400",
       "title": "A multi-level complexity metric suite for software quality measurement and machine learning-based software defect prediction",
       "abstract": "Resumo nao disponivel na fonte indexada.",
@@ -694,6 +902,28 @@
       ],
       "query": "software quality model",
       "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s11219-026-09747-6",
+      "title": "CoCo-GAN: CodeBERT-driven collaborative generative adversarial learning for software defect prediction",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Xiaoxing Yang",
+        "Liwei Xiao",
+        "Jianmin Su",
+        "Bingding Huang"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-03-19",
+      "source": "Semantic Scholar",
+      "venue": "Software quality journal",
+      "doi": "https://doi.org/10.1007/s11219-026-09747-6",
+      "url": "https://doi.org/10.1007/s11219-026-09747-6",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
       "id": "doi-doi-org-10-37012-jtik-v12i1-3294",
@@ -775,6 +1005,26 @@
       ],
       "query": "software quality model",
       "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s10115-026-02696-3",
+      "title": "A transformer-based stacked ensemble framework for software defect prediction",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Meetesh Nevendra",
+        "Rahul Shrivastava"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-02-11",
+      "source": "Semantic Scholar",
+      "venue": "Knowledge and Information Systems",
+      "doi": "https://doi.org/10.1007/s10115-026-02696-3",
+      "url": "https://doi.org/10.1007/s10115-026-02696-3",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
       "id": "doi-doi-org-10-1109-rams50514-2026-11424466",
@@ -861,6 +1111,31 @@
       "discoveredAt": "2026-08-15T22:37:48.767Z"
     },
     {
+      "id": "doi-doi-org-10-1007-s44443-025-00401-y",
+      "title": "MSTDP: a multi-scale temporal deep learning framework for just-in-time software defect prediction with cross-attention fusion",
+      "abstract": "Just-In-Time Defect Prediction (JITDP), as an important means to improve software quality and reduce maintenance costs, has received widespread attention in recent years. However, existing methods generally neglect multi-scale temporal features during the development process, lack dynamic modeling of developer behavior and project lifecycle, and have limited robustness when facing concept drift. To address these limitations, this paper proposes a novel Multi-Scale Temporal Defect Prediction framework (MSTDP) that integrates commit behavior patterns at temporal granularities of hours, days, and weeks, combining code semantic information, developer behavioral features, and lifecycle-aware mechanisms to comprehensively characterize the dynamic evolution patterns of defect introduction. MSTDP achieves deep feature fusion through cross-attention mechanisms and constructs a concept drift analysis module to enhance the model’s adaptability across different evolutionary stages. Empirical results on 9 large-scale open-source projects demonstrate that MSTDP achieves optimal performance across all evaluation metrics: average accuracy of 76.89% (0.56% improvement), precision of 61.02% (0.53% improvement), recall of 67.82% (0.64% improvement), F1-score of 60.93% (0.46% improvement), and AUC of 81.88% (0.52% improvement), significantly outperforming 7 mainstream baseline methods including JITBoost, FENSE, and JIT-CF. Wilcoxon signed-rank tests confirm the statistical significance of these improvements (p<0.05\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\varvec{p < 0.05}$$\\end{document}). The research results validate the effectiveness of this method for efficient and accurate defect prediction in dynamic software engineering environments, demonstrating stronger generalization capability and robustness against concept drift.",
+      "authors": [
+        "Ziyang Liu",
+        "Chunhong Yuan",
+        "Hengjun Liu",
+        "Xiangyu Li",
+        "Shengrui Liu",
+        "Xiang Zhou",
+        "Zhikui Tian"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-17",
+      "source": "Semantic Scholar",
+      "venue": "Journal of King Saud University: Computer and Information Sciences",
+      "doi": "https://doi.org/10.1007/s44443-025-00401-y",
+      "url": "https://doi.org/10.1007/s44443-025-00401-y",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
       "id": "doi-doi-org-10-23960-jitet-v14i1-8462",
       "title": "ANALISIS KUALITAS DAN PENERAPAN SOFTWARE QUALITY ASSURANCE PADA WEBSITE PORTAL KATINGAN MENGGUNAKAN MODEL ISOIEC 9126",
       "abstract": "Portal Katingan memegang peran strategis sebagai gerbang utama layanan digital dan informasi publik di Kabupaten Katingan. Penelitian ini bertujuan untuk menganalisis kualitas perangkat lunak website tersebut menggunakan standar ISO/IEC 9126 dan memberikan evaluasi berbasis Software Quality Assurance (SQA). Metode penelitian menggunakan pendekatan kuantitatif deskriptif dengan menyebarkan kuesioner kepada 50 responden, serta divalidasi melalui pengujian teknis Black Box Testing dan GTmetrix. Hasil penelitian menunjukkan bahwa secara keseluruhan kualitas Website Portal Katingan masuk dalam kategori Sangat Baik dengan skor rata-rata 4.63. Aspek Portability menjadi karakteristik paling unggul (4.74), sedangkan aspek Functionality memperoleh skor terendah (4.53) karena adanya temuan tautan layanan yang tidak aktif. Pada aspek Efficiency, ditemukan perbedaan signifikan di mana halaman utama sangat efisien (Grade A), namun halaman berita memerlukan optimasi (Grade F). Kesimpulannya, Portal Katingan telah memenuhi standar kelayakan perangkat lunak yang baik, namun memerlukan pemeliharaan berkala pada tautan dan kompresi aset gambar berita.",
@@ -880,6 +1155,48 @@
       ],
       "query": "software quality model",
       "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-iceaai68945-2026-11442359",
+      "title": "Software Defect Prediction Models: Technical Evolution, Performance Comparison, and Future Directions",
+      "abstract": "Software defect prediction (SDP) is a core technology in software quality assurance, enabling early identification of defect-prone modules via multi-dimensional data mining to optimize testing resource allocation and reduce costs. This paper systematically sorts out the evolutionary context of SDP models, focusing on three developmental stages with clear problem-solution logic: traditional models (solving basic defect classification needs), feature engineering optimization models (addressing data quality bottlenecks), and deep learning & emerging fusion models (breaking through scale and scenario limitations). It conducts a multi-dimensional quantitative comparative analysis of different models based on data scale, imbalance degree, cross-project generalization ability, and engineering cost, clarifies their core advantages and applicable boundaries, and critically analyzes current challenges and future directions. Traditional models suit small-to-medium-sized scenarios with high interpretability requirements; feature engineering optimization models apply to poor data quality scenarios; deep learning models excel in large-scale, cross-version/cross-project prediction; federated and fusion models meet cross-organizational collaboration and privacy protection needs. Current challenges include data class imbalance, insufficient model interpretability, and lack of industrial-level verification. Future efforts should focus on multi-source data fusion, model lightweighting, privacy protection enhancement, and customized development to promote industrial application. This paper provides important references for theoretical research and engineering practice in SDP.",
+      "authors": [
+        "Tao Zhang",
+        "Hongxia Zhou"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-16",
+      "source": "Semantic Scholar",
+      "venue": "2026 2nd International Conference on Electrical Automation and Artificial Intelligence (ICEAAI)",
+      "doi": "https://doi.org/10.1109/ICEAAI68945.2026.11442359",
+      "url": "https://doi.org/10.1109/ICEAAI68945.2026.11442359",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s41060-025-00987-6",
+      "title": "Explainable deep learning for software defect prediction: a residual-shuffle network approach with SHAP and LIME",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Samira Keramat Talatapeh",
+        "M. Dishabi",
+        "Hamed Pezeshki",
+        "Halimeh Madadi"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-12",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Data Science and Analysis",
+      "doi": "https://doi.org/10.1007/s41060-025-00987-6",
+      "url": "https://doi.org/10.1007/s41060-025-00987-6",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
       "id": "arxiv-arxiv-org-abs-2601-02454v1",
@@ -902,6 +1219,114 @@
       ],
       "query": "software quality assurance",
       "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-access-2026-3656247",
+      "title": "Benchmarking TabNet, NODE, and FT-Transformer for Software Defect Prediction: An Empirical Comparison and Explainability Analysis",
+      "abstract": "Software defect prediction (SDP) is essential for improving software quality and reliability. Traditional machine learning methods, while effective, often fail in capturing complex interactions among software metrics. Recently, specialized deep learning architectures designed for tabular data, including TabNet, Neural Oblivious Decision Ensembles (NODE), and FT-Transformer, have emerged, offering promising potential to enhance prediction accuracy and interpretability. This study comprehensively benchmarks the TabNet, NODE and FT-Transformer models on the challenging NASA JM1 dataset from the PROMISE repository. We address severe class imbalance using NearMiss undersampling and ensure hyperparameter optimization for fairness across comparisons. The performance of the models was evaluated using standard metrics: precision, recall, F1-score, and accuracy. In addition, the interpretability of the model was assessed using SHAP and LIME methods. The FT-Transformer and NODE models demonstrated superior performance, achieving 88% accuracy compared to the accuracy of TabNet 86%. FT-Transformer showed exceptional precision (99%) for defect detection, emphasizing its low false-positive rate. SHAP and LIME analyzes revealed unique attention patterns for each model, highlighting differences in feature importance and decision-making processes. FT-Transformer and NODE outperform TabNet in accuracy and balance between recall and precision. Interpretability analysis provides actionable insights into feature importance, enabling better decision-making in practical SDP workflows.",
+      "authors": [
+        "Burçak Asal",
+        "Burcu Yalçıner"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "IEEE Access",
+      "doi": "https://doi.org/10.1109/ACCESS.2026.3656247",
+      "url": "https://doi.org/10.1109/ACCESS.2026.3656247",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-5220-0014459000004052",
+      "title": "Emerging Patterns and Research Directions on Machine Learning in Software Defect Prediction: A Systematic Literature Review",
+      "abstract": ": Software defects remain a significant challenge in the development of reliable and maintainable software systems. Machine Learning (ML) techniques have emerged as effective tools for predicting software defects, enabling early identification of faulty modules and improving software quality. This paper presents a Systematic Literature Review (SLR) of ML-based Software Defect Prediction (SDP) approaches published between 2015 and 2025. The review analyzes widely used ML techniques such as Decision Trees, Support Vector Machines, and Neural Networks, as well as recent advances in ensemble and deep learning models. Datasets are evaluated, along with feature selection strategies and performance metrics. The key challenges identified include class imbalance, feature redundancy, and limited dataset availability. The study highlights trends such as the integration of explainable AI, transfer learning, and AutoML into defect prediction workflows. The findings provide insights into the current state of ML-based SDP and suggest directions for future research and industrial applications.",
+      "authors": [
+        "Camelia-Petrina Nadejde"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Agents and Artificial Intelligence",
+      "doi": "https://doi.org/10.5220/0014459000004052",
+      "url": "https://doi.org/10.5220/0014459000004052",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-access-2026-3674915",
+      "title": "A Novel Unsupervised Method for Software Defect Prediction Based on Clustering Assumption",
+      "abstract": "Software defect prediction (SDP) is a very important technique used in the software testing. It helps to quickly predict the defects contained in software in the early stage of development. Currently, many SDP methods use machine learning algorithms to build defect prediction models based on historical data. However, due to the lack of historical data that can be used to train the models, unsupervised defect prediction (UDP) methods have been proposed. The instance-violation-score-based-clustering (IVSBC) method is an example of the UDP method. It is relatively effective but vulnerable to redundant features and rough split of the feature space. To overcome those shortcoming, this paper proposes an unsupervised defect prediction method named CLA-CA based on clustering assumption. The CLA-CA searches different regions of every feature space to find an appropriate classification threshold, and remove redundant features, so as to improve the prediction performance. Experiments show that the CLA-CA is not only better than other mainstream UDP methods, but also outperforms most supervised defect prediction methods.",
+      "authors": [
+        "Shiqi Tang",
+        "X. Tie",
+        "Minggui Song",
+        "Qiao Yang"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "IEEE Access",
+      "doi": "https://doi.org/10.1109/ACCESS.2026.3674915",
+      "url": "https://doi.org/10.1109/ACCESS.2026.3674915",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-5220-0014981600004015",
+      "title": "An Extensive Empirical Investigation of Ensemble Learning for Software Defect Prediction",
+      "abstract": ": Software Defect Prediction (SDP) is crucial for enhancing the reliability of software by early identification of defect-prone modules. This is significant as software faults can incur substantial expenses and delays in software development. While individual machine learning (ML) models have shown promising outcomes, their effectiveness fluctuates across various datasets due to data imbalance, heterogeneity, and project-specific characteristics. Ensemble learning has emerged as an effective method to address this limitation. This study conducts a comprehensive empirical analysis evaluating individual ML classifiers and ensemble learning techniques for SDP. We first assess the effectiveness of seven common ML classifiers, including Decision Tree, K-Nearest Neighbors, Random Forest, Gradient Boosting, Extra Trees, Bagging, and AdaBoost. To enhance data quality and rectify class imbalance, the datasets are subjected to preprocessing utilizing Ant Colony Optimization (ACO)-based feature selection and the Random Over-Sampling Technique. The hyperparameters for each classifier are optimized by 5-fold Cross-Validation and Grid Search to provide unbiased and robust model tuning. Extensive experiments are conducted on a consolidated dataset of 47,618 samples. The experimental results consistently demonstrate that ensemble models outperform individual ML models. The SLSQP-based ensemble exhibits considerable proficiency in handling varied and imbalanced defect datasets among the evaluated ensemble algorithms. These findings provide significant insights for researchers pursuing reliable, scalable approaches to improve software quality assurance.",
+      "authors": [
+        "Mr. D. Jayakumar",
+        "Suyash Shukla",
+        "Sandeep Kumar"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Evaluation of Novel Approaches to Software Engineering",
+      "doi": "https://doi.org/10.5220/0014981600004015",
+      "url": "https://doi.org/10.5220/0014981600004015",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-1051-e3sconf-202673503005",
+      "title": "Cross Project Software Defect Prediction Using Machine Learning with Optimized Feature Selection",
+      "abstract": "In smart city software systems, where interconnected services demand high reliability, Software Defect Prediction (SDP) plays a vital role and reducing maintenance costs by identifying defect-prone modules early in the Software Development Life Cycle (SDLC). Cross-Project Defect Prediction (CPDP) enables defect data from source projects to predict defects in target projects with scarce labels; However, its effectiveness is hindered by feature redundancy, heterogeneous data distributions, and severe class imbalance. To address these challenges, this study proposes an integrated CPDP framework that combines Particle Swarm Optimization with Domain Knowledge (PSO+DK) for feature selection and Adaptive Synthetic Sampling (ADASYN) for class imbalance handling. Experiments were conducted on five widely used NASA datasets; CM1, PC1,PC2, PC3, and PC4 —using Random Forest (RF), Support Vector Machine (SVM), and Extreme Gradient Boosting (XGBoost) classifiers. Results show that PSO+DK enhanced the discriminative power of the models, with the framework achieving the highest accuracy of 0.9785 on PC2 dataset. Furthermore, ADASYN show minimal differences over SMOTE in improving classifier robustness. Highlights promising directions for deploying reliable cross-project prediction in smart city software development",
+      "authors": [
+        "Emediong Bassey Obot",
+        "Victor Anaga",
+        "Sadiq Thomas",
+        "B. Stephen",
+        "Samuel Okon Bassey",
+        "Solomon Joseph Udoabba",
+        "P. Asuquo",
+        "Amarachi Vivian Nnajiofor"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "E3S Web of Conferences",
+      "doi": "https://doi.org/10.1051/e3sconf/202673503005",
+      "url": "https://doi.org/10.1051/e3sconf/202673503005",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
       "id": "doi-doi-org-10-1109-access-2026-3712592",
