@@ -1,6 +1,31 @@
 {
-  "updatedAt": "2026-08-27T19:51:46.209Z",
+  "updatedAt": "2026-08-28T20:56:04.791Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-22124553",
+      "title": "DA-GWO-AUC: A Defect-Aware and AUC-Preserving Grey Wolf Optimisation Framework for Stable Feature Selection in Software Defect Prediction",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Surbhi Syal",
+        "Jagdeep Kaur"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-27",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.22124553",
+      "url": "https://doi.org/10.5281/zenodo.22124553",
+      "topics": [
+        "Computer science",
+        "Feature selection",
+        "Artificial intelligence",
+        "Feature (linguistics)",
+        "Software",
+        "Selection (genetic algorithm)"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-28T20:56:04.791Z"
+    },
     {
       "id": "doi-doi-org-10-1007-978-3-032-36816-4-14",
       "title": "Quantum Data Encoding Techniques for Software Defect Prediction: A Resource-Aware Evaluation",
