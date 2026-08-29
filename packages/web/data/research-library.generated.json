@@ -1,6 +1,30 @@
 {
-  "updatedAt": "2026-08-28T20:56:04.791Z",
+  "updatedAt": "2026-08-29T14:30:45.689Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-22138125",
+      "title": "Based on Multi-Modal Data Fusion for Software Testing",
+      "abstract": "This paper investigates the application of multi-modal data fusion techniques to enhance software testing practices. The core claim is that integrating diverse software testing data sources, such as source code, test cases, and log files, provides a more comprehensive and accurate assessment of software quality. A multi-modal data fusion framework is proposed, utilizing machine learning algorithms to consolidate and analyze these disparate data streams. This framework aims to improve defect prediction and localization. The research demonstrates that leveraging multi-modal data fusion significantly increases testing coverage and accuracy compared to traditional, single-source testing methodologies. The presented approach represents a novel contribution to the field of software testing, offering a more robust and intelligent method for ensuring software reliability. ---",
+      "authors": [
+        "Jincheng Zhang"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-28",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.22138125",
+      "url": "https://doi.org/10.5281/zenodo.22138125",
+      "topics": [
+        "Computer science",
+        "Software",
+        "Software reliability testing",
+        "Data mining",
+        "System integration testing",
+        "Verification and validation"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-08-29T14:30:45.689Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-22124553",
       "title": "DA-GWO-AUC: A Defect-Aware and AUC-Preserving Grey Wolf Optimisation Framework for Stable Feature Selection in Software Defect Prediction",
