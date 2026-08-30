@@ -1,6 +1,34 @@
 {
-  "updatedAt": "2026-08-29T14:30:45.689Z",
+  "updatedAt": "2026-08-30T14:25:47.998Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1007-s44196-026-01534-2",
+      "title": "Quantum-Inspired Deep Learning for Automated Software Defect Prediction: A Hybrid QLSTM-GCN Approach",
+      "abstract": "The growing complexity of contemporary software systems has intensified the need for intelligent and dependable techniques capable of identifying defects early. Conventional machine learning models often face limitations when handling high-dimensional code metrics, class imbalance, and limited interpretability, thereby diminishing their practical utility. More critically, existing approaches treat software defect prediction as a flat-feature classification problem, failing to jointly model the temporal evolution of software metrics and the structural dependencies between modules, two complementary dimensions that empirical evidence consistently identifies as the primary drivers of defect propagation in real-world repositories. In this study, we propose a quantum-inspired hybrid deep learning framework, QLSTM-GCN, that combines the sequential modeling strength of Quantum Long Short-Term Memory (QLSTM) networks with the structural learning capacity of Graph Convolutional Networks (GCNs). Importantly, all quantum-inspired operations are numerically simulated on classical hardware using unitary matrix transformations, requiring no quantum computing infrastructure and ensuring full reproducibility on standard computing platforms. This integration enables the simultaneous capture of temporal and topological dependencies inherent in software repositories. To refine the input space, an improved Quantum-Inspired Genetic Algorithm (QIGA) is applied for optimized feature selection, reducing feature dimensionality by 37-39% while improving both accuracy and model generalization across datasets. Furthermore, explainable AI mechanisms, including Local Interpretable Model-Agnostic Explanations (LIME), Partial Dependence Plots (PDP), and SHapley Additive exPlanations (SHAP), are incorporated to enhance interpretability and transparency at both the instance and global levels. Experiments conducted on three benchmark datasets, NASA PROMISE, GitHub Bug, and GHPR, demonstrate that QLSTM-GCN attains a peak accuracy of 96.7% and an AUC-ROC of 98.7% on the NASA PROMISE dataset, with consistently strong performance across all three benchmarks (95.3%-96.7% accuracy; 98.1%-98.7% AUC-ROC), surpassing recent state-of-the-art approaches on every evaluated metric. More importantly, the framework improves reliability and trust in software quality assurance by balancing predictive performance with practical explainability, offering actionable insights at the module, project, and organizational levels.",
+      "authors": [
+        "Yousef Sanjalawe",
+        "Salam Al-E’mari",
+        "F.M.A. Salam",
+        "Qusai Shambour",
+        "Sharif Naser Makhadmeh"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-29",
+      "source": "OpenAlex",
+      "venue": "International Journal of Computational Intelligence Systems",
+      "doi": "https://doi.org/10.1007/s44196-026-01534-2",
+      "url": "https://doi.org/10.1007/s44196-026-01534-2",
+      "topics": [
+        "Computer science",
+        "Interpretability",
+        "Benchmark (surveying)",
+        "Artificial intelligence",
+        "Software",
+        "Machine learning"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-08-30T14:25:47.998Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-22138125",
       "title": "Based on Multi-Modal Data Fusion for Software Testing",
