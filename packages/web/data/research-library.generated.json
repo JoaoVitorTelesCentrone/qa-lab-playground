@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-31T17:05:15.834Z",
+  "updatedAt": "2026-09-01T14:10:27.703Z",
   "items": [
     {
       "id": "doi-doi-org-10-1007-s44196-026-01534-2",
@@ -502,6 +502,27 @@
       "discoveredAt": "2026-08-15T22:37:48.767Z"
     },
     {
+      "id": "doi-doi-org-10-70184-3ejnrd38",
+      "title": "Designing Software Quality Assurance Framework Integrated With Scrum And Rsm For Multi-Project",
+      "abstract": "Purpose: This study aims to design an integrated Software Quality Assurance (SQA) framework combining Scrum and the Recognize, Scrutinize, Materialize (RSM) approach to mitigate context switching, priority ambiguity, and technical debt in multi-project environments.\nResearch Design and Methodology: Utilizing a mixed-methods approach with sequential triangulation based on Design Science Research (DSR), secondary data were gathered from SOP studies at PT. Boer Technology. Framework evaluation involved a 1–5 Likert-scale questionnaire administered to a purposive sample of 9 active expert Scrum Masters\nFindings and Discussion: Descriptive statistics and inter-rater reliability analysis confirm a high expert consensus, with a 99.02% cumulative positive response rate. Gwet’s AC2 yielded a fair agreement of 0.2279, demonstrating that integrating RSM strengthens shift-left testing and continuous quality execution without compromising Scrum's iterative nature\nImplications: This framework offers an original, implementable quality governance solution for medium-to-large software industries to enhance compliance, product stability, and business value. Future research should conduct empirical pilot implementations to test scalability and quantitatively measure long-term impacts using metrics like defect density",
+      "authors": [
+        "D. Veronica",
+        "Muharman Lubis",
+        "B. Rahmad"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-04",
+      "source": "Semantic Scholar",
+      "venue": "Vifada Management and Social Sciences",
+      "doi": "https://doi.org/10.70184/3ejnrd38",
+      "url": "https://doi.org/10.70184/3ejnrd38",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
       "id": "arxiv-arxiv-org-abs-2607-01842v1",
       "title": "Understanding Software Defect Prediction: A Large-scale Empirical Study Across Uncertainty Quantification and Performance Evaluation",
       "abstract": "Software defect prediction (SDP) classifiers produce probabilities used for inspection prioritization, threshold tuning, and risk communication. Probability-based uncertainty quantification (UQ) characterizes prediction confidence, but whether common UQ metrics reliably indicate performance and calibration remains unclear. We conducted a large-scale empirical study of probability-based UQ for SDP. We evaluated five UQ metrics, six performance metrics, and three calibration metrics for 16 representative classifiers. We analyzed these relationships under two prediction settings: within-project defect prediction (WPDP), using 36 benchmark datasets, and cross-project defect prediction (CPDP), using 32 feature-compatible datasets. Results showed that UQ was highly context-dependent. Under WPDP, UQ correlated more consistently with false positive rate and AUC than with MCC, F1 score, and other metrics; these correlations also varied across classifier categories and dataset collections. Performance and calibration were related but not interchangeable; classifiers with strong discrimination could still exhibit large calibration error. Under CPDP, several UQ-performance and UQ-calibration correlations weakened or reversed, indicating that uncertainty signals do not reliably transfer across projects. Thus, UQ should be evaluated against specific performance objectives. Calibration should be assessed independently using multiple metrics. Transferred probabilities should be revalidated before guiding quality-assurance decisions.",
@@ -630,6 +651,27 @@
       "discoveredAt": "2026-08-15T22:36:58.611Z"
     },
     {
+      "id": "doi-doi-org-10-25258-ijddt-16-48s-109",
+      "title": "A Multi-Agent AI Framework for Automated Requirement-to-Test Case Mapping in Software Quality Assurance",
+      "abstract": "The complexity of today’s software systems has become critically important to ensure sufficient test coverage based on changing requirements. Conventional methods of requirements traceability and test case generation are mostly manual, time-consuming, and subject to human error, often resulting in coverage gaps which translate into post-release bugs. In this paper, a new Multi-Agent Artificial Intelligence (AI) system that could be used to automate the entire pipeline of requirement-to-test mapping is presented, and the way it would revolutionize software quality assurance practices is discussed. The proposed framework uses three collaborating intelligent agents: a Requirement Parsing Agent (RPA) that applies transformer-based Natural Language Processing (NLP) to extract semantic objects of the heterogeneous requirement documents a Traceability Mapping Agent (TMA) that builds and maintains dynamic bidirectional traceability matrices using a knowledge graph backbone and a Test Generation Agent (TGA) that synthesizes executable test cases of the traced requirement nodes using large language model (LLM) guided templates. Experimental analysis of three opensource software projects indicates that the proposed system can meet an average requirement coverage rate of 94.7, a precision of traceability link of 91.3 and a 67 percent reduction in the manual test authoring effort as compared to the baseline approaches. The framework is checked in the framework of IEEE 29148 and ISO/IEC 25010 quality standards. Findings suggest that the system performs remarkably better compared to the current automated tests systems such as NLP-based traceability recovery techniques and traditional test generation systems. This study offers a reproducible, time saving and produces standards-conforming, open-source architecture of intelligent software testing both in an Agile and traditional SDLC setting.",
+      "authors": [
+        "Shailjakant Shukla",
+        "Manav Bansal",
+        "Arpit Chhabra"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-08",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Drug Delivery Technology",
+      "doi": "https://doi.org/10.25258/ijddt.16.48s.109",
+      "url": "https://doi.org/10.25258/ijddt.16.48s.109",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
       "id": "doi-doi-org-10-48550-arxiv-2606-08793",
       "title": "AI-Augmented Closed-Loop Quality Engineering: A Reference Architecture for Continuous Software Quality Intelligence",
       "abstract": "The quality of software engineering is still under a challenge due to disjointed processes between requirements, testing, and production, which hinders the opportunity to implement quality strategies in consecutive releases. Existing approaches tend to be fixed-model or single-optimization approaches and lack production feedback learning mechanisms. The paper at hand proposes a closed-loop reference architecture of continuous software quality intelligence with AI enhancements. The model synthesizes requirement feature mining, risk-based test prioritization, defect prediction, and production incident analysis as an element of a feedback-based pipeline. A limited feedback learning model is introduced that is used to propagate the production signal-based on defect severity and incident impact- to the following release to ensure stability, and the time. The method is evaluated using a semi-synthetic test dataset of 4,500 requirements, 27,049 test cases, 13,089 defects and 7,841 incidents in six release cycles. The experimental results show that the proposed system reduces the defect leakage by 0.19 to 0.13, increases the effectiveness of the detection system to 0.72 to 0.84, and shortens the test execution by up to 35 percent compared to the non-adaptive baselines. The changes are stable release to release. The findings indicate that through the integration of feedback-based learning in a closed-loop architecture, it can be continued to enhance quality process, which offers practical foundation of adaptive quality engineering of software.",
@@ -647,6 +689,25 @@
       ],
       "query": "software quality model",
       "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-54066-jptis-v4i2-3925",
+      "title": "Implementasi Software Quality Assurance pada Aplikasi E-Commerce Menggunakan Manual Testing dan Katalon Studio",
+      "abstract": "The reliability of an e-commerce application is essential to ensure smooth and secure user transactions. This study discusses the implementation of Software Quality Assurance (SQA) on a web-based e-commerce application to test the functionality of the developed system. The testing methodology used in this research combines manual testing and automated testing using the Katalon Studio tool, following the Software Testing Life Cycle (STLC) framework. Manual testing was focused on validating the user interface and user experience across core workflows, including user registration, authentication, cart management, and the checkout process. Meanwhile, Katalon Studio was utilized to execute automated test scenarios on these crucial features to accelerate regression testing and ensure system stability. The results indicate that from 42 test cases executed, the SQA approach successfully identified five functional defects across three modules, categorized by severity into two High-level defects (server error on registration and missing error handling on checkout), two Medium-level defects (client-side-only address validation and cart quantity logic), and one Low-level defect (insufficient logout notification display time). Four of the five defects were resolved, raising the test pass rate from 90.5% to 97.6% during regression testing. Automated testing demonstrated a significant time efficiency of approximately 95% compared to manual execution for regression scenarios. In conclusion, the combination of manual and automated testing proved capable of thoroughly verifying software quality, ensuring that the SQA Shop application functions according to the required specifications before its release to end-users.",
+      "authors": [
+        "Fahmi Ardiansyah"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-05",
+      "source": "Semantic Scholar",
+      "venue": "Jurnal Penelitian Teknologi Informasi dan Sains",
+      "doi": "https://doi.org/10.54066/jptis.v4i2.3925",
+      "url": "https://doi.org/10.54066/jptis.v4i2.3925",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
     },
     {
       "id": "doi-doi-org-10-9734-jamcs-2026-v41i62161",
@@ -908,6 +969,26 @@
       "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
+      "id": "doi-doi-org-10-1007-s13198-026-03271-3",
+      "title": "Innovative research and practice of software quality assurance and testing curriculum based on inquiry-oriented teaching",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Songhao Jia",
+        "Cai Yang"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-09",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of System Assurance Engineering and Management",
+      "doi": "https://doi.org/10.1007/s13198-026-03271-3",
+      "url": "https://doi.org/10.1007/s13198-026-03271-3",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
       "id": "doi-doi-org-10-1038-s41598-026-41981-7",
       "title": "A novel generative oversampling for software defect prediction",
       "abstract": "Software defect prediction is one of the highly active research areas as it allows to focus the testing efforts on the defective modules and reduce the cost of development. The imbalanced nature of defect data poses a threat to the performance of software defect predictors. This study proposes a novel Generative oversampling-based Software Defect Prediction naming GeNSDP. It oversamples defect data by generating synthetic minority instances utilizing lightweight generative model, then the oversampled data is used for defect prediction using deep network. NASA and PROMISE datasets are used for experimentation, for which GeNSDP achieves a remarkable average score of 99.1% for Area Under the Curve, and 0.92 for F-measure. The proposed model outperforms the traditional oversampling methods (including ROS, SMOTE, COSTE) by 30.1%, and selected baseline models by 14.1%. From the statistical evidence obtained by conducting the Anova Test with Bonferroni Post-hoc test at the confidence level of 95%, it is concluded that the proposed model is effective to handle class imbalance and achieve stable defect prediction.",
@@ -925,6 +1006,32 @@
       ],
       "query": "software defect prediction",
       "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-1088-1742-6596-3206-1-012031",
+      "title": "The Software Quality Assurance programme of the ASTRI Mini-Array project",
+      "abstract": "The ASTRI Mini-Array is a gamma-ray experiment led by Istituto Nazionale di Astrofisica with the partnership of the Instituto de Astrofisica de Canarias, Fundacion Galileo Galilei, Universidade de Sao Paulo (Brazil) North-West University (South Africa) and the University of Geneve. The ASTRI Mini-Array consists of nine innovative Imaging Atmospheric Cherenkov Telescopes that are being installed at the Teide Astronomical Observatory (∽2400 m a.s.l.) in Tenerife (Canary Islands, Spain). The ASTRI Mini-Array software will cover the entire life cycle of the experiment, including scheduling, operations and data dissemination. The on-site control software will allow the operator to communicate remotely to the array (including automated reaction to critical environmental conditions). Due to the high-speed (10 Gbit/s) networking connection available between Canary Islands and Italy, all data will be delivered every night to the ASTRI Data Centre in Rome for their processing and dissemination. The ASTRI team made experience with ASTRI-Horn, the first Italian dual-mirror Cherenkov telescope, prototype of the ASTRI Mini-Array project. Exploiting lessons learned from ASTRI-Horn, we decided to adopt an iterative incremental model for the software development in order to provide more software releases according to the project schedule. We have implemented a Quality Assurance (QA) programme specific for the software, which defines the strategy and the organization for the management of the quality control. In this contribution we present the layout and the contents of the ASTRI Mini-Array QA software programme, describing the organization adopted for its management and reporting some examples of how it has been applied so far.",
+      "authors": [
+        "V. Conforti",
+        "N. Palombara",
+        "V. Giordano",
+        "G. Sironi",
+        "L. A. Antonelli",
+        "C. Bigongiari",
+        "A. Bulgarelli",
+        "F. Lucarelli"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-01",
+      "source": "Semantic Scholar",
+      "venue": "Journal of Physics, Conference Series",
+      "doi": "https://doi.org/10.1088/1742-6596/3206/1/012031",
+      "url": "https://doi.org/10.1088/1742-6596/3206/1/012031",
+      "topics": [
+        "Physics"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
     },
     {
       "id": "doi-doi-org-10-1002-smr-70116",
@@ -1031,6 +1138,29 @@
       "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
+      "id": "doi-doi-org-10-63878-cjssr-v4i1-2003",
+      "title": "IMPACT OF SOFTWARE PROCESS METRICS ON DEFECT DETECTION EFFICIENCY: A COMPARATIVE STUDY WITHIN ADVANCED SOFTWARE QUALITY ASSURANCE FRAMEWORKS",
+      "abstract": "The issue of software defects has been a major concern in the contemporary software development and has greatly impacted the reliability of the product, cost of development as well as delivery timelines. One of the main goals of Software Quality Assurance (SQA) practices is therefore effective defect detection. Software process metrics has become one of the useful tools that can be used to track the development activities and enhance quality results within recent years. The paper examines how software process metrics can influence the efficiency of defect detection by taking a combined approach to the advanced SQA and software process management practices. The research methodology includes a comparison, which is premised on a systematic study and review of empirical studies published in the period between 2015 and 2025. Various types of process metrics such as change-based metrics, effort and time metrics, defect flow metrics, and process compliance metrics are assessed in the study in various environments of the development. The findings suggest that change-based and defect flow metrics are the most influential ones in terms of the early and effective detection of defects, whereas effort and compliance metrics indirectly support the approach with the enhanced process control and resource management. The results indicate the significance of taking a more comprehensive, measurement-based, SQA that establishes process metrics against quality organizational goals. The study offers effective ideas that can be used by quality managers and practitioners to improve efficiency of defect detection in the process of improving maturity of software processes.",
+      "authors": [
+        "Rabia Kausar",
+        "Hamna",
+        "Saleem Zubair",
+        "Sabah Arif",
+        "Ayesha Saddiqa"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-03-02",
+      "source": "Semantic Scholar",
+      "venue": "Contemporary Journal of Social Science Review",
+      "doi": "https://doi.org/10.63878/cjssr.v4i1.2003",
+      "url": "https://doi.org/10.63878/cjssr.v4i1.2003",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
       "id": "doi-doi-org-10-37012-jtik-v12i1-3294",
       "title": "Implementation of Information System and Software Quality Testing in Company Operational Applications Based on ISO/IEC 25010 (Case Study: PT Snapdev Digital Indonesia)",
       "abstract": "Implementation of information system quality testing is an important factor in supporting the effectiveness and efficiency of company operations. This study aims to implement an information system and conduct software quality testing based on the ISO/IEC 25010 standard at PT Snapdev Digital Indonesia. Quality testing is carried out by measuring seven main characteristics, namely Performance Efficiency, Compatibility, Usability, Reliability, Security, Maintainability, and Portability. The research methods used include observation, data collection, and analysis of test results based on indicators in each ISO/IEC 25010 characteristic. The measurement results show that the percentage value for each aspect of system quality is in the range of 79%–83%, which indicates that the system has met most of the established quality criteria. The overall average value of 80.97% places the system quality in the very good category. This indicates that the system has efficient performance, adequate levels of security and reliability, good ease of use, and can be maintained and run in various environments. However, there are still opportunities for improvement in several aspects to improve system quality to be more optimal. Overall, the implemented information system is considered suitable for use and complies with international software quality standards.",
@@ -1132,6 +1262,25 @@
       "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
+      "id": "doi-doi-org-10-52783-jisem-v11i1s-14246",
+      "title": "AI-Driven Software Quality Assurance: Transforming Testing Through Intelligent Automation and Predictive Analytics",
+      "abstract": "Software Quality Assurance has undergone a significant transformation as organizations shift from traditional development models to continuous delivery approaches requiring adaptive, intelligent validation strategies. Artificial Intelligence introduces paradigm-shifting capabilities through machine learning algorithms that enable predictive defect detection, self-healing test automation, and dynamic optimization of validation activities. Natural language processing technologies facilitate automated requirements analysis and comprehensive traceability verification, while reinforcement learning algorithms enable adaptive test prioritization based on continuous feedback from execution outcomes. These AI-driven capabilities address critical limitations in conventional quality assurance practices, including test maintenance overhead, delayed defect detection, and insufficient scalability for complex distributed systems. The integration of AI into quality assurance workflows necessitates thoughtful human-AI collaboration frameworks that leverage complementary strengths while maintaining appropriate human oversight of critical quality decisions. As software systems increasingly govern essential societal infrastructure across healthcare, transportation, and financial domains, AI-enhanced quality assurance becomes essential for maintaining trust, reliability, and safety. The successful adoption of intelligent quality assurance requires robust data management practices, workforce skill development, and ethical governance frameworks that ensure transparent, accountable AI application throughout the software development lifecycle.",
+      "authors": [
+        "Thanigaivel Rangasamy"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-30",
+      "source": "Semantic Scholar",
+      "venue": "Journal of Information Systems Engineering & Management",
+      "doi": "https://doi.org/10.52783/jisem.v11i1s.14246",
+      "url": "https://doi.org/10.52783/jisem.v11i1s.14246",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
       "id": "doi-doi-org-10-1109-rams50514-2026-11424466",
       "title": "Software Reliability and Availability Testing of a Kubernetes Cluster",
       "abstract": "SUMMARY & CONCLUSIONSThis paper describes the testing of a real time data processing system built on Kubernetes, the most common orchestration (system management) platform for containerized architectures. The testing was performed using the LitmusChaos failure simulation testing framework and resulted in measurements on recovery time and recovery probability that were used as inputs to a model for predicting system reliability and availability. Systems built on Kubernetes can be developed incrementally so that executable systems with partial functionality can be tested to get early feedback on system reliability and availability performance.The innovation in this work is a data-driven testing and analysis approach for containerized architectures that enables better design decisions. As an example, the work here describes how the benefits of additional redundancy on system availability could be assessed using data gathered from early testing, which, in turn, was enabled by containerized architectures and Kubernetes clusters. These constructs facilitate incremental development and Continuous Integration/Continuous Deployment (CI/CD) thereby enabling early testing and measurement of recovery rates and probabilities. This testing can continue throughout the software development process and the results can be incorporated into the model.",
@@ -1176,6 +1325,47 @@
       "discoveredAt": "2026-08-15T22:36:58.611Z"
     },
     {
+      "id": "doi-doi-org-10-36040-jati-v10i1-16610",
+      "title": "ANALISIS KUALITAS DAN PENERAPAN SOFTWARE QUALITY ASSURANCE MENGGUNAKAN BLACK BOX TESTING PADA APLIKASI WEB EXPLORE PALANGKA RAYA",
+      "abstract": "Penelitian ini bertujuan untuk menganalisis kualitas dan penerapan Software Quality Assurance (SQA) menggunakan metode Black Box Testing pada aplikasi web Explore Palangka Raya. Aplikasi ini dikembangkan sebagai sarana promosi destinasi wisata di Kota Palangka Raya berbasis web, sehingga diperlukan evaluasi kualitas untuk menjamin keandalan dan kenyamanan pengguna. Penelitian ini menggunakan pendekatan kuantitatif deskriptif dengan dua metode utama, yaitu Black Box Testing untuk menguji fungsionalitas sistem dan kuesioner untuk menilai persepsi pengguna terhadap kualitas aplikasi berdasarkan standar ISO/IEC 25010. Responden penelitian terdiri dari 30 pengguna aktif yang meliputi wisatawan, mahasiswa, dan masyarakat umum. Hasil pengujian Black Box Testing menunjukkan bahwa seluruh fitur aplikasi, seperti navigasi, pencarian, tampilan peta, dan kolom ulasan, berfungsi dengan baik dengan tingkat keberhasilan 100% (Pass). Sementara itu, hasil analisis kuesioner menunjukkan skor rata-rata keseluruhan 4,01 dari skala 5, dengan aspek fungsionalitas dan usability memperoleh kategori “sangat baik”, serta reliabilitas dan efisiensi berkategori “baik”. Temuan ini membuktikan bahwa penerapan Software Quality Assurance secara sistematis dan pengujian berbasis fungsi efektif dalam menjaga kualitas perangkat lunak, sekaligus meningkatkan kepuasan pengguna terhadap aplikasi web Explore Palangka Raya",
+      "authors": [
+        "Azizah Shafa Budiman",
+        "Jadiaman Parhusip"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-23",
+      "source": "Semantic Scholar",
+      "venue": "JATI (Jurnal Mahasiswa Teknik Informatika)",
+      "doi": "https://doi.org/10.36040/jati.v10i1.16610",
+      "url": "https://doi.org/10.36040/jati.v10i1.16610",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
+      "id": "doi-doi-org-10-36040-jati-v10i1-16639",
+      "title": "ANALISIS KUALITAS DAN PENERAPAN SOFTWARE QUALITY ASSURANCE PADA APLIKASI GOOGLE CLASSROOM MENGGUNAKAN MODEL ISO/IEC 9126",
+      "abstract": "Google Classroom merupakan aplikasi pembelajaran daring yang banyak digunakan pada berbagai jenjang pendidikan, namun tingginya penggunaan tidak selalu mencerminkan kualitas perangkat lunak yang optimal. Permasalahan muncul ketika pengguna masih mengalami variasi terkait keandalan, kemudahan penggunaan, serta performa sistem sehingga diperlukan evaluasi kualitas berdasarkan standar yang terukur. Penelitian ini bertujuan untuk menganalisis kualitas aplikasi Google Classroom menggunakan model ISO/IEC 9126 yang terdiri dari enam atribut, yaitu Functionality, Reliability, Usability, Efficiency, Maintainability, dan Portability. Metode yang digunakan adalah deskriptif kuantitatif melalui penyebaran kuesioner berskala Likert kepada 60 responden pengguna aktif. Hasil penelitian menunjukkan bahwa Google Classroom memperoleh skor total 2789 yang berada pada kategori “Setuju”, dengan nilai sangat tinggi pada aspek Functionality serta nilai baik pada Usability, Efficiency, Reliability, Maintainability, dan Portability. Temuan ini mengindikasikan bahwa Google Classroom memiliki kualitas perangkat lunak yang baik dan mampu mendukung proses pembelajaran daring secara efektif, meskipun peningkatan tetap diperlukan pada aspek efisiensi dan pemeliharaan sistem agar kualitas aplikasi semakin optimal",
+      "authors": [
+        "Angel Gavrila",
+        "C. Wijaya",
+        "Widiatry Widiatry"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-23",
+      "source": "Semantic Scholar",
+      "venue": "JATI (Jurnal Mahasiswa Teknik Informatika)",
+      "doi": "https://doi.org/10.36040/jati.v10i1.16639",
+      "url": "https://doi.org/10.36040/jati.v10i1.16639",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
       "id": "doi-doi-org-10-36040-jati-v10i1-16613",
       "title": "ANALISIS KUALITAS DAN PENERAPAN SOFTWARE QUALITY ASSURANCE MENGGUNAKAN MODEL ISO/IEC 9126 PADA APLIKASI WEB EXPLORE PALANGKA RAYA",
       "abstract": "Perkembangan teknologi informasi menuntut layanan pariwisata untuk mampu menyediakan informasi yang cepat, akurat, dan mudah diakses secara digital. Website Explore Palangka Raya dikembangkan sebagai media informasi wisata Kota Palangka Raya, namun kualitas perangkat lunaknya perlu dievaluasi secara sistematis agar dapat memenuhi kebutuhan pengguna. Penelitian ini bertujuan untuk menganalisis kualitas website Explore Palangka Raya serta menerapkan prinsip Software Quality Assurance (SQA) menggunakan standar ISO/IEC 9126. Metode penelitian meliputi Black Box Testing untuk menguji fungsi sistem dan survei pengguna menggunakan kuesioner skala Likert yang disebarkan kepada 36 responden. Data dianalisis secara deskriptif untuk memperoleh total skor pada setiap atribut kualitas perangkat lunak. Hasil penelitian menunjukkan bahwa seluruh atribut, yaitu Functionality, Reliability, Usability, Efficiency, Maintainability, dan Portability memperoleh kategori sangat baik, dengan perolehan skor masing-masing 549, 452, 612, 468, 289, dan 319. Temuan ini menunjukkan bahwa website Explore Palangka Raya telah memenuhi standar kualitas perangkat lunak dan mampu memberikan pengalaman penggunaan yang optimal. Penelitian ini memberikan rekomendasi untuk pengembangan lanjutan agar website semakin informatif, stabil, dan sesuai kebutuhan pengguna",
@@ -1195,6 +1385,25 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-08-21T09:53:52.283Z"
+    },
+    {
+      "id": "doi-doi-org-10-46632-cset-2-4-6",
+      "title": "Software Quality Assurance Techniques of Models and Practices",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Elayaraja Subbaiah"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-21",
+      "source": "Semantic Scholar",
+      "venue": "Computer Science, Engineering and Technology",
+      "doi": "https://doi.org/10.46632/cset/2/4/6",
+      "url": "https://doi.org/10.46632/cset/2/4/6",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
     },
     {
       "id": "doi-doi-org-10-23960-jitet-v14i1-8585",
@@ -1304,6 +1513,25 @@
       "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
+      "id": "doi-doi-org-10-63278-jicrcr-vi-3650",
+      "title": "Autonomous Test Generation And Optimization: The Future Of Software Quality Assurance",
+      "abstract": "The integration of artificial intelligence (AI) and machine learning (ML) into software testing has significantly transformed modern quality assurance practices, enabling the emergence of autonomous test generation and optimization systems. These systems represent a fundamental shift away from manual and heavily scripted testing approaches toward intelligent, adaptive, and self-sustaining testing workflows. This article examines the core capabilities of autonomous testing systems, including intelligent test case generation based on application analysis, historical defect patterns, and risk-based prioritization using machine learning and evolutionary computation techniques. It further explores self-healing mechanisms that allow automated tests to adapt to application changes through multi-locator strategies, visual comparison algorithms, and behavioral anomaly detection. Deep learning approaches to automated test repair are analyzed, demonstrating how neural machine translation and sequence-to-sequence models learn from historical maintenance data to repair broken tests while preserving original test intent. Additionally, the article investigates edge case discovery through intelligent fuzzing and combinatorial testing methods that systematically explore interaction spaces to uncover boundary conditions and latent defects. By synthesizing findings across these domains, this paper demonstrates that autonomous testing systems address critical challenges in contemporary software development, including increasing system complexity, accelerated release cycles, and rising maintenance costs, while enabling improved test coverage, reduced maintenance effort, and enhanced defect detection capabilities.",
+      "authors": [
+        "Jainik Sudhanshubhai Patel"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-05",
+      "source": "Semantic Scholar",
+      "venue": "Journal of International Crisis and Risk Communication Research",
+      "doi": "https://doi.org/10.63278/jicrcr.vi.3650",
+      "url": "https://doi.org/10.63278/jicrcr.vi.3650",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
       "id": "arxiv-arxiv-org-abs-2601-02454v1",
       "title": "The Rise of Agentic Testing: Multi-Agent Systems for Robust Software Quality Assurance",
       "abstract": "Software testing has progressed toward intelligent automation, yet current AI-based test generators still suffer from static, single-shot outputs that frequently produce invalid, redundant, or non-executable tests due to the lack of execution aware feedback. This paper introduces an agentic multi-model testing framework a closed-loop, self-correcting system in which a Test Generation Agent, an Execution and Analysis Agent, and a Review and Optimization Agent collaboratively generate, execute, analyze, and refine tests until convergence. By using sandboxed execution, detailed failure reporting, and iterative regeneration or patching of failing tests, the framework autonomously improves test quality and expands coverage. Integrated into a CI/CD-compatible pipeline, it leverages reinforcement signals from coverage metrics and execution outcomes to guide refinement. Empirical evaluations on microservice based applications show up to a 60% reduction in invalid tests, 30% coverage improvement, and significantly reduced human effort compared to single-model baselines demonstrating that multi-agent, feedback-driven loops can evolve software testing into an autonomous, continuously learning quality assurance ecosystem for self-healing, high-reliability codebases.",
@@ -1324,6 +1552,52 @@
       ],
       "query": "software quality assurance",
       "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-64137-3108-2637-ijmar-v2i1p101",
+      "title": "Data-Driven Software Quality Assurance: Leveraging Machine Learning for Risk Prediction and Test Optimization",
+      "abstract": "Software quality assurance is undergoing a structural transition from manually orchestrated verification toward continuously adaptive, data-driven assurance. Contemporary software systems evolve under tight release cadences, heterogeneous architectures, volatile workloads, and increasing security exposure, making uniform testing strategies economically unsustainable and technically inefficient. This paper develops a literature-grounded research framework for data-driven software quality assurance that integrates machine learning based risk prediction with intelligent test optimization. The central argument is that modern quality engineering should no longer treat defect prediction, regression testing, observability, and governance as separate activities. Instead, these capabilities should operate as a closed feedback system in which code, process, runtime, and business-context signals are fused to prioritize the highest-risk components and allocate testing effort dynamically. Building on prior work in software defect prediction, test prioritization, observability, AI governance, enterprise automation, and domain-specific intelligent systems, the paper proposes a multi-layer architecture that links feature engineering, risk scoring, test selection, feedback learning, and operational controls. It further shows that patterns demonstrated in cloud-native pharmacy, healthcare, manufacturing, finance, and cyber-physical settings provide transferable insights for software assurance, particularly around traceability, secure microservices, anomaly monitoring, and deployment optimization. The paper contributes a unified conceptual model, a risk-to-test prioritization formulation, an implementation-oriented pipeline, and a research agenda for robust, explainable, and operationally grounded machine learning in quality engineering. The framework is intended for practitioners and researchers seeking to improve defect discovery efficiency, reduce waste in testing, and align software verification with real delivery risk.",
+      "authors": [
+        "Nisha Varma",
+        "Rohit Chandra",
+        "Sandeep Iyer",
+        "P. Narayanan"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-02",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Mathematical Analysis and Research",
+      "doi": "https://doi.org/10.64137/3108-2637/ijmar-v2i1p101",
+      "url": "https://doi.org/10.64137/3108-2637/ijmar-v2i1p101",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
+      "id": "doi-doi-org-10-32604-cmc-2026-077782",
+      "title": "Data-Driven Test Case Prioritization (DD-TCP): A Machine Learning Framework for Intelligent Software Quality Assurance",
+      "abstract": ": Regression testing of large-scale, data-intensive software systems demands efficient test-case prioritization strategies to detect faults early while minimizing computational cost. Conventional prioritization methods, such as coverage-based and risk-based approaches, lack adaptability to evolving project dynamics and fail to leverage the rich test-execution data accumulated over continuous integration cycles. This study presents a Data-Driven Test-Case Prioritization (DD-TCP) Framework that incorporates statistical and machine-learning techniques to model the relationship between test-case features and historical fault detection outcomes. The framework extracts multidimensional attributes including code-change frequency, dependency metrics, execution duration, and past failure density, which are normalized and embedded into a predictive ranking model based on gradient-boosted decision trees. Test cases are then dynamically reordered using a probabilistic gain function that maximizes early fault detection probability. Comprehensive simulations on representative open-source project datasets and synthetically generated large-scale test suites reveal that the proposed Data-Driven Test-Case Prioritization (DD-TCP) framework consistently achieves superior performance, yielding a 32.4% improvement in Average Percentage of Faults Detected (APFD) and a 27.1% reduction in execution overhead relative to baseline methods. The results demonstrate the feasibility of data-centric intelligence for scalable regression testing and provide an analytical foundation for integrating machine learning into next-generation Software Quality Assurance pipelines.",
+      "authors": [
+        "Hafiz Arslan Ramzan",
+        "K. Islam",
+        "Md Ahbab Hussain",
+        "Raiyan Muntasir Monim",
+        "Sabit Md Asad",
+        "Sadia Ramzan"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "Computers, Materials &amp; Continua",
+      "doi": "https://doi.org/10.32604/cmc.2026.077782",
+      "url": "https://doi.org/10.32604/cmc.2026.077782",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-01T14:10:27.703Z"
     },
     {
       "id": "doi-doi-org-10-1109-access-2026-3656247",
