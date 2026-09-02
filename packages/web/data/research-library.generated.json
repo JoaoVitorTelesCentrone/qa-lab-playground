@@ -1,6 +1,25 @@
 {
-  "updatedAt": "2026-09-01T14:10:27.703Z",
+  "updatedAt": "2026-09-02T13:42:31.786Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-60087-jaigs-v10i01-495",
+      "title": "AI-Driven Autonomous Test Automation Frameworks for Cloud Native Applications: Improving Software Reliability and Continuous Delivery",
+      "abstract": "Cloud native applications are built and released through continuous integration and continuous delivery pipelines that call for fast feedback and frequent deployment. Traditional test automation, which depends on scripts that are written once and maintained by hand, was never really designed for this pace of change. When a microservice is redeployed, refactored, or scaled several times a day, the scripts that were written to test it tend to fall behind, and quality assurance teams end up spending more time repairing tests than writing new ones. This paper looks at how artificial intelligence can be used to build a test automation framework that adjusts itself as the application changes, rather than breaking every time something moves. We describe a framework, referred to here as AutoQA CN, that brings together three capabilities: automatic generation of new test cases from API specifications and usage data, self-healing of broken test scripts through similarity-based and learned matching, and risk-based prioritisation of test execution using a reinforcement learning agent. The framework is built to sit alongside existing continuous integration tooling in a containerised environment rather than replace it outright. We evaluate the approach through an illustrative case study across three representative microservice scenarios and compare it with a conventional scripted automation baseline on three measures: maintenance effort, time to detect faults, and pipeline throughput. The results point to meaningful reductions in maintenance work and faster fault detection, along with a modest gain in throughput. We close by discussing where these gains are likely to hold up in practice, where the approach still needs human oversight, and what would need to happen for a framework like this to be trusted in production settings.",
+      "authors": [
+        "Ihor Diakonov"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-02",
+      "source": "Crossref",
+      "venue": "Journal of Artificial Intelligence General science (JAIGS) ISSN:3006-4023",
+      "doi": "https://doi.org/10.60087/jaigs.v10i01.495",
+      "url": "https://doi.org/10.60087/jaigs.v10i01.495",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-09-02T13:42:31.786Z"
+    },
     {
       "id": "doi-doi-org-10-1007-s44196-026-01534-2",
       "title": "Quantum-Inspired Deep Learning for Automated Software Defect Prediction: A Hybrid QLSTM-GCN Approach",
