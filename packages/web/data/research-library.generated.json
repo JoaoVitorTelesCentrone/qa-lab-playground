@@ -1,6 +1,51 @@
 {
-  "updatedAt": "2026-09-02T13:42:31.786Z",
+  "updatedAt": "2026-09-03T13:37:01.166Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-3390-math14173176",
+      "title": "A Convex-Dependent NHPP Software Reliability Model and Its Deep-Learning-Based Parameter Estimation",
+      "abstract": "Many software systems currently under development exhibit numerous new types of failure due to their structural complexity. This suggests the need for research on structures capable of representing convex patterns in the fault-detection rate over time. This paper proposes a non-homogeneous Poisson process (NHPP) software reliability model (SRM) incorporating a convex fault-detection rate. To validate this, we compared 13 SRMs with different forms using three datasets to evaluate the effectiveness and applicability of the proposed model. Furthermore, the performance of the proposed model was evaluated through comparisons with multiple models, and a deep-learning-based parameter estimation (DL-BPE) was introduced as an alternative estimation framework. The proposed DL-BPE provides a competitive and flexible parameter estimation framework, showing improved predictive performance in several datasets while preserving the structural interpretability of the proposed NHPP SRM. Based on the results, we propose new assumptions for enhancing the reliability of increasingly complex software packages. The DL-BPE framework may provide a basis for integrating interpretable reliability-model structures into deep-learning architectures for software reliability analysis.",
+      "authors": [
+        "Youn Su Kim",
+        "In Hong Chang",
+        "Kwang Yoon Song"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-03",
+      "source": "Crossref",
+      "venue": "Mathematics",
+      "doi": "https://doi.org/10.3390/math14173176",
+      "url": "https://doi.org/10.3390/math14173176",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-09-03T13:37:01.166Z"
+    },
+    {
+      "id": "doi-doi-org-10-21203-rs-3-rs-10891677-v1",
+      "title": "A Secure Offline Edge Architecture for Wearable Vision Assistance: Raspberry Pi-ESP32-CAM Integration and Reproducible Software Validation",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Md Shahanur Islam Shagor"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-02",
+      "source": "OpenAlex",
+      "venue": "Research Square",
+      "doi": "https://doi.org/10.21203/rs.3.rs-10891677/v1",
+      "url": "https://www.researchsquare.com/article/rs-10891677/latest.pdf",
+      "topics": [
+        "Computer science",
+        "Firmware",
+        "Software deployment",
+        "Embedded system",
+        "Software",
+        "Trusted computing base"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-03T13:37:01.166Z"
+    },
     {
       "id": "doi-doi-org-10-60087-jaigs-v10i01-495",
       "title": "AI-Driven Autonomous Test Automation Frameworks for Cloud Native Applications: Improving Software Reliability and Continuous Delivery",
