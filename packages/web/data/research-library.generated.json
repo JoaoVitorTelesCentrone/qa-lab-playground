@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-03T13:37:01.166Z",
+  "updatedAt": "2026-09-04T13:33:50.663Z",
   "items": [
     {
       "id": "doi-doi-org-10-3390-math14173176",
@@ -21,6 +21,30 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-09-03T13:37:01.166Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-19682732",
+      "title": "Software Defect Prediction Dataset: 296,457 Code File Instances from Five Open-Source Repositories (Elasticsearch, Spring Boot, Hadoop, Kafka, Express)",
+      "abstract": "A large-scale software defect prediction dataset containing 296,457 file-level instances mined from five mature open-source repositories: Elasticsearch (165,032 files, 21.21% defect rate), Spring Boot (68,207 files, 9.52%), Hadoop (49,047 files, 16.99%), Kafka (13,158 files, 37.59%), and Express (1,013 files, 37.51%). Overall defect rate: 18.61%. Each instance is annotated with process metrics (commit count, unique developers, lines added, lines deleted, code churn, bug-fix commits, file age, commit frequency) and a binary defect label derived from commit-message keyword matching. The corpus is one to three orders of magnitude larger than the PROMISE and AEEEM benchmarks that dominate the SDP literature. Released with extraction scripts, trained model artifacts, data validation summaries, and analysis notebooks. Version 2 re-mines Spring Boot against its full commit history (56,425 → 68,207 files), corrects a file_age_days sign bug present in v1, and removes one spurious Express row.",
+      "authors": [
+        "Vijay P Javvadi"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-02",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.19682732",
+      "url": "https://doi.org/10.5281/zenodo.19682732",
+      "topics": [
+        "Computer science",
+        "Commit",
+        "Software bug",
+        "Software",
+        "Operating system",
+        "Source lines of code"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-04T13:33:50.663Z"
     },
     {
       "id": "doi-doi-org-10-21203-rs-3-rs-10891677-v1",
