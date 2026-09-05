@@ -1,6 +1,57 @@
 {
-  "updatedAt": "2026-09-04T13:33:50.663Z",
+  "updatedAt": "2026-09-05T12:45:27.943Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1002-9781394422791-ch21",
+      "title": "Quality Assurance of Software Incorporating Graph Neural Networks for Defect Prediction",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "D. R. Medhunhashini",
+        "K. S. Jeen Marseline",
+        "B. Varun"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-04",
+      "source": "OpenAlex",
+      "venue": "",
+      "doi": "https://doi.org/10.1002/9781394422791.ch21",
+      "url": "https://doi.org/10.1002/9781394422791.ch21",
+      "topics": [
+        "Quality assurance",
+        "Computer science",
+        "Artificial neural network",
+        "Software",
+        "Artificial intelligence",
+        "Data mining"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-05T12:45:27.943Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-22303726",
+      "title": "Software Defect Prediction Using Machine Learning: A Comparative Analysis of Ensemble and Neural Classification Algorithms",
+      "abstract": "Ensemble and neural classifiers are widely believed to outperform single-model classifiers for software defect prediction, but the size of that advantage, and the training-data volume required to realise it, are not always quantified in comparative studies. This paper benchmarks six such models — Bagging, Random Forest, AdaBoost, Gradient Boosting, XGBoost, and a shallow multilayer perceptron — on static code metrics pooled from four NASA/PROMISE datasets, using a common preprocessing pipeline with SMOTE-based training-fold resampling. XGBoost achieved the best overall accuracy, precision, recall, and F1-score (89.4% accuracy, 85.1% F1-score) while training faster than Gradient Boosting, and a learning-curve analysis shows that its advantage over Random Forest grows with training set size rather than being constant across data volumes. The multilayer perceptron did not outperform the strongest tree ensembles at the data volumes examined. These results suggest that boosting-based tree ensembles remain the most practical choice for defect prediction from static metrics, with the specific choice between Random Forest and XGBoost best guided by the amount of historical defect data a project has accumulated.",
+      "authors": [
+        "Arjun Singh Tomar",
+        "Aashish Kumar Tiwari"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-04",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.22303726",
+      "url": "https://doi.org/10.5281/zenodo.22303726",
+      "topics": [
+        "Preprocessor",
+        "Computer science",
+        "Random forest",
+        "Pipeline (software)",
+        "Artificial intelligence",
+        "Artificial neural network"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-05T12:45:27.943Z"
+    },
     {
       "id": "doi-doi-org-10-3390-math14173176",
       "title": "A Convex-Dependent NHPP Software Reliability Model and Its Deep-Learning-Based Parameter Estimation",
