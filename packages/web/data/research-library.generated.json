@@ -1,6 +1,78 @@
 {
-  "updatedAt": "2026-09-06T12:53:57.334Z",
+  "updatedAt": "2026-09-07T15:04:56.332Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-22414216",
+      "title": "Software Quality Assurance and Testing Work in the United States: Evidence from 108 Current Vacancies",
+      "abstract": "Software testing is sometimes presented as either a purely manual entry route or a branch of software engineering dominated by automation. A purposive review of 108 current United States software quality assurance vacancies shows why neither description is adequate on its own. The most visible practices in this sample were defect work, mentioned in 92 records; test-case or scenario work, 83; regression, 80; and automation, 79. Requirements or other test-basis analysis appeared in 45 records, acceptance or release evidence in 49, API testing in 44, and data testing in 31. Exploratory testing appeared explicitly in 31 records. These categories overlap and describe only this sample. The role mix is demanding. Only one record met a conservative direct-entry manual or analyst signal. Nineteen were early-career but still contained education, experience, programming, or other technical filters; 22 were general or intermediate; and 66 were senior or automation-progression comparators. This evidence supports a beginner learning pathway built on manual analysis, reproducible evidence, defect communication, retest, and regression, followed by API, data, and automation literacy. It does not support promises of easy hiring, no technical learning, or universal access to QA roles. The study uses 99 employer-controlled or first-party records and a separately disclosed nine-record fallback stratum. Direct U.S. occupational context from the Bureau of Labor Statistics and O*NET supports the distinct occupational identity of software QA analysis and testing, while also reinforcing its substantial preparation requirements. A direct review of 65 live MTF programmes found no exact duplicate, provided the proposed certificate remains bounded from Systems Analysis and Business Analysis. The learning design is feasible through original text, fictional cases, synthetic data, and original templates without reproducing protected standards, certification curricula, vendor interfaces, or employer expression. The archive includes the report PDF, a rights-limited accepted-vacancy CSV, coding summary, record-level analytic labels without vacancy prose, context-source bibliography, methods, data dictionary and dispositions. CC BY 4.0 applies to original MTF research and annotations. Third-party source material remains subject to its original rights.",
+      "authors": [
+        "MTF Institute Research Team"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-05",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.22414216",
+      "url": "https://doi.org/10.5281/zenodo.22414216",
+      "topics": [
+        "Quality assurance",
+        "Software quality assurance",
+        "Context (archaeology)",
+        "Software",
+        "Computer science",
+        "Certificate"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-07T15:04:56.332Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-22336824",
+      "title": "Based on Information Entropy: A Software Testing Method",
+      "abstract": "This paper proposes a novel software testing methodology predicated on the principles of information entropy. The core idea is to quantify software testing using entropy theory, offering a rigorous framework for analyzing test coverage, identifying critical areas, and ultimately, improving the efficiency and effectiveness of the testing process. Traditional software testing often relies heavily on manual design and subjective rules, leading to inconsistencies and potential blind spots. This research introduces an entropy-based approach, providing a measurable metric to guide test design and prioritization. The method utilizes entropy calculation on code segments to determine the inherent randomness or uncertainty within the system, directly translating this into test coverage targets. The paper details the entropy calculation process, outlines a framework for applying it to software testing, and argues for its potential to significantly enhance the quality assurance of software development. ---",
+      "authors": [
+        "Jincheng Zhang"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-05",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.22336824",
+      "url": "https://doi.org/10.5281/zenodo.22336824",
+      "topics": [
+        "Computer science",
+        "Software reliability testing",
+        "Software quality assurance",
+        "Non-regression testing",
+        "Software quality",
+        "Software construction"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-07T15:04:56.332Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-22341782",
+      "title": "Software Quality Assurance Process: A Consolidated Definition and a Lifecycle-Mapped Taxonomy of Tool Support",
+      "abstract": "Software quality assurance (SQA) continues to suffer from persistent terminological confusion. Organizations and practitioners routinely use quality assurance (QA), quality control (QC), and testing as if they were synonyms, even though international standards treat them as distinct functions. A second problem compounds the first: tool support for each activity is scattered across vendor categories rather than organized by engineering purpose, so it rarely lines up cleanly with the software development lifecycle (SDLC). This paper tackles that fragmentation through a structured narrative review. Authoritative sources - IEEE Std 730, IEEE Std 1028, IEEE Std 829, ISO/IEC 25010, the SWEBOK Guide, and seminal texts by Sommerville, Pressman, and Myers - were analyzed alongside recent comparative work on quality in agile and maturity-model contexts, and alongside a supplementary search of recent (2019-2025) peer-reviewed literature on tool taxonomies and DevOps quality practice; a definitional synthesis was built by pulling out the elements that stayed invariant across the standards. Two results come out of the review: a consolidated working definition of the SQA process that separates its managerial, process-facing core from quality control's product-facing activities, and a two-dimensional taxonomy mapping QA tool support (requirements management and traceability, structured review support, static analysis, unit and system test automation, continuous integration, code coverage measurement, defect/error tracking, and configuration management) across both the SDLC phase in which each tool operates and the QA function it serves (prevention, appraisal, or detection). This paper concludes that engineering teams get more out of their tooling, and adopt it more effectively, when selection is driven by this lifecycle mapping rather than by vendor categorization alone. Future work will empirically validate the taxonomy on FraudShield, a real-time financial fraud-detection system currently under development, and will survey current tool coverage against the taxonomy in the Nigerian software industry.",
+      "authors": [
+        "Michael Fatayo"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-05",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.22341782",
+      "url": "https://doi.org/10.5281/zenodo.22341782",
+      "topics": [
+        "Quality assurance",
+        "DevOps",
+        "Software engineering",
+        "Software quality assurance",
+        "Agile software development",
+        "Software quality analyst"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-07T15:04:56.332Z"
+    },
     {
       "id": "doi-doi-org-10-1002-9781394422791-ch21",
       "title": "Quality Assurance of Software Incorporating Graph Neural Networks for Defect Prediction",
