@@ -1,6 +1,26 @@
 {
-  "updatedAt": "2026-09-07T15:04:56.332Z",
+  "updatedAt": "2026-09-08T13:39:55.647Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-4038-cjs-v55i4-9573",
+      "title": "Toward trustworthy adaptive software reliability engineering: An explainable deep reinforcement learning framework",
+      "abstract": "Ensuring the dependable operation of modern software systems under dynamic and non-stationary operating conditions remains a major challenge in software reliability engineering. Although recent deep reinforcement learning (DRL)-based approaches have demonstrated promising capabilities for closed-loop adaptation of software reliability and testing effort, their black-box nature limits transparency, trustworthiness, and adoption in mission-critical and regulated domains. To address this limitation, we propose X-DRL-SRE, an explainable deep reinforcement learning framework for adaptive software reliability engineering. The framework integrates dynamic operational profile learning, level-wise reliability estimation, and a Proximal Policy Optimization (PPO)-based DRL agent with an explainability module that provides state-, action-, and outcome-level interpretations of reliability control decisions. Explainability is achieved through SHAP-based feature attribution for operational and code-level metrics, integrated gradients for policy sensitivity analysis, and counterfactual reasoning to justify testing effort reallocation under changing operational profiles. The proposed framework was evaluated using repeated stratified 10-fold cross-validation on NASA software defect benchmark datasets, including JM1, KC1, and PC1. Experimental results demonstrate that X-DRL-SRE improves reliability indices by 11.8–15.6% and reduces testing effort by 13.2–18.4% compared with LCSR-OPE, ML-ER-OPE, and non-explainable DRL baselines. Statistical significance was confirmed using paired t-tests and Wilcoxon signed-rank tests (p < 0.01), with medium-to-large effect sizes (Cohen’s d = 0.62–0.89). Furthermore, explanation stability scores exceeding 0.85 indicate that the generated explanations are reliable and consistent without compromising optimization performance. These findings demonstrate that explainability can be effectively integrated into adaptive reliability control, enabling transparent, interpretable, and high-performing software reliability engineering.",
+      "authors": [
+        "Sudhakar Kambhampati",
+        "G. Vamsi Krishna"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-08",
+      "source": "Crossref",
+      "venue": "Ceylon Journal of Science",
+      "doi": "https://doi.org/10.4038/cjs.v55i4.9573",
+      "url": "https://doi.org/10.4038/cjs.v55i4.9573",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-08T13:39:55.647Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-22414216",
       "title": "Software Quality Assurance and Testing Work in the United States: Evidence from 108 Current Vacancies",
