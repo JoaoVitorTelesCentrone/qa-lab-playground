@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-10T13:38:41.785Z",
+  "updatedAt": "2026-09-11T13:36:59.173Z",
   "items": [
     {
       "id": "doi-doi-org-10-4038-cjs-v55i4-9573",
@@ -282,6 +282,27 @@
       ],
       "query": "software quality assurance",
       "discoveredAt": "2026-08-30T14:25:47.998Z"
+    },
+    {
+      "id": "doi-doi-org-10-3389-fcomp-2026-1936730",
+      "title": "Software quality assurance in the era of Agentic AI: a systematic mapping study",
+      "abstract": "The growing complexity of software systems has increased demand for intelligent solutions in Software Quality Assurance (SQA). Agentic Artificial Intelligence (AI) offers autonomous decision-making, adaptive behavior, and proactive quality improvement, yet its applications across SQA remain fragmented. This systematic mapping study examines Agentic AI integration in SQA, analyzing application distribution, agent characteristics, and supported stakeholder roles to identify coverage, trends, benefits, limitations, and gaps. Following systematic mapping protocols and PRISMA, five digital libraries were searched, retrieving 37 primary studies. Data were classified through frequency analysis and qualitative categorization aligned with Agentic AI behavior, architecture, and autonomy dimensions. Applications concentrate in Product Assurance, mainly test generation and defect management, with fewer studies in Process or Planning activities. Most agents exhibit goal-oriented or diagnostic behaviors, moderate autonomy, and hybrid or multi-agent architectures. Benefits include efficiency, accuracy, and maintainability improvements; limitations involve scalability, generalizability, and transparency. Role coverage focuses on execution-level stakeholders, while managerial and leadership roles receive minimal support. Agentic AI shows potential for strengthening SQA intelligence and adaptability but remains unevenly distributed across activities and roles. Transparency, validation, and leadership support are priority research gaps for developing trustworthy, process-aware Agentic systems across the full SQA lifecycle.",
+      "authors": [
+        "Randa Ouaarous",
+        "Imane Hilal",
+        "Abdellatif Mezrioui"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-28",
+      "source": "Semantic Scholar",
+      "venue": "Frontiers of Computer Science",
+      "doi": "https://doi.org/10.3389/fcomp.2026.1936730",
+      "url": "https://doi.org/10.3389/fcomp.2026.1936730",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-11T13:36:59.173Z"
     },
     {
       "id": "doi-doi-org-10-5281-zenodo-22138125",
@@ -775,6 +796,29 @@
       ],
       "query": "software quality assurance",
       "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
+      "id": "doi-doi-org-10-15276-hait-09-2026-24",
+      "title": "Integrated system of methods for automating the evaluation of risk management effectiveness in software quality assurance systems",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Ihor Liakh",
+        "Y. Kish",
+        "R. Zhovtani",
+        "Iryna Gado",
+        "Martin Kelemen"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-02",
+      "source": "Semantic Scholar",
+      "venue": "Herald of Advanced Information Technology",
+      "doi": "https://doi.org/10.15276/hait.09.2026.24",
+      "url": "https://doi.org/10.15276/hait.09.2026.24",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-11T13:36:59.173Z"
     },
     {
       "id": "arxiv-arxiv-org-abs-2607-01842v1",
