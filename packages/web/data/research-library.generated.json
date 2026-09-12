@@ -1,6 +1,30 @@
 {
-  "updatedAt": "2026-09-11T13:36:59.173Z",
+  "updatedAt": "2026-09-12T12:53:01.220Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-21203-rs-3-rs-10975428-v1",
+      "title": "Project-Aware Validation in Software Defect Prediction: A Controlled Simulation and Real-World Benchmark Study of Evaluation Optimism",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Vladimir Tomilov"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-10",
+      "source": "OpenAlex",
+      "venue": "Research Square",
+      "doi": "https://doi.org/10.21203/rs.3.rs-10975428/v1",
+      "url": "https://doi.org/10.21203/rs.3.rs-10975428/v1",
+      "topics": [
+        "Benchmark (surveying)",
+        "Covariate",
+        "Wilcoxon signed-rank test",
+        "Statistics",
+        "Interval (graph theory)",
+        "Receiver operating characteristic"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-12T12:53:01.220Z"
+    },
     {
       "id": "doi-doi-org-10-4038-cjs-v55i4-9573",
       "title": "Toward trustworthy adaptive software reliability engineering: An explainable deep reinforcement learning framework",
