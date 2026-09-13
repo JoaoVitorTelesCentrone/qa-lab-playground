@@ -1,6 +1,25 @@
 {
-  "updatedAt": "2026-09-12T12:53:01.220Z",
+  "updatedAt": "2026-09-13T13:49:02.556Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-70267-aitia-2026300307",
+      "title": "AI-Assisted Software Testing: Opportunities and Challenges",
+      "abstract": "Software testing has played an important role in checking software reliability, security, and quality. However, testing has remained one of the most costly and time-consuming parts of the software development life cycle, especially as modern systems have b ecome larger and more frequently updated. Traditional manual testing depends on human experience, while automated testing still requires testers to write and maintain many test scripts. This paper reviewed the opportunities and challenges of AI-assisted software testing based on selected academic studies, technical reports, and industry examples. The review found that AI techniques, such as machine learning, search-based optimization, fuzzing, and large language models, can support testing tasks such as test generation, defect prediction, code analysis, test prioritization, and debugging. These applications may reduce manual effort, improve test coverage, and help teams identify risky components earlier. At the same time, the review identified several challenges, including limited data quality, weak generalization across projects, low interpretability, false positives, integration difficulties, and risks related to LLM outputs. The paper argues that AI is unlikely to fully replace human testers in the near future. Instead, AI should be used as an assistant that supports human judgment in software quality assurance.",
+      "authors": [
+        "Mingyang Peng"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-13",
+      "source": "Crossref",
+      "venue": "Exploring Science Academic Conference Series",
+      "doi": "https://doi.org/10.70267/aitia.2026300307",
+      "url": "https://doi.org/10.70267/aitia.2026300307",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-09-13T13:49:02.556Z"
+    },
     {
       "id": "doi-doi-org-10-21203-rs-3-rs-10975428-v1",
       "title": "Project-Aware Validation in Software Defect Prediction: A Controlled Simulation and Real-World Benchmark Study of Evaluation Optimism",
