@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-13T13:49:02.556Z",
+  "updatedAt": "2026-09-14T15:54:35.333Z",
   "items": [
     {
       "id": "doi-doi-org-10-70267-aitia-2026300307",
@@ -19,6 +19,30 @@
       ],
       "query": "software product quality",
       "discoveredAt": "2026-09-13T13:49:02.556Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-22721707",
+      "title": "Replication Package: How Reliable Are Explanations in Cross-Project Software Defect Prediction? An Empirical Study of Stability and Robustness",
+      "abstract": "This replication package accompanies the manuscript “How Reliable Are Explanations in Cross-Project Software Defect Prediction? An Empirical Study of Stability and Robustness.” The package contains Python source code, study-generated experimental outputs, SHAP feature rankings and stability results, statistical analysis scripts, documentation, and validation reports. It includes full-precision predictive-performance results and the recorded outputs of the simultaneous-metric perturbation experiment (P1) and the single-feature perturbation experiment (P2). The files named perturbation_p1_raw.csv and perturbation_p2_raw.csv contain experimental comparison outputs; they are not the original software defect datasets. The original Jureczko/PROMISE input datasets are not bundled. The manuscript itself is also not included in this archive. Original Python source code and dependency specifications are distributed under the MIT License. Original documentation, metadata, and study-generated experimental outputs are distributed under Creative Commons Attribution 4.0 International (CC BY 4.0), to the extent the author holds applicable rights. These licenses apply to their respective components, as specified in the package’s licensing documentation. Third-party datasets, software, and other materials retain their original terms.",
+      "authors": [
+        "Emre Selman Caniaz"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-12",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.22721707",
+      "url": "https://doi.org/10.5281/zenodo.22721707",
+      "topics": [
+        "Python (programming language)",
+        "Computer science",
+        "Empirical research",
+        "Software",
+        "Robustness (evolution)",
+        "Software bug"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-14T15:54:35.333Z"
     },
     {
       "id": "doi-doi-org-10-21203-rs-3-rs-10975428-v1",
@@ -1071,6 +1095,25 @@
       "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
+      "id": "doi-doi-org-10-1109-cicse70286-2026-11621056",
+      "title": "AI-Driven Code Quality Assessment Model and Implementation for Complex Power Grid Software Systems",
+      "abstract": "Power grid software systems, containing dispatching automation platforms, distribution management systems, substation secondary applications, metering and marketing services, equipment condition monitoring systems, and edge-cloud collaborative applications, show interlaced quality signals among source code structure, dependency topology, configuration logic, repository evolution, and review discourse. Therefore, purely metric-based evaluation is not enough for utility software that must simultaneously satisfy reliability, cyber-security, traceability, and maintainability constraints. This paper puts forward CAIQA-Net, an AI-driven code quality assessment model that combines static metrics, abstract syntax tree representations, graph-based dependency context, change-history signals, and a constrained large language model critic to generate maintainability, defect-risk, security-compliance smell, and review-burden assessments for complex po]wer grid software. The application uses a complexity-aware controller that sends routine interface adjustments or configuration edits to a lightweight path while sends cross-subsystem, protocol-parsing, protection-logic, or semantically novel changes to deep analysis, thus balancing accuracy and cost. A controlled prototype test on a utility-oriented benchmark indicates that the proposed fusion strategy is better than metric-only, AST-only, and unconstrained LLM baselines; it raises Macro-F1 to 0.87 and AUC to 0.93 while keeping average decision delay below 100 ms per analyzed module in the hybrid mode. Hence, the study demonstrates that practical AI quality assessment for power grid software gains benefits not from a single model family, but from disciplined multi-view evidence fusion and uncertainty-aware explanation generation.",
+      "authors": [
+        "Wen-Long Zhang"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-01",
+      "source": "Semantic Scholar",
+      "venue": "2026 International Conference on Computer Intelligence and Software Engineering (CICSE)",
+      "doi": "https://doi.org/10.1109/CICSE70286.2026.11621056",
+      "url": "https://doi.org/10.1109/CICSE70286.2026.11621056",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-09-14T15:54:35.333Z"
+    },
+    {
       "id": "arxiv-arxiv-org-abs-2605-20788v1",
       "title": "BioDefect: The First Dataset for Defect Detection in Bioinformatics Software",
       "abstract": "Software defect detection is a critical task in software engineering. However, no prior studies have specifically addressed defect detection in bioinformatics software. Given that the performance of defect detection tasks is primarily influenced by both models and datasets, our experiments controlled for model-related factors and confirmed the limitations of existing datasets in bioinformatics software. To address this issue, we introduce BioDefect, the first dataset specifically designed for defect detection in bioinformatics software, aiming to overcome the limitations of existing datasets in this context. Unlike prior datasets, BioDefect includes complete source code repositories, preserving the actual contextual information of defective code, thereby more accurately reflecting real-world defect scenarios in bioinformatics software. Additionally, BioDefect mitigates issues related to label inconsistency and data leakage, ensuring high data quality and experimental reliability. To evaluate the effectiveness of BioDefect, we conduct a systematic assessment on nine language models (LMs), including DeepSeek-R1. The results demonstrate that BioDefect significantly enhances defect detection performance for bioinformatics software. Compared to existing datasets, BioDefect achieves an average F1-score improvement of 29.61% to 38.04% across all models, highlighting its superior advantages. This study fills a critical research gap in bioinformatics software defect detection, laying a foundation for future studies in this field and offering new insights for improving bioinformatics software quality assurance.",
@@ -1157,6 +1200,27 @@
       ],
       "query": "software quality model",
       "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-58952-zriut202601117j",
+      "title": "THE ROLE OF SOFTWARE QUALITY IN MODERN LOGISTICS PROCESSES: AN ANALYSIS BASED ON THE ISO/IEC 25010:2023 STANDARD",
+      "abstract": "<p><i>The rapid digitalization of business processes has placed software quality at the center of operational success, particularly within the complex field of logistics. This paper examines the role of software quality in supporting logistics processes, focusing on the updated international standard ISO/IEC 25010:2023. This standard, part of the Systems and Software Quality Requirements and Evaluation (SQuaRE) series, provides a comprehensive framework for defining, measuring, and evaluating software product quality. The paper demonstrates how the nine quality characteristics &ndash; functional suitability, performance efficiency, compatibility, interaction capability, reliability, security, maintainability, flexibility, and safety &ndash; address the specific needs of logistics information systems. By applying these characteristics to logistics information systems, such as Warehouse Management Systems and Transport Management Systems, the study illustrates how structured quality evaluation mitigates operational risks and enhances supply chain resilience. The findings suggest that the 2023 update, which separates quality-in-use into ISO/IEC 25019, offers a more precise framework for assessing the technical integrity of Information and Communications Technology products in complex, multi-stakeholder logistics environments.</i><i></i></p>",
+      "authors": [
+        "B. Jereb",
+        "Nina Vrečko",
+        "Nena Orel Šanko"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-15",
+      "source": "Semantic Scholar",
+      "venue": "Proceedings of International University Travnik",
+      "doi": "https://doi.org/10.58952/zriut202601117j",
+      "url": "https://doi.org/10.58952/zriut202601117j",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-09-14T15:54:35.333Z"
     },
     {
       "id": "doi-doi-org-10-30572-2018-kje-170209",
