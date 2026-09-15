@@ -1,6 +1,46 @@
 {
-  "updatedAt": "2026-09-14T15:54:35.333Z",
+  "updatedAt": "2026-09-15T14:20:51.675Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-54254-2755-2721-2026-ld36950",
+      "title": "Artificial Intelligence-Driven Software Test Automation: A Comprehensive Survey",
+      "abstract": "Software testing accounts for a significant proportion of resource consumption within the software development lifecycle. Traditional automated testing methods rely on predefined scripts and deterministic logic, and have inherent limitations when addressing the dynamic complexities of modern software systems. Artificial intelligence, particularly large language models, offers new technical avenues for test automation.This paper focuses on two key tasks—AI-driven test case generation and defect detection—and provides a systematic review of the technological evolution from traditional automation to intelligent testing. It analyses methods such as prompt engineering, retrieval-augmented generation, model fine-tuning and multi-agent systems,while contrasting traditional deep learning and large language model approaches in defect detection. The paper also examines key challenges, including the hallucination problem, evaluation criteria, interpretability and generalisation capabilities.The fundamental contribution of large language models lies not in replacing human testers, but in driving the transformation of test automation from 'execution automation' to 'decision support'—a distinction that provides important guidance for the design, evaluation and deployment of AI testing tools.",
+      "authors": [
+        "Jiale Chen"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-15",
+      "source": "Crossref",
+      "venue": "Applied and Computational Engineering",
+      "doi": "https://doi.org/10.54254/2755-2721/2026.ld36950",
+      "url": "https://doi.org/10.54254/2755-2721/2026.ld36950",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-09-15T14:20:51.675Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s12597-026-01277-w",
+      "title": "Size-biased multinomial modelling of detection data in software testing",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Pallabi Ghosh",
+        "Ashis Kumar Chakraborty",
+        "Soumen Dey"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-15",
+      "source": "Crossref",
+      "venue": "OPSEARCH",
+      "doi": "https://doi.org/10.1007/s12597-026-01277-w",
+      "url": "https://doi.org/10.1007/s12597-026-01277-w",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-09-15T14:20:51.675Z"
+    },
     {
       "id": "doi-doi-org-10-70267-aitia-2026300307",
       "title": "AI-Assisted Software Testing: Opportunities and Challenges",
