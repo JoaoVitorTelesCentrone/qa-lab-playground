@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-15T14:20:51.675Z",
+  "updatedAt": "2026-09-16T14:13:30.577Z",
   "items": [
     {
       "id": "doi-doi-org-10-54254-2755-2721-2026-ld36950",
@@ -273,6 +273,26 @@
       ],
       "query": "software defect prediction",
       "discoveredAt": "2026-09-05T12:45:27.943Z"
+    },
+    {
+      "id": "doi-doi-org-10-59562-jessi-v7i3-11711",
+      "title": "Sensitivity Analysis of Weight Normalization Schemes in McCall-Based Software Quality Measurement",
+      "abstract": "Purpose – This study examines the sensitivity of McCall-based software quality measurement to alternative weight normalization intervals and rounding configurations. It specifically evaluates whether different weighting schemes produce consistent Total Quality scores and quality classifications when the evaluated system, criteria values, and aggregation procedures remain unchanged.\nDesign/methods/approach – A quantitative experimental design was applied to the Product Operation dimension of the McCall model using Simponi, a web-based learning management system at Universitas Multi Data Palembang, as the case study. Criteria values were obtained from 166 student respondents, while indicator importance ratings were provided by two software engineering experts. Three normalization intervals, namely 0.1–0.5, 0.1–0.4, and 0.4–0.8, were evaluated using floor and ceiling rounding configurations. The resulting scores were calculated through hierarchical weighted additive aggregation.\nFindings – Weight normalization substantially influenced the resulting software quality assessment. The moderate and expanded weighting schemes produced comparable Total Quality outcomes and consistently classified the evaluated system at the highest quality level, whereas the compressed weighting scheme generated a lower overall assessment and shifted the system into a lower quality category. In contrast, differences between floor and ceiling rounding configurations were negligible and did not alter the resulting quality classification.\nResearch implications/limitations – Weight normalization should be explicitly documented and standardized to improve comparability across McCall-based evaluations. The findings are limited to the Product Operation dimension, three predefined intervals, and one academic web application.\nOriginality/value – This study provides empirical sensitivity evidence showing that weight interval selection is a substantive methodological decision that can alter software quality interpretations, whereas rounding configurations have negligible practical effects.",
+      "authors": [
+        "Ahmad Farisi",
+        "Dafid"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-03",
+      "source": "Semantic Scholar",
+      "venue": "Journal of Embedded Systems, Security and Intelligent Systems",
+      "doi": "https://doi.org/10.59562/jessi.v7i3.11711",
+      "url": "https://doi.org/10.59562/jessi.v7i3.11711",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality measurement",
+      "discoveredAt": "2026-09-16T14:13:30.577Z"
     },
     {
       "id": "doi-doi-org-10-3390-math14173176",
@@ -679,6 +699,25 @@
       ],
       "query": "software product quality",
       "discoveredAt": "2026-08-18T09:50:09.710Z"
+    },
+    {
+      "id": "doi-doi-org-10-37547-ajast-volume06issue08-07",
+      "title": "Artificial Intelligence-Based Test Automation Frameworks for Next-Generation Software Quality Engineering",
+      "abstract": "The increasing complexity, scale, and dynamic behavior of contemporary software systems have created substantial challenges for conventional test automation approaches. Traditional automation frameworks generally depend on predefined scripts, deterministic rules, and manually maintained test artifacts, which limits their adaptability when applications, interfaces, requirements, and execution environments change continuously. This research and review paper examines the conceptual foundations of Artificial Intelligence (AI)-based test automation frameworks for next-generation software quality engineering by integrating perspectives from human-like computing, functionalism, semantic representation, conceptual spaces, distributed intelligence, and machine-intelligence measurement. The study develops a conceptual framework in which AI-supported test automation is organized around five interconnected capabilities: intelligent requirement interpretation, semantic test modeling, adaptive test generation, autonomous execution and maintenance, and predictive quality-risk analysis. The theoretical synthesis indicates that human-like and symbolic approaches can provide interpretability and structured reasoning, whereas conceptual-space and semantic approaches can support contextual representation of software behavior. Distributed intelligence perspectives further suggest opportunities for scalable quality engineering across heterogeneous testing environments. The analysis also incorporates AI-driven project-risk prediction as a complementary decision-support mechanism for prioritizing testing resources and identifying high-risk software components. Findings indicate that the most promising next-generation architecture is not a completely autonomous testing system but a human-centered, adaptive framework combining machine intelligence with explainable representations and continuous feedback. The paper identifies important limitations involving semantic ambiguity, model reliability, maintenance complexity, and the absence of universal evaluation criteria. It concludes that AI-based test automation can substantially strengthen software quality engineering when intelligence is integrated as an adaptive reasoning layer rather than treated merely as an alternative mechanism for script generation.",
+      "authors": [
+        "Priyanka Sharma"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-17",
+      "source": "Semantic Scholar",
+      "venue": "American Journal Of Applied Science And Technology",
+      "doi": "https://doi.org/10.37547/ajast/volume06issue08-07",
+      "url": "https://doi.org/10.37547/ajast/volume06issue08-07",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality measurement",
+      "discoveredAt": "2026-09-16T14:13:30.577Z"
     },
     {
       "id": "doi-doi-org-10-64917-fems-volume03issue08-04",
