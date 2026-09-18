@@ -1,6 +1,30 @@
 {
-  "updatedAt": "2026-09-17T14:18:40.247Z",
+  "updatedAt": "2026-09-18T13:38:00.114Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-20232955",
+      "title": "Bugs in a Perfect Substrate: An Ontology of Software Defects",
+      "abstract": "The word bug entered engineering usage with a precise referent: a substrate intrusion — a physical object occupying space in a mechanism whose designed geometry excluded it. Around defects of this kind, a measurement apparatus was built — statistical process control, defect density, process capability — whose load-bearing assumption was that defects are draws from a stable probability distribution over substrate-induced deviations across a population of nominally identical units. That ontology and that apparatus were carried into software engineering through the late 1980s. The substrate did not come with them. This paper recovers what bug can mean in a substrate without an instantiation gap. The constructive ontology is that a bug is not a property of a unit of software, but rather a witnessed event in which something an engineering practice was proceeding as though it knew did not hold for a specific execution. Based on the formalism of the bounded local theory established in a companion paper, we identify four fundamental disjuncts which can produce such an event: a hidden distinction mattered, the expectation was wrong, the system was used outside its envelope, or the accepted tolerance was too generous. None of the four locates the bug in the software itself, but rather in the relationship between the operative theory, the system it describes, and the context in which the system operates. The paper traces the historical inheritance from Shewhart's 1931 control charts through Humphrey's importation into the CMM and on to ASPICE and ISO 26262, identifies the four preconditions of statistical process control that fail on the software substrate (population, repeatable process, stable distribution, substrate causation), and develops the constructive ontology of quality as alignment under an operational measure rather than dispersion across a population. Specific interventions practitioners already use — type systems, code review, testing, formal methods — are reframed not as lower-quality versions of statistical process control but as the correct kind of intervention for the substrate: each addresses one or more of the possibilities a witness leaves open, and none is a statistical operation on a population of artifacts. The argument has direct consequences for ASPICE Level 4/5, CMMI Quantitatively Managed, ISO 26262 safety integrity claims, and every safety case that treats defect metrics as evidence of capability. The paper belongs to a programme that began with The Wrong Substrate (TWS) and the formal trio of CCI, CHP, and SSEP, and continues in Conditional System Guarantees (CSG, forthcoming). TWS traced what the inherited engineering wisdom assumed about the substrate and identified the structural properties that fail. The formal trio established the substrate's own properties: faithful realization, ageometric state space, and specification–implementation equivalence. The present paper applies those results to the specific question of bugs and quality. CSG develops the operational alternative: a guarantee algebra structured around alignment evidence, measure estimation, monitoring discipline, and the honest accounting of what the substrate permits to be known. Change History: Version 2.0: Replaced the observation-map mismatch with formal language from the \"Towards Achievable Locality\" companion paper. The four disjuncts locate the bug to elements of the engineers' bounded local theories. Keywords: software defects, software quality, statistical process control, observation maps, gauge structure, distinguishability, perfect substrate, software measurement, KPIs, defect density, process capability, CMMI, ASPICE, ISO 26262, computational holographic principle, causally complete interfaces, specification equivalence, software ontology",
+      "authors": [
+        "Oliver Albrecht"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-17",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.20232955",
+      "url": "https://doi.org/10.5281/zenodo.20232955",
+      "topics": [
+        "Computer science",
+        "Population",
+        "Reverse engineering",
+        "Software",
+        "Process (computing)",
+        "Constructive"
+      ],
+      "query": "software quality measurement",
+      "discoveredAt": "2026-09-18T13:38:00.114Z"
+    },
     {
       "id": "doi-doi-org-10-54254-2755-2721-2026-ld36950",
       "title": "Artificial Intelligence-Driven Software Test Automation: A Comprehensive Survey",
