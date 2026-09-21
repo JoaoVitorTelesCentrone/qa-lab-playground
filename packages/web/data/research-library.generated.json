@@ -1,6 +1,27 @@
 {
-  "updatedAt": "2026-09-20T13:35:50.897Z",
+  "updatedAt": "2026-09-21T15:54:46.988Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1007-978-981-92-5644-0-26",
+      "title": "Adaptive Intuitionistic Fuzzy K-Nearest Neighbors for Software Defect Prediction",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Hai Yen Nguyen",
+        "Tuan Thai",
+        "Anh Phong Phan"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-21",
+      "source": "Crossref",
+      "venue": "Lecture Notes in Computer Science",
+      "doi": "https://doi.org/10.1007/978-981-92-5644-0_26",
+      "url": "https://doi.org/10.1007/978-981-92-5644-0_26",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-09-21T15:54:46.988Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-20232955",
       "title": "Bugs in a Perfect Substrate: An Ontology of Software Defects",
