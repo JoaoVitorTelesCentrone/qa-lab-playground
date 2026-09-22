@@ -1,6 +1,46 @@
 {
-  "updatedAt": "2026-09-21T15:54:46.988Z",
+  "updatedAt": "2026-09-22T14:03:26.481Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1007-s11518-026-5758-0",
+      "title": "Cross-project Software Defect Prediction Using Divergence-based Domain Adaptation Approach",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Yash Bhilala",
+        "Santosh Singh Rathore"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-22",
+      "source": "Crossref",
+      "venue": "Journal of Systems Science and Systems Engineering",
+      "doi": "https://doi.org/10.1007/s11518-026-5758-0",
+      "url": "https://doi.org/10.1007/s11518-026-5758-0",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-978-3-032-39708-9-9",
+      "title": "Validation-Controlled Model Selection and Soft Ensembling for Imbalanced Software Defect Prediction: A Repeated Within- and Cross-Project Evaluation",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "MohammadMehdi Mehraein",
+        "Abtin Asghari"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-22",
+      "source": "Crossref",
+      "venue": "Communications in Computer and Information Science",
+      "doi": "https://doi.org/10.1007/978-3-032-39708-9_9",
+      "url": "https://doi.org/10.1007/978-3-032-39708-9_9",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
+    },
     {
       "id": "doi-doi-org-10-1007-978-981-92-5644-0-26",
       "title": "Adaptive Intuitionistic Fuzzy K-Nearest Neighbors for Software Defect Prediction",
@@ -21,6 +61,31 @@
       ],
       "query": "software product quality",
       "discoveredAt": "2026-09-21T15:54:46.988Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-978-3-032-36868-3-31",
+      "title": "Interpretable Software Defect Prediction with Ensemble Models Across Static and Process Metrics",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Dominik Łysak",
+        "Małgorzata Przybyła‐Kasperek"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-20",
+      "source": "OpenAlex",
+      "venue": "Lecture notes in computer science",
+      "doi": "https://doi.org/10.1007/978-3-032-36868-3_31",
+      "url": "https://doi.org/10.1007/978-3-032-36868-3_31",
+      "topics": [
+        "Computer science",
+        "Hyperparameter",
+        "Benchmark (surveying)",
+        "Machine learning",
+        "Software bug",
+        "Process (computing)"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
     },
     {
       "id": "doi-doi-org-10-5281-zenodo-20232955",
@@ -884,6 +949,30 @@
       "discoveredAt": "2026-08-15T22:36:58.611Z"
     },
     {
+      "id": "doi-doi-org-10-1109-icisc69558-2026-11681129",
+      "title": "A Hybrid Feature Selection and Ensemble Learning Framework for Software Defect Prediction with Class Imbalance Handling",
+      "abstract": "Software defect prediction (SDP) is essential for improving software quality since it finds error-prone modules early in the development lifecycle. Current methods produce inflated and erroneous performance metrics because of data leaks, inadequate class imbalance management, and reliance on antiquated classifiers. By integrating a soft voting ensemble of six contemporary gradient boosting classifiers XGBoost, LightGBM, CatBoost, Random Forest, Extra Trees, and Gradient Boosting with Mutual Information filtering, this study provides a MI-based feature selection technique that gets beyond these restrictions. To avoid data leakage, SMOTE is only used on training data to address class imbalance. Five publicly accessible PROMISE repository datasets CM1, PC1, KC1, KC2, and JM1 are used in the experiments. For all five datasets, the average accuracy is 82.86%, while the average F1-score and ROC-AUC are 46.92% and 0.778, respectively. Previous studies on the same datasets only give accuracy numbers of up to 94% for imbalanced defect datasets, when the number of non-faulty modules significantly exceeds that of defective ones. This is a deceptive figure that hides insufficient ability to detect defects. F1-score, Precision, Recall, and ROC-AUC are used to measure performance; these metrics offer a more accurate evaluation than accuracy alone. The results show that MI-based feature selection improves prediction performance while lowering computational overhead; on all five datasets, contemporary ensemble techniques regularly beat traditional classifiers.",
+      "authors": [
+        "B. V. Chowdary",
+        "Sendhil Kumar B. B",
+        "D. L. Sri",
+        "P. Avinash",
+        "M. Keerthana",
+        "S. V. Goud"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-01",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Information Security and Cryptology",
+      "doi": "https://doi.org/10.1109/ICISC69558.2026.11681129",
+      "url": "https://doi.org/10.1109/ICISC69558.2026.11681129",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
+    },
+    {
       "id": "doi-doi-org-10-14483-23448350-24627",
       "title": "Identifying Software Quality Attributes Relevant for Very Small Entities",
       "abstract": "Nowadays, software systems are increasingly important and are rapidly growing in complexity and size. Their development involves large, medium, small, and very small entities (VSEs). The latter play a critical role in the supply chain, so developing high-quality software in accordance with established standards is fundamental to ensure the success of their software products. Applying standards such as ISO/IEC 29110 supports VSEs by providing efficient processes and increased productivity. However, standards such as ISO/IEC 25010, which provide a quality model for software products and quality in use, are not intended for implementation in VSEs. This paper presents an exploratory study that identifies the relevant quality characteristics and sub-characteristics in VSEs, as well as the practices they use to achieve product quality.",
@@ -1415,6 +1504,29 @@
       "discoveredAt": "2026-08-15T22:37:48.767Z"
     },
     {
+      "id": "doi-doi-org-10-1109-fet68771-2026-11601511",
+      "title": "Diversity-Stacked Ensemble (DSE): A Heterogeneous Meta-Ensemble Framework for Imbalanced Software Defect Prediction",
+      "abstract": "Software defect prediction plays a critical role in maintaining software quality and minimization of the cost of software maintenance, but it is not an easy task because of the unbalanced datasets, which results in the so-called Accuracy Paradox, high overall accuracy, poor detection of actual defects. In this paper, it is suggested to use a framework called Diversity-Stacked Ensemble (DSE) that would address this shortcoming by balancing heterogeneous classifiers into a meta-learning framework. The model combines tree based (Histogram Gradient Boosting, ExtraTrees), distance based (K-nearest neighbors), and neural (Multi-layer perceptron) learners; it takes advantage of the strengths of each of these learners. It has a strong preprocessing pipeline, including logarithmic transformation, correlation-based feature selection, robust scaling, and SMOTE oversampling that is used to stabilize training and increase the representation of minority classes.The proposed framework, when evaluated on NASA MDP benchmark datasets (PC1, KC1, CM1) has a high accuracy of 95.05% on PC1 and has a balanced precision and recall, which is higher than traditional single-classifier and ensemble baselines.The findings indicate that DSE model is an effective way of reducing the effect of the Accuracy Paradox and it provides a scalable and dependable model of predicting defects in quality assurance of real-world software.",
+      "authors": [
+        "Tanvir Mhamud Sarker",
+        "Tasmia Nabila",
+        "Sazin Israk Prioty",
+        "Rifat Al Mamun Rudro",
+        "Kamruddin Nur"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-22",
+      "source": "Semantic Scholar",
+      "venue": "European Future Technologies Conference and Exhibition",
+      "doi": "https://doi.org/10.1109/FET68771.2026.11601511",
+      "url": "https://doi.org/10.1109/FET68771.2026.11601511",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
+    },
+    {
       "id": "arxiv-arxiv-org-abs-2604-20742v1",
       "title": "Evaluating Software Defect Prediction Models via the Area Under the ROC Curve Can Be Misleading",
       "abstract": "Background: Receiver Operating Characteristic (ROC) curves are widely used to evaluate the performance of Software Defect Prediction (SDP) models that estimate module fault-proneness, i.e., the probability that a module is faulty. A ROC curve maps a model's performance in terms of True Positive Rate and False Positive Rate for any possible threshold set on fault-proneness. The Area Under the ROC Curve (AUC) summarizes the performance of a model across all possible thresholds. Traditionally, ROC curves completely above the bisector of the ROC space are considered better than random, and high AUC values are associated with good performance. Aim: We investigate whether these beliefs are correct, hence if SDP model evaluation based on ROC curves and AUC is reliable. Method: We decorate ROC curves by highlighting the points corresponding to threshold values. We also represent True Positive Rate and False Positive Rate as functions of the threshold. Thus, we can evaluate whether a model classifies both faulty and non-faulty modules better than the random model. Results: We show that commonly used evaluation criteria may lead to wrong conclusions. Conclusions: A high value of AUC does not guarantee that both the True Positive Rate and the False Positive Rate of a model are better than the random model's for all possible thresholds. Either decorated ROC curves or alternative representations are needed to appreciate all the relevant aspects of SDP models.",
@@ -1690,6 +1802,27 @@
       "discoveredAt": "2026-09-01T14:10:27.703Z"
     },
     {
+      "id": "doi-doi-org-10-65997-bitm3382",
+      "title": "Machine Learning-Based Software Defect Prediction and Its Application: A Systematic Review",
+      "abstract": "Software errors may cause serious problems in any system, expose security vulnerabilities, and result in expensive downtime, thus negatively affecting user experience and efficiency. Machine learning algorithms allow for predicting software defects by analyzing the source code and related patterns. These types of predictive features make it easier to identify potential software defects at an early stage, enabling proactive responses. Recent developments in machine learning-driven software reliability and software defect prediction were considered in this study, with special attention to the methods employed, the conclusions made, and the limitations of each study. The review methodologically synthesized the recent literature by classifying the machine learning algorithms used, the nature of the datasets, the performance metrics used for evaluation, and the domains examined. Empirical validation processes and the implementation of machine learning strategies were included in the review. This review additionally revealed some weaknesses; the importance of validating them by tackling real-world problems, as well as conducting an extensive evaluation of scalability. The outcomes of the study were used to come up with recommendations, which are expected to guide researchers and practitioners on how to make findings on future studies on machine learning-based software defect prediction towards advanced software development procedures.",
+      "authors": [
+        "A. Abdulsalam",
+        "M. Timothy",
+        "C. Eke"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-02-27",
+      "source": "Semantic Scholar",
+      "venue": "AGE Journal of Science",
+      "doi": "https://doi.org/10.65997/bitm3382",
+      "url": "https://doi.org/10.65997/bitm3382",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
+    },
+    {
       "id": "doi-doi-org-10-37012-jtik-v12i1-3294",
       "title": "Implementation of Information System and Software Quality Testing in Company Operational Applications Based on ISO/IEC 25010 (Case Study: PT Snapdev Digital Indonesia)",
       "abstract": "Implementation of information system quality testing is an important factor in supporting the effectiveness and efficiency of company operations. This study aims to implement an information system and conduct software quality testing based on the ISO/IEC 25010 standard at PT Snapdev Digital Indonesia. Quality testing is carried out by measuring seven main characteristics, namely Performance Efficiency, Compatibility, Usability, Reliability, Security, Maintainability, and Portability. The research methods used include observation, data collection, and analysis of test results based on indicators in each ISO/IEC 25010 characteristic. The measurement results show that the percentage value for each aspect of system quality is in the range of 79%–83%, which indicates that the system has met most of the established quality criteria. The overall average value of 80.97% places the system quality in the very good category. This indicates that the system has efficient performance, adequate levels of security and reliability, good ease of use, and can be maintained and run in various environments. However, there are still opportunities for improvement in several aspects to improve system quality to be more optimal. Overall, the implemented information system is considered suitable for use and complies with international software quality standards.",
@@ -1789,6 +1922,48 @@
       ],
       "query": "software defect prediction",
       "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-1145-3806980-3807093",
+      "title": "Gradient-Guided Adversarial Data Augmentation with Genetic Optimization for Imbalanced Software Defect Prediction",
+      "abstract": "The problem of data imbalance is widespread in software defect prediction and seriously affects the prediction performance of classification models. In this study, we propose a new data augmentation method, namely the Gradient Perturbation Data Augmentation method (GPDA), which combines gradient information and genetic algorithm optimization to generate adversarial samples for improving the ability of classifiers to handle imbalanced data.GPDA exploits gradient information to capture the influence of input features on model outputs, and employs a genetic algorithm to jointly consider the Euclidean distances among adversarial samples, normal samples, and defect samples in order to generate samples that can enhance classification performance. By comparing multiple data augmentation methods on several classifiers, experimental results show that GPDA significantly improves the average AUC and G-mean values on most classifiers. The adversarial sample generation strategy effectively enhances the prediction capability of the classifiers. To further analyze the dependence of the model on adversarial samples, we design an experiment by gradually removing adversarial samples from the training data. By training models under different adversarial sample ratios and evaluating their performance on the same test set, the results indicate that adversarial samples play an important role in improving model performance.",
+      "authors": [
+        "Wei Zheng",
+        "Kangpeng Jin",
+        "Hao Pan"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-02-06",
+      "source": "Semantic Scholar",
+      "venue": "Proceedings of the 2026 International Conference on Big Data and Informatization Education",
+      "doi": "https://doi.org/10.1145/3806980.3807093",
+      "url": "https://doi.org/10.1145/3806980.3807093",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s13198-025-03122-7",
+      "title": "Detecting concept drift in just-in-time software defect prediction using model interpretation",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Zeynab Chitsazian",
+        "Saeed Sedighian Kashi",
+        "Amin Nikanjam"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-02-01",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of System Assurance Engineering and Management",
+      "doi": "https://doi.org/10.1007/s13198-025-03122-7",
+      "url": "https://doi.org/10.1007/s13198-025-03122-7",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
     },
     {
       "id": "doi-doi-org-10-52783-jisem-v11i1s-14246",
@@ -2103,6 +2278,67 @@
       ],
       "query": "software quality assurance",
       "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
+      "id": "doi-doi-org-10-64137-31079458-ijcsei-v2i2p102",
+      "title": "Explainable Machine Learning for Software Defect Prediction in Large-Scale Code Repositories Using Code Embeddings and Repository-Level Knowledge Graphs",
+      "abstract": "Software defect prediction has moved from static metric classification toward learning-based quality intelligence that must operate across millions of functions, commits, tests, services, and developer interactions. This paper proposes an explainable machine learning framework for large-scale defect prediction that fuses contextual code embeddings, repository-level knowledge graphs, and governance-aware explanation mechanisms into a single lifecycle architecture. The core premise is that source code tokens alone cannot represent the socio-technical context in which defects emerge: dependency changes, test failures, build instability, ownership patterns, issue histories, deployment topology, and review signals also shape risk. Accordingly, the proposed framework encodes functions and patches with transformer-based code representations, constructs a typed repository graph from version-control and DevOps artifacts, and combines these representations through a graph-aware fusion layer that predicts file-, function-, and commit-level defect risk. The design builds on advances in pre-trained programming-language models [1]. It also aligns with lifecycle governance work that connects defect prediction, automated testing, and architecture-centered delivery controls [2]. For regulated and high-assurance domains, the model must produce explanations that are traceable enough for review triage, audit, and risk acceptance rather than merely producing probability scores [3]. The explainability layer, therefore, integrates local feature attribution, graph rationales, counterfactual repository edits, and confidence calibration so that predictions can be inspected by developers, testers, release managers, and compliance reviewers. A reproducible experimental protocol is specified for temporal validation, cross-project evaluation, ablation analysis, effort-aware ranking, and explanation faithfulness. The paper contributes a rigorous blueprint for defect prediction systems that are semantically aware, context-rich, and operationally trustworthy while avoiding ungrounded claims about empirical performance before dataset-specific evaluation is executed.",
+      "authors": [
+        "Pratiti Bhadra",
+        "V. V.",
+        "Keerthika T",
+        "S. S"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Computer Science and Engineering Innovations",
+      "doi": "https://doi.org/10.64137/31079458/ijcsei-v2i2p102",
+      "url": "https://doi.org/10.64137/31079458/ijcsei-v2i2p102",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
+    },
+    {
+      "id": "doi-doi-org-10-5220-0014959700004015",
+      "title": "Self-Adaptive Parameter Control in Differential Evolution Based on Optimizing Undersampling Strategies for Software Defect Prediction",
+      "abstract": ": Data imbalance is a fundamental challenge in software defect prediction (SDP), as the dominance of non-defect classes biases models and reduces the ability to detect defective modules. Although Learning-to-Rank Undersampling (LTRUS) has been shown to be more effective than random undersampling; however, its performance still depends on the determination of static ranking weights ( A ), which are prone to stagnation during optimization. This study proposes an adaptive framework that integrates LTRUS with four variants of differential evolution, namely JADE, SHADE, L SHADE, and SaWDE, to dynamically optimize the weight ( A ). Experiments were conducted using a 5-fold cross-validation scheme and three classifiers: K-Nearest Neigh-bors, Logistic Regression, and Na¨ıve Bayes. Performance was evaluated using AUC, Matthews Correlation Coefficient, Precision, Recall, and F Measure, along with statistical analysis based on the Shapiro–Wilk normality test and paired t-test. The results showed that JADE performed best on KNN, with AUC 0.725, MCC 0.356, and F Measure 0.450, and on Logistic Regression, with AUC 0.750, MCC 0.397, and F Measure 0.474. In Na¨ıve Bayes, differential evolution was most effective with an AUC of 0.784, MCC of 0.441, and F Measure of 0.515. The results indicate that performance improvements are statistically significant in several cases, particularly for KNN and Logistic Regression, although not all comparisons show significant differences.",
+      "authors": [
+        "Moch. Lutfi",
+        "A. Shiddiqi"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Evaluation of Novel Approaches to Software Engineering",
+      "doi": "https://doi.org/10.5220/0014959700004015",
+      "url": "https://doi.org/10.5220/0014959700004015",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-access-2026-3710498",
+      "title": "Evolution of Ensemble Learning in Software Defect Prediction: A Systematic Literature Review",
+      "abstract": "Software Defect Prediction (SDP) is crucial for early defect identification and targeted software testing to handle fault prone modules. SDP has been observed in association with a large body of machine learning and deep learning studies. The performance of Ensemble Learning (EL) models for SDP is far beyond over that has been achieved with single learners. The stability and reliability of ensembles over the constituent base models have raised the influx of EL based SDP Models in the past decade. A comprehensive review of the shifting paradigm of Ensemble Learning from its initial exploration in SDP to the advanced integration is essential as a reference for future researchers to achieve more reliable and effective EL based SDP models. This study represents a systematic literature review with following aspects- 1) Research evolution in ensembles for SDP over time, 2) Variety of ensemble learners being used, 3) Range of the base learners adopted for ensembles, 4) Dataset usage trends and evaluation metrics employed in experiments, and 5) Research gaps and limitations of applying EL in SDP literature and suggest guidelines for future research. To conduct the review, four digital libraries are searched (i.e., IEEE Xplore, SpringerLink, ACM DL, ScienceDirect), following the PRISMA guidelines. With appropriate quality assessment criteria applied, 97 studies are selected from the time-period of 16 years from January 2010 to December 2025, to produce the evidence for the reported observations. It can be concluded that Ensemble Learning based SDP models progress from initial exploration to advanced integration out of the virtue of possessing the potential to break the performance ceiling constrained by individual base SDP models.",
+      "authors": [
+        "Somya R. Goyal"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "IEEE Access",
+      "doi": "https://doi.org/10.1109/ACCESS.2026.3710498",
+      "url": "https://doi.org/10.1109/ACCESS.2026.3710498",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-09-22T14:03:26.481Z"
     },
     {
       "id": "doi-doi-org-10-32604-cmc-2026-077782",
