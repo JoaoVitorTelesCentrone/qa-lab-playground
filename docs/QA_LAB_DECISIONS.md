@@ -1,8 +1,16 @@
 # QA Lab Playground - Registro de Decisoes
 
-Ultima atualizacao: 2026-08-09
+Ultima atualizacao: 2026-09-23
 
 Este documento registra decisoes de produto e arquitetura do QA Lab Playground. A motivacao e parte da decisao: sem ela, mudancas futuras tendem a desfazer escolhas intencionais.
+
+## Estado implementado em 2026-09-23
+
+O codigo em producao do produto segue hoje um lancamento enxuto: o catalogo lista tres Labs liberados, todos de Financas; os demais desafios ficam agendados. O conteudo dos desafios continua no registry e nao exige migration para ser publicado. A rota direta de um Lab agendado agora redireciona para `/waitlist`, e as APIs de progresso, evidencias e anexos recusam Labs agendados.
+
+Isso diverge do plano inicial abaixo de 30 Labs com liberacao semanal. A cadencia de 30 continua sendo uma proposta registrada, nao o comportamento ativo do catalogo. Antes de mudar a lista liberada, atualizar `LAUNCH_ORDER` em `packages/web/lib/playground/catalog.ts` e confirmar que o ambiente do Lab tambem esta pronto.
+
+O checkout implementado e uma compra unica do Pro por R$ 297 com Checkout Pro e webhook assinado. Os precos Free/Pro/Time/Assessment abaixo sao uma proposta anterior e nao descrevem o catalogo de cobranca ativo.
 
 ## Escopo e release
 
@@ -16,7 +24,7 @@ Os labs 21-30 usam a mesma API `/api/bookings`, cada um por uma lente diferente.
 Editor Given/When/Then, release notes simuladas, template de PR e matriz de risco sao materiais anexados ao lab, nao features navegaveis.
 
 **DECIDIDO - Gate server-side para labs futuros.**
-Rotas futuras em `/labs/*` redirecionam para `/waitlist?lab=...`. O bloqueio vira captacao de interesse, nao uma tela morta.
+Rotas agendadas em `/labs/*` redirecionam para `/waitlist?lab=...`; progresso, envio de evidencias e upload de anexos tambem verificam o estado do catalogo no servidor.
 
 ## Conteudo
 
@@ -56,7 +64,7 @@ Datas relativas fazem testes passarem hoje e falharem depois.
 **DECIDIDO - Login aceita `?ttl=1`.**
 Token expirado deve ser testavel sem sleep longo.
 
-## Pendencias antes do deploy
+## Pendencias de operacao e lancamento
 
 - **DECIDIDO/IMPLEMENTADO - Rate limit para API publica.**
   Escritas em `/api/*` usam limite por IP com `QALAB_API_RATE_LIMIT_PER_MINUTE`.

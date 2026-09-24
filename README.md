@@ -1,8 +1,12 @@
-# QA Lab Playground
+# QA Lab
 
-Playground proprio da QA Lab para treinar QA manual, automacao, API, exploratorio, acessibilidade e produto sem depender de sites externos.
+Plataforma de prática de QA com aplicações que simulam produtos reais, Labs guiados, entrega de evidências e acompanhamento de evolução. O conteúdo está em português e é desenvolvido neste monorepo Next.js + Bun.
 
-A primeira tela (`/`) e o hub de labs. Ele lista 100 ideias navegaveis em seis trilhas, com dificuldade, tempo, entrega esperada, criterios de aceite, tags e prompt de post LinkedIn.
+## Estado do lançamento
+
+O catálogo público libera três Labs de Finanças. Os demais desafios e ambientes estão no código, mas não fazem parte da vitrine ativa. Rotas de Labs ainda não liberados encaminham para a lista de interesse; evidências e anexos também são bloqueados no servidor.
+
+O estado do produto, decisões e pendências estão em [`docs/PRODUCTIZATION_PLAN.md`](docs/PRODUCTIZATION_PLAN.md), [`docs/QA_LAB_DECISIONS.md`](docs/QA_LAB_DECISIONS.md) e [`docs/QA_LAB_PRODUCT_PLAN.md`](docs/QA_LAB_PRODUCT_PLAN.md).
 
 ## Rodar localmente
 
@@ -13,77 +17,29 @@ bun install
 bun run dev:web
 ```
 
-Acesse `http://localhost:3000`.
+Acesse `http://localhost:3000` (ou a porta exibida pelo script de desenvolvimento).
 
 ## Rotas principais
 
-- `/` e `/labs`: hub com 100 labs.
-- `/labs/login`: Projeto 1, login quebravel.
-- `/labs/waits`: Projeto 5, waits inteligentes.
-- `/labs/api-crud`: Projeto 21, CRUD completo de API.
-- `/labs/exploratorio`: Projeto 41, charter exploratorio.
-- `/labs/acessibilidade`: Projeto 89, acessibilidade por teclado.
-- `/labs/1` ate `/labs/100`: registros navegaveis dos labs planejados/parciais/prontos.
-- `/shop/products`, `/shop/cart`, `/shop/checkout`, `/shop/orders/:id`: QA Lab Shop.
-- `/playground/elements`, `/playground/tables`, `/playground/dialogs`, `/playground/frames`, `/playground/shadow-dom`, `/playground/files`: microdesafios isolados.
-- `/api/docs`: contrato JSON da API.
+- `/` — página inicial e jornada do aluno.
+- `/labs` — catálogo de Labs liberados.
+- `/labs/:number` — briefing, ambiente de prática e entrega de evidência; Labs agendados vão para a lista de interesse.
+- `/trilhas` — percursos de aprendizagem.
+- `/playground/*` e `/shop/*` — microdesafios e QA Lab Shop.
+- `/financas`, `/agendamentos` e `/crm` — ambientes de prática.
+- `/api-playground` e `/api/docs` — exploração e documentação da API de treino.
+- `/lab/*` — workspace, CI/CD, People Lab, design de testes, triagem e logs.
+- `/boards` — board Kanban/Scrum pessoal e demonstração pública.
+- `/perfil` e `/portfolio/:username` — progresso e portfólio.
 
-## Dados de teste
-
-Senha padrao: `qa_lab_secret`.
-
-- `standard_user`: fluxo normal.
-- `locked_out_user`: bloqueado.
-- `problem_user`: comportamento inconsistente.
-- `performance_user`: atrasos artificiais.
-- `error_user`: erros controlados.
-- `visual_user`: problemas visuais.
-- `keyboard_user`: fluxo pensado para teclado.
-
-## API
-
-Endpoints principais:
-
-- `POST /api/auth/login`
-- `POST /api/auth/logout`
-- `GET /api/products?search=&category=&sort=`
-- `GET /api/cart`
-- `POST /api/cart/items`
-- `PATCH /api/cart/items/:id`
-- `DELETE /api/cart/items/:id`
-- `GET /api/bookings?firstname=&lastname=&checkin=&page=&perPage=&sort=`
-- `POST /api/bookings`
-- `GET /api/bookings/:id`
-- `PUT /api/bookings/:id`
-- `PATCH /api/bookings/:id`
-- `DELETE /api/bookings/:id`
-- `POST /api/test/reset`
-- `GET /api/health`
-
-`PUT`, `PATCH` e `DELETE` de reservas exigem `Authorization: Bearer <token>`. Gere o token com:
-
-```bash
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "content-type: application/json" \
-  -d "{\"username\":\"standard_user\",\"password\":\"qa_lab_secret\"}"
-```
-
-## Modo bugado
-
-Bugs controlados por query param:
-
-- `/labs/login?bug=locked-message`
-- `/labs/waits?bug=infinite-loading`
-- `/shop/checkout?bug=wrong-total`
-- `/labs/acessibilidade?bug=missing-focus`
-- `/api/bookings/1?bug=delete-without-auth`
-- `/api/bookings/1?bug=contract-broken`
-
-## Verificacao
+## Desenvolvimento e verificação
 
 ```bash
 bun test packages/web
-bun run --filter '@qa-lab/web' build
+bun run lint
+bun run build
 ```
 
-O projeto tambem preserva os modulos anteriores do QA Lab, incluindo ExpenseFlow, blog, pesquisa e labs ja existentes.
+O Supabase é usado para autenticação, progresso, evidências e dados persistentes. As migrações do produto ficam em `packages/web/supabase/migrations`; confirme a aplicação no projeto Supabase antes de validar fluxos autenticados ou publicar. Configure as variáveis usando `packages/web/.env.example`.
+
+`packages/api` é uma API alvo para exercícios. A API de produto vive nas rotas `/api/v1/*` de `packages/web`.

@@ -12,6 +12,7 @@
 import { fail, ok, withUser } from "@/lib/product/api";
 import { uploadEvidenceFile, removeEvidenceFile } from "@/lib/product/evidence-storage";
 import { ALLOWED_TYPES, MAX_FILE_BYTES, formatBytes } from "@/lib/product/evidence-limits";
+import { labs } from "@/lib/playground/catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,10 @@ export function POST(request: Request) {
     const labSlug = form.get("labSlug");
     if (!(file instanceof File)) return fail("Nenhum arquivo recebido.", 400);
     if (typeof labSlug !== "string" || !labSlug) return fail("Lab não informado.", 400);
+
+    const lab = labs.find((item) => item.slug === labSlug);
+    if (!lab) return fail("Lab não encontrado.", 404);
+    if (lab.status !== "liberado") return fail("Este Lab ainda não foi liberado.", 409);
 
     if (file.size === 0) return fail("O arquivo está vazio.", 400);
     if (file.size > MAX_FILE_BYTES) {

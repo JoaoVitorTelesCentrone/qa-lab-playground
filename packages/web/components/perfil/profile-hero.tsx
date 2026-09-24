@@ -30,7 +30,7 @@ export function ProfileHero({ name, email, plan, role, bio, username, isPublic }
   }
 
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8">
+    <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8 md:p-10">
       <HeroGraphic />
       <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-7">
         <span

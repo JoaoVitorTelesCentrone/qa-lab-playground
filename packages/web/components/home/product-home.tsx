@@ -13,6 +13,7 @@ import { posts as blogPosts } from "@/lib/blog-posts";
 import { getRecentResearch } from "@/lib/research-library";
 import type { AppCoverage, Journey } from "@/lib/product/journey";
 import { trackHasReleasedLab, type TrackProgress } from "@/lib/product/tracks";
+import { CONTENT_ONLY_LAUNCH } from "@/lib/product/launch";
 
 const studySuggestion = blogPosts.find((post) => post.destaque) ?? blogPosts[0] ?? null;
 const referenceSuggestion = getRecentResearch(1)[0] ?? null;
@@ -29,6 +30,8 @@ const quickLinks = [
 ];
 
 export function ProductHome({ journey, tracks, signedIn, name }: { journey: Journey; tracks: TrackProgress[]; signedIn: boolean; name: string }) {
+  if (CONTENT_ONLY_LAUNCH) return <ContentLaunchHome />;
+
   // A trilha é o caminho recomendado; o Lab solto da jornada é o plano B para
   // quem já terminou o percurso curado.
   const track = tracks.find((item) => item.nextLab) ?? tracks[0] ?? null;
@@ -158,6 +161,45 @@ export function ProductHome({ journey, tracks, signedIn, name }: { journey: Jour
       <Button asChild variant="outline"><Link href="/labs">Ver Labs e desafios <ArrowRight className="size-4" /></Link></Button>
     </section>
     </>}
+  </div></div>;
+}
+
+function ContentLaunchHome() {
+  return <div className="qa-home"><div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-16">
+    <section className="qa-next-lab" aria-labelledby="home-title">
+      <p className="qa-watermark" aria-hidden="true">Qualidade se constrói com repertório.</p>
+      <div className="qa-next-content max-w-3xl">
+        <p className="qa-eyebrow">QA Lab</p>
+        <h1 id="home-title" className="mt-7 text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-6xl">
+          Conteúdo para quem constrói qualidade de software.
+        </h1>
+        <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+          Artigos práticos e uma biblioteca científica para investigar testes, estratégia, produto e engenharia de qualidade com mais profundidade.
+        </p>
+        <div className="mt-9 flex flex-wrap gap-3">
+          <Button asChild size="lg"><Link href="/blog">Explorar o Blog <ArrowRight className="size-4" /></Link></Button>
+          <Button asChild size="lg" variant="outline"><Link href="/pesquisa">Abrir a Biblioteca <Library className="size-4" /></Link></Button>
+        </div>
+      </div>
+    </section>
+
+    <section className="mt-12 grid gap-4 md:grid-cols-2" aria-label="Conteúdos em destaque">
+      {studySuggestion && <Link href={`/blog/${studySuggestion.slug}`} className="group rounded-2xl border border-border bg-card p-6 transition hover:border-primary/40 hover:bg-accent sm:p-8">
+        <BookOpen className="size-5 text-primary" />
+        <p className="mt-8 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">Artigo em destaque · {studySuggestion.tempoLeitura} min</p>
+        <h2 className="mt-3 text-2xl font-semibold leading-tight">{studySuggestion.titulo}</h2>
+        <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">{studySuggestion.resumo}</p>
+        <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary">Ler artigo <ArrowRight className="size-4 transition group-hover:translate-x-1" /></span>
+      </Link>}
+
+      {referenceSuggestion && <Link href="/pesquisa" className="group rounded-2xl border border-border bg-card p-6 transition hover:border-primary/40 hover:bg-accent sm:p-8">
+        <Library className="size-5 text-primary" />
+        <p className="mt-8 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">Biblioteca científica · {referenceSuggestion.year}</p>
+        <h2 className="mt-3 text-2xl font-semibold leading-tight">{referenceSuggestion.title}</h2>
+        <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">{referenceSuggestion.abstract}</p>
+        <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary">Ver referências <ArrowRight className="size-4 transition group-hover:translate-x-1" /></span>
+      </Link>}
+    </section>
   </div></div>;
 }
 

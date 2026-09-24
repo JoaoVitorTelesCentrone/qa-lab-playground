@@ -95,7 +95,7 @@ export function PortfolioSectionsEditor({ sections: initial, available }: { sect
   return (
     <section className="rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="secoes-title">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="max-w-2xl">
+        <div className="min-w-0 max-w-2xl flex-1">
           <h2 id="secoes-title" className="text-base font-semibold">Seções da página pública</h2>
           <p className="mt-1 text-sm leading-6 text-muted-foreground">
             Texto livre para o que a evidência não conta — formação, certificações, ferramentas. Aparecem na sua página pública, na ordem definida aqui, e só quando marcadas como visíveis.

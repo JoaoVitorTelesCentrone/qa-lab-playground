@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FlaskConical, ArrowLeft, Construction } from "lucide-react";
+import { BookOpen, Library, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
@@ -25,9 +25,9 @@ export default function NotFound() {
             Em breve.
           </h1>
           <p className="text-off-white/60 leading-relaxed">
-            Esta página não existe ou foi movida. Volte ao início ou comece pela{" "}
-            <Link href="/playground" className="text-mint hover:underline font-semibold">
-              prática no Playground
+            Esta página não está disponível nesta fase. Continue pelo{" "}
+            <Link href="/blog" className="text-mint hover:underline font-semibold">
+              conteúdo publicado
             </Link>.
           </p>
         </div>
@@ -35,15 +35,15 @@ export default function NotFound() {
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button asChild variant="outline" className="gap-2">
-            <Link href="/">
-              <ArrowLeft className="size-4" />
-              Voltar ao início
+            <Link href="/blog">
+              <BookOpen className="size-4" />
+              Abrir o Blog
             </Link>
           </Button>
           <Button asChild className="gap-2">
-            <Link href="/playground">
-              <FlaskConical className="size-4" />
-              Ir ao Playground
+            <Link href="/pesquisa">
+              <Library className="size-4" />
+              Abrir a Biblioteca
             </Link>
           </Button>
         </div>

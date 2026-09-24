@@ -11,15 +11,15 @@ const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], 
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app"),
-  title: { default: "QA Lab - Aprenda qualidade de software na pratica", template: "%s | QA Lab" },
-  description: "Um laboratorio para treinar QA de ponta a ponta: investigacao, design de testes, execucao, gestao de defeitos e competencias humanas em sistemas com falhas reais.",
+  title: { default: "QA Lab - Conteúdo sobre qualidade de software", template: "%s | QA Lab" },
+  description: "Artigos práticos e uma biblioteca científica sobre testes, estratégia, produto e engenharia de qualidade.",
   openGraph: {
-    title: "QA Lab - Aprenda qualidade de software na pratica",
-    description: "Da descoberta do risco ao defeito fechado. Pratique QA em sistemas quebrados de verdade.",
+    title: "QA Lab - Conteúdo sobre qualidade de software",
+    description: "Artigos práticos e uma biblioteca científica para quem constrói qualidade de software.",
     type: "website",
     locale: "pt_BR",
   },
-  twitter: { card: "summary_large_image", title: "QA Lab", description: "Aprenda qualidade de software praticando em sistemas quebrados de verdade." },
+  twitter: { card: "summary_large_image", title: "QA Lab", description: "Conteúdo prático e científico sobre qualidade de software." },
 };
 
 export const viewport: Viewport = { themeColor: "#111315", colorScheme: "dark" };

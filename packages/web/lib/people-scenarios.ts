@@ -1,4 +1,4 @@
-import type { PeopleScenarioCategory } from "./people-scenario-catalog";
+import { peopleScenarioCatalog, type PeopleScenarioCategory } from "./people-scenario-catalog";
 
 export type PeopleScenario = {
   id: string;
@@ -288,6 +288,140 @@ export function getDailyPeopleScenario(date = new Date()) {
   const dayIndex = Math.floor((today - start) / 86_400_000);
   const index = ((dayIndex % peopleScenarios.length) + peopleScenarios.length) % peopleScenarios.length;
   return peopleScenarios[index];
+}
+
+export function getPeopleCatalogId(scenarioId: string) {
+  return peopleScenarioCatalog.find((item) => scenarioId.endsWith(item.id))?.id ?? "";
+}
+
+const PEOPLE_CATEGORY_RUBRICS: Record<PeopleScenarioCategory, { considerations: [string, string, string]; competencies: string[] }> = {
+  "Acessibilidade e inclusão": {
+    considerations: ["Identifique quem pode ficar impedido de concluir a tarefa e em qual barreira.", "Inclua tecnologia assistiva, teclado e diferentes necessidades na investigação.", "Proponha uma correção verificável e valide com pessoas ou critérios de acessibilidade."],
+    competencies: ["Acessibilidade", "Inclusão", "Validação"],
+  },
+  "Automação e estratégia técnica": {
+    considerations: ["Relacione a automação ao risco que precisa reduzir.", "Escolha a camada mais rápida e confiável que prova o comportamento.", "Considere manutenção, dados de teste e sinais de instabilidade."],
+    competencies: ["Estratégia de automação", "Risco técnico", "Manutenibilidade"],
+  },
+  "CI/CD e confiabilidade do pipeline": {
+    considerations: ["Identifique em qual etapa o sinal de qualidade falhou ou ficou ausente.", "Separe falha real de instabilidade sem esconder risco com retries cegos.", "Defina um gate, responsável e próximo passo de recuperação."],
+    competencies: ["CI/CD", "Confiabilidade", "Quality gates"],
+  },
+  "Comunicação de bugs e riscos": {
+    considerations: ["Separe o que foi observado do que ainda é hipótese.", "Explique impacto e alcance com evidência, sem inflar ou minimizar severidade.", "Peça uma decisão ou ação concreta que permita avançar."],
+    competencies: ["Comunicação", "Evidência", "Risco"],
+  },
+  "Conflitos com desenvolvimento": {
+    considerations: ["Traga a conversa de volta ao comportamento observado e ao contexto.", "Evite atribuir culpa e explicite a regra ou decisão que falta.", "Combine quem decide, como registrar e como evitar regressão."],
+    competencies: ["Colaboração", "Resolução de conflitos", "Requisitos"],
+  },
+  "Cultura de segurança": {
+    considerations: ["Descreva a ameaça ou exposição e quem pode ser afetado.", "Evite ampliar acesso ou reproduzir risco fora do ambiente controlado.", "Acione o canal responsável e proponha contenção verificável."],
+    competencies: ["Segurança", "Contenção", "Reporte responsável"],
+  },
+  "Ética, privacidade e dados": {
+    considerations: ["Identifique os dados pessoais e a finalidade de uso.", "Prefira dados sintéticos ou minimizados e limite quem pode acessá-los.", "Registre a decisão e envolva privacidade ou segurança quando necessário."],
+    competencies: ["Privacidade", "Ética", "Governança de dados"],
+  },
+  "Feedback e liderança": {
+    considerations: ["Descreva comportamento e impacto sem rotular a pessoa.", "Ouça contexto e deixe espaço para resposta e discordância.", "Combine uma mudança observável e uma data para acompanhar."],
+    competencies: ["Feedback", "Liderança", "Acompanhamento"],
+  },
+  "Fornecedores, integrações e dependências": {
+    considerations: ["Mapeie a dependência e os limites de responsabilidade de cada parte.", "Defina contrato, evidência e comportamento esperado quando a dependência falha.", "Combine contingência, responsável e critério para retomar o fluxo."],
+    competencies: ["Integrações", "Gestão de dependências", "Resiliência"],
+  },
+  "Gestão da qualidade e métricas": {
+    considerations: ["Conecte a métrica a uma decisão concreta de qualidade.", "Verifique se a medida representa resultado e não apenas volume de atividade.", "Inclua contexto, limitações e uma ação diante do sinal observado."],
+    competencies: ["Métricas", "Governança", "Melhoria contínua"],
+  },
+  "Incidentes e crise": {
+    considerations: ["Priorize segurança das pessoas, contenção e impacto ao usuário.", "Separe fatos confirmados, hipóteses e lacunas durante a investigação.", "Defina comunicação, responsáveis e critério para declarar recuperação."],
+    competencies: ["Resposta a incidentes", "Investigação", "Comunicação sob pressão"],
+  },
+  "Inteligência artificial e uso responsável": {
+    considerations: ["Valide a saída contra fontes e critérios observáveis.", "Considere privacidade, viés e o impacto de uma resposta incorreta.", "Mantenha revisão humana e registre limites e decisão de uso."],
+    competencies: ["Avaliação de IA", "Ética", "Privacidade"],
+  },
+  "Mentoria, carreira e aprendizagem": {
+    considerations: ["Entenda a necessidade de aprendizagem antes de prescrever uma solução.", "Ofereça autonomia com um próximo passo pequeno e feedback específico.", "Combine como observar progresso sem transformar apoio em vigilância."],
+    competencies: ["Mentoria", "Aprendizagem", "Autonomia"],
+  },
+  "Performance, confiabilidade e operações": {
+    considerations: ["Defina uma medida observável ligada à experiência ou ao serviço.", "Reproduza sob condições controladas e compare com uma referência válida.", "Proponha mitigação e monitoramento para o risco residual."],
+    competencies: ["Performance", "Confiabilidade", "Operações"],
+  },
+  "Política organizacional e influência": {
+    considerations: ["Identifique interesses, incentivos e pessoas afetadas pela decisão.", "Use evidência e opções concretas em vez de disputa de posição.", "Registre quem decide, qual risco aceita e quando reavaliar."],
+    competencies: ["Influência", "Negociação", "Decisão"],
+  },
+  "Prazos, releases e negociação": {
+    considerations: ["Compare urgência, impacto, alcance e alternativas disponíveis.", "Apresente opções com risco residual explícito.", "Defina dono da decisão, mitigação e sinais para interromper ou reverter."],
+    competencies: ["Release", "Priorização", "Negociação"],
+  },
+  "Priorização e estimativa": {
+    considerations: ["Priorize pelo risco e valor, não apenas pela ordem de chegada.", "Explicite capacidade, dependências e o que ficará sem cobertura.", "Proponha uma sequência viável com critério para revisar a estimativa."],
+    competencies: ["Priorização", "Estimativa", "Gestão de risco"],
+  },
+  "Produto, requisitos e escopo": {
+    considerations: ["Identifique a regra, usuário ou resultado que está ambíguo.", "Faça perguntas que revelem limites, exceções e critérios de aceite.", "Registre uma decisão testável e o impacto de deixar a dúvida aberta."],
+    competencies: ["Requisitos", "Produto", "Testabilidade"],
+  },
+  "Trabalho ágil e cerimônias": {
+    considerations: ["Foque a conversa no objetivo e no fluxo de trabalho do time.", "Torne bloqueios e dependências acionáveis sem transformar cerimônia em cobrança.", "Combine responsável e acompanhamento fora da reunião quando necessário."],
+    competencies: ["Colaboração ágil", "Facilitação", "Fluxo"],
+  },
+  "Trabalho remoto e diversidade cultural": {
+    considerations: ["Não presuma concordância pelo silêncio ou por resposta tardia.", "Ofereça caminhos assíncronos e seguros para contribuir ou discordar.", "Registre a decisão e dê tempo e contexto para participação de todos os fusos."],
+    competencies: ["Comunicação assíncrona", "Inclusão", "Colaboração remota"],
+  },
+};
+
+export function getPeopleScenarioByCatalogId(catalogId: string): PeopleScenario | null {
+  const entry = peopleScenarioCatalog.find((item) => item.id === catalogId);
+  if (!entry) return null;
+
+  const authored = peopleScenarios.find((item) => item.id.endsWith(entry.id));
+  if (authored) return authored;
+  const rubric = PEOPLE_CATEGORY_RUBRICS[entry.category];
+
+  return {
+    id: `people-${entry.id}`,
+    category: entry.category,
+    level: entry.level,
+    title: entry.title,
+    context: entry.situation,
+    situation: entry.situation,
+    pressure: "Considere quem é afetado, o impacto possível e o que ainda precisa ser confirmado antes de decidir.",
+    question: `Como você conduziria esta situação de ${entry.category.toLowerCase()}? Explique sua decisão e o próximo passo.`,
+    considerations: rubric.considerations,
+    mentorNote: "Esta situação usa o resumo do catálogo e uma rubrica de autoavaliação para o tema. Compare sua resposta com os critérios; eles ajudam a estruturar o raciocínio, mas não são uma nota automática.",
+    competencies: rubric.competencies,
+  };
+}
+
+export function nextPeopleCatalogId(currentId: string, attempts: PeopleAttempt[], category?: PeopleScenarioCategory, level?: PeopleScenario["level"]) {
+  const eligible = peopleScenarioCatalog.filter((item) => (!category || item.category === category) && (!level || item.level === level));
+  if (!eligible.length) return currentId;
+
+  const attemptsByCatalogId = new Map<string, PeopleAttempt[]>();
+  for (const attempt of attempts) {
+    const id = getPeopleCatalogId(attempt.scenarioId);
+    const bucket = attemptsByCatalogId.get(id) ?? [];
+    bucket.push(attempt);
+    attemptsByCatalogId.set(id, bucket);
+  }
+
+  return [...eligible]
+    .filter((item) => item.id !== currentId)
+    .sort((a, b) => {
+      const aAttempts = attemptsByCatalogId.get(a.id) ?? [];
+      const bAttempts = attemptsByCatalogId.get(b.id) ?? [];
+      if (aAttempts.length !== bAttempts.length) return aAttempts.length - bAttempts.length;
+      const aLast = Math.max(0, ...aAttempts.map((attempt) => Date.parse(attempt.createdAt) || 0));
+      const bLast = Math.max(0, ...bAttempts.map((attempt) => Date.parse(attempt.createdAt) || 0));
+      return aLast - bLast || a.id.localeCompare(b.id);
+    })[0]?.id ?? currentId;
 }
 
 export function nextPeopleScenario(currentId: string | null, seenIds: string[], random = Math.random, filter: PeopleScenarioFilter = {}) {

@@ -13,10 +13,10 @@ import type { PeopleAttempt } from "@/lib/people-scenarios";
 const gridStagger = { hidden: {}, show: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } } };
 const cardItem = { hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0, transition: { type: "spring" as const, damping: 18, stiffness: 220 } } };
 
-export function CompetencyMap({ serverCicd = [], serverPeople = [] }: { serverCicd?: string[]; serverPeople?: PeopleAttempt[] }) {
-  const [competencies, setCompetencies] = useState<LearningCompetency[]>(() => buildLearningProgress(emptyDeliverables, serverPeople, serverCicd));
+export function CompetencyMap({ serverCicd = [], serverSecurity = [], serverPeople = [] }: { serverCicd?: string[]; serverSecurity?: string[]; serverPeople?: PeopleAttempt[] }) {
+  const [competencies, setCompetencies] = useState<LearningCompetency[]>(() => buildLearningProgress(emptyDeliverables, serverPeople, serverCicd, serverSecurity));
   const [loaded, setLoaded] = useState(false);
-  useEffect(() => { const timer = window.setTimeout(() => { setCompetencies(buildLearningProgress(parseDeliverables(localStorage.getItem(DELIVERABLES_KEY)), serverPeople, serverCicd)); setLoaded(true); }, 0); return () => window.clearTimeout(timer); }, [serverCicd, serverPeople]);
+  useEffect(() => { const timer = window.setTimeout(() => { setCompetencies(buildLearningProgress(parseDeliverables(localStorage.getItem(DELIVERABLES_KEY)), serverPeople, serverCicd, serverSecurity)); setLoaded(true); }, 0); return () => window.clearTimeout(timer); }, [serverCicd, serverSecurity, serverPeople]);
   const overall = Math.round(competencies.reduce((total, item) => total + item.score, 0) / competencies.length);
   const practiced = competencies.filter((item) => item.score > 0).length;
 

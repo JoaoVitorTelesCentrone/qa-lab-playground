@@ -32,12 +32,13 @@ import { roadmapEnvironments } from "@/lib/product/apps";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { CONTENT_ONLY_LAUNCH, LAUNCH_ENVIRONMENT } from "@/lib/product/launch";
 
 const LINKEDIN_URL = "https://www.linkedin.com/company/qa-lab-oficial/";
 
 const nav = [
-  { label: "Labs", href: "/labs" },
-  { label: "Trilhas", href: "/trilhas" },
+  // Labs e Trilhas voltam ao menu quando a fase editorial terminar.
+  { label: LAUNCH_ENVIRONMENT.label, href: LAUNCH_ENVIRONMENT.route },
   { label: "Blog", href: "/blog" },
   { label: "Referências", href: "/pesquisa" },
 ];
@@ -111,7 +112,7 @@ export function SiteHeader() {
 
         <NavigationMenu className="hidden lg:flex" viewport={false}>
           <NavigationMenuList className="gap-1">
-            <NavigationMenuItem>
+            {!CONTENT_ONLY_LAUNCH && <NavigationMenuItem>
               <NavigationMenuTrigger className={cn("h-auto rounded-full bg-transparent px-4 py-2 text-sm font-medium transition-colors", appsActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
                 Ambientes
               </NavigationMenuTrigger>
@@ -142,7 +143,7 @@ export function SiteHeader() {
                   ))}
                 </ul>
               </NavigationMenuContent>
-            </NavigationMenuItem>
+            </NavigationMenuItem>}
 
             {nav.map((item) => (
               <NavigationMenuItem key={item.href}>
@@ -169,7 +170,7 @@ export function SiteHeader() {
 
           {/* Só renderiza depois de saber a sessão: mostrar "Criar conta" para
               quem já está logado, mesmo que por um instante, é pior que esperar. */}
-          {signedIn !== null && (signedIn
+          {!CONTENT_ONLY_LAUNCH && signedIn !== null && (signedIn
             ? <Button asChild variant="outline" size="sm" className="hidden max-w-44 rounded-full sm:inline-flex"><Link href="/perfil"><User className="size-4" /> <span className="truncate">{name ? firstName(name) : "Perfil"}</span></Link></Button>
             : <Button asChild size="sm" className="hidden rounded-full px-5 font-semibold sm:inline-flex"><Link href="/cadastro">Criar conta</Link></Button>)}
 
@@ -184,7 +185,7 @@ export function SiteHeader() {
               </SheetTitle>
 
               <div className="flex flex-col gap-4">
-                <Accordion type="single" collapsible className="w-full">
+                {!CONTENT_ONLY_LAUNCH && <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="ambientes" className="border-none">
                     <AccordionTrigger className="justify-between py-0 text-base font-medium hover:no-underline">Ambientes</AccordionTrigger>
                     <AccordionContent className="mt-1 ml-2 max-h-[60vh] overflow-y-auto border-l border-border pb-0 pl-4">
@@ -203,7 +204,7 @@ export function SiteHeader() {
                       </div>
                     </AccordionContent>
                   </AccordionItem>
-                </Accordion>
+                </Accordion>}
 
                 {nav.map((item) => (
                   <Link key={item.href} href={item.href} className={cn("text-base font-medium transition", isActive(pathname, item.href) ? "text-primary" : "hover:text-primary")}>
@@ -213,7 +214,7 @@ export function SiteHeader() {
               </div>
 
               <div className="mt-auto flex flex-col gap-2">
-                {signedIn !== null && (
+                {!CONTENT_ONLY_LAUNCH && signedIn !== null && (
                   <Button asChild className="w-full rounded-full" variant={signedIn ? "outline" : "default"}>
                     <Link href={signedIn ? "/perfil" : "/cadastro"}><span className="truncate">{signedIn ? (name ?? "Meu perfil") : "Criar conta"}</span></Link>
                   </Button>

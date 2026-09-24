@@ -22,6 +22,7 @@ import {
   Plus,
   Route,
   SearchCode,
+  ShieldCheck,
   Sparkles,
   Target,
   TestTube2,
@@ -64,6 +65,7 @@ type LabModule = {
 };
 
 const labModules = [
+  { id: "security", title: "Security Lab", description: "Pratique decisões de segurança em cenários simulados e autorizados.", href: "/lab/seguranca", icon: ShieldCheck, tone: "blue", status: "Sandbox", category: "Entrega e automacao", outcome: "Decisão segura" },
   { id: "refinement", title: "Refinement Lab", description: "Avalie, edite e melhore PBIs e bugs mal escritos em formato de cards.", href: "/lab/refinamento", icon: Filter, tone: "neon", status: "Real lab", category: "Produto e requisitos", outcome: "Clareza de demanda" },
   { id: "criteria", title: "Acceptance Criteria Lab", description: "Transforme PBIs vagos em criterios testaveis, exemplos e perguntas abertas.", href: "/lab/criterios", icon: ListChecks, tone: "blue", status: "Real lab", category: "Produto e requisitos", outcome: "Criterios testaveis" },
   { id: "stories", title: "Historias", description: "Organize historias, criterios e fluxo de trabalho em um board de produto.", href: "/lab/historias", icon: Route, tone: "blue", status: "Board", category: "Produto e requisitos", outcome: "Fluxo de produto" },

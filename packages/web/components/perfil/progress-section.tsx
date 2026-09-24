@@ -17,7 +17,7 @@ function Bar({ percent, label }: { percent: number; label: string }) {
 
 export function ProgressSection({ tracks, coverage }: { tracks: TrackProgress[]; coverage: AppCoverage[] }) {
   return (
-    <div className="grid gap-4">
+    <div className="grid min-w-0 gap-4">
       <section className="rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="progresso-title">
         <div className="flex items-center gap-2.5">
           <Route className="size-4 text-primary" aria-hidden="true" />
@@ -61,12 +61,12 @@ export function ProgressSection({ tracks, coverage }: { tracks: TrackProgress[];
         {coverage.length === 0 ? (
           <p className="mt-4 text-sm text-muted-foreground">Nenhum ambiente de prática liberado ainda.</p>
         ) : (
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+          <ul className="mt-4 grid min-w-0 gap-3 sm:grid-cols-2">
             {coverage.map((item) => (
-              <li key={item.id}>
+              <li key={item.id} className="min-w-0">
                 <Link
                   href={item.route}
-                  className="block rounded-lg border border-border bg-background/40 p-4 transition hover:border-primary/40"
+                  className="block min-w-0 rounded-lg border border-border bg-background/40 p-4 transition hover:border-primary/40"
                 >
                   <div className="flex items-center justify-between gap-3 text-sm">
                     <span className="truncate font-medium">{item.name}</span>

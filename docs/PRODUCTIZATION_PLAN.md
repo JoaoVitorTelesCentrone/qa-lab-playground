@@ -70,9 +70,12 @@ Os apps são ambientes que o aluno testa. Os Labs são missões sobre esses ambi
 
 ## 5. Fases de entrega
 
-> **Estado em 2026-08-15:** Fases 0 a 4 implementadas, mais uma trilha por
-> ambiente (extensão da Fase 2 para os apps da Fase 3). O que falta para o plano
-> estar de fato entregue está em **Pendências** ao final deste documento.
+> **Estado em 2026-09-23:** as fases 0 a 4 têm implementação no repositório,
+> incluindo quatro ambientes de prática, trilhas, evidências, portfólio, packs
+> de regressão e métricas. O catálogo público está em lançamento enxuto, com
+> três Labs de Finanças liberados. Implementação local não confirma migrações,
+> configuração ou validação em produção; os gates restantes estão em
+> **Pendências**.
 
 ### Fase 0 — Reorganização (1 semana)
 
@@ -162,21 +165,23 @@ alunos, usado pelos Labs de API.
 
 ## 9. Pendências
 
-1. **Aplicar as migrações no Supabase**, na ordem: `0004_product_core.sql`,
-   `0005_submission_checklist.sql`, `0006_practice_data.sql`,
-   `0007_qa_lab_state.sql`, `0008_portfolio.sql`, `0009_certificates.sql`,
-   `0010_profile_links.sql` (GitHub no perfil),
-   `0014_billing_mercado_pago.sql` (cobrança) e
-   `0015_roadmap_attempts.sql` (tentativas dos desafios autorais). São aplicadas à mão pelo SQL
-   Editor (não há CLI configurada) e todas são idempotentes. Sem elas o produto
-   abre, mas nada persiste: cada leitura cai no fallback vazio de propósito,
-   para a home não quebrar.
-2. **Validar o caminho autenticado ponta a ponta** depois das migrações. Só o
-   comportamento deslogado foi exercitado rodando o app.
-3. **Auditoria de alterações** nos três ambientes novos: hoje o cenário 31 de
-   cada pack existe para o aluno *provar a ausência* de trilha. Se virar
-   requisito, precisa de tabela própria.
-4. **Acessibilidade e responsividade** foram construídas com rótulo
-   programático, `aria-live`, `aria-invalid` associado ao campo, alvo de
-   teclado na grade de horários e tabela com rolagem própria — mas não foram
-   validadas com leitor de tela real nem em dispositivo físico.
+1. **Conferir as migrações no projeto Supabase de produção.** O repositório tem
+   migrations de produto, cobrança, tentativas, board e Test Suite até `0022`.
+   Comparar o histórico remoto com `packages/web/supabase/migrations` e aplicar
+   somente as que faltarem, na ordem. A integração de Supabase disponível nesta
+   sessão não tem permissão para consultar o projeto configurado no ambiente do
+   app; o histórico remoto ainda precisa ser conferido nesse projeto.
+2. **Validar os fluxos autenticados e de cobrança em ambiente de staging.**
+   Cobrir cadastro/login, jornada, upload privado, portfólio e webhook do
+   Mercado Pago; a resposta de retorno do checkout não concede acesso.
+3. **Validar acessibilidade e responsividade com tecnologia assistiva e
+   dispositivos reais.** O código inclui rótulos, anúncios de estado e
+   navegação por teclado, mas isso não substitui a validação prática.
+4. **Decidir a expansão do lançamento.** O registry tem mais desafios, mas só
+   três entram hoje na vitrine. Publicar cada novo Lab requer liberar sua
+   posição e conferir que o ambiente e os critérios de evidência estão prontos.
+
+Auditoria de alterações dos três ambientes de prática não é requisito do MVP
+atual: o cenário 31 dos packs foi escrito para o aluno validar justamente a
+ausência dessa trilha. Se auditoria de produto virar requisito, deve entrar
+como escopo explícito com retenção e permissões definidas.

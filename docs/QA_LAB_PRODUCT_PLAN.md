@@ -257,9 +257,36 @@ Evitar usar apenas quantidade de cliques, páginas visitadas ou pontos acumulado
 
 ## Ordem recomendada
 
-1. Consolidar People Lab e modelo educacional compartilhado.
-2. Construir CI/CD Lab por ser técnico, visual e altamente demonstrável.
-3. Converter Gestão da Qualidade de ferramenta para aprendizagem guiada.
-4. Construir Security Lab com ambientes seguros.
-5. Conectar tudo em desafios integradores.
+1. Avaliar qualidade das respostas e emitir relatório de competências no People Lab.
+2. Encadear Refinement, Critérios, Triagem, Logs, Test Design Studio e Execution Hub numa trilha de Gestão da Qualidade avaliada.
+3. Ampliar Security Lab com aplicações vulneráveis isoladas, evidências e reporte responsável.
+4. Conectar as cinco trilhas em desafios integradores de release e resposta a incidentes.
+5. Validar migrações, autenticação, cobrança e acessibilidade no ambiente de produção antes de expandir o catálogo público.
 
+## Estado de implementação em 2026-09-23
+
+- O núcleo do Playground, submissão de evidência, jornada, mapa de competências,
+  portfólio e trilhas por ambiente já existem no produto.
+- CI/CD Lab está implementado como trilha de dez módulos com missões, avaliação
+  determinística e relatório de confiabilidade.
+- People Lab já permite explorar as duzentas situações por tema e nível e sugere
+  primeiro as menos praticadas. Vinte situações têm contexto, pressão e revisão
+  de mentor específicos; as outras 180 usam o resumo disponível e rubricas de
+  autoavaliação específicas por tema. A tela mostra cobertura de temas
+  praticados, sem confundir frequência com domínio. Ainda falta gerar o
+  relatório de competências humanas com avaliação da qualidade das respostas.
+- Refinement, Critérios, Triagem, investigação de logs, Test Design Studio e
+  Execution Hub estão disponíveis como ferramentas/labs. Ainda falta encadeá-los
+  numa trilha única de Gestão da Qualidade com entrega final avaliada.
+- O Security Lab local agora oferece dez missões de decisão em cenários
+  simulados, com feedback e persistência de progresso para usuários autenticados;
+  o mapa de competências já contabiliza essa prática. Ainda faltam aplicações
+  vulneráveis isoladas para exercícios técnicos mão na massa, avaliação de
+  evidências e fluxo de reporte responsável.
+- Há um ciclo integrador no plano de evolução, mas os cenários completos de
+  release crítica e incidente em produção descritos acima ainda não conectam as
+  cinco trilhas num único desafio.
+
+O estado do catálogo público é menor que o conteúdo existente: três Labs de
+Finanças estão liberados; os demais desafios ficam fora da vitrine até a decisão
+de expansão registrada em `QA_LAB_DECISIONS.md`.

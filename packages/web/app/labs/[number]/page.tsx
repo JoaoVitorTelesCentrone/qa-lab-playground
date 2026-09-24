@@ -4,6 +4,8 @@ import { systemChallenges } from "@/lib/system-challenges";
 import { getJourney, getLabState, getSessionUser } from "@/lib/product/store";
 import { buildTrackProgress, trackForLab } from "@/lib/product/tracks";
 import { emptyJourney } from "@/lib/product/journey";
+import { findLabByNumber } from "@/lib/playground/catalog";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 export function generateStaticParams() { return systemChallenges.map((challenge) => ({ number: String(challenge.number) })); }
@@ -12,6 +14,11 @@ export default async function LabPage({ params }: { params: Promise<{ number: st
   const { number } = await params;
   const challenge = systemChallenges.find((item) => item.number === Number(number));
   if (!challenge) notFound();
+
+  const lab = findLabByNumber(challenge.number);
+  if (!lab || lab.status !== "liberado") {
+    redirect(`/waitlist?lab=${encodeURIComponent(challenge.id)}`);
+  }
 
   const user = await getSessionUser();
   const [state, journey] = user

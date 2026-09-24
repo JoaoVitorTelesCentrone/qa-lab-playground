@@ -53,7 +53,7 @@ export function PublicPortfolioCard({ portfolio, username, onUsername, name }: {
   }
 
   return (
-    <section className="rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="portfolio-title">
+    <section className="min-w-0 rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="portfolio-title">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 id="portfolio-title" className="text-base font-semibold">Portfólio público</h2>
         <Badge variant={isPublic ? "default" : "ghost"} className={isPublic ? "font-medium" : "border-border font-medium"}>
@@ -128,7 +128,7 @@ export function PublicPortfolioCard({ portfolio, username, onUsername, name }: {
           </Button>
         )}
         {items.length > 0 && (
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid min-w-0 grid-cols-2 gap-2">
             <Button type="button" variant="outline" size="sm" onClick={() => download("evidencias-qa-lab.md", toMarkdown(entries, { name }), "text/markdown;charset=utf-8")}>
               <Download className="size-3.5" /> Markdown
             </Button>

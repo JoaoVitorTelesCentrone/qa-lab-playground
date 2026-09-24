@@ -38,7 +38,7 @@ export function AccountForm({ email, fields, onChange, state, onSubmit }: {
       </div>
 
       <form onSubmit={onSubmit} className="mt-5 grid gap-4">
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid min-w-0 gap-4 md:grid-cols-2">
           <Field label="Nome" htmlFor="conta-nome">
             <input id="conta-nome" value={fields.fullName} onChange={(e) => onChange("fullName", e.target.value)} maxLength={80} className="field w-full" />
           </Field>
@@ -58,7 +58,7 @@ export function AccountForm({ email, fields, onChange, state, onSubmit }: {
         </Field>
 
         {/* LinkedIn e GitHub aparecem lado a lado no topo do portfólio público. */}
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid min-w-0 gap-4 md:grid-cols-2">
           <Field label="LinkedIn" htmlFor="conta-linkedin">
             <input id="conta-linkedin" value={fields.linkedin} onChange={(e) => onChange("linkedin", e.target.value)} placeholder="linkedin.com/in/seu-perfil" className="field w-full" />
           </Field>

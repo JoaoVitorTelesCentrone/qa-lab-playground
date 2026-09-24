@@ -7,7 +7,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { SaveGate } from "@/components/lab/save-gate";
 import { savePeopleAttempt } from "./actions";
-import { getDailyPeopleScenario, type PeopleAttempt, type PeopleScenario } from "@/lib/people-scenarios";
+import { getDailyPeopleScenario, getPeopleCatalogId, getPeopleScenarioByCatalogId, nextPeopleCatalogId, type PeopleAttempt, type PeopleScenario } from "@/lib/people-scenarios";
+import { peopleScenarioCatalog, type PeopleScenarioCategory } from "@/lib/people-scenario-catalog";
 
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.05, delayChildren: 0.1 } } };
 const chip = { hidden: { opacity: 0, y: 8, scale: 0.9 }, show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring" as const, damping: 16, stiffness: 260 } } };
@@ -17,12 +18,43 @@ function todayKey() {
 }
 
 export function PeopleLab({ initialAttempts = [], authed = false }: { initialAttempts?: PeopleAttempt[]; authed?: boolean }) {
-  const scenario: PeopleScenario = getDailyPeopleScenario();
+  const [category, setCategory] = useState<PeopleScenarioCategory | "all">("all");
+  const [level, setLevel] = useState<PeopleScenario["level"] | "all">("all");
+  const [catalogId, setCatalogId] = useState<string>(() => getPeopleCatalogId(getDailyPeopleScenario().id));
+  const scenario = getPeopleScenarioByCatalogId(catalogId) ?? getDailyPeopleScenario();
   const [attempts, setAttempts] = useState<PeopleAttempt[]>(initialAttempts);
   const [response, setResponse] = useState("");
   const [revealed, setRevealed] = useState(false);
   const [reflections, setReflections] = useState<string[]>([]);
   const [showGate, setShowGate] = useState(false);
+
+  const categories = [...new Set(peopleScenarioCatalog.map((item) => item.category))];
+  const filteredScenarios = peopleScenarioCatalog.filter((item) => (category === "all" || item.category === category) && (level === "all" || item.level === level));
+  const attemptsByCategory = new Map<PeopleScenarioCategory, number>();
+  for (const attempt of attempts) {
+    const scenarioCategory = peopleScenarioCatalog.find((item) => item.id === getPeopleCatalogId(attempt.scenarioId))?.category;
+    if (scenarioCategory) attemptsByCategory.set(scenarioCategory, (attemptsByCategory.get(scenarioCategory) ?? 0) + 1);
+  }
+
+  function chooseScenario(nextId: string) {
+    setCatalogId(nextId);
+    setResponse("");
+    setRevealed(false);
+    setReflections([]);
+    setShowGate(false);
+  }
+
+  function updateFilters(nextCategory: PeopleScenarioCategory | "all", nextLevel: PeopleScenario["level"] | "all") {
+    setCategory(nextCategory);
+    setLevel(nextLevel);
+    const nextOptions = peopleScenarioCatalog.filter((item) => (nextCategory === "all" || item.category === nextCategory) && (nextLevel === "all" || item.level === nextLevel));
+    if (!nextOptions.some((item) => item.id === catalogId)) chooseScenario(nextOptions[0]?.id ?? catalogId);
+  }
+
+  function chooseNextScenario() {
+    const nextId = nextPeopleCatalogId(catalogId, attempts, category === "all" ? undefined : category, level === "all" ? undefined : level);
+    chooseScenario(nextId);
+  }
 
   useEffect(() => {
     const todaysAttempt = initialAttempts.find((item) => item.scenarioId === scenario.id && item.createdAt.startsWith(todayKey()));
@@ -58,16 +90,39 @@ export function PeopleLab({ initialAttempts = [], authed = false }: { initialAtt
           <p className="text-xs font-bold uppercase tracking-[.2em] text-[#9BC0F5]">People Lab · situação do dia</p>
           <TextAnimate text="O que você faria hoje?" type="whipInUp" className="mt-3 flex-wrap text-4xl font-black text-off-white sm:text-5xl" />
           <p className="mt-4 max-w-3xl text-base leading-8 text-[#AAB2BC]">
-            Uma situação realista por dia para treinar comunicação, negociação, postura profissional e decisão em cenários que um QA encontra no trabalho.
+            Explore situações de comunicação, negociação, estratégia e decisão que aparecem no trabalho de QA. Escolha um tema ou siga a próxima sugestão.
           </p>
         </div>
 
         <div className="rounded-xl border border-[#7BA7E8]/25 bg-[#7BA7E8]/[.06] px-5 py-4">
           <CalendarDays className="size-5 text-[#9BC0F5]" />
-          <p className="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-[#9BC0F5]">Disponível hoje</p>
-          <p className="mt-1 text-sm leading-6 text-[#AAB2BC]">A próxima situação entra amanhã.</p>
+          <p className="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-[#9BC0F5]">Prática adaptativa</p>
+          <p className="mt-1 text-sm leading-6 text-[#AAB2BC]">A sugestão prioriza temas ainda não praticados e situações revisitadas há mais tempo.</p>
         </div>
       </header>
+
+      <section aria-label="Explorar situações" className="mt-8 grid gap-3 rounded-2xl border border-white/10 bg-[#171B21] p-4 sm:grid-cols-[1fr_1fr_2fr_auto] sm:items-end">
+        <label className="grid gap-2 text-xs font-bold text-[#AAB2BC]">Tema
+          <select value={category} onChange={(event) => updateFilters(event.target.value as PeopleScenarioCategory | "all", level)} className="field">
+            <option value="all">Todos os temas</option>
+            {categories.map((item) => <option key={item} value={item}>{item}</option>)}
+          </select>
+        </label>
+        <label className="grid gap-2 text-xs font-bold text-[#AAB2BC]">Nível
+          <select value={level} onChange={(event) => updateFilters(category, event.target.value as PeopleScenario["level"] | "all")} className="field">
+            <option value="all">Todos os níveis</option>
+            <option value="Iniciante">Iniciante</option>
+            <option value="Intermediário">Intermediário</option>
+            <option value="Avançado">Avançado</option>
+          </select>
+        </label>
+        <label className="grid gap-2 text-xs font-bold text-[#AAB2BC]">Situação · {filteredScenarios.length} disponíveis
+          <select value={catalogId} onChange={(event) => chooseScenario(event.target.value)} className="field">
+            {filteredScenarios.map((item) => <option key={item.id} value={item.id}>{item.id} · {item.title}</option>)}
+          </select>
+        </label>
+        <button type="button" onClick={chooseNextScenario} disabled={filteredScenarios.length < 2} className="h-10 rounded-lg border border-[#7BA7E8]/30 px-3 text-xs font-bold text-[#9BC0F5] disabled:opacity-40">Próxima sugerida</button>
+      </section>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
         <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: "easeOut" }} className="overflow-hidden rounded-3xl border border-[#7BA7E8]/25 bg-[#151A20]">
@@ -107,7 +162,7 @@ export function PeopleLab({ initialAttempts = [], authed = false }: { initialAtt
                     />
                   </label>
                   <div className="mt-2 flex justify-between text-[10px] text-[#69737E]">
-                    <span>Mínimo de 120 caracteres</span>
+                    <span>Mínimo de 120 caracteres · revisão por autoavaliação</span>
                     <span>{response.length}</span>
                   </div>
                   <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.96 }} className="mt-4 inline-flex h-11 items-center gap-2 rounded-lg bg-neon px-5 text-sm font-black text-[#101319]">
@@ -143,12 +198,23 @@ export function PeopleLab({ initialAttempts = [], authed = false }: { initialAtt
                 <div key={`${attempt.scenarioId}-${attempt.createdAt}`} className="flex gap-2 text-xs">
                   <CheckCircle2 className="size-3.5 shrink-0 text-neon" />
                   <div>
-                    <p className="font-bold text-[#AAB2BC]">{attempt.scenarioId === scenario.id ? scenario.title : "Situação anterior"}</p>
+                    <p className="font-bold text-[#AAB2BC]">{getPeopleScenarioByCatalogId(getPeopleCatalogId(attempt.scenarioId))?.title ?? "Situação anterior"}</p>
                     <time className="text-[10px] text-[#69737E]">{new Date(attempt.createdAt).toLocaleDateString("pt-BR")}</time>
                   </div>
                 </div>
               ))}
               {!attempts.length && <p className="text-xs leading-5 text-[#69737E]">Sua resposta de hoje aparecerá aqui depois da revisão.</p>}
+            </div>
+          </section>
+
+          <section className="rounded-2xl border border-white/10 bg-[#171B21] p-5">
+            <h2 className="font-black text-off-white">Temas praticados</h2>
+            <p className="mt-1 text-xs leading-5 text-[#69737E]">Cobertura de situações respondidas; não é uma nota de competência.</p>
+            <div className="mt-4 space-y-2">
+              {categories.map((item) => <div key={item} className="flex items-center justify-between gap-3 text-xs">
+                <span className="truncate text-[#AAB2BC]">{item}</span>
+                <span className="shrink-0 font-mono text-[#9BC0F5]">{attemptsByCategory.get(item) ?? 0}</span>
+              </div>)}
             </div>
           </section>
         </aside>
@@ -176,7 +242,7 @@ function Review({ scenario, reflections, toggle }: { scenario: PeopleScenario; r
           ))}
         </div>
       </div>
-      <p className="mt-4 text-xs leading-6 text-[#69737E]">Você já concluiu a situação de hoje. Volte amanhã para um novo caso.</p>
+      <p className="mt-4 text-xs leading-6 text-[#69737E]">Revise os critérios e escolha outra situação quando quiser continuar.</p>
     </div>
   );
 }

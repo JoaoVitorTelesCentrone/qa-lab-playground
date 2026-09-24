@@ -86,7 +86,7 @@ export function ProfileClient({ email, profile, journey, tracks, submissions, se
   }
 
   return (
-    <div className="mx-auto grid max-w-[1200px] gap-4 px-5 py-8 sm:px-8 sm:gap-5 lg:py-10">
+    <div className="mx-auto grid w-full max-w-[1200px] gap-4 px-5 py-8 sm:px-8 sm:gap-5 lg:py-10">
       <ProfileHero
         name={fields.fullName}
         email={email}
@@ -99,7 +99,7 @@ export function ProfileClient({ email, profile, journey, tracks, submissions, se
 
       <ProfileStats journey={journey} />
 
-      <div className="grid items-start gap-4 sm:gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="grid min-w-0 items-start gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <ProgressSection tracks={tracks} coverage={journey.coverage} />
         <PublicPortfolioCard
           portfolio={portfolio}

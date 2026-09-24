@@ -12,14 +12,14 @@ export function ProfileStats({ journey }: { journey: Journey }) {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
       {stats.map(({ icon: Icon, value, label }) => (
-        <div key={label} className="rounded-xl border border-border bg-card p-4 sm:p-5">
+        <div key={label} className="min-w-0 rounded-xl border border-border bg-card p-4 sm:p-5">
           <span className="flex size-9 items-center justify-center rounded-lg bg-primary/10">
             <Icon className="size-4 text-primary" aria-hidden="true" />
           </span>
           <p className="mt-4 text-3xl font-bold tracking-[-0.03em] tabular-nums">{value}</p>
-          <p className="mt-1 text-xs text-muted-foreground">{label}</p>
+          <p className="mt-1 break-words text-xs text-muted-foreground">{label}</p>
         </div>
       ))}
     </div>

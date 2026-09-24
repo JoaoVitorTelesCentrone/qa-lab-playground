@@ -33,11 +33,11 @@ export function EvidenceList({ portfolio }: { portfolio: Portfolio }) {
           <Button asChild size="sm" variant="outline" className="mt-4"><Link href="/labs">Escolher um Lab</Link></Button>
         </div>
       ) : (
-        <ul className="mt-4 divide-y divide-border">
+        <ul className="mt-4 min-w-0 divide-y divide-border">
           {items.map((item) => {
             const lab = labs.find((candidate) => candidate.slug === item.labSlug);
             return (
-              <li key={item.id} className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+              <li key={item.id} className="flex min-w-0 flex-col gap-3 py-4 first:pt-0 last:pb-0 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
                 {/* Miniatura sem quebrar a densidade da linha: só a primeira
                     imagem, para o aluno reconhecer a entrega de relance. */}
                 <Thumb item={item} />

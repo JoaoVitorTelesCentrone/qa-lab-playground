@@ -1,7 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { VIEW_ONLY_LAUNCH } from "@/lib/product/launch";
 
 export async function GET(request: Request) {
+  if (VIEW_ONLY_LAUNCH) {
+    return NextResponse.json({ error: "Autenticação indisponível durante o lançamento editorial." }, { status: 404 });
+  }
+
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const requestedNext = searchParams.get("next") ?? "/lab";
