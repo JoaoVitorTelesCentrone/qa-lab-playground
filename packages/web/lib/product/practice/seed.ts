@@ -16,12 +16,22 @@ export const seedRows: Record<string, Array<Record<string, unknown>>> = {
     { name: "Carteira", kind: "carteira", balance: 180 },
   ],
   "financas.transactions": [
-    { description: "Salário", amount: 6800, kind: "receita", category: "Trabalho", date: "2026-08-05", recurring: true },
-    { description: "Aluguel", amount: 1850, kind: "despesa", category: "Moradia", date: "2026-08-08", recurring: true },
-    { description: "Mercado", amount: 430.9, kind: "despesa", category: "Alimentação", date: "2026-08-10", recurring: false },
-    { description: "Internet", amount: 129.9, kind: "despesa", category: "Moradia", date: "2026-08-12", recurring: true },
-    { description: "Freelance", amount: 1200, kind: "receita", category: "Trabalho", date: "2026-08-14", recurring: false },
-    { description: "Farmácia", amount: 87.4, kind: "despesa", category: "Saúde", date: "2026-08-15", recurring: false },
+    // Lab 101: período fechado de janeiro/2024. Os quatro achados fazem parte
+    // da massa, não de uma explicação escondida: o aluno os vê e os comprova.
+    // A soma crua dá R$ 1.530,00; após deduplicar #011, excluir #009, corrigir
+    // #007 e rejeitar #012, o saldo correto é R$ 1.730,00.
+    { description: "#001 · Salário", amount: 3000, kind: "receita", category: "Trabalho", date: "2024-01-02", recurring: true },
+    { description: "#002 · Aluguel", amount: 1200, kind: "despesa", category: "Moradia", date: "2024-01-03", recurring: true },
+    { description: "#003 · Freelance", amount: 700, kind: "receita", category: "Trabalho", date: "2024-01-05", recurring: false },
+    { description: "#004 · Consultoria", amount: 200, kind: "despesa", category: "Serviços", date: "2024-01-08", recurring: false },
+    { description: "#005 · Mercado", amount: 300, kind: "despesa", category: "Alimentação", date: "2024-01-10", recurring: false },
+    { description: "#006 · Internet", amount: 100, kind: "despesa", category: "Moradia", date: "2024-01-12", recurring: true },
+    { description: "#007 · Manutenção do carro", amount: 150, kind: "receita", category: "Transporte", date: "2024-01-15", recurring: false },
+    { description: "#008 · Energia", amount: 200, kind: "despesa", category: "Utilidades", date: "2024-01-18", recurring: false },
+    { description: "#009 · Seguro", amount: 250, kind: "despesa", category: "Transporte", date: "2024-02-01", recurring: false },
+    { description: "#010 · Venda de material", amount: 180, kind: "receita", category: "Outros", date: "2024-01-22", recurring: false },
+    { description: "#011 · Consultoria", amount: 200, kind: "despesa", category: "Serviços", date: "2024-01-08", recurring: false },
+    { description: "#012 · Reembolso", amount: -50, kind: "receita", category: "Outros", date: "2024-01-29", recurring: false },
   ],
   "financas.budgets": [
     { category: "Moradia", limit_amount: 2200 },

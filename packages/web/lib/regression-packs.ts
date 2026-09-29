@@ -185,7 +185,7 @@ const qaLab: Draft[] = [
   { title: "Smoke final", layer: "Regressão", precondition: "Sessão nova.", steps: ["Percorra catálogo, carrinho, cupom, frete e checkout.", "Conclua o pedido e abra o detalhe dele.", "Confira o total em cada tela do caminho."], expected: "O valor cobrado é o mesmo do carrinho, do resumo e do detalhe do pedido, sem divergência em nenhum passo.", at: "/shop/checkout", bugId: "qa-lab.wrong-total" },
 ];
 
-const drafts: Record<PracticeAppId, Draft[]> = { "qa-lab": qaLab, financas, agendamentos, crm };
+const drafts: Record<PracticeAppId, Draft[]> = { "qa-lab": qaLab, financas, agendamentos, crm, expenseflow: [] };
 
 export const regressionPacks = practiceApps.map((app) => ({
   ...app,
@@ -213,5 +213,12 @@ export function findRegressionPack(appId: string) {
 
 /** Cenários que costumam pegar um desvio plantado. Usado no modo instrutor. */
 export function scenariosForBug(bugId: string) {
-  return regressionPacks.flatMap((pack) => pack.scenarios.filter((scenario) => scenario.bugId === bugId).map((scenario) => ({ pack, scenario })));
+  return regressionPacks.flatMap((pack) => pack.scenarios.filter((scenario) => {
+    if (scenario.bugId === bugId) return true;
+    // Finanças mantém o recorte de 20 cenários. Dois desvios de limite usam
+    // cenários existentes, sem inflar ou quebrar a ordem da matriz.
+    if (pack.id !== "financas") return false;
+    return (scenario.title === "Valor limite" && bugId === "financas.receita-negativa")
+      || (scenario.title === "Smoke final" && bugId === "financas.meta-supera-limite");
+  }).map((scenario) => ({ pack, scenario })));
 }

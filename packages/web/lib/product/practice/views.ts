@@ -47,9 +47,12 @@ export function financeSummary(
   };
 }
 
-export function goalProgress(goal: Goal) {
+export function goalProgress(goal: Goal, activeBugs: string[] = []) {
   const target = Number(goal.target_amount);
   const saved = Number(goal.saved_amount);
+  if (activeBugs.includes("financas.meta-supera-limite")) {
+    return { percent: target <= 0 ? 0 : Math.round((saved / target) * 100), remaining: target - saved, reached: saved >= target && target > 0 };
+  }
   const percent = target <= 0 ? 0 : Math.min(100, Math.round((saved / target) * 100));
   return { percent, remaining: Math.max(0, target - saved), reached: saved >= target && target > 0 };
 }

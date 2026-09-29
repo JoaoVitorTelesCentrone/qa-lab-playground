@@ -216,7 +216,7 @@ const timeFormat = /^\d{2}:\d{2}$/;
  * o que veio; fora dele, campo obrigatório ausente é erro. Campos fora do
  * registro são ignorados — o cliente não escolhe o que grava.
  */
-export function parseRecord(resource: PracticeResource, body: Record<string, unknown>, { partial = false } = {}): ParseResult {
+export function parseRecord(resource: PracticeResource, body: Record<string, unknown>, { partial = false, allowNegativeFinanceAmount = false } = {}): ParseResult {
   const values: Record<string, unknown> = {};
   const errors: Record<string, string> = {};
 
@@ -241,8 +241,9 @@ export function parseRecord(resource: PracticeResource, body: Record<string, unk
       }
       case "number": {
         const value = typeof raw === "number" ? raw : Number(String(raw).replace(",", "."));
+        const allowsNegative = allowNegativeFinanceAmount && resource.id === "financas.transactions" && name === "amount";
         if (!Number.isFinite(value)) errors[name] = "Informe um número válido.";
-        else if (spec.min !== undefined && value < spec.min) errors[name] = `Valor mínimo: ${spec.min}.`;
+        else if (!allowsNegative && spec.min !== undefined && value < spec.min) errors[name] = `Valor mínimo: ${spec.min}.`;
         else if (spec.max !== undefined && value > spec.max) errors[name] = `Valor máximo: ${spec.max}.`;
         else values[name] = value;
         break;

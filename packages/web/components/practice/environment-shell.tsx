@@ -13,8 +13,9 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { PracticeApp } from "@/lib/product/apps";
 import type { PracticeSettings } from "@/lib/product/practice/store";
+import { EnvironmentBar } from "./environment-bar";
 
-export function EnvironmentShell({ app, signedIn, children }: {
+export function EnvironmentShell({ app, settings, signedIn, children }: {
   app: PracticeApp;
   settings: PracticeSettings;
   signedIn: boolean;
@@ -39,6 +40,8 @@ export function EnvironmentShell({ app, signedIn, children }: {
             Praticando sem conta: o que criar aqui some ao sair.{" "}
             <Link href={`/login?next=${encodeURIComponent(app.route)}`} className="text-primary">Entre para salvar</Link>.
           </p>}
+
+      {signedIn && <div className="mt-5"><EnvironmentBar appId={app.id} settings={settings} /></div>}
 
       <div className="mt-6">
         <div className="min-w-0">{children}</div>

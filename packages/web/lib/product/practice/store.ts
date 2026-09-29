@@ -70,7 +70,7 @@ const actionLabel = (action: PracticeAction) => ({ read: "consultar", create: "c
 export async function createRecord(userId: string, resourceId: string, body: Record<string, unknown>) {
   const resource = requireResource(resourceId);
   const settings = await authorize(userId, resource, "create");
-  const { values, errors } = parseRecord(resource, body);
+  const { values, errors } = parseRecord(resource, body, { allowNegativeFinanceAmount: settings.activeBugs.includes("financas.receita-negativa") });
   if (Object.keys(errors).length > 0) throw new PracticeError("Verifique os campos destacados.", 422, errors);
 
   const rows = await loadApp(userId, resource.appId);
@@ -86,7 +86,7 @@ export async function createRecord(userId: string, resourceId: string, body: Rec
 export async function updateRecord(userId: string, resourceId: string, id: string, body: Record<string, unknown>) {
   const resource = requireResource(resourceId);
   const settings = await authorize(userId, resource, "update");
-  const { values, errors } = parseRecord(resource, body, { partial: true });
+  const { values, errors } = parseRecord(resource, body, { partial: true, allowNegativeFinanceAmount: settings.activeBugs.includes("financas.receita-negativa") });
   if (Object.keys(errors).length > 0) throw new PracticeError("Verifique os campos destacados.", 422, errors);
   if (Object.keys(values).length === 0) throw new PracticeError("Nenhum campo para atualizar.", 422);
 

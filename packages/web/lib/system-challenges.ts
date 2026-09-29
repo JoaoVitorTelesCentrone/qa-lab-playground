@@ -69,6 +69,57 @@ export const systemChallenges: SystemChallenge[] = allFeatures.flatMap(({ area, 
   return (["fluxo", "investigacao"] as const).map((mode, variant) => {
     const number = index * 2 + variant + 1;
     const flow = mode === "fluxo";
+    // Lab 01 é a experiência de entrada do lançamento. Ele precisa ter um
+    // briefing autocontido, com uma massa e um oráculo verificáveis, em vez
+    // de herdar o texto genérico usado pelos demais pontos do catálogo.
+    if (number === 101) {
+      return {
+        id: "desafio-101", number, area: "Financas", mode, route,
+        title: "Validar lançamentos e saldo do período",
+        difficulty: "Basico" as const,
+        objective: "Validar lançamentos e o saldo do período de janeiro de 2024, documentando discrepâncias com evidências reproduzíveis.",
+        testData: "Massa carregada automaticamente: 12 lançamentos identificados de #001 a #012. Período de análise: janeiro/2024. Use “Restaurar massa” antes de uma nova tentativa.",
+        expected: "O saldo correto do período é R$ 1.730,00. A tela exibe R$ 1.530,00: investigue e explique a diferença de R$ 200,00.",
+        steps: [
+          "Abra Finanças e confirme que os 12 lançamentos #001–#012 foram carregados.",
+          "Some receitas e despesas do período de janeiro de 2024 e compare com o saldo exibido.",
+          "Investigue duplicidade, data fora do período, tipo/categoria e valores de borda; registre somente o que conseguir provar.",
+          "Entregue uma evidência com passos de reprodução, resultado observado, resultado esperado e impacto.",
+        ],
+        acceptance: [
+          "Período, lançamentos consultados e cálculo ficam claros na evidência",
+          "Pelo menos três achados são descritos com IDs, passos e resultado observado",
+          "Saldo esperado, saldo exibido e a diferença são comparados explicitamente",
+        ],
+        plantedBug: "A massa é intencionalmente inconsistente. Não há resposta escondida no briefing: investigue os registros e explique a diferença que você conseguir reproduzir.",
+      };
+    }
+    if (number === 103) {
+      return {
+        id: "desafio-103", number, area: "Financas", mode, route,
+        title: "Validar orçamento por categoria e alerta de estouro",
+        difficulty: "Basico" as const,
+        objective: "Validar o consumo de orçamento por categoria e o alerta quando o limite é ultrapassado.",
+        testData: "Massa carregada: orçamentos Moradia R$ 2.200, Alimentação R$ 900 e Saúde R$ 300. Crie despesas na mesma categoria para testar limite e estouro.",
+        expected: "No limite o alerta não deve aparecer; acima do limite, deve aparecer. Com o desvio controlado ativo, o alerta deixa de ser exibido.",
+        steps: ["Abra Finanças > Orçamentos.", "Registre despesas na categoria do orçamento até o limite e depois acima dele.", "Compare barra, valor consumido e alerta."],
+        acceptance: ["Categoria e valores usados ficam claros", "Resultado no limite e acima do limite são comparados", "Evidência separa comportamento esperado e observado"],
+        plantedBug: "Use o modo instrutor para ativar o desvio de alerta de orçamento e registrar o sintoma reproduzível.",
+      };
+    }
+    if (number === 105) {
+      return {
+        id: "desafio-105", number, area: "Financas", mode, route,
+        title: "Validar metas de reserva",
+        difficulty: "Basico" as const,
+        objective: "Validar progresso, valor restante e conclusão de metas de reserva.",
+        testData: "Massa carregada: Reserva de emergência R$ 12.300 de R$ 20.000 e Viagem R$ 1.450 de R$ 8.000. Edite uma meta para valor acima do alvo.",
+        expected: "O progresso deve ficar limitado a 100% e o valor restante a R$ 0,00. Com o desvio controlado ativo, o sistema mostra percentual acima de 100% e restante negativo.",
+        steps: ["Abra Finanças > Metas.", "Edite uma meta até o alvo e depois acima dele.", "Registre percentual, restante e estado de conclusão."],
+        acceptance: ["Valores do alvo e do acumulado são identificados", "Caso de borda acima do alvo é testado", "Resultado esperado e observado são documentados"],
+        plantedBug: "Use o modo instrutor para ativar o desvio de meta acima do limite e registrar o sintoma reproduzível.",
+      };
+    }
     return {
       id: `desafio-${String(number).padStart(3, "0")}`, number, area, mode, route,
       // Sem o índice da feature no título: "Validar 51: Lancamentos" mostrava ao

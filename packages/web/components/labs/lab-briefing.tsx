@@ -24,7 +24,7 @@ import { findLabByNumber, labLabel } from "@/lib/playground/catalog";
 import type { SystemChallenge } from "@/lib/system-challenges";
 import type { Attachment, EnrollmentStatus, Submission } from "@/lib/product/journey";
 import type { TrackProgress } from "@/lib/product/tracks";
-import { evaluateEvidence, type Evaluation } from "@/lib/product/evaluation";
+import { evaluateEvidence, type Evaluation, type Lab101Feedback } from "@/lib/product/evaluation";
 
 const steps = [
   { label: "Contexto" },
@@ -49,6 +49,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [state, setState] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState("");
+  const [feedback, setFeedback] = useState<Lab101Feedback | null>(null);
 
   const lab = findLabByNumber(challenge.number);
   // O aluno lê o número de lançamento ("01"); a rota continua no de catálogo.
@@ -78,6 +79,8 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
       setError(body?.error?.message ?? "Não foi possível salvar a evidência. Tente novamente.");
       return;
     }
+    const payload = await response.json().catch(() => null);
+    setFeedback(payload?.data?.feedback ?? null);
     setState("done");
     setEvidence("");
     setAttachments([]);
@@ -192,6 +195,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
         {state === "done" && <div role="status" aria-live="polite" className="mt-5 rounded-md border border-primary/30 bg-primary/[0.04] p-4">
           <p className="text-sm font-medium text-primary">Evidência salva. Lab concluído.</p>
           <p className="mt-2 text-sm text-muted-foreground">Sua entrega virou um case: contexto do sistema, o que você provou, passos de reprodução e um post pronto para o LinkedIn.</p>
+          {feedback && <p className="mt-3 rounded-md bg-background p-3 text-sm text-foreground">{feedback.message}</p>}
           <div className="mt-3 flex flex-wrap gap-2">
             <Button asChild size="sm"><Link href={`/labs/${challenge.number}/conclusao`}>Ver meu case <ArrowRight className="size-4" /></Link></Button>
             {nextInTrack

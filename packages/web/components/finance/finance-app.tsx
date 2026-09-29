@@ -14,6 +14,7 @@
 // plantados agem — a tela só mostra o que o cálculo compartilhado devolveu.
 
 import { useState } from "react";
+import type { ReactNode } from "react";
 import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -23,7 +24,7 @@ import { ResourceForm } from "@/components/practice/resource-form";
 import { usePracticeApp, type AppRows, type ResourceHandle, type Row } from "@/components/practice/use-practice-app";
 import { findPracticeApp } from "@/lib/product/apps";
 import { money } from "@/lib/product/practice/format";
-import { financeSummary, type Account, type Budget } from "@/lib/product/practice/views";
+import { financeSummary, goalProgress, type Account, type Budget, type Goal } from "@/lib/product/practice/views";
 import type { Transaction } from "@/lib/product/practice/rules";
 import type { PracticeSettings } from "@/lib/product/practice/store";
 
@@ -164,20 +165,19 @@ function LedgerColumn({
 }
 
 export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; settings: PracticeSettings; signedIn: boolean }) {
-  // Sem desvios ativos: o painel que ligava/desligava isso saiu de tela, então
-  // o saldo sempre bate com a soma real dos lançamentos — é o que dá pra
-  // validar criando, editando e apagando aqui.
-  const practice = usePracticeApp(initial, { persist: signedIn, activeBugs: [] });
+  const practice = usePracticeApp(initial, { persist: signedIn, activeBugs: settings.activeBugs });
   const transactions = practice.use("financas.transactions");
   const budgets = practice.use("financas.budgets");
   const accounts = practice.use("financas.accounts");
+  const goals = practice.use("financas.goals");
 
   const rows = {
     transactions: transactions.rows as unknown as Transaction[],
     budgets: budgets.rows as unknown as Budget[],
     accounts: accounts.rows as unknown as Account[],
+    goals: goals.rows as unknown as Goal[],
   };
-  const summary = financeSummary(rows, []);
+  const summary = financeSummary(rows, settings.activeBugs);
   const recentFirst = (kind: Transaction["kind"]) =>
     rows.transactions.filter((item) => item.kind === kind).sort((a, b) => b.date.localeCompare(a.date));
 
@@ -226,5 +226,28 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
         amountClassName="text-primary"
       />
     </div>
+
+    {/* O Lab 01 começa pelo extrato, mas o ambiente precisa oferecer as outras
+        superfícies financeiras para os Labs seguintes: contas, orçamentos,
+        metas e uma leitura de relatório do mesmo período. */}
+    <section className="mt-8 grid gap-4 md:grid-cols-2" aria-label="Visões financeiras">
+      <FinancePanel title="Contas" empty="Nenhuma conta cadastrada.">
+        {rows.accounts.map((account) => <div key={account.id} className="flex items-center justify-between gap-3 text-sm"><span>{account.name}<span className="ml-2 text-xs text-muted-foreground">{account.kind}</span></span><strong className="font-mono font-medium">{money(Number(account.balance))}</strong></div>)}
+      </FinancePanel>
+      <FinancePanel title="Orçamentos" empty="Nenhum orçamento configurado.">
+        {summary.budgets.map((budget) => <div key={budget.id} className="text-sm"><div className="flex items-center justify-between gap-3"><span>{budget.category}</span><span className={budget.exceeded ? "text-destructive" : "text-muted-foreground"}>{money(budget.used)} de {money(budget.limit)}</span></div><div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted"><div className={`h-full rounded-full ${budget.exceeded ? "bg-destructive" : "bg-primary"}`} style={{ width: `${Math.min(100, budget.percent)}%` }} /></div></div>)}
+      </FinancePanel>
+      <FinancePanel title="Metas" empty="Nenhuma meta cadastrada.">
+        {rows.goals.map((goal) => { const progress = goalProgress(goal, settings.activeBugs); return <div key={goal.id} className="text-sm"><div className="flex items-center justify-between gap-3"><span>{goal.name}</span><span className="text-muted-foreground">{progress.percent}%</span></div><p className="mt-1 text-xs text-muted-foreground">{money(Number(goal.saved_amount))} de {money(Number(goal.target_amount))} · faltam {money(progress.remaining)}</p></div>; })}
+      </FinancePanel>
+      <FinancePanel title="Relatório do período" empty="Sem lançamentos para o período.">
+        <div className="grid grid-cols-3 gap-3 text-sm"><div><p className="text-xs text-muted-foreground">Receitas</p><strong className="font-mono font-medium">{money(summary.totals.income)}</strong></div><div><p className="text-xs text-muted-foreground">Despesas</p><strong className="font-mono font-medium">{money(summary.totals.expense)}</strong></div><div><p className="text-xs text-muted-foreground">Saldo</p><strong className="font-mono font-medium">{money(summary.totals.balance)}</strong></div></div>
+      </FinancePanel>
+    </section>
   </EnvironmentShell>;
+}
+
+function FinancePanel({ title, empty, children }: { title: string; empty: string; children: ReactNode[] | ReactNode }) {
+  const items = Array.isArray(children) ? children : [children];
+  return <section className="rounded-xl border border-border bg-card p-5"><h2 className="text-base font-semibold">{title}</h2><div className="mt-4 grid gap-3">{items.length > 0 ? children : <p className="text-sm text-muted-foreground">{empty}</p>}</div></section>;
 }

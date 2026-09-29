@@ -4,13 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { countCompletedStages, countDeliverables, DELIVERABLES_KEY, emptyDeliverables, isChallengeReady, parseDeliverables, type ChallengeDeliverables } from "@/lib/challenge-deliverables";
+import { countDeliverables, DELIVERABLES_KEY, emptyDeliverables, parseDeliverables, type ChallengeDeliverables } from "@/lib/challenge-deliverables";
 
 const steps = [
   { href: "/playground", label: "Briefing", hint: "Entenda o contexto" },
   { href: "/playground/expenseflow", label: "Investigar", hint: "Explore o sistema" },
-  { href: "/playground/entregas", label: "Documentar", hint: "Bugs · BDD · E2E" },
-  { href: "/playground/conclusao", label: "Concluir", hint: "Revisar e exportar" },
+  { href: "/playground/entregas", label: "Entregas", hint: "Bug reports · BDD" },
 ] as const;
 
 export function ChallengeStepper() {
@@ -26,12 +25,7 @@ export function ChallengeStepper() {
 
   const activeIndex = steps.findIndex((step) => step.href === pathname);
   const total = countDeliverables(data);
-  const documented = countCompletedStages(data) === 3;
-  const ready = isChallengeReady(data);
-
   function statusOf(index: number): "done" | "current" | "todo" {
-    if (index === 2 && documented) return "done";
-    if (index === 3 && ready) return "done";
     if (index === activeIndex) return "current";
     if (activeIndex >= 0 && index < activeIndex) return "done";
     return "todo";

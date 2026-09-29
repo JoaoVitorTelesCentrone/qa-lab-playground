@@ -46,14 +46,8 @@ type LabSeed = {
 export const SEMANA_1 = "2026-08-10";
 export const tracks: LabTrack[] = ["UI Automation", "API e Contrato"];
 
-// Lançamento enxuto: só o ambiente de Finanças abre agora (ver apps.ts e
-// product-home.tsx), então os 3 desafios liberados são desafios de Finanças —
-// não faz sentido liberar um desafio de um ambiente que está fechado. O resto
-// fica "agendado" (badge "em breve" no catálogo, redireciona pra waitlist se
-// acessado direto) até o time decidir liberar mais. Nada é deletado — só a
-// data de liberação muda. Ver [[qa-lab-lancamento-enxuto]].
-// Números 101/103/105 = Lançamentos e saldo, Orçamento por categoria e Metas
-// de reserva (variante "fluxo" de cada um) — ver lib/system-challenges.ts.
+// Durante o lançamento, o único desafio público é o ExpenseFlow Challenge,
+// em /playground. O catálogo continua reservado para próximos Labs.
 //
 // A ORDEM importa e a lista é APPEND-ONLY: a posição aqui é o número que o
 // aluno lê ("Lab 01"), e o número de catálogo (101) fica só como identidade
@@ -62,7 +56,7 @@ export const tracks: LabTrack[] = ["UI Automation", "API e Contrato"];
 //
 // Nunca reordene nem insira no meio: o Lab 01 precisa continuar sendo o Lab 01
 // depois que alguém publicar o case dele. Lab novo entra no fim, sempre.
-const LAUNCH_ORDER = [101, 103, 105];
+const LAUNCH_ORDER: number[] = [];
 const launchPosition = (number: number) => {
   const index = LAUNCH_ORDER.indexOf(number);
   return index === -1 ? null : index + 1;

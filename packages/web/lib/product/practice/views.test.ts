@@ -50,6 +50,7 @@ describe("finanças", () => {
 
   test("progresso da meta satura em 100% e não fica negativo", () => {
     expect(goalProgress({ id: "g", name: "Meta", target_amount: 1000, saved_amount: 1500 })).toEqual({ percent: 100, remaining: 0, reached: true });
+    expect(goalProgress({ id: "g", name: "Meta", target_amount: 1000, saved_amount: 1500 }, ["financas.meta-supera-limite"])).toEqual({ percent: 150, remaining: -500, reached: true });
     expect(goalProgress({ id: "g", name: "Meta", target_amount: 0, saved_amount: 0 }).percent).toBe(0);
   });
 

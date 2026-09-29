@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { evaluateEvidence, MIN_LENGTH } from "./evaluation";
+import { evaluateEvidence, evaluateLab101Evidence, MIN_LENGTH } from "./evaluation";
 
 const long = "x".repeat(MIN_LENGTH);
 
@@ -32,5 +32,17 @@ describe("avaliação automática da evidência", () => {
 
   test("texto curto passa quando vem acompanhado de anexo", () => {
     expect(evaluateEvidence({ evidence: "Vídeo da repro", attachments: 1 }).passed).toBe(true);
+  });
+
+  test("reconhece os três achados principais do Lab 01 sem exigir a borda", () => {
+    const result = evaluateLab101Evidence("#004 e #011 são duplicados. #009 é de fevereiro. #007 classifica manutenção do carro como receita.");
+    expect(result.mainFindings).toBe(3);
+    expect(result.message).toContain("três problemas principais");
+  });
+
+  test("o caso de valor negativo é opcional", () => {
+    const result = evaluateLab101Evidence("#012 Reembolso é uma receita negativa.");
+    expect(result.mainFindings).toBe(0);
+    expect(result.found).toContain("valor-negativo");
   });
 });

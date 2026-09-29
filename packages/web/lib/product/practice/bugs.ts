@@ -24,6 +24,24 @@ export type PlantedBug = {
 
 export const plantedBugs: PlantedBug[] = [
   {
+    id: "financas.receita-negativa",
+    appId: "financas",
+    title: "Receita negativa é aceita",
+    symptom: "Um lançamento de receita com valor negativo é salvo sem validação.",
+    mechanism: "A validação de valor mínimo é removida somente quando o desvio está ativo.",
+    severity: "media",
+    scenario: "Valor limite",
+  },
+  {
+    id: "financas.meta-supera-limite",
+    appId: "financas",
+    title: "Meta de reserva ultrapassa 100%",
+    symptom: "Ao guardar mais que o alvo, a meta mostra mais de 100% e um valor restante negativo.",
+    mechanism: "O calculo deixa de limitar o progresso em 100% e de limitar o restante em zero somente quando o desvio esta ativo.",
+    severity: "media",
+    scenario: "Smoke final",
+  },
+  {
     id: "financas.total-ignora-recorrente",
     appId: "financas",
     title: "Total de despesas ignora lançamentos recorrentes",
