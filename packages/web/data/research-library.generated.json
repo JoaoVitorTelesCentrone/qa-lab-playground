@@ -1,6 +1,50 @@
 {
-  "updatedAt": "2026-10-01T16:28:26.999Z",
+  "updatedAt": "2026-10-02T15:51:03.694Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-66977-xsci-2610-0006",
+      "title": "The AI Productivity Paradox in Software Engineering: A Systematic Review of Code Quality, Technical Debt, and Organizational Throughout (2024–2026)",
+      "abstract": "Background: The period 2024–2026 has seen accelerated adoption of AI coding assistants (e.g., GitHub Copilot, Cursor, CodeWhisperer, Amazon CodeWhisperer). Early productivity gains are well reported in industry white papers and short-term controlled experiments. However, emerging evidence suggests a paradox: perceived throughput increases may coincide with hidden declines in code quality and accelerated technical debt accumulation that only manifest after several months of use. Objective: To systematically review empirical studies published between 2024 and 2026 examining the associations between AI coding assistant usage and three outcome categories: (1) code quality metrics, (2) technical debt indicators, and (3) organizational throughput measures. Methods: Following PRISMA 2020 systematic review guidelines, we searched four electronic databases: Scopus, IEEE Xplore, ACM Digital Library, and arXiv. The search was conducted on March 15, 2026, using a Boolean search string combining terms for AI coding assistants, code quality, technical debt, and throughput. Inclusion criteria required: (a) empirical study design (controlled experiment, field study, longitudinal case study, or survey with quantitative analysis), (b) software engineers using AI coding assistants in real or realistically complex tasks, © at least one measured outcome in the three categories of interest, (d) publication date 2024–2026, and (e) peer-reviewed or pre-print with verifiable methodology. Exclusion criteria eliminated opinion pieces, non-software contexts, studies without direct AI attribution, non-English publications, and duplicates. Two independent reviewers conducted title/abstract screening, full-text retrieval, and eligibility assessment. Risk of bias was evaluated using the adapted Newcastle-Ottawa Scale for observational studies and ROBINS-I for quasi-experiments. Due to high statistical heterogeneity (I² > 85%), narrative synthesis was performed with effect direction plots. Results: A total of 1,247 records were identified. After duplicate removal (n=891), title/abstract screening (764 excluded), full-text retrieval (127 sought), and full-text assessment (93 excluded), 34 studies met inclusion criteria. Study designs included controlled experiments (14 studies, 41%), longitudinal field studies (12 studies, 35%), cross-sectional surveys with code analysis (5 studies, 15%), and industry case studies (3 studies, 9%). GitHub Copilot was the most frequently studied tool (22 studies), followed by Cursor (5 studies), CodeWhisperer (4 studies), and generic LLM APIs (3 studies). Study duration ranged from 1 day to 9 months (median = 8 weeks). Total unique developer participants across studies was 2,847. For RQ1 (code quality), 20 out of 34 studies (58%) reported statistically significant quality degradation in at least one metric. The most commonly observed degradations were increased code duplication (52% of studies), higher cyclomatic complexity (48%), and elevated defect rates in modified legacy code (41%). Defect density increased by a median of 23% in AI-heavy modules (p<0.05). 3 [4/27/2026 12:40 PM] George Panos: Code churn increased 34% in the first 8 weeks post-AI adoption (p<0.01). Test coverage showed no consistent change, but assertion quality decreased. For RQ2 (technical debt), four debt types were identified across studies: copy-paste debt (present in 74% of AI-heavy repositories), dead code (62% of AI commits), API coupling debt (44% of AI-suggested API calls used deprecated methods), and testing debt (78% of AI-generated unit tests covered only positive paths). Technical debt principal (time to fix) increased by an average of 1.8 person-days per 1000 AI-generated lines of code (p<0.001). Interest (extra effort per change) rose 27% in modules with >40% AI-generated code. The debt ratio doubled in 6 months for teams without debt gating (from 8% to 16%). Debt accumulation followed a nonlinear temporal pattern: minimal weeks 1–3, exponential growth weeks 5–12, then plateau after forced refactoring. For RQ3 (organizational throughput), 71% of studies reported increased individual story point completion in the short term (median +27% during weeks 1–4). Cycle time for new features decreased 18% in the first 4 weeks. However, after week 8, cumulative cycle time including rework exceeded baseline by 9% (based on 6 longitudinal studies with data beyond 8 weeks). Code review time increased 35% for AI-generated pull requests. Integration test failures grew 2.2 times. Net overall throughput gain was absent for 54% of teams after 6 months. Teams with fewer than 5 engineers saw temporary gain (+15% velocity) that dissipated by month 4; teams larger than 20 engineers experienced net negative organizational throughput (-6%). For RQ4 (mitigation strategies), the most effective strategies were mandatory quality gates (test coverage >80% + cyclomatic complexity <10) before merge, which prevented 67% of debt insertion (11 studies), and mandatory human refactoring after AI commits, which reduced debt principal by 41% with only temporary velocity loss of 2% (8 studies). Debt-aware prompting alone showed only small effects. Weekly debt reduction sprints reduced interest by 29% but reduced feature velocity by 8%. Conclusions: The AI productivity paradox is substantiated by the available empirical evidence from 2024–2026. Individual developer velocity increases significantly in the short term (first 4 weeks), but code quality degrades and technical debt accelerates nonlinearly, eroding organizational throughput by week 8 and producing net negative outcomes for many teams by month 6. The paradox is not inevitable; effective countermeasures exist, particularly quality gates and mandatory refactoring capacity. Organizations must treat AI coding assistants as tools requiring debt-aware governance rather than unconditional productivity accelerators. Short-term (1–5 day) studies systematically underestimate the negative effects and should be interpreted with caution. Future research requires longitudinal designs of 6+ months, standardized technical debt metrics, and automated detection of AI-introduced debt.",
+      "authors": [
+        "George Panos"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-02",
+      "source": "Crossref",
+      "venue": "",
+      "doi": "https://doi.org/10.66977/xsci.2610.0006",
+      "url": "https://doi.org/10.66977/xsci.2610.0006",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-10-02T15:51:03.694Z"
+    },
+    {
+      "id": "doi-doi-org-10-17632-jywxnx4fzs",
+      "title": "Use of Gen AI in software testing-Experiment Data",
+      "abstract": "This dataset contains the experimental results used in the study evaluating AI-generated test cases against human-written test cases. The dataset includes testing quality metrics, productivity metrics, user story evaluations, and survey responses collected from software quality assurance professionals.",
+      "authors": [
+        "Muhammad Aftab Ahmad Khan",
+        "Ali Afzal Malik"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-01",
+      "source": "OpenAlex",
+      "venue": "Mendeley Data",
+      "doi": "https://doi.org/10.17632/jywxnx4fzs",
+      "url": "https://doi.org/10.17632/jywxnx4fzs",
+      "topics": [
+        "Computer science",
+        "Software",
+        "Quality (philosophy)",
+        "Quality assurance",
+        "Test (biology)",
+        "Software quality"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-02T15:51:03.694Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-22981865",
       "title": "Deepfake-as-a-Service: Governance Frameworks, Software Quality Engineering, and Organizational Resilience in the Age of Synthetic Media",
