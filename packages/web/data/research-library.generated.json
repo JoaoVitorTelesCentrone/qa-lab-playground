@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T15:51:03.694Z",
+  "updatedAt": "2026-10-03T14:19:38.821Z",
   "items": [
     {
       "id": "doi-doi-org-10-66977-xsci-2610-0006",
@@ -964,6 +964,31 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-08-24T10:06:10.409Z"
+    },
+    {
+      "id": "doi-doi-org-10-7716-aem-v15i3-4178",
+      "title": "A Software Code Defect Detection Method Based on the Fusion of Transformer and Graph Neural Networks",
+      "abstract": "Software defect detection plays a key role in improving system reliability, security, and maintainability. This study proposes a hybrid Transformer–GNN framework to jointly model code semantics and program structure. Source files are normalized, segmented at the function level, and converted into token sequences, while multi-relation graphs are generated to describe syntax, control flow, and data dependencies. The Transformer branch captures long-range contextual information from code tokens, whereas the GNN branch learns structural interactions among statements, execution paths, and variables. Their representations are adaptively integrated through a gated fusion module for defect classification. Experiments show that the proposed method outperforms conventional classifiers, sequence-oriented neural networks, and standalone Transformer or GNN models. Ablation results also verify the importance of semantic encoding, structural learning, data-flow information, and gated fusion. Overall, combining lexical context with graph-based program relations provides a more accurate, robust, and interpretable solution for software defect identification.",
+      "authors": [
+        "Z.-F. Wang",
+        "A.-X. Ding",
+        "C. Ma",
+        "H. Chang",
+        "J. Tang",
+        "Y.-J. Wu",
+        "G.-L. Yao"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-21",
+      "source": "Semantic Scholar",
+      "venue": "Advanced Electromagnetics",
+      "doi": "https://doi.org/10.7716/aem.v15i3.4178",
+      "url": "https://doi.org/10.7716/aem.v15i3.4178",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-10-03T14:19:38.821Z"
     },
     {
       "id": "doi-doi-org-10-1007-s10515-026-00668-z",
