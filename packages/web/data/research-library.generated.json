@@ -1,6 +1,30 @@
 {
-  "updatedAt": "2026-10-03T14:19:38.821Z",
+  "updatedAt": "2026-10-04T14:49:01.757Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23114586",
+      "title": "Supplementary Material and Code for ICUSDP:Interpretable Clustering-based Unsupervised Software Defect Prediction",
+      "abstract": "This repository contains the source code, implementation scripts, and experimental datasets (JIRA projects) associated with the research paper titled \"ICUSDP: Interpretable Clustering-based Unsupervised Software Defect Prediction\". It is provided for double-blind peer review purposes.",
+      "authors": [
+        "Anonymous"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-03",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23114586",
+      "url": "https://doi.org/10.5281/zenodo.23114586",
+      "topics": [
+        "Computer science",
+        "Code (set theory)",
+        "Software bug",
+        "Software",
+        "Source code",
+        "Programming language"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-04T14:49:01.757Z"
+    },
     {
       "id": "doi-doi-org-10-66977-xsci-2610-0006",
       "title": "The AI Productivity Paradox in Software Engineering: A Systematic Review of Code Quality, Technical Debt, and Organizational Throughout (2024–2026)",
