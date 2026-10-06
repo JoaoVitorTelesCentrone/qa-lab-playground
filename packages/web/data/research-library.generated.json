@@ -1,6 +1,30 @@
 {
-  "updatedAt": "2026-10-05T18:31:15.959Z",
+  "updatedAt": "2026-10-06T15:58:52.868Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23139843",
+      "title": "Preregistration: Does lifecycle coverage of software QA tooling associate with post-release bug reports in open source projects?",
+      "abstract": "Analysis plan for an observational study of public GitHub projects. Exposure: coverage of nine QA tool categories coded from repository files at a snapshot date (T0 = 2024-10-01). Primary outcome: bug issues reported by people outside the project from 2024-10 to 2025-09, per commit, fitted with a negative binomial model with controls. H1 tests total tooling breadth; H2 tests the preregistered phase by function claim (prevention and early appraisal tooling adjusted for detection tooling and CI). Holm correction across H1 and H2. All results are associations, not causal claims Timing disclosure: the plan was drafted on 2026-10-04 before a 16 repository pilot; two dated amendments in the document record the changes made after the pilot, and the pilot repositories are excluded from the main sample. Screening of candidate repositories for the main sample began at about 08:21 PDT. In this pipeline screening also downloads each eligible repository's issue and outcome records, so outcome data for about 110 repositories had been downloaded before this record was deposited at about 09:07 PDT. No outcome data from the main sample had been analysed or inspected at the time of deposit; the analysis was run once, after collection finished. \"Version 2 (2026-10-05) adds Amendment 3 (preregistered robustness checks and validation steps completed late, no change to hypotheses or decision rules) and Amendment 4 (an independent second sample collected after the sample 1 primary analysis, a post hoc extension reported as such; no claim of support unless sample 2 alone meets the preregistered decision rule). Sample 1 results (N = 175: H1 and H2 inconclusive) are included for transparency. This version was deposited before any sample 2 data were analysed.\"",
+      "authors": [
+        "Michael Fatayo"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-05",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23139843",
+      "url": "https://doi.org/10.5281/zenodo.23139843",
+      "topics": [
+        "Snapshot (computer storage)",
+        "Computer science",
+        "Open source",
+        "Software",
+        "Software engineering",
+        "Function (biology)"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-06T15:58:52.868Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-23114586",
       "title": "Supplementary Material and Code for ICUSDP:Interpretable Clustering-based Unsupervised Software Defect Prediction",
