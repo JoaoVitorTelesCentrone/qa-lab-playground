@@ -1,6 +1,56 @@
 {
-  "updatedAt": "2026-10-06T15:58:52.868Z",
+  "updatedAt": "2026-10-07T16:33:21.597Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23190936",
+      "title": "sdp-budget-tuning: Budget-controlled comparison of HHO and DE for SVM-based software defect prediction",
+      "abstract": "Code, per-fold results and analysis scripts for: M. Y. Al-Tarawneh and O. I. Al-Mrayat, \"Do Metaheuristics Really Improve Software Defect Prediction? A Budget-Fair Empirical Study,\" 2026. Reproduce all results with ./run_all.sh, or verify the paper's numbers from the included results with: python src/analysis.py",
+      "authors": [
+        "Mejhem Yousef al-Tarawneh",
+        "Omar Isam Al-Mrayat"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-06",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23190936",
+      "url": "https://doi.org/10.5281/zenodo.23190936",
+      "topics": [
+        "Python (programming language)",
+        "Software",
+        "Computer science",
+        "Software bug",
+        "Scripting language",
+        "Software quality"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-07T16:33:21.597Z"
+    },
+    {
+      "id": "doi-doi-org-10-48175-ijarsct-38713",
+      "title": "AI-Driven Software Testing: An Adaptive Agentic Framework for Context-Aware Test Generation, Validation, Prioritization, and Refinement",
+      "abstract": "Software testing is a critical activity in the software development life cycle, but conventional test automation still requires substantial human effort for test design, maintenance, execution, and analysis. Recent advances in artificial intelligence (AI), machine learning (ML), natural language processing (NLP), and large language models (LLMs) have created new opportunities to automate and improve several testing activities. This paper presents a structured review of AI-driven software test automation, emphasizing test-case generation, test prioritization, defect prediction, test execution, failure analysis, and automated test repair. The study also examines the emerging role of LLMs in understanding requirements and source code and in producing developer-readable tests. AI-assisted approaches can improve coverage, fault detection, and testing productivity, but generated tests may contain hallucinations, weak assertions, flaky behavior, or inadequate contextual understanding. Therefore, human supervision, execution-based validation, coverage measurement, mutation testing, and secure integration with CI/CD pipelines remain important. The paper proposes a practical AI-driven testing workflow that combines requirement analysis, intelligent test generation, automated execution, feedback, and continuous refinement",
+      "authors": [
+        "Prof. Pratiksha Vinayak Gaikwad Sanika Jaysing Dorge",
+        "Dr. H. B. Jadhav"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-06",
+      "source": "OpenAlex",
+      "venue": "International Journal of Advanced Research in Science Communication and Technology",
+      "doi": "https://doi.org/10.48175/ijarsct-38713",
+      "url": "https://doi.org/10.48175/ijarsct-38713",
+      "topics": [
+        "Computer science",
+        "Manual testing",
+        "White-box testing",
+        "Test strategy",
+        "Test Management Approach",
+        "Workflow"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-07T16:33:21.597Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-23139843",
       "title": "Preregistration: Does lifecycle coverage of software QA tooling associate with post-release bug reports in open source projects?",
@@ -24,6 +74,26 @@
       ],
       "query": "software quality assurance",
       "discoveredAt": "2026-10-06T15:58:52.868Z"
+    },
+    {
+      "id": "doi-doi-org-10-1145-3837062-3839560",
+      "title": "Towards Class-level Lifecycle Governance of Ontology-driven Conceptual Models for Software Quality Assurance",
+      "abstract": "Context. Ontology-driven conceptual models evolve over time as domain modellers introduce class-level extensions to express taxonomies, constraints, and domain-specific knowledge. Problem. Monitoring the quality of these conceptual models during evolution is challenging. Existing approaches in the literature mainly address version-centric evolution, overlooking governance of individual class-level lifecycles. Consequently, domain modellers lack support for specifying lifecycle policies to monitor class-level evolving taxonomies over time. In addition, the lack of policies demands the implementation of tests manually for each class, which is time-consuming, error-prone, and difficult to scale. Method. In this paper, we propose OCMLG (Ontology-driven Conceptual Modelling Lifecycle Governance), a model-driven development tool for monitoring the quality of ontology-driven conceptual models based on lifecycle policies. OCMLG allows domain modellers to automatically generate tests based on a specific lifecycle policy and monitor the conceptual models’ class-level lifecycle quality over time. Results. We present a preliminary evaluation in a simulated environment where LLM-based agents evolve an ontology-driven conceptual model across multiple iterations. OCMLG successfully detected breaking class-level lifecycle changes and reported the conceptual model’s quality metrics. Conclusions. Our results suggest that OCMLG provides a structured and automated mechanism for governing the class-level lifecycle of ontology-driven conceptual models. We expect OCMLG to integrate with the AI-SQUARE platform ecosystem to maintain and evolve software quality assurance metrics.",
+      "authors": [
+        "David Mosquera",
+        "Leandra Willi"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-04",
+      "source": "Semantic Scholar",
+      "venue": "Proceedings of the ACM/IEEE 29th International Conference on Model Driven Engineering Languages and Systems",
+      "doi": "https://doi.org/10.1145/3837062.3839560",
+      "url": "https://doi.org/10.1145/3837062.3839560",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-07T16:33:21.597Z"
     },
     {
       "id": "doi-doi-org-10-5281-zenodo-23114586",
@@ -92,6 +162,27 @@
       ],
       "query": "software quality assurance",
       "discoveredAt": "2026-10-02T15:51:03.694Z"
+    },
+    {
+      "id": "doi-doi-org-10-15294-rji-v4i2-64137",
+      "title": "A Comparative Analysis of the Effectiveness and Efficiency of Manual and Automated Testing in Software Quality Assurance",
+      "abstract": "Purpose: This study aims to analyze the effectiveness, bottlenecks, and reliability of automated testing and manual testing, as well as to compare the two approaches in detecting bugs and supporting software product quality. Accelerating release cycles can be counterproductive if functional stability is ignored; thus, evaluating these two quality assurance methods is crucial to finding an optimal balance in software development.\nMethods/Study design/approach: The study employed a quantitative approach through a survey of 105 respondents, comprising QA Engineers, software developers, and academics, using a five-level Likert scale questionnaire. The collected data were rigorously analyzed using descriptive statistics, the Wilcoxon Signed-Rank Test, and the Friedman Test to objectively evaluate the performance, reliability, and operational bottlenecks of both testing methods. \nResult/Findings: The results demonstrate that automated testing is highly effective for regression testing and repetitive execution, while manual testing remains significantly effective for UI/UX evaluation and complex dynamic cases. Both methods face distinct challenges. Automated testing is bottlenecked by script maintenance efforts and flaky tests, whereas manual testing is hindered by lengthy execution times and human error. Automated testing was found to be significantly more accurate in detecting recurring functional bugs. Furthermore, an integrated combination of both automated and manual testing was proven to substantially reduce escaped defects.\nNovelty/Originality/Value: This research provides empirical evidence confirming that despite the strong push for automation in modern Agile and DevOps environments, neither method can completely replace the other. Both testing approaches are most effective when utilized complementarily according to their intrinsic characteristics. This synergy is essential to prevent bottlenecks in the software release cycle and ensure superior product quality.",
+      "authors": [
+        "Amara Seviany Agustin",
+        "N. W. A. Majid",
+        "Md Baharuddin Bin Abdul Rahman"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-30",
+      "source": "Semantic Scholar",
+      "venue": "Recursive Journal of Informatics",
+      "doi": "https://doi.org/10.15294/rji.v4i2.64137",
+      "url": "https://doi.org/10.15294/rji.v4i2.64137",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-07T16:33:21.597Z"
     },
     {
       "id": "doi-doi-org-10-5281-zenodo-22981865",
