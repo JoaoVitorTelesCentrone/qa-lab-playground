@@ -1,6 +1,28 @@
 {
-  "updatedAt": "2026-10-07T16:33:21.597Z",
+  "updatedAt": "2026-10-08T16:31:47.153Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1145-3843776-3844668",
+      "title": "FitGen: Validation and Guided Repair of LLM Generated Executable Fitness Functions for Search Based Software Testing",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Md Al Muzahid Nayim",
+        "Faezeh Rajabi Kouchi",
+        "Amit Kumar Sikder",
+        "Myra B Cohen"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-08",
+      "source": "Crossref",
+      "venue": "Proceedings of the 7th International Workshop on Automated Program Repair",
+      "doi": "https://doi.org/10.1145/3843776.3844668",
+      "url": "https://doi.org/10.1145/3843776.3844668",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-10-08T16:31:47.153Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-23190936",
       "title": "sdp-budget-tuning: Budget-controlled comparison of HHO and DE for SVM-based software defect prediction",
@@ -1306,6 +1328,28 @@
       ],
       "query": "software defect prediction",
       "discoveredAt": "2026-08-15T22:36:58.611Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-icscsa69367-2026-11708564",
+      "title": "LLM-based Automated Test Case Generation Framework for Software Quality Assurance",
+      "abstract": "Automated test case generation remains a critical challenge in software engineering, with existing approaches achieving limited branch coverage and mutation scores. Current techniques based on search-based software testing fail to adequately capture semantic information from source code, resulting in test suites that exercise code paths without verifying behavioral correctness. This work addresses these limitations by introducing AutoTest, a framework integrating large language model (LLM) capabilities with coverage-guided test synthesis. The proposed approach employs a multi-stage pipeline comprising repository analysis, semantic summarization, and iterative test refinement driven by an adaptive gradient-based optimization algorithm. Experiments were conducted across five benchmark datasets containing 147 open-source Java projects. AutoTest achieved 87.6% branch coverage and 72.4% mutation score, representing improvements of 11.8 and 10.7 percentage points over the strongest baseline. Convergence was attained within 95 iterations, compared to 247 iterations for the nearest competitor. Statistical analysis confirmed significance at p <0.001 (Cohen's d= 1.17). The results demonstrate that LLM-guided semantic understanding substantially improves automated test generation effectiveness.",
+      "authors": [
+        "A. S. Lakshmi",
+        "G. N. Sarayu",
+        "Mallareddy Adudhodla",
+        "P. Manellore"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-08-01",
+      "source": "Semantic Scholar",
+      "venue": "2026 6th International Conference on Soft Computing for Security Applications (ICSCSA)",
+      "doi": "https://doi.org/10.1109/ICSCSA69367.2026.11708564",
+      "url": "https://doi.org/10.1109/ICSCSA69367.2026.11708564",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-08T16:31:47.153Z"
     },
     {
       "id": "doi-doi-org-10-1109-icisc69558-2026-11681129",
