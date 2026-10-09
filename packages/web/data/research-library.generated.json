@@ -1,6 +1,56 @@
 {
-  "updatedAt": "2026-10-08T16:31:47.153Z",
+  "updatedAt": "2026-10-09T16:15:54.709Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1038-s41598-026-75037-7",
+      "title": "An integrated framework for explainable and uncertainty-aware software defect prediction with adaptive risk scoring and multi-task deep residual learning",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "M. Murali Mohana Kumara Varma",
+        "M. Giri"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-08",
+      "source": "OpenAlex",
+      "venue": "Scientific Reports",
+      "doi": "https://doi.org/10.1038/s41598-026-75037-7",
+      "url": "https://doi.org/10.1038/s41598-026-75037-7",
+      "topics": [
+        "Computer science",
+        "Residual",
+        "Artificial intelligence",
+        "Software bug",
+        "Machine learning",
+        "Software"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-09T16:15:54.709Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23243669",
+      "title": "When Does Domain Alignment Fail in Cross-Project Software Defect Prediction? An Empirical Study of Representation, Distribution Shift, and Pseudo-Label Estimation",
+      "abstract": "Reproducibility package for an empirical study of when domain alignment fails in cross-project software defect prediction (CPDP). The study places two mainstream lines side by side under a unified diagnostic protocol—semantic representations from pre-trained code models, and shallow distribution alignment (CORAL, TCA, KMM)—across three datasets (PROMISE/Jureczko, Devign, and PrimeVul), and diagnoses the sources of conditional-alignment failure using oracle controls, a prior-match intervention, and a fixed-confusion-matrix error-location control. This deposit contains the analysis source code, the experiment and plotting scripts, the complete result tables (including negative results), the derived feature and embedding matrices needed to reproduce the experiments without re-running the pre-trained models, the manuscript figures, and the reproduction map, data card, and environment report. Raw third-party datasets and pre-trained model weights are not redistributed here and should be obtained from their original sources.",
+      "authors": [
+        "Xinchen Tian",
+        "Xinwen Zhao"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-08",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23243669",
+      "url": "https://doi.org/10.5281/zenodo.23243669",
+      "topics": [
+        "Computer science",
+        "Domain (mathematical analysis)",
+        "Data mining",
+        "Feature (linguistics)",
+        "Software",
+        "Oracle"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-09T16:15:54.709Z"
+    },
     {
       "id": "doi-doi-org-10-1145-3843776-3844668",
       "title": "FitGen: Validation and Guided Repair of LLM Generated Executable Fitness Functions for Search Based Software Testing",
