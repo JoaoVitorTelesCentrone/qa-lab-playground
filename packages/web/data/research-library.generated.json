@@ -1,6 +1,86 @@
 {
-  "updatedAt": "2026-10-10T15:24:25.041Z",
+  "updatedAt": "2026-10-11T15:44:46.957Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-30574-wjarr-2026-32-1-2563",
+      "title": "AN EXPLAINABLE DEEP LEARNING FRAMEWORK FOR PREDICTIVE SOFTWARE QUALITY ENGINEERING AND AUTOMATED DEFECT DETECTION",
+      "abstract": "Software Quality Engineering (SQE) is evolving from reactive defect detection toward predictive and intelligent quality assurance. Traditional testing approaches identify defects after implementation and require extensive manual effort to analyze source code, test results, historical defects, and execution behavior. Machine learning and deep learning techniques enable prediction of defect-prone software components before failures occur; however, many deep learning models operate as black boxes, making their predictions difficult for developers, testers, and quality engineers to understand and validate. This paper proposes the Explainable Deep Learning Framework for Predictive Software Quality Engineering and Automated Defect Detection (XDL-SQE). The framework integrates static code metrics, change history, historical defect data, test execution results, runtime information, and source-code embeddings. A hybrid deep learning engine (CNN-LSTM-Transformer) generates defect-risk predictions, while an explainability layer based on SHAP and LIME provides feature attribution. A quality-prioritization layer converts predictions into actionable testing recommendations integrated with CI/CD pipelines. The framework addresses five key gaps: prediction without explanation, fragmented quality data, limited testing integration, human trust, and cross-project generalization. A comprehensive research protocol is proposed for evaluating predictive accuracy, explanation quality, testing efficiency, and operational usefulness. This work contributes a unified architecture for interpretable, actionable, and continuous predictive quality engineering.",
+      "authors": [
+        "Prathap Raghavan"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-10",
+      "source": "OpenAlex",
+      "venue": "World Journal of Advanced Research and Reviews",
+      "doi": "https://doi.org/10.30574/wjarr.2026.32.1.2563",
+      "url": "https://wjarr.com/sites/default/files/fulltext_pdf/WJARR-2026-2563.pdf",
+      "topics": [
+        "Computer science",
+        "Deep learning",
+        "Artificial intelligence",
+        "Machine learning",
+        "Software engineering",
+        "Quality (philosophy)"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-10-11T15:44:46.957Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23274376",
+      "title": "AEFS: Adaptive Explainable Feature Selection for Cross-Project Software Defect Prediction",
+      "abstract": "Artifact of the AEFS (Adaptive Explainable Feature Selection) framework for cross-project software defect prediction: reference implementation, four public benchmark pools (AEEEM, TeraPromise, NASA MDP, ReLink; 80 project-versions), raw per-fold results of every experiment, analysis CSVs behind every reported number, and independent replication runs.",
+      "authors": [
+        "Mohsin Ibna Hossain",
+        "Tasnim Bari Jenny",
+        "Afroja Hoque Shornaly",
+        "Md. Khairul Alam Mazumder",
+        "Saikat Baul",
+        "Md Rakibul Islam",
+        "M. F. Mridha"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-10",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23274376",
+      "url": "https://doi.org/10.5281/zenodo.23274376",
+      "topics": [
+        "Computer science",
+        "Feature (linguistics)",
+        "Feature selection",
+        "Software",
+        "Artificial intelligence",
+        "Benchmark (surveying)"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-11T15:44:46.957Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23275515",
+      "title": "Reproducibility package for: SMOTE, Training Budget and the Stability of SHAP and LIME in Neural Software Defect Prediction",
+      "abstract": "Code, data and per-fold results that regenerate all tables and figures of the paper. Scripts 01–09 are run with \"sh run_all.sh\"; package versions are pinned in requirements.txt; the four NASA/PROMISE ARFF files are included with SHA-256 checksums (see README.md).",
+      "authors": [
+        "Omar Isam Al Mrayat",
+        "Malik Mustafa Mohammad Jawarneh",
+        "Omar Husain Tarawneh"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-10",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23275515",
+      "url": "https://doi.org/10.5281/zenodo.23275515",
+      "topics": [
+        "Checksum",
+        "Computer science",
+        "Stability (learning theory)",
+        "Reproducibility",
+        "Software",
+        "Training (meteorology)"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-11T15:44:46.957Z"
+    },
     {
       "id": "doi-doi-org-10-1038-s41598-026-75037-7",
       "title": "An integrated framework for explainable and uncertainty-aware software defect prediction with adaptive risk scoring and multi-task deep residual learning",
