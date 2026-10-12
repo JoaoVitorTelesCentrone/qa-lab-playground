@@ -1,6 +1,49 @@
 {
-  "updatedAt": "2026-10-11T15:44:46.957Z",
+  "updatedAt": "2026-10-12T19:05:33.394Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-30546-09090-2025-1010-2019",
+      "title": "FUNCTIONAL PROGRAMMING AND SOFTWARE RELIABILITY",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Rahima HAJIYEVA"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-12",
+      "source": "Crossref",
+      "venue": "Journal of Baku Engineering University Mathematics and Computer Science",
+      "doi": "https://doi.org/10.30546/09090.2025.1010.2019",
+      "url": "https://doi.org/10.30546/09090.2025.1010.2019",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-10-12T19:05:33.394Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23301635",
+      "title": "Replication Package for Cross-Project Software Defect Prediction and SHAP Explanation Agreement: An ApacheJIT Study",
+      "abstract": "This repository provides the experimental results, analysis scripts, and reproducibility materials associated with the study \"Global Explanation Consistency under Within-Project and Cross-Project Just-in-Time Defect Prediction: A 13-Project ApacheJIT Study.\" The study evaluates within-project (WPDP) and cross-project (CPDP) just-in-time software defect prediction across 13 Apache repositories using Logistic Regression, Random Forest, XGBoost, and LightGBM. Global explanation consistency is assessed using SHAP feature rankings, Spearman and Kendall rank correlations, and Top-3 and Top-5 Jaccard similarity. The repository includes results from three experimental conditions: C1 (expanded historical training), C2 (official ApacheJIT training), and C3 (size-matched training). The recorded experiments comprise 1,248 model conditions and 624 paired explanation comparisons. The package also includes statistical analyses and supplementary robustness results. Original ApacheJIT dataset files are not redistributed; they must be obtained from their original source. This repository is intended to support transparency, independent verification, and reproducibility of the reported experimental findings.",
+      "authors": [
+        "Emre Selman Caniaz"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-11",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23301635",
+      "url": "https://doi.org/10.5281/zenodo.23301635",
+      "topics": [
+        "Jaccard index",
+        "R package",
+        "Computer science",
+        "Consistency (knowledge bases)",
+        "Software bug",
+        "Data mining"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-12T19:05:33.394Z"
+    },
     {
       "id": "doi-doi-org-10-30574-wjarr-2026-32-1-2563",
       "title": "AN EXPLAINABLE DEEP LEARNING FRAMEWORK FOR PREDICTIVE SOFTWARE QUALITY ENGINEERING AND AUTOMATED DEFECT DETECTION",
@@ -2832,6 +2875,25 @@
       ],
       "query": "software quality assurance",
       "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
+      "id": "doi-doi-org-10-63282-3050-922x-ijeret-v7i3p110",
+      "title": "Modern Software Quality Assurance in Safety-Critical Automotive Programs an Integrated Framework for Continuous Compliance and Engineering Excellence",
+      "abstract": "Modern automotive software has evolved from isolated embedded controllers to highly connected software-defined vehicles (SDVs). This evolution has significantly increased expectations on software quality assurance (SQA), process governance, functional safety, cybersecurity and regulatory compliance. Traditional milestone-based quality assurance is no longer sufficient for agile and continuous development environments. This paper proposes a Continuous Software Quality Assurance (CSQA) framework integrating Automotive SPICE, ISO 26262, engineering analytics and risk-based governance. The framework enables continuous evidence collection, proactive audit planning, objective process measurement and early identification of compliance risks. A representative SDV case study illustrates improvements in audit readiness, traceability coverage, defect prevention and engineering efficiency.",
+      "authors": [
+        "Krishna Chaitanya Mamidala"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Emerging Research in Engineering and Technology",
+      "doi": "https://doi.org/10.63282/3050-922x.ijeret-v7i3p110",
+      "url": "https://doi.org/10.63282/3050-922x.ijeret-v7i3p110",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-12T19:05:33.394Z"
     },
     {
       "id": "doi-doi-org-10-64137-31079458-ijcsei-v2i2p102",
