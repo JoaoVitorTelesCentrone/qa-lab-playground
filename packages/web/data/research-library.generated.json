@@ -1,6 +1,33 @@
 {
-  "updatedAt": "2026-10-12T19:05:33.394Z",
+  "updatedAt": "2026-10-13T16:58:20.241Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23311062",
+      "title": "Replication package for: Size is most of the signal: Just-in-time defect prediction from commits to releases in a regulated software organisation",
+      "abstract": "Replication package for the manuscript \"Size is most of the signal: Just-in-time defect prediction from commits to releases in a regulated software organisation\", submitted to The Journal of Systems and Software. The package contains everything needed to audit and re-run the analysis except the data: the pre-registered protocol and methodology, the configuration file with every parameter and the fixed random seed, all analysis scripts (data audit, labels, features, folds, models, evaluation, label variants, temporal analysis, release-level analysis, interpretation, sensitivity and reviewer-driven diagnostics), the shared statistics and figure-style helpers, the generated LaTeX tables and figures, 58 aggregate result files (CSV and JSON summaries, library versions and the clean-rebuild reproducibility check), and a number audit that traces every numeric token in the manuscript to its source file. The industrial records on which the study is based are confidential and are not included; row-level derived files (labels, features, folds, predictions) are withheld for the same reason, and timestamp fields on the dataset's relative time axis are withheld from the JSON copies. With the data in place, a single command (python src/run_all.py) rebuilds every result, table and figure deterministically. See README.md for the folder layout and the environment (Python 3.12, scikit-learn 1.9, LightGBM 4.7).",
+      "authors": [
+        "Johnson Nuviadenu",
+        "Themba Masombuka",
+        "Ernest Mnkandla",
+        "Malusi Sibiya"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-12",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23311062",
+      "url": "https://doi.org/10.5281/zenodo.23311062",
+      "topics": [
+        "JSON",
+        "Computer science",
+        "Replication (statistics)",
+        "Scripting language",
+        "Software",
+        "Audit trail"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-13T16:58:20.241Z"
+    },
     {
       "id": "doi-doi-org-10-30546-09090-2025-1010-2019",
       "title": "FUNCTIONAL PROGRAMMING AND SOFTWARE RELIABILITY",
