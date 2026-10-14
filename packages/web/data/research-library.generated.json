@@ -1,6 +1,29 @@
 {
-  "updatedAt": "2026-10-13T16:58:20.241Z",
+  "updatedAt": "2026-10-14T14:32:01.277Z",
   "items": [
+    {
+      "id": "arxiv-arxiv-org-abs-2610-16594v1",
+      "title": "Software Testing Meets Bayesian Workflow: A Literature-Driven Artifact Study of Probabilistic Programs",
+      "abstract": "Automated testing is an effective software quality assurance method, but it is rarely used for probabilistic models. This is despite the heavy use of probabilistic programming for data analytics in research and engineering, where the consequences of errors are dire. A key obstacle is the specification of testable correctness properties for probabilistic models, known as the oracle problem. Like machine learning, probabilistic programming is used precisely where no analytical specification exists: had we been able to write one, we would have written an algorithm instead of fitting a model. An alternative is partial, proxy correctness specifications. The statistics literature already offers many, but as quality guidelines that require human judgment: comparing plots, visually analyzing shapes of distributions, assessing whether parameter values are ''far'' or ''close enough''. These guidelines are not systematically automated. In this work, we elicit, implement, and study testable correctness properties of probabilistic models. We extract 17 broadly applicable properties for probabilistic models from one of the most widely used textbooks in Bayesian data analysis, Statistical Rethinking by McElreath. For each property, we select and implement a test oracle, and study its utility for automatic testing, using a population of 59 probabilistic models from academic and industrial sources. We find realistic use cases (models under test) for all the properties. We observe that the vast majority of tests are not flaky in practice, despite the theoretical potential for flakiness. To the best of our knowledge, we are the first to investigate the effectiveness of mutation testing for probabilistic models, showing that standard mutation operators do not capture faults tracked by the probabilistic properties.",
+      "authors": [
+        "Oleg Jarma",
+        "Maja Dall",
+        "Raúl Pardo",
+        "Mahsa Varshosaz",
+        "Andrzej Wąsowski"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-12",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2610.16594v1",
+      "topics": [
+        "cs.SE"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-14T14:32:01.277Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-23311062",
       "title": "Replication package for: Size is most of the signal: Just-in-time defect prediction from commits to releases in a regulated software organisation",
