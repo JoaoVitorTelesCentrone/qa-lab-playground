@@ -1,6 +1,52 @@
 {
-  "updatedAt": "2026-10-16T13:59:35.497Z",
+  "updatedAt": "2026-10-17T12:59:24.497Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-36548-jitdw-2026-4-007",
+      "title": "Multiclass Software Defect Prediction Using an Optimized LLM CodeSentinel-BERT Based Framework",
+      "abstract": "The prediction of software defects is important to detect defects in source codes prior to their deployment but traditional techniques use selected features and limited binary classification. This research work proposes DefectGuard, a transformer-based multiclass software defect prediction system for C/C++ source code that utilizes CodeBERT fine-tuning. This custom dataset consists of 2,000 samples of manually collected and labeled C/C++ source codes and includes nine classes of defects, namely syntax, semantic, logic, linker, and runtime-related defects. The proposed pipeline includes preprocessing, stratified splitting, sub-word tokenization, CodeBERT representation learning, and multiclass classification. The experimental results show the accuracy, precision, recall, and F1-score of 98.8%, 96.4%, 95.8%, and 96.1%, respectively, on the test set. Additionally, ROC-AUC and confusion-matrix metrics are used to evaluate the class-level discrimination. Moreover, the proposed model is implemented in a real-time Flask-based web application, which can classify the source code into defect labels with confidence scores and language detection to provide the interpretation feedback.",
+      "authors": [
+        "Vijayarajan S.M.",
+        "Ponnalagar V.",
+        "Ravikrishnan R.",
+        "Sarguna Gokul R."
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-17",
+      "source": "Crossref",
+      "venue": "Journal of Information Technology and Digital World",
+      "doi": "https://doi.org/10.36548/jitdw.2026.4.007",
+      "url": "https://doi.org/10.36548/jitdw.2026.4.007",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-10-17T12:59:24.497Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23424834",
+      "title": "Machine Learning for Software Defect Prediction",
+      "abstract": "This review paper explores the application of machine learning techniques in software defect prediction to improve software quality and reliability. It discusses algorithms such as logistic regression, decision trees, random forests, support vector machines, gradient boosting, and neural networks. The paper examines software metrics, code change history, dataset preparation, evaluation methods, and model validation. It also highlights challenges such as class imbalance, data leakage, false predictions, and model interpretability. Finally, it presents practical recommendations for using defect prediction models to prioritize software testing, code reviews, and maintenance activities.",
+      "authors": [
+        "Prathamesh Kadam"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-16",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23424834",
+      "url": "https://doi.org/10.5281/zenodo.23424834",
+      "topics": [
+        "Machine learning",
+        "Computer science",
+        "Software bug",
+        "Artificial intelligence",
+        "Software quality",
+        "Software"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-17T12:59:24.497Z"
+    },
     {
       "id": "arxiv-arxiv-org-abs-2610-16594v1",
       "title": "Software Testing Meets Bayesian Workflow: A Literature-Driven Artifact Study of Probabilistic Programs",
