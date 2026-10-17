@@ -18,6 +18,13 @@ npm-debug.log*
 .next-dev-*.log
 .api-dev*.log
 .web-dev*.log
+.api-local*.log
+.web-local*.log
+.web-*.log
+
+# local validation artifacts
+packages/web/.tmp/
+packages/web/test-results/
 
 # scraping cache
 .firecrawl/

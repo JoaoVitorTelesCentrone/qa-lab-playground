@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { isSupabaseConfigured } from "./config";
+import { getSupabaseConfig, isSupabaseConfigured } from "./config";
 
 // Renova a sessão do Supabase a cada request. É aqui (e não nos Server
 // Components) que os cookies de auth são reescritos — sem isto o access token
@@ -12,9 +12,17 @@ export async function updateSession(request: NextRequest) {
   // Sem env de Supabase o app roda em modo anônimo: não há o que renovar.
   if (!isSupabaseConfigured()) return response;
 
+  // Visitante novo não possui sessão para validar ou renovar. Além de evitar
+  // uma chamada externa inútil, isso mantém login/cadastro disponíveis mesmo
+  // durante uma instabilidade momentânea do projeto Supabase.
+  const hasAuthCookie = request.cookies.getAll().some(({ name }) => name.startsWith("sb-") && name.includes("auth-token"));
+  if (!hasAuthCookie) return response;
+
+  const { url, key } = getSupabaseConfig();
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    key,
     {
       cookies: {
         getAll() {
@@ -31,9 +39,9 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  // IMPORTANTE: getUser() força a validação/refresh do token. Não inserir lógica
-  // entre createServerClient e getUser, sob risco de sessões intermitentes.
-  await supabase.auth.getUser();
+  // IMPORTANTE: getClaims() valida e renova o token. Não inserir lógica entre
+  // createServerClient e esta chamada, sob risco de sessões intermitentes.
+  await supabase.auth.getClaims();
 
   return response;
 }

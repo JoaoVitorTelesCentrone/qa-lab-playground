@@ -114,6 +114,14 @@ export async function signPublicAttachments(attachments: Attachment[]): Promise<
   return applySigned(await signPaths(admin, attachments.map((file) => file.path)), attachments);
 }
 
+/** Assina anexos apos o chamador validar acesso privilegiado (ex.: mentor da turma). */
+export async function signAuthorizedAttachments(attachments: Attachment[]): Promise<Attachment[]> {
+  if (attachments.length === 0) return attachments;
+  if (!hasServiceRole()) return attachments.map((file) => ({ ...file, url: "" }));
+  const admin = createAdminClient();
+  return applySigned(await signPaths(admin, attachments.map((file) => file.path)), attachments);
+}
+
 function applySigned(urls: string[], attachments: Attachment[]): Attachment[] {
   return attachments.map((file, index) => ({ ...file, url: urls[index] ?? "" }));
 }

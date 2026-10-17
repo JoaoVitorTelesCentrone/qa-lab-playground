@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { VIEW_ONLY_LAUNCH } from "@/lib/product/launch";
+import { safeAuthDestination } from "@/lib/auth/redirect";
 
 export async function GET(request: Request) {
   if (VIEW_ONLY_LAUNCH) {
@@ -9,8 +10,7 @@ export async function GET(request: Request) {
 
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const requestedNext = searchParams.get("next") ?? "/lab";
-  const next = requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/lab";
+  const next = safeAuthDestination(searchParams.get("next"));
 
   if (code) {
     const supabase = await createClient();
@@ -20,5 +20,8 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.redirect(`${origin}/login?error=auth`);
+  const loginUrl = new URL("/login", origin);
+  loginUrl.searchParams.set("error", "auth");
+  loginUrl.searchParams.set("next", next);
+  return NextResponse.redirect(loginUrl);
 }

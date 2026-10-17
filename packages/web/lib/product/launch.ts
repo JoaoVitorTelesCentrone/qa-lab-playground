@@ -3,7 +3,7 @@ export const SINGLE_LAB_LAUNCH = true;
 
 /** Superfícies futuras ficam fora do lançamento público. */
 export const CONTENT_ONLY_LAUNCH = true;
-export const VIEW_ONLY_LAUNCH = true;
+export const VIEW_ONLY_LAUNCH = false;
 
 export const LAUNCH_ENVIRONMENT = {
   label: "ExpenseFlow",

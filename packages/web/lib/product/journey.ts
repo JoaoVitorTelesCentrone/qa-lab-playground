@@ -42,7 +42,7 @@ export function toAttachments(raw: unknown): Attachment[] {
     const name = typeof file.name === "string" ? file.name : "";
     const url = typeof file.url === "string" ? file.url : "";
     const path = typeof file.path === "string" ? file.path : "";
-    if (!name || !url) return [];
+    if (!name || (!url && !path)) return [];
     return [{
       name,
       url,
@@ -144,7 +144,9 @@ export function buildJourney(rawEnrollments: Enrollment[], rawSubmissions: Submi
 }
 
 export function buildCoverage(runs: ScenarioRun[]): AppCoverage[] {
-  return practiceApps.map((app) => {
+  // ExpenseFlow is a standalone free challenge and is intentionally kept out
+  // of the four-environment regression dashboard used by the journey view.
+  return practiceApps.filter((app) => app.id !== "expenseflow").map((app) => {
     const total = regressionPacks.find((pack) => pack.id === app.id)?.scenarios.length ?? 0;
     const appRuns = runs.filter((run) => run.appId === app.id);
     const executed = new Set(appRuns.map((run) => run.scenarioId)).size;

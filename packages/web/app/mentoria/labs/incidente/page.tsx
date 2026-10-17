@@ -1,0 +1,8 @@
+import Link from "next/link";
+import { IncidentLab } from "@/components/mentorship/incident-lab";
+
+export const metadata = { title: "Do incidente ao teste preventivo | Mentoria QA Lab" };
+
+export default function IncidentLabPage() {
+  return <main className="mx-auto max-w-5xl px-5 py-10 text-off-white sm:px-8"><Link href="/mentoria/conteudo/10/desafio" className="text-sm font-bold text-mint underline underline-offset-4">Voltar ao desafio da semana 10</Link><header className="my-9 max-w-[70ch]"><p className="text-sm text-mint">Prática científica · Semana 10 · Cerca de 30 minutos</p><h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Do incidente ao teste que impede a volta</h1><p className="mt-4 text-lg leading-8 text-[#C8CFD7]">Siga um identificador pelos logs, confirme uma hipótese, reproduza a falha e mostre o teste falhando antes e passando depois da correção.</p><p className="mt-3 text-sm leading-6 text-[#AAB2BC]">Incidente, release, logs e valores são sintéticos e versionados. Nenhum sistema de produção é consultado.</p></header><IncidentLab/><details className="mt-12 border-t border-white/15 pt-5 text-sm leading-7 text-[#C8CFD7]"><summary className="cursor-pointer font-semibold text-mint">Fundamentação e limite científico</summary><p className="mt-4">O exercício implementa um ciclo fechado de evidência. Ele demonstra prevenção de uma falha controlada; medir redução de reincidência exige acompanhar incidentes reais ao longo do tempo.</p><a className="mt-3 inline-block text-mint underline" href="https://doi.org/10.48550/arXiv.2606.08793" target="_blank" rel="noreferrer">Arquitetura de quality engineering em ciclo fechado</a></details></main>;
+}

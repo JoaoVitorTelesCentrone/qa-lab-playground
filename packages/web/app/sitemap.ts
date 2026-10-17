@@ -7,5 +7,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: baseUrl, changeFrequency: "weekly", priority: 1 },
     { url: `${baseUrl}${LAUNCH_LAB.route}`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}${LAUNCH_ENVIRONMENT.route}`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${baseUrl}/mentoria`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/mentoria/labs/requisitos`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/mentoria/labs/oraculo`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/mentoria/labs/incidente`, changeFrequency: "monthly", priority: 0.7 },
   ];
 }

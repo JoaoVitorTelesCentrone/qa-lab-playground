@@ -1,0 +1,11 @@
+{
+  "name": "@qa-lab/performance",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cenarios k6 seguros para a trilha de performance da mentoria.",
+  "scripts": {
+    "test:baseline": "node scripts/run-k6.js baseline",
+    "test:load": "node scripts/run-k6.js load",
+    "test:spike": "node scripts/run-k6.js spike"
+  }
+}

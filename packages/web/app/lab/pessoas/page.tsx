@@ -5,7 +5,8 @@ import type { PeopleAttempt } from "@/lib/people-scenarios";
 
 export const metadata = { title: "People Lab", description: "Pratique decisões, comunicação e liderança em situações reais de qualidade." };
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ scenario?: string }> }) {
+  const params = await searchParams;
   let authed = false;
   let initialAttempts: PeopleAttempt[] = [];
 
@@ -24,5 +25,5 @@ export default async function Page() {
     }
   }
 
-  return <PeopleLab initialAttempts={initialAttempts} authed={authed} />;
+  return <PeopleLab initialAttempts={initialAttempts} authed={authed} initialScenarioId={params.scenario} />;
 }

@@ -65,6 +65,8 @@ export default async function PortfolioPage({ params }: Props) {
       sections={portfolio.sections}
     />
 
+    {portfolio.mentorshipCases.length > 0 && <section className="mt-12 border-t border-border pt-8"><p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">Cases da mentoria</p><div className="mt-4 grid gap-3">{portfolio.mentorshipCases.map((item) => <Link key={item.id} href={`/portfolio/${portfolio.username}/mentoria/${item.id}`} className="rounded-xl border border-border p-5 transition hover:border-primary"><h2 className="text-lg font-semibold">{item.title}</h2><p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">{item.summary}</p></Link>)}</div></section>}
+
     <footer className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-border pt-8 sm:flex-row sm:items-center">
       <p className="text-sm text-muted-foreground">Evidências produzidas praticando em ambientes reais no QA Lab.</p>
       <Button asChild variant="outline"><Link href="/">Conhecer o QA Lab</Link></Button>

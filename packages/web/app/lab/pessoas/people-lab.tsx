@@ -17,10 +17,13 @@ function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
-export function PeopleLab({ initialAttempts = [], authed = false }: { initialAttempts?: PeopleAttempt[]; authed?: boolean }) {
+export function PeopleLab({ initialAttempts = [], authed = false, initialScenarioId }: { initialAttempts?: PeopleAttempt[]; authed?: boolean; initialScenarioId?: string }) {
   const [category, setCategory] = useState<PeopleScenarioCategory | "all">("all");
   const [level, setLevel] = useState<PeopleScenario["level"] | "all">("all");
-  const [catalogId, setCatalogId] = useState<string>(() => getPeopleCatalogId(getDailyPeopleScenario().id));
+  const [catalogId, setCatalogId] = useState<string>(() => {
+    const requestedId = initialScenarioId ? getPeopleCatalogId(initialScenarioId) || initialScenarioId : "";
+    return getPeopleScenarioByCatalogId(requestedId) ? requestedId : getPeopleCatalogId(getDailyPeopleScenario().id);
+  });
   const scenario = getPeopleScenarioByCatalogId(catalogId) ?? getDailyPeopleScenario();
   const [attempts, setAttempts] = useState<PeopleAttempt[]>(initialAttempts);
   const [response, setResponse] = useState("");

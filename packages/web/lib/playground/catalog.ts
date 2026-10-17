@@ -56,7 +56,9 @@ export const tracks: LabTrack[] = ["UI Automation", "API e Contrato"];
 //
 // Nunca reordene nem insira no meio: o Lab 01 precisa continuar sendo o Lab 01
 // depois que alguém publicar o case dele. Lab novo entra no fim, sempre.
-const LAUNCH_ORDER: number[] = [];
+// Recorte publico atual do lancamento enxuto. A ordem e append-only: um Lab
+// novo entra no fim para nao quebrar certificados, URLs e portfolios existentes.
+const LAUNCH_ORDER: number[] = [101, 103, 105];
 const launchPosition = (number: number) => {
   const index = LAUNCH_ORDER.indexOf(number);
   return index === -1 ? null : index + 1;

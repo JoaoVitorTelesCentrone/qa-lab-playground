@@ -124,37 +124,33 @@ export function ExpenseFlowApp() {
             ))}
           </nav>
 
-          <div className="hidden px-4 pb-6 pt-6 lg:mt-auto lg:block">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4">
-              <p className="text-xs font-medium text-[#A8C8B6]">Área de prática</p>
-              <p className="mt-2 text-sm leading-5 text-white">Encontrou um problema no fluxo?</p>
-              <Link href="/playground/entregas" className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[#B8E9C7] hover:text-white">
-                Documentar descoberta <ArrowRight className="size-3.5" />
-              </Link>
-            </div>
-          </div>
         </aside>
 
         <div className="min-w-0">
           <header className="flex flex-col gap-4 border-b border-[#3B4240] bg-[#202425] px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
             <div>
               <p className="text-xs font-medium text-[#9AA9A0]">Workspace / Reembolsos</p>
-              <p className="mt-0.5 text-sm font-semibold text-[#DCE7DF]">Ambiente de prática do QA Lab</p>
+              <p className="mt-0.5 text-sm font-semibold text-[#DCE7DF]">Simulação de solicitações e aprovações</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <div className="min-w-[195px] flex-1 sm:flex-none">
+                <label htmlFor="expenseflow-profile" className="mb-1 block text-xs font-medium text-[#C5D2CA]">Perfil de teste</label>
                 <SelectField
+                  id="expenseflow-profile"
                   value={profileId}
-                  onChange={setProfileId}
+                  onChange={(nextProfileId) => { setProfileId(nextProfileId); setSelected(null); }}
                   options={profiles.map((item) => ({ value: item.id, label: `${item.name} · ${roleLabel[item.role]}` }))}
                   aria-label="Perfil de teste"
                   className={selectClass}
                   contentClassName={selectContentClass}
                 />
               </div>
-              <Button type="button" variant="outline" onClick={reset} className={cn("h-11 rounded-xl px-3.5", secondaryButton)} title="Restaurar dados iniciais">
+              <Button type="button" variant="outline" onClick={reset} aria-label="Restaurar dados iniciais" className={cn("h-11 rounded-xl px-3.5", secondaryButton)} title="Restaurar dados iniciais">
                 <RefreshCcw className="size-4" /><span className="hidden sm:inline">Restaurar</span>
               </Button>
+              <Link href="/playground/entregas" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#53665A] px-3.5 text-sm font-semibold text-[#B8E9C7] hover:bg-[#343B37] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#75B88D]">
+                Documentar descoberta <ArrowRight className="size-4" />
+              </Link>
             </div>
           </header>
 
@@ -203,7 +199,7 @@ function Dashboard({ expenses, totals, pendingCount, open, navigate }: {
     <>
       <PageHeading
         title="Visão geral"
-        description="Acompanhe solicitações, decisões e valores do perfil selecionado."
+        description="Acompanhe solicitações, decisões e valores do perfil selecionado. Troque de perfil para investigar permissões e fluxo de aprovação."
         action={<Button type="button" onClick={() => navigate("new")} className={cn("h-11 rounded-xl px-5", primaryButton)}><Plus className="size-4" /> Nova despesa</Button>}
       />
 
@@ -243,7 +239,7 @@ function Dashboard({ expenses, totals, pendingCount, open, navigate }: {
             <h2 className="text-base font-semibold tracking-tight">Despesas recentes</h2>
             <p className="mt-0.5 text-xs text-[#9EACA3]">Últimas movimentações deste perfil</p>
           </div>
-          <button type="button" onClick={() => navigate("expenses")} className="inline-flex items-center gap-1 text-sm font-semibold text-[#246B4B] hover:underline focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#246B4B]">Ver todas <ChevronRight className="size-4" /></button>
+          <button type="button" onClick={() => navigate("expenses")} className="inline-flex items-center gap-1 text-sm font-semibold text-[#9BDFB2] hover:text-white hover:underline focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9BDFB2]">Ver todas <ChevronRight className="size-4" /></button>
         </div>
         <ExpenseTable expenses={expenses.slice(0, 5)} open={open} />
       </Surface>
@@ -359,7 +355,7 @@ function ExpenseList({ expenses, open, navigate }: { expenses: Expense[]; open: 
           <SelectField value={category} onChange={setCategory} aria-label="Filtrar por categoria" options={[{ value: "all", label: "Todas as categorias" }, ...toOptions(categories)]} className={selectClass} contentClassName={selectContentClass} />
           <Input aria-label="Filtrar por data" type="date" value={date} onChange={(event) => setDate(event.target.value)} className={fieldClass} />
         </div>
-        <div className="flex items-center justify-between px-5 py-3 text-xs text-[#A3B0A8] sm:px-6"><span>{list.length} {list.length === 1 ? "despesa encontrada" : "despesas encontradas"}</span><span>Selecione uma despesa para ver os detalhes</span></div>
+        <div className="flex flex-wrap items-center justify-between gap-2 px-5 py-3 text-xs text-[#A3B0A8] sm:px-6"><span aria-live="polite">{list.length} {list.length === 1 ? "despesa encontrada" : "despesas encontradas"}</span><span>Selecione uma despesa para ver os detalhes</span></div>
         <ExpenseTable expenses={list} open={open} />
       </Surface>
     </>

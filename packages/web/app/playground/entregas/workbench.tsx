@@ -97,7 +97,7 @@ function BddForm({ add }: { add: (item: BddScenario) => void }) {
   return <form onSubmit={submit} className="grid gap-5"><div className="grid gap-5 sm:grid-cols-2"><FieldLabel>Funcionalidade<input required name="feature" className="field" placeholder="Ex.: gestão de despesas" /></FieldLabel><FieldLabel>Nome do cenário<input required name="title" className="field" placeholder="Ex.: excluir despesa recalcula total" /></FieldLabel></div><div className="grid gap-5"><FieldLabel>Dado que<textarea required name="given" rows={2} className="field resize-y" placeholder="o usuário possui uma despesa registrada..." /></FieldLabel><FieldLabel>Quando<textarea required name="when" rows={2} className="field resize-y" placeholder="ele exclui essa despesa..." /></FieldLabel><FieldLabel>Então<textarea required name="then" rows={2} className="field resize-y" placeholder="o total mensal deve ser recalculado..." /></FieldLabel></div><AddButton>Registrar cenário BDD</AddButton></form>;
 }
 
-function EntryList<T extends { id: string }>({ stage, items, remove }: { stage: Stage; items: T[]; remove: (id: string) => void }) {
+function EntryList({ stage, items, remove }: { stage: Stage; items: BugReport[] | BddScenario[]; remove: (id: string) => void }) {
   if (!items.length) return <div className="mt-10 border-t border-dashed border-[#3A4147] py-8"><p className="text-sm text-[#76818B]">Ainda não há registros nesta etapa.</p></div>;
   return <div className="mt-10 border-t border-[#3A4147]"><p className="pt-5 text-xs font-bold text-[#7F8993]">{items.length} registro{items.length > 1 ? "s" : ""}</p><div className="mt-2 divide-y divide-[#30373D]">{items.map((item) => <EntryRow key={item.id} stage={stage} item={item} remove={remove} />)}</div></div>;
 }

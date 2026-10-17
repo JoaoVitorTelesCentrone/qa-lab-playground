@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    ".tmp/**",
+    "test-results/**",
     // Módulos legados mantidos apenas como referência; as rotas públicas são
     // redirecionadas em next.config.ts e não fazem parte do produto publicado.
     "app/alvos/**",

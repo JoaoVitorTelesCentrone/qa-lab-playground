@@ -1,10 +1,14 @@
-import { loadMetrics, metricsAvailable } from "@/lib/product/metrics-store";
+import { isAdmin, loadMetrics, metricsAvailable } from "@/lib/product/metrics-store";
 import { buildMetrics } from "@/lib/product/metrics";
+import { getSessionUser } from "@/lib/product/store";
+import { notFound } from "next/navigation";
 
 export const metadata = { title: "Métricas | QA Lab", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 
 export default async function MetricsPage() {
+  const user = await getSessionUser();
+  if (!user || !isAdmin(user.email)) notFound();
   const metrics = metricsAvailable() ? await loadMetrics(30) : buildMetrics([]);
   const peak = Math.max(1, ...metrics.daily.map((item) => item.events));
 

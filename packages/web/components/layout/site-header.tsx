@@ -7,12 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LAUNCH_LAB } from "@/lib/product/launch";
 import { cn } from "@/lib/utils";
+import { AccountNav } from "@/components/auth/account-nav";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 const LINKEDIN_URL = "https://www.linkedin.com/company/qa-lab-oficial/";
 
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const labActive = pathname === LAUNCH_LAB.route || pathname.startsWith("/playground/");
+  const contentActive = pathname.startsWith("/mentoria/conteudo");
+  const mentorshipActive = pathname.startsWith("/mentoria") && !contentActive;
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 py-3 sm:px-6 sm:py-4">
@@ -26,12 +30,19 @@ export function SiteHeader() {
           <Link href={LAUNCH_LAB.route} className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors", labActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
             O Lab
           </Link>
+          <Link href="/mentoria" aria-current={mentorshipActive ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors", mentorshipActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+            Mentoria
+          </Link>
+          <Link href="/mentoria/conteudo" aria-current={contentActive ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors", contentActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+            Conteúdo
+          </Link>
         </nav>
 
         <div className="flex items-center gap-1.5">
           <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" aria-label="QA Lab no LinkedIn" className="hidden size-9 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-primary sm:inline-flex">
             <Linkedin className="size-4" />
           </a>
+          <AccountNav configured={isSupabaseConfigured()} />
           <Button asChild size="sm" className="hidden rounded-full px-4 sm:inline-flex">
             <Link href={LAUNCH_LAB.route}>Começar</Link>
           </Button>
@@ -45,7 +56,10 @@ export function SiteHeader() {
                 <span className="text-lg font-semibold">QA Lab</span>
               </SheetTitle>
               <Link href={LAUNCH_LAB.route} className="text-base font-medium hover:text-primary">O Lab</Link>
+              <Link href="/mentoria" className="text-base font-medium hover:text-primary">Mentoria</Link>
+              <Link href="/mentoria/conteudo" aria-current={contentActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Conteúdo</Link>
               <div className="mt-auto flex flex-col gap-2">
+                <Button asChild variant="outline" className="w-full rounded-full"><Link href="/login">Entrar na minha conta</Link></Button>
                 <Button asChild className="w-full rounded-full"><Link href={LAUNCH_LAB.route}>Começar o Lab</Link></Button>
                 <Button asChild variant="ghost" className="w-full rounded-full"><a href={LINKEDIN_URL} target="_blank" rel="noreferrer"><Linkedin className="size-4" /> LinkedIn do QA Lab</a></Button>
               </div>

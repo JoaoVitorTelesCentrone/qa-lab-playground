@@ -24,7 +24,7 @@ describe("People Lab", () => {
 
   test("prioriza cenários ainda não vistos", () => {
     const seen = peopleScenarios.slice(0, -1).map((item) => item.id);
-    expect(nextPeopleScenario(null, seen, () => 0).id).toBe(peopleScenarios.at(-1)?.id);
+    expect(nextPeopleScenario(null, seen, () => 0).id).toBe(peopleScenarios[peopleScenarios.length - 1].id);
   });
 
   test("ignora histórico inválido", () => {
