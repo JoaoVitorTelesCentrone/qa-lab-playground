@@ -15,8 +15,8 @@ const LINKEDIN_URL = "https://www.linkedin.com/company/qa-lab-oficial/";
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const labActive = pathname === LAUNCH_LAB.route || pathname.startsWith("/playground/");
-  const contentActive = pathname.startsWith("/mentoria/conteudo");
-  const mentorshipActive = pathname.startsWith("/mentoria") && !contentActive;
+  const contentActive = pathname === "/conteudo" || pathname.startsWith("/conteudo/");
+  const mentorshipActive = pathname.startsWith("/mentoria");
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 py-3 sm:px-6 sm:py-4">
@@ -33,7 +33,7 @@ export function SiteHeader() {
           <Link href="/mentoria" aria-current={mentorshipActive ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors", mentorshipActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
             Mentoria
           </Link>
-          <Link href="/mentoria/conteudo" aria-current={contentActive ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors", contentActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+          <Link href="/conteudo" aria-current={contentActive ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors", contentActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
             Conteúdo
           </Link>
         </nav>
@@ -57,7 +57,7 @@ export function SiteHeader() {
               </SheetTitle>
               <Link href={LAUNCH_LAB.route} className="text-base font-medium hover:text-primary">O Lab</Link>
               <Link href="/mentoria" className="text-base font-medium hover:text-primary">Mentoria</Link>
-              <Link href="/mentoria/conteudo" aria-current={contentActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Conteúdo</Link>
+              <Link href="/conteudo" aria-current={contentActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Conteúdo</Link>
               <div className="mt-auto flex flex-col gap-2">
                 <Button asChild variant="outline" className="w-full rounded-full"><Link href="/login">Entrar na minha conta</Link></Button>
                 <Button asChild className="w-full rounded-full"><Link href={LAUNCH_LAB.route}>Começar o Lab</Link></Button>

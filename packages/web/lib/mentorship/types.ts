@@ -12,6 +12,7 @@ export type MentorshipEnrollment = {
   diagnosticScore: Record<string, unknown>;
   joinedAt: string | null;
   completedAt: string | null;
+  programVersion: "v1" | "v2";
 };
 
 export type MentorshipSubmission = {

@@ -2,7 +2,6 @@ import Link from "next/link";
 
 const items = [
   { href: "/mentoria/app", label: "Minha jornada" },
-  { href: "/mentoria/conteudo", label: "Conteúdo" },
   { href: "/mentoria/carreira", label: "Carreira" },
   { href: "/mentoria/dinamicas", label: "Dinâmicas" },
 ] as const;

@@ -1,0 +1,32 @@
+meta {
+  name: 6 - Login de treino
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-QALab-Session: {{sessionId}}
+}
+
+body:json {
+  {
+    "username": "standard_user",
+    "password": "qa_lab_secret"
+  }
+}
+
+script:post-response {
+  const body = res.getBody();
+  test("login retornou token", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(body.data.token).to.be.a("string").and.not.empty;
+  });
+  if (body.data && body.data.token) bru.setVar("token", body.data.token);
+}

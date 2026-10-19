@@ -1,0 +1,22 @@
+meta {
+  name: 8 - Excluir com token
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}/api/bookings/{{bookingId}}
+  body: none
+  auth: none
+}
+
+headers {
+  X-QALab-Session: {{sessionId}}
+  Authorization: Bearer {{token}}
+}
+
+tests {
+  test("exclusão autorizada sem corpo", function() {
+    expect(res.getStatus()).to.equal(204);
+  });
+}

@@ -2,18 +2,16 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, BookOpenCheck, ClipboardCheck, ExternalLink, FlaskConical, MessageSquareText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CompleteLessonButton, MentorshipPortfolioForm, SubmissionForm, WeeklyCommitmentForm } from "@/components/mentorship/mentorship-actions";
-import { WeekStudyGuide } from "@/components/mentorship/week-study-guide";
-import { LabBrief } from "@/components/mentorship/lab-brief";
+import { MentorshipPortfolioForm, SubmissionForm, WeeklyCommitmentForm } from "@/components/mentorship/mentorship-actions";
+import { LessonSequence } from "@/components/mentorship/lesson-sequence";
 import { BrotoSpacePractice } from "@/components/mentorship/brotospace-practice";
 import { findMentorshipWeek, requirementsFor } from "@/lib/mentorship/catalog";
 import { brotoSpaceWeeks } from "@/lib/mentorship/brotospace-track";
-import { getMentorshipWeekContent } from "@/lib/mentorship/curriculum";
-import { getMentorshipLessonGuide } from "@/lib/mentorship/lesson-guides";
-import { labBriefs } from "@/lib/mentorship/lab-briefs";
 import { getOwnMentorshipCase } from "@/lib/mentorship/portfolio";
 import { getMentorshipDashboard, listOwnLabEvidence, listReviewsForSubmissions } from "@/lib/mentorship/store";
 import { getSessionUser } from "@/lib/product/store";
+import { mentorshipThemes, themeForUnit } from "@/lib/mentorship/themes";
+import { pathV2ChapterHref, pathV2Chapters } from "@/lib/mentorship/path-v2";
 
 export const dynamic = "force-dynamic";
 
@@ -25,16 +23,21 @@ const steps = [
 ];
 
 export default async function MentorshipWeekPage({ params }: { params: Promise<{ week: string }> }) {
-  const user = await getSessionUser();
-  if (!user) redirect("/login?next=/mentoria/app");
   const number = Number((await params).week);
+  const user = await getSessionUser();
+  if (!user) redirect(`/login?next=${encodeURIComponent(`/mentoria/semanas/${number}`)}`);
   const week = findMentorshipWeek(number);
-  const content = getMentorshipWeekContent(number);
-  const labBrief = labBriefs[number];
+  const theme = themeForUnit(number);
   const brotoPractice = brotoSpaceWeeks[number];
-  if (!week || !content || !labBrief || !brotoPractice) notFound();
+  if (!week || !theme || !brotoPractice) notFound();
+  const themeIndex = mentorshipThemes.findIndex((item) => item.id === theme.id);
   const dashboard = await getMentorshipDashboard(user.id);
   if (!dashboard) redirect("/mentoria");
+  if (dashboard.enrollment.programVersion === "v2") {
+    const prefix = `mentoria.w${String(number).padStart(2, "0")}.`;
+    const destination = pathV2Chapters.find(({ chapter }) => chapter.lessonKeys.some((key) => key.startsWith(prefix)));
+    redirect(destination ? pathV2ChapterHref(destination.module, destination.chapter) : "/mentoria/app");
+  }
   if (dashboard.enrollment.status === "paused") redirect("/mentoria/app");
 
   const lessonKeys = new Set(week.lessons.map((lesson) => lesson.key));
@@ -47,16 +50,18 @@ export default async function MentorshipWeekPage({ params }: { params: Promise<{
   const labEvidence = await listOwnLabEvidence(user.id);
   const reviewsBySubmission = await listReviewsForSubmissions(user.id, attempts.map((attempt) => attempt.id));
   const liveSession = dashboard.sessions.find((session) => session.week_number === week.number);
-  const lessonContent = new Map((dashboard.lessonContent ?? []).map((item: { lesson_key: string; video_url?: string | null; material_url?: string | null }) => [item.lesson_key, item]));
+  const videoKeys = (dashboard.lessonContent ?? []).filter((item) => item.video_url).map((item) => item.lesson_key);
+  const resumeIndex = week.lessons.findIndex((lesson) => !completed.has(lesson.key));
+  const resumeHref = `/conteudo/${week.number}/${resumeIndex >= 0 ? `teoria-${resumeIndex + 1}` : "quiz"}`;
   const finalSubmission = week.number === 12 ? dashboard.submissions.find((item) => item.assignmentKey === week.assignment.key && item.status === "approved") : null;
   const finalCase = finalSubmission ? await getOwnMentorshipCase(finalSubmission.id) : null;
   const practiceHref = `${week.assignment.practice.route}${week.assignment.practice.route.includes("?") ? "&" : "?"}mentorshipWeek=${week.number}`;
 
   return <main className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
-    <div className="flex flex-wrap items-center gap-5"><Link href="/mentoria/app" className="inline-flex items-center gap-2 text-sm font-bold text-mint hover:text-neon"><ArrowLeft className="size-4" /> Voltar para minha jornada</Link><Link href="/mentoria/conteudo" className="text-sm font-bold text-[#C8CFD7] hover:text-mint">Ver roadmap de conteúdo</Link></div>
+    <div className="flex flex-wrap items-center gap-5"><Link href="/mentoria/app" className="inline-flex items-center gap-2 text-sm font-bold text-mint hover:text-neon"><ArrowLeft className="size-4" /> Voltar para minha jornada</Link><Link href={`/conteudo/temas/${theme.slug}#unidade-${number}`} className="text-sm font-bold text-[#C8CFD7] hover:text-mint">Ver tema completo</Link></div>
     <header className="mt-8 max-w-4xl">
-      <p className="text-sm font-bold text-mint">Semana {week.number} de 12</p>
-      <h1 className="mt-4 text-4xl font-black text-off-white sm:text-5xl">{week.title}</h1>
+      <p className="text-sm font-bold text-mint">Tema {themeIndex + 1} · Missão {number - theme.units[0] + 1}</p>
+      <h1 className="mt-4 text-4xl font-black text-off-white sm:text-5xl">{week.assignment.title}</h1>
       <p className="mt-4 text-lg leading-8 text-[#AAB2BC]">{week.assignment.objective}</p>
       <div className="mt-6 flex flex-wrap gap-2"><span className="border border-white/10 bg-[#171B21] px-3 py-1.5 text-xs text-[#C8CFD7]">Foco: {week.technicalFocus}</span><span className="border border-white/10 bg-[#171B21] px-3 py-1.5 text-xs text-[#C8CFD7]">Nivel: {dashboard.enrollment.level === "intermediate" ? "intermediario" : "iniciante"}</span></div>
     </header>
@@ -66,33 +71,26 @@ export default async function MentorshipWeekPage({ params }: { params: Promise<{
     </nav>
 
     <section id="aprender" className="scroll-mt-24 pt-10">
-      <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm font-bold text-neon">Etapa 1 · Aprender</p><h2 className="mt-2 text-2xl font-black text-off-white">Estude o conceito e prepare a investigacao</h2></div><span className="text-sm text-[#8B949E]">{completed.size}/{week.lessons.length} aulas concluidas</span></div>
-      <WeekStudyGuide content={content} practice={week.assignment.practice} />
-      <Link href={`/mentoria/conteudo/${week.number}/teoria-1`} className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-mint hover:text-neon">Ler as aulas teóricas completas <BookOpenCheck className="size-4" /></Link>
-      <h3 className="mt-12 text-xl font-black text-off-white">Topicos da semana</h3><p className="mt-2 text-sm leading-6 text-[#AAB2BC]">Use o guia acima para estudar cada tema. Quando houver video ou material complementar publicado, o link aparece no topico.</p>
-      <div className="mt-5 grid gap-3">{week.lessons.map((lesson) => {
-        const published = lessonContent.get(lesson.key);
-        const videoUrl = published?.video_url || lesson.videoUrl;
-        const materialUrl = published?.material_url;
-        const guide = getMentorshipLessonGuide(lesson.key);
-        return <article key={lesson.key} className="flex flex-wrap items-center justify-between gap-4 border border-white/10 bg-[#171B21] p-5">
-          <div className="flex min-w-0 items-start gap-4"><span className="flex size-9 shrink-0 items-center justify-center bg-mint/10 text-mint"><BookOpenCheck className="size-4" /></span><div><div className="flex flex-wrap items-center gap-2"><h3 className="font-bold text-off-white">{lesson.title}</h3>{videoUrl && <span className="text-xs text-[#AAB2BC]">Video · {lesson.duration}</span>}</div><p className="mt-1 text-sm leading-6 text-[#AAB2BC]">{lesson.summary}</p><div className="mt-2 flex flex-wrap gap-x-4 gap-y-2">{videoUrl && <a href={videoUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs font-bold text-neon hover:text-mint">Assistir aula <ExternalLink className="size-3" /></a>}{materialUrl && <a href={materialUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs font-bold text-neon hover:text-mint">Abrir material <ExternalLink className="size-3" /></a>}</div></div></div>
-          {guide ? <details className="w-full border-t border-white/10 pt-4"><summary className="cursor-pointer text-sm font-bold text-mint marker:text-mint">Ler explicação e exemplo</summary><div className="mt-4 grid gap-4 text-sm leading-7 text-[#C8CFD7]"><p>{guide.idea}</p><p><strong className="text-off-white">Exemplo:</strong> {guide.example}</p><p className="border-t border-white/10 pt-4"><strong className="text-off-white">Agora aplique:</strong> {guide.apply}</p></div><div className="mt-5 flex justify-end"><CompleteLessonButton lessonKey={lesson.key} completed={completed.has(lesson.key)} /></div></details> : <CompleteLessonButton lessonKey={lesson.key} completed={completed.has(lesson.key)} />}
-        </article>;
-      })}</div>
-      
+      <div className="flex flex-wrap items-center justify-between gap-4"><h2 className="text-2xl font-black text-off-white">Estude as aulas</h2><span className="text-sm text-[#AAB2BC]">{completed.size}/{week.lessons.length} concluídas</span></div>
+      <p className="mt-2 text-sm leading-6 text-[#AAB2BC]">Escolha vídeo ou leitura na aula. Depois, confira seu entendimento e pratique.</p>
+      <Link href={resumeHref} className="mt-5 inline-flex min-h-11 items-center gap-2 bg-mint px-5 text-sm font-bold text-[#101319] hover:bg-neon">{completed.size ? "Continuar estudo" : "Começar as aulas"}<BookOpenCheck aria-hidden="true" className="size-4" /></Link>
+      <div className="mt-5 max-w-3xl"><LessonSequence unit={week} completedKeys={[...completed]} videoKeys={videoKeys} /></div>
     </section>
 
     <section id="praticar" className="scroll-mt-24 pt-12">
-      <div><p className="text-sm font-bold text-neon">Etapa 2 · Praticar</p><h2 className="mt-2 text-2xl font-black text-off-white">Leve o conceito para um Lab</h2></div>
-      <LabBrief brief={labBrief} />
+      <div><p className="text-sm font-bold text-neon">Etapa 2 · Praticar</p><h2 className="mt-2 text-2xl font-black text-off-white">Aplique no Broto Space</h2></div>
       <BrotoSpacePractice week={brotoPractice} />
+      <details className="group mt-6 border-y border-white/10 py-4">
+        <summary className="cursor-pointer text-sm font-bold text-[#C8CFD7] marker:text-mint">Exercício opcional no QA Lab · {week.assignment.practice.estimatedMinutes} min</summary>
+        <div className="mt-4">
       <article className="mt-5 grid gap-6 border border-mint/25 bg-mint/[.04] p-6 md:grid-cols-[1fr_auto] md:items-start">
         <div><div className="flex items-center gap-3"><FlaskConical className="size-5 text-mint" /><h3 className="text-xl font-black text-off-white">{week.assignment.practice.environment}</h3></div><p className="mt-2 text-sm text-[#AAB2BC]">Artefato: <strong className="text-off-white">{week.assignment.practice.artifact}</strong> · cerca de {week.assignment.practice.estimatedMinutes} min</p>
           <ol className="mt-5 grid gap-2 text-sm leading-6 text-[#C8CFD7]">{week.assignment.practice.instructions.map((item, index) => <li key={item}><span className="mr-2 font-bold text-mint">{index + 1}.</span>{item}</li>)}</ol>
           <h4 className="mt-5 text-sm font-black text-off-white">Considere a pratica concluida quando</h4><ul className="mt-2 grid gap-1 text-sm leading-6 text-[#AAB2BC]">{week.assignment.practice.completionCriteria.map((item) => <li key={item}>— {item}</li>)}</ul>
         </div><div className="flex flex-col gap-3"><Button asChild><Link href={practiceHref} target="_blank" rel="noreferrer">Abrir ambiente de pratica <ExternalLink className="ml-2 size-4" /></Link></Button><Link href={`/mentoria/semanas/${week.number}#enviar`} className="text-center text-xs font-bold text-neon hover:text-mint">Voltar para registrar a entrega</Link></div>
       </article>
+        </div>
+      </details>
     </section>
 
     <section id="enviar" className="scroll-mt-24 pt-12">

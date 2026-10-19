@@ -1,0 +1,25 @@
+meta {
+  name: Produto ausente retorna status incorreto em modo bug
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/products/999
+  body: none
+  auth: none
+}
+
+headers {
+  X-QA-Lab-Scenario: bug
+}
+
+docs {
+  Falha intencional: compare o status observado ao contrato esperado para recurso inexistente. Execute separadamente; o teste deve falhar em modo bug.
+}
+
+tests {
+  test("produto inexistente deveria retornar 404 (falha esperada)", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

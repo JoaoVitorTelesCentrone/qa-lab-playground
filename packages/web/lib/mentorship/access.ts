@@ -22,7 +22,7 @@ type EnrollmentRow = {
   completed_at: string | null;
 };
 
-function toEnrollment(row: EnrollmentRow): MentorshipEnrollment {
+function toEnrollment(row: EnrollmentRow, programVersion: "v1" | "v2"): MentorshipEnrollment {
   return {
     id: row.id,
     cohortId: row.cohort_id,
@@ -33,6 +33,7 @@ function toEnrollment(row: EnrollmentRow): MentorshipEnrollment {
     diagnosticScore: row.diagnostic_score && typeof row.diagnostic_score === "object" ? row.diagnostic_score as Record<string, unknown> : {},
     joinedAt: row.joined_at,
     completedAt: row.completed_at,
+    programVersion,
   };
 }
 
@@ -77,7 +78,9 @@ export async function getEnrollmentForUser(userId: string, enrollmentId?: string
     const { data, error } = await query.maybeSingle();
     if (error) throw new Error(`Nao foi possivel carregar sua matricula: ${error.message}`);
     if (!data) return null;
-    return toEnrollment(data as EnrollmentRow);
+    const { data: cohort, error: cohortError } = await admin.from("mentorship_cohorts").select("program_version").eq("id", data.cohort_id).maybeSingle();
+    if (cohortError || !cohort) throw new Error(`Nao foi possivel carregar sua matricula: ${cohortError?.message ?? "turma nao encontrada"}`);
+    return toEnrollment(data as EnrollmentRow, cohort.program_version === "v2" ? "v2" : "v1");
   } catch (error) {
     if (error instanceof Error && error.message.startsWith("Nao foi possivel carregar sua matricula:")) throw error;
     throw new Error(error instanceof Error ? error.message : "Nao foi possivel carregar sua matricula.");

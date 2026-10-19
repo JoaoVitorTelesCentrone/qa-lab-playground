@@ -25,6 +25,7 @@ npm-debug.log*
 # local validation artifacts
 packages/web/.tmp/
 packages/web/test-results/
+packages/web/supabase/.temp/
 
 # scraping cache
 .firecrawl/

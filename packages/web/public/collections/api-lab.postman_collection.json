@@ -1,0 +1,69 @@
+{
+  "info": {
+    "_postman_id": "e2ab0b28-861d-49d5-a0d8-3b633fab3b50",
+    "name": "QA Lab · API Playground",
+    "description": "Coleção de treino local. Rode Fluxo principal em sequência. Desafio de bug é intencional e deve ser executado separadamente. Não aponte para produção.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3002", "type": "string" },
+    { "key": "sessionId", "value": "postman-training", "type": "string" },
+    { "key": "bookingId", "value": "", "type": "string" },
+    { "key": "token", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Fluxo principal · execute em sequência",
+      "item": [
+        {
+          "name": "1 · Reset da sessão de treino",
+          "request": { "method": "POST", "header": [{ "key": "X-QALab-Session", "value": "{{sessionId}}" }], "url": "{{baseUrl}}/api/test/reset", "description": "Restaura as reservas da sessão identificada por X-QALab-Session." },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('reset concluído', () => pm.response.to.have.status(200));", "pm.test('sessão retornada', () => pm.expect(pm.response.headers.get('X-QALab-Session')).to.eql(pm.collectionVariables.get('sessionId')));"] } }]
+        },
+        {
+          "name": "2 · Listar reservas",
+          "request": { "method": "GET", "header": [{ "key": "X-QALab-Session", "value": "{{sessionId}}" }], "url": "{{baseUrl}}/api/bookings", "description": "Resposta paginada no formato { data, meta }." },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["const body = pm.response.json();", "pm.test('lista responde 200', () => pm.response.to.have.status(200));", "pm.test('contrato de lista', () => { pm.expect(body.data).to.be.an('array'); pm.expect(body.meta).to.be.an('object'); });"] } }]
+        },
+        {
+          "name": "3 · Criar reserva",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "X-QALab-Session", "value": "{{sessionId}}" }], "body": { "mode": "raw", "raw": "{\n  \"firstname\": \"Lia\",\n  \"lastname\": \"QA Lab\",\n  \"totalprice\": 123,\n  \"depositpaid\": true,\n  \"bookingdates\": { \"checkin\": \"2099-12-01\", \"checkout\": \"2099-12-02\" },\n  \"additionalneeds\": \"Treino de API\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/bookings" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["const body = pm.response.json();", "pm.test('reserva criada', () => pm.response.to.have.status(201));", "pm.test('id retornado', () => pm.expect(body.data.id).to.exist);", "if (body.data && body.data.id) pm.collectionVariables.set('bookingId', String(body.data.id));"] } }]
+        },
+        {
+          "name": "4 · Ler reserva criada",
+          "request": { "method": "GET", "header": [{ "key": "X-QALab-Session", "value": "{{sessionId}}" }], "url": "{{baseUrl}}/api/bookings/{{bookingId}}" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["const body = pm.response.json();", "pm.test('reserva encontrada', () => pm.response.to.have.status(200));", "pm.test('id corresponde', () => pm.expect(String(body.data.id)).to.eql(pm.collectionVariables.get('bookingId')));"] } }]
+        },
+        {
+          "name": "5 · Atualizar sem token (deve negar)",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "X-QALab-Session", "value": "{{sessionId}}" }], "body": { "mode": "raw", "raw": "{\"additionalneeds\":\"Sem autorização\"}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/bookings/{{bookingId}}", "description": "Teste negativo: 401 é o resultado esperado." },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('alteração sem autenticação é bloqueada', () => pm.response.to.have.status(401));"] } }]
+        },
+        {
+          "name": "6 · Login de treino",
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "X-QALab-Session", "value": "{{sessionId}}" }], "body": { "mode": "raw", "raw": "{\"username\":\"standard_user\",\"password\":\"qa_lab_secret\"}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/auth/login" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["const body = pm.response.json();", "pm.test('login concluído', () => pm.response.to.have.status(200));", "pm.test('token retornado', () => pm.expect(body.data.token).to.be.a('string').and.not.empty);", "if (body.data && body.data.token) pm.collectionVariables.set('token', body.data.token);"] } }]
+        },
+        {
+          "name": "7 · Atualizar com token",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "X-QALab-Session", "value": "{{sessionId}}" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "body": { "mode": "raw", "raw": "{\"additionalneeds\":\"Autorização verificada\"}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/api/bookings/{{bookingId}}" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["const body = pm.response.json();", "pm.test('alteração autorizada', () => pm.response.to.have.status(200));", "pm.test('mudança persistida', () => pm.expect(body.data.additionalneeds).to.eql('Autorização verificada'));"] } }]
+        },
+        {
+          "name": "8 · Excluir com token",
+          "request": { "method": "DELETE", "header": [{ "key": "X-QALab-Session", "value": "{{sessionId}}" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/api/bookings/{{bookingId}}" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('exclusão autorizada sem corpo', () => pm.response.to.have.status(204));"] } }]
+        }
+      ]
+    },
+    {
+      "name": "Desafio de bug · execute separadamente",
+      "item": [{
+        "name": "Produto ausente retorna status incorreto em modo bug",
+        "request": { "method": "GET", "header": [{ "key": "X-QA-Lab-Scenario", "value": "bug" }], "url": "{{baseUrl}}/api/products/999", "description": "Falha intencional: compare o status observado com o contrato esperado para recurso inexistente. Este teste deve falhar em modo bug." },
+        "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('produto inexistente deve retornar 404 (falha esperada neste desafio)', () => pm.response.to.have.status(404));"] } }]
+      }]
+    }
+  ]
+}

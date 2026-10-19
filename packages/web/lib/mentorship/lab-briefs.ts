@@ -65,7 +65,7 @@ export const labBriefs: Record<number, LabBrief> = {
   },
   7: {
     scenario: "A API de treino oferece operações de consulta e escrita. Um teste que valida apenas HTTP 200 pode deixar passar schema errado, valor incorreto ou acesso indevido. Sua tarefa é verificar o contrato como consumidor da API.",
-    startingPoint: "Abra o API Playground e a documentação do recurso escolhido. Use uma sessão de treino e dados criados por você. Registre base URL e credenciais fora da coleção ou spec compartilhada.",
+    startingPoint: "Baixe a coleção Postman ou Bruno em /api-docs e execute o fluxo principal contra Local. Ela usa a API de treino do QA Lab, não a API do Broto Space. Só troque o alvo quando receber um staging autorizado e seu contrato; nunca use produção ou dados reais.",
     mission: "Crie uma coleção ou suíte de contrato com sucesso, erro e limite de autorização ou validação.",
     tasks: ["Selecione um recurso e anote método, endpoint, campos obrigatórios, status esperado e regra de negócio.", "Execute uma operação de criação, capture o ID retornado e consulte o recurso; valide status, campos e valor persistido.", "Execute uma alteração ou remoção e confirme o efeito com uma nova consulta, não apenas com o status da resposta.", "Faça um request com campo ausente ou inválido e registre código, corpo e ausência de alteração parcial.", "Se o recurso permitir, verifique comportamento com outra conta ou sem autorização. Documente setup, variáveis, limpeza e ordem das requests."],
     evidence: ["Collection ou spec executável sem IDs fixos e sem segredos embutidos.", "Resultados de sucesso, erro e validação do corpo.", "Notas sobre contrato, dados de teste e limite de autorização."],

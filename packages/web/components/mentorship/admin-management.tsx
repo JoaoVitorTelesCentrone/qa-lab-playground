@@ -3,6 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { LessonVideo } from "@/components/mentorship/lesson-video";
+import { resolveLessonMedia } from "@/lib/mentorship/lesson-media";
+import { mentorshipThemes, themeForUnit } from "@/lib/mentorship/themes";
+import { extraTheoryV2, pathV2Chapters, pathV2ChapterHref } from "@/lib/mentorship/path-v2";
 
 type Cohort = { id: string; name: string; starts_on: string; ends_on: string; capacity: number; status: string };
 type Person = { id: string; fullName: string; email: string };
@@ -155,24 +159,41 @@ function SessionPanel({ cohorts, sessions }: Props) {
 }
 
 function LessonPanel({ lessons, lessonContent }: Props) {
+  const allLessons = [...lessons, ...Object.values(extraTheoryV2).map(({ lesson }) => ({ key: lesson.key, title: lesson.title, week: 0 }))];
   const router = useRouter();
   const [key, setKey] = useState("");
   const [form, setForm] = useState({ videoUrl: "", materialUrl: "", status: "draft", availableAt: "" });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const selected = allLessons.find((lesson) => lesson.key === key);
+  const theme = selected ? themeForUnit(selected.week) : undefined;
+  const media = resolveLessonMedia(form.videoUrl);
+  const videoCount = allLessons.filter((lesson) => lessonContent.some((item) => item.lesson_key === lesson.key && item.video_url)).length;
+  const v2Chapter = selected?.week === 0 ? pathV2Chapters.find(({ chapter }) => chapter.lessonKeys.includes(selected.key)) : undefined;
+  const lessonHref = selected?.week === 0 && v2Chapter ? `${pathV2ChapterHref(v2Chapter.module, v2Chapter.chapter)}#${selected.key}` : selected ? `/conteudo/${selected.week}/teoria-${lessons.filter((lesson) => lesson.week === selected.week).findIndex((lesson) => lesson.key === selected.key) + 1}` : "";
   function selectLesson(value: string) { const row = lessonContent.find((item) => item.lesson_key === value); setKey(value); setForm({ videoUrl: row?.video_url ?? "", materialUrl: row?.material_url ?? "", status: row?.status ?? "draft", availableAt: localDate(row?.available_at ?? null) }); setError(""); setMessage(""); }
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setError(""); setMessage("");
-    try { await save(`/api/v1/mentorship/admin/lessons/${encodeURIComponent(key)}`, "PUT", form); setMessage("Conteudo da aula salvo."); router.refresh(); }
+    try {
+      if (form.videoUrl.trim() && !media) throw new Error("Informe um link HTTP ou HTTPS válido para o vídeo.");
+      await save(`/api/v1/mentorship/admin/lessons/${encodeURIComponent(key)}`, "PUT", { ...form, availableAt: form.status === "scheduled" && form.availableAt ? new Date(form.availableAt).toISOString() : "" });
+      setMessage(form.status === "published" ? "Aula publicada. O vídeo e o material já aparecem para os alunos da mentoria." : form.status === "scheduled" ? "Publicação agendada. O conteúdo ficará disponível na data escolhida." : "Rascunho salvo. O conteúdo ainda não está disponível para os alunos.");
+      router.refresh();
+    }
     catch (cause) { setError(cause instanceof Error ? cause.message : "Falha ao salvar conteudo."); }
     finally { setBusy(false); }
   }
-  return <form onSubmit={submit} className={panelClass}><h2 className="text-xl font-black text-off-white">Conteudo das aulas</h2>
-    <Select label="Aula" value={key} onChange={selectLesson}><option value="">Selecione uma aula</option>{lessons.map((lesson) => <option key={lesson.key} value={lesson.key}>Semana {lesson.week} · {lesson.title}</option>)}</Select>
-    <Field label="Link do video" type="url" required={false} value={form.videoUrl} onChange={(videoUrl) => setForm({ ...form, videoUrl })} /><Field label="Link do material" type="url" required={false} value={form.materialUrl} onChange={(materialUrl) => setForm({ ...form, materialUrl })} />
-    <Select label="Publicacao" value={form.status} onChange={(status) => setForm({ ...form, status })}><option value="draft">Rascunho</option><option value="published">Publicado</option><option value="scheduled">Agendado</option></Select>
-    {form.status === "scheduled" && <Field label="Disponivel a partir de" type="datetime-local" value={form.availableAt} onChange={(availableAt) => setForm({ ...form, availableAt })} />}
-    <Feedback error={error} message={message} /><Button type="submit" disabled={busy || !key}>{busy ? "Salvando..." : "Salvar conteudo"}</Button>
+  return <form id="conteudo-aulas" onSubmit={submit} className={`${panelClass} scroll-mt-24`}><h2 className="text-xl font-black text-off-white">Publicar aulas</h2>
+    <p className="text-sm leading-6 text-[#AAB2BC]">{videoCount}/{allLessons.length} aulas com vídeo cadastrado. Escolha a aula, confira a prévia e publique.</p>
+    <Select label="Aula" value={key} onChange={selectLesson}><option value="">Selecione uma aula</option>{mentorshipThemes.map((item, index) => <optgroup key={item.id} label={`Tema ${index + 1}: ${item.title}`}>{lessons.filter((lesson) => lesson.week >= item.units[0] && lesson.week <= item.units[1]).map((lesson) => <option key={lesson.key} value={lesson.key}>Parte {lesson.week - item.units[0] + 1} · {lesson.title}{lessonContent.some((row) => row.lesson_key === lesson.key && row.video_url) ? " · Vídeo cadastrado" : ""}</option>)}</optgroup>)}<optgroup label="Novas aulas da trilha por módulos">{allLessons.filter((lesson) => lesson.week === 0).map((lesson) => <option key={lesson.key} value={lesson.key}>{lesson.title}{lessonContent.some((row) => row.lesson_key === lesson.key && row.video_url) ? " · Vídeo cadastrado" : ""}</option>)}</optgroup></Select>
+    {selected && <p className="text-xs leading-5 text-[#AAB2BC]">{theme?.title ?? v2Chapter?.module.title} · <a href={lessonHref} target="_blank" rel="noreferrer" className="font-semibold text-mint underline underline-offset-4">Ver página da aula</a></p>}
+    <Field label="Link do vídeo" type="url" required={false} value={form.videoUrl} onChange={(videoUrl) => setForm({ ...form, videoUrl })} />
+    <p className="-mt-2 text-xs leading-5 text-[#AAB2BC]">YouTube, Vimeo ou link direto de MP4/WebM. Outros players abrem na plataforma de origem.</p>
+    {form.videoUrl.trim() && <section aria-label="Prévia do vídeo" className="min-w-0 border-y border-white/10 py-4"><h3 className="mb-3 text-sm font-bold text-off-white">Prévia para conferir antes de publicar</h3>{media ? <LessonVideo url={form.videoUrl} title={selected?.title ?? "Prévia da aula"} /> : <p role="alert" className="text-sm text-coral">O link do vídeo é inválido.</p>}</section>}
+    <Field label="Link do material (opcional)" type="url" required={false} value={form.materialUrl} onChange={(materialUrl) => setForm({ ...form, materialUrl })} />
+    <Select label="Publicação" value={form.status} onChange={(status) => setForm({ ...form, status })}><option value="draft">Rascunho — só no painel</option><option value="published">Publicar para os alunos</option><option value="scheduled">Agendar publicação</option></Select>
+    {form.status === "scheduled" && <Field label="Disponível a partir de (horário deste dispositivo)" type="datetime-local" value={form.availableAt} onChange={(availableAt) => setForm({ ...form, availableAt })} />}
+    <Feedback error={error} message={message} /><Button type="submit" disabled={busy || !key || Boolean(form.videoUrl.trim() && !media)}>{busy ? "Salvando..." : form.status === "published" ? "Publicar aula" : form.status === "scheduled" ? "Agendar aula" : "Salvar rascunho"}</Button>
   </form>;
 }

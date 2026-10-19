@@ -206,15 +206,15 @@ export const mentorshipCurriculum: MentorshipWeekContent[] = [
   },
   {
     week: 11,
-    promise: "Modelar carga segura, interpretar percentis e transformar métricas em recomendação técnica.",
-    outcomes: ["Diferenciar baseline, load, stress e spike", "Modelar usuários ou taxa de chegada", "Definir checks e thresholds", "Interpretar latência, erro e throughput em conjunto"],
+    promise: "Planejar carga segura, interpretar percentis e conectar um smoke de performance ao pipeline.",
+    outcomes: ["Modelar um fluxo e perfil de uso", "Diferenciar baseline, carga gradual e pico", "Definir checks e thresholds antes da execução", "Interpretar latência, erro e throughput e recomendar o próximo passo"],
     concepts: [
       { title: "Pergunta de performance", content: "Comece com objetivo e expectativa: quantos usuários, quais operações, por quanto tempo e qual nível de serviço. Sem modelo de carga, o número de VUs não representa negócio." },
       { title: "Percentis", content: "Média esconde cauda. p95 informa o limite abaixo do qual ficaram 95% das observações; avalie também erro e throughput para evitar uma leitura isolada." },
       { title: "Checks e thresholds", content: "Checks validam respostas; thresholds definem critérios de aprovação e podem produzir saída não zero para CI. Um teste rápido não é necessariamente aprovado se falhou funcionalmente." },
       { title: "Segurança operacional", content: "Tenha autorização, ambiente, janela, limites e mecanismo de interrupção. Comece pequeno, monitore o sistema e nunca aponte a prática para terceiros." },
     ],
-    guidedPractice: ["Execute o baseline local protegido do projeto", "Defina um fluxo e distribuição de operações", "Configure threshold de erro e p95", "Rode carga gradual e depois pico controlado", "Compare resultados e escreva limite, hipótese e próxima medição"],
+    guidedPractice: ["Escreva a pergunta de performance e o perfil de uso", "Configure o alvo loopback e confira o limite LOCAL_ONLY", "Execute baseline, carga gradual e pico controlado", "Compare p95/p99, throughput, erros e checks", "Desenhe um smoke curto de performance para o CI e separe-o de um teste de capacidade"],
     checkpoints: ["O alvo está autorizado", "O modelo representa uso esperado", "Thresholds expressam um objetivo", "A recomendação separa fato de hipótese"],
     commonMistakes: ["Testar produção sem coordenação", "Olhar apenas média", "Aumentar VUs sem observar gargalo e erro"],
     mentorQuestions: ["Que comportamento de usuário o script representa?", "O sistema ficou lento ou começou a errar?", "Que telemetria confirmaria o gargalo?"],

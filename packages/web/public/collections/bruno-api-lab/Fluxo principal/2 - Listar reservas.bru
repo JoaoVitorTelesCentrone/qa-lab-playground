@@ -1,0 +1,26 @@
+meta {
+  name: 2 - Listar reservas
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/bookings
+  body: none
+  auth: none
+}
+
+headers {
+  X-QALab-Session: {{sessionId}}
+}
+
+tests {
+  test("lista responde 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("contrato inclui data e meta", function() {
+    const body = res.getBody();
+    expect(body.data).to.be.an("array");
+    expect(body.meta).to.be.an("object");
+  });
+}

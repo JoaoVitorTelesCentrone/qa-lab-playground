@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDisplayName, trackEvent } from "@/lib/product/store";
 import { findMentorshipAssignment, findMentorshipLesson, findMentorshipWeek, mentorshipTrackForWeek, mentorshipWeeks } from "./catalog";
+import { findPathV2Assignment, findPathV2Lesson, pathV2Assignments, pathV2Chapters, pathV2LessonKeys, pathV2PracticeKeys } from "./path-v2";
 import { assertStaffForCohort, getEnrollmentForUser, requireEnrollment, requireStaff, requireWritableEnrollment } from "./access";
 import type { MentorshipReview, MentorshipSubmission } from "./types";
 import { signAuthorizedAttachments, signOwnAttachments } from "@/lib/product/evidence-storage";
@@ -145,6 +146,9 @@ export async function getMentorshipDashboard(userId: string) {
   });
   const currentWeek = firstPending === -1 ? 12 : firstPending + 1;
   const completedWeeks = [...Array(12)].filter((_, index) => latestByAssignment.get(findMentorshipWeek(index + 1)?.assignment.key ?? "")?.status === "approved").length;
+  const v2 = enrollment.programVersion === "v2";
+  const v2Approved = pathV2Assignments.filter((assignment) => latestByAssignment.get(assignment.key)?.status === "approved").length;
+  const currentV2 = pathV2Chapters.find(({ chapter }) => chapter.assignmentKey && latestByAssignment.get(chapter.assignmentKey)?.status !== "approved") ?? pathV2Chapters[pathV2Chapters.length - 1];
   const visibleSessions: MentorshipSessionRow[] = (sessions ?? []).map((session: MentorshipSessionRow) => {
     const expiresAt = session.recording_available_until ? new Date(session.recording_available_until).getTime() : null;
     if (session.recording_url && expiresAt !== null && Number.isFinite(expiresAt) && expiresAt <= Date.now()) {
@@ -164,10 +168,11 @@ export async function getMentorshipDashboard(userId: string) {
     commitments: commitments ?? [],
     notifications: notifications ?? [],
     lessonContent: (lessonContent ?? []).filter((item) => item.status === "published" || (item.available_at && new Date(item.available_at) <= new Date())),
+    currentChapterId: currentV2.chapter.id,
     currentWeek,
-    completedWeeks,
-    totalWeeks: 12,
-    isComplete: completedWeeks === 12,
+    completedWeeks: v2 ? v2Approved : completedWeeks,
+    totalWeeks: v2 ? pathV2Assignments.length : 12,
+    isComplete: v2 ? v2Approved === pathV2Assignments.length : completedWeeks === 12,
   };
 }
 
@@ -182,14 +187,15 @@ export async function saveDiagnostic(userId: string, input: { level: "beginner" 
 }
 
 export async function markLessonComplete(userId: string, lessonKey: string) {
-  const lesson = findMentorshipLesson(lessonKey);
-  if (!lesson) throw new Error("Aula nao encontrada.");
   const { enrollment } = await requireWritableEnrollment();
+  const practice = enrollment.programVersion === "v2" && pathV2PracticeKeys.includes(lessonKey);
+  const lesson = enrollment.programVersion === "v2" ? findPathV2Lesson(lessonKey) : findMentorshipLesson(lessonKey);
+  if ((!lesson && !practice) || (enrollment.programVersion === "v2" && !practice && !pathV2LessonKeys.includes(lessonKey))) throw new Error("Atividade nao encontrada nesta versao da mentoria.");
   const admin = createAdminClient();
-  const { error } = await admin.from("mentorship_lesson_progress").upsert({ enrollment_id: enrollment.id, lesson_key: lesson.key, status: "completed", completed_at: new Date().toISOString() }, { onConflict: "enrollment_id,lesson_key" });
+  const { error } = await admin.from("mentorship_lesson_progress").upsert({ enrollment_id: enrollment.id, lesson_key: lessonKey, status: "completed", completed_at: new Date().toISOString() }, { onConflict: "enrollment_id,lesson_key" });
   if (error) throw new Error(error.message);
-  await trackEvent(userId, "lesson_completed", { lesson: lesson.key, cohort: enrollment.cohortId });
-  return { lessonKey: lesson.key, status: "completed" as const };
+  await trackEvent(userId, practice ? "practice_completed" : "lesson_completed", { lesson: lessonKey, cohort: enrollment.cohortId });
+  return { lessonKey, status: "completed" as const };
 }
 
 type MentorshipSubmissionInput = { assignmentKey: string; content: Record<string, unknown>; repositoryUrl?: string; reportUrl?: string; labSubmissionId?: string; attachments?: Attachment[] };
@@ -239,9 +245,9 @@ async function validateSubmissionReferences(userId: string, input: MentorshipSub
 }
 
 export async function saveMentorshipDraft(userId: string, input: MentorshipSubmissionInput) {
-  const assignment = findMentorshipAssignment(input.assignmentKey);
-  if (!assignment) throw new Error("Entrega nao encontrada.");
   const { enrollment } = await requireWritableEnrollment();
+  const assignment = enrollment.programVersion === "v2" ? findPathV2Assignment(input.assignmentKey) : findMentorshipAssignment(input.assignmentKey);
+  if (!assignment) throw new Error("Entrega nao encontrada nesta versao da mentoria.");
   const admin = createAdminClient();
   const attachments = await validateSubmissionReferences(userId, input, enrollment.id);
   const { data: draft, error: draftError } = await admin.from("mentorship_submissions").select("id,attempt_number").eq("enrollment_id", enrollment.id).eq("assignment_key", assignment.key).eq("status", "draft").order("attempt_number", { ascending: false }).limit(1).maybeSingle();
@@ -265,10 +271,20 @@ export async function saveMentorshipDraft(userId: string, input: MentorshipSubmi
 }
 
 export async function submitMentorshipAssignment(userId: string, input: MentorshipSubmissionInput) {
-  const assignment = findMentorshipAssignment(input.assignmentKey);
-  if (!assignment) throw new Error("Entrega nao encontrada.");
   const { enrollment } = await requireWritableEnrollment();
+  const assignment = enrollment.programVersion === "v2" ? findPathV2Assignment(input.assignmentKey) : findMentorshipAssignment(input.assignmentKey);
+  if (!assignment) throw new Error("Entrega nao encontrada nesta versao da mentoria.");
   const admin = createAdminClient();
+  if (enrollment.programVersion === "v2" && input.assignmentKey === "mentoria.v2.case-final.assignment") {
+    const response = String(input.content.response ?? "").trim();
+    if (response.length < 120) throw new MentorshipSubmissionValidationError("Explique o case, as evidencias e a decisao em pelo menos 120 caracteres.");
+    const previousKeys = pathV2Assignments.filter((item) => item.key !== input.assignmentKey).map((item) => item.key);
+    const { data: previous, error: previousError } = await admin.from("mentorship_submissions").select("assignment_key,attempt_number,status").eq("enrollment_id", enrollment.id).in("assignment_key", previousKeys).order("attempt_number", { ascending: false });
+    if (previousError) throw new Error(previousError.message);
+    const latest = new Map<string, string>();
+    for (const row of previous ?? []) if (!latest.has(row.assignment_key)) latest.set(row.assignment_key, row.status);
+    if (previousKeys.some((key) => latest.get(key) !== "approved")) throw new MentorshipSubmissionValidationError("Conclua as entregas anteriores antes de enviar o case final.");
+  }
   const attachments = await validateSubmissionReferences(userId, input, enrollment.id, input.assignmentKey === "mentoria.w12.assignment");
   const { data: draft, error: draftError } = await admin.from("mentorship_submissions").select("id,attempt_number").eq("enrollment_id", enrollment.id).eq("assignment_key", assignment.key).eq("status", "draft").order("attempt_number", { ascending: false }).limit(1).maybeSingle();
   if (draftError) throw new Error(draftError.message);
@@ -303,26 +319,31 @@ export type MentorshipCertificateProgress = {
   requiredAssignments: number;
   completedLessons: number;
   requiredLessons: number;
+  completedPractices: number;
+  requiredPractices: number;
   certificate: MentorshipCertificate | null;
 };
 
 async function certificateProgress(userId: string) {
   const enrollment = await getEnrollmentForUser(userId);
-  if (!enrollment) return { enrollment: null, approvedAssignments: 0, requiredAssignments: mentorshipWeeks.length, completedLessons: 0, requiredLessons: mentorshipWeeks.reduce((total, week) => total + week.lessons.length, 0) };
+  if (!enrollment) return { enrollment: null, approvedAssignments: 0, requiredAssignments: mentorshipWeeks.length, completedLessons: 0, requiredLessons: mentorshipWeeks.reduce((total, week) => total + week.lessons.length, 0), completedPractices: 0, requiredPractices: 0 };
   const admin = createAdminClient();
-  const assignmentKeys = mentorshipWeeks.map((week) => week.assignment.key);
-  const lessonKeys = mentorshipWeeks.flatMap((week) => week.lessons.map((lesson) => lesson.key));
+  const assignmentKeys = enrollment.programVersion === "v2" ? pathV2Assignments.map((item) => item.key) : mentorshipWeeks.map((week) => week.assignment.key);
+  const lessonKeys = enrollment.programVersion === "v2" ? pathV2LessonKeys : mentorshipWeeks.flatMap((week) => week.lessons.map((lesson) => lesson.key));
+  const practiceKeys = enrollment.programVersion === "v2" ? pathV2PracticeKeys : [];
   const [submissionsResult, lessonsResult] = await Promise.all([
     admin.from("mentorship_submissions").select("assignment_key,attempt_number,status").eq("enrollment_id", enrollment.id).in("assignment_key", assignmentKeys).order("attempt_number", { ascending: false }),
-    admin.from("mentorship_lesson_progress").select("lesson_key,status").eq("enrollment_id", enrollment.id).in("lesson_key", lessonKeys),
+    admin.from("mentorship_lesson_progress").select("lesson_key,status").eq("enrollment_id", enrollment.id).in("lesson_key", [...lessonKeys, ...practiceKeys]),
   ]);
   if (submissionsResult.error) throw new Error(submissionsResult.error.message);
   if (lessonsResult.error) throw new Error(lessonsResult.error.message);
   const latest = new Map<string, string>();
   for (const submission of submissionsResult.data ?? []) if (!latest.has(submission.assignment_key)) latest.set(submission.assignment_key, submission.status);
   const approvedAssignments = assignmentKeys.filter((key) => latest.get(key) === "approved").length;
-  const completedLessons = new Set((lessonsResult.data ?? []).filter((lesson) => lesson.status === "completed").map((lesson) => lesson.lesson_key)).size;
-  return { enrollment, approvedAssignments, requiredAssignments: assignmentKeys.length, completedLessons, requiredLessons: lessonKeys.length };
+  const completedKeys = new Set((lessonsResult.data ?? []).filter((lesson) => lesson.status === "completed").map((lesson) => lesson.lesson_key));
+  const completedLessons = lessonKeys.filter((key) => completedKeys.has(key)).length;
+  const completedPractices = practiceKeys.filter((key) => completedKeys.has(key)).length;
+  return { enrollment, approvedAssignments, requiredAssignments: assignmentKeys.length, completedLessons, requiredLessons: lessonKeys.length, completedPractices, requiredPractices: practiceKeys.length };
 }
 
 export async function getMentorshipCertificateProgress(userId: string): Promise<MentorshipCertificateProgress> {
@@ -335,7 +356,7 @@ export async function getMentorshipCertificateProgress(userId: string): Promise<
     certificate = data as MentorshipCertificate | null;
   }
   const enrollmentCanGraduate = progress.enrollment && ["active", "completed"].includes(progress.enrollment.status);
-  return { ...progress, eligible: Boolean(enrollmentCanGraduate) && progress.approvedAssignments === progress.requiredAssignments && progress.completedLessons === progress.requiredLessons && progress.requiredAssignments > 0 && progress.requiredLessons > 0, certificate };
+  return { ...progress, eligible: Boolean(enrollmentCanGraduate) && progress.approvedAssignments === progress.requiredAssignments && progress.completedLessons === progress.requiredLessons && progress.completedPractices === progress.requiredPractices && progress.requiredAssignments > 0 && progress.requiredLessons > 0, certificate };
 }
 
 export async function issueMentorshipCertificate(userId: string) {
@@ -468,7 +489,7 @@ export async function mentorQueue() {
       ...row,
       studentName: profile?.full_name?.trim() || profile?.username || "Aluno",
       cohortName: enrollment ? cohortById.get(enrollment.cohort_id) ?? "Turma" : "Turma",
-      weekTitle: week?.title ?? row.assignmentKey,
+      weekTitle: week?.title ?? findPathV2Assignment(row.assignmentKey)?.title ?? row.assignmentKey,
       attachments: await signAuthorizedAttachments(row.attachments),
     });
   })) };
@@ -514,7 +535,7 @@ export async function reviewMentorshipSubmission(submissionId: string, input: { 
   const { data: submission, error } = await admin.from("mentorship_submissions").select("id,enrollment_id,assignment_key,status").eq("id", submissionId).maybeSingle();
   if (error || !submission) throw new Error("Entrega nao encontrada.");
   if (submission.status !== "submitted" && submission.status !== "in_review") throw new Error("Esta entrega nao esta aguardando revisao.");
-  const assignment = findMentorshipWeek([...Array(12)].findIndex((_, index) => findMentorshipWeek(index + 1)?.assignment.key === submission.assignment_key) + 1)?.assignment;
+  const assignment = findPathV2Assignment(submission.assignment_key) ?? findMentorshipAssignment(submission.assignment_key);
   if (!assignment) throw new Error("A rubrica desta entrega nao foi encontrada.");
   const rubricKeys = assignment.rubric;
   const scoreKeys = Object.keys(input.scores);
@@ -528,7 +549,7 @@ export async function reviewMentorshipSubmission(submissionId: string, input: { 
   const reviewedAt = new Date().toISOString();
   const { data: claimed, error: claimError } = await admin.from("mentorship_submissions").update({ status: decision, reviewed_at: reviewedAt }).eq("id", submissionId).in("status", ["submitted", "in_review"]).select("id").maybeSingle();
   if (claimError || !claimed) throw new Error(claimError?.message ?? "Esta entrega acabou de ser revisada por outra pessoa.");
-  const { data: review, error: reviewError } = await admin.from("mentorship_reviews").insert({ submission_id: submissionId, reviewer_id: user.id, rubric_version: "mentoria-v1", scores: input.scores, strengths: input.strengths.trim().slice(0, 3000), improvements: input.improvements.trim().slice(0, 3000), next_action: input.nextAction.trim().slice(0, 1000), decision }).select("id,submission_id,reviewer_id,rubric_version,scores,strengths,improvements,next_action,decision,created_at").single();
+  const { data: review, error: reviewError } = await admin.from("mentorship_reviews").insert({ submission_id: submissionId, reviewer_id: user.id, rubric_version: findPathV2Assignment(submission.assignment_key) ? "mentoria-v2" : "mentoria-v1", scores: input.scores, strengths: input.strengths.trim().slice(0, 3000), improvements: input.improvements.trim().slice(0, 3000), next_action: input.nextAction.trim().slice(0, 1000), decision }).select("id,submission_id,reviewer_id,rubric_version,scores,strengths,improvements,next_action,decision,created_at").single();
   if (reviewError || !review) {
     await admin.from("mentorship_submissions").update({ status: "in_review", reviewed_at: null }).eq("id", submissionId).eq("reviewed_at", reviewedAt);
     throw new Error(reviewError?.message ?? "Nao foi possivel salvar a revisao.");
@@ -550,7 +571,7 @@ export async function reviewMentorshipSubmission(submissionId: string, input: { 
 export async function createCohort(input: { code: string; name: string; startsOn: string; endsOn: string; capacity?: number }) {
   const { user } = await requireStaff("admin");
   const admin = createAdminClient();
-  const { data, error } = await admin.from("mentorship_cohorts").insert({ code: input.code.trim().toLowerCase(), name: input.name.trim(), starts_on: input.startsOn, ends_on: input.endsOn, capacity: input.capacity ?? 20, status: "enrollment", created_by: user.id }).select("id,code,name,starts_on,ends_on,capacity,status").single();
+  const { data, error } = await admin.from("mentorship_cohorts").insert({ code: input.code.trim().toLowerCase(), name: input.name.trim(), starts_on: input.startsOn, ends_on: input.endsOn, capacity: input.capacity ?? 20, status: "enrollment", program_version: "v2", created_by: user.id }).select("id,code,name,starts_on,ends_on,capacity,status,program_version").single();
   if (error || !data) throw new Error(error?.message ?? "Nao foi possivel criar a turma.");
   return data;
 }
@@ -679,7 +700,7 @@ export async function updateLiveSessionAdmin(sessionId: string, input: { title: 
 
 export async function saveLessonContentAdmin(lessonKey: string, input: { videoUrl?: string; materialUrl?: string; status: typeof lessonContentStatuses[number]; availableAt?: string }) {
   const { user } = await requireStaff("admin");
-  if (!findMentorshipLesson(lessonKey)) throw new Error("Aula nao encontrada no catalogo.");
+  if (!findMentorshipLesson(lessonKey) && !findPathV2Lesson(lessonKey)) throw new Error("Aula nao encontrada no catalogo.");
   if (!lessonContentStatuses.includes(input.status)) throw new Error("Status do conteudo invalido.");
   const videoUrl = input.videoUrl?.trim() || null;
   const materialUrl = input.materialUrl?.trim() || null;
@@ -781,7 +802,7 @@ export async function getMentorshipAdminOverview() {
   await requireStaff("admin");
   const admin = createAdminClient();
   const [cohortResult, enrollmentResult, sessionResult, submissionResult, profileResult, staffResult, cohortStaffResult, lessonContentResult, authResult, attendanceResult, lessonProgressResult, activityResult, emailQueueResult, failedEmailCountResult] = await Promise.all([
-    admin.from("mentorship_cohorts").select("id,name,code,starts_on,ends_on,status,capacity,created_at").order("starts_on", { ascending: false }).limit(100),
+    admin.from("mentorship_cohorts").select("id,name,code,starts_on,ends_on,status,capacity,program_version,created_at").order("starts_on", { ascending: false }).limit(100),
     admin.from("mentorship_enrollments").select("id,cohort_id,user_id,level,status,goal,diagnostic_score,joined_at,created_at").order("created_at", { ascending: false }).limit(1000),
     admin.from("mentorship_live_sessions").select("id,cohort_id,week_number,title,agenda,starts_at,ends_at,meeting_url,recording_url,recording_available_until").order("starts_at", { ascending: false }).limit(200),
     admin.from("mentorship_submissions").select("id,enrollment_id,assignment_key,status,attempt_number,submitted_at,reviewed_at,created_at").order("created_at", { ascending: false }).limit(500),
@@ -815,7 +836,6 @@ export async function getMentorshipAdminOverview() {
     if (!current || Number(row.attempt_number) > current.attempt) latestAttemptByAssignment.set(key, { attempt: Number(row.attempt_number), status: row.status });
   }
   const attendanceByKey = new Map((attendanceResult.data ?? []).map((row) => [`${row.session_id}:${row.enrollment_id}`, row.status]));
-  const completedLessonKeys = new Set((lessonProgressResult.data ?? []).filter((row) => row.status === "completed").map((row) => `${row.enrollment_id}:${row.lesson_key}`));
   const activityCounts = new Map<string, number>();
   for (const event of activityResult.data ?? []) {
     const props = event.props && typeof event.props === "object" ? event.props as Record<string, unknown> : {};
@@ -823,14 +843,15 @@ export async function getMentorshipAdminOverview() {
     if (cohortId) activityCounts.set(cohortId, (activityCounts.get(cohortId) ?? 0) + 1);
   }
   const nowMs = Date.now();
-  const totalLessonsInProgram = mentorshipWeeks.reduce((count, week) => count + week.lessons.length, 0);
   const cohortMetrics = cohorts.map((cohort) => {
+    const assignmentKeys = cohort.program_version === "v2" ? pathV2Assignments.map((item) => item.key) : mentorshipWeeks.map((week) => week.assignment.key);
+    const lessonKeys = cohort.program_version === "v2" ? pathV2LessonKeys : mentorshipWeeks.flatMap((week) => week.lessons.map((lesson) => lesson.key));
     const roster = enrollments.filter((row) => row.cohort_id === cohort.id && ["active", "completed"].includes(row.status));
     const rosterIds = new Set(roster.map((row) => row.id));
-    const completedAssignmentCount = roster.reduce((sum, row) => sum + mentorshipWeeks.filter((week) => latestAttemptByAssignment.get(`${row.id}:${week.assignment.key}`)?.status === "approved").length, 0);
-    const progressPercent = roster.length ? Math.round(completedAssignmentCount / (roster.length * mentorshipWeeks.length) * 100) : 0;
-    const completedLessonCount = (lessonProgressResult.data ?? []).filter((row) => rosterIds.has(row.enrollment_id) && row.status === "completed").length;
-    const lessonPercent = roster.length ? Math.round(completedLessonCount / (roster.length * totalLessonsInProgram) * 100) : 0;
+    const completedAssignmentCount = roster.reduce((sum, row) => sum + assignmentKeys.filter((key) => latestAttemptByAssignment.get(`${row.id}:${key}`)?.status === "approved").length, 0);
+    const progressPercent = roster.length ? Math.round(completedAssignmentCount / (roster.length * assignmentKeys.length) * 100) : 0;
+    const completedLessonCount = (lessonProgressResult.data ?? []).filter((row) => rosterIds.has(row.enrollment_id) && lessonKeys.includes(row.lesson_key) && row.status === "completed").length;
+    const lessonPercent = roster.length ? Math.round(completedLessonCount / (roster.length * lessonKeys.length) * 100) : 0;
     const cohortSessions = sessions.filter((session) => session.cohort_id === cohort.id);
     const pastSessions = cohortSessions.filter((session) => new Date(session.ends_at).getTime() <= nowMs);
     const expectedAttendances = roster.length * pastSessions.length;
@@ -847,7 +868,7 @@ export async function getMentorCohortOverview(cohortId: string) {
   const admin = createAdminClient();
   await assertStaffForCohort(user.id, staff.role, cohortId);
   const [cohortResult, enrollmentResult, sessionResult] = await Promise.all([
-    admin.from("mentorship_cohorts").select("id,name,code,starts_on,ends_on,status").eq("id", cohortId).maybeSingle(),
+    admin.from("mentorship_cohorts").select("id,name,code,starts_on,ends_on,status,program_version").eq("id", cohortId).maybeSingle(),
     admin.from("mentorship_enrollments").select("id,user_id,level,status,diagnostic_score,joined_at").eq("cohort_id", cohortId).in("status", ["invited", "active", "paused", "completed"]).order("created_at"),
     admin.from("mentorship_live_sessions").select("id,week_number,title,agenda,starts_at,ends_at,meeting_url").eq("cohort_id", cohortId).order("week_number"),
   ]);
@@ -884,7 +905,7 @@ export async function getMentorStudentOverview(enrollmentId: string) {
   if (!enrollment) return null;
   await assertStaffForCohort(user.id, staff.role, enrollment.cohort_id);
   const [{ data: cohort, error: cohortError }, { data: profile, error: profileError }, { data: submissions, error: submissionsError }, { data: lessons, error: lessonsError }, { data: sessions, error: sessionsError }, { data: commitments, error: commitmentsError }] = await Promise.all([
-    admin.from("mentorship_cohorts").select("id,name,code").eq("id", enrollment.cohort_id).maybeSingle(),
+    admin.from("mentorship_cohorts").select("id,name,code,program_version").eq("id", enrollment.cohort_id).maybeSingle(),
     admin.from("profiles").select("id,full_name,username").eq("id", enrollment.user_id).maybeSingle(),
     admin.from("mentorship_submissions").select("id,assignment_key,status,attempt_number,submitted_at,reviewed_at,created_at").eq("enrollment_id", enrollment.id).order("created_at", { ascending: false }),
     admin.from("mentorship_lesson_progress").select("lesson_key,status,completed_at").eq("enrollment_id", enrollment.id),

@@ -1,0 +1,7 @@
+{
+  "version": "1",
+  "name": "QA Lab API Playground",
+  "type": "collection",
+  "defaultEnvironment": "Local",
+  "ignore": ["node_modules", ".git"]
+}

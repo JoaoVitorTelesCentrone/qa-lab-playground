@@ -5,6 +5,7 @@ import { lessonTheory } from "./lesson-theory";
 import { theoryExpansion } from "./theory-expansion";
 import { roadmapQASupplement } from "./roadmapqa-supplement";
 import { roadmapQAWorkedCases } from "./roadmapqa-worked-cases";
+import { brotoSpaceWeeks } from "./brotospace-track";
 
 describe("conteudo da mentoria", () => {
   test("cobre as doze semanas com conteudo pratico", () => {
@@ -30,6 +31,18 @@ describe("conteudo da mentoria", () => {
   test("recupera o guia pela semana", () => {
     expect(getMentorshipWeekContent(6)?.promise).toContain("Playwright");
     expect(getMentorshipWeekContent(99)).toBeUndefined();
+  });
+
+  test("apresenta teste de carga como módulo depois de CI/CD", () => {
+    const cicd = mentorshipWeeks.find((item) => item.number === 10);
+    const load = mentorshipWeeks.find((item) => item.number === 11);
+    expect(cicd).toBeDefined();
+    expect(load?.number).toBe((cicd?.number ?? 0) + 1);
+    expect(load?.title).toContain("carga");
+    expect(load?.assignment.title).toContain("teste de carga");
+    expect(load?.assignment.practice.route).toBe("/mentoria/performance");
+    expect(brotoSpaceWeeks[11].evidence.toLowerCase()).toContain("relatório comparativo de carga");
+    expect(getMentorshipWeekContent(11)?.promise).toContain("carga segura");
   });
 
   test("todas as aulas têm leitura teórica desenvolvida", () => {

@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
     ];
 
     return [
+      // Conteúdo tem uma área própria; links legados da mentoria continuam válidos.
+      { source: "/mentoria/conteudo", destination: "/conteudo", permanent: true },
+      { source: "/mentoria/conteudo/:path*", destination: "/conteudo/:path*", permanent: true },
       // Old practice/challenge modules → current Playground.
       { source: "/desafio", destination: "/playground", permanent: true },
       { source: "/desafios/:path*", destination: "/playground", permanent: true },

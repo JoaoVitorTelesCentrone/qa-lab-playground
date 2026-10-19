@@ -1,0 +1,28 @@
+meta {
+  name: 5 - Atualizar sem token (espera 401)
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/api/bookings/{{bookingId}}
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-QALab-Session: {{sessionId}}
+}
+
+body:json {
+  {
+    "additionalneeds": "Sem autorização"
+  }
+}
+
+tests {
+  test("alteração sem autenticação é bloqueada", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+}

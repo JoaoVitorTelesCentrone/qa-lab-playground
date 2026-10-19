@@ -1,0 +1,36 @@
+meta {
+  name: 3 - Criar reserva
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/bookings
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-QALab-Session: {{sessionId}}
+}
+
+body:json {
+  {
+    "firstname": "Lia",
+    "lastname": "QA Lab",
+    "totalprice": 123,
+    "depositpaid": true,
+    "bookingdates": { "checkin": "2099-12-01", "checkout": "2099-12-02" },
+    "additionalneeds": "Treino de API"
+  }
+}
+
+script:post-response {
+  const body = res.getBody();
+  test("reserva criada", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(body.data.id).to.exist;
+  });
+  if (body.data && body.data.id) bru.setVar("bookingId", String(body.data.id));
+}

@@ -1,0 +1,30 @@
+meta {
+  name: 7 - Atualizar com token
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{baseUrl}}/api/bookings/{{bookingId}}
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-QALab-Session: {{sessionId}}
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+  {
+    "additionalneeds": "Autorização verificada"
+  }
+}
+
+tests {
+  test("alteração autorizada", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().data.additionalneeds).to.equal("Autorização verificada");
+  });
+}

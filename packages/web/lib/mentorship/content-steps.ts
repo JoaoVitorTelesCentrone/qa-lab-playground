@@ -24,7 +24,7 @@ export function getContentSteps(week: MentorshipWeek): ContentStep[] {
 }
 
 export function contentStepHref(week: number, slug: string) {
-  return `/mentoria/conteudo/${week}/${slug}`;
+  return `/conteudo/${week}/${slug}`;
 }
 
 export function findContentStep(week: MentorshipWeek, slug: string) {

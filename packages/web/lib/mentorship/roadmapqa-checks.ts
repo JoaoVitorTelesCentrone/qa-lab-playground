@@ -54,8 +54,8 @@ export const roadmapQAChecks: Record<number, readonly CheckQuestion[]> = {
   ],
   11: [
     { question: "O que p95 alto com throughput estável e aumento de erros sugere?", answer: "Um limite no cenário pode estar próximo, mas não revela a causa. Correlacione com telemetria e ambiente antes de recomendar otimização." },
-    { question: "Uma nota de Lighthouse certifica que uma página é acessível?", answer: "Não. É uma avaliação automatizada parcial sob condições específicas; tarefas reais com teclado e outras formas de acesso ainda precisam ser observadas." },
-    { question: "Por que Locust e Lighthouse não são substitutos?", answer: "Um ajuda a avaliar experiência/carregamento de página; o outro modela usuários e operações sob carga. As perguntas e medidas são diferentes." },
+    { question: "Que tipo de verificação de performance cabe no pull request?", answer: "Um smoke curto, estável e de baixa intensidade para detectar regressão evidente. Ele não substitui um teste de capacidade em ambiente preparado." },
+    { question: "O que um pipeline deve guardar quando um threshold falha?", answer: "Versão, alvo, perfil, duração, checks, percentis, throughput, erros e a saída que permite investigar o resultado." },
   ],
   12: [
     { question: "Que conteúdo não deve ser enviado a uma IA externa sem autorização?", answer: "Código proprietário, segredos, dados de clientes e documentos internos; consulte a política da organização e use conteúdo seguro." },

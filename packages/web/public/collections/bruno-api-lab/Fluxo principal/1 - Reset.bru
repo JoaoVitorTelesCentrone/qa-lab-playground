@@ -1,0 +1,24 @@
+meta {
+  name: 1 - Reset da sessão
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/test/reset
+  body: none
+  auth: none
+}
+
+headers {
+  X-QALab-Session: {{sessionId}}
+}
+
+script:post-response {
+  test("reset concluído", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("sessão de treino retornada", function() {
+    expect(res.getHeader("X-QALab-Session")).to.equal(bru.getEnvVar("sessionId"));
+  });
+}

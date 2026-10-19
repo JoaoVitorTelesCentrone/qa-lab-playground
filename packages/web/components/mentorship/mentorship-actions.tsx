@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { Attachment } from "@/lib/product/journey";
 import { mentorshipTrackForWeek, mentorshipWeeks, type MentorshipTechnicalTrack } from "@/lib/mentorship/catalog";
@@ -9,23 +10,30 @@ import { getMentorshipSubmissionPrompts } from "@/lib/mentorship/submission-prom
 import type { MentorshipSubmission } from "@/lib/mentorship/types";
 import { MAX_FILES } from "@/lib/product/evidence-limits";
 
-export function CompleteLessonButton({ lessonKey, completed }: { lessonKey: string; completed: boolean }) {
+export function CompleteLessonButton({ lessonKey, completed, nextHref }: { lessonKey: string; completed: boolean; nextHref?: string }) {
+  const router = useRouter();
   const [done, setDone] = useState(completed);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
   async function complete() {
+    if (done && nextHref) { router.push(nextHref); return; }
     setBusy(true); setError("");
-    const response = await fetch(`/api/v1/mentorship/lessons/${encodeURIComponent(lessonKey)}/progress`, { method: "POST" });
-    const payload = await response.json().catch(() => null);
-    setBusy(false);
-    if (!response.ok) { setError(payload?.error?.message ?? "Nao foi possivel salvar."); return; }
-    setDone(true);
+    try {
+      const response = await fetch(`/api/v1/mentorship/lessons/${encodeURIComponent(lessonKey)}/progress`, { method: "POST" });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(payload?.error?.message ?? "Não foi possível salvar.");
+      setDone(true);
+      if (nextHref) router.push(nextHref);
+      router.refresh();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Não foi possível salvar. Tente novamente.");
+    } finally { setBusy(false); }
   }
 
   return <span className="inline-flex flex-col items-end gap-1">
-    <Button type="button" size="sm" variant={done ? "secondary" : "outline"} disabled={done || busy} onClick={complete}>
-      {busy ? "Salvando..." : done ? "Concluida" : "Marcar como concluida"}
+    <Button type="button" size={nextHref ? "default" : "sm"} variant={nextHref ? "default" : done ? "secondary" : "outline"} disabled={(done && !nextHref) || busy} onClick={complete}>
+      {busy ? "Salvando..." : nextHref ? done ? "Continuar" : "Concluir e continuar" : done ? "Concluída" : "Marcar como concluída"}
     </Button>
     {error && <span className="text-xs text-destructive" role="alert">{error}</span>}
   </span>;
@@ -73,7 +81,7 @@ const releaseTracks: Array<{ key: Exclude<MentorshipTechnicalTrack, "integrated"
   { key: "performance", label: "Carga e performance", prompt: "Modelo de carga, alvo local, thresholds, resultados e limites." },
 ];
 
-export function SubmissionForm({ assignmentKey, initialSubmission, labEvidence = [], approvedEvidence = [] }: { assignmentKey: string; initialSubmission: MentorshipSubmission | null; labEvidence?: LabEvidenceOption[]; approvedEvidence?: ApprovedMentorshipEvidenceOption[] }) {
+export function SubmissionForm({ assignmentKey, initialSubmission, labEvidence = [], approvedEvidence = [], prompts }: { assignmentKey: string; initialSubmission: MentorshipSubmission | null; labEvidence?: LabEvidenceOption[]; approvedEvidence?: ApprovedMentorshipEvidenceOption[]; prompts?: readonly string[] }) {
   const [content, setContent] = useState(String(initialSubmission?.content.response ?? ""));
   const initialProject = initialSubmission?.content.finalProject && typeof initialSubmission.content.finalProject === "object" ? initialSubmission.content.finalProject as Partial<ReleaseProjectFields> : {};
   const initialEvidenceIds = initialSubmission?.content.evidenceSubmissionIds && typeof initialSubmission.content.evidenceSubmissionIds === "object" ? initialSubmission.content.evidenceSubmissionIds as Record<string, string> : {};
@@ -91,7 +99,7 @@ export function SubmissionForm({ assignmentKey, initialSubmission, labEvidence =
 
   const isReleaseChallenge = assignmentKey === "mentoria.w12.assignment";
   const assignmentWeek = mentorshipWeeks.find((week) => week.assignment.key === assignmentKey)?.number ?? 0;
-  const submissionPrompts = getMentorshipSubmissionPrompts(assignmentWeek);
+  const submissionPrompts = prompts ?? getMentorshipSubmissionPrompts(assignmentWeek);
   const responseTemplate = submissionPrompts.map((prompt, index) => `${index + 1}. ${prompt}\n`).join("\n");
   const evidenceOptionsByTrack = new Map(releaseTracks.map((track) => [track.key, approvedEvidence.filter((submission) => {
     const week = mentorshipWeeks.find((item) => item.assignment.key === submission.assignmentKey);

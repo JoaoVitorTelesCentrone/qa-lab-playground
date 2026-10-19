@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, AlertTriangle, CheckCircle2, ClipboardList, Users } from "lucide-react";
 import { MentorshipAccessError } from "@/lib/mentorship/access";
 import { getMentorCohortOverview } from "@/lib/mentorship/store";
+import { pathV2LessonKeys } from "@/lib/mentorship/path-v2";
 import { getCurrentTimestamp } from "@/lib/mentorship/time";
 
 export const dynamic = "force-dynamic";
@@ -33,7 +34,7 @@ export default async function MentorCohortPage({ params }: { params: Promise<{ c
       <table className="w-full min-w-[760px] text-left text-sm"><thead className="border-b border-white/10 text-xs uppercase tracking-[.14em] text-[#8B949E]"><tr><th className="pb-3 pr-4">Aluno</th><th className="pb-3 pr-4">Nível</th><th className="pb-3 pr-4">Diagnóstico</th><th className="pb-3 pr-4">Aulas</th><th className="pb-3 pr-4">Entregas</th><th className="pb-3">Ao vivo</th></tr></thead>
         <tbody>{enrollments.map((enrollment) => {
           const studentSubmissions = submissions.filter((item) => item.enrollment_id === enrollment.id);
-          const studentLessons = lessons.filter((item) => item.enrollment_id === enrollment.id && item.status === "completed");
+          const studentLessons = lessons.filter((item) => item.enrollment_id === enrollment.id && item.status === "completed" && (cohort.program_version !== "v2" || pathV2LessonKeys.includes(item.lesson_key)));
           const studentAttendance = attendance.filter((item) => item.enrollment_id === enrollment.id);
           const pending = studentSubmissions.filter((item) => item.status === "submitted" || item.status === "in_review");
           const overdue = pending.some((item) => item.submitted_at && currentTimestamp - new Date(item.submitted_at).getTime() > 72 * 60 * 60 * 1000);

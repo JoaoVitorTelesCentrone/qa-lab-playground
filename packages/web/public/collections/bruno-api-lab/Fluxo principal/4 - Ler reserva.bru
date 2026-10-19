@@ -1,0 +1,22 @@
+meta {
+  name: 4 - Ler reserva criada
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/bookings/{{bookingId}}
+  body: none
+  auth: none
+}
+
+headers {
+  X-QALab-Session: {{sessionId}}
+}
+
+tests {
+  test("reserva encontrada", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(String(res.getBody().data.id)).to.equal(bru.getEnvVar("bookingId"));
+  });
+}

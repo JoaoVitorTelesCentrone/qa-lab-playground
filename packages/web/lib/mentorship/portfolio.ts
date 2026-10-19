@@ -40,7 +40,8 @@ export async function publishMentorshipCase(userId: string, input: { submissionI
   const admin = createAdminClient();
   const { data: submission, error: submissionError } = await admin.from("mentorship_submissions").select("id,enrollment_id,assignment_key,status,content,repository_url,report_url").eq("id", input.submissionId).eq("enrollment_id", enrollment.id).maybeSingle();
   if (submissionError || !submission) throw new Error("Entrega final nao encontrada.");
-  if (submission.assignment_key !== "mentoria.w12.assignment") throw new Error("Somente a entrega final da semana 12 pode virar case.");
+  const finalKey = enrollment.programVersion === "v2" ? "mentoria.v2.case-final.assignment" : "mentoria.w12.assignment";
+  if (submission.assignment_key !== finalKey) throw new Error("Somente a entrega final da sua trilha pode virar case.");
   if (submission.status !== "approved") throw new Error("O case so pode ser publicado depois da aprovacao do mentor.");
   const title = input.title.trim().slice(0, 160);
   const summary = input.summary.trim().slice(0, 2000);

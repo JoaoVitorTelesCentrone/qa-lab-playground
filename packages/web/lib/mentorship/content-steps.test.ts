@@ -11,7 +11,7 @@ describe("etapas do conteúdo", () => {
       for (const [index, lesson] of week.lessons.entries()) {
         expect(steps[index]).toMatchObject({ slug: `teoria-${index + 1}`, title: lesson.title, kind: "lesson", lessonIndex: index });
         expect(findContentStep(week, `teoria-${index + 1}`)?.title).toBe(lesson.title);
-        expect(contentStepHref(week.number, steps[index].slug)).toBe(`/mentoria/conteudo/${week.number}/teoria-${index + 1}`);
+        expect(contentStepHref(week.number, steps[index].slug)).toBe(`/conteudo/${week.number}/teoria-${index + 1}`);
       }
       expect(steps.slice(week.lessons.length).map((step) => step.slug)).toEqual(["quiz", "exemplo", "desafio"]);
     }
