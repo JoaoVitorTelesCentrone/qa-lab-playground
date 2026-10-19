@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { buildMetrics, type ActivityEvent } from "./metrics";
+import { buildMetrics, type ActivityEvent, type Signup } from "./metrics";
 
 const event = (name: string, userId: string, createdAt: string, props: Record<string, unknown> = {}): ActivityEvent => ({ name, userId, createdAt, props });
 
@@ -13,12 +13,17 @@ const events: ActivityEvent[] = [
   event("lab_started", "bruno", "2026-08-12T09:00:00Z", { lab: "desafio-001" }),
   event("api_error", "bruno", "2026-08-12T09:05:00Z", { message: "Lab não encontrado." }),
 ];
+const signups: Signup[] = [
+  { userId: "ana", createdAt: "2026-08-10T08:00:00Z" },
+  { userId: "bruno", createdAt: "2026-08-10T08:30:00Z" },
+];
 
 describe("métricas de produto", () => {
-  const metrics = buildMetrics(events);
+  const metrics = buildMetrics(events, signups);
 
   test("conta contas ativas, Labs iniciados e concluídos", () => {
     expect(metrics.activeUsers).toBe(2);
+    expect(metrics.newUsers).toBe(2);
     expect(metrics.labsStarted).toBe(3);
     expect(metrics.labsCompleted).toBe(1);
   });
@@ -27,7 +32,7 @@ describe("métricas de produto", () => {
     expect(metrics.completionRate).toBe(33);
   });
 
-  test("ativação exige iniciar um Lab no mesmo dia do primeiro evento", () => {
+  test("ativação exige iniciar um Lab no mesmo dia do cadastro", () => {
     expect(metrics.activatedUsers).toBe(1);
     expect(metrics.activationRate).toBe(50);
   });
@@ -48,5 +53,21 @@ describe("métricas de produto", () => {
 
   test("sem eventos, nenhuma métrica divide por zero", () => {
     expect(buildMetrics([])).toMatchObject({ activeUsers: 0, completionRate: 0, activationRate: 0, daily: [], topLabs: [] });
+  });
+
+  test("eventos repetidos não duplicam Labs nem elevam conclusão acima de 100%", () => {
+    const duplicate = buildMetrics([
+      event("lab_started", "ana", "2026-08-10T10:00:00Z", { lab: "desafio-001" }),
+      event("lab_started", "ana", "2026-08-10T11:00:00Z", { lab: "desafio-001" }),
+      event("lab_completed", "ana", "2026-08-10T12:00:00Z", { lab: "desafio-001" }),
+      event("lab_completed", "ana", "2026-08-10T13:00:00Z", { lab: "desafio-001" }),
+    ], signups);
+    expect(duplicate).toMatchObject({ labsStarted: 1, labsCompleted: 1, completionRate: 100 });
+    expect(duplicate.topLabs[0]).toEqual({ lab: "desafio-001", started: 1, completed: 1 });
+  });
+
+  test("primeiro evento tardio não faz uma conta antiga parecer ativada no cadastro", () => {
+    const late = buildMetrics([event("lab_started", "ana", "2026-08-11T10:00:00Z", { lab: "desafio-001" })], signups);
+    expect(late.activatedUsers).toBe(0);
   });
 });

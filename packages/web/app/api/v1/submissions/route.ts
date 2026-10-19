@@ -1,7 +1,8 @@
 import { FieldReader, fail, ok, readJson, validated, withUser } from "@/lib/product/api";
-import { deleteSubmission, listSubmissions, submitEvidence, updateSubmission } from "@/lib/product/store";
+import { deleteSubmission, getSubmissionLabSlug, listSubmissions, submitEvidence, updateSubmission } from "@/lib/product/store";
 import { evaluateEvidence, evaluateLab101Evidence } from "@/lib/product/evaluation";
-import { toAttachments } from "@/lib/product/journey";
+import { validateEvidenceAttachments } from "@/lib/product/evidence-attachments";
+import { evidenceFilesExist } from "@/lib/product/evidence-storage";
 import { labs } from "@/lib/playground/catalog";
 
 export const dynamic = "force-dynamic";
@@ -31,7 +32,9 @@ export function POST(request: Request) {
       // Os anexos chegam já subidos (POST /api/v1/evidence/upload devolve o
       // ponteiro). Aqui só sobra revalidar o formato — o cliente não decide
       // sozinho o que entra no banco.
-      const attachments = toAttachments(raw.attachments);
+      const attachments = validateEvidenceAttachments(raw.attachments, user.id, lab.slug);
+      if (!attachments) return fail("Anexo inválido ou de outro Lab.", 422, { attachments: "Envie apenas arquivos deste Lab." });
+      if (!(await evidenceFilesExist(attachments))) return fail("Anexo não encontrado.", 422, { attachments: "Envie o arquivo novamente." });
 
       // A avaliação é a mesma do formulário. O servidor é quem decide.
       const evaluation = evaluateEvidence({ evidence, attachments: attachments.length });
@@ -39,7 +42,7 @@ export function POST(request: Request) {
         return fail("A entrega ainda não atende aos critérios do Lab.", 422, Object.fromEntries(evaluation.issues.map((issue) => [issue.field, issue.message])));
       }
 
-      const submission = await submitEvidence(user.id, {
+      const submission = await submitEvidence({
         labSlug: lab.slug,
         evidence: evidence.trim(),
         attachments,
@@ -61,7 +64,11 @@ export function PATCH(request: Request) {
       if (!id) return fail("Informe a evidência.", 400);
 
       const evidence = typeof raw.evidence === "string" ? raw.evidence : "";
-      const attachments = toAttachments(raw.attachments);
+      const labSlug = await getSubmissionLabSlug(user.id, id);
+      if (!labSlug) return fail("Evidência não encontrada.", 404);
+      const attachments = validateEvidenceAttachments(raw.attachments, user.id, labSlug);
+      if (!attachments) return fail("Anexo inválido ou de outro Lab.", 422, { attachments: "Envie apenas arquivos deste Lab." });
+      if (!(await evidenceFilesExist(attachments))) return fail("Anexo não encontrado.", 422, { attachments: "Envie o arquivo novamente." });
 
       // Mesma régua da entrega original: corrigir não pode ser um atalho para
       // deixar a evidência vazia depois que o Lab já foi dado como concluído.

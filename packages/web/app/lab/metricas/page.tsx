@@ -18,9 +18,9 @@ export default async function MetricsPage() {
     <p className="mt-3 max-w-2xl text-muted-foreground">Ativação, conclusão e erros a partir dos eventos registrados pelo próprio produto.</p>
 
     <dl className="mt-8 grid divide-y divide-border rounded-xl border border-border sm:grid-cols-4 sm:divide-x sm:divide-y-0">
-      <Stat label="Contas ativas" value={metrics.activeUsers} hint={`${metrics.activatedUsers} ativaram no primeiro dia`} />
+      <Stat label="Novas contas" value={metrics.newUsers} hint={`${metrics.activatedUsers} iniciaram um Lab no dia do cadastro`} />
       <Stat label="Ativação" value={`${metrics.activationRate}%`} hint="iniciou um Lab no dia do cadastro" />
-      <Stat label="Conclusão" value={`${metrics.completionRate}%`} hint={`${metrics.labsCompleted} de ${metrics.labsStarted} Labs`} />
+      <Stat label="Conclusão" value={`${metrics.completionRate}%`} hint={`${metrics.labsCompleted} de ${metrics.labsStarted} Labs iniciados no período`} />
       <Stat label="Erros de API" value={metrics.errors} hint="respostas 5xx registradas" />
     </dl>
 

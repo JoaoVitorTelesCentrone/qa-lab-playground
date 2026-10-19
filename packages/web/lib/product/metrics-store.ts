@@ -5,7 +5,7 @@
 // precisa estar em QALAB_ADMIN_EMAILS. Sem as duas, o painel não abre.
 
 import { createAdminClient, hasServiceRole } from "@/lib/supabase/admin";
-import { buildMetrics, type ActivityEvent, type Metrics } from "./metrics";
+import { buildMetrics, type ActivityEvent, type Metrics, type Signup } from "./metrics";
 
 /** E-mails autorizados a ver números do produto inteiro. Vazio = ninguém. */
 export function isAdmin(email: string) {
@@ -23,19 +23,32 @@ export function metricsAvailable() {
 export async function loadMetrics(days = 30): Promise<Metrics> {
   const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
   const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from("activity_events")
-    .select("name,user_id,props,created_at")
-    .gte("created_at", since)
-    .order("created_at", { ascending: true })
-    .limit(20000);
-  if (error) throw new Error(error.message);
-
-  const events: ActivityEvent[] = (data ?? []).map((row) => ({
-    name: row.name,
-    userId: row.user_id,
-    createdAt: row.created_at,
-    props: (row.props ?? {}) as Record<string, unknown>,
-  }));
-  return buildMetrics(events);
+  const pageSize = 500;
+  const [events, signups] = await Promise.all([
+    (async () => {
+      const all: ActivityEvent[] = [];
+      for (let offset = 0; ; offset += pageSize) {
+        const { data, error } = await supabase.from("activity_events")
+          .select("id,name,user_id,props,created_at").gte("created_at", since)
+          .order("created_at", { ascending: true }).order("id", { ascending: true })
+          .range(offset, offset + pageSize - 1);
+        if (error) throw new Error(error.message);
+        all.push(...(data ?? []).map((row) => ({ name: row.name, userId: row.user_id, createdAt: row.created_at, props: (row.props ?? {}) as Record<string, unknown> })));
+        if ((data?.length ?? 0) < pageSize) return all;
+      }
+    })(),
+    (async () => {
+      const all: Signup[] = [];
+      for (let offset = 0; ; offset += pageSize) {
+        const { data, error } = await supabase.from("profiles")
+          .select("id,created_at").gte("created_at", since)
+          .order("created_at", { ascending: true }).order("id", { ascending: true })
+          .range(offset, offset + pageSize - 1);
+        if (error) throw new Error(error.message);
+        all.push(...(data ?? []).map((row) => ({ userId: row.id, createdAt: row.created_at })));
+        if ((data?.length ?? 0) < pageSize) return all;
+      }
+    })(),
+  ]);
+  return buildMetrics(events, signups);
 }

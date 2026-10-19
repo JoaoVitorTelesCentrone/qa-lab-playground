@@ -13,15 +13,18 @@ export type ActivityEvent = {
   props: Record<string, unknown>;
 };
 
+export type Signup = { userId: string; createdAt: string };
+
 export type Metrics = {
   /** Contas que geraram pelo menos um evento no período. */
   activeUsers: number;
+  newUsers: number;
   labsStarted: number;
   labsCompleted: number;
   evidence: number;
   /** Percentual de Labs iniciados que chegaram a ter evidência entregue. */
   completionRate: number;
-  /** Contas que iniciaram um Lab no mesmo dia do primeiro evento. */
+  /** Contas novas que iniciaram um Lab no dia do cadastro. */
   activatedUsers: number;
   activationRate: number;
   errors: number;
@@ -35,19 +38,18 @@ export type Metrics = {
 
 const day = (iso: string) => iso.slice(0, 10);
 
-export function buildMetrics(events: ActivityEvent[]): Metrics {
+export function buildMetrics(events: ActivityEvent[], signups: Signup[] = []): Metrics {
   const started = events.filter((event) => event.name === "lab_started");
   const completed = events.filter((event) => event.name === "lab_completed");
   const errors = events.filter((event) => event.name === "api_error");
 
   const users = new Set(events.map((event) => event.userId));
-
-  // Ativação: iniciou um Lab no mesmo dia em que apareceu pela primeira vez.
-  const firstSeen = new Map<string, string>();
-  for (const event of [...events].sort((a, b) => a.createdAt.localeCompare(b.createdAt))) {
-    if (!firstSeen.has(event.userId)) firstSeen.set(event.userId, day(event.createdAt));
-  }
-  const activated = new Set(started.filter((event) => firstSeen.get(event.userId) === day(event.createdAt)).map((event) => event.userId));
+  const signupDays = new Map(signups.map((signup) => [signup.userId, day(signup.createdAt)]));
+  const activated = new Set(started.filter((event) => signupDays.get(event.userId) === day(event.createdAt)).map((event) => event.userId));
+  const pair = (event: ActivityEvent) => `${event.userId}\u0000${String(event.props.lab ?? "")}`;
+  const startedPairs = new Set(started.filter((event) => typeof event.props.lab === "string").map(pair));
+  const completedPairs = new Set(completed.filter((event) => typeof event.props.lab === "string").map(pair));
+  const completedStartedPairs = [...startedPairs].filter((key) => completedPairs.has(key));
 
   const days = new Map<string, { events: number; started: number; completed: number }>();
   for (const event of events) {
@@ -61,12 +63,13 @@ export function buildMetrics(events: ActivityEvent[]): Metrics {
 
   return {
     activeUsers: users.size,
-    labsStarted: started.length,
-    labsCompleted: completed.length,
+    newUsers: signupDays.size,
+    labsStarted: startedPairs.size,
+    labsCompleted: completedStartedPairs.length,
     evidence: completed.length,
-    completionRate: started.length === 0 ? 0 : Math.round((completed.length / started.length) * 100),
+    completionRate: startedPairs.size === 0 ? 0 : Math.round((completedStartedPairs.length / startedPairs.size) * 100),
     activatedUsers: activated.size,
-    activationRate: users.size === 0 ? 0 : Math.round((activated.size / users.size) * 100),
+    activationRate: signupDays.size === 0 ? 0 : Math.round((activated.size / signupDays.size) * 100),
     errors: errors.length,
     daily: [...days.entries()].map(([date, bucket]) => ({ date, ...bucket })).sort((a, b) => a.date.localeCompare(b.date)),
     topLabs: rank(started, completed),
@@ -75,17 +78,16 @@ export function buildMetrics(events: ActivityEvent[]): Metrics {
 }
 
 function rank(started: ActivityEvent[], completed: ActivityEvent[]) {
-  const labs = new Map<string, { started: number; completed: number }>();
-  for (const event of started) {
+  const labs = new Map<string, { started: Set<string>; completed: Set<string> }>();
+  for (const event of [...started, ...completed]) {
     const lab = String(event.props.lab ?? "desconhecido");
-    labs.set(lab, { started: (labs.get(lab)?.started ?? 0) + 1, completed: labs.get(lab)?.completed ?? 0 });
-  }
-  for (const event of completed) {
-    const lab = String(event.props.lab ?? "desconhecido");
-    labs.set(lab, { started: labs.get(lab)?.started ?? 0, completed: (labs.get(lab)?.completed ?? 0) + 1 });
+    const counts = labs.get(lab) ?? { started: new Set<string>(), completed: new Set<string>() };
+    if (event.name === "lab_started") counts.started.add(event.userId);
+    if (event.name === "lab_completed") counts.completed.add(event.userId);
+    labs.set(lab, counts);
   }
   return [...labs.entries()]
-    .map(([lab, counts]) => ({ lab, ...counts }))
+    .map(([lab, counts]) => ({ lab, started: counts.started.size, completed: [...counts.completed].filter((userId) => counts.started.has(userId)).length }))
     .sort((a, b) => b.started - a.started || b.completed - a.completed)
     .slice(0, 10);
 }

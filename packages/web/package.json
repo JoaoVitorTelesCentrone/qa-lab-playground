@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test:e2e": "playwright test",
+    "test:e2e:smoke": "playwright test --grep @smoke",
     "research:update": "bun scripts/update-research-library.ts",
     "research:index": "bun scripts/export-research-articles-index.ts",
     "mentorship:readiness": "bun --env-file=.env.local scripts/check-mentorship-readiness.ts",

@@ -4,7 +4,7 @@ Plataforma de prática de QA com aplicações que simulam produtos reais, Labs g
 
 ## Estado do lançamento
 
-O catálogo público libera três Labs de Finanças. Os demais desafios e ambientes estão no código, mas não fazem parte da vitrine ativa. Rotas de Labs ainda não liberados encaminham para a lista de interesse; evidências e anexos também são bloqueados no servidor.
+O lançamento público destaca o ExpenseFlow Free Challenge em `/playground`. O catálogo de Labs e as trilhas antigas continuam no código, mas estão ocultos pela configuração de lançamento. A home leva diretamente ao briefing, ao ambiente de prática e às entregas do ExpenseFlow.
 
 O estado do produto, decisões e pendências estão em [`docs/PRODUCTIZATION_PLAN.md`](docs/PRODUCTIZATION_PLAN.md), [`docs/QA_LAB_DECISIONS.md`](docs/QA_LAB_DECISIONS.md) e [`docs/QA_LAB_PRODUCT_PLAN.md`](docs/QA_LAB_PRODUCT_PLAN.md).
 
@@ -40,6 +40,6 @@ bun run lint
 bun run build
 ```
 
-O Supabase é usado para autenticação, progresso, evidências e dados persistentes. As migrações do produto ficam em `packages/web/supabase/migrations`; confirme a aplicação no projeto Supabase antes de validar fluxos autenticados ou publicar. Configure as variáveis usando `packages/web/.env.example`.
+O Supabase é usado para autenticação, progresso, evidências e dados persistentes. As migrações do produto ficam em `packages/web/supabase/migrations`; aplique até `0030_atomic_lab_completion.sql` antes de publicar esta versão da aplicação, pois o envio de evidência chama a função `complete_lab_submission`. Confirme o histórico no projeto Supabase correto antes de validar fluxos autenticados. Configure as variáveis usando `packages/web/.env.example`.
 
 `packages/api` é uma API alvo para exercícios. A API de produto vive nas rotas `/api/v1/*` de `packages/web`.

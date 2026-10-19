@@ -13,6 +13,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient, hasServiceRole } from "@/lib/supabase/admin";
 import type { Attachment } from "./journey";
+import { isOwnEvidencePath } from "./evidence-attachments";
 
 const BUCKET = "lab-evidence";
 
@@ -58,6 +59,16 @@ export async function uploadEvidenceFile(userId: string, labSlug: string, file: 
     size: file.size,
     type: file.type,
   };
+}
+
+/** Confirm that attachment pointers really exist before they count as evidence. */
+export async function evidenceFilesExist(attachments: Attachment[]): Promise<boolean> {
+  if (attachments.length === 0) return true;
+  const supabase = await createClient();
+  const results = await Promise.all(attachments.map((file) => supabase.storage.from(BUCKET).exists(file.path)));
+  const failure = results.find((result) => result.error);
+  if (failure?.error) throw new Error(`Não foi possível conferir o anexo: ${failure.error.message}`);
+  return results.every((result) => result.data === true);
 }
 
 export async function removeEvidenceFile(path: string) {
@@ -107,11 +118,14 @@ export async function signOwnAttachments(attachments: Attachment[]): Promise<Att
  * depois de já ter filtrado `published = true`. Sem chave de serviço a página
  * continua de pé, só sem os anexos.
  */
-export async function signPublicAttachments(attachments: Attachment[]): Promise<Attachment[]> {
+export async function signPublicAttachments(attachments: Attachment[], ownerId: string, labSlug: string): Promise<Attachment[]> {
   if (attachments.length === 0) return attachments;
-  if (!hasServiceRole()) return attachments.map((file) => ({ ...file, url: "" }));
+  const safe = attachments.filter((file) => isOwnEvidencePath(file.path, ownerId, labSlug));
+  if (!hasServiceRole() || safe.length === 0) return attachments.map((file) => ({ ...file, url: "" }));
   const admin = createAdminClient();
-  return applySigned(await signPaths(admin, attachments.map((file) => file.path)), attachments);
+  const urls = await signPaths(admin, safe.map((file) => file.path));
+  const signed = new Map(safe.map((file, index) => [file.path, urls[index] ?? ""]));
+  return attachments.map((file) => ({ ...file, url: signed.get(file.path) ?? "" }));
 }
 
 /** Assina anexos apos o chamador validar acesso privilegiado (ex.: mentor da turma). */

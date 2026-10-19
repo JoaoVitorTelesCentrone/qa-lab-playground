@@ -33,3 +33,9 @@ jobs:
 
       - name: Build web app
         run: bun run build
+
+      - name: Install Chromium for smoke tests
+        run: bunx playwright install --with-deps chromium
+
+      - name: Run launch smoke tests
+        run: bun run --filter '@qa-lab/web' test:e2e:smoke

@@ -3,6 +3,7 @@
 import { FormEvent, type ReactNode, useEffect, useState } from "react";
 import { ArrowUpRight, Bug, Check, ChevronRight, ClipboardCheck, Download, FileSearch, ListChecks, Plus, Trash2 } from "lucide-react";
 import { ChallengeStepper } from "@/components/challenge/challenge-stepper";
+import { ChallengeAccount } from "@/components/challenge/challenge-account";
 import { DELIVERABLES_KEY, emptyDeliverables, exportDeliverables, parseDeliverables, type BddScenario, type BugReport, type ChallengeDeliverables } from "@/lib/challenge-deliverables";
 
 type Stage = "bugs" | "bdd";
@@ -79,6 +80,7 @@ export function DeliverablesWorkbench() {
         <p className="mt-4 text-sm font-bold text-off-white">O que uma boa entrega mostra</p>
         {stage === "bugs" ? <ul className="mt-4 space-y-3 text-xs leading-5 text-[#9CA7B0]"><li className="flex gap-2"><Check className="mt-0.5 size-3.5 shrink-0 text-[#81C899]" />Passos que outra pessoa consegue repetir.</li><li className="flex gap-2"><Check className="mt-0.5 size-3.5 shrink-0 text-[#81C899]" />Evidência que sustenta o relato.</li><li className="flex gap-2"><Check className="mt-0.5 size-3.5 shrink-0 text-[#81C899]" />Resultado esperado descrito com clareza.</li></ul> : <ul className="mt-4 space-y-3 text-xs leading-5 text-[#9CA7B0]"><li className="flex gap-2"><Check className="mt-0.5 size-3.5 shrink-0 text-[#81C899]" />Um comportamento observável por cenário.</li><li className="flex gap-2"><Check className="mt-0.5 size-3.5 shrink-0 text-[#81C899]" />Dado, Quando e Então sem detalhe técnico.</li><li className="flex gap-2"><Check className="mt-0.5 size-3.5 shrink-0 text-[#81C899]" />Regra de negócio fácil de revisar.</li></ul>}
         <div className="mt-8 border-t border-[#3A4147] pt-5"><p className="text-xs leading-5 text-[#71808B]">Os registros ficam só neste navegador enquanto você trabalha.</p><button type="button" onClick={downloadDeliverables} disabled={completed === 0} className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-[#A5D9B6] disabled:opacity-35"><Download className="size-3.5" />Exportar investigação <ArrowUpRight className="size-3.5" /></button></div>
+        <ChallengeAccount data={data} loaded={loaded} onLoad={(value) => { setData(value); localStorage.setItem(DELIVERABLES_KEY, JSON.stringify(value)); }} />
       </aside>
     </div>
   </main>;

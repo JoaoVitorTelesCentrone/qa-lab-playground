@@ -93,7 +93,7 @@ export async function getPortfolio(username: string): Promise<Portfolio | null> 
   // assinada aqui. Só chega neste ponto o que já passou pelo filtro de
   // publicado, logo a assinatura não vaza rascunho.
   const signedEntries = await Promise.all(
-    entries.map(async (entry) => ({ ...entry, attachments: await signPublicAttachments(entry.attachments) })),
+    entries.map(async (entry) => ({ ...entry, attachments: await signPublicAttachments(entry.attachments, profile.id, entry.labSlug) })),
   );
 
   return {
@@ -164,7 +164,7 @@ export async function getPublicCase(username: string, labSlug: string): Promise<
       id: row.id,
       labSlug: row.lab_slug,
       evidence: row.evidence ?? "",
-      attachments: await signPublicAttachments(toAttachments(row.attachments)),
+      attachments: await signPublicAttachments(toAttachments(row.attachments), profile.id, row.lab_slug),
       published: true,
       createdAt: row.created_at,
     },

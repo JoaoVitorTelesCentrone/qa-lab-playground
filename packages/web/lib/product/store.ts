@@ -101,23 +101,22 @@ export type EvidenceInput = {
  * nenhum Lab é concluído sem evidência, por isso a conclusão só acontece
  * depois que a submissão existe e aponta para ela.
  */
-export async function submitEvidence(userId: string, input: EvidenceInput) {
+export async function submitEvidence(input: EvidenceInput) {
   const supabase = await createClient();
-  const { data: submission, error } = await supabase
-    .from("lab_submissions")
-    .insert({ user_id: userId, lab_slug: input.labSlug, evidence: input.evidence, attachments: input.attachments })
-    .select(SUBMISSION_COLUMNS)
-    .single();
+  const { data: submission, error } = await supabase.rpc("complete_lab_submission", {
+    p_lab_slug: input.labSlug,
+    p_evidence: input.evidence,
+    p_attachments: input.attachments,
+  });
   if (error || !submission) throw new Error(error?.message ?? "Não foi possível salvar a evidência.");
-
-  const completedAt = new Date().toISOString();
-  const { error: enrollmentError } = await supabase
-    .from("lab_enrollments")
-    .upsert({ user_id: userId, lab_slug: input.labSlug, status: "completed", submission_id: submission.id, completed_at: completedAt }, { onConflict: "user_id,lab_slug" });
-  if (enrollmentError) throw new Error(enrollmentError.message);
-
-  await track(supabase, userId, "lab_completed", { lab: input.labSlug, attachments: input.attachments.length });
   return toSubmissions([submission])[0];
+}
+
+export async function getSubmissionLabSlug(userId: string, submissionId: string): Promise<string | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("lab_submissions").select("lab_slug").eq("user_id", userId).eq("id", submissionId).maybeSingle();
+  if (error) throw new Error(error.message);
+  return data?.lab_slug ?? null;
 }
 
 /**
