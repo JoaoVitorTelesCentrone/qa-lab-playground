@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CloudDownload, CloudUpload, Loader2 } from "lucide-react";
-import { countDeliverables, type ChallengeDeliverables } from "@/lib/challenge-deliverables";
+import { countDeliverables, sameChallengeDeliverables, type ChallengeDeliverables } from "@/lib/challenge-deliverables";
 
-type Saved = { id: string; savedAt: string; deliverables: ChallengeDeliverables };
+export type SavedChallenge = { id: string; savedAt: string; deliverables: ChallengeDeliverables };
 
-export function ChallengeAccount({ data, loaded, onLoad }: { data: ChallengeDeliverables; loaded: boolean; onLoad: (value: ChallengeDeliverables) => void }) {
+export function ChallengeAccount({ data, loaded, onLoad, onSaved }: { data: ChallengeDeliverables; loaded: boolean; onLoad: (value: ChallengeDeliverables) => void; onSaved?: (value: SavedChallenge | null) => void }) {
   const [account, setAccount] = useState<"checking" | "guest" | "ready" | "error">("checking");
-  const [saved, setSaved] = useState<Saved | null>(null);
+  const [saved, setSaved] = useState<SavedChallenge | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -20,10 +20,10 @@ export function ChallengeAccount({ data, loaded, onLoad }: { data: ChallengeDeli
       if (response.status === 401) { setAccount("guest"); return; }
       if (!response.ok) throw new Error("Não foi possível consultar sua conta.");
       const body = await response.json();
-      if (active) { setSaved(body.data); setAccount("ready"); }
+      if (active) { setSaved(body.data); onSaved?.(body.data); setAccount("ready"); }
     }).catch(() => { if (active) setAccount("error"); });
     return () => { active = false; };
-  }, []);
+  }, [onSaved]);
 
   async function save() {
     setBusy(true); setMessage("");
@@ -31,14 +31,16 @@ export function ChallengeAccount({ data, loaded, onLoad }: { data: ChallengeDeli
       const response = await fetch("/api/v1/challenge", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ deliverables: data }) });
       const body = await response.json();
       if (!response.ok) throw new Error(body.error?.message ?? "Não foi possível salvar.");
-      setSaved({ ...body.data, deliverables: data });
+      const version = { ...body.data, deliverables: data } as SavedChallenge;
+      setSaved(version);
+      onSaved?.(version);
       setMessage("Versão salva na sua conta. Nada foi publicado.");
     } catch (error) { setMessage(error instanceof Error ? error.message : "Não foi possível salvar."); }
     finally { setBusy(false); }
   }
 
   const localCount = countDeliverables(data);
-  const different = saved && JSON.stringify(saved.deliverables) !== JSON.stringify(data);
+  const different = saved && !sameChallengeDeliverables(saved.deliverables, data);
   return <section aria-label="Salvar desafio na conta" className="mt-8 border-t border-[#3A4147] pt-5">
     <p className="text-sm font-bold text-off-white">Continue de onde parou</p>
     {account === "checking" && <p role="status" className="mt-2 text-xs text-[#AAB2BC]">Verificando sua conta...</p>}

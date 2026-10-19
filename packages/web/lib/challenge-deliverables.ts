@@ -19,6 +19,16 @@ export type ChallengeDeliverables = { bugs: BugReport[]; bdd: BddScenario[]; e2e
 export const emptyDeliverables: ChallengeDeliverables = { bugs: [], bdd: [], e2e: [], release: null };
 export const DELIVERABLES_KEY = "qa-lab-expenseflow-deliverables-v1";
 
+/** JSONB reordena chaves; igualdade de versões não pode depender dessa ordem. */
+export function sameChallengeDeliverables(a: ChallengeDeliverables, b: ChallengeDeliverables) {
+  function stable(value: unknown): unknown {
+    if (Array.isArray(value)) return value.map(stable);
+    if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).sort(([left], [right]) => left.localeCompare(right)).map(([key, item]) => [key, stable(item)]));
+    return value;
+  }
+  return JSON.stringify(stable(a)) === JSON.stringify(stable(b));
+}
+
 export function parseDeliverables(value: string | null): ChallengeDeliverables {
   if (!value) return emptyDeliverables;
   try {

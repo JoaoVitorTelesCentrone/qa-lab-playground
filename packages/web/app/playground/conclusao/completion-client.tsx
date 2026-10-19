@@ -1,20 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { ArrowLeft, CheckCircle2, Circle, Download, Linkedin, Mail } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { ArrowLeft, CheckCircle2, Circle, Download, Mail } from "lucide-react";
 import { ChallengeStepper } from "@/components/challenge/challenge-stepper";
-import { ChallengeAccount } from "@/components/challenge/challenge-account";
+import { ChallengeAccount, type SavedChallenge } from "@/components/challenge/challenge-account";
+import { ChallengeCasePublisher } from "@/components/challenge/challenge-case-publisher";
 import { challengeChecklist, DELIVERABLES_KEY, emptyDeliverables, exportDeliverables, parseDeliverables, type ChallengeDeliverables } from "@/lib/challenge-deliverables";
-
-const shareText = "Completei o ExpenseFlow Free Challenge no QA Lab Playground: investiguei riscos, documentei bugs, modelei a regressão em BDD e defini uma estratégia E2E.";
 
 export function CompletionClient() {
   const [data, setData] = useState<ChallengeDeliverables>(emptyDeliverables);
   const [loaded, setLoaded] = useState(false);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app";
+  const [saved, setSaved] = useState<SavedChallenge | null>(null);
+  const onSaved = useCallback((value: SavedChallenge | null) => setSaved(value), []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -57,13 +57,12 @@ export function CompletionClient() {
       <div className="flex items-center justify-between border-b border-white/10 p-5"><strong className="text-off-white">Progresso verificável</strong><span className={`text-sm font-black ${ready ? "text-neon" : "text-mint"}`}>{loaded ? `${completed}/${checks.length}` : "..."}</span></div>
       <div className="grid gap-3 p-5 sm:grid-cols-2">{checks.map((item) => <div key={item.label} className={`flex items-start gap-3 rounded-xl border p-4 ${item.done ? "border-neon/20 bg-neon/[.04]" : "border-white/10"}`}>{item.done ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-neon" /> : <Circle className="mt-0.5 size-4 shrink-0 text-[#69737E]" />}<div><p className="text-sm font-bold text-off-white">{item.label}</p><p className="mt-1 text-xs text-[#69737E]">{item.detail}</p></div></div>)}</div>
     </section>
-    <ChallengeAccount data={data} loaded={loaded} onLoad={(value) => { setData(value); localStorage.setItem(DELIVERABLES_KEY, JSON.stringify(value)); }} />
+    <ChallengeAccount data={data} loaded={loaded} onLoad={(value) => { setData(value); localStorage.setItem(DELIVERABLES_KEY, JSON.stringify(value)); }} onSaved={onSaved} />
     <div className="mt-8 flex flex-col gap-3 sm:flex-row">
       <Link href="/playground/entregas" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-white/15 px-5 text-sm font-bold text-off-white"><ArrowLeft className="size-4" />Editar entregas</Link>
       <button type="button" onClick={download} disabled={!loaded || data.bugs.length + data.bdd.length + data.e2e.length === 0} className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-neon px-5 text-sm font-black text-[#101319] disabled:cursor-not-allowed disabled:opacity-40"><Download className="size-4" />Baixar artefatos</button>
-       {ready && <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(siteUrl)}`} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-[#7BA7E8]/30 px-5 text-sm font-bold text-[#9BC0F5]"><Linkedin className="size-4" />Compartilhar</a>}
     </div>
-    {ready && <blockquote className="mt-6 rounded-xl border border-mint/20 bg-mint/[.04] p-4 text-sm leading-6 text-[#AAB2BC]">“{shareText}”</blockquote>}
+    <ChallengeCasePublisher data={data} saved={saved} />
     <section className="mt-10 rounded-2xl border border-white/10 bg-[#171B21] p-6"><Mail className="size-5 text-mint" /><h2 className="mt-3 text-xl font-black text-off-white">Receber os próximos desafios</h2><form onSubmit={submit} className="mt-4 flex flex-col gap-2 sm:flex-row"><input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="seu@email.com" className="field flex-1" /><button className="h-11 rounded-lg bg-mint px-5 text-sm font-black text-[#101319]">Quero receber</button></form>{message && <p className="mt-3 text-xs text-[#8B949E]">{message}</p>}</section>
   </main>;
 }

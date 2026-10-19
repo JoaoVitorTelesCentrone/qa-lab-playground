@@ -17,6 +17,7 @@ import { listPublicPortfolioSections } from "./store";
 import { selectWithOptionalColumn } from "./profile-columns";
 import { buildProjects, findProject, projectMeta, portfolioSkills, statsFor, type PortfolioProject, type PortfolioStats } from "./portfolio-projects";
 import type { MentorshipPortfolioCase } from "@/lib/mentorship/portfolio";
+import { publicCaseFromRow, type ChallengeCase } from "@/lib/challenge-case";
 
 export type Portfolio = {
   username: string;
@@ -35,6 +36,7 @@ export type Portfolio = {
   /** Texto livre do dono: formação, certificações, o que a evidência não conta. */
   sections: PortfolioSection[];
   mentorshipCases: MentorshipPortfolioCase[];
+  challengeCase: ChallengeCase | null;
 };
 
 const SUBMISSION_COLUMNS = "id,lab_slug,evidence,attachments,created_at";
@@ -67,7 +69,7 @@ export async function getPortfolio(username: string): Promise<Portfolio | null> 
   const profile = await publicProfile(supabase, username, "id,full_name,username,bio,role,linkedin_url,portfolio_headline,portfolio_public");
   if (!profile) return null;
 
-  const [{ data }, sections, { data: mentorshipData }] = await Promise.all([
+  const [{ data }, sections, { data: mentorshipData }, { data: challengeData }] = await Promise.all([
     supabase
       .from("lab_submissions")
       .select(SUBMISSION_COLUMNS)
@@ -78,6 +80,7 @@ export async function getPortfolio(username: string): Promise<Portfolio | null> 
     // completa tirando as que ficaram sem conteúdo.
     listPublicPortfolioSections(profile.id),
     supabase.from("mentorship_portfolio_cases").select("id,submission_id,user_id,title,summary,evidence,repository_url,report_url,published,created_at,updated_at").eq("user_id", profile.id).eq("published", true).order("updated_at", { ascending: false }),
+    supabase.from("expenseflow_portfolio_cases").select("title,summary,snapshot,published,updated_at").eq("user_id", profile.id).eq("published", true).maybeSingle(),
   ]);
 
   const entries = toEntries((data ?? []).map((row) => ({
@@ -112,6 +115,7 @@ export async function getPortfolio(username: string): Promise<Portfolio | null> 
     mentorshipCases: (mentorshipData ?? []).map((row) => ({
       id: String(row.id), submissionId: String(row.submission_id), userId: String(row.user_id), title: String(row.title), summary: String(row.summary ?? ""), evidence: String(row.evidence ?? ""), repositoryUrl: typeof row.repository_url === "string" ? row.repository_url : null, reportUrl: typeof row.report_url === "string" ? row.report_url : null, published: true, createdAt: String(row.created_at), updatedAt: String(row.updated_at),
     })),
+    challengeCase: publicCaseFromRow(challengeData),
   };
 }
 

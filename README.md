@@ -40,6 +40,6 @@ bun run lint
 bun run build
 ```
 
-O Supabase é usado para autenticação, progresso, evidências e dados persistentes. As migrações do produto ficam em `packages/web/supabase/migrations`; aplique até `0030_atomic_lab_completion.sql` antes de publicar esta versão da aplicação, pois o envio de evidência chama a função `complete_lab_submission`. Confirme o histórico no projeto Supabase correto antes de validar fluxos autenticados. Configure as variáveis usando `packages/web/.env.example`.
+O Supabase é usado para autenticação, progresso, evidências e dados persistentes. As migrações do produto ficam em `packages/web/supabase/migrations`; aplique `0030_atomic_lab_completion.sql` e `20261019232810_expenseflow_portfolio_case.sql` antes de publicar esta versão da aplicação. A primeira sustenta a conclusão atômica do Lab; a segunda libera a publicação do case ExpenseFlow. Confirme o histórico no projeto Supabase correto antes de validar fluxos autenticados. Configure as variáveis usando `packages/web/.env.example`.
 
 `packages/api` é uma API alvo para exercícios. A API de produto vive nas rotas `/api/v1/*` de `packages/web`.

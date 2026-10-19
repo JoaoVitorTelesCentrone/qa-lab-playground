@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { challengeChecklist, countCompletedStages, countDeliverables, emptyDeliverables, exportDeliverables, isChallengeReady, parseDeliverables, type ChallengeDeliverables } from "./challenge-deliverables";
+import { challengeChecklist, countCompletedStages, countDeliverables, emptyDeliverables, exportDeliverables, isChallengeReady, parseDeliverables, sameChallengeDeliverables, type ChallengeDeliverables } from "./challenge-deliverables";
 
 function makeReady(): ChallengeDeliverables {
   return {
@@ -12,6 +12,11 @@ function makeReady(): ChallengeDeliverables {
 
 describe("entregáveis do desafio", () => {
   test("recupera uma estrutura vazia quando o armazenamento é inválido", () => expect(parseDeliverables("não é json")).toEqual(emptyDeliverables));
+  test("reconhece a mesma versão após a reordenação de chaves do JSONB", () => {
+    const local = { ...emptyDeliverables, bugs: [{ id: "1", title: "Erro", steps: "Abrir", actual: "X", expected: "Y", severity: "Alta" as const }] };
+    const stored = { release: null, e2e: [], bdd: [], bugs: [{ severity: "Alta" as const, expected: "Y", actual: "X", steps: "Abrir", title: "Erro", id: "1" }] };
+    expect(sameChallengeDeliverables(local, stored)).toBe(true);
+  });
   test("preserva listas válidas e completa campos ausentes", () => expect(parseDeliverables('{"bugs":[]}')).toEqual({ bugs: [], bdd: [], e2e: [], release: null }));
   test("conta somente etapas que possuem ao menos uma entrega", () => expect(countCompletedStages({ bugs: [{ id: "1", title: "Bug", steps: "1", actual: "A", expected: "B", severity: "Alta" }], bdd: [], e2e: [{ id: "2", flow: "Login", priority: "Alta", decision: "Automatizar", reason: "Crítico", assertions: "Sucesso" }] })).toBe(2));
   test("exporta artefatos em formatos prontos para versionamento", () => {
