@@ -1,6 +1,25 @@
 {
-  "updatedAt": "2026-10-18T13:20:00.821Z",
+  "updatedAt": "2026-10-19T16:29:39.594Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1007-978-3-032-42320-7-16",
+      "title": "A Study of the Software Engineering Process’s Complexity and Its Relationship with Software Quality",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Dobromir M. Dinev"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-19",
+      "source": "Crossref",
+      "venue": "Lecture Notes of the Institute for Computer Sciences, Social Informatics and Telecommunications Engineering",
+      "doi": "https://doi.org/10.1007/978-3-032-42320-7_16",
+      "url": "https://doi.org/10.1007/978-3-032-42320-7_16",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-10-19T16:29:39.594Z"
+    },
     {
       "id": "doi-doi-org-10-36548-jitdw-2026-4-007",
       "title": "Multiclass Software Defect Prediction Using an Optimized LLM CodeSentinel-BERT Based Framework",
