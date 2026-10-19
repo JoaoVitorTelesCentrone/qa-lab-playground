@@ -1,4 +1,5 @@
-import { Hono } from "hono";
+import { timingSafeEqual } from "node:crypto";
+import { Hono, type Context, type Next } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import users from "./routes/users";
@@ -17,6 +18,29 @@ type Variables = {
 };
 
 const app = new Hono<{ Variables: Variables }>();
+
+function hasValidAdminToken(authorization: string | undefined) {
+  const expected = process.env.ADMIN_SECRET;
+  if (!expected || !authorization) return false;
+
+  const match = /^Bearer\s+(.+)$/i.exec(authorization);
+  if (!match) return false;
+
+  const providedBytes = Buffer.from(match[1], "utf8");
+  const expectedBytes = Buffer.from(expected, "utf8");
+  return providedBytes.length === expectedBytes.length && timingSafeEqual(providedBytes, expectedBytes);
+}
+
+async function requireAdmin(c: Context<{ Variables: Variables }>, next: Next) {
+  const configuredSecret = process.env.ADMIN_SECRET;
+  if (!configuredSecret || Buffer.byteLength(configuredSecret, "utf8") < 32) {
+    return c.json({ error: "Admin controls are disabled: configure ADMIN_SECRET with at least 32 characters." }, 503);
+  }
+  if (!hasValidAdminToken(c.req.header("authorization"))) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+  await next();
+}
 
 // Middleware
 app.use("*", cors({ origin: "*" }));
@@ -44,6 +68,9 @@ app.route("/api/system", system);
 // ==============================
 // Chaos Control Endpoints
 // ==============================
+
+app.use("/api/_chaos/*", requireAdmin);
+app.use("/api/_admin/*", requireAdmin);
 
 // GET chaos config
 app.get("/api/_chaos/config", (c) => {
@@ -78,12 +105,8 @@ app.post("/api/_chaos/toggle", async (c) => {
   });
 });
 
-// View stats (protegido por token)
+// View stats (protegido por Bearer token)
 app.get("/api/_admin/stats", (c) => {
-  const secret = process.env.ADMIN_SECRET;
-  if (secret && c.req.query("secret") !== secret) {
-    return c.json({ error: "Unauthorized" }, 401);
-  }
   return c.json(store.getStats());
 });
 

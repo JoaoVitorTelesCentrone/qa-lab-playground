@@ -2,6 +2,9 @@
   "name": "qa-lab-playground",
   "private": true,
   "workspaces": ["packages/*"],
+  "overrides": {
+    "proxy-addr": "2.0.8"
+  },
   "scripts": {
     "dev": "bun run --filter '*' dev",
     "dev:api": "bun run --filter '@qa-lab/api' dev",
