@@ -1,6 +1,33 @@
 {
-  "updatedAt": "2026-10-19T16:29:39.594Z",
+  "updatedAt": "2026-10-20T14:20:00.649Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1007-978-3-032-34434-2-18",
+      "title": "Enhancing Software Defect Prediction (ESDP): A Deep Learning Approach for Improved Defect Prediction and Analysis",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Ayesha Siddika",
+        "Momotaz Begum",
+        "Md. Asikur Rahman",
+        "Imam Hossain"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-19",
+      "source": "OpenAlex",
+      "venue": "Lecture notes in networks and systems",
+      "doi": "https://doi.org/10.1007/978-3-032-34434-2_18",
+      "url": "https://doi.org/10.1007/978-3-032-34434-2_18",
+      "topics": [
+        "Robustness (evolution)",
+        "Deep learning",
+        "Artificial intelligence",
+        "Convolutional neural network",
+        "Computer science",
+        "Machine learning"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-20T14:20:00.649Z"
+    },
     {
       "id": "doi-doi-org-10-1007-978-3-032-42320-7-16",
       "title": "A Study of the Software Engineering Process’s Complexity and Its Relationship with Software Quality",
