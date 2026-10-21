@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Check } from "lucide-react";
-import { countDeliverables, DELIVERABLES_KEY, emptyDeliverables, parseDeliverables, type ChallengeDeliverables } from "@/lib/challenge-deliverables";
+import { CHALLENGE_DELIVERABLES_UPDATED, countDeliverables, DELIVERABLES_KEY, emptyDeliverables, parseDeliverables, type ChallengeDeliverables } from "@/lib/challenge-deliverables";
 
 const steps = [
   { href: "/playground", label: "Briefing", hint: "Entenda o contexto" },
@@ -20,22 +19,19 @@ export function ChallengeStepper() {
     const read = () => setData(parseDeliverables(localStorage.getItem(DELIVERABLES_KEY)));
     read();
     window.addEventListener("storage", read);
-    return () => window.removeEventListener("storage", read);
+    window.addEventListener(CHALLENGE_DELIVERABLES_UPDATED, read);
+    return () => {
+      window.removeEventListener("storage", read);
+      window.removeEventListener(CHALLENGE_DELIVERABLES_UPDATED, read);
+    };
   }, []);
 
   const activeIndex = steps.findIndex((step) => step.href === pathname);
   const total = countDeliverables(data);
-  function statusOf(index: number): "done" | "current" | "todo" {
-    if (index === activeIndex) return "current";
-    if (activeIndex >= 0 && index < activeIndex) return "done";
-    return "todo";
-  }
-
   return (
-    <nav aria-label="Progresso do desafio" className="rounded-2xl border border-white/10 bg-[#151A20] p-2.5">
+    <nav aria-label="Etapas do desafio" className="rounded-2xl border border-white/10 bg-[#151A20] p-2.5">
       <ol className="flex items-stretch gap-1.5 overflow-x-auto">
         {steps.map((step, index) => {
-          const status = statusOf(index);
           const isActive = index === activeIndex;
           const badge = index === 2 && total > 0 ? String(total) : null;
           return (
@@ -47,23 +43,15 @@ export function ChallengeStepper() {
                   isActive ? "bg-mint/[.08] ring-1 ring-mint/30" : "hover:bg-white/[.04]"
                 }`}
               >
-                <span
-                  className={`flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition ${
-                    status === "done"
-                      ? "bg-neon text-[#101319]"
-                      : status === "current"
-                        ? "bg-mint text-[#101319]"
-                        : "border border-white/15 text-[#69737E]"
-                  }`}
-                >
-                  {status === "done" ? <Check className="size-4" /> : index + 1}
+                <span className={`flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition ${isActive ? "bg-mint text-[#101319]" : "border border-white/20 text-[#AAB2BC]"}`}>
+                  {index + 1}
                 </span>
                 <span className="min-w-0">
                   <span className="flex items-center gap-1.5">
-                    <span className={`truncate text-sm font-bold ${isActive || status === "done" ? "text-off-white" : "text-[#AAB2BC]"}`}>{step.label}</span>
+                    <span className={`truncate text-sm font-bold ${isActive ? "text-off-white" : "text-[#AAB2BC]"}`}>{step.label}</span>
                     {badge && <span className="rounded-full bg-neon/15 px-1.5 text-[10px] font-black text-neon">{badge}</span>}
                   </span>
-                  <span className="hidden truncate text-[11px] text-[#69737E] sm:block">{step.hint}</span>
+                  <span className="hidden truncate text-[11px] text-[#AAB2BC] sm:block">{step.hint}</span>
                 </span>
               </Link>
             </li>

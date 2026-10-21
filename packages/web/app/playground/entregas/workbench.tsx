@@ -1,10 +1,10 @@
 "use client";
 
-import { FormEvent, type ReactNode, useEffect, useState } from "react";
+import { type FormEvent, type KeyboardEvent, type ReactNode, useEffect, useState } from "react";
 import { ArrowUpRight, Bug, Check, ChevronRight, ClipboardCheck, Download, FileSearch, ListChecks, Plus, Trash2 } from "lucide-react";
 import { ChallengeStepper } from "@/components/challenge/challenge-stepper";
 import { ChallengeAccount } from "@/components/challenge/challenge-account";
-import { DELIVERABLES_KEY, emptyDeliverables, exportDeliverables, parseDeliverables, type BddScenario, type BugReport, type ChallengeDeliverables } from "@/lib/challenge-deliverables";
+import { CHALLENGE_DELIVERABLES_UPDATED, DELIVERABLES_KEY, emptyDeliverables, exportDeliverables, parseDeliverables, type BddScenario, type BugReport, type ChallengeDeliverables } from "@/lib/challenge-deliverables";
 
 type Stage = "bugs" | "bdd";
 const stages = {
@@ -26,7 +26,11 @@ export function DeliverablesWorkbench() {
     const timer = window.setTimeout(() => { setData(parseDeliverables(localStorage.getItem(DELIVERABLES_KEY))); setLoaded(true); }, 0);
     return () => window.clearTimeout(timer);
   }, []);
-  useEffect(() => { if (loaded) localStorage.setItem(DELIVERABLES_KEY, JSON.stringify(data)); }, [data, loaded]);
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem(DELIVERABLES_KEY, JSON.stringify(data));
+    window.dispatchEvent(new Event(CHALLENGE_DELIVERABLES_UPDATED));
+  }, [data, loaded]);
 
   function downloadDeliverables() {
     const files = exportDeliverables(data);
@@ -34,6 +38,13 @@ export function DeliverablesWorkbench() {
     const anchor = document.createElement("a"); anchor.href = url; anchor.download = "expenseflow-investigacao.md"; anchor.click(); URL.revokeObjectURL(url);
   }
   function remove(group: Stage, id: string) { setData((value) => ({ ...value, [group]: value[group].filter((item) => item.id !== id) })); }
+  function handleStageKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const nextStage = event.key === "Home" ? "bugs" : event.key === "End" ? "bdd" : stage === "bugs" ? "bdd" : "bugs";
+    setStage(nextStage);
+    document.getElementById(`deliverables-tab-${nextStage}`)?.focus();
+  }
 
   return <main className="mx-auto max-w-6xl px-5 pb-16 pt-10 sm:px-8 sm:pt-14">
     <ChallengeStepper />
@@ -58,11 +69,11 @@ export function DeliverablesWorkbench() {
         <div role="tablist" aria-label="Tipo de entrega" className="flex border-b border-[#3A4147]">
           {(Object.keys(stages) as Stage[]).map((id) => {
             const item = stages[id]; const Icon = item.icon; const active = id === stage; const count = data[id].length;
-            return <button key={id} role="tab" aria-selected={active} onClick={() => setStage(id)} className={`group -mb-px flex items-center gap-3 border-b-2 px-1 py-4 pr-7 text-left transition sm:pr-10 ${active ? "border-[#81C899] text-off-white" : "border-transparent text-[#7F8993] hover:text-[#C7D0D8]"}`}><Icon className="size-4" /><span><span className="block text-sm font-bold">{item.label}</span><span className="mt-1 block text-[11px] font-normal">{item.subtitle}</span></span>{count > 0 && <span className={`ml-1 inline-flex size-5 items-center justify-center rounded-full text-[10px] font-black ${active ? "bg-[#81C899] text-[#172019]" : "bg-white/[.08]"}`}>{count}</span>}</button>;
+            return <button key={id} id={`deliverables-tab-${id}`} type="button" role="tab" aria-selected={active} aria-controls="deliverables-panel" tabIndex={active ? 0 : -1} onKeyDown={handleStageKeyDown} onClick={() => setStage(id)} className={`group -mb-px flex items-center gap-3 border-b-2 px-1 py-4 pr-7 text-left transition sm:pr-10 ${active ? "border-[#81C899] text-off-white" : "border-transparent text-[#7F8993] hover:text-[#C7D0D8]"}`}><Icon aria-hidden="true" className="size-4" /><span><span className="block text-sm font-bold">{item.label}</span><span className="mt-1 block text-[11px] font-normal">{item.subtitle}</span></span>{count > 0 && <span className={`ml-1 inline-flex size-5 items-center justify-center rounded-full text-[10px] font-black ${active ? "bg-[#81C899] text-[#172019]" : "bg-white/[.08]"}`}>{count}</span>}</button>;
           })}
         </div>
 
-        <div className="mt-8">
+        <div id="deliverables-panel" role="tabpanel" aria-labelledby={`deliverables-tab-${stage}`} tabIndex={0} className="mt-8 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-[#81C899]">
           <div className="flex items-start gap-4">
             <span className="font-mono text-sm text-[#81C899]">{current.number}</span>
             <div><h2 className="text-2xl font-bold tracking-tight text-off-white">{current.label}</h2><p className="mt-1 text-sm text-[#89939E]">{current.subtitle}</p></div>
@@ -107,5 +118,5 @@ function EntryList({ stage, items, remove }: { stage: Stage; items: BugReport[] 
 function EntryRow({ stage, item, remove }: { stage: Stage; item: BugReport | BddScenario; remove: (id: string) => void }) {
   const title = item.title;
   const detail = stage === "bugs" ? `${(item as BugReport).severity} — ${(item as BugReport).expected}` : `Dado ${(item as BddScenario).given} · Quando ${(item as BddScenario).when} · Então ${(item as BddScenario).then}`;
-  return <article className="group flex items-start gap-4 py-5"><ClipboardCheck className="mt-0.5 size-4 shrink-0 text-[#81C899]" /><div className="min-w-0 flex-1"><h3 className="font-semibold text-off-white">{title}</h3><p className="mt-1 line-clamp-2 text-xs leading-5 text-[#89939E]">{detail}</p></div><button type="button" onClick={() => remove(item.id)} className="p-1 text-[#65707A] opacity-0 transition hover:text-[#E48D88] group-hover:opacity-100 focus:opacity-100" aria-label="Excluir registro"><Trash2 className="size-4" /></button><ChevronRight className="mt-1 size-4 text-[#56616A]" /></article>;
+  return <article className="group flex items-start gap-4 py-5"><ClipboardCheck className="mt-0.5 size-4 shrink-0 text-[#81C899]" /><div className="min-w-0 flex-1"><h3 className="font-semibold text-off-white">{title}</h3><p className="mt-1 line-clamp-2 text-xs leading-5 text-[#89939E]">{detail}</p></div><button type="button" onClick={() => { if (window.confirm(`Excluir “${title}”? Essa ação não pode ser desfeita.`)) remove(item.id); }} className="p-2 text-[#9AA4AE] opacity-100 transition hover:text-[#E48D88] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#81C899] sm:opacity-0 sm:group-hover:opacity-100" aria-label={`Excluir ${stage === "bugs" ? "bug report" : "cenário BDD"}: ${title}`}><Trash2 aria-hidden="true" className="size-4" /></button><ChevronRight aria-hidden="true" className="mt-1 size-4 text-[#56616A]" /></article>;
 }

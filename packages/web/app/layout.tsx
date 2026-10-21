@@ -30,7 +30,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${inter.variable} ${mono.variable} min-h-screen bg-background font-sans text-foreground antialiased`}>
         <NavigationProgress />
         <SiteHeader />
-        <main>{children}</main>
+        <a
+          href="#main-content"
+          className="fixed left-4 top-4 z-[300] -translate-y-20 rounded-md bg-primary px-4 py-3 font-semibold text-primary-foreground shadow-lg transition-transform focus:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
+          Pular para o conteúdo
+        </a>
+        <div id="main-content" tabIndex={-1} className="outline-none">
+          {children}
+        </div>
         <Toaster />
         <SiteFooter />
       </body>

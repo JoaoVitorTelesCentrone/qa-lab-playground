@@ -18,6 +18,7 @@ export const ciGates: CiGateName[] = ["Lint", "Testes unitários", "Integração
 export type ChallengeDeliverables = { bugs: BugReport[]; bdd: BddScenario[]; e2e: E2eCandidate[]; release?: ReleaseDecision | null };
 export const emptyDeliverables: ChallengeDeliverables = { bugs: [], bdd: [], e2e: [], release: null };
 export const DELIVERABLES_KEY = "qa-lab-expenseflow-deliverables-v1";
+export const CHALLENGE_DELIVERABLES_UPDATED = "qa-lab:challenge-deliverables-updated";
 
 /** JSONB reordena chaves; igualdade de versões não pode depender dessa ordem. */
 export function sameChallengeDeliverables(a: ChallengeDeliverables, b: ChallengeDeliverables) {
