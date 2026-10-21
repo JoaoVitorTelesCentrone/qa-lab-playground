@@ -76,9 +76,10 @@ export async function sendRequest(
 const systemApiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 
 export async function systemApi<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = typeof window !== "undefined" ? sessionStorage.getItem("qa-lab-system-token") : null;
   const response = await fetch(`${systemApiUrl}/api/system${path}`, {
     ...options,
-    headers: { "Content-Type": "application/json", ...options.headers },
+    headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers },
   });
   const body = await response.json() as { data?: T; error?: string };
   if (!response.ok || !body.data) throw new Error(body.error ?? "Erro ao comunicar com a API");

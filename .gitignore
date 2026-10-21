@@ -26,6 +26,7 @@ npm-debug.log*
 packages/web/.tmp/
 packages/web/test-results/
 packages/web/supabase/.temp/
+packages/api/src/data/system-state.json
 
 # scraping cache
 .firecrawl/
