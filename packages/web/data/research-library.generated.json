@@ -1,6 +1,54 @@
 {
-  "updatedAt": "2026-10-20T14:20:00.649Z",
+  "updatedAt": "2026-10-21T14:30:21.725Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-15408-jti-v19i2-53564",
+      "title": "AI-Driven Software Testing for a Test Center of Excellence: A Systematic Mapping and Evidence Synthesis",
+      "abstract": "Artificial intelligence (AI) is increasingly used to automate and optimize software testing, but the evidence is distributed across heterogeneous testing activities, AI techniques, and evaluation measures. This study maps AI-driven software-testing research and translates the evidence into capabilities relevant to a Test Center of Excellence (TCoE). A systematic evidence workflow was applied to a unified audit corpus of 2,072 records, followed by focused eligibility reconciliation and full-text verification. The final focused evidence workset contains 29 records: 15 primary empirical studies, 9 secondary studies, 1 scope exclusion, and 4 full-text/access exclusions. The primary evidence covers machine learning, reinforcement learning, evolutionary and search-based methods, deep learning, explainable AI, and large language models. The supported testing activities include test generation, selection and prioritization, minimization and optimization, fuzzing, validation, adaptive automation, and maintenance. The synthesis shows that AI should be treated in a TCoE as a governed capability layer rather than as a single automation tool. The proposed capability model links AI techniques to testing activities, measurable outcomes, reusable TCoE capabilities, and governance with human oversight. The study also identifies gaps in reliability, context awareness, test-oracle support, long-term maintenance, CI/CD integration, reproducibility, and standardized evaluation.",
+      "authors": [
+        "Ali Ahmad"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-20",
+      "source": "OpenAlex",
+      "venue": "JURNAL TEKNIK INFORMATIKA",
+      "doi": "https://doi.org/10.15408/jti.v19i2.53564",
+      "url": "https://journal.uinjkt.ac.id/index.php/ti/article/download/53564/20093",
+      "topics": [
+        "Computer science",
+        "Workflow",
+        "Keyword-driven testing",
+        "Software engineering",
+        "Automation",
+        "Context (archaeology)"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-21T14:30:21.725Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23495798",
+      "title": "SWARM METROLOGY AND AUTONOMOUS REPAIR REQUALIFICATION AT THE LIMIT STARLI Research Works | White Rainbow Scientific Library Prospective Research Review Edition | October 2026 A robotic swarm can repair a structure, repeat a successful movement, and agree on a measurement while still misunderstanding the repaired object's physical condition. This monograph explores a deeper engineering question: can distributed measuring agents independently requalify repaired geometry, material properties, and functional capacity when their sensors may share a drifting reference, a common software defect, or an unobservable state? The proposed research programme couples distributed metrology, traceable repair evidence, and independent adjudication. Its mathematical foundation addresses correlated sensor errors, marginalization of calibration bias, measurement observability, covariance intersection, robust estimation, confidence and coverage, sequential decisions, conformity assessment, calibration genealogy, and long-horizon reliability. Thirty distinct mathematical signposts link physical assumptions, measured units, falsifiable predictions, and proposed experiments. Rather than treating sensor consensus as physical truth, the work requires a blind external witness capable of defeating a preferred interpretation. Across 82 research chapters and 410 separately paginated study units, the atlas investigates hidden common-mode calibration faults, coordinate-frame and timestamp drift, non-Gaussian measurement noise, blind regions, firmware contamination, robot-sensor attrition, cross-modal references, release guard bands, and second-laboratory reproducibility. Each chapter specifies measurable quantities, a controlled intervention, a strong conventional comparator, and a research stop condition. Two hundred Research Gates invite future researchers to conduct discriminating experiments under real resource budgets and genuine uncertainty. Thirty-three Phoenix Answer Embryos outline revisable concepts that can be corrected, rejected, divided, or rebuilt by successor teams. A separate Excel companion cross-references formulas, chapters, studies, Gates, source DOI metadata, and PDF pages. External references include metrology standards, distributed estimation research, and modular robotics literature; earlier STARLI research works serve only as conceptual genealogy.",
+      "abstract": "SWARM METROLOGY AND AUTONOMOUS REPAIR REQUALIFICATION AT THE LIMIT STARLI Research Works | White Rainbow Scientific LibraryProspective Research Review Edition | October 2026 A robotic swarm can repair a structure, repeat a successful movement, and agree on a measurement while still misunderstanding the repaired object's physical condition. This monograph explores a deeper engineering question: can distributed measuring agents independently requalify repaired geometry, material properties, and functional capacity when their sensors may share a drifting reference, a common software defect, or an unobservable state? The proposed research programme couples distributed metrology, traceable repair evidence, and independent adjudication. Its mathematical foundation addresses correlated sensor errors, marginalization of calibration bias, measurement observability, covariance intersection, robust estimation, confidence and coverage, sequential decisions, conformity assessment, calibration genealogy, and long-horizon reliability. Thirty distinct mathematical signposts link physical assumptions, measured units, falsifiable predictions, and proposed experiments. Rather than treating sensor consensus as physical truth, the work requires a blind external witness capable of defeating a preferred interpretation. Across 82 research chapters and 410 separately paginated study units, the atlas investigates hidden common-mode calibration faults, coordinate-frame and timestamp drift, non-Gaussian measurement noise, blind regions, firmware contamination, robot-sensor attrition, cross-modal references, release guard bands, and second-laboratory reproducibility. Each chapter specifies measurable quantities, a controlled intervention, a strong conventional comparator, and a research stop condition. Two hundred Research Gates invite future researchers to conduct discriminating experiments under real resource budgets and genuine uncertainty. Thirty-three Phoenix Answer Embryos outline revisable concepts that can be corrected, rejected, divided, or rebuilt by successor teams. A separate Excel companion cross-references formulas, chapters, studies, Gates, source DOI metadata, and PDF pages. External references include metrology standards, distributed estimation research, and modular robotics literature; earlier STARLI research works serve only as conceptual genealogy.",
+      "authors": [
+        "33"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-20",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23495798",
+      "url": "https://doi.org/10.5281/zenodo.23495798",
+      "topics": [
+        "Swarm behaviour",
+        "Computer science",
+        "Operations research",
+        "Engineering",
+        "Calibration",
+        "Resource (disambiguation)"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-21T14:30:21.725Z"
+    },
     {
       "id": "doi-doi-org-10-1007-978-3-032-34434-2-18",
       "title": "Enhancing Software Defect Prediction (ESDP): A Deep Learning Approach for Improved Defect Prediction and Analysis",
