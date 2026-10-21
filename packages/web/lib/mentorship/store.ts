@@ -19,7 +19,7 @@ type MentorshipNotificationInput = {
 export class MentorshipReviewValidationError extends Error {}
 export class MentorshipSubmissionValidationError extends Error {}
 
-async function notifyMentorshipUsers(userIds: string[], input: MentorshipNotificationInput) {
+export async function notifyMentorshipUsers(userIds: string[], input: MentorshipNotificationInput) {
   const ids = [...new Set(userIds)].filter(Boolean);
   if (ids.length === 0) return;
   try {
@@ -113,7 +113,7 @@ function toReview(row: Record<string, unknown>): MentorshipReview {
 
 export async function getMentorshipDashboard(userId: string) {
   const enrollment = await getEnrollmentForUser(userId);
-  if (!enrollment) return null;
+  if (!enrollment || enrollment.status === "invited" || enrollment.status === "cancelled") return null;
   const admin = createAdminClient();
   const [lessonsResult, submissionsResult, cohortResult, sessionsResult, commitmentsResult, notificationsResult, lessonContentResult] = await Promise.all([
     admin.from("mentorship_lesson_progress").select("lesson_key,status,completed_at").eq("enrollment_id", enrollment.id),
@@ -571,7 +571,7 @@ export async function reviewMentorshipSubmission(submissionId: string, input: { 
 export async function createCohort(input: { code: string; name: string; startsOn: string; endsOn: string; capacity?: number }) {
   const { user } = await requireStaff("admin");
   const admin = createAdminClient();
-  const { data, error } = await admin.from("mentorship_cohorts").insert({ code: input.code.trim().toLowerCase(), name: input.name.trim(), starts_on: input.startsOn, ends_on: input.endsOn, capacity: input.capacity ?? 20, status: "enrollment", program_version: "v2", created_by: user.id }).select("id,code,name,starts_on,ends_on,capacity,status,program_version").single();
+  const { data, error } = await admin.from("mentorship_cohorts").insert({ code: input.code.trim().toLowerCase(), name: input.name.trim(), starts_on: input.startsOn, ends_on: input.endsOn, capacity: input.capacity ?? 20, status: "draft", program_version: "v2", created_by: user.id }).select("id,code,name,starts_on,ends_on,capacity,status,program_version").single();
   if (error || !data) throw new Error(error?.message ?? "Nao foi possivel criar a turma.");
   return data;
 }
@@ -579,7 +579,7 @@ export async function createCohort(input: { code: string; name: string; startsOn
 export async function enrollStudent(input: { cohortId: string; userId: string; level?: "beginner" | "intermediate" }) {
   await requireStaff("admin");
   const admin = createAdminClient();
-  const { data, error } = await admin.from("mentorship_enrollments").upsert({ cohort_id: input.cohortId, user_id: input.userId, level: input.level ?? "beginner", status: "invited" }, { onConflict: "cohort_id,user_id" }).select("id,cohort_id,user_id,status,level").single();
+  const { data, error } = await admin.rpc("create_mentorship_invitation", { target_cohort_id: input.cohortId, target_user_id: input.userId, target_level: input.level ?? "beginner" });
   if (error || !data) throw new Error(error?.message ?? "Nao foi possivel matricular o aluno.");
   return data;
 }
@@ -645,8 +645,11 @@ export async function updateCohortAdmin(cohortId: string, input: { name: string;
   if (!cohortStatuses.includes(input.status)) throw new Error("Status da turma invalido.");
   if (!input.name.trim()) throw new Error("Informe o nome da turma.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.startsOn) || !/^\d{4}-\d{2}-\d{2}$/.test(input.endsOn) || input.endsOn < input.startsOn) throw new Error("O periodo da turma e invalido.");
-  if (!Number.isInteger(input.capacity) || input.capacity < 1 || input.capacity > 1000) throw new Error("A capacidade deve estar entre 1 e 1000.");
-  const { data, error } = await createAdminClient().from("mentorship_cohorts").update({ name: input.name.trim().slice(0, 180), starts_on: input.startsOn, ends_on: input.endsOn, capacity: input.capacity, status: input.status }).eq("id", cohortId).select("id,code,name,starts_on,ends_on,capacity,status").maybeSingle();
+  if (!Number.isInteger(input.capacity) || input.capacity < 1 || input.capacity > 200) throw new Error("A capacidade deve estar entre 1 e 200.");
+  const admin = createAdminClient();
+  const { error: capacityError } = await admin.rpc("set_mentorship_cohort_capacity", { target_cohort_id: cohortId, target_capacity: input.capacity });
+  if (capacityError) throw new Error(capacityError.message.includes("CAPACITY_BELOW_OCCUPIED") ? "A capacidade não pode ficar abaixo das vagas ocupadas ou reservadas." : "Não foi possível atualizar a capacidade.");
+  const { data, error } = await admin.from("mentorship_cohorts").update({ name: input.name.trim().slice(0, 180), starts_on: input.startsOn, ends_on: input.endsOn, status: input.status }).eq("id", cohortId).select("id,code,name,starts_on,ends_on,capacity,status").maybeSingle();
   if (error || !data) throw new Error(error?.message ?? "Turma nao encontrada.");
   return data;
 }
@@ -655,8 +658,7 @@ export async function updateEnrollmentAdmin(enrollmentId: string, input: { statu
   await requireStaff("admin");
   if (!enrollmentStatuses.includes(input.status)) throw new Error("Status da matricula invalido.");
   if (!["beginner", "intermediate"].includes(input.level)) throw new Error("Nivel da matricula invalido.");
-  const completedAt = input.status === "completed" ? new Date().toISOString() : null;
-  const { data, error } = await createAdminClient().from("mentorship_enrollments").update({ status: input.status, level: input.level, completed_at: completedAt }).eq("id", enrollmentId).select("id,cohort_id,user_id,status,level,completed_at").maybeSingle();
+  const { data, error } = await createAdminClient().rpc("set_mentorship_enrollment_status", { target_enrollment_id: enrollmentId, target_status: input.status, target_level: input.level });
   if (error || !data) throw new Error(error?.message ?? "Matricula nao encontrada.");
   return data;
 }

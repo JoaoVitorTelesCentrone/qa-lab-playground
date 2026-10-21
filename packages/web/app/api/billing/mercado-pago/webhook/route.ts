@@ -16,10 +16,39 @@ export async function POST(request: Request) {
     const purchaseId = payment.external_reference;
     if (!purchaseId) return NextResponse.json({ ok: true });
     const admin = createAdminClient();
-    const { data: purchase } = await admin.from("billing_purchases").select("id,user_id,plan").eq("id", purchaseId).maybeSingle();
+    const { data: mentorshipOrder } = await admin.from("mentorship_orders").select("id,user_id,amount,currency,status,enrollment_id").eq("id", purchaseId).maybeSingle();
+    if (mentorshipOrder) {
+      const expectedCollectorId = process.env.MERCADO_PAGO_COLLECTOR_ID;
+      if (!expectedCollectorId || String(payment.collector_id ?? "") !== expectedCollectorId) throw new Error("Conta recebedora do pagamento não corresponde à configuração da mentoria.");
+      if (typeof payment.transaction_amount !== "number" || !Number.isFinite(payment.transaction_amount) || !payment.currency_id) throw new Error("Pagamento sem valor ou moeda para conciliação.");
+      const { data: finalized, error: finalizeError } = await admin.rpc("finalize_mentorship_payment", {
+        target_order_id: mentorshipOrder.id,
+        target_payment_id: String(payment.id),
+        target_payment_status: payment.status,
+        target_amount: payment.transaction_amount,
+        target_currency: payment.currency_id,
+      });
+      if (finalizeError) throw new Error(finalizeError.message);
+      if (mentorshipOrder.status !== "approved" && payment.status === "approved" && finalized?.status === "approved" && finalized?.enrollment_id) {
+        const { notifyMentorshipUsers } = await import("@/lib/mentorship/store");
+        await notifyMentorshipUsers([mentorshipOrder.user_id], {
+          kind: "system", title: "Sua vaga na Mentoria QA Lab está confirmada",
+          body: "Pagamento confirmado. Faça o diagnóstico para começar sua jornada.", href: "/mentoria/diagnostico",
+        });
+      }
+      return NextResponse.json({ ok: true });
+    }
+    const { data: purchase } = await admin.from("billing_purchases").select("id").eq("id", purchaseId).maybeSingle();
     if (!purchase) return NextResponse.json({ ok: true });
-    await admin.from("billing_purchases").update({ status: payment.status, mercado_pago_payment_id: String(payment.id), paid_at: payment.status === "approved" ? new Date().toISOString() : null }).eq("id", purchase.id);
-    if (payment.status === "approved") await admin.from("profiles").update({ plan: purchase.plan }).eq("id", purchase.user_id);
+    if (typeof payment.transaction_amount !== "number" || !Number.isFinite(payment.transaction_amount) || !payment.currency_id) throw new Error("Pagamento sem valor ou moeda para conciliação.");
+    const { error: purchaseUpdateError } = await admin.rpc("reconcile_billing_purchase", {
+      target_purchase_id: purchase.id,
+      target_payment_id: String(payment.id),
+      target_payment_status: payment.status,
+      target_amount: payment.transaction_amount,
+      target_currency: payment.currency_id,
+    });
+    if (purchaseUpdateError) throw new Error(purchaseUpdateError.message);
     return NextResponse.json({ ok: true });
   } catch {
     // O Mercado Pago volta a tentar respostas não-2xx; responda 500 para não

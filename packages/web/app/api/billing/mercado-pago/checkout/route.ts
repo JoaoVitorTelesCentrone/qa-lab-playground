@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getBillingOffer } from "@/lib/billing/catalog";
 import { createPreference, mercadoPagoConfigured } from "@/lib/billing/mercado-pago";
-import { hasServiceRole } from "@/lib/supabase/admin";
+import { createAdminClient, hasServiceRole } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   if (!siteUrl || !mercadoPagoConfigured() || !hasServiceRole()) return NextResponse.json({ error: "O checkout ainda não foi configurado." }, { status: 503 });
 
-  const { data: purchase, error: purchaseError } = await supabase.from("billing_purchases").insert({ user_id: user.id, offer_id: offer.id, plan: offer.plan, amount: offer.price, currency: "BRL", status: "pending" }).select("id").single();
+  const { data: purchase, error: purchaseError } = await createAdminClient().from("billing_purchases").insert({ user_id: user.id, offer_id: offer.id, plan: offer.plan, amount: offer.price, currency: "BRL", status: "pending" }).select("id").single();
   if (purchaseError || !purchase) return NextResponse.json({ error: "Não foi possível iniciar sua compra." }, { status: 500 });
   try {
     const preference = await createPreference({ title: offer.title, description: offer.description, price: offer.price, externalReference: purchase.id, payerEmail: user.email, siteUrl });

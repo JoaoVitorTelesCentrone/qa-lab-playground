@@ -91,12 +91,14 @@ export async function requireEnrollment(enrollmentId?: string) {
   const user = await requireSession();
   const enrollment = await getEnrollmentForUser(user.id, enrollmentId);
   if (!enrollment) throw new MentorshipAccessError(403, "Sua conta ainda nao esta matriculada em uma turma ativa.");
+  if (enrollment.status === "invited") throw new MentorshipAccessError(403, "Sua vaga foi reservada. A equipe precisa confirmar sua matrícula antes do início da jornada.");
   return { user, enrollment };
 }
 
 export async function requireWritableEnrollment(enrollmentId?: string) {
   const result = await requireEnrollment(enrollmentId);
   if (result.enrollment.status === "paused") throw new MentorshipAccessError(403, "Sua matricula esta pausada. Fale com a equipe da mentoria para retomar o acesso.");
+  if (result.enrollment.status !== "active") throw new MentorshipAccessError(403, "Sua jornada de mentoria já foi concluída.");
   return result;
 }
 

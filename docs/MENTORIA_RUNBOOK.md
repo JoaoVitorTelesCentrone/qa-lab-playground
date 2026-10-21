@@ -20,7 +20,7 @@ bun run test:e2e
 
 Os testes sem credenciais cobrem a página pública e o redirecionamento da área autenticada em viewport mobile. A jornada mutante usa admin, aluno e mentor para matricular, enviar PDF, pedir ajustes, reenviar e aprovar. Configure também `MENTORSHIP_E2E_STUDENT_USERNAME` e uma entrega final já aprovada para validar a publicação pública do portfólio.
 
-O teste do checkout é separado porque o fluxo atual compra QA Lab Pro, não matrícula da mentoria. Habilite `QA_E2E_CHECKOUT_ENABLED=true` apenas quando o app usar credenciais sandbox do Mercado Pago e uma conta descartável sem plano Pro; o teste cria uma preferência pendente e para antes do pagamento.
+O smoke da admissão cobre a página pública mobile e impede que visitantes anônimos criem inscrição ou checkout. Para a jornada mutante de admissão, configure `MENTORSHIP_ADMISSION_E2E_ENABLED=true`, `MENTORSHIP_ADMISSION_E2E_STUDENT_EMAIL/PASSWORD`, `MENTORSHIP_ADMISSION_E2E_COHORT_ID` e `MENTORSHIP_E2E_ADMIN_EMAIL/PASSWORD` em staging. Use aluno novo e turma aberta: o teste cria solicitação e bolsa, confirma a matrícula e verifica acesso ao diagnóstico. O checkout do Mercado Pago da mentoria precisa ainda de compra sandbox e webhook validados manualmente. O teste `QA_E2E_CHECKOUT_ENABLED=true` cobre apenas a preferência do QA Lab Pro.
 
 Para rodar apenas os cenários mutantes: `bun run test:e2e -- tests/e2e/mentorship-journey.e2e.ts`.
 
@@ -30,7 +30,7 @@ Execute as verificações SQL de permissões num banco de teste Supabase com pgT
 supabase test db
 ```
 
-`packages/web/supabase/tests/mentorship_hardening.test.sql` valida RLS ativo, privilégio restrito de `read_at` e acesso fechado ao outbox. Não execute esse teste apontando para produção.
+`packages/web/supabase/tests/mentorship_hardening.test.sql` valida RLS ativo, privilégio restrito de `read_at` e acesso fechado ao outbox. `payment_reconciliation.test.sql` valida reembolso, eventos tardios, capacidade e privilégios de compra/perfil. Não execute esses testes apontando para produção.
 
 ## Roteiro manual do piloto (3 perfis)
 

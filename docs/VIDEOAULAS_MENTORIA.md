@@ -1,6 +1,6 @@
 # Produção das videoaulas da mentoria
 
-O fluxo de publicação já existe em `/mentoria/admin#conteudo-aulas`. Os vídeos em si ainda precisam ser gravados e hospedados; não há arquivos ou links de gravação neste workspace. Esta pauta converte o catálogo atual em uma lista pronta para produção. Cada aula deve terminar com uma ação observável no lab, não com um resumo longo.
+O fluxo de publicação já existe em `/mentoria/admin#conteudo-aulas`. Os vídeos em si ainda precisam ser gravados e hospedados; não há arquivos ou links de gravação neste workspace. O planejamento completo da trilha v2 está em [curso-videos/ESTRUTURA.md](../curso-videos/ESTRUTURA.md): 7 temas e 40 roteiros individuais com alvo de 9 minutos e teto de 10 minutos por vídeo. A fila abaixo destaca aulas prioritárias para começar a gravação. Cada aula deve terminar com uma ação observável no lab.
 
 ## Roteiro padrão de gravação
 

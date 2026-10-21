@@ -68,7 +68,7 @@ export const mentorshipWeeks: MentorshipWeek[] = [
   }, [
     { title: "O que um QA decide", kind: "video", duration: "12 min", summary: "Qualidade como decisão, risco e comunicação." },
     { title: "Leitura do briefing", kind: "reading", duration: "10 min", summary: "Como extrair regras e perguntas antes de executar." },
-    { title: "Exploração guiada", kind: "demo", duration: "18 min", summary: "Uma investigação curta no ExpenseFlow." },
+    { title: "Exploração guiada", kind: "demo", duration: "18 min", summary: "Uma investigação curta no Broto Space." },
   ]),
   week(2, "Explorar com intencao", "Teste exploratorio e priorizacao", "Inseguranca e sindrome do impostor", {
     title: "Charter de captura móvel",

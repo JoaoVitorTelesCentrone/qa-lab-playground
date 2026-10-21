@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowRight, Check, ChevronDown, ExternalLink } from "lucide-react";
 import { mentorshipWeeks } from "@/lib/mentorship/catalog";
 import { brotoSpaceSite } from "@/lib/mentorship/brotospace-track";
@@ -17,6 +18,7 @@ export const dynamic = "force-dynamic";
 export default async function MentorshipContentPage() {
   const user = await getSessionUser();
   const dashboard = user ? await getMentorshipDashboard(user.id) : null;
+  if (dashboard?.enrollment.programVersion !== "v1") redirect("/conteudo");
   const latestByAssignment = new Map<string, MentorshipSubmission>();
   for (const submission of dashboard?.submissions ?? []) {
     if (!latestByAssignment.has(submission.assignmentKey)) latestByAssignment.set(submission.assignmentKey, submission);

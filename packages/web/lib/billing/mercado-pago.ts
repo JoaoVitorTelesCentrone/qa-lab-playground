@@ -6,6 +6,10 @@ export function mercadoPagoConfigured() {
   return Boolean(process.env.MERCADO_PAGO_ACCESS_TOKEN && process.env.MERCADO_PAGO_WEBHOOK_SECRET);
 }
 
+export function mercadoPagoMentorshipConfigured() {
+  return mercadoPagoConfigured() && Boolean(process.env.MERCADO_PAGO_COLLECTOR_ID);
+}
+
 export async function createPreference(input: {
   title: string;
   description: string;
@@ -13,6 +17,11 @@ export async function createPreference(input: {
   externalReference: string;
   payerEmail: string | undefined;
   siteUrl: string;
+  itemId?: string;
+  successUrl?: string;
+  failureUrl?: string;
+  pendingUrl?: string;
+  expiresAt?: string;
 }) {
   const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
   if (!token) throw new Error("Mercado Pago não configurado.");
@@ -21,17 +30,18 @@ export async function createPreference(input: {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      items: [{ id: "qa-lab-pro-lifetime", title: input.title, description: input.description, quantity: 1, currency_id: "BRL", unit_price: input.price }],
+      items: [{ id: input.itemId ?? "qa-lab-pro-lifetime", title: input.title, description: input.description, quantity: 1, currency_id: "BRL", unit_price: input.price }],
       payer: input.payerEmail ? { email: input.payerEmail } : undefined,
       external_reference: input.externalReference,
       notification_url: `${base}/api/billing/mercado-pago/webhook`,
       back_urls: {
-        success: `${base}/planos/confirmacao`,
-        failure: `${base}/planos/confirmacao`,
-        pending: `${base}/planos/confirmacao`,
+        success: input.successUrl ?? `${base}/planos/confirmacao`,
+        failure: input.failureUrl ?? `${base}/planos/confirmacao`,
+        pending: input.pendingUrl ?? `${base}/planos/confirmacao`,
       },
       auto_return: "approved",
       payment_methods: { installments: 12 },
+      ...(input.expiresAt ? { expires: true, expiration_date_from: new Date().toISOString(), expiration_date_to: input.expiresAt, date_of_expiration: input.expiresAt } : {}),
     }),
   });
   const body = await response.json().catch(() => ({}));
@@ -60,5 +70,5 @@ export async function getPayment(paymentId: string) {
   if (!token) throw new Error("Mercado Pago não configurado.");
   const response = await fetch(`${apiUrl}/v1/payments/${encodeURIComponent(paymentId)}`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
   if (!response.ok) throw new Error("Não foi possível consultar o pagamento no Mercado Pago.");
-  return response.json() as Promise<{ id: number; status: string; external_reference?: string; transaction_amount?: number }>;
+  return response.json() as Promise<{ id: number; status: string; external_reference?: string; transaction_amount?: number; currency_id?: string; collector_id?: number; status_detail?: string }>;
 }
