@@ -1,6 +1,26 @@
 {
-  "updatedAt": "2026-10-22T14:32:05.259Z",
+  "updatedAt": "2026-10-23T14:15:48.716Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-21203-rs-3-rs-11254037-v1",
+      "title": "AI-Driven Automation of Software Testing to Enhance Software Quality and Enable Agentic AI",
+      "abstract": "Abstract As modern systems evolve into complex microservices and highly regulated data ecosystems, manual test case design has become a severe bottleneck in Agile CI/CD pipelines. While Artificial Intelligence (AI) accelerates code synthesis, standard Generative AI models persistently struggle with the \"Oracle Problem.\" They treat test generation as a stateless translation task, lacking the strategic reasoning necessary to navigate multi-layered industrial requirements without hallucinating logic. To bridge this massive \"Design Gap,\" we propose the Agentic-QA Fusion Framework. This stateful, multi-stage architecture transforms automated test generation into an active reasoning ecosystem. Utilizing a specialized \"actor-critic\" loop comprising Parser, Triage, Architect, Writer, and Auditor agents, the framework autonomously strategizes, generates, and self-heals test scripts. The framework’s cross-industry scalability is empirically evaluated against baseline ML and deterministic LLMs across five complex datasets. This includes baseline commercial platforms (ISIS Travel, Travco Travel, Vantage Towers) and two highly constrained domains: the European Securities and Markets Authority (ESMA) FIRDS system (requiring strict ISO 20022 messaging) and a governmental Job Matching Platform (JMP). By shifting the focus upstream to cognitive requirement analysis, the proposed framework successfully parses deeply nested regulatory logic. It drastically reduces hallucination and redundancy rates to 1.3% and 7.8%, respectively. Furthermore, it guarantees near-perfect syntactic correctness (99.6%) and achieves an industry-leading Mutation Score of 93.4%. Ultimately, while this Agentic approach necessitates higher computational resources to resolve dense enterprise dependencies, it establishes a reliable, zero-touch automation solution vital for modern software quality engineering.",
+      "authors": [
+        "Ibrahim El Samman",
+        "Mohammed Safy"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-23",
+      "source": "Crossref",
+      "venue": "",
+      "doi": "https://doi.org/10.21203/rs.3.rs-11254037/v1",
+      "url": "https://doi.org/10.21203/rs.3.rs-11254037/v1",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-10-23T14:15:48.716Z"
+    },
     {
       "id": "doi-doi-org-10-37394-23205-2026-25-18",
       "title": "Evaluating the Impact of AI Tools on Software Accuracy Using Code Quality Metrics",
@@ -1827,6 +1847,25 @@
       "discoveredAt": "2026-09-22T14:03:26.481Z"
     },
     {
+      "id": "doi-doi-org-10-1117-12-3119634",
+      "title": "Software defect prediction model integrating quantum variational autoencoder and transformer",
+      "abstract": "To address the issues of insufficient feature extraction from high-dimensional, nonlinear data and rigid hyperparameter tuning in deep learning models—core challenges commonly faced by intelligent recognition tasks such as software defect prediction and industrial visual inspection—this paper proposes a general intelligent recognition model (ADE-QVAET) that integrates Adaptive Differential Evolution, a Quantum Variational Autoencoder, and Transformer. The model first preprocesses multi-source software data through an Adaptive Noise Reduction and Augmentation framework; subsequently, it utilizes a Quantum Variational Autoencoder to mine high-dimensional latent features and employs the Transformer's self-attention mechanism to capture long-range dependencies among features; finally, the Adaptive Differential Evolution algorithm is used to dynamically optimize model hyperparameters. Experiments on the NASAMDP dataset and the Kaggle software defect dataset demonstrate that the proposed model outperforms baseline models in key metrics such as accuracy, precision, recall, and F1-score, particularly excelling in defect detection tasks for AI-generated code. The QVAE and Transformer combination architecture along with the adaptive hyperparameter optimization strategy presented in this paper, as a class of general intelligent recognition algorithms, holds significant methodological reference value for defect recognition tasks in industrial visual inspection.",
+      "authors": [
+        "Huiping Cui"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-23",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Machine Vision, Automatic Identification and Detection",
+      "doi": "https://doi.org/10.1117/12.3119634",
+      "url": "https://doi.org/10.1117/12.3119634",
+      "topics": [
+        "Engineering"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-23T14:15:48.716Z"
+    },
+    {
       "id": "doi-doi-org-10-14483-23448350-24627",
       "title": "Identifying Software Quality Attributes Relevant for Very Small Entities",
       "abstract": "Nowadays, software systems are increasingly important and are rapidly growing in complexity and size. Their development involves large, medium, small, and very small entities (VSEs). The latter play a critical role in the supply chain, so developing high-quality software in accordance with established standards is fundamental to ensure the success of their software products. Applying standards such as ISO/IEC 29110 supports VSEs by providing efficient processes and increased productivity. However, standards such as ISO/IEC 25010, which provide a quality model for software products and quality in use, are not intended for implementation in VSEs. This paper presents an exploratory study that identifies the relevant quality characteristics and sub-characteristics in VSEs, as well as the practices they use to achieve product quality.",
@@ -1889,6 +1928,27 @@
       ],
       "query": "software quality model",
       "discoveredAt": "2026-08-15T22:37:48.767Z"
+    },
+    {
+      "id": "doi-doi-org-10-3390-info17070658",
+      "title": "SCAR-CMB: A Class-Reweighted and Interaction-Aware Feature Selection Method for Imbalanced Software Defect Prediction",
+      "abstract": "Software defect prediction (SDP) aims to identify defect-prone modules before testing, but severe class imbalance and redundant software metrics often limit prediction performance. Many conventional feature selection methods estimate feature relevance with the original imbalanced empirical distribution and mainly emphasize marginal relevance or global classifier-oriented criteria, which may under-prioritize features that are informative for the minority defective class. To address this issue, this paper proposes SCAR-CMB, a simplified class-reweighted and interaction-aware feature selection method for imbalanced SDP. SCAR-CMB estimates feature-label dependency with a class-balanced empirical distribution, controls redundancy using weighted conditional dependency information, and incorporates an interaction-aware conditional-gain term as an auxiliary re-prioritization signal within a relevance-screened feature pool. Rather than performing full causal structure discovery or formal synergy estimation, SCAR-CMB adopts a Markov-blanket-inspired conditional dependency design as a practical guide for feature selection. The final configuration excludes both hardness-aware weighting and false discovery rate filtering. SCAR-CMB is evaluated on ten public NASA and PROMISE defect datasets under a leakage-free cross-validation protocol. Compared with seven representative baselines, SCAR-CMB achieves competitive overall performance and obtains the highest average defective-class recall, G-mean, and balanced accuracy. However, it is not uniformly superior across all metrics, and the recall advantage is not confirmed by the omnibus Friedman test. Additional mechanism-level, stability, and sensitivity analyses show that class reweighting changes feature prioritization, the selected feature subsets are relatively stable across folds, and the interaction-aware term provides limited and dataset-dependent auxiliary effects. Sensitivity analyses further indicate that the main conclusions are not solely determined by a specific feature budget, discretization-bin setting, or downstream classifier. Overall, SCAR-CMB should be interpreted as a practical minority-class-oriented feature selection method that provides a trade-off among defective-class detection, feature subset control, and computational cost.",
+      "authors": [
+        "Guanlong Yan",
+        "Yong Li",
+        "Zheyuan Pan"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-06",
+      "source": "Semantic Scholar",
+      "venue": "Information",
+      "doi": "https://doi.org/10.3390/info17070658",
+      "url": "https://doi.org/10.3390/info17070658",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-23T14:15:48.716Z"
     },
     {
       "id": "doi-doi-org-10-1145-3803437-3805580",
@@ -2083,6 +2143,32 @@
       "discoveredAt": "2026-08-15T22:36:58.611Z"
     },
     {
+      "id": "doi-doi-org-10-30564-jeis-v8i2-13303",
+      "title": "Enhancing Software Defect Prediction Security via Federated BLSTM with Differential Privacy",
+      "abstract": "Software Defect Prediction (SDP) is an issue of paramount importance for improvement of software quality but data isolation and privacy concerns across organizations affects efficacy of SDP. By making use of a Federated Learning (FL) framework in combination with Differential Privacy (DP) for collective learning without exchanging any raw data, we provide a unique solution to this problem. The study makes use of advanced deep learning architectures the baseline Neural Network (NN), the sequential Long Short-Term Memory (LSTM) and the contextual Bidirectional LSTM (BLSTM) that were trained on the ten different, non-IID client datasets (software projects). Data processing included logarithmic transformation, Min Max Scaling, while the Synthetic Minority Over-sampling Technique (SMOTE) algorithm was used to address local class imbalance. The application of DP noise ensured the privacy of the model updates by quantifying them before aggregation using FedAvg. The results are a definite success for recurrent models with the BLSTM network coming on top, achieving a peak Global Accuracy of 99.05% and an F1-Score of 98.9% with the constraint of FL-DP. In comparison, the centralized, non-private BLSTM had slightly better performance in terms of accuracy, 99.3%, proving that the FL-DP framework is able to preserve close to optimal performance while increasing data security drastically. These results confirm that FL-DP is a powerful, safe and open-source paradigm for collaborative SDP, which enables a base solution for organizations that need to achieve high predictive power while maintaining high data confidentiality.",
+      "authors": [
+        "Aunik Hasan Mridul",
+        "Raihan Jamil",
+        "Md. Injamul Haque",
+        "Niazi Mahrab",
+        "Sartaz Islam",
+        "Mohammad Abdullah Al Nayeem Khan",
+        "Nowreen Ahsan",
+        "M. Rakib"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-22",
+      "source": "Semantic Scholar",
+      "venue": "Journal of Electronic &amp; Information Systems",
+      "doi": "https://doi.org/10.30564/jeis.v8i2.13303",
+      "url": "https://doi.org/10.30564/jeis.v8i2.13303",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-23T14:15:48.716Z"
+    },
+    {
       "id": "doi-doi-org-10-25258-ijddt-16-48s-109",
       "title": "A Multi-Agent AI Framework for Automated Requirement-to-Test Case Mapping in Software Quality Assurance",
       "abstract": "The complexity of today’s software systems has become critically important to ensure sufficient test coverage based on changing requirements. Conventional methods of requirements traceability and test case generation are mostly manual, time-consuming, and subject to human error, often resulting in coverage gaps which translate into post-release bugs. In this paper, a new Multi-Agent Artificial Intelligence (AI) system that could be used to automate the entire pipeline of requirement-to-test mapping is presented, and the way it would revolutionize software quality assurance practices is discussed. The proposed framework uses three collaborating intelligent agents: a Requirement Parsing Agent (RPA) that applies transformer-based Natural Language Processing (NLP) to extract semantic objects of the heterogeneous requirement documents a Traceability Mapping Agent (TMA) that builds and maintains dynamic bidirectional traceability matrices using a knowledge graph backbone and a Test Generation Agent (TGA) that synthesizes executable test cases of the traced requirement nodes using large language model (LLM) guided templates. Experimental analysis of three opensource software projects indicates that the proposed system can meet an average requirement coverage rate of 94.7, a precision of traceability link of 91.3 and a 67 percent reduction in the manual test authoring effort as compared to the baseline approaches. The framework is checked in the framework of IEEE 29148 and ISO/IEC 25010 quality standards. Findings suggest that the system performs remarkably better compared to the current automated tests systems such as NLP-based traceability recovery techniques and traditional test generation systems. This study offers a reproducible, time saving and produces standards-conforming, open-source architecture of intelligent software testing both in an Agile and traditional SDLC setting.",
@@ -2179,6 +2265,28 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-09-14T15:54:35.333Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-icicacs68679-2026-11578727",
+      "title": "V-GCODE: A Temporal Aware Vulnerability Repair Gated Concept Drift for Software Defect Prediction",
+      "abstract": "In the current era of software applications, the need for Software Defect Prediction (SDP) has been become important for a reliable functioning of software. The traditional way of doing SDP process lags in temporal awareness and struggles with the paradigm shifts due to the presence of various projects from varied paradigms. This research work deals with temporal awareness and handling paradigm shifts in software defect prediction by proposing a temporal aware Vulnerability Repair Gated Concept Drift (V-GCODE). The transfer learning based transformer architecture is utilized, which incorporates Concept Drift Detection (CODE) framework and Adaptive Windowing (ADWIN) mechanism. The Gated Recurrent Unit (GRU) layers are employed for sequential processing of the software metrics to understand the change with respect to the changes. The CODE framework helps the model to identify the concept drift and handle temporal dependencies by using window mechanism which is improvised by using ADWIN that uses adaptive window size. The old software defects are of no use as the model looks for the patterns which no longer exists so that CODE framework discards the historical data in the windowing mechanism. The proposed V-GCODE model performed well by achieving 98.95% accuracy in the NASA dataset and proves reliable for SDP process.",
+      "authors": [
+        "P. Bolisetty",
+        "Anu Krishna",
+        "Akhila K. R.",
+        "Kumar Mohan"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-22",
+      "source": "Semantic Scholar",
+      "venue": "2026 4th International Conference on Integrated Circuits and Communication Systems (ICICACS)",
+      "doi": "https://doi.org/10.1109/ICICACS68679.2026.11578727",
+      "url": "https://doi.org/10.1109/ICICACS68679.2026.11578727",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-23T14:15:48.716Z"
     },
     {
       "id": "arxiv-arxiv-org-abs-2605-20788v1",
@@ -2288,6 +2396,30 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-09-14T15:54:35.333Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-icctac68277-2026-11524570",
+      "title": "Grey Wolf Optimization Enhanced Random Forest Framework for LLM Software Defect Prediction",
+      "abstract": "Software Defect Prediction in Large Language Models (LLMs) has become significant area to have an impressive ability in understanding the natural language generation. The models do give flawed results in the form of hallucinations, factual errors and logical contradictions, however, they stand to question the use of these models in critical formulations. Contrary to conventional software defect prediction, there is little data on the systematic detection of defects in LLM outputs. In this paper we present an innovative solution of the LLM Defect Prediction (GWOEnRF) framework based on the Optimization-based solution to the problem of detecting defective outputs of LLMs. The defect repository is built on benchmark data whose ground-truth solutions are known, and errors on the part of the LLM in their responses are considered defects. Prompt and response semantic embeddings are obtained and optimized though the Grey Wolf Optimization algorithm on the classifier parameter tuning problem. The experimental findings indicate that the suggested framework is much better at detecting defects than the non-optimized baselines. The research work leads to the increase of the credibility and reliability of large language models.",
+      "authors": [
+        "D. R. Medhunhashini",
+        "B. Varun",
+        "J. Ramkumar",
+        "V. Valarmathi",
+        "R. Karthikeyan",
+        "R. Kavitha"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-06",
+      "source": "Semantic Scholar",
+      "venue": "2026 International Conference on Current Trends in Advanced Computing (ICCTAC)",
+      "doi": "https://doi.org/10.1109/ICCTAC68277.2026.11524570",
+      "url": "https://doi.org/10.1109/ICCTAC68277.2026.11524570",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-23T14:15:48.716Z"
     },
     {
       "id": "doi-doi-org-10-30572-2018-kje-170209",
@@ -2505,6 +2637,27 @@
       "discoveredAt": "2026-09-01T14:10:27.703Z"
     },
     {
+      "id": "doi-doi-org-10-1117-12-3106908",
+      "title": "Research on software defect prediction method integrating transfer learning and ADASYN-GBDT",
+      "abstract": "As a key technology for improving software quality, software defect prediction is always limited by two core challenges in practical applications: the scarcity of labeled samples and the class imbalance problem. Traditional machine learning models rely on sufficient and balanced local data, so their performance degrades significantly in the above scenarios. This paper proposes a hybrid method integrating transfer learning and ADASYN-GBDT, which solves the above problems through three key technologies: Firstly, the ADASYN (Adaptive Synthetic Sampling) technique is adopted to generate synthetic data for difficult defect samples near the classification boundary, thereby alleviating class imbalance. Secondly, Transfer Component Analysis (TCA) is introduced to realize cross-project feature transfer, transferring knowledge from the data-rich source domain to the data-scarce target domain to address the sample scarcity issue. Finally, a weighted GBDT (Gradient Boosting Decision Tree) ensemble model is constructed, which dynamically adjusts the minority-class defect samples through sample weights to further optimize classification performance. Experiments on 6 subsets of the NASA MDP dataset show that the proposed model achieves significant improvements in Accuracy (ACC), F1-score, and Matthews Correlation Coefficient (MCC) compared with four models, namely LR (Logistic Regression), SVM+SMOTE, RF+ADASYN, and XGBoost+TCA. Among these metrics, the improvement in F1-score is the most optimal, verifying the stability and reliability of the proposed model. The results demonstrate the effectiveness of the synergy between transfer learning and class imbalance learning, providing a reliable solution for software defect prediction in emerging projects with insufficient labeled samples.",
+      "authors": [
+        "Ying Zhang",
+        "Wentao Wang",
+        "Meng-Qi Sun"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-07",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Information Engineering, Intelligent Information Technology and Artificial Intelligence",
+      "doi": "https://doi.org/10.1117/12.3106908",
+      "url": "https://doi.org/10.1117/12.3106908",
+      "topics": [
+        "Engineering"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-23T14:15:48.716Z"
+    },
+    {
       "id": "doi-doi-org-10-1038-s41598-026-41981-7",
       "title": "A novel generative oversampling for software defect prediction",
       "abstract": "Software defect prediction is one of the highly active research areas as it allows to focus the testing efforts on the defective modules and reduce the cost of development. The imbalanced nature of defect data poses a threat to the performance of software defect predictors. This study proposes a novel Generative oversampling-based Software Defect Prediction naming GeNSDP. It oversamples defect data by generating synthetic minority instances utilizing lightweight generative model, then the oversampled data is used for defect prediction using deep network. NASA and PROMISE datasets are used for experimentation, for which GeNSDP achieves a remarkable average score of 99.1% for Area Under the Curve, and 0.92 for F-measure. The proposed model outperforms the traditional oversampling methods (including ROS, SMOTE, COSTE) by 30.1%, and selected baseline models by 14.1%. From the statistical evidence obtained by conducting the Anova Test with Bonferroni Post-hoc test at the confidence level of 95%, it is concluded that the proposed model is effective to handle class imbalance and achieve stable defect prediction.",
@@ -2590,6 +2743,25 @@
       "discoveredAt": "2026-08-15T22:37:48.767Z"
     },
     {
+      "id": "doi-doi-org-10-26438-ijcse-v14i3-7293",
+      "title": "A Hybrid AI-Driven Framework for Software Defect Prediction and Adaptive Test Optimization Using Multi-Objective Feature Selection",
+      "abstract": "By predicting which modules are likely to have defects before testing, software defect prediction helps keep development time and expenses down. Despite the prevalence of machine learning techniques, classification performance is frequently compromised in high-dimensional datasets by features that are not relevant to the problem. To solve this, heuristic algorithms are the way to go because effective feature selection is still NP-hard. This research presents a binary multi-objective starfish optimizer that finds the sweet spot between feature reduction and classification performance while selecting features. By combining many classifiers, an ensemble classifier based on Choquet fuzzy integrals can further improve the dependability of predictions. The method outperformed conventional classifiers in five separate NASA datasets that were used for validation. Defect prediction was discovered to be greatly affected by important software metrics as design complexity, number of branches, lines of code, and operators and operands count. Offering a trustworthy and interpretable approach for software defect prediction, the outcomes demonstrate that the suggested strategy enhances classification performance by 2% to 15% while preserving just 32% to 58% of feature set. For more general, high-dimensional classification jobs, our method shows great promise.",
+      "authors": [
+        "Chaitanya Kiran Mandadapu"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-03-31",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Computer Science and Engineering",
+      "doi": "https://doi.org/10.26438/ijcse.v14i3.7293",
+      "url": "https://doi.org/10.26438/ijcse.v14i3.7293",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-23T14:15:48.716Z"
+    },
+    {
       "id": "doi-doi-org-10-64612-ijiv-v2i3-72",
       "title": "Evaluating the Effectiveness of Barangay Management System for Local Governance using Software Quality Model of ISO 25010:2011",
       "abstract": "This research evaluated the effectiveness of the Barangay Management System (BMS) developed for Barangay Macapso, Vallehermoso, Negros Oriental, Philippines. The study aimed to address gaps in the barangay’s manual administrative processes and improve service delivery through an automated system. A descriptive–developmental research design was employed, integrating system development with empirical evaluation. Data were collected using surveys and structured interviews from end-users, including the Barangay Chairman, Kagawad, Secretary, and staff, while IT experts assessed technical quality based on the ISO/IEC 25010:2011 software quality model. The findings reveal that end-users rated the system highly in functional suitability, usability, reliability, and performance efficiency, while IT experts reported favorable results for maintainability, compatibility, and security. The results indicate that the BMS effectively supports operational tasks, enhances service delivery, and meets essential software quality standards. Gaps identified include varying digital proficiency among users and areas for ongoing system optimization. The study recommends targeted user training, continuous system maintenance, and potential expansion to other barangays to ensure scalability and sustained adoption. These findings provide practical insights for improving local government information systems and promoting efficient, technology-driven governance.",
@@ -2652,6 +2824,29 @@
       ],
       "query": "software defect prediction",
       "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s44196-026-01174-6",
+      "title": "Optimizing the Undersampling Technique by Feature Weighting for Software Defect Prediction",
+      "abstract": "The class imbalance problem significantly hinders the ability of the software defect prediction models to distinguish defective (minority class) software instances from non-defective (majority class) ones. Traditional defect prediction models’ undersampling techniques have drawbacks like information loss due to discarding majority class samples and data distribution alteration causing model bias. Recently, researchers have sought to address the imbalance problem by introducing techniques that weigh the characteristics of instances. Using these weighted characteristics, samples can be ranked according to their relevance, allowing the removal of those deemed less critical to the prediction task. However, current feature weighting approaches often focus on the significance of individual features, overlooking the overall contribution of samples with high feature sums, which may carry critical information for classification tasks and risk being disproportionately removed, thereby degrading performance. This limitation reflects a feature-centric perspective that treats feature importance independently and overlooks the collective contribution of instances to the predictive task. To address this challenge, this paper proposes a Learning-to-Rank Feature Weighting (LTRFW) framework, which shifts the focus from individual features to instances by integrating a Learning-to-Rank model with Differential Evolution (DE) for feature weight optimization. The DE algorithm optimizes the weight vector by combining grid search and Pearson’s correlation analysis to rank majority-class instances and perform selective undersampling, enabling the model to retain informative samples while effectively mitigating class imbalance. Experimental results on four classifiers and 21 datasets demonstrate that LTRFW consistently outperforms existing undersampling methods, improving the F1-score by 14.8% and the AUC by 21.9% on average compared to state-of-the-art baselines such as LTRUS and COSTE. Although the average Cliff’s\n \n $$\\delta$$\n \n is approximately 0.12, indicating a small effect size, its consistent statistical significance with\n \n $$p<0.05$$\n \n demonstrates that the improvements achieved by LTRFW are robust, reproducible, and practically meaningful.",
+      "authors": [
+        "Xiaowei Zhao",
+        "Shaosheng Wang",
+        "Shaojian Qiu",
+        "Si-Liang Suo",
+        "Lu Lu"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-03-05",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Computational Intelligence Systems",
+      "doi": "https://doi.org/10.1007/s44196-026-01174-6",
+      "url": "https://doi.org/10.1007/s44196-026-01174-6",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-23T14:15:48.716Z"
     },
     {
       "id": "doi-doi-org-10-63878-cjssr-v4i1-2003",
