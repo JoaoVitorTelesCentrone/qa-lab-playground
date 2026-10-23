@@ -46,7 +46,7 @@ type LabSeed = {
 export const SEMANA_1 = "2026-08-10";
 export const tracks: LabTrack[] = ["UI Automation", "API e Contrato"];
 
-// Durante o lançamento, o único desafio público é o ExpenseFlow Challenge,
+// Durante o lançamento, o único desafio público é o sistema Challenge,
 // em /playground. O catálogo continua reservado para próximos Labs.
 //
 // A ORDEM importa e a lista é APPEND-ONLY: a posição aqui é o número que o

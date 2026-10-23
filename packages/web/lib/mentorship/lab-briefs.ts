@@ -10,8 +10,8 @@ export type LabBrief = {
 
 export const labBriefs: Record<number, LabBrief> = {
   1: {
-    scenario: "Você entrou no time do ExpenseFlow, um produto usado para solicitar, aprovar e acompanhar reembolsos. Antes de executar uma bateria de casos, o time quer saber onde uma falha causaria mais dano e que informações faltam sobre o produto.",
-    startingPoint: "Abra o ExpenseFlow e observe o caminho de criar uma despesa, consultá-la, decidir uma aprovação e ler os relatórios. Troque entre os perfis de treino para investigar o acesso. Registre o que viu e o que ainda precisa confirmar antes de classificar um comportamento como defeito.",
+    scenario: "Você entrou no time do sistema, um produto usado para solicitar, aprovar e acompanhar reembolsos. Antes de executar uma bateria de casos, o time quer saber onde uma falha causaria mais dano e que informações faltam sobre o produto.",
+    startingPoint: "Abra o sistema e observe o caminho de criar uma despesa, consultá-la, decidir uma aprovação e ler os relatórios. Troque entre os perfis de treino para investigar o acesso. Registre o que viu e o que ainda precisa confirmar antes de classificar um comportamento como defeito.",
     mission: "Produza um mapa do fluxo e cinco riscos priorizados que guiem a próxima rodada de testes.",
     tasks: ["Descreva o objetivo de cada perfil e represente entrada, regra, saída e dependências do fluxo principal.", "Crie uma despesa, observe lista e totais, depois compare o estado antes e depois de uma decisão de aprovação.", "Liste cinco riscos específicos em forma de causa possível, evento observável e impacto. Inclua pelo menos um risco de cálculo ou persistência e um de acesso ou uso.", "Classifique impacto e probabilidade com justificativa curta. Escolha o risco que investigaria primeiro e explique por quê.", "Para cada risco, escreva uma pergunta de negócio ou de comportamento que um teste futuro deve responder."],
     evidence: ["Mapa do fluxo com ator, dados, ações e resultado.", "Tabela de cinco riscos, prioridade e justificativa.", "Notas de observação separadas das hipóteses e cinco perguntas abertas."],
@@ -38,7 +38,7 @@ export const labBriefs: Record<number, LabBrief> = {
   },
   4: {
     scenario: "Uma release se aproxima e o time encontrou comportamentos suspeitos. Produto e engenharia precisam de relatos que permitam reproduzir, estimar impacto e tomar uma decisão informada.",
-    startingPoint: "Use um comportamento inesperado confirmado em um lab ou no ExpenseFlow. Se o primeiro achado não se repetir, investigue outra condição antes de chamá-lo de defeito. Abra o template de bug report para organizar o relato.",
+    startingPoint: "Use um comportamento inesperado confirmado em um lab ou no sistema. Se o primeiro achado não se repetir, investigue outra condição antes de chamá-lo de defeito. Abra o template de bug report para organizar o relato.",
     mission: "Escreva dois bug reports e um parecer curto de release baseado nas evidências.",
     tasks: ["Para cada achado, registre ambiente, conta ou papel, dados iniciais e menor sequência que reproduz o comportamento.", "Descreva resultado atual e esperado com valores concretos; indique de onde vem a regra esperada e anexe captura, resposta ou nota de execução.", "Diferencie severidade do dano e prioridade de correção. Explique usuários ou fluxos afetados e o que ainda não sabe sobre alcance.", "Repita uma variação relevante, como recarga ou dado diferente, para reforçar ou limitar a conclusão.", "Feche com recomendação de liberar, bloquear ou investigar mais. Cite a evidência decisiva, risco residual e condição que mudaria sua decisão."],
     evidence: ["Dois relatos independentes com passos, atual, esperado e contexto.", "Evidências de reprodução ou limite da investigação.", "Parecer de release com decisão e justificativa."],
@@ -47,7 +47,7 @@ export const labBriefs: Record<number, LabBrief> = {
   },
   5: {
     scenario: "Depois de quatro semanas de investigação manual, o time quer reduzir regressões repetidas sem criar uma suíte lenta e frágil. Há mais candidatos que capacidade de implementação.",
-    startingPoint: "Reabra seu mapa de riscos, cenários e relatos de defeito. Use o ExpenseFlow como produto de referência e consulte o curso Cypress para conhecer as opções de automação.",
+    startingPoint: "Reabra seu mapa de riscos, cenários e relatos de defeito. Use o sistema como produto de referência e consulte o curso Cypress para conhecer as opções de automação.",
     mission: "Priorize três candidatos de automação e justifique pelo menos dois adiamentos.",
     tasks: ["Liste ao menos cinco verificações que hoje exigiriam repetição manual; para cada uma, nomeie a regra e o risco protegido.", "Avalie frequência, impacto, estabilidade do fluxo, preparo de dados, facilidade de assertion e custo de manutenção usando a mesma escala.", "Para três candidatos, escolha unidade, API ou E2E e explique por que a camada responde à pergunta de risco.", "Para dois itens não escolhidos, descreva o motivo do adiamento e o sinal que faria você rever a decisão.", "Monte uma ordem de implementação com primeira entrega pequena, gatilho de execução e critério de estabilidade."],
     evidence: ["Matriz comparativa com critérios consistentes.", "Três escolhas de automação e duas decisões de manter manual ou adiar.", "Plano inicial com camada, dados e assertion principal."],
@@ -109,7 +109,7 @@ export const labBriefs: Record<number, LabBrief> = {
     extension: "Aprofundamento: proponha instrumentação adicional para diferenciar gargalo de aplicação, banco ou máquina do teste antes de otimizar.",
   },
   12: {
-    scenario: "Chegou a revisão final do ExpenseFlow. O time precisa de uma recomendação de release que reúna investigação manual, automação, API, CI e performance numa narrativa verificável.",
+    scenario: "Chegou a revisão final do sistema. O time precisa de uma recomendação de release que reúna investigação manual, automação, API, CI e performance numa narrativa verificável.",
     startingPoint: "Reúna os artefatos das onze semanas anteriores. Escolha um risco central que percorra o case. Se alguma etapa produziu evidência em outro ambiente, declare a diferença em vez de apresentar tudo como uma única execução.",
     mission: "Entregue um case integrado, um parecer de release e uma apresentação de cinco minutos.",
     tasks: ["Abra com contexto do produto, usuário afetado, fluxo crítico e risco central. Mostre por que priorizou esse risco.", "Selecione evidências manuais: mapa de risco, charter, cenários e bug report. Explique o que cada uma revelou e o que não cobre.", "Conecte smoke E2E, verificação de API, sinais de CI e resultado de k6 à mesma pergunta de release. Inclua links, comandos ou capturas rastreáveis.", "Recomende liberar, bloquear ou mitigar; indique risco residual, responsável, monitoramento e gatilho para reavaliar ou reverter.", "Prepare resumo oral de cinco minutos: contexto, risco, estratégia, duas ou três evidências fortes, decisão e próximo passo."],

@@ -46,7 +46,7 @@ export const roadmapQAWorkedCases: Record<number, RoadmapQAWorkedCase> = {
   },
   4: {
     title: "Relatar uma correção com alcance honesto",
-    context: "O relatório do ExpenseFlow soma R$ 140 em despesas aprovadas, mas a lista mostra R$ 80 aprovados e R$ 60 pendentes. A equipe corrige um filtro de status.",
+    context: "O relatório do sistema soma R$ 140 em despesas aprovadas, mas a lista mostra R$ 80 aprovados e R$ 60 pendentes. A equipe corrige um filtro de status.",
     procedure: [
       "Registre versão, perfil, período, valores e status. Faça captura da lista e do relatório, preservando os identificadores necessários e removendo dados pessoais.",
       "Escreva resultado atual e esperado com base na regra confirmada. Classifique impacto financeiro e prioridade de correção separadamente.",

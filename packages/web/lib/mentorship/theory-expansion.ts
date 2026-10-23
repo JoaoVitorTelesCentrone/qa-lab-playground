@@ -17,7 +17,7 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
       {
         title: "Construir um modelo antes de escolher testes",
         paragraphs: [
-          "Um produto não é uma coleção de telas: é um conjunto de atores, objetivos, regras, estados e efeitos sobre dados. Para modelá-lo, escolha uma jornada importante e descreva quem inicia a ação, quais pré-condições precisam existir, quais decisões o sistema toma e o que deve permanecer verdadeiro ao final. No ExpenseFlow, a criação de uma despesa muda uma lista, um saldo pendente, as permissões de aprovação e possivelmente um relatório. Cada efeito cria uma pergunta de teste diferente. Um mapa simples dessas relações é mais útil do que começar com uma lista genérica de cliques.",
+          "Um produto não é uma coleção de telas: é um conjunto de atores, objetivos, regras, estados e efeitos sobre dados. Para modelá-lo, escolha uma jornada importante e descreva quem inicia a ação, quais pré-condições precisam existir, quais decisões o sistema toma e o que deve permanecer verdadeiro ao final. No sistema, a criação de uma despesa muda uma lista, um saldo pendente, as permissões de aprovação e possivelmente um relatório. Cada efeito cria uma pergunta de teste diferente. Um mapa simples dessas relações é mais útil do que começar com uma lista genérica de cliques.",
           "O modelo também precisa registrar o que se sabe e a fonte desse conhecimento. Uma regra descrita no briefing, um comportamento observado e uma suposição da equipe não têm o mesmo peso. Se a regra de quem aprova despesas não está clara, você pode explorar o comportamento atual, mas não deve chamar de defeito qualquer resultado que contradiga apenas sua hipótese. Escreva a dúvida, identifique quem pode respondê-la e prepare exemplos concretos para a conversa. Essa disciplina evita tanto bugs falsos quanto decisões baseadas em expectativas inventadas.",
         ],
       },
@@ -127,7 +127,7 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
     ],
     caseStudy: {
       title: "Escolher onde verificar o total aprovado",
-      context: "O ExpenseFlow calcula o total de despesas aprovadas e o exibe em relatório.",
+      context: "O sistema calcula o total de despesas aprovadas e o exibe em relatório.",
       reasoning: "Use teste de regra para combinações de valores e estados, teste de API para persistência e um smoke de interface que aprove uma despesa e confira o total. Deixe a exploração visual e de clareza do relatório para revisão humana.",
       conclusion: "A matriz deve explicar por que cada camada existe, quais dados prepara, qual falha detecta e quais riscos continuam fora da automação.",
     },

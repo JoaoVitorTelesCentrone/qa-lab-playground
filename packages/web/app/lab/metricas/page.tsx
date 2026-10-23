@@ -19,7 +19,7 @@ export default async function MetricsPage() {
 
     <dl className="mt-8 grid divide-y divide-border rounded-xl border border-border sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-3 xl:grid-cols-6">
       <Stat label="Novas contas" value={metrics.newUsers} hint={`${metrics.activatedUsers} iniciaram um Lab no dia do cadastro`} />
-      <Stat label="Primeira evidência em 7 dias" value={`${metrics.firstEvidenceWithin7Days.rate}%`} hint={`${metrics.firstEvidenceWithin7Days.users} de ${metrics.firstEvidenceWithin7Days.eligibleUsers} contas com coorte completa; Lab ou desafio ExpenseFlow`} />
+      <Stat label="Primeira evidência em 7 dias" value={`${metrics.firstEvidenceWithin7Days.rate}%`} hint={`${metrics.firstEvidenceWithin7Days.users} de ${metrics.firstEvidenceWithin7Days.eligibleUsers} contas com coorte completa; atividades práticas`} />
       <Stat label="Tempo até evidência" value={metrics.medianHoursToFirstEvidence === null ? "—" : `${metrics.medianHoursToFirstEvidence} h`} hint="mediana da primeira evidência na coorte completa" />
       <Stat label="Publicaram um case" value={metrics.casesPublished} hint="contas com publicação registrada nos últimos 30 dias" />
       <Stat label="Ativação" value={`${metrics.activationRate}%`} hint="iniciou um Lab no dia do cadastro" />

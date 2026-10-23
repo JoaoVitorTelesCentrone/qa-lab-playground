@@ -17,7 +17,7 @@ const tables = [
   "mentorship_lesson_progress", "mentorship_live_sessions", "mentorship_attendance", "mentorship_submissions",
   "mentorship_reviews", "mentorship_weekly_commitments", "mentorship_portfolio_cases", "mentorship_notifications",
   "mentorship_lesson_content", "mentorship_certificates", "mentorship_email_outbox",
-  "mentorship_waitlist_leads", "mentorship_orders", "expenseflow_portfolio_cases", "deliverables", "activity_events",
+  "mentorship_waitlist_leads", "mentorship_orders", "deliverables", "activity_events",
 ];
 let failed = false;
 

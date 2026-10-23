@@ -163,7 +163,7 @@ describe("QA Lab smoke", () => {
     exerciseSteps: [
       "Instale Cypress e crie a estrutura cypress/e2e, cypress/fixtures e cypress/support.",
       "Configure baseUrl apontando para o ambiente local.",
-      "Crie um smoke test para home, playground e página do ExpenseFlow.",
+      "Crie um smoke test para home, playground e página do sistema.",
       "Force uma falha proposital e anote qual evidência o runner oferece.",
     ],
     reviewChecklist: ["A spec roda com cypress open e cypress run", "Não existe URL hardcoded dentro de todos os testes", "O aluno consegue explicar o erro usando command log e screenshot"],
@@ -176,9 +176,9 @@ describe("QA Lab smoke", () => {
       "Criar uma regra de seletores para o projeto.",
     ],
     concepts: ["data-testid", "query por texto", "subject", "chain", "retry-ability", "actionability", "anti-pattern de XPath"],
-    code: `describe("ExpenseFlow - cadastro de despesa", () => {
+    code: `describe("sistema - cadastro de despesa", () => {
   it("exibe validação quando título fica vazio", () => {
-    cy.visit("/playground/expenseflow");
+    cy.visit("/shop/products");
 
     cy.contains("Nova despesa").click();
     cy.get('[data-testid="expense-title"]').clear();
@@ -206,7 +206,7 @@ describe("QA Lab smoke", () => {
     concepts: ["describe", "context", "it", "beforeEach", "should", "expect", "assertion message", "test independence"],
     code: `describe("Aprovação de despesas", () => {
   beforeEach(() => {
-    cy.visit("/playground/expenseflow");
+    cy.visit("/shop/products");
     cy.contains("Perfil gestor").click();
   });
 
@@ -239,7 +239,7 @@ describe("QA Lab smoke", () => {
     concepts: ["fixture", "factory", "custom command", "Cypress.Commands.add", "support/e2e.ts", "types.d.ts"],
     code: `// cypress/support/commands.ts
 Cypress.Commands.add("loginAs", (role: "employee" | "manager") => {
-  cy.visit("/playground/expenseflow");
+  cy.visit("/shop/products");
   cy.contains(role === "manager" ? "Perfil gestor" : "Perfil colaborador").click();
 });
 
@@ -279,7 +279,7 @@ describe("Despesas", () => {
       body: { error: "internal_error" },
     }).as("reportsError");
 
-    cy.visit("/playground/expenseflow");
+    cy.visit("/shop/products");
     cy.contains("Relatórios").click();
     cy.wait("@reportsError");
 
@@ -314,7 +314,7 @@ describe("Despesas", () => {
 
 it("anexa comprovante na despesa", () => {
   cy.sessionLogin(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
-  cy.visit("/playground/expenseflow");
+  cy.visit("/shop/products");
   cy.contains("Nova despesa").click();
   cy.get('input[type="file"]').selectFile("cypress/fixtures/receipt.pdf");
   cy.contains("receipt.pdf").should("be.visible");
@@ -379,7 +379,7 @@ jobs:
 
 // acessibilidade básica
 it("não possui violações críticas no formulário", () => {
-  cy.visit("/playground/expenseflow");
+  cy.visit("/shop/products");
   cy.injectAxe();
   cy.contains("Nova despesa").click();
   cy.checkA11y(undefined, { includedImpacts: ["critical", "serious"] });
@@ -420,7 +420,7 @@ export default defineConfig({
 
 it("registra evidência técnica sem poluir o teste", () => {
   cy.task("log", "Iniciando regressão de aprovação");
-  cy.visit("/playground/expenseflow");
+  cy.visit("/shop/products");
 });`,
     exerciseSteps: [
       "Adicione um reporter e gere HTML/JSON no cypress run.",
@@ -450,7 +450,7 @@ export const cypressCourseResources = [
 ];
 
 export const cypressFinalProject = {
-  title: "Projeto final: suíte E2E profissional para ExpenseFlow",
+  title: "Projeto final: suíte E2E profissional para sistema",
   description:
     "O aluno monta uma suíte Cypress para um produto com falhas intencionais, cobrindo login, cadastro de despesa, aprovação, reprovação, relatórios, erros de API e regressão crítica.",
   deliverables: [

@@ -58,7 +58,6 @@ O aluno testa produtos simulados, cada um com fluxos, massa de dados, permissõe
 | Agendamentos | Disponibilidade, conflitos, reservas, reagendamento e cancelamento. |
 | CRM | Funil, oportunidades, empresas, contatos, atividades e indicadores. |
 | Web Playground | Elementos, tabelas, arquivos, frames, diálogos e Shadow DOM. |
-| ExpenseFlow | Fluxo financeiro responsivo com bugs reproduzíveis. |
 
 Também há recursos específicos para prática de acessibilidade, login, CRUD, testes exploratórios, esperas assíncronas e regressão.
 

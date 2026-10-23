@@ -17,7 +17,7 @@ export type AcceptanceSubmission = {
   notes: string;
 };
 
-const domains = ["ExpenseFlow", "Conta digital", "Marketplace", "Agenda medica", "CRM", "Assinaturas", "Help desk", "Logistica", "Checkout", "Portal educacional"];
+const domains = ["sistema", "Conta digital", "Marketplace", "Agenda medica", "CRM", "Assinaturas", "Help desk", "Logistica", "Checkout", "Portal educacional"];
 const personas = ["colaborador", "gestor", "cliente", "analista financeiro", "operador", "administrador", "suporte", "vendedor"];
 const goals = ["aprovar solicitacoes", "filtrar resultados", "cancelar pedidos", "exportar relatorios", "receber notificacoes", "alterar permissoes", "reabrir chamados", "comparar historico", "validar pagamento", "anexar comprovantes"];
 const rules = [

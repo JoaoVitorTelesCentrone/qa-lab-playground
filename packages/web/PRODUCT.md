@@ -58,7 +58,7 @@ O conteudo tecnico cobre testes manuais, automacao, CI/CD e testes de carga. Os 
 
 ## Evidence on Hand
 
-- Ambientes de pratica: ExpenseFlow, Financas, Agendamentos, CRM e Shop.
+- Ambientes de pratica: sistema, Financas, Agendamentos, CRM e Shop.
 - Labs de UI, API, exploracao, acessibilidade e regressao.
 - Trilha implementada de CI/CD com dez modulos.
 - Curso e material de automacao com Cypress.

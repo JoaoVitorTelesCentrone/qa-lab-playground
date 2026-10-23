@@ -4,7 +4,7 @@ Plataforma de prática de QA com aplicações que simulam produtos reais, Labs g
 
 ## Estado do lançamento
 
-O lançamento público destaca o ExpenseFlow Free Challenge em `/playground`. O catálogo de Labs e as trilhas antigas continuam no código, mas estão ocultos pela configuração de lançamento. A home leva diretamente ao briefing, ao ambiente de prática e às entregas do ExpenseFlow.
+O lançamento público destaca os Labs de prática e as trilhas disponíveis. A home leva à jornada principal do QA Lab; desafios e ambientes de prática ficam em suas áreas próprias.
 
 O estado do produto, decisões e pendências estão em [`docs/PRODUCTIZATION_PLAN.md`](docs/PRODUCTIZATION_PLAN.md), [`docs/QA_LAB_DECISIONS.md`](docs/QA_LAB_DECISIONS.md) e [`docs/QA_LAB_PRODUCT_PLAN.md`](docs/QA_LAB_PRODUCT_PLAN.md).
 
@@ -40,6 +40,6 @@ bun run lint
 bun run build
 ```
 
-O Supabase é usado para autenticação, progresso, evidências e dados persistentes. As migrações do produto ficam em `packages/web/supabase/migrations`; aplique `0030_atomic_lab_completion.sql` e `20261019232810_expenseflow_portfolio_case.sql` antes de publicar esta versão da aplicação. A primeira sustenta a conclusão atômica do Lab; a segunda libera a publicação do case ExpenseFlow. Confirme o histórico no projeto Supabase correto antes de validar fluxos autenticados. Configure as variáveis usando `packages/web/.env.example`.
+O Supabase é usado para autenticação, progresso, evidências e dados persistentes. As migrações do produto ficam em `packages/web/supabase/migrations`; aplique `0030_atomic_lab_completion.sql` antes de publicar esta versão da aplicação. Confirme o histórico no projeto Supabase correto antes de validar fluxos autenticados. Configure as variáveis usando `packages/web/.env.example`.
 
 `packages/api` é uma API alvo para exercícios. A API de produto vive nas rotas `/api/v1/*` de `packages/web`.

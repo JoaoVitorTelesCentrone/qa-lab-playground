@@ -32,11 +32,10 @@ type Props = {
   skills: string[];
   /** Seções livres que o dono escreveu e deixou visíveis. */
   sections: PortfolioSection[];
-  hasChallengeCase?: boolean;
 };
 
 export function PortfolioView(props: Props) {
-  const { username, name, bio, role, linkedin, github, entries, projects, skills, sections, hasChallengeCase } = props;
+  const { username, name, bio, role, linkedin, github, entries, projects, skills, sections } = props;
   // O filtro era por severidade; sem esse campo, o recorte que ainda importa
   // para quem varre o portfólio é o tipo de trabalho.
   const [kind, setKind] = useState<"todas" | "investigacao" | "fluxo">("todas");
@@ -46,9 +45,9 @@ export function PortfolioView(props: Props) {
 
   if (entries.length === 0) {
     return <div className="mt-10">
-      {!hasChallengeCase && <p className="rounded-xl border border-dashed border-border px-4 py-12 text-center text-sm text-muted-foreground">
+      <p className="rounded-xl border border-dashed border-border px-4 py-12 text-center text-sm text-muted-foreground">
         Nenhum projeto publicado ainda.
-      </p>}
+      </p>
       <CustomSections sections={sections} className="mt-12" />
     </div>;
   }

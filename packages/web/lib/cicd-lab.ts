@@ -248,7 +248,7 @@ export const cicdMissions: CicdMission[] = [
     title: "Verde no CI, vermelho ao subir",
     context: "Todos os testes passaram, o build foi publicado, mas o deploy em produção falha na inicialização. O log da aplicação no ambiente mostra a falha abaixo.",
     log: [
-      "Starting ExpenseFlow v2.14.0 ...",
+      "Starting sistema v2.14.0 ...",
       "[boot] connecting to database",
       "[error] PaymentService: missing required env STRIPE_API_KEY",
       "[error] failed to initialize PaymentService",

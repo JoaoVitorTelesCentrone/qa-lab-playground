@@ -42,7 +42,7 @@ export default function LabPage() {
           <div className="lab-intro-specimen-top"><span className="lab-intro-specimen-mark" aria-hidden="true" /> Caderno de prática <span>QA LAB</span></div>
           <div className="lab-intro-specimen-body">
             <p className="lab-intro-specimen-label">Situação</p>
-            <h2>O sistema aprovou uma despesa fora da regra.</h2>
+            <h2>Uma pessoa recebeu acesso a dados que não deveria ver.</h2>
             <div className="lab-intro-specimen-rule" />
             <dl>
               <div><dt>Observar</dt><dd>O que aconteceu? Em quais condições?</dd></div>

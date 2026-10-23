@@ -25,7 +25,7 @@ export type RefinementReview = {
 };
 
 const domains = [
-  "ExpenseFlow", "Conta digital", "Marketplace", "Agenda medica", "Portal educacional", "CRM comercial", "Logistica", "Assinaturas", "Checkout", "Backoffice financeiro", "App de entregas", "Help desk",
+  "sistema", "Conta digital", "Marketplace", "Agenda medica", "Portal educacional", "CRM comercial", "Logistica", "Assinaturas", "Checkout", "Backoffice financeiro", "App de entregas", "Help desk",
 ];
 const personas = ["colaborador", "gestor", "analista financeiro", "cliente", "operador", "administrador", "suporte", "vendedor", "auditor", "professor"];
 const pbiGoals = [

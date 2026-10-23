@@ -1,4 +1,4 @@
-export type PracticeAppId = "qa-lab" | "financas" | "agendamentos" | "crm" | "expenseflow";
+export type PracticeAppId = "qa-lab" | "financas" | "agendamentos" | "crm";
 
 export type PracticeApp = {
   id: PracticeAppId;
@@ -15,15 +15,12 @@ export const practiceApps: PracticeApp[] = [
   { id: "financas", name: "Finanças", route: "/financas", summary: "Controle financeiro com lançamentos, orçamento, metas e relatórios.", entity: "lançamento financeiro", flows: ["Lançamentos", "Orçamento por categoria", "Metas", "Recorrências", "Relatórios"], screens: [{ id: "overview", label: "Visão geral" }, { id: "transactions", label: "Lançamentos" }, { id: "accounts", label: "Contas" }, { id: "budgets", label: "Orçamentos" }, { id: "goals", label: "Metas" }, { id: "reports", label: "Relatórios" }] },
   { id: "agendamentos", name: "Agendamentos", route: "/agendamentos", summary: "Agenda de serviços com disponibilidade, conflitos, reagendamento e cancelamento.", entity: "agendamento", flows: ["Disponibilidade", "Conflito de horário", "Reagendamento", "Cancelamento", "Confirmação"], screens: [{ id: "overview", label: "Visão geral" }, { id: "schedule", label: "Grade e reserva" }, { id: "bookings", label: "Agenda" }, { id: "services", label: "Serviços" }, { id: "availability", label: "Disponibilidade" }] },
   { id: "crm", name: "CRM", route: "/crm", summary: "Painel comercial com funil, empresas, atividades e indicadores.", entity: "indicador do funil", flows: ["Funil por estágio", "Valor por empresa", "Atividades", "Taxa de ganho", "Gráfico versus tabela"], screens: [{ id: "overview", label: "Visão geral" }, { id: "funnel", label: "Funil" }, { id: "companies", label: "Empresas" }, { id: "activities", label: "Atividades" }, { id: "deals", label: "Oportunidades" }] },
-  { id: "expenseflow", name: "ExpenseFlow", route: "/playground/expenseflow", summary: "Um ambiente financeiro completo, com falhas reproduzíveis para investigar no Lab.", entity: "despesa e reembolso", flows: ["Cadastro de despesa", "Aprovação", "Reembolso", "Relatórios", "Regras de negócio"] },
 ];
 
 export function findPracticeApp(id: string) { return practiceApps.find((app) => app.id === id); }
 export function isPracticeAppId(value: string): value is PracticeAppId { return practiceApps.some((app) => app.id === value); }
 
-// Por enquanto, toda a prática acontece no mesmo sistema. Os demais cenários
-// continuam no código, mas não fazem parte da experiência pública.
-export const liveApps: PracticeApp[] = practiceApps.filter((app) => app.id === "expenseflow");
+export const liveApps: PracticeApp[] = practiceApps;
 
 export type RoadmapEnvironment = { id: string; name: string; route: string; summary: string };
 
@@ -40,5 +37,4 @@ export const roadmapEnvironments: RoadmapEnvironment[] = [
   { id: "shop", name: "QA Lab Shop", route: "/shop/products", summary: "Catalogo, carrinho e checkout." },
   { id: "crm", name: "CRM", route: "/crm", summary: "Funil comercial e indicadores." },
   { id: "perfil", name: "Portfolio", route: "/perfil", summary: "Evidencias e carreira." },
-  { id: "expenseflow", name: "ExpenseFlow", route: "/playground/expenseflow", summary: "O ambiente único para praticar os Labs." },
 ];

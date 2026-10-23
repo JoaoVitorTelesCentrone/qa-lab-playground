@@ -20,7 +20,7 @@ const byModule: Array<[RegExp, EnvironmentConfig]> = [
   [/^1\.13/, { environment: "Waits Lab", route: "/labs/waits", setup: ["Execute primeiro o cenário normal.", "Repita com o desvio de carregamento quando fizer sentido."] }],
   [/^1\.14/, { environment: "API Playground", route: "/api-playground", setup: ["Use somente dados fictícios.", "Não registre tokens ou segredos na evidência."] }],
   [/^1\.15/, { environment: "Lab de acessibilidade", route: "/labs/acessibilidade", setup: ["Inicie usando somente teclado.", "Ative o cenário de desvio apenas depois de observar o fluxo normal."] }],
-  [/^1\.16/, { environment: "ExpenseFlow Mobile", route: "/playground/expenseflow", setup: ["Use viewport de 320 px e depois 768 px.", "Teste orientação, teclado e interrupção do fluxo."] }],
+  [/^1\.16/, { environment: "Aplicativo mobile", route: "/lab", setup: ["Use viewport de 320 px e depois 768 px.", "Teste orientação, teclado e interrupção do fluxo."] }],
   [/^1\.17/, { environment: "Finanças — indicadores", route: "/financas", setup: ["Crie uma linha de base com os dados visíveis.", "Defina a decisão que a métrica deve apoiar."] }],
   [/^1\.[1-6]/, { environment: "QA Lab Shop", route: "/shop/products", setup: ["Escolha um fluxo entre catálogo, carrinho e checkout.", "Use dados controlados e registre a pré-condição."] }],
   [/^2\.1/, { environment: "QA Lab People", route: "/lab/pessoas", setup: ["Selecione uma situação de trabalho em time.", "Separe fatos, interesses e decisão necessária."] }],

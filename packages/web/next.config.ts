@@ -15,12 +15,16 @@ const nextConfig: NextConfig = {
       // Conteúdo tem uma área própria; links legados da mentoria continuam válidos.
       { source: "/mentoria/conteudo", destination: "/conteudo", permanent: true },
       { source: "/mentoria/conteudo/:path*", destination: "/conteudo/:path*", permanent: true },
-      // Old practice/challenge modules → current Playground.
-      { source: "/desafio", destination: "/playground", permanent: true },
-      { source: "/desafios/:path*", destination: "/playground", permanent: true },
-      { source: "/missoes/:path*", destination: "/playground", permanent: true },
-      { source: "/datas/:path*", destination: "/playground", permanent: true },
-      { source: "/despesas", destination: "/playground/expenseflow", permanent: true },
+      // Legacy practice URLs go to the current Lab entry point.
+      { source: "/desafio", destination: "/lab", permanent: true },
+      { source: "/desafios/:path*", destination: "/lab", permanent: true },
+      { source: "/missoes/:path*", destination: "/lab", permanent: true },
+      { source: "/datas/:path*", destination: "/lab", permanent: true },
+      { source: "/despesas", destination: "/lab", permanent: true },
+      { source: "/playground/expenseflow/:path*", destination: "/lab", permanent: true },
+      { source: "/playground/entregas/:path*", destination: "/lab", permanent: true },
+      { source: "/playground/conclusao/:path*", destination: "/lab", permanent: true },
+      { source: "/portfolio/:username/expenseflow", destination: "/portfolio/:username", permanent: true },
       ...legacyRoutes.map((source) => ({ source: `${source}/:path*`, destination: "/", permanent: false })),
     ];
   },

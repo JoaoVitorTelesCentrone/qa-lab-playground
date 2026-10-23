@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!portfolio) return { title: "Portfólio não encontrado | QA Lab" };
   return {
     title: `${portfolio.name} — portfólio de QA | QA Lab`,
-    description: portfolio.headline || `${portfolio.projects.length + (portfolio.challengeCase ? 1 : 0)} projeto(s) e ${portfolio.stats.evidences + (portfolio.challengeCase ? 1 : 0)} case(s) de teste publicados no QA Lab.`,
+    description: portfolio.headline || `${portfolio.projects.length} projeto(s) e ${portfolio.stats.evidences} evidência(s) de teste publicados no QA Lab.`,
   };
 }
 
@@ -44,14 +44,13 @@ export default async function PortfolioPage({ params }: Props) {
     </header>
 
     <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
-      <Stat label="Projetos" value={portfolio.projects.length + (portfolio.challengeCase ? 1 : 0)} />
-      <Stat label="Evidências" value={stats.evidences + (portfolio.challengeCase ? 1 : 0)} />
-      <Stat label="Bugs encontrados" value={stats.bugs + (portfolio.challengeCase?.snapshot.bugs.length ?? 0)} />
-      <Stat label="Sistemas testados" value={stats.domains + (portfolio.challengeCase ? 1 : 0)} />
+      <Stat label="Projetos" value={portfolio.projects.length} />
+      <Stat label="Evidências" value={stats.evidences} />
+      <Stat label="Bugs encontrados" value={stats.bugs} />
+      <Stat label="Sistemas testados" value={stats.domains} />
       <Stat label="Com prova anexada" value={stats.documented} />
     </dl>
 
-    {portfolio.challengeCase && <section className="mt-10 border-t border-border pt-8"><h2 className="text-xl font-semibold">Case em destaque</h2><Link href={`/portfolio/${portfolio.username}/expenseflow`} className="group mt-4 block rounded-xl border border-border p-5 transition hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"><h3 className="text-lg font-semibold group-hover:text-primary">{portfolio.challengeCase.title}</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{portfolio.challengeCase.summary}</p><span className="mt-4 inline-block text-sm font-semibold text-primary">Ler case do ExpenseFlow →</span></Link></section>}
 
     <PortfolioView
       username={portfolio.username}
@@ -65,7 +64,6 @@ export default async function PortfolioPage({ params }: Props) {
       stats={stats}
       skills={portfolio.skills}
       sections={portfolio.sections}
-      hasChallengeCase={Boolean(portfolio.challengeCase)}
     />
 
     {portfolio.mentorshipCases.length > 0 && <section className="mt-12 border-t border-border pt-8"><p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">Cases da mentoria</p><div className="mt-4 grid gap-3">{portfolio.mentorshipCases.map((item) => <Link key={item.id} href={`/portfolio/${portfolio.username}/mentoria/${item.id}`} className="rounded-xl border border-border p-5 transition hover:border-primary"><h2 className="text-lg font-semibold">{item.title}</h2><p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">{item.summary}</p></Link>)}</div></section>}

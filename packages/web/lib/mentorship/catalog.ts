@@ -64,7 +64,7 @@ export const mentorshipWeeks: MentorshipWeek[] = [
     intermediateRequirements: ["Relacionar risco a impacto", "Definir heuristicas de exploracao", "Justificar a priorizacao"],
     rubric: ["Contexto compreendido", "Riscos especificos", "Prioridade justificada", "Evidencia clara"],
     labRoute: "/playground",
-    practice: { environment: "ExpenseFlow", route: "/playground/expenseflow", artifact: "Mapa de risco", estimatedMinutes: 35, instructions: ["Compare os perfis de colaborador, gestora e admin e identifique quem decide sobre cada reembolso.", "Percorra nova despesa, lista, aprovações e relatórios; observe o que muda após salvar e decidir.", "Anote o que observou, o impacto possível e o que ainda precisa confirmar."], completionCriteria: ["Cinco riscos descritos com impacto", "Risco mais importante justificado", "Uma pergunta de negócio registrada"] },
+    practice: { environment: "sistema", route: "/shop/products", artifact: "Mapa de risco", estimatedMinutes: 35, instructions: ["Compare os perfis de colaborador, gestora e admin e identifique quem decide sobre cada reembolso.", "Percorra nova despesa, lista, aprovações e relatórios; observe o que muda após salvar e decidir.", "Anote o que observou, o impacto possível e o que ainda precisa confirmar."], completionCriteria: ["Cinco riscos descritos com impacto", "Risco mais importante justificado", "Uma pergunta de negócio registrada"] },
   }, [
     { title: "O que um QA decide", kind: "video", duration: "12 min", summary: "Qualidade como decisão, risco e comunicação." },
     { title: "Leitura do briefing", kind: "reading", duration: "10 min", summary: "Como extrair regras e perguntas antes de executar." },
@@ -126,7 +126,7 @@ export const mentorshipWeeks: MentorshipWeek[] = [
     beginnerRequirements: ["Automatizar um smoke", "Usar seletores por intencao", "Adicionar assertions"],
     intermediateRequirements: ["Isolar massa", "Tratar ambientes", "Evitar espera fixa e acoplamento"],
     rubric: ["Legibilidade", "Estabilidade", "Assertions uteis", "Reproducibilidade"],
-    practice: { environment: "Workspace de automacao", route: "/test-suite", artifact: "Smoke automatizado", estimatedMinutes: 50, instructions: ["Use o workspace para estruturar uma spec para o ExpenseFlow ou outro fluxo web simples.", "Implemente ou esboce passos com seletores por intencao.", "Valide resultado de negocio com assertions e documente a execucao."], completionCriteria: ["Fluxo smoke definido", "Assertions observaveis", "Massa e execucao reproduziveis"] },
+    practice: { environment: "Workspace de automacao", route: "/test-suite", artifact: "Smoke automatizado", estimatedMinutes: 50, instructions: ["Use o workspace para estruturar uma spec para o sistema ou outro fluxo web simples.", "Implemente ou esboce passos com seletores por intencao.", "Valide resultado de negocio com assertions e documente a execucao."], completionCriteria: ["Fluxo smoke definido", "Assertions observaveis", "Massa e execucao reproduziveis"] },
   }, [
     { title: "Primeiro teste executável", kind: "video", duration: "25 min", summary: "Estrutura mínima e fluxo de trabalho." },
     { title: "Seletores e massa", kind: "demo", duration: "20 min", summary: "Como reduzir flakiness desde o primeiro teste." },

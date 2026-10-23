@@ -7,7 +7,7 @@ export type MentorshipLessonGuide = {
 export const mentorshipLessonGuides: Record<string, MentorshipLessonGuide> = {
   "mentoria.w01.l1": {
     idea: "QA ajuda o time a decidir com menos incerteza. Comece pela pergunta que o teste precisa responder: qual falha poderia prejudicar o usuário ou o negócio? Uma lista grande de casos só tem valor quando esclarece riscos relevantes.",
-    example: "No ExpenseFlow, conferir que o botão Salvar funciona é pouco. Se uma despesa for salva com valor incorreto, o relatório de reembolsos pode levar a uma decisão financeira errada.",
+    example: "No sistema, conferir que o botão Salvar funciona é pouco. Se uma despesa for salva com valor incorreto, o relatório de reembolsos pode levar a uma decisão financeira errada.",
     apply: "Escreva três perguntas de risco antes de abrir o ambiente. Para cada uma, diga que observação mudaria sua decisão.",
   },
   "mentoria.w01.l2": {
@@ -18,7 +18,7 @@ export const mentorshipLessonGuides: Record<string, MentorshipLessonGuide> = {
   "mentoria.w01.l3": {
     idea: "Explorar não e clicar sem direção. Escolha um risco, execute um caminho curto, compare o resultado com a regra e registre evidências. Ao encontrar algo inesperado, teste uma variação para separar defeito de configuração ou dado.",
     example: "Cadastre uma despesa, consulte a lista, aprove com outro perfil e consulte o relatório. Registre cada estado observado antes de concluir que houve falha.",
-    apply: "Percorra um fluxo do ExpenseFlow e produza uma nota com ação, resultado, hipótese e próximo experimento.",
+    apply: "Percorra um fluxo do sistema e produza uma nota com ação, resultado, hipótese e próximo experimento.",
   },
   "mentoria.w02.l1": {
     idea: "Uma sessão exploratoria tem missao, tempo e registro. A missao limita o foco; o registro separa o que você fez do que concluiu. Quando o tempo termina, sintetize cobertura, achados e lacunas.",

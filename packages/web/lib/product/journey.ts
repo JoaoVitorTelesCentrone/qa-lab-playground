@@ -144,9 +144,7 @@ export function buildJourney(rawEnrollments: Enrollment[], rawSubmissions: Submi
 }
 
 export function buildCoverage(runs: ScenarioRun[]): AppCoverage[] {
-  // ExpenseFlow is a standalone free challenge and is intentionally kept out
-  // of the four-environment regression dashboard used by the journey view.
-  return practiceApps.filter((app) => app.id !== "expenseflow").map((app) => {
+  return practiceApps.map((app) => {
     const total = regressionPacks.find((pack) => pack.id === app.id)?.scenarios.length ?? 0;
     const appRuns = runs.filter((run) => run.appId === app.id);
     const executed = new Set(appRuns.map((run) => run.scenarioId)).size;

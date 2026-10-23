@@ -7,7 +7,7 @@ export type AppliedExample = {
 
 const examples: Record<number, AppliedExample> = {
   1: {
-    situation: "Uma despesa aparece como aprovada na lista do ExpenseFlow, mas o total aprovado no relatório não corresponde à soma das despesas aprovadas.",
+    situation: "Uma despesa aparece como aprovada na lista do sistema, mas o total aprovado no relatório não corresponde à soma das despesas aprovadas.",
     reasoning: "Antes de concluir que o cálculo falhou, confira o perfil selecionado, o status e os valores de cada despesa visível. Compare a soma manual com o relatório e repita após restaurar os dados de treino. O risco é uma decisão de reembolso baseada em número incorreto.",
     transfer: "Percorra lista, aprovações e relatórios. Anote quais despesas entram no total e que observação confirmaria a divergência.",
     evidence: "No mapa de risco, registre evento, impacto, prioridade e uma pergunta de negócio para esse fluxo.",
@@ -31,7 +31,7 @@ const examples: Record<number, AppliedExample> = {
     evidence: "Entregue dois relatos reproduzíveis e uma recomendação de release para cada risco.",
   },
   5: {
-    situation: "O time quer automatizar todos os caminhos do ExpenseFlow e também uma área hipotética cujo comportamento ainda muda toda semana.",
+    situation: "O time quer automatizar todos os caminhos do sistema e também uma área hipotética cujo comportamento ainda muda toda semana.",
     reasoning: "Automacao compensa quando protege risco frequente com resultado observavel e custo de manutenção aceitavel. Um cálculo financeiro estável pode ser bom candidato; uma exploração visual em area instável pode continuar manual.",
     transfer: "Compare fluxos por risco, repetição, estabilidade e camada de teste. Escreva por que automatizaria alguns e adiaria outros.",
     evidence: "Entregue uma matriz de candidatos com três escolhas, dois descartes e critérios claros.",

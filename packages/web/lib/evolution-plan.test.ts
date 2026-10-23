@@ -13,7 +13,7 @@ const base = {
 describe("evolution plan", () => {
   test("recomenda base quando usuario ainda nao tem contexto nem entregaveis", () => {
     const plan = buildEvolutionPlan(base);
-    expect(plan.map((step) => step.id)).toEqual(["setup-project", "investigate-expenseflow", "review-competency-map"]);
+    expect(plan.map((step) => step.id)).toEqual(["setup-project", "investigation-practice", "review-competency-map"]);
     expect(plan[0].status).toBe("Agora");
   });
 

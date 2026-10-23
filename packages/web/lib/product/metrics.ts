@@ -31,7 +31,7 @@ export type Metrics = {
   firstEvidenceWithin7Days: { users: number; eligibleUsers: number; rate: number };
   /** Mediana em horas para a primeira evidência da coorte elegível. */
   medianHoursToFirstEvidence: number | null;
-  /** Contas que publicaram o case ExpenseFlow no período lido. */
+  /** Contas que publicaram o case sistema no período lido. */
   casesPublished: number;
   mentorshipFunnel: { applications: number; checkouts: number; payments: number };
   errors: number;
@@ -68,9 +68,7 @@ export function buildMetrics(events: ActivityEvent[], signups: Signup[] = [], no
   const signupByUser = new Map(eligibleSignups.map((signup) => [signup.userId, Date.parse(signup.createdAt)]));
   const firstEvidenceByUser = new Map<string, number>();
   for (const event of events) {
-    // Lab completion is atomic in SQL; challenge evidence is derived from
-    // persisted, checklist-complete deliverables in metrics-store.
-    if (event.name !== "lab_completed" && event.name !== "challenge_evidence_submitted") continue;
+    if (event.name !== "lab_completed") continue;
     const signupAt = signupByUser.get(event.userId);
     if (signupAt === undefined) continue;
     const submittedAt = Date.parse(event.createdAt);

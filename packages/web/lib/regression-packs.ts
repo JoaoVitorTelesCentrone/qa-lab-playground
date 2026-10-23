@@ -185,11 +185,7 @@ const qaLab: Draft[] = [
   { title: "Smoke final", layer: "Regressão", precondition: "Sessão nova.", steps: ["Percorra catálogo, carrinho, cupom, frete e checkout.", "Conclua o pedido e abra o detalhe dele.", "Confira o total em cada tela do caminho."], expected: "O valor cobrado é o mesmo do carrinho, do resumo e do detalhe do pedido, sem divergência em nenhum passo.", at: "/shop/checkout", bugId: "qa-lab.wrong-total" },
 ];
 
-// ExpenseFlow e um ambiente publico separado, mas usa a mesma matriz de
-// verificacoes do Shop para que toda aplicacao tenha um pack executavel. Os
-// desvios do Shop nao sao copiados para nao atribuir bug ao ambiente errado.
-const expenseflow = qaLab.map((draft) => ({ ...draft, bugId: undefined }));
-const drafts: Record<PracticeAppId, Draft[]> = { "qa-lab": qaLab, financas, agendamentos, crm, expenseflow };
+const drafts: Record<PracticeAppId, Draft[]> = { "qa-lab": qaLab, financas, agendamentos, crm };
 
 export const regressionPacks = practiceApps.map((app) => ({
   ...app,

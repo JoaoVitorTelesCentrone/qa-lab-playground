@@ -9,7 +9,7 @@ export type TechnicalPlaybook = {
 export const technicalPlaybooks: Record<number, TechnicalPlaybook> = {
   6: {
     title: "Do cenário manual ao E2E executável",
-    introduction: "Os exemplos usam o Lab de login que existe no QA Lab. Compare a intenção do teste com a ação e a assertion. Para o ExpenseFlow, adapte os seletores e as regras após observar o fluxo real.",
+    introduction: "Os exemplos usam o Lab de login que existe no QA Lab. Compare a intenção do teste com a ação e a assertion. Para o sistema, adapte os seletores e as regras após observar o fluxo real.",
     examples: [
       { title: "Playwright: sucesso e erro com estado observável", language: "typescript", code: `import { expect, test } from "@playwright/test";
 

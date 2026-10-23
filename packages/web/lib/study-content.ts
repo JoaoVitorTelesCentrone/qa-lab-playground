@@ -31,8 +31,8 @@ export const studyTracks: StudyTrack[] = [
     level: "Fundacao",
     duration: "45 min",
     focus: ["impacto", "reproducao", "evidencia", "severidade"],
-    exerciseHref: "/playground/expenseflow",
-    exerciseLabel: "Cacar bugs no ExpenseFlow",
+    exerciseHref: "/lab/triagem",
+    exerciseLabel: "Classificar e priorizar bugs",
     postSlugs: ["como-escrever-um-bug-report-que-ajuda", "severidade-e-prioridade-nao-sao-a-mesma-coisa"],
     checkpoint:
       "Entregar 3 bugs com titulo, passos minimos, resultado atual, resultado esperado, severidade, prioridade e evidencia.",
@@ -45,8 +45,8 @@ export const studyTracks: StudyTrack[] = [
     level: "Pratica",
     duration: "60 min",
     focus: ["charter", "timebox", "notas", "heuristicas"],
-    exerciseHref: "/playground",
-    exerciseLabel: "Abrir briefing do desafio",
+    exerciseHref: "/lab",
+    exerciseLabel: "Conhecer os Labs",
     postSlugs: ["charter-de-teste-exploratorio-na-pratica"],
     checkpoint:
       "Rodar uma sessao de 30 minutos com missao clara, riscos observados, duvidas abertas e evidencias anexadas.",
