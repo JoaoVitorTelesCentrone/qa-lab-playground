@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { FlaskConical, Linkedin, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { LAUNCH_LAB } from "@/lib/product/launch";
 import { cn } from "@/lib/utils";
 import { AccountNav } from "@/components/auth/account-nav";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -14,7 +13,7 @@ const LINKEDIN_URL = "https://www.linkedin.com/company/qa-lab-oficial/";
 
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
-  const labActive = pathname === LAUNCH_LAB.route || pathname.startsWith("/playground/");
+  const labActive = pathname === "/lab" || pathname === "/labs" || pathname.startsWith("/labs/");
   const contentActive = pathname === "/conteudo" || pathname.startsWith("/conteudo/");
   const mentorshipActive = pathname.startsWith("/mentoria");
 
@@ -27,7 +26,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Navegação principal">
-          <Link href={LAUNCH_LAB.route} className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors", labActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+          <Link href="/lab" aria-current={labActive ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors", labActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
             O Lab
           </Link>
           <Link href="/mentoria" aria-current={mentorshipActive ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-sm font-medium transition-colors", mentorshipActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
@@ -44,7 +43,7 @@ export function SiteHeader() {
           </a>
           <AccountNav configured={isSupabaseConfigured()} />
           <Button asChild size="sm" className="hidden rounded-full px-4 sm:inline-flex">
-            <Link href={LAUNCH_LAB.route}>Começar</Link>
+            <Link href="/lab">Conhecer o Lab</Link>
           </Button>
           <Sheet>
             <SheetTrigger asChild>
@@ -55,12 +54,12 @@ export function SiteHeader() {
                 <span className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground"><FlaskConical className="size-4" /></span>
                 <span className="text-lg font-semibold">QA Lab</span>
               </SheetTitle>
-              <Link href={LAUNCH_LAB.route} className="text-base font-medium hover:text-primary">O Lab</Link>
+              <Link href="/lab" aria-current={labActive ? "page" : undefined} className="text-base font-medium hover:text-primary">O Lab</Link>
               <Link href="/mentoria" className="text-base font-medium hover:text-primary">Mentoria</Link>
               <Link href="/conteudo" aria-current={contentActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Conteúdo</Link>
               <div className="mt-auto flex flex-col gap-2">
                 <Button asChild variant="outline" className="w-full rounded-full"><Link href="/login">Entrar na minha conta</Link></Button>
-                <Button asChild className="w-full rounded-full"><Link href={LAUNCH_LAB.route}>Começar o Lab</Link></Button>
+                <Button asChild className="w-full rounded-full"><Link href="/lab">Conhecer o Lab</Link></Button>
                 <Button asChild variant="ghost" className="w-full rounded-full"><a href={LINKEDIN_URL} target="_blank" rel="noreferrer"><Linkedin className="size-4" /> LinkedIn do QA Lab</a></Button>
               </div>
             </SheetContent>

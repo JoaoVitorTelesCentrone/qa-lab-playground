@@ -1,0 +1,98 @@
+.lab-intro {
+  --lab-green: #8ddaa4;
+  --lab-line: #343d37;
+  --lab-muted: #b9c5bd;
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: 38px 24px 96px;
+  color: #f5f7f6;
+}
+
+.lab-intro :focus-visible { outline: 2px solid var(--lab-green); outline-offset: 5px; }
+.lab-intro h1, .lab-intro h2, .lab-intro h3, .lab-intro p { margin: 0; }
+.lab-intro h1, .lab-intro h2, .lab-intro h3 { text-wrap: balance; }
+.lab-intro-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(350px, .83fr);
+  gap: clamp(40px, 6vw, 90px);
+  align-items: center;
+  padding: clamp(42px, 6vw, 86px) 0 clamp(68px, 9vw, 124px);
+}
+.lab-intro-hero-copy { max-width: 630px; }
+.lab-intro-kicker { display: flex; align-items: center; gap: 10px; color: var(--lab-green); font-size: .88rem; font-weight: 700; }
+.lab-intro-hero h1 { margin-top: 26px; font-size: clamp(3.2rem, 5.4vw, 5.7rem); font-weight: 750; line-height: 1.04; letter-spacing: -.065em; }
+.lab-intro-lead { max-width: 52ch; margin-top: 28px !important; color: #d2dcd5; font-size: clamp(1.06rem, 1.5vw, 1.22rem); line-height: 1.68; }
+.lab-intro-jump { display: inline-flex; min-height: 44px; align-items: center; gap: 12px; margin-top: 30px; border-bottom: 1px solid var(--lab-green); color: var(--lab-green); font-size: .95rem; font-weight: 700; transition: gap .2s ease; }
+.lab-intro-jump:hover { gap: 18px; }
+
+.lab-intro-specimen { transform: rotate(1.2deg); overflow: hidden; border: 1px solid #49604f; border-radius: 10px; background: #1c2921; box-shadow: 18px 24px 0 #172019, 0 34px 80px #0006; }
+.lab-intro-specimen-top, .lab-intro-specimen-foot { display: flex; align-items: center; gap: 10px; padding: 14px 20px; color: #d5e3d8; font-size: .78rem; font-weight: 700; }
+.lab-intro-specimen-top { border-bottom: 1px solid #405446; }
+.lab-intro-specimen-top > span:last-child { margin-left: auto; color: #92cda3; font-size: .68rem; letter-spacing: .13em; }
+.lab-intro-specimen-mark { width: 10px; height: 10px; border: 2px solid var(--lab-green); border-radius: 50%; }
+.lab-intro-specimen-body { padding: clamp(24px, 3vw, 38px); }
+.lab-intro-specimen-label { color: #a7d7b4; font-size: .76rem; font-weight: 700; }
+.lab-intro-specimen-body h2 { max-width: 17ch; margin-top: 12px; font-size: clamp(1.65rem, 2.45vw, 2.45rem); font-weight: 700; line-height: 1.16; letter-spacing: -.04em; }
+.lab-intro-specimen-rule { height: 1px; margin: 28px 0 8px; background: #49604f; }
+.lab-intro-specimen dl { margin: 0; }
+.lab-intro-specimen dl > div { display: grid; grid-template-columns: 82px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid #394d3e; }
+.lab-intro-specimen dl > div:last-child { border: 0; }
+.lab-intro-specimen dt { color: var(--lab-green); font-size: .78rem; font-weight: 700; }
+.lab-intro-specimen dd { margin: 0; color: #e0e8e1; font-size: .81rem; line-height: 1.5; }
+.lab-intro-specimen-foot { justify-content: space-between; border-top: 1px solid #405446; color: #a7c5ae; font-size: .68rem; }
+
+.lab-intro-why, .lab-intro-territories { display: grid; grid-template-columns: minmax(0, .86fr) minmax(0, 1fr); gap: clamp(40px, 8vw, 130px); padding: 70px 0; border-top: 1px solid var(--lab-line); }
+.lab-intro-section-heading > span, .lab-intro-method-heading > span, .lab-intro-close > div > span { color: var(--lab-green); font-size: .82rem; font-weight: 700; }
+.lab-intro-section-heading h2, .lab-intro-method-heading h2, .lab-intro-close h2 { margin-top: 18px; font-size: clamp(2rem, 3.2vw, 3.35rem); font-weight: 700; line-height: 1.14; letter-spacing: -.045em; }
+.lab-intro-why-copy { max-width: 56ch; padding-top: 29px; }
+.lab-intro-why-copy p, .lab-intro-close p { color: var(--lab-muted); font-size: 1.05rem; line-height: 1.8; }
+.lab-intro-why-copy p + p { margin-top: 23px; }
+
+.lab-intro-method { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1fr); gap: clamp(40px, 8vw, 130px); padding: clamp(42px, 6vw, 72px); border: 1px solid #3d5543; border-radius: 12px; background: #1a251d; }
+.lab-intro-method-heading p { max-width: 43ch; margin-top: 22px; color: #bfcec2; font-size: 1rem; line-height: 1.7; }
+.lab-intro-steps { margin: 0; padding: 0; list-style: none; }
+.lab-intro-steps li { display: grid; grid-template-columns: 42px 1fr; gap: 20px; padding: 21px 0; border-bottom: 1px solid #405446; }
+.lab-intro-steps li:first-child { padding-top: 0; }
+.lab-intro-steps li:last-child { padding-bottom: 0; border-bottom: 0; }
+.lab-intro-step-number { color: var(--lab-green); font-size: .9rem; font-weight: 700; }
+.lab-intro-steps h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: -.025em; }
+.lab-intro-steps p { max-width: 48ch; margin-top: 9px; color: #bfcec2; font-size: .94rem; line-height: 1.7; }
+
+.lab-intro-territories { margin-top: 90px; }
+.lab-intro-territory-list article { display: grid; grid-template-columns: minmax(145px, .7fr) 1fr; gap: 24px; padding: 23px 0; border-bottom: 1px solid var(--lab-line); }
+.lab-intro-territory-list article:first-child { padding-top: 8px; }
+.lab-intro-territory-list h3 { font-size: 1.05rem; font-weight: 700; }
+.lab-intro-territory-list p { color: var(--lab-muted); font-size: .94rem; line-height: 1.65; }
+
+.lab-intro-close { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-top: 22px; padding: clamp(38px, 5vw, 62px); border-radius: 10px; background: #25382b; }
+.lab-intro-close > div { max-width: 700px; }
+.lab-intro-close h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+.lab-intro-close p { max-width: 62ch; margin-top: 18px; font-size: .98rem; }
+.lab-intro-catalog-link { display: inline-flex; min-height: 48px; flex: none; align-items: center; justify-content: center; gap: 13px; padding: 0 22px; border-radius: 6px; background: #a8e6b8; color: #122117; font-size: .94rem; font-weight: 750; transition: background .18s ease; }
+.lab-intro-catalog-link:hover { background: #d0f3d9; }
+
+@media (max-width: 850px) {
+  .lab-intro-hero { grid-template-columns: 1fr; gap: 52px; }
+  .lab-intro-specimen { max-width: 620px; transform: none; box-shadow: 12px 14px 0 #172019; }
+  .lab-intro-why, .lab-intro-territories, .lab-intro-method { grid-template-columns: 1fr; gap: 30px; }
+  .lab-intro-why-copy { padding-top: 0; }
+  .lab-intro-territories { margin-top: 48px; }
+  .lab-intro-close { align-items: start; flex-direction: column; }
+}
+
+@media (max-width: 550px) {
+  .lab-intro { padding: 12px 20px 72px; }
+  .lab-intro-hero { padding: 44px 0 80px; }
+  .lab-intro-hero h1 { font-size: clamp(2.75rem, 13vw, 3.7rem); }
+  .lab-intro-specimen-body { padding: 24px; }
+  .lab-intro-specimen dl > div { grid-template-columns: 1fr; gap: 4px; }
+  .lab-intro-why, .lab-intro-territories { padding: 52px 0; }
+  .lab-intro-method { padding: 30px 24px; }
+  .lab-intro-territory-list article { grid-template-columns: 1fr; gap: 6px; }
+  .lab-intro-close { padding: 32px 26px; }
+  .lab-intro-catalog-link { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-intro-jump, .lab-intro-catalog-link { transition: none; }
+}
