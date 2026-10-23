@@ -4,6 +4,10 @@
     {
       "path": "/api/cron/mentorship-emails",
       "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/cron/supabase-health",
+      "schedule": "0 6 * * *"
     }
   ]
 }
