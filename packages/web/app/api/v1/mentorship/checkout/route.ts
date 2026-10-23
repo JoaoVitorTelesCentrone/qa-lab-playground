@@ -2,6 +2,8 @@ import { createPreference, mercadoPagoMentorshipConfigured } from "@/lib/billing
 import { createAdminClient, hasServiceRole } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { fail, ok, readJson } from "@/lib/product/api";
+import { trackEvent } from "@/lib/product/store";
+import { normalizeWaitlistAttribution } from "@/lib/mentorship/waitlist-request";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +15,12 @@ export async function POST(request: Request) {
   if (typeof body.offerId !== "string" || !/^[0-9a-f-]{36}$/i.test(body.offerId) || !Number.isInteger(body.offerVersion) || typeof body.acceptedTerms !== "boolean" || !body.acceptedTerms) {
     return fail("Confira e aceite as condições da turma para continuar.", 422);
   }
+  const campaign = body.attribution && typeof body.attribution === "object" && !Array.isArray(body.attribution) ? body.attribution as Record<string, unknown> : {};
+  const attribution = {
+    utm_source: normalizeWaitlistAttribution(campaign.utm_source),
+    utm_medium: normalizeWaitlistAttribution(campaign.utm_medium),
+    utm_campaign: normalizeWaitlistAttribution(campaign.utm_campaign),
+  };
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   if (!siteUrl || !mercadoPagoMentorshipConfigured() || !hasServiceRole()) return fail("As inscrições pagas ainda não estão configuradas.", 503);
   const admin = createAdminClient();
@@ -31,6 +39,14 @@ export async function POST(request: Request) {
     return fail(message, reason.includes("COHORT_FULL") || reason.includes("ALREADY_ENROLLED") || reason.includes("OFFER_VERSION_CHANGED") || reason.includes("ENROLLMENT_CLOSED") ? 409 : 503);
   }
   if (order.status === "approved" && order.enrollment_id) return ok({ checkoutUrl: new URL("/mentoria/app", siteUrl).toString(), enrolled: true });
+  if (Object.values(attribution).some(Boolean)) {
+    const { error: attributionError } = await admin.from("mentorship_orders").update({
+      utm_source: order.utm_source ?? attribution.utm_source,
+      utm_medium: order.utm_medium ?? attribution.utm_medium,
+      utm_campaign: order.utm_campaign ?? attribution.utm_campaign,
+    }).eq("id", order.id).eq("status", "pending");
+    if (attributionError) return fail("Não foi possível registrar a origem da inscrição.", 503);
+  }
   if (order.checkout_url && order.mercado_pago_preference_id) return ok({ checkoutUrl: order.checkout_url, orderId: order.id, expiresAt: order.reservation_expires_at });
 
   try {
@@ -50,6 +66,7 @@ export async function POST(request: Request) {
     });
     const { error: saveError } = await admin.from("mentorship_orders").update({ mercado_pago_preference_id: preference.id, checkout_url: preference.initPoint }).eq("id", order.id).eq("status", "pending");
     if (saveError) throw new Error("Não foi possível salvar o checkout da reserva.");
+    await trackEvent(user.id, "mentorship_checkout_started", { cohort: offer.cohort_id, offer: offer.id, ...attribution });
     return ok({ checkoutUrl: preference.initPoint, orderId: order.id, expiresAt: expiry }, 201);
   } catch (cause) {
     return fail(cause instanceof Error ? cause.message : "Não foi possível abrir o checkout.", 502);

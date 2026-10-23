@@ -70,4 +70,21 @@ describe("métricas de produto", () => {
     const late = buildMetrics([event("lab_started", "ana", "2026-08-11T10:00:00Z", { lab: "desafio-001" })], signups);
     expect(late.activatedUsers).toBe(0);
   });
+
+  test("evidência persistida do desafio conta uma vez na coorte de sete dias", () => {
+    const cohort = [
+      { userId: "ana", createdAt: "2026-08-10T08:00:00Z" },
+      { userId: "bruno", createdAt: "2026-08-10T08:00:00Z" },
+      { userId: "recente", createdAt: "2026-08-19T08:00:00Z" },
+    ];
+    const result = buildMetrics([
+      event("challenge_evidence_submitted", "ana", "2026-08-11T08:00:00Z"),
+      event("challenge_evidence_submitted", "ana", "2026-08-12T08:00:00Z"),
+      event("lab_completed", "ana", "2026-08-13T08:00:00Z"),
+      event("challenge_evidence_submitted", "bruno", "2026-08-13T08:00:00Z"),
+      event("challenge_evidence_submitted", "recente", "2026-08-20T08:00:00Z"),
+    ], cohort, new Date("2026-08-20T09:00:00Z"));
+    expect(result.firstEvidenceWithin7Days).toEqual({ users: 2, eligibleUsers: 2, rate: 100 });
+    expect(result.medianHoursToFirstEvidence).toBe(48);
+  });
 });

@@ -17,6 +17,7 @@ const tables = [
   "mentorship_lesson_progress", "mentorship_live_sessions", "mentorship_attendance", "mentorship_submissions",
   "mentorship_reviews", "mentorship_weekly_commitments", "mentorship_portfolio_cases", "mentorship_notifications",
   "mentorship_lesson_content", "mentorship_certificates", "mentorship_email_outbox",
+  "mentorship_waitlist_leads", "mentorship_orders", "expenseflow_portfolio_cases", "deliverables", "activity_events",
 ];
 let failed = false;
 
@@ -38,6 +39,14 @@ result("service role no servidor", !adminCheck.error, adminCheck.error?.name);
 for (const table of tables) {
   const { error } = await service.from(table).select("*", { head: true, count: "exact" });
   result(`tabela ${table}`, !error, error?.code);
+}
+
+for (const [table, columns] of [
+  ["mentorship_waitlist_leads", "utm_source,utm_medium,utm_campaign"],
+  ["mentorship_orders", "utm_source,utm_medium,utm_campaign"],
+] as const) {
+  const { error } = await service.from(table).select(columns, { head: true }).limit(1);
+  result(`atribuição em ${table}`, !error, error?.code);
 }
 
 const privateRead = await anonymous.from("mentorship_cohorts").select("id").limit(1);

@@ -4,7 +4,7 @@ Este documento descreve a publicação e a validação da fase 6. O gate do pilo
 
 ## Publicar em staging
 
-1. Faça backup do banco de staging e aplique, em ordem, todas as migrations em `packages/web/supabase/migrations`, incluindo `0029_mentorship_hardening_email.sql`. A aplicação depende do trigger `touch_mentorship_updated_at` da migration 0024.
+1. Faça backup do banco de staging e aplique, em ordem, todas as migrations em `packages/web/supabase/migrations`, incluindo `0029_mentorship_hardening_email.sql`, `20261021222551_mentorship_waitlist_attribution.sql` e `20261021233458_mentorship_order_attribution.sql`. A aplicação depende do trigger `touch_mentorship_updated_at` da migration 0024.
 2. Configure as variáveis de ambiente do app: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SITE_URL`, `MENTORSHIP_EMAIL_ENABLED`, `MENTORSHIP_FROM_EMAIL`, `RESEND_API_KEY` e `CRON_SECRET`.
 3. Configure `MENTORSHIP_EMAIL_ENABLED=true` somente após verificar o domínio remetente no Resend. Gere um `CRON_SECRET` forte e configure o mesmo valor na Vercel. O cron está agendado diariamente; dispare o endpoint uma vez com o header `Authorization: Bearer <CRON_SECRET>` para validar o processamento controlado.
 4. Confirme que o e-mail de staging usa remetente e destinatários autorizados. O worker não envia nada enquanto a flag de e-mail estiver desabilitada ou faltarem credenciais.
@@ -55,3 +55,4 @@ Em desktop e em 390 px de largura, percorra página pública, login, painel, for
 ## Resultado atual
 
 O código e os artefatos de validação da fase 6 estão preparados. O gate de staging permanece pendente até serem fornecidos um projeto de staging, credenciais de três perfis, configuração do Mercado Pago sandbox e remetente de e-mail verificado.
+Use `docs/STAGING_GATE_QA_LAB.md` para registrar os resultados de cada jornada, o commit e as evidências.

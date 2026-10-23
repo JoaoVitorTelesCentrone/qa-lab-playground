@@ -2,6 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { notifyMentorshipUsers } from "@/lib/mentorship/store";
 import { fail, ok, readJson } from "@/lib/product/api";
+import { trackEvent } from "@/lib/product/store";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,7 @@ export async function POST(request: Request) {
     if (duplicate.data && ["requested","awaiting_payment","waitlisted","confirmed"].includes(duplicate.data.status)) return ok({ id: duplicate.data.id, status: duplicate.data.status, alreadyRegistered: true });
     return fail("Não foi possível registrar seu interesse agora.", 500);
   }
+  await trackEvent(user.id, "mentorship_application_submitted", { cohort: cohortId });
   await notifyMentorshipUsers([user.id], { kind: "system", title: "Interesse na Mentoria QA Lab registrado", body: "A equipe entrará em contato quando houver uma atualização sobre a turma.", href: "/mentoria/inscricao" });
   return ok({ id: data.id, status: data.status, createdAt: data.created_at }, 201);
 }

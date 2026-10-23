@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { fail, ok } from "@/lib/product/api";
-import { MAX_WAITLIST_BODY_BYTES, readWaitlistBody } from "@/lib/mentorship/waitlist-request";
+import { MAX_WAITLIST_BODY_BYTES, normalizeWaitlistAttribution, readWaitlistBody } from "@/lib/mentorship/waitlist-request";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +41,9 @@ export async function POST(request: Request) {
   if (fullName.length < 2 || fullName.length > 80) return fail("Informe seu nome com 2 a 80 caracteres.", 422);
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail("Informe um e-mail válido.", 422);
   if (body.acceptedContact !== true) return fail("Autorize o contato para entrar na lista.", 422);
+  const attribution = body.attribution && typeof body.attribution === "object" && !Array.isArray(body.attribution)
+    ? body.attribution as Record<string, unknown>
+    : {};
 
   try {
     const { error } = await admin.from("mentorship_waitlist_leads").insert({
@@ -48,6 +51,9 @@ export async function POST(request: Request) {
       email,
       contact_consent_at: new Date().toISOString(),
       source: "mentoria",
+      utm_source: normalizeWaitlistAttribution(attribution.source),
+      utm_medium: normalizeWaitlistAttribution(attribution.medium),
+      utm_campaign: normalizeWaitlistAttribution(attribution.campaign),
     });
     if (error && error.code !== "23505") {
       console.error("Falha ao registrar lead da mentoria:", error.code);

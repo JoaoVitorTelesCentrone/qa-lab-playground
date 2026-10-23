@@ -6,6 +6,8 @@
 
 import { createAdminClient, hasServiceRole } from "@/lib/supabase/admin";
 import { buildMetrics, type ActivityEvent, type Metrics, type Signup } from "./metrics";
+import { CHALLENGE_KIND, validChallengeDeliverables } from "@/lib/challenge-account";
+import { isChallengeReady } from "@/lib/challenge-deliverables";
 
 /** E-mails autorizados a ver números do produto inteiro. Vazio = ninguém. */
 export function isAdmin(email: string) {
@@ -24,7 +26,7 @@ export async function loadMetrics(days = 30): Promise<Metrics> {
   const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
   const supabase = createAdminClient();
   const pageSize = 500;
-  const [events, signups] = await Promise.all([
+  const [events, signups, challengeEvidence] = await Promise.all([
     (async () => {
       const all: ActivityEvent[] = [];
       for (let offset = 0; ; offset += pageSize) {
@@ -49,6 +51,22 @@ export async function loadMetrics(days = 30): Promise<Metrics> {
         if ((data?.length ?? 0) < pageSize) return all;
       }
     })(),
+    (async () => {
+      const all: ActivityEvent[] = [];
+      for (let offset = 0; ; offset += pageSize) {
+        const { data, error } = await supabase.from("deliverables")
+          .select("id,user_id,created_at,payload").eq("kind", CHALLENGE_KIND).gte("created_at", since)
+          .order("created_at", { ascending: true }).order("id", { ascending: true })
+          .range(offset, offset + pageSize - 1);
+        if (error) throw new Error(error.message);
+        for (const row of data ?? []) {
+          if (validChallengeDeliverables(row.payload) && isChallengeReady(row.payload)) {
+            all.push({ name: "challenge_evidence_submitted", userId: row.user_id, createdAt: row.created_at, props: { product: "expenseflow" } });
+          }
+        }
+        if ((data?.length ?? 0) < pageSize) return all;
+      }
+    })(),
   ]);
-  return buildMetrics(events, signups);
+  return buildMetrics([...events, ...challengeEvidence], signups);
 }

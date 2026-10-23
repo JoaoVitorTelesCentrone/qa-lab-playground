@@ -1,6 +1,6 @@
-# QA Lab Playground — Guia de Posts Virais para LinkedIn
+# QA Lab Playground — Rascunhos antigos de conteúdo para LinkedIn
 
-> Tudo que você precisa para transformar o projeto em conteúdo de alto alcance.
+> **Arquivo legado.** Para o lançamento da turma fundadora da Mentoria QA Lab, use o [plano atual de lançamento e conteúdo](docs/PLANO_LANCAMENTO_MARKETING_CONTEUDO_TURMA_FUNDADORA.md). Os exemplos abaixo pertencem a uma versão anterior do produto: confirme cada funcionalidade, preço, acesso e promessa antes de reaproveitar. Nenhum formato garante alcance viral.
 
 ---
 

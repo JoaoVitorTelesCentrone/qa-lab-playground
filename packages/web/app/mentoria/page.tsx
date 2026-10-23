@@ -1,50 +1,103 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpenText, CheckCircle2, ClipboardCheck, FlaskConical, MessageSquareText, Video } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Bug, ClipboardCheck, SearchCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { JoinWaitlist } from "@/components/mentorship/admission-actions";
+import { MentorshipLabVisual } from "./mentorship-lab-visual";
+import { BrotoInvestigation } from "./broto-investigation";
 import { getPublicMentorshipOffers, isOfferOpen } from "@/lib/mentorship/admissions";
-import { getSessionUser } from "@/lib/product/store";
-import { mentorshipPathV2 } from "@/lib/mentorship/path-v2";
+import { brotoSpaceSite } from "@/lib/mentorship/brotospace-track";
+import { normalizeWaitlistAttribution } from "@/lib/mentorship/waitlist-request";
+import "./mentoria.css";
 
-export const metadata = { title: "Mentoria QA Lab", description: "Aprenda QA com prática orientada, entregas aplicadas e feedback de mentor." };
+export const metadata = {
+  title: "Mentoria QA Lab | Transforme prática em evidência",
+  description: "Investigue o Broto Space, receba feedback de mentor e construa um case que mostra seu raciocínio.",
+};
 
-export default async function MentorshipLandingPage() {
-  const [offers, user] = await Promise.all([getPublicMentorshipOffers(), getSessionUser()]);
+const steps = [
+  { icon: SearchCheck, title: "Investigue", detail: "Encontre o risco" },
+  { icon: Bug, title: "Teste", detail: "Registre a evidência" },
+  { icon: ClipboardCheck, title: "Apresente", detail: "Defenda a decisão" },
+] as const;
+
+export default async function MentorshipLandingPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const query = await searchParams;
+  const first = (value: string | string[] | undefined) => Array.isArray(value) ? value[0] : value;
+  const waitlistQuery = new URLSearchParams();
+  for (const [key, value] of [["utm_source", query.utm_source], ["utm_medium", query.utm_medium], ["utm_campaign", query.utm_campaign]] as const) {
+    const normalized = normalizeWaitlistAttribution(first(value));
+    if (normalized) waitlistQuery.set(key, normalized);
+  }
+  const waitlistHref = `/mentoria/lista-de-interesse${waitlistQuery.size ? `?${waitlistQuery}` : ""}`;
+  const offers = await getPublicMentorshipOffers();
   const openOffer = offers.find(isOfferOpen);
-  const interestCohort = offers[0]?.cohort_id ?? null;
-  return <main className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
-    <section className="grid gap-10 border-b border-white/10 pb-14 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
-      <div>
-        <p className="text-sm font-bold text-mint">Mentoria QA Lab</p>
-        <h1 className="mt-5 max-w-4xl text-4xl font-black leading-[1.02] tracking-[-.05em] text-off-white sm:text-7xl">Pratique QA com problemas que pedem investigação de verdade.</h1>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-[#AAB2BC]">Aprenda um conceito, investigue um produto, apresente sua evidência e receba feedback de mentor para avançar.</p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          {openOffer ? <Button asChild size="lg"><Link href={`/mentoria/inscricao?offer=${openOffer.id}`}>Ver turma e condições <ArrowRight className="size-4" /></Link></Button> : <Button asChild size="lg" variant="outline"><Link href="/mentoria/inscricao">Ver inscrição e lista de interesse <ArrowRight className="size-4" /></Link></Button>}
-          <Button asChild size="lg" variant="outline"><Link href="/conteudo">Explorar conteúdo</Link></Button>
+  const enrollmentHref = openOffer ? `/mentoria/inscricao?offer=${encodeURIComponent(openOffer.id)}${waitlistQuery.size ? `&${waitlistQuery}` : ""}` : waitlistHref;
+
+  return <main className="mentoria-page">
+    <section className="mentoria-hero" aria-labelledby="mentoria-title">
+      <div className="mentoria-hero-main">
+      <div className="mentoria-hero-content">
+        <h1 id="mentoria-title">Chegue à próxima entrevista com <em>algo para mostrar.</em></h1>
+        <p>Comece no Broto Space, receba feedback humano e construa um case que mostra como você pensa.</p>
+        <div className="mentoria-actions">
+          <Button asChild size="lg"><Link href={enrollmentHref}>{openOffer ? "Ver turma aberta" : "Entrar na lista de interesse"}<ArrowRight aria-hidden="true" className="size-4" /></Link></Button>
+          <Link className="mentoria-text-link" href="#metodo">Veja como funciona <ArrowUpRight aria-hidden="true" size={16} /></Link>
         </div>
       </div>
-      <aside className="border-l-2 border-mint/60 pl-6">
-        <p className="text-sm font-semibold text-mint">Ao longo da jornada</p>
-        <ul className="mt-5 grid gap-3 text-sm leading-6 text-[#D9DEE4]">{["Missões com critérios claros", "Prática aplicada em produtos", "Revisão humana das entregas", "Cases para apresentar seu raciocínio"].map((item) => <li key={item} className="flex gap-3"><CheckCircle2 className="mt-1 size-4 shrink-0 text-mint" />{item}</li>)}</ul>
-      </aside>
+      <MentorshipLabVisual />
+      </div>
+      <div className="mentoria-hero-foot" aria-label="Formato da mentoria"><span>12 semanas de prática</span><span>Feedback de mentor</span><span>1 encontro ao vivo por semana</span></div>
     </section>
 
-    <section id="turmas" className="py-14" aria-labelledby="cohort-title">
-      <div className="flex flex-wrap items-end justify-between gap-5"><div><p className="text-sm font-semibold text-mint">Próximo passo</p><h2 id="cohort-title" className="mt-2 text-3xl font-black text-off-white">Encontre sua turma</h2></div><p className="max-w-xl text-sm leading-6 text-[#AAB2BC]">Datas, valores e vagas aparecem aqui quando uma turma estiver publicada. Sua matrícula só fica ativa depois da confirmação.</p></div>
-      {openOffer ? <div className="mt-7 border border-mint/30 bg-mint/[.04] p-6 sm:p-8"><p className="text-xs font-bold text-mint">Inscrições abertas</p><h3 className="mt-3 text-2xl font-black text-off-white">{openOffer.title}</h3><p className="mt-3 max-w-2xl text-sm leading-7 text-[#C8CFD7]">{openOffer.summary}</p><p className="mt-5 text-lg font-black text-off-white">{new Intl.NumberFormat("pt-BR", { style: "currency", currency: openOffer.currency }).format(openOffer.price)}</p><p className="mt-2 text-sm text-[#AAB2BC]">{openOffer.cohort.name} · início {new Date(`${openOffer.cohort.starts_on}T12:00:00`).toLocaleDateString("pt-BR")} · {Math.max(0, openOffer.cohort.capacity - openOffer.occupied)} vagas disponíveis</p><Button asChild className="mt-5"><Link href={`/mentoria/inscricao?offer=${openOffer.id}`}>Ver condições e se inscrever <ArrowRight className="size-4" /></Link></Button></div> : offers.length === 0 ? <div className="mt-7 grid gap-6 border-y border-white/10 py-8 md:grid-cols-[1fr_360px] md:items-center"><div><h3 className="text-xl font-black text-off-white">Nenhuma turma com inscrição aberta</h3><p className="mt-3 max-w-2xl text-sm leading-7 text-[#AAB2BC]">Entre na lista de interesse e receba uma mensagem quando a equipe publicar uma nova turma.</p></div><JoinWaitlist cohortId={interestCohort} signedIn={Boolean(user)} /></div> : <p className="mt-7 border-y border-white/10 py-6 text-sm leading-6 text-[#AAB2BC]">As inscrições para as turmas publicadas estão fechadas. Escolha uma turma abaixo para entrar na lista de interesse.</p>}
-      {offers.filter((offer) => !isOfferOpen(offer)).map((offer) => <article key={offer.id} className="mt-5 flex flex-wrap items-center justify-between gap-4 border border-white/10 p-5"><div><p className="text-xs font-semibold text-[#8B949E]">Inscrições fechadas</p><h3 className="mt-2 font-bold text-off-white">{offer.cohort.name}</h3><p className="mt-1 text-sm text-[#AAB2BC]">{offer.occupied >= offer.cohort.capacity ? "Turma completa" : `Início ${new Date(`${offer.cohort.starts_on}T12:00:00`).toLocaleDateString("pt-BR")}`}</p></div><JoinWaitlist cohortId={offer.cohort_id} signedIn={Boolean(user)} /></article>)}
+    <section id="metodo" className="mentoria-method" aria-labelledby="method-title">
+      <div className="mentoria-section-head">
+        <h2 id="method-title">O que vai para o seu case?</h2>
+        <p>Seu raciocínio, do problema à decisão.</p>
+      </div>
+      <ol className="mentoria-steps">
+        {steps.map((step) => <li key={step.title}>
+          <span className="mentoria-step-icon"><step.icon aria-hidden="true" size={25} strokeWidth={1.8} /></span>
+          <strong>{step.title}</strong>
+          <span>{step.detail}</span>
+        </li>)}
+      </ol>
+      <div className="mentoria-outcome">
+        <figure className="mentoria-case-visual">
+          <Image src="/mentoria/qa-lab-bug-report.webp" alt="Tela do QA Lab com campos para registrar um bug report e descrever como reproduzir o problema" width={849} height={680} sizes="(max-width: 700px) 100vw, 48vw" />
+          <figcaption>Exemplo do Lab aberto: registro de uma descoberta no QA Lab.</figcaption>
+        </figure>
+        <div className="mentoria-outcome-copy">
+          <h3>Seu trabalho fica visível.</h3>
+          <p>Do Broto Space ao QA Lab: investigue jornadas, registre evidências e transforme suas decisões em um case revisado por mentor.</p>
+          <Link href="/conteudo" className="mentoria-text-link">Explorar conteúdo aberto <ArrowUpRight aria-hidden="true" size={16} /></Link>
+        </div>
+      </div>
     </section>
 
-    <section className="border-y border-white/10 py-14" aria-labelledby="method-title"><h2 id="method-title" className="text-3xl font-black text-off-white">Como a prática vira aprendizado</h2><p className="mt-3 max-w-3xl text-sm leading-7 text-[#AAB2BC]">Você leva uma pergunta para o produto, registra o que observou e explica a decisão. O mentor responde à evidência e orienta a próxima tentativa.</p><ol className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"><MethodStep icon={<BookOpenText className="size-5" />} title="Entender" text="Leia o conceito e descubra qual problema ele ajuda a resolver." /><MethodStep icon={<FlaskConical className="size-5" />} title="Investigar" text="Explore uma jornada e prepare os dados que respondem sua pergunta." /><MethodStep icon={<ClipboardCheck className="size-5" />} title="Evidenciar" text="Registre risco, cenário, resultado e limites da investigação." /><MethodStep icon={<MessageSquareText className="size-5" />} title="Evoluir" text="Receba feedback, revise sua entrega e aplique a próxima missão." /></ol></section>
-
-    <section className="grid gap-8 py-14 md:grid-cols-[1fr_1fr]">
-      <div><p className="text-sm font-semibold text-mint">Percurso de aprendizagem</p><h2 className="mt-2 text-3xl font-black text-off-white">Sete módulos, da análise à entrega</h2><p className="mt-4 text-sm leading-7 text-[#AAB2BC]">As aulas conectam fundamentos, teste exploratório, API, automação, CI/CD, qualidade e projeto integrado. O diagnóstico ajuda a escolher a profundidade das primeiras entregas.</p><Link href="/conteudo" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-mint hover:underline">Explorar os módulos <ArrowRight className="size-4" /></Link></div>
-      <div className="grid grid-cols-2 gap-x-5 gap-y-4 border-l border-white/10 pl-6">{mentorshipPathV2.map((module, index) => <p key={module.id} className="text-sm leading-6 text-[#D9DEE4]"><span className="mr-2 text-xs font-bold text-mint">{String(index + 1).padStart(2,"0")}</span>{module.title}</p>)}</div>
+    <section className="mentoria-real" aria-labelledby="real-title">
+      <div className="mentoria-real-copy">
+        <h2 id="real-title">Aprenda em um sistema real, com quem vive a área.</h2>
+        <p>Explore três superfícies do Broto Space. Em cada uma, uma pergunta de QA vira evidência para discutir com o mentor.</p>
+        <a href={brotoSpaceSite.url} target="_blank" rel="noreferrer" className="mentoria-real-link">Conhecer o Broto Space <ArrowUpRight aria-hidden="true" size={17} /></a>
+      </div>
+      <BrotoInvestigation />
     </section>
-    <section className="flex flex-wrap items-center justify-between gap-5 border-t border-white/10 pt-8"><div><h2 className="text-xl font-black text-off-white">Um encontro ao vivo por semana</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#AAB2BC]">Conversas sobre comunicação, autonomia, colaboração e apresentação de evidências.</p></div><Video className="size-6 text-mint" aria-hidden="true" /></section>
+
+    <section id="turmas" className="mentoria-cohort" aria-labelledby="cohort-title">
+      <div className="mentoria-cohort-heading">
+        <h2 id="cohort-title">Seu próximo passo.</h2>
+        <p>{openOffer ? "Conheça a turma e veja as condições para participar." : "Entre na lista e saiba quando a próxima turma abrir."}</p>
+      </div>
+      <div className="mentoria-cohort-content">
+        {openOffer ? <article className="mentoria-offer">
+          <span className="mentoria-status"><span /> Inscrições abertas</span>
+          <h3>{openOffer.title}</h3>
+          <p>{openOffer.summary}</p>
+          <div className="mentoria-offer-details"><strong>{new Intl.NumberFormat("pt-BR", { style: "currency", currency: openOffer.currency }).format(openOffer.price)}</strong><span>{openOffer.cohort.name} · início {new Date(`${openOffer.cohort.starts_on}T12:00:00`).toLocaleDateString("pt-BR")} · {Math.max(0, openOffer.cohort.capacity - openOffer.occupied)} vagas</span></div>
+          <Button asChild><Link href={enrollmentHref}>Ver condições e se inscrever <ArrowRight aria-hidden="true" className="size-4" /></Link></Button>
+        </article> : offers.length === 0 ? <div className="mentoria-waitlist"><span className="mentoria-status"><span /> Próxima turma</span><h3>Inscrições em breve.</h3><p>Datas, vagas e valores serão divulgados aqui.</p><Button asChild className="mt-6"><Link href={waitlistHref}>Entrar na lista <ArrowRight aria-hidden="true" className="size-4" /></Link></Button></div> : <p className="mentoria-closed">As inscrições das turmas publicadas estão fechadas. <Link href={waitlistHref} className="font-bold text-mint underline">Entre na lista</Link> para receber novidades.</p>}
+        {offers.filter((offer) => !isOfferOpen(offer)).map((offer) => <article key={offer.id} className="mentoria-past-offer"><h3>{offer.cohort.name}</h3><p>{offer.occupied >= offer.cohort.capacity ? "Turma completa" : "Inscrições fechadas"}</p></article>)}
+      </div>
+    </section>
   </main>;
-}
-
-function MethodStep({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
-  return <li className="border-t-2 border-mint/60 pt-4"><span className="text-mint" aria-hidden="true">{icon}</span><h3 className="mt-3 font-bold text-off-white">{title}</h3><p className="mt-2 text-sm leading-6 text-[#AAB2BC]">{text}</p></li>;
 }

@@ -1,0 +1,143 @@
+:root { color-scheme: light; font-family: Arial, Helvetica, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #ebece7; color: #11161a; }
+.board-header { max-width: 1280px; margin: 0 auto; padding: 56px 28px 26px; }
+.board-kicker { color: #277f73; font: 800 13px/1.4 Consolas, monospace; letter-spacing: .18em; }
+.board-header h1 { margin: 8px 0; font: 900 48px/1 Arial, sans-serif; letter-spacing: -.05em; }
+.board-header p:last-child { color: #50605f; font-size: 17px; }
+.gallery { max-width: 1280px; display: grid; grid-template-columns: repeat(auto-fit, minmax(378px, 1fr)); gap: 38px; margin: 0 auto; padding: 0 28px 70px; }
+.preview-label { margin: 0 0 13px; font: 800 14px/1.3 Consolas, monospace; color: #303c3d; }
+.frame { width: 378px; height: 378px; box-shadow: 0 18px 45px #14201f24; background: #fff; overflow: hidden; }
+.artboard { position: relative; width: 1080px; height: 1080px; overflow: hidden; transform: scale(.35); transform-origin: left top; isolation: isolate; }
+.export-mode { width: 1080px; height: 1080px; background: transparent; }
+.export-mode .board-header, .export-mode .preview-label { display: none; }
+.export-mode .gallery { display: block; width: 1080px; padding: 0; margin: 0; }
+.export-mode .frame { width: 1080px; height: 1080px; box-shadow: none; }
+.export-mode .artboard { transform: none; }
+
+.topline, .footerline { position: absolute; z-index: 10; left: 72px; right: 72px; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: .17em; }
+.topline { top: 64px; font: 800 17px/1 Consolas, monospace; }
+.footerline { bottom: 57px; font: 800 16px/1 Consolas, monospace; }
+.brand { font: italic 900 34px/.85 'Arial Narrow', Arial, sans-serif; letter-spacing: -.055em; }
+.brand span { display: block; margin-top: 2px; }
+.eyebrow { font: 800 19px/1.3 Consolas, monospace; letter-spacing: .15em; }
+.coral { color: #fb7185; }
+
+/* Carrossel 01: editorial. A pergunta domina, a resposta abre espaço para evidência. */
+.editorial { background: #10151b; color: #f0f6fc; }
+.editorial::before { content: ''; position: absolute; z-index: -1; width: 740px; height: 740px; right: -380px; top: -250px; border: 2px solid #fb71855c; border-radius: 50%; box-shadow: 0 0 0 100px #fb718509, 0 0 0 202px #fb718506; }
+.editorial .brand { color: #2dd4bf; }
+.editorial .topline > span, .editorial .footerline { color: #9ca7ad; }
+.editorial .footerline span:last-child { color: #fb7185; }
+.editorial-mark { position: absolute; top: 195px; right: 125px; color: #fb71851c; font: 900 400px/.8 Georgia, serif; transform: rotate(-11deg); }
+.ed-main { position: absolute; left: 76px; right: 75px; bottom: 160px; z-index: 2; }
+.ed-main h2 { margin: 24px 0 22px; font: 900 116px/.91 'Arial Narrow', Arial, sans-serif; letter-spacing: -.07em; }
+.ed-main h2 em { font-style: normal; color: #fb7185; }
+.ed-main p { max-width: 800px; margin: 0; color: #b9c4c7; font: 500 36px/1.25 Arial, sans-serif; }
+.ed-inner { bottom: 183px; }
+.ed-inner h2 { font-size: 114px; }
+.ed-rule { width: 690px; height: 2px; margin: 35px 0 27px; background: linear-gradient(90deg, #fb7185, #fb718500); }
+.ed-inner p.ed-note { margin-top: 35px; color: #fb7185; font-size: 30px; }
+.ed-close { bottom: 167px; }
+.ed-close h2 { font-size: 107px; }
+.ed-pills { display: flex; gap: 11px; margin: 30px 0 37px; }
+.ed-pills span { border: 1px solid #fb71856e; border-radius: 50px; padding: 14px 22px; color: #ffdce1; font: 800 18px/1 Consolas, monospace; letter-spacing: .06em; }
+.ed-close p { font-size: 30px; }
+
+/* Carrossel 02: terminal. A UI serve de moldura para um exemplo reproduzível. */
+.terminal { background: #0b1115; color: #e7f6ef; }
+.terminal::before { content: ''; position: absolute; inset: 0; z-index: -1; background: repeating-linear-gradient(0deg, transparent 0 50px, #2dd4bf08 51px 52px); }
+.terminal .brand { color: #2dd4bf; }
+.terminal .topline > span, .terminal .footerline { color: #829891; }
+.terminal .footerline span:last-child { color: #a3e635; }
+.terminal-window { position: absolute; left: 72px; right: 72px; top: 177px; bottom: 168px; border: 2px solid #32594c; border-radius: 22px; background: #111c1b; box-shadow: 0 0 0 8px #2dd4bf0a, 0 40px 90px #0008; overflow: hidden; }
+.terminal-chrome { height: 77px; display: flex; align-items: center; gap: 12px; padding: 0 34px; border-bottom: 2px solid #32594c; background: #182623; }
+.terminal-chrome i { width: 14px; height: 14px; border-radius: 50%; background: #fb7185; }
+.terminal-chrome i:nth-child(2) { background: #f0c040; }
+.terminal-chrome i:nth-child(3) { background: #2dd4bf; }
+.terminal-chrome span { margin-left: auto; color: #799b8c; font: 700 16px Consolas, monospace; }
+.terminal-body { padding: 50px 48px 38px; }
+.prompt { color: #a3e635; font: 700 21px/1.4 Consolas, monospace; }
+.terminal-body h2 { margin: 22px 0 22px; font: 900 107px/.91 'Arial Narrow', Arial, sans-serif; letter-spacing: -.065em; }
+.terminal-body h2 em { font-style: normal; color: #2dd4bf; }
+.terminal-body p { margin: 20px 0 0; max-width: 760px; color: #b6cbc1; font: 500 30px/1.28 Arial, sans-serif; }
+.cursor-line { margin-top: 15px; color: #2dd4bf; font: 900 45px/1 Consolas, monospace; }
+.terminal-body h2.terminal-title { font-size: 85px; line-height: .94; }
+.diff { display: flex; gap: 18px; align-items: flex-start; padding: 21px 23px; margin: 18px 0; border-radius: 10px; font: 700 26px/1.28 Consolas, monospace; }
+.diff b { font-size: 31px; line-height: .9; }
+.diff.bad { border: 1px solid #fb718557; background: #fb718512; color: #ffd1d9; }
+.diff.good { border: 1px solid #2dd4bf70; background: #2dd4bf12; color: #d7ffea; }
+.terminal-list { display: grid; gap: 16px; margin: 25px 0 18px; padding: 0; list-style: none; }
+.terminal-list li { display: flex; gap: 20px; color: #dceae0; font: 700 28px/1.1 Consolas, monospace; }
+.terminal-list b { color: #a3e635; }
+
+/* Carrossel 03: mapa. Quatro blocos tornam a técnica fácil de salvar. */
+.mapa { background: #def0cc; color: #0d1b19; }
+.mapa::before { content: ''; position: absolute; inset: 0; z-index: -1; opacity: .2; background-image: linear-gradient(#43665e 1px, transparent 1px), linear-gradient(90deg, #43665e 1px, transparent 1px); background-size: 54px 54px; }
+.mapa .brand { color: #087969; }
+.mapa .topline > span, .mapa .footerline { color: #295047; }
+.mapa .footerline span:last-child { color: #0d1b19; }
+.mapa-grid { position: absolute; left: 72px; right: 72px; top: 228px; bottom: 185px; display: grid; grid-template-columns: 1.2fr .8fr; align-items: center; gap: 22px; }
+.mapa-tag, .compare-tag, .invite-tag { display: inline-block; padding: 13px 17px; border: 2px solid currentColor; border-radius: 50px; font: 900 17px/1 Consolas, monospace; letter-spacing: .08em; }
+.mapa-copy h2, .mapa-inner h2 { margin: 36px 0 24px; font: 900 115px/.87 'Arial Narrow', Arial, sans-serif; letter-spacing: -.08em; }
+.mapa-copy h2 em, .mapa-inner h2 em { color: #087969; font-style: normal; }
+.mapa-copy p { max-width: 570px; font: 700 32px/1.18 Arial, sans-serif; }
+.mapa-symbol { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; transform: rotate(-8deg); }
+.mapa-symbol span { display: flex; align-items: center; justify-content: center; height: 172px; background: #0d1b19; color: #a3e635; font: 900 76px/1 Consolas, monospace; border-radius: 9px; box-shadow: 10px 11px 0 #08796935; }
+.mapa-symbol span:nth-child(2), .mapa-symbol span:nth-child(3) { background: #087969; color: #fff; }
+.mapa-inner { position: absolute; left: 72px; right: 72px; top: 205px; }
+.mapa-inner h2 { margin: 28px 0 30px; font-size: 89px; }
+.risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.risk-grid div { display: flex; flex-direction: column; gap: 11px; min-height: 172px; padding: 24px 28px; border: 2px solid #0d1b19; background: #f2f8e5; }
+.risk-grid div:nth-child(2), .risk-grid div:nth-child(3) { background: #0d1b19; color: #f2f8e5; }
+.risk-grid b { color: #087969; font: 900 17px Consolas, monospace; }
+.risk-grid div:nth-child(2) b, .risk-grid div:nth-child(3) b { color: #a3e635; }
+.risk-grid strong { font: 900 32px/1 Arial, sans-serif; }
+.risk-grid span { font: 500 23px/1.1 Arial, sans-serif; }
+.mapa-finish { top: 251px; }
+.mapa-finish h2 { font-size: 88px; line-height: 1; }
+.mapa-finish h2 span { color: #0aa08b; }
+.mapa-finish p { max-width: 800px; margin: 36px 0; font: 700 30px/1.25 Arial, sans-serif; }
+.mapa-action { width: max-content; padding: 19px 25px; background: #0d1b19; color: #a3e635; font: 900 22px/1 Consolas, monospace; }
+.mapa-action span { margin-left: 35px; }
+
+/* Post 01: headline máxima. Um enunciado curto segura a peça. */
+.post-provocacao { background: #10151b; color: #f0f6fc; }
+.post-provocacao::before { content: '✓'; position: absolute; top: 208px; right: -87px; color: #1c3030; font: 900 600px/1 Arial, sans-serif; transform: rotate(-11deg); }
+.post-provocacao .brand { color: #2dd4bf; }
+.post-provocacao .topline > span, .post-provocacao .footerline { color: #87999b; }
+.post-one { position: absolute; left: 72px; right: 72px; top: 268px; }
+.post-tiny { color: #a3e635; font: 800 18px/1.3 Consolas, monospace; letter-spacing: .11em; }
+.post-one h2 { position: relative; margin: 39px 0 30px; font: 900 153px/.86 'Arial Narrow', Arial, sans-serif; letter-spacing: -.075em; }
+.post-one h2 em { color: #fb7185; font-style: normal; }
+.post-one-rule { width: 400px; height: 11px; background: #2dd4bf; }
+.post-one p { max-width: 750px; margin-top: 28px; color: #c6d1d1; font: 500 32px/1.24 Arial, sans-serif; }
+
+/* Post 02: comparação. A pergunta é a transformação visual. */
+.post-comparacao { background: #e8f2e9; color: #132321; }
+.post-comparacao .brand { color: #087969; }
+.post-comparacao .topline > span, .post-comparacao .footerline { color: #45645e; }
+.compare-main { position: absolute; left: 72px; right: 72px; top: 205px; }
+.compare-main h2 { margin: 30px 0 40px; font: 900 108px/.9 'Arial Narrow', Arial, sans-serif; letter-spacing: -.072em; }
+.compare-main h2 em { color: #087969; font-style: normal; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.compare-grid > div { min-height: 258px; padding: 35px 27px; border-radius: 16px; }
+.compare-no { background: #f4d8dc; }
+.compare-yes { background: #15352d; color: #effff5; }
+.compare-grid b { font: 900 18px/1 Consolas, monospace; letter-spacing: .12em; }
+.compare-no b { color: #aa4f5e; }
+.compare-yes b { color: #a3e635; }
+.compare-grid p { margin: 31px 0 0; font: 800 35px/1.18 Arial, sans-serif; }
+
+/* Post 03: convite. Contraste alto para anunciar a lista de interesse. */
+.post-convite { background: #a3e635; color: #101a13; }
+.post-convite::before { content: ''; position: absolute; z-index: -1; width: 500px; height: 500px; right: -175px; top: 194px; border: 4px solid #101a1369; border-radius: 50%; box-shadow: 0 0 0 65px #101a1312, 0 0 0 130px #101a130a; }
+.post-convite .brand { color: #0b4c40; }
+.post-convite .topline > span, .post-convite .footerline { color: #2d482d; }
+.invite-main { position: absolute; left: 72px; right: 72px; top: 190px; }
+.invite-main h2 { position: relative; margin: 30px 0 41px; font: 900 113px/.91 'Arial Narrow', Arial, sans-serif; letter-spacing: -.075em; }
+.invite-main h2 em { font-style: normal; color: #0a6a5a; }
+.invite-bottom { display: flex; align-items: end; justify-content: space-between; gap: 25px; }
+.invite-bottom p { margin: 0; font: 700 29px/1.25 Arial, sans-serif; }
+.invite-cta { background: #0f1c18; padding: 24px 27px; color: #d9ff8b; font: 900 21px/1 Consolas, monospace; white-space: nowrap; }
+.invite-cta span { margin-left: 20px; }

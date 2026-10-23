@@ -1,4 +1,12 @@
 export const MAX_WAITLIST_BODY_BYTES = 4096;
+const ATTRIBUTION_TOKEN = /^[a-zA-Z0-9_-]{1,80}$/;
+
+/** Aceita somente identificadores curtos; evita guardar URLs, e-mails ou texto livre como UTM. */
+export function normalizeWaitlistAttribution(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const token = value.trim();
+  return ATTRIBUTION_TOKEN.test(token) ? token.toLowerCase() : null;
+}
 
 export async function readWaitlistBody(request: Request): Promise<{ body: Record<string, unknown> } | { status: 400 | 413 }> {
   const reader = request.body?.getReader();

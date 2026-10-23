@@ -7,13 +7,16 @@ function authHref(mode: "cadastro" | "login", next: string) {
   return `/${mode}?next=${encodeURIComponent(next)}`;
 }
 
-export function JoinOffer({ offerId, offerCode, offerVersion, terms, cancellationPolicy, signedIn }: {
+export function JoinOffer({ offerId, offerCode, offerVersion, terms, cancellationPolicy, signedIn, attribution }: {
   offerId: string; offerCode: string; offerVersion: number; terms: string; cancellationPolicy: string; signedIn: boolean;
+  attribution: { utm_source: string | null; utm_medium: string | null; utm_campaign: string | null };
 }) {
   const [accepted, setAccepted] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const next = `/mentoria/inscricao?offer=${encodeURIComponent(offerId)}`;
+  const nextQuery = new URLSearchParams({ offer: offerId });
+  for (const [key, value] of Object.entries(attribution)) if (value) nextQuery.set(key, value);
+  const next = `/mentoria/inscricao?${nextQuery}`;
   async function checkout() {
     if (!signedIn) { window.location.assign(authHref("cadastro", next)); return; }
     if (!accepted || busy) return;
@@ -21,7 +24,7 @@ export function JoinOffer({ offerId, offerCode, offerVersion, terms, cancellatio
     try {
       const response = await fetch("/api/v1/mentorship/checkout", {
         method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ offerId, offerVersion, acceptedTerms: accepted }),
+        body: JSON.stringify({ offerId, offerVersion, acceptedTerms: accepted, attribution }),
       });
       const payload = await response.json().catch(() => null);
       if (!response.ok || typeof payload?.data?.checkoutUrl !== "string") throw new Error(payload?.error?.message ?? "Não foi possível iniciar a inscrição.");
@@ -44,7 +47,7 @@ export function JoinOffer({ offerId, offerCode, offerVersion, terms, cancellatio
   </div>;
 }
 
-export function JoinWaitlist({ cohortId, signedIn }: { cohortId?: string | null; signedIn: boolean }) {
+export function JoinWaitlist({ cohortId, signedIn, prominent = false }: { cohortId?: string | null; signedIn: boolean; prominent?: boolean }) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -68,7 +71,7 @@ export function JoinWaitlist({ cohortId, signedIn }: { cohortId?: string | null;
   }
   return <div className="mt-6">
     {signedIn ? <label className="mb-4 flex cursor-pointer items-start gap-3 text-xs leading-5 text-[#AAB2BC]"><input type="checkbox" checked={acceptedContact} onChange={(event) => setAcceptedContact(event.target.checked)} className="mt-1 size-4 accent-[#9FE870]" /><span>Concordo em ser contatado pela equipe sobre novas turmas da Mentoria QA Lab.</span></label> : <p className="mb-4 text-xs leading-5 text-[#AAB2BC]">Entre ou crie uma conta. Depois, você poderá autorizar o contato para receber notícias sobre novas turmas.</p>}
-    <button type="button" onClick={join} disabled={busy || (signedIn && !acceptedContact)} className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-mint/40 px-5 text-sm font-bold text-mint hover:bg-mint/10 disabled:opacity-50">{busy ? "Registrando…" : signedIn ? "Entrar na lista de interesse" : "Criar conta para entrar na lista"}</button>
+    <button type="button" onClick={join} disabled={busy || (signedIn && !acceptedContact)} className={prominent ? "inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-mint px-5 text-sm font-bold text-[#101319] hover:bg-neon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-off-white disabled:opacity-50" : "inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-mint/40 px-5 text-sm font-bold text-mint hover:bg-mint/10 disabled:opacity-50"}>{busy ? "Registrando…" : signedIn ? "Entrar na lista de interesse" : "Criar conta para entrar na lista"}</button>
     {message && <p role="status" className="mt-3 text-sm text-mint">{message}</p>}
     {error && <p role="alert" className="mt-3 text-sm text-coral">{error}</p>}
     {!signedIn && <Link href={authHref("login", next)} className="mt-3 inline-block text-sm font-semibold text-mint hover:underline">Já tenho conta</Link>}

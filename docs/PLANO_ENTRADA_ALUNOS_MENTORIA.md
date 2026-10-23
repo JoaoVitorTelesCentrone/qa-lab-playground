@@ -1,16 +1,17 @@
 # Plano de entrada de alunos — Mentoria QA Lab
 
-**Estado:** implementação entregue em código; abertura comercial e operação em produção pendentes de configuração, 21/10/2026.
+**Estado em 22/10/2026:** fluxo de inscrição e cobrança implementado localmente; configuração comercial, aplicação das migrations e validação em staging/produção ainda pendentes.
 **Objetivo:** permitir que uma pessoa descubra a turma, crie sua conta, solicite ou compre uma vaga, receba confirmação e acesse o diagnóstico e o painel da mentoria. O QA Lab Pro permanece uma oferta separada.
 
-## 1. Situação encontrada
+## 1. Situação atual
 
-- `/mentoria` explica a proposta, mas oferece somente login e exploração do conteúdo. Falta inscrição, oferta da turma, preço, datas, vagas e estado das inscrições.
-- Cadastro e login Supabase já existem em `/cadastro` e `/login`; o redirecionamento `next` já permite voltar ao fluxo após a autenticação.
-- O admin cria turmas e matricula apenas usuários que já têm conta. A função `enrollStudent` grava `invited`; o admin pode alterar o status depois.
-- O checkout e `billing_purchases` representam somente QA Lab Pro. O webhook atual altera `profiles.plan`. Não há associação entre pagamento e turma.
-- A página de retorno do pagamento é do Pro e leva aos Labs. A lista de interesse existente depende de `NEXT_PUBLIC_LEAD_FORM_URL` e não representa inscrição na mentoria.
-- `requireWritableEnrollment` bloqueia `paused`, mas aceita `invited`. A capacidade da turma é exibida, mas não é aplicada na matrícula.
+- `/mentoria` e `/mentoria/inscricao` já leem ofertas e turmas publicadas, exibem preço, datas, vagas disponíveis e estado das inscrições. Sem oferta aberta, a página oferece a lista de interesse própria da mentoria.
+- Cadastro e login em `/cadastro` e `/login` retornam a pessoa ao fluxo de inscrição.
+- A inscrição, a fila administrativa, as bolsas e as confirmações manuais estão implementadas. A ativação da matrícula verifica a capacidade da turma e pode ser repetida sem criar vaga duplicada.
+- O checkout da mentoria usa ordens próprias, separado de `billing_purchases` do QA Lab Pro. O webhook consulta e confere o pagamento antes de ativar a matrícula; retorno do navegador não concede acesso.
+- Matrícula `invited` não libera diagnóstico nem entregas; a jornada exige estado `active`.
+- O código e as migrations existem localmente. Ainda falta aplicá-las ao projeto Supabase correto e comprovar a jornada em staging; o checkout da mentoria ainda precisa de compra sandbox e validação do webhook.
+- O plano de turma permanece sem preço, datas, capacidade, contato de suporte e políticas comerciais aprovados. A tela consegue apresentar esses dados quando a oferta for configurada.
 
 ## 2. Decisões de produto a registrar antes de abrir inscrições
 

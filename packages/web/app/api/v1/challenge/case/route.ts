@@ -2,7 +2,7 @@ import { fail, ok, readJson, withUser } from "@/lib/product/api";
 import { CHALLENGE_KIND, validChallengeDeliverables } from "@/lib/challenge-account";
 import { isChallengeReady } from "@/lib/challenge-deliverables";
 import { validChallengeCaseInput } from "@/lib/challenge-case";
-import { normalizeUsername, savePortfolioSettings } from "@/lib/product/store";
+import { normalizeUsername, savePortfolioSettings, trackEvent } from "@/lib/product/store";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -61,6 +61,7 @@ export async function POST(request: Request) {
     } catch (profileError) {
       return fail(profileError instanceof Error ? profileError.message : "Não foi possível tornar o portfólio público.", 409);
     }
+    await trackEvent(user.id, "case_published", { product: "expenseflow", source: "challenge" });
     return ok({ published: true, url: `/portfolio/${username}/expenseflow` });
   });
 }

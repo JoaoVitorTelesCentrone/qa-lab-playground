@@ -15,14 +15,26 @@ export default async function MetricsPage() {
   return <main className="qa-system"><div className="mx-auto max-w-5xl px-5 py-10 sm:px-8">
     <p className="qa-eyebrow">Últimos 30 dias</p>
     <h1 className="mt-2 text-4xl font-semibold tracking-[-0.03em]">Métricas do produto</h1>
-    <p className="mt-3 max-w-2xl text-muted-foreground">Ativação, conclusão e erros a partir dos eventos registrados pelo próprio produto.</p>
+    <p className="mt-3 max-w-2xl text-muted-foreground">Aprendizagem, publicação de cases, inscrição na mentoria e erros registrados pelo produto.</p>
 
-    <dl className="mt-8 grid divide-y divide-border rounded-xl border border-border sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+    <dl className="mt-8 grid divide-y divide-border rounded-xl border border-border sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-3 xl:grid-cols-6">
       <Stat label="Novas contas" value={metrics.newUsers} hint={`${metrics.activatedUsers} iniciaram um Lab no dia do cadastro`} />
+      <Stat label="Primeira evidência em 7 dias" value={`${metrics.firstEvidenceWithin7Days.rate}%`} hint={`${metrics.firstEvidenceWithin7Days.users} de ${metrics.firstEvidenceWithin7Days.eligibleUsers} contas com coorte completa; Lab ou desafio ExpenseFlow`} />
+      <Stat label="Tempo até evidência" value={metrics.medianHoursToFirstEvidence === null ? "—" : `${metrics.medianHoursToFirstEvidence} h`} hint="mediana da primeira evidência na coorte completa" />
+      <Stat label="Publicaram um case" value={metrics.casesPublished} hint="contas com publicação registrada nos últimos 30 dias" />
       <Stat label="Ativação" value={`${metrics.activationRate}%`} hint="iniciou um Lab no dia do cadastro" />
       <Stat label="Conclusão" value={`${metrics.completionRate}%`} hint={`${metrics.labsCompleted} de ${metrics.labsStarted} Labs iniciados no período`} />
       <Stat label="Erros de API" value={metrics.errors} hint="respostas 5xx registradas" />
     </dl>
+
+    <section className="mt-8" aria-labelledby="mentorship-funnel-title">
+      <h2 id="mentorship-funnel-title" className="text-lg font-semibold">Funil da mentoria · últimos 30 dias</h2>
+      <dl className="mt-3 grid grid-cols-3 divide-x divide-border rounded-xl border border-border">
+        <Stat label="Interesse registrado" value={metrics.mentorshipFunnel.applications} hint="contas únicas" />
+        <Stat label="Checkout iniciado" value={metrics.mentorshipFunnel.checkouts} hint="contas únicas" />
+        <Stat label="Pagamento confirmado" value={metrics.mentorshipFunnel.payments} hint="contas únicas" />
+      </dl>
+    </section>
 
     <section className="mt-10" aria-labelledby="daily-title">
       <h2 id="daily-title" className="text-lg font-semibold">Uso por dia</h2>
