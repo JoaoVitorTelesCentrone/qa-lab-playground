@@ -1,6 +1,59 @@
 {
-  "updatedAt": "2026-10-23T14:15:48.716Z",
+  "updatedAt": "2026-10-24T13:21:24.424Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-63158-journalisi-v8i5-1823",
+      "title": "Software Defect Prediction: A Systematic Review and a Conceptual Framework for Stable, Actionable Explanations (AISD-F)",
+      "abstract": "Machine learning-based Software Defect Prediction (SDP) has largely focused on improving prediction accuracy, but recent research has placed greater emphasis on making predictions understandable and useful to developers. This systematic review examines the use of Explainable Artificial Intelligence (XAI) in SDP and the evidence supporting its reliability in practice. Following PRISMA guidelines, 40 peer-reviewed studies, primarily published between 2020 and 2025, were selected from IEEE Xplore, SpringerLink, ScienceDirect, Google Scholar, and Scopus. The studies were examined in terms of XAI methods, explanation reliability and stability, dataset quality, and model selection. LIME and SHAP were the most frequently used methods, yet multi-run evaluations showed changes in their feature rankings across configurations, in contrast to the reliability reported by many single-run studies. Data-quality problems, particularly SZZ-related label noise, class imbalance, and multicollinearity, often had a greater effect on prediction reliability than model architecture. The review also found growing use of line-level and just-in-time prediction, although consistent validation at industrial scale remains limited. Within the reviewed corpus, no study provides controlled evidence that XAI explanations improve developers' ability to resolve software defects, and the field currently lacks industrial-scale validation and controlled developer studies of XAI-assisted defect resolution. Based on these findings, this paper proposes the Actionable and Interpretable Software Defect Framework (AISD-F), a conceptual, five-stage modular architecture (not yet empirically validated) that is intended to integrate data quality assurance, hybrid model selection, dual-layer explanation, and CI/CD into a unified research agenda for explainable SDP, rather than a deployment-ready solution.",
+      "authors": [
+        "Dikeledi Irene Thubisi",
+        "Bassey Echeng Isong",
+        "Rodney Buang Sebopelo"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-24",
+      "source": "OpenAlex",
+      "venue": "Journal of Information Systems and Informatics",
+      "doi": "https://doi.org/10.63158/journalisi.v8i5.1823",
+      "url": "https://doi.org/10.63158/journalisi.v8i5.1823",
+      "topics": [
+        "Computer science",
+        "Reliability (semiconductor)",
+        "Software quality",
+        "Field (mathematics)",
+        "Data science",
+        "Quality (philosophy)"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-24T13:21:24.424Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23602275",
+      "title": "Software Defect Severity Prediction Dataset: Binarized and Non-Binarized Data from 17 PROMISE Java Projects",
+      "abstract": "This dataset supports research on software defect severity prediction using traditional and novel object-oriented metrics. It was prepared from 17 Java software projects available in the PROMISE repository and is intended to facilitate the evaluation and reproducibility of machine learning approaches for software quality assessment. The dataset is provided in two versions: Non-binarized dataset: Preserves the original defect-related labels and severity information available in the source data, allowing researchers to investigate defect severity prediction and multiclass classification, subject to the label definitions and transformations documented for each project. Binarized dataset: Contains a binary representation of defect-related labels, distinguishing defective from non-defective software modules, for experiments involving conventional binary software defect prediction. The datasets include software module characteristics and object-oriented metrics used to investigate the relationship between software design properties and defect occurrence or severity. The two versions allow researchers to compare binary defect prediction with severity-aware prediction and to study the contribution of object-oriented metrics to software quality assessment. If you use this dataset in your research, please cite the dataset using the DOI provided by Zenodo. Please also acknowledge the original data sources and cite the relevant publications, where applicable.",
+      "authors": [
+        "Fatma Zohra Mekahlia",
+        "Mohamed Ilyes Bouguerri",
+        "Zineddine Djama",
+        "Rabah Chabane-Chaouche"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-23",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23602275",
+      "url": "https://doi.org/10.5281/zenodo.23602275",
+      "topics": [
+        "Computer science",
+        "Software",
+        "Software metric",
+        "Software quality",
+        "Data mining",
+        "Java"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-24T13:21:24.424Z"
+    },
     {
       "id": "doi-doi-org-10-21203-rs-3-rs-11254037-v1",
       "title": "AI-Driven Automation of Software Testing to Enhance Software Quality and Enable Agentic AI",
