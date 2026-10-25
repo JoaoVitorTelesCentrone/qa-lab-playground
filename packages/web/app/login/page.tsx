@@ -12,5 +12,5 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const user = await getSessionUser();
   if (user) redirect(next);
 
-  return <AuthForm mode="login" next={next} configured={isSupabaseConfigured()} googleEnabled={process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true"} initialError={params.error === "auth" ? "O link de acesso expirou ou já foi utilizado. Entre novamente." : undefined} />;
+  return <AuthForm mode="login" next={next} signupHref={params.next ? `/cadastro?next=${encodeURIComponent(next)}` : "/cadastro"} configured={isSupabaseConfigured()} googleEnabled={process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true"} initialError={params.error === "auth" ? "O link de acesso expirou ou já foi utilizado. Entre novamente." : undefined} />;
 }

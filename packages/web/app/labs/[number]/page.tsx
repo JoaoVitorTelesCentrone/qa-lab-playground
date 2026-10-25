@@ -28,5 +28,5 @@ export default async function LabPage({ params }: { params: Promise<{ number: st
   const track = trackForLab(challenge.number);
   const trackProgress = track ? buildTrackProgress(track, journey.labs) : null;
 
-  return <LabBriefing challenge={challenge} status={state?.status ?? "nao-iniciado"} submissions={state?.submissions ?? []} trackProgress={trackProgress} />;
+  return <LabBriefing challenge={challenge} status={state?.status ?? "nao-iniciado"} submissions={state?.submissions ?? []} trackProgress={trackProgress} signedIn={Boolean(user)} />;
 }

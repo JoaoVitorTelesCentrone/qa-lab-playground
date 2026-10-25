@@ -25,11 +25,15 @@ export function isMissingColumn(error: { code?: string; message?: string } | nul
 export async function selectWithOptionalColumn<T>(
   run: (columns: string) => PromiseLike<QueryResult<T>>,
   columns: string,
-  optional: string,
+  optional: string | string[],
 ): Promise<T | null> {
-  const first = await run(`${columns},${optional}`);
-  if (!first.error) return first.data;
-  if (!isMissingColumn(first.error, optional)) return null;
-  const retry = await run(columns);
-  return retry.error ? null : retry.data;
+  const optionalColumns = Array.isArray(optional) ? optional : [optional];
+  const selected = [...optionalColumns];
+  while (true) {
+    const result = await run([columns, ...selected].join(","));
+    if (!result.error) return result.data;
+    const missing = selected.find((column) => isMissingColumn(result.error, column));
+    if (!missing) return null;
+    selected.splice(selected.indexOf(missing), 1);
+  }
 }

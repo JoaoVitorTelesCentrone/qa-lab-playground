@@ -71,7 +71,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
               ["Nível", course.level],
               ["Carga", course.hours],
               ["Pré-requisito", course.prerequisite],
-              ["Papel no funil", course.funnelRole],
+              ["O que você vai produzir", course.finalDeliverable],
             ].map(([label, value]) => (
               <div key={label} className="rounded-lg border border-white/10 bg-[#101319] p-3">
                 <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#8B949E]">{label}</p>

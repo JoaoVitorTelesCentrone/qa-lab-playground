@@ -112,6 +112,7 @@
 
   --destructive: #B42318;
   --destructive-foreground: #FFFFFF;
+  --negative-foreground: #FF938A;
 
   --border: #2B3136;
   --input: #343B41;
@@ -327,6 +328,27 @@
      atrapalhava a leitura. */
   .qa-store { min-height: calc(100vh - 4rem); background: #16181C; color: #F4F6F5; }
   .qa-system { min-height: calc(100vh - 4rem); background: #16181C; color: #F4F6F5; }
+  .portfolio-surface { container-type: inline-size; min-height: 100vh; background: var(--background); color: var(--foreground); overflow-wrap: anywhere; }
+  .portfolio-shell { max-width: 56rem; }
+  .portfolio-surface[data-layout="gallery"] .portfolio-shell { max-width: 72rem; }
+  .portfolio-surface ::selection { background: var(--primary); color: var(--primary-foreground); }
+  .portfolio-surface :focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
+  .portfolio-surface .portfolio-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .portfolio-surface .portfolio-stats > div:last-child { grid-column: 1 / -1; }
+  @container (min-width: 640px) {
+    .portfolio-surface .portfolio-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .portfolio-surface .portfolio-stats > div:last-child { grid-column: auto; }
+    .portfolio-surface[data-layout="gallery"] .portfolio-project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @container (min-width: 900px) {
+    .portfolio-surface[data-layout="editorial"] .portfolio-shell { display: grid; max-width: 76rem; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.5fr); column-gap: 4rem; align-items: start; }
+    .portfolio-surface[data-layout="editorial"] .portfolio-header { grid-column: 1; grid-row: 1; flex-direction: column; }
+    .portfolio-surface[data-layout="editorial"] .portfolio-stats { grid-column: 1; grid-row: 2; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .portfolio-surface[data-layout="editorial"] .portfolio-stats > div:last-child { grid-column: 1 / -1; }
+    .portfolio-surface[data-layout="editorial"] .portfolio-work { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; min-width: 0; }
+    .portfolio-surface[data-layout="editorial"] :is(.portfolio-mentorship, .portfolio-export, .portfolio-footer) { grid-column: 1 / -1; }
+  }
+  body:has([data-portfolio-preview]) > :is(header, footer, a) { display: none; }
   .qa-system-hero { padding: clamp(2rem, 6vw, 5rem); border: 1px solid #343941; border-radius: 1rem; background: #20242A; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
   .qa-system-hero h1, .qa-module-detail h1 { margin-top: .8rem; font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 650; letter-spacing: -.07em; line-height: .95; }
   .qa-system-hero > p:not(.qa-eyebrow), .qa-module-detail > p:not(.qa-eyebrow) { max-width: 580px; margin-top: 1.25rem; color: var(--muted-foreground); font-size: 1.05rem; line-height: 1.7; }
@@ -428,6 +450,52 @@
   line-height: 1.3;
 }
 
+.qa-page-title {
+  font-size: clamp(2.25rem, 5vw, 3rem);
+  font-weight: 650;
+  letter-spacing: -0.055em;
+  line-height: 1.04;
+}
+
+.qa-page-title-hero {
+  font-size: clamp(2.5rem, 5.5vw, 3.75rem);
+}
+
+.qa-home-grid { display: grid; gap: 2rem; align-items: center; }
+.qa-practice-sequence { display: grid; gap: 1rem; }
+.qa-practice-sequence > li { display: flex; min-width: 0; align-items: flex-start; gap: .75rem; }
+.qa-demo-result { animation: qa-demo-reveal 220ms ease-out both; }
+@keyframes qa-demo-reveal {
+  from { opacity: .35; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (min-width: 900px) {
+  .qa-home-grid { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: clamp(2rem, 5vw, 4rem); }
+  .qa-practice-sequence { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .qa-practice-sequence > li + li { border-left: 1px solid var(--border); padding-left: 1rem; }
+}
+
+[data-onboarding-highlight] {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+  scroll-margin-block: 100px 28px;
+  border-radius: 0.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .qa-onboarding-panel { animation: qa-onboarding-enter 180ms ease-out; }
+  @keyframes qa-onboarding-enter {
+    from { opacity: .6; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+.qa-lab-step-panel { animation: qa-lab-step-enter 180ms ease-out both; }
+@keyframes qa-lab-step-enter {
+  from { opacity: .7; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .logo-qa {
   color: var(--mint);
   opacity: 0.25;
@@ -450,6 +518,10 @@
   .qa-next-lab .qa-watermark { display: none; }
   .qa-hero-delivery { margin-top: 2rem; }
   .qa-process { min-height: auto; padding: 1.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qa-lab-step-panel, .qa-demo-result { animation: none; }
 }
 
 @media (max-width: 420px) {

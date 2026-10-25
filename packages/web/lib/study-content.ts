@@ -59,8 +59,8 @@ export const studyTracks: StudyTrack[] = [
     level: "Pratica",
     duration: "75 min",
     focus: ["exemplos", "gherkin", "regra de negocio", "regressao"],
-    exerciseHref: "/desafios",
-    exerciseLabel: "Usar gerador de BDD",
+    exerciseHref: "/labs/desafios#desafio-09",
+    exerciseLabel: "Praticar cenários BDD",
     postSlugs: ["bdd-alem-do-dado-quando-entao"],
     checkpoint:
       "Criar 5 cenarios em Gherkin para fluxo principal, validacoes negativas e um edge case relevante.",

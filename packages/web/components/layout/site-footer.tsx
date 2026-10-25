@@ -8,6 +8,7 @@
 // e uma faixa de links no fim da rolagem competia com ela.
 
 import { usePathname } from "next/navigation";
+import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
 
 const LINKEDIN_URL = "https://www.linkedin.com/company/qa-lab-oficial/";
 
@@ -22,6 +23,7 @@ export function SiteFooter() {
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 py-3.5 text-xs text-muted-foreground sm:px-8">
         <span>© {new Date().getFullYear()} QA Lab</span>
+        <OnboardingLink className="inline-flex min-h-11 items-center transition hover:text-primary">Primeiros passos</OnboardingLink>
         <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="transition hover:text-primary">LinkedIn</a>
       </div>
     </footer>

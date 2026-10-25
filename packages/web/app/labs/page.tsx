@@ -1,7 +1,7 @@
 import { LabCatalog } from "@/components/labs/lab-catalog";
 import { getJourney, getSessionUser } from "@/lib/product/store";
 
-export const metadata = { title: "Labs | QA Lab" };
+export const metadata = { title: "Labs de QA na prática", description: "Escolha uma missão, teste um sistema com dados de treino e registre suas descobertas. Aprenda QA com prática e evidências." };
 
 export default async function LabsPage() {
   // A lista funciona deslogada; quando há sessão, marca o que já foi feito.

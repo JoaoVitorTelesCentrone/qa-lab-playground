@@ -22,6 +22,10 @@ O resultado esperado nao e apenas consumir aulas: cada aluno deve demonstrar com
 
 ## Positioning
 
+Mensagem central do QA Lab: **Aprenda QA na prática. Teste sistemas, investigue falhas e transforme suas descobertas em evidências.**
+
+O percurso começa em uma missão, passa pela investigação em um sistema e termina com uma entrega que explica o observado. Os ambientes internos usam dados de treino e falhas controladas. Conteúdo e pesquisa apoiam essa prática; a mentoria acrescenta acompanhamento humano. O onboarding é um guia flutuante sobre a página: destaca os controles reais, acompanha a navegação e pode ser fechado ou retomado em Primeiros passos. Não usa uma página de questionário. Deve preservar o destino de quem já veio para um Lab específico.
+
 O diferencial do QA Lab e unir, no mesmo percurso, ambientes de pratica com falhas controladas, entregas avaliadas, feedback humano e evidencia profissional verificavel.
 
 O conteudo tecnico cobre testes manuais, automacao, CI/CD e testes de carga. Os encontros ao vivo tratam de comunicacao, autonomia, posicionamento, relacionamento profissional, carreira e entrevistas.

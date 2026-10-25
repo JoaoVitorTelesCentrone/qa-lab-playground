@@ -22,7 +22,7 @@ function authErrorMessage(error: { message?: string; status?: number; code?: str
     : "Não foi possível criar a conta. Confira os dados e tente novamente.";
 }
 
-export function AuthForm({ mode, next = "/lab", configured, googleEnabled = false, initialError }: { mode: Mode; next?: string; configured: boolean; googleEnabled?: boolean; initialError?: string }) {
+export function AuthForm({ mode, next = "/lab", configured, googleEnabled = false, initialError, signupHref }: { mode: Mode; next?: string; configured: boolean; googleEnabled?: boolean; initialError?: string; signupHref?: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -87,17 +87,17 @@ export function AuthForm({ mode, next = "/lab", configured, googleEnabled = fals
     <div className="mx-auto grid min-h-[calc(100vh-8rem)] w-full max-w-5xl items-center gap-10 px-5 py-12 lg:grid-cols-[1fr_28rem] lg:px-8">
       <section className="hidden max-w-xl lg:block" aria-labelledby="auth-context-title">
         <div className="inline-flex size-12 items-center justify-center rounded-xl bg-mint/10 text-mint"><ShieldCheck className="size-6" /></div>
-        <h2 id="auth-context-title" className="mt-6 max-w-lg text-4xl font-black tracking-[-0.03em] text-off-white">Seu progresso continua de onde você parou.</h2>
-        <p className="mt-4 max-w-lg text-base leading-7 text-[#AAB2BC]">A conta conecta suas entregas, feedbacks da mentoria e cases do portfólio em uma jornada só sua.</p>
+        <h2 id="auth-context-title" className="mt-6 max-w-lg text-4xl font-black tracking-[-0.03em] text-off-white">{isLogin ? "Continue sua prática de onde parou." : "Sua primeira evidência começa com uma prática."}</h2>
+        <p className="mt-4 max-w-lg text-base leading-7 text-[#AAB2BC]">Teste um sistema, investigue o resultado e registre o que descobriu. Sua conta reúne o progresso dos Labs e as evidências que você escolhe apresentar.</p>
         <ul className="mt-7 space-y-3 text-sm text-[#D9DEE4]">
           <li className="flex items-center gap-3"><span className="size-1.5 rounded-full bg-mint" />Evidências e histórico protegidos por usuário</li>
-          <li className="flex items-center gap-3"><span className="size-1.5 rounded-full bg-neon" />Acesso à turma, aulas e revisões do mentor</li>
+          <li className="flex items-center gap-3"><span className="size-1.5 rounded-full bg-neon" />Labs com roteiro, dados de treino e critérios de entrega</li>
           <li className="flex items-center gap-3"><span className="size-1.5 rounded-full bg-coral" />Publicação no portfólio somente quando você escolher</li>
         </ul>
       </section>
 
       <div className="w-full rounded-2xl bg-[#171B21] p-6 shadow-[0_22px_65px_-24px_rgba(0,0,0,.72)] sm:p-8">
-        <div className="text-center"><Link href="/" aria-label="Voltar ao início" className="inline-flex size-11 items-center justify-center rounded-xl bg-mint/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint"><FlaskConical className="size-5 text-mint" /></Link><h1 className="mt-5 text-3xl font-black tracking-[-0.03em] text-off-white">{isLogin ? "Entrar no QA Lab" : "Criar sua conta"}</h1><p className="mt-2 text-sm leading-6 text-[#AAB2BC]">{isLogin ? "Acesse sua mentoria, projetos e progresso." : "Comece sua jornada prática e mantenha cada entrega organizada."}</p></div>
+        <div className="text-center"><Link href="/" aria-label="Voltar ao início" className="inline-flex size-11 items-center justify-center rounded-xl bg-mint/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint"><FlaskConical className="size-5 text-mint" /></Link><h1 className="mt-5 text-3xl font-black tracking-[-0.03em] text-off-white">{isLogin ? "Entrar no QA Lab" : "Criar sua conta"}</h1><p className="mt-2 text-sm leading-6 text-[#AAB2BC]">{isLogin ? "Continue seus Labs e acompanhe suas entregas." : "Aprenda QA na prática e salve as evidências do que você sabe fazer."}</p></div>
 
         {!configured && <div role="alert" className="mt-6 rounded-xl bg-[#F0C040]/10 p-4 text-sm leading-6 text-[#F4CF68]">As contas ainda não estão configuradas neste ambiente. Adicione a URL e a chave pública do Supabase para continuar.</div>}
 
@@ -112,7 +112,7 @@ export function AuthForm({ mode, next = "/lab", configured, googleEnabled = fals
         </form>
 
         {googleEnabled && <><div className="my-5 flex items-center gap-3"><span className="h-px flex-1 bg-white/10" /><span className="text-[10px] uppercase tracking-wider text-[#69737E]">ou</span><span className="h-px flex-1 bg-white/10" /></div><button type="button" onClick={signInWithGoogle} disabled={!configured || loading} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-off-white ring-1 ring-inset ring-white/10 transition hover:bg-white/5 hover:ring-mint/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint disabled:cursor-not-allowed disabled:opacity-40"><Chrome className="size-4" /> Continuar com Google</button></>}
-        <p className="mt-6 text-center text-xs text-[#8B949E]">{isLogin ? "Ainda não tem conta? " : "Já possui conta? "}<Link href={isLogin ? `/cadastro?next=${encodeURIComponent(next)}` : `/login?next=${encodeURIComponent(next)}`} className="font-bold text-mint hover:underline">{isLogin ? "Criar conta" : "Entrar"}</Link></p>
+        <p className="mt-6 text-center text-xs text-[#8B949E]">{isLogin ? "Ainda não tem conta? " : "Já possui conta? "}<Link href={isLogin ? signupHref ?? `/cadastro?next=${encodeURIComponent(next)}` : `/login?next=${encodeURIComponent(next)}`} className="font-bold text-mint hover:underline">{isLogin ? "Criar conta" : "Entrar"}</Link></p>
       </div>
     </div>
   );

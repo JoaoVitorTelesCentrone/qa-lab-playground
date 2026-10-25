@@ -8,6 +8,7 @@
 // carregamento inicial: os únicos estados assíncronos são os das ações
 // (salvar, publicar, excluir), sinalizados no próprio botão.
 
+import { PortfolioAppearanceEditor } from "./portfolio-appearance-editor";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { normalizeProfileLink } from "@/lib/product/profile-links";
@@ -21,13 +22,16 @@ import { EvidenceList } from "./evidence-list";
 import { AccountForm, type AccountFields, type SaveState } from "./account-form";
 import { DangerZone } from "./danger-zone";
 import { PortfolioSectionsEditor } from "./portfolio-sections-editor";
+import { PortfolioProjectsEditor } from "./portfolio-projects-editor";
+import { PortfolioFeaturedEditor } from "./portfolio-featured-editor";
 import type { Journey, Submission } from "@/lib/product/journey";
 import type { TrackProgress } from "@/lib/product/tracks";
 import type { PortfolioSectionsResult } from "@/lib/product/store";
+import type { PortfolioProjectDraft } from "@/lib/product/portfolio-projects";
 
-type Profile = { full_name?: string | null; username?: string | null; bio?: string | null; linkedin_url?: string | null; github_url?: string | null; role?: string | null; plan?: string | null; portfolio_public?: boolean | null; portfolio_headline?: string | null } | null;
+type Profile = { portfolio_appearance?: unknown; full_name?: string | null; username?: string | null; bio?: string | null; linkedin_url?: string | null; github_url?: string | null; role?: string | null; plan?: string | null; portfolio_public?: boolean | null; portfolio_headline?: string | null; portfolio_featured_submission_ids?: string[] | null } | null;
 
-export function ProfileClient({ email, profile, journey, tracks, submissions, sections }: { email: string; profile: Profile; journey: Journey; tracks: TrackProgress[]; submissions: Submission[]; sections: PortfolioSectionsResult }) {
+export function ProfileClient({ email, profile, journey, tracks, submissions, sections, projects }: { email: string; profile: Profile; journey: Journey; tracks: TrackProgress[]; submissions: Submission[]; sections: PortfolioSectionsResult; projects: PortfolioProjectDraft[] }) {
   // O username é editado em dois lugares (dados da conta e endereço do
   // portfólio); um estado só evita que um card mostre o valor antigo do outro.
   const [fields, setFields] = useState<AccountFields>({
@@ -109,7 +113,13 @@ export function ProfileClient({ email, profile, journey, tracks, submissions, se
         />
       </div>
 
+      <PortfolioAppearanceEditor initialAppearance={profile?.portfolio_appearance} />
+
       <PortfolioSectionsEditor sections={sections.sections} available={sections.available} />
+
+      <PortfolioProjectsEditor projects={projects} submissions={submissions} username={fields.username} portfolioPublic={portfolio.isPublic} />
+
+      <PortfolioFeaturedEditor submissions={submissions} initialSelection={profile?.portfolio_featured_submission_ids ?? []} />
 
       <EvidenceList portfolio={portfolio} />
 

@@ -1,14 +1,33 @@
-# Gate de staging — QA Lab
+# Gate de validação — QA Lab
 
-Este registro acompanha `docs/PLANO_PROXIMO_NIVEL_2026-10-21.md` e `docs/MENTORIA_RUNBOOK.md`. O gate está **pendente** até haver um projeto Supabase de staging identificado, três contas de teste, checkout Mercado Pago sandbox e remetente de e-mail verificado. Não usar projetos de outros produtos como substitutos.
+Este registro acompanha `docs/PLANO_PROXIMO_NIVEL_2026-10-21.md` e `docs/MENTORIA_RUNBOOK.md`. O QA Lab tem **um único banco Supabase remoto**. O gate está **pendente** até haver ensaio no Supabase local, smoke controlado no remoto com contas de teste, checkout Mercado Pago sandbox e remetente de e-mail verificado. Não usar projetos de outros produtos como substitutos. Uma prévia Vercel conectada ao banco remoto compartilha dados de produção e não constitui staging isolado.
+
+## Validação local da mentoria
+
+**Atualização da mentoria:** o ensaio local automatizado da v2 foi concluído: nove E2E, 50 verificações pgTAP, build e TypeScript aprovados. Veja `VALIDACAO_PRIORIDADES_ALTAS_PRIMEIRA_TURMA.md`. Os provedores de pagamento e e-mail foram simulados somente na borda externa. Isso não aprova o smoke no remoto nem os provedores reais; as linhas de execução remota abaixo continuam pendentes. Incluir no candidato as migrações `20261025023653_mentorship_notification_outbox_atomic.sql` e `20261025023740_evidence_upload_owner_parameter.sql` após suas dependências.
+
+## Liberação independente do portfólio
+
+O portfólio pode ser validado antes de checkout e e-mail. Seu gate está **pendente**: faltam evidências do ensaio das migrações no Supabase local e do smoke no único remoto com duas contas. Um build local não substitui essa validação.
+
+1. Fixar o commit candidato e o project ref do único Supabase remoto. Conferir seu histórico antes de executar SQL. Ensaiar no Supabase local, nesta ordem, `20261023190624_portfolio_case_builder.sql`, `20261023192027_portfolio_projects.sql`, `20261023193221_portfolio_featured_work.sql`, `20261023193556_portfolio_project_media.sql`, `20261023195000_portfolio_project_order.sql` e `20261023214640_evidence_upload_quota.sql`. A última migration deve entrar junto com o código que emite reservas; aplicada sozinha, bloqueia novos uploads.
+2. Rodar os testes locais e o build. No ambiente local, usar aluno A, aluno B e visitante: salvar case, publicar, editar rascunho, republicar, criar projeto, vincular case, ordenar, subir JPG/WebP e MP4/WebM, escolher capa, privatizar mídia e despublicar projeto/portfólio. Conferir as respostas HTTP e as permissões no banco e Storage.
+3. No ambiente local, testar limites: imagem acima de 3 MB após otimização, quinto arquivo, mais de 20 MB por projeto, tipo inválido e tentativa de acesso cruzado. No deploy candidato, repetir upload de vídeo de 10 MB em conexão lenta e confirmar que o arquivo vai do navegador ao Supabase Storage sem atravessar a função da Vercel. Verificar falha de upload, nova tentativa pelo usuário e faxina de arquivo enviado sem finalização. Se vídeos acima de 6 MB falharem ou demorarem demais, trocar o envio padrão por upload retomável TUS antes da liberação.
+4. Conferir os avisos de segurança e desempenho do Supabase. Registrar resultado por cenário, commit, migrations, URL e evidências. Após backup, aplicar as migrações ensaiadas ao único remoto, configurar variáveis e publicar o mesmo commit. Repetir nele apenas o smoke necessário com contas descartáveis antes de abrir acesso real.
+5. Após o deploy, executar smoke com uma conta descartável e acompanhar erros, Storage e tráfego. Se o código falhar, voltar ao deploy anterior; mudanças de banco exigem migração corretiva revisada e backup, não reversão cega.
+
+**Controle de consumo:** a migration de quota exige uma reserva emitida pelo servidor para o caminho exato, válida por 30 minutos. O banco limita a conta a 100 MB ou 200 objetos, 5 reservas simultâneas e 30 reservas ou 150 MB a cada 24 horas. A policy compara o tamanho real do objeto com a reserva. Validar no Supabase local: upload normal de Lab, mentoria e portfólio; chamada direta ao Storage sem reserva, com caminho de outra conta, tamanho maior que o reservado e reserva expirada; limites concorrentes e faxina de órfãos. No remoto, confirmar o caminho de upload normal e isolamento com contas descartáveis. Consultar `storage.objects` e `app_private.evidence_upload_intents` para conferir os resultados sem editar metadados do Storage. A faxina de órfãos continua necessária.
+
+**Critério de liberação do portfólio:** jornadas aprovadas no ambiente local e smoke remoto registrado, nenhum acesso cruzado, nenhum arquivo privado exposto em nova visita e upload de vídeo de 10 MB concluído no deploy. Um link assinado já compartilhado pode continuar funcionando até expirar, e o cache pode prolongar a disponibilidade; verificar e registrar esse prazo antes de prometer revogação imediata. Se a regra de negócio exigir revogação imediata, implementar entrega de mídia com checagem de autorização por requisição antes da abertura pública. Checkout e e-mail permanecem sob o gate próprio da mentoria.
 
 ## Identificação da execução
 
 | Campo | Valor |
 | --- | --- |
 | Responsável pela execução | A definir |
-| URL da aplicação de staging | A definir |
-| Supabase project ref | A definir |
+| URL da aplicação local e do deploy candidato | A definir |
+| Supabase project ref remoto | A definir; único banco remoto do QA Lab |
+| Supabase local | A definir; registrar versão e data do ensaio |
 | Commit implantado | A definir |
 | Migrations aplicadas | A definir; incluir `20261021222551_mentorship_waitlist_attribution.sql` e `20261021233458_mentorship_order_attribution.sql` |
 | Contas aluno, mentor, admin | A definir; guardar credenciais em cofre, nunca neste arquivo |
@@ -16,7 +35,7 @@ Este registro acompanha `docs/PLANO_PROXIMO_NIVEL_2026-10-21.md` e `docs/MENTORI
 
 ## Verificações automáticas
 
-Execute a partir de `packages/web`, com variáveis locais apontando somente para staging:
+Execute a partir de `packages/web`, com variáveis locais apontando para o Supabase local durante o ensaio. O readiness remoto deve ser executado separadamente, com o project ref conferido:
 
 ```powershell
 bun run mentorship:readiness
@@ -24,7 +43,7 @@ bun run test:e2e
 bunx supabase test db
 ```
 
-O primeiro comando confere Auth, service role, tabelas, colunas de atribuição, RLS básico, e-mail e rotas. O E2E autenticado requer as variáveis descritas no runbook; sem elas, apenas os cenários públicos rodam. Execute pgTAP em banco de teste local ou staging preparado, nunca em produção. Registre comando, saída, data e commit; não cole segredos nos logs.
+O primeiro comando confere Auth, service role, tabelas, colunas de atribuição, RLS básico, e-mail e rotas. O E2E autenticado requer as variáveis descritas no runbook; sem elas, apenas os cenários públicos rodam. Execute pgTAP somente no banco local, nunca no remoto. Registre comando, saída, data e commit; não cole segredos nos logs.
 
 ## Matriz de jornadas
 
@@ -33,7 +52,9 @@ Para cada linha, anexe link privado para captura, log ou ID verificável. Preenc
 | Jornada | Perfil | Evidência mínima | Resultado |
 | --- | --- | --- | --- |
 | Landing → desafio → cadastro | Visitante/aluno | URL, viewport móvel e desktop, redirecionamento após cadastro | Não executado |
-| Entrega válida do ExpenseFlow → case público | Aluno | ID da versão salva, URL pública, checklist completo, atualização no painel de métricas | Não executado |
+| Entrega de Lab → case editável → publicação | Aluno/visitante | Rascunho privado, snapshot público, URL do case e republicação sem vazamento do rascunho | Não executado |
+| Projeto autoral → capa, mídia e ordenação | Aluno/visitante | Upload direto ao Storage de imagem e vídeo de até 10 MB, capa pública, ordem salva e página pública correta | Não executado |
+| Privacidade de projeto e mídia | Aluno A/aluno B/visitante | Projeto despublicado retorna 404; mídia privada não recebe URL pública; conta B não lê nem altera arquivos ou rascunhos de A | Não executado |
 | Lista de interesse com UTM e consentimento | Visitante/admin | Lead no admin com origem; tentativas inválidas rejeitadas | Não executado |
 | Oferta aberta → cadastro → checkout sandbox | Aluno | Reserva, origem UTM no pedido, preferência sandbox | Não executado |
 | Pagamento aprovado → matrícula | Aluno/admin | Pedido, webhook e matrícula da turma correta | Não executado |

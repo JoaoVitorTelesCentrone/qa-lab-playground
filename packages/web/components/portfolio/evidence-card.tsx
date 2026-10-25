@@ -13,6 +13,7 @@ export function EvidenceCard({ entry, username, showProject }: { entry: Portfoli
   const isBug = entry.labMode === "investigacao";
   const text = entry.evidence.trim();
   const rest = summaryRest(text);
+  const title = entry.portfolioCase?.title?.trim() || entry.portfolioCase?.findings?.trim() || (text ? summarize(text, 110) : `Evidência em ${entry.attachments.length} arquivo(s)`);
 
   return <Link
     href={`/portfolio/${username}/${entry.labSlug}`}
@@ -27,7 +28,7 @@ export function EvidenceCard({ entry, username, showProject }: { entry: Portfoli
     </div>
 
     <h3 className="mt-2.5 text-base font-medium leading-6 tracking-[-0.01em] group-hover:text-primary">
-      {text ? summarize(text, 110) : `Evidência em ${entry.attachments.length} arquivo(s)`}
+      {title}
     </h3>
     {rest && <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-muted-foreground">{rest}</p>}
 

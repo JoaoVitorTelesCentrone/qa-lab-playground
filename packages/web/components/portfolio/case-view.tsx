@@ -24,7 +24,7 @@ export function CaseView({ item }: { item: QaCase }) {
 
     {/* A manchete é o que a pessoa encontrou, não o título do exercício: quem
         abre o link quer saber o achado, o Lab é só a origem. */}
-    <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl">{headline(item, 120)}</h2>
+    <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl">{item.customization.title || headline(item, 120)}</h2>
 
     <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
       <span>{modeLabels[item.mode]}</span>
@@ -33,12 +33,18 @@ export function CaseView({ item }: { item: QaCase }) {
     </div>
 
     <Section title="Contexto — o que precisava ser provado">
-      <p className="text-sm leading-7 text-muted-foreground">{item.objective}</p>
+      <p className="text-sm leading-7 text-muted-foreground">{item.customization.context || item.objective}</p>
     </Section>
+
+    {item.customization.approach && <Section title="Abordagem"><p className="whitespace-pre-line text-base leading-7">{item.customization.approach}</p></Section>}
 
     <Section title="Resultado esperado">
       <p className="text-base leading-7">{item.expected}</p>
     </Section>
+
+    {item.customization.findings && <Section title="O que encontrei"><p className="whitespace-pre-line text-base leading-7">{item.customization.findings}</p></Section>}
+    {item.customization.decision && <Section title="Decisão"><p className="whitespace-pre-line text-base leading-7">{item.customization.decision}</p></Section>}
+    {item.customization.reflection && <Section title="Aprendizados e limites"><p className="whitespace-pre-line text-base leading-7 text-muted-foreground">{item.customization.reflection}</p></Section>}
 
     <Section title="Evidência">
       {item.submission.evidence.trim()

@@ -8,12 +8,21 @@ import Link from "next/link";
 import { ClipboardCheck, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
 import { labLabel, labs } from "@/lib/playground/catalog";
 import type { Portfolio } from "./use-portfolio";
 
 export function EvidenceList({ portfolio }: { portfolio: Portfolio }) {
   const { items, busy, togglePublished } = portfolio;
   const published = items.filter((item) => item.published).length;
+  const latestByLab = new Set<string>();
+  const latestSubmissionIds = new Set<string>();
+  for (const item of items) {
+    if (!latestByLab.has(item.labSlug)) {
+      latestByLab.add(item.labSlug);
+      latestSubmissionIds.add(item.id);
+    }
+  }
 
   return (
     <section className="rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="evidencias-title">
@@ -29,8 +38,9 @@ export function EvidenceList({ portfolio }: { portfolio: Portfolio }) {
 
       {items.length === 0 ? (
         <div className="mt-5 rounded-lg border border-dashed border-border px-5 py-10 text-center">
-          <p className="text-sm text-muted-foreground">Nenhuma evidência registrada ainda.</p>
-          <Button asChild size="sm" variant="outline" className="mt-4"><Link href="/labs">Escolher um Lab</Link></Button>
+          <p className="text-sm font-medium">Sua primeira descoberta pode virar uma evidência.</p>
+          <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-muted-foreground">Escolha um Lab, investigue o sistema e registre o que encontrou. Suas entregas aparecerão aqui para você revisar e decidir o que publicar.</p>
+          <Button asChild size="lg" variant="outline" className="mt-4"><OnboardingLink>Encontrar minha primeira prática</OnboardingLink></Button>
         </div>
       ) : (
         <ul className="mt-4 min-w-0 divide-y divide-border">
@@ -53,6 +63,7 @@ export function EvidenceList({ portfolio }: { portfolio: Portfolio }) {
                   <Badge variant={item.published ? "default" : "ghost"} className={item.published ? "font-normal" : "border-border font-normal"}>
                     {item.published ? "publicada" : "privada"}
                   </Badge>
+                  {latestSubmissionIds.has(item.id) && lab && <Button asChild type="button" size="sm" variant="outline"><Link href={`/labs/${lab.number}/conclusao`}>Montar case</Link></Button>}
                   <Button
                     type="button"
                     size="sm"

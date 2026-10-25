@@ -40,11 +40,29 @@ export type QaCase = {
   /** Critérios de aceite do Lab. Mesma origem do roteiro. */
   criteria: string[];
   createdAt: string;
+  customization: CaseCustomization;
+};
+
+export type CaseCustomization = {
+  title: string;
+  context: string;
+  approach: string;
+  findings: string;
+  decision: string;
+  reflection: string;
+};
+
+export const emptyCaseCustomization: CaseCustomization = {
+  title: "", context: "", approach: "", findings: "", decision: "", reflection: "",
 };
 
 /** Junta evidência e briefing. Devolve null quando o Lab saiu do catálogo. */
-export function buildCase(submission: Submission, lab: Lab | undefined, challenge: SystemChallenge | undefined): QaCase | null {
+export function buildCase(submission: Submission, lab: Lab | undefined, challenge: SystemChallenge | undefined, customization?: Partial<CaseCustomization> | Record<string, string> | null): QaCase | null {
   if (!lab || !challenge) return null;
+  const rawCustomization = customization ?? {};
+  const safeCustomization = Object.fromEntries(
+    Object.keys(emptyCaseCustomization).map((field) => [field, typeof rawCustomization[field as keyof CaseCustomization] === "string" ? rawCustomization[field as keyof CaseCustomization] : ""]),
+  ) as CaseCustomization;
   return {
     submission,
     labNumber: lab.number,
@@ -60,6 +78,7 @@ export function buildCase(submission: Submission, lab: Lab | undefined, challeng
     labSteps: challenge.steps,
     criteria: challenge.acceptance,
     createdAt: submission.createdAt,
+    customization: safeCustomization,
   };
 }
 
@@ -91,6 +110,8 @@ export function caseSkills(item: QaCase): string[] {
 
 /** Primeira frase da evidência — a manchete do case, em capa e em post. */
 export function headline(item: QaCase, max = 180) {
+  if (item.customization.title.trim()) return summarize(item.customization.title.trim(), max);
+  if (item.customization.findings.trim()) return summarize(item.customization.findings.trim(), max);
   const text = item.submission.evidence.trim();
   if (text) return summarize(text, max);
   // Entrega só com anexo não tem frase para virar manchete.
@@ -119,9 +140,10 @@ export function linkedInPost(item: QaCase, { url, criteria = 3 }: PostInput) {
   return [
     `${opening}`,
     "",
-    `🎯 O que eu tinha que provar: ${item.objective}`,
+    `🎯 O que eu tinha que provar: ${item.customization.context || item.objective}`,
     "",
-    `🔍 O que encontrei: ${headline(item)}`,
+    `🔍 O que encontrei: ${item.customization.findings || headline(item)}`,
+    ...(item.customization.decision ? ["", `🧭 Minha decisão: ${item.customization.decision}`] : []),
     ...(files > 0 ? ["", `📎 ${files} evidência(s) anexada(s) no case.`] : []),
     "",
     ...(shownCriteria.length > 0

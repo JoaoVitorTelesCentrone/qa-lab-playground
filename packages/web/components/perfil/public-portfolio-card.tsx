@@ -12,16 +12,16 @@ import { useEffect, useState } from "react";
 import { Check, Copy, Download, ExternalLink, Globe, Loader2, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PortfolioExportPanel } from "@/components/portfolio/portfolio-export-panel";
 import { toEntries, toMarkdown } from "@/lib/product/portfolio-format";
 import type { Portfolio } from "./use-portfolio";
 
-function download(filename: string, content: string, type: string) {
+function downloadBackup(filename: string, content: string, type: string) {
   const url = URL.createObjectURL(new Blob([content], { type }));
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
+  const anchor = document.createElement("a");
+  anchor.href = url; anchor.download = filename;
+  document.body.appendChild(anchor); anchor.click(); anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export function PublicPortfolioCard({ portfolio, username, onUsername, name }: {
@@ -33,7 +33,6 @@ export function PublicPortfolioCard({ portfolio, username, onUsername, name }: {
   const { items, headline, setHeadline, isPublic, busy, error, saved, patch, commitUsername, commitHeadline } = portfolio;
   const [copied, setCopied] = useState(false);
   const ready = username.length >= 3;
-  const entries = toEntries(items);
 
   useEffect(() => {
     if (!copied) return;
@@ -127,16 +126,6 @@ export function PublicPortfolioCard({ portfolio, username, onUsername, name }: {
             <Link href={`/portfolio/${username}`}><ExternalLink className="size-3.5" /> Ver minha página pública</Link>
           </Button>
         )}
-        {items.length > 0 && (
-          <div className="grid min-w-0 grid-cols-2 gap-2">
-            <Button type="button" variant="outline" size="sm" onClick={() => download("evidencias-qa-lab.md", toMarkdown(entries, { name }), "text/markdown;charset=utf-8")}>
-              <Download className="size-3.5" /> Markdown
-            </Button>
-            <Button type="button" variant="outline" size="sm" onClick={() => download("evidencias-qa-lab.json", JSON.stringify(entries, null, 2), "application/json")}>
-              <Download className="size-3.5" /> JSON
-            </Button>
-          </div>
-        )}
         <Button
           type="button"
           size="sm"
@@ -150,12 +139,19 @@ export function PublicPortfolioCard({ portfolio, username, onUsername, name }: {
         </Button>
       </div>
 
+      <div className="mt-5"><PortfolioExportPanel key={username} username={username} enabled={isPublic && ready} /></div>
+
       {items.length > 0 && (
         <div className="mt-5 border-t border-border pt-5">
           <p className="text-xs font-medium text-muted-foreground">Evidências registradas</p>
           <p className="mt-2.5 text-sm text-muted-foreground">
             {items.length} entrega(s) · {items.reduce((total, item) => total + item.attachments.length, 0)} arquivo(s) anexado(s)
           </p>
+          <p className="mt-3 text-xs leading-5 text-muted-foreground">Backup pessoal: inclui também suas evidências privadas.</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Button type="button" size="sm" variant="outline" onClick={() => downloadBackup("evidencias-qa-lab.md", toMarkdown(toEntries(items), { name }), "text/markdown;charset=utf-8")}><Download className="size-3.5" /> Markdown</Button>
+            <Button type="button" size="sm" variant="outline" onClick={() => downloadBackup("evidencias-qa-lab.json", JSON.stringify(toEntries(items), null, 2), "application/json;charset=utf-8")}><Download className="size-3.5" /> JSON</Button>
+          </div>
         </div>
       )}
     </section>

@@ -41,7 +41,7 @@ function surfaceRoute(challenge: SystemChallenge) {
   return challenge.route;
 }
 
-export function LabBriefing({ challenge, status, submissions, trackProgress }: { challenge: SystemChallenge; status: EnrollmentStatus | "nao-iniciado"; submissions: Submission[]; trackProgress: TrackProgress | null }) {
+export function LabBriefing({ challenge, status, submissions, trackProgress, signedIn }: { challenge: SystemChallenge; status: EnrollmentStatus | "nao-iniciado"; submissions: Submission[]; trackProgress: TrackProgress | null; signedIn: boolean }) {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [evidence, setEvidence] = useState("");
@@ -50,6 +50,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
   const [state, setState] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState("");
   const [feedback, setFeedback] = useState<Lab101Feedback | null>(null);
+  const [starting, setStarting] = useState(false);
 
   const lab = findLabByNumber(challenge.number);
   // O aluno lê o número de lançamento ("01"); a rota continua no de catálogo.
@@ -60,8 +61,22 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
   const nextInTrack = trackProgress?.steps.find((item) => item.position > (trackStep?.position ?? 0) && item.status !== "completed")?.lab ?? null;
 
   async function start() {
-    await fetch("/api/v1/progress", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ labSlug: challenge.id }) });
-    router.refresh();
+    if (!signedIn || starting) return;
+    setStarting(true);
+    setError("");
+    try {
+      const response = await fetch("/api/v1/progress", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ labSlug: challenge.id }) });
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        setError(body?.error?.message ?? "Não foi possível iniciar o Lab. Tente novamente.");
+        return;
+      }
+      router.refresh();
+    } catch {
+      setError("Sem conexão com o servidor. Tente iniciar o Lab novamente.");
+    } finally {
+      setStarting(false);
+    }
   }
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -72,25 +87,30 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
     if (!local.passed) return;
 
     setState("saving");
-    const response = await fetch("/api/v1/submissions", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ labSlug: challenge.id, evidence, attachments }) });
-    if (!response.ok) {
-      setState("idle");
-      const body = await response.json().catch(() => null);
-      setError(body?.error?.message ?? "Não foi possível salvar a evidência. Tente novamente.");
-      return;
+    try {
+      const response = await fetch("/api/v1/submissions", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ labSlug: challenge.id, evidence, attachments }) });
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        setError(body?.error?.message ?? "Não foi possível salvar a evidência. Tente novamente.");
+        return;
+      }
+      const payload = await response.json().catch(() => null);
+      setFeedback(payload?.data?.feedback ?? null);
+      setState("done");
+      setEvidence("");
+      setAttachments([]);
+      setEvaluation(null);
+      router.refresh();
+    } catch {
+      setError("Sem conexão com o servidor. Sua evidência continua no formulário; tente novamente.");
+    } finally {
+      setState((current) => current === "saving" ? "idle" : current);
     }
-    const payload = await response.json().catch(() => null);
-    setFeedback(payload?.data?.feedback ?? null);
-    setState("done");
-    setEvidence("");
-    setAttachments([]);
-    setEvaluation(null);
-    router.refresh();
   }
 
   const exitHref = trackProgress ? `/trilhas/${trackProgress.track.slug}` : "/labs";
 
-  return <main className="qa-system"><div className="mx-auto max-w-4xl px-5 py-8 sm:px-8">
+  return <main className="qa-system"><div className="mx-auto max-w-5xl px-5 py-8 sm:px-8 sm:py-12">
     {trackProgress && trackStep && <p className="text-xs text-muted-foreground">{trackProgress.track.name} · passo {trackStep.position} de {trackProgress.total} · {trackProgress.completed} concluído(s)</p>}
 
     <Breadcrumb className="mt-2">
@@ -102,20 +122,20 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
               Labs
             </Link>
           </BreadcrumbLink>
-          <BreadcrumbSeparator className="text-muted-foreground/70"><ChevronRight /></BreadcrumbSeparator>
         </BreadcrumbItem>
+        <BreadcrumbSeparator className="text-muted-foreground/70"><ChevronRight /></BreadcrumbSeparator>
         <BreadcrumbItem>
           <BreadcrumbPage className="rounded-sm px-1 py-0.5 font-medium">Lab {label}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
 
-    <header className="mt-3 flex flex-wrap items-center gap-3">
-      <h1 className="text-2xl font-semibold tracking-[-0.02em]">{challenge.title}</h1>
+    <header className="mt-7 flex flex-wrap items-center gap-3">
+      <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl">{challenge.title}</h1>
       {status === "completed" && <Badge variant="secondary" className="gap-1"><CheckCircle2 className="size-3" /> concluído</Badge>}
       {status === "started" && <Badge variant="secondary">em andamento</Badge>}
     </header>
-    <p className="mt-1 text-xs text-muted-foreground">{challenge.area} · {challenge.difficulty} · {challenge.mode}</p>
+    <p className="mt-3 text-sm text-muted-foreground">Lab {label} · {challenge.area} · {challenge.difficulty} · {challenge.mode}</p>
 
     {/* Quem volta a um Lab já entregue precisa de um caminho de uma linha até o
         case — sem isso a entrega antiga fica enterrada no histórico. */}
@@ -125,23 +145,26 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
     </Link>}
 
     {/* Passo a passo horizontal: cada etapa é um botão; só o conteúdo do passo atual aparece abaixo. */}
-    <ol className="mt-7 flex items-center gap-1.5">
-      {steps.map((item, index) => <li key={item.label} className="flex flex-1 items-center gap-1.5">
+    <ol className="mt-6 grid grid-cols-2 gap-2 border-b border-border pb-3 sm:mt-9 sm:flex" aria-label="Etapas do Lab">
+      {steps.map((item, index) => <li key={item.label} className="min-w-0 sm:shrink-0">
         <button
           type="button"
+          aria-label={`Etapa ${index + 1}: ${item.label}`}
+          data-onboarding={`lab-step-${index}`}
+          aria-current={index === step ? "step" : undefined}
           onClick={() => setStep(index)}
-          className={`flex shrink-0 items-center gap-2 rounded-full py-1.5 pl-1.5 pr-3 text-sm font-medium transition ${index === step ? "bg-primary text-primary-foreground" : index < step ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted"}`}
+          className={`flex min-h-11 w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:w-auto sm:pr-4 ${index === step ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}
         >
-          <span className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs ${index === step ? "bg-primary-foreground/20" : index < step ? "bg-primary/15" : "border border-border"}`}>
-            {index < step ? <Check className="size-3.5" /> : index + 1}
+          <span className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs ${index === step ? "bg-primary-foreground/20" : "border border-border"}`}>
+            {index + 1}
           </span>
-          <span className="hidden sm:inline">{item.label}</span>
+          <span>{item.label}</span>
         </button>
-        {index < steps.length - 1 && <span className={`h-px flex-1 ${index < step ? "bg-primary/40" : "bg-border"}`} />}
       </li>)}
     </ol>
 
-    <div className="mt-6 min-h-[380px] rounded-xl border border-border bg-card p-6">
+    <div data-onboarding="lab-panel" className="mt-6 rounded-xl bg-card p-5 sm:p-8">
+      <div key={step} className="qa-lab-step-panel">
       {step === 0 && <section>
         <h2 className="text-sm font-semibold text-muted-foreground">Objetivo</h2>
         <p className="mt-2 text-base leading-7">{challenge.objective}</p>
@@ -150,32 +173,33 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
           <Brief label="Oráculo" value={challenge.expected} />
           <Brief label="Pista de investigação" value={challenge.plantedBug} />
         </div>
+        <h3 className="mt-8 text-sm font-semibold">O que precisa aparecer na entrega</h3>
+        <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">{challenge.acceptance.map((criterion) => <li key={criterion} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><span>{criterion}</span></li>)}</ul>
       </section>}
 
       {step === 1 && <section>
         <h2 className="text-sm font-semibold text-muted-foreground">Roteiro de execução</h2>
-        <div className="mt-3 -mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2">
-          {challenge.steps.map((item, index) => <div key={item} className="w-64 shrink-0 snap-start rounded-lg border border-border bg-background p-4 text-sm">
-            <span className="font-mono text-xs text-primary">{String(index + 1).padStart(2, "0")}</span>
-            <p className="mt-2 leading-6">{item}</p>
-          </div>)}
-        </div>
+        <ol className="mt-5 divide-y divide-border border-y border-border">
+          {challenge.steps.map((item, index) => <li key={item} className="flex gap-5 py-4 text-sm"><span className="font-mono text-xs text-primary">{String(index + 1).padStart(2, "0")}</span><p className="max-w-2xl leading-6">{item}</p></li>)}
+        </ol>
       </section>}
 
       {step === 2 && <section>
         <h2 className="text-sm font-semibold text-muted-foreground">Ambiente do Lab</h2>
         <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">Abra o ambiente em outra aba, execute o roteiro e volte aqui para registrar a evidência.</p>
         <div className="mt-5 flex flex-wrap gap-2">
-          <Button asChild onClick={status === "nao-iniciado" ? start : undefined}><Link href={surface} target="_blank" rel="noopener noreferrer">Abrir ambiente do Lab <ExternalLink className="size-4" /></Link></Button>
-          {status === "nao-iniciado" && <Button type="button" variant="outline" onClick={start}>Marcar como iniciado</Button>}
+          <Button asChild><Link href={surface} target="_blank" rel="noopener noreferrer">Abrir ambiente do Lab <ExternalLink className="size-4" /></Link></Button>
+          {signedIn && status === "nao-iniciado" && <Button type="button" variant="outline" disabled={starting} onClick={() => void start()}>{starting && <Loader2 className="size-4 animate-spin" />} {starting ? "Iniciando..." : "Marcar como iniciado"}</Button>}
         </div>
+        {!signedIn && <p className="mt-4 text-sm text-muted-foreground">Você pode explorar o ambiente agora. <Link href={`/login?next=${encodeURIComponent(`/labs/${challenge.number}`)}`} className="font-medium text-primary underline underline-offset-4">Entre na sua conta</Link> para registrar o progresso e entregar a evidência.</p>}
+        {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
       </section>}
 
       {step === 3 && <section>
         <h2 className="text-sm font-semibold text-muted-foreground">Entrega de evidência</h2>
         <p className="mt-1 text-xs text-muted-foreground">Escreva o que encontrou e anexe a prova. Sem evidência, o Lab continua em aberto.</p>
 
-        <form className="mt-5 grid gap-5" onSubmit={submit} noValidate>
+        {!signedIn ? <p className="mt-5 rounded-md border border-border bg-muted/40 p-4 text-sm">Para salvar sua evidência, <Link href={`/login?next=${encodeURIComponent(`/labs/${challenge.number}`)}`} className="font-medium text-primary underline underline-offset-4">entre na sua conta</Link>. Depois você volta a este Lab.</p> : <form className="mt-5 grid gap-5" onSubmit={submit} noValidate>
           <EvidenceField
             labSlug={challenge.id}
             value={evidence}
@@ -186,7 +210,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
             disabled={state === "saving"}
           />
           <Button disabled={state === "saving"} className="justify-self-start">{state === "saving" ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />} Entregar evidência</Button>
-        </form>
+        </form>}
 
         {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
         {/* O destino depois da entrega é a conclusão, não o próximo Lab: é lá
@@ -207,6 +231,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress }: {
 
         <SubmissionHistory labSlug={challenge.id} submissions={submissions} />
       </section>}
+      </div>
     </div>
 
     <div className="mt-4 flex items-center justify-between">

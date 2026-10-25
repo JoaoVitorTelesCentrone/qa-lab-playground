@@ -1,3 +1,4 @@
+import { normalizePortfolioAppearance, type PortfolioAppearance } from "./portfolio-appearance";
 // Portfólio público de evidências.
 //
 // Regra de produto: publicar é decisão do aluno, em dois níveis — o portfólio
@@ -15,10 +16,11 @@ import { normalizeProfileLink } from "./profile-links";
 import { visibleSections, type PortfolioSection } from "./portfolio-sections";
 import { listPublicPortfolioSections } from "./store";
 import { selectWithOptionalColumn } from "./profile-columns";
-import { buildProjects, findProject, projectMeta, portfolioSkills, statsFor, type PortfolioProject, type PortfolioStats } from "./portfolio-projects";
+import { buildProjects, findProject, normalizePortfolioProjectMedia, portfolioProjectMediaFolder, projectMeta, portfolioSkills, statsFor, type PortfolioProject, type PortfolioStats } from "./portfolio-projects";
 import type { MentorshipPortfolioCase } from "@/lib/mentorship/portfolio";
 
 export type Portfolio = {
+  appearance?: PortfolioAppearance;
   username: string;
   name: string;
   headline: string;
@@ -27,6 +29,7 @@ export type Portfolio = {
   linkedin: string;
   github: string;
   entries: PortfolioEntry[];
+  featuredSubmissionIds: string[];
   /** O nível do meio: em que sistemas essa pessoa trabalhou. */
   projects: PortfolioProject[];
   /** Números do topo, somando o portfólio inteiro. */
@@ -37,12 +40,13 @@ export type Portfolio = {
   mentorshipCases: MentorshipPortfolioCase[];
 };
 
-const SUBMISSION_COLUMNS = "id,lab_slug,evidence,attachments,created_at";
+const SUBMISSION_COLUMNS = "id,lab_slug,evidence,attachments,created_at,published_portfolio_case";
 
 // `github_url` nasceu na migração 0010 e as migrações sobem à mão. Enquanto ela
 // não é aplicada, pedir a coluna faria o perfil vir nulo e a página pública
 // responder 404 — ver lib/product/profile-columns.ts.
 type ProfileRow = {
+  portfolio_appearance?: unknown;
   id: string;
   full_name: string | null;
   username: string;
@@ -51,23 +55,27 @@ type ProfileRow = {
   linkedin_url: string | null;
   github_url?: string | null;
   portfolio_headline: string | null;
+  portfolio_featured_submission_ids?: string[] | null;
 };
 
-function publicProfile(supabase: Awaited<ReturnType<typeof createClient>>, username: string, columns: string) {
+function publicProfile(supabase: Awaited<ReturnType<typeof createClient>>, username: string, columns: string, ownerId?: string) {
   return selectWithOptionalColumn<ProfileRow>(
-    (selected) => supabase.from("profiles").select(selected).eq("username", username).eq("portfolio_public", true).maybeSingle() as PromiseLike<{ data: ProfileRow | null; error: { code?: string; message?: string } | null }>,
+    (selected) => (ownerId ? supabase.from("profiles").select(selected).eq("id", ownerId) : supabase.from("profiles").select(selected).eq("username", username).eq("portfolio_public", true)).maybeSingle() as PromiseLike<{ data: ProfileRow | null; error: { code?: string; message?: string } | null }>,
     columns,
-    "github_url",
+    ["github_url", "portfolio_featured_submission_ids", "portfolio_appearance"],
   );
 }
 
-export async function getPortfolio(username: string): Promise<Portfolio | null> {
+export async function getPortfolio(username: string, options?: { preview: true }): Promise<Portfolio | null> {
   const supabase = await createClient();
 
-  const profile = await publicProfile(supabase, username, "id,full_name,username,bio,role,linkedin_url,portfolio_headline,portfolio_public");
+  // Private previews are scoped to the verified session, never a caller-supplied owner.
+  const owner = options?.preview ? (await supabase.auth.getUser()).data.user : null;
+  if (options?.preview && !owner) return null;
+  const profile = await publicProfile(supabase, username, "id,full_name,username,bio,role,linkedin_url,portfolio_headline,portfolio_public", owner?.id);
   if (!profile) return null;
 
-  const [{ data }, sections, { data: mentorshipData }] = await Promise.all([
+  const [{ data }, sections, { data: mentorshipData }, { data: projectPublications }] = await Promise.all([
     supabase
       .from("lab_submissions")
       .select(SUBMISSION_COLUMNS)
@@ -78,6 +86,7 @@ export async function getPortfolio(username: string): Promise<Portfolio | null> 
     // completa tirando as que ficaram sem conteúdo.
     listPublicPortfolioSections(profile.id),
     supabase.from("mentorship_portfolio_cases").select("id,submission_id,user_id,title,summary,evidence,repository_url,report_url,published,created_at,updated_at").eq("user_id", profile.id).eq("published", true).order("updated_at", { ascending: false }),
+    supabase.from("portfolio_project_publications").select("project_id,source,name,summary,role,period,links,media,case_submission_ids,sort_order,published_at").eq("user_id", profile.id).order("sort_order", { ascending: true }).order("published_at", { ascending: false }),
   ]);
 
   const entries = toEntries((data ?? []).map((row) => ({
@@ -87,6 +96,7 @@ export async function getPortfolio(username: string): Promise<Portfolio | null> 
     attachments: toAttachments(row.attachments),
     published: true,
     createdAt: row.created_at,
+    portfolioCase: row.published_portfolio_case && typeof row.published_portfolio_case === "object" && !Array.isArray(row.published_portfolio_case) ? row.published_portfolio_case as Record<string, string> : undefined,
   })));
 
   // Bucket privado: quem abre esta página é anônimo, então a URL do anexo é
@@ -95,17 +105,47 @@ export async function getPortfolio(username: string): Promise<Portfolio | null> 
   const signedEntries = await Promise.all(
     entries.map(async (entry) => ({ ...entry, attachments: await signPublicAttachments(entry.attachments, profile.id, entry.labSlug) })),
   );
+  const linkedSubmissionIds = new Set((projectPublications ?? []).flatMap((row) => Array.isArray(row.case_submission_ids) ? row.case_submission_ids.map(String) : []));
+  const customProjects: PortfolioProject[] = await Promise.all((projectPublications ?? []).map(async (row) => {
+    const ids = new Set(Array.isArray(row.case_submission_ids) ? row.case_submission_ids.map(String) : []);
+    const projectEntries = signedEntries.filter((entry) => ids.has(entry.id));
+    const rawMedia = (normalizePortfolioProjectMedia(row.media, profile.id, String(row.project_id)) ?? []).filter((file) => file.visibility === "public");
+    const media = (await signPublicAttachments(rawMedia, profile.id, portfolioProjectMediaFolder(String(row.project_id)))).filter((file) => file.url);
+    const coverPath = rawMedia.find((file) => file.isCover)?.path;
+    return {
+      id: String(row.project_id),
+      name: String(row.name),
+      summary: String(row.summary ?? ""),
+      source: row.source === "profissional" ? "profissional" : "pessoal",
+      route: "",
+      sortOrder: Number.isFinite(Number(row.sort_order)) ? Number(row.sort_order) : 0,
+      role: String(row.role ?? ""),
+      period: String(row.period ?? ""),
+      links: Array.isArray(row.links) ? row.links.filter((link): link is string => typeof link === "string") : [],
+      media,
+      cover: media.find((file) => file.path === coverPath),
+      tags: [],
+      entries: projectEntries,
+      stats: statsFor(projectEntries),
+    };
+  }));
+  const projects = [
+    ...customProjects,
+    ...buildProjects(signedEntries.filter((entry) => !linkedSubmissionIds.has(entry.id))),
+  ];
 
   return {
-    username: profile.username,
-    name: profile.full_name ?? profile.username,
+    appearance: normalizePortfolioAppearance(profile.portfolio_appearance),
+    username: profile.username ?? "meu-portfolio",
+    name: profile.full_name || profile.username || "Meu portfólio",
     headline: profile.portfolio_headline ?? "",
     bio: profile.bio ?? "",
     role: profile.role ?? "",
     linkedin: normalizeProfileLink(profile.linkedin_url ?? "", "linkedin"),
     github: normalizeProfileLink(profile.github_url ?? "", "github"),
     entries: signedEntries,
-    projects: buildProjects(signedEntries),
+    featuredSubmissionIds: Array.isArray(profile.portfolio_featured_submission_ids) ? profile.portfolio_featured_submission_ids.map(String).slice(0, 3) : [],
+    projects,
     stats: statsFor(signedEntries),
     skills: portfolioSkills(signedEntries),
     sections: visibleSections(sections),
@@ -170,6 +210,7 @@ export async function getPublicCase(username: string, labSlug: string): Promise<
     },
     labs.find((item) => item.slug === row.lab_slug),
     systemChallenges.find((item) => item.id === row.lab_slug),
+    row.published_portfolio_case && typeof row.published_portfolio_case === "object" && !Array.isArray(row.published_portfolio_case) ? row.published_portfolio_case as Record<string, string> : undefined,
   );
   if (!built) return null;
 
@@ -184,11 +225,12 @@ export async function getPublicCase(username: string, labSlug: string): Promise<
     return [{ labSlug: lab.slug, label: labLabel(lab), title: lab.title }];
   });
 
-  const projectId = projectIdForArea(built.area);
+  const { data: linkedProject } = await supabase.from("portfolio_project_publications").select("project_id,name").eq("user_id", profile.id).contains("case_submission_ids", [row.id]).order("published_at", { ascending: false }).limit(1).maybeSingle();
+  const projectId = linkedProject?.project_id ?? projectIdForArea(built.area);
 
   return {
     case: built,
-    project: { id: projectId, name: projectMeta(projectId).name },
+    project: { id: projectId, name: linkedProject?.name ?? projectMeta(projectId).name },
     author: {
       username: profile.username,
       name: profile.full_name ?? profile.username,

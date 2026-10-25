@@ -8,7 +8,7 @@ export const metadata = { title: "Criar conta", robots: { index: false, follow: 
 
 export default async function SignupPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const params = await searchParams;
-  const next = safeAuthDestination(params.next);
+  const next = safeAuthDestination(params.next, "/comecar");
   const user = await getSessionUser();
   if (user) redirect(next);
 

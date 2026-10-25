@@ -15,7 +15,7 @@
 
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import { Loader2, MoveHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EnvironmentShell } from "@/components/practice/environment-shell";
@@ -59,10 +59,10 @@ function LedgerColumn({
   const [deleting, setDeleting] = useState<Row | null>(null);
 
   return (
-    <section className="flex flex-col rounded-xl border border-border">
+    <section className="flex min-w-0 flex-col rounded-xl border border-border">
       <header className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-5 py-4">
         <h2 className="text-lg font-semibold">{title}</h2>
-        <div className="flex gap-2">
+        <div className="flex min-w-0 flex-wrap gap-2">
           <ExportCsv resource={handle.resource} rows={rows} columns={FIELDS} filename={title.toLowerCase()} />
           <Button type="button" size="sm" onClick={() => setCreating((current) => !current)}>
             <Plus className="size-3.5" /> Nova {singular}
@@ -82,7 +82,9 @@ function LedgerColumn({
         </div>
       )}
 
-      <Table>
+      <p className="flex items-center gap-1.5 border-b border-border px-5 py-2 text-xs text-muted-foreground sm:hidden"><MoveHorizontal aria-hidden="true" className="size-3.5" /> Deslize a tabela para ver valores e ações.</p>
+      <div className="min-w-0 overflow-x-auto" role="region" aria-label={`${title}: lançamentos`} tabIndex={0}>
+      <Table className="min-w-[560px]">
         <TableHeader>
           <TableRow>
             <TableHead>Data</TableHead>
@@ -126,6 +128,7 @@ function LedgerColumn({
           )}
         </TableBody>
       </Table>
+      </div>
 
       {editing && (
         <div role="dialog" aria-modal="true" aria-labelledby={`edit-${kind}`} className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
@@ -188,7 +191,7 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
       <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-6">
         <div>
           <p className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">Saldo do período</p>
-          <p className={`mt-2 font-mono text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl ${summary.totals.balance < 0 ? "text-destructive" : "text-primary"}`}>{money(summary.totals.balance)}</p>
+          <p className={`mt-2 font-mono text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl ${summary.totals.balance < 0 ? "text-[var(--negative-foreground)]" : "text-primary"}`}>{money(summary.totals.balance)}</p>
           <p className="mt-2 text-xs text-muted-foreground">{money(summary.accountsTotal)} distribuídos nas contas</p>
         </div>
         <dl className="flex gap-8">
@@ -206,7 +209,7 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
     </div>
 
     {/* `items-start` para uma coluna com mais lançamentos não esticar a outra. */}
-    <div className="mt-6 grid items-start gap-6 lg:grid-cols-2">
+    <div className="mt-6 grid min-w-0 grid-cols-1 items-start gap-6 lg:grid-cols-2">
       <LedgerColumn
         kind="despesa"
         title="Despesas"
@@ -214,7 +217,7 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
         rows={recentFirst("despesa")}
         handle={transactions}
         sign="−"
-        amountClassName="text-destructive"
+        amountClassName="text-[var(--negative-foreground)]"
       />
       <LedgerColumn
         kind="receita"
@@ -235,7 +238,7 @@ export function FinanceApp({ initial, settings, signedIn }: { initial: AppRows; 
         {rows.accounts.map((account) => <div key={account.id} className="flex items-center justify-between gap-3 text-sm"><span>{account.name}<span className="ml-2 text-xs text-muted-foreground">{account.kind}</span></span><strong className="font-mono font-medium">{money(Number(account.balance))}</strong></div>)}
       </FinancePanel>
       <FinancePanel title="Orçamentos" empty="Nenhum orçamento configurado.">
-        {summary.budgets.map((budget) => <div key={budget.id} className="text-sm"><div className="flex items-center justify-between gap-3"><span>{budget.category}</span><span className={budget.exceeded ? "text-destructive" : "text-muted-foreground"}>{money(budget.used)} de {money(budget.limit)}</span></div><div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted"><div className={`h-full rounded-full ${budget.exceeded ? "bg-destructive" : "bg-primary"}`} style={{ width: `${Math.min(100, budget.percent)}%` }} /></div></div>)}
+        {summary.budgets.map((budget) => <div key={budget.id} className="text-sm"><div className="flex items-center justify-between gap-3"><span>{budget.category}</span><span className={budget.exceeded ? "text-[var(--negative-foreground)]" : "text-muted-foreground"}>{money(budget.used)} de {money(budget.limit)}</span></div><div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted"><div className={`h-full rounded-full ${budget.exceeded ? "bg-destructive" : "bg-primary"}`} style={{ width: `${Math.min(100, budget.percent)}%` }} /></div></div>)}
       </FinancePanel>
       <FinancePanel title="Metas" empty="Nenhuma meta cadastrada.">
         {rows.goals.map((goal) => { const progress = goalProgress(goal, settings.activeBugs); return <div key={goal.id} className="text-sm"><div className="flex items-center justify-between gap-3"><span>{goal.name}</span><span className="text-muted-foreground">{progress.percent}%</span></div><p className="mt-1 text-xs text-muted-foreground">{money(Number(goal.saved_amount))} de {money(Number(goal.target_amount))} · faltam {money(progress.remaining)}</p></div>; })}

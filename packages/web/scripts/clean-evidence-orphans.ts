@@ -68,29 +68,36 @@ async function walk(prefix: string): Promise<StoredFile[]> {
   return found;
 }
 
-/** Todo caminho citado em `attachments`, de qualquer submissão. */
+/** Todo caminho citado por entregas, projetos ou publicações. */
 async function referencedPaths(): Promise<Set<string>> {
   const paths = new Set<string>();
-  let from = 0;
+  const sources = [
+    { table: "lab_submissions", column: "attachments", required: true },
+    { table: "mentorship_submissions", column: "attachments", required: false },
+    { table: "portfolio_projects", column: "media", required: false },
+    { table: "portfolio_project_publications", column: "media", required: false },
+  ];
 
-  for (;;) {
-    const { data, error } = await supabase
-      .from("lab_submissions")
-      .select("attachments")
-      .range(from, from + PAGE - 1);
-    if (error) throw new Error(`Falha ao ler submissões: ${error.message}`);
-    if (!data || data.length === 0) break;
-
-    for (const row of data) {
-      if (!Array.isArray(row.attachments)) continue;
-      for (const file of row.attachments) {
-        const path = (file as { path?: unknown })?.path;
-        if (typeof path === "string" && path) paths.add(path);
+  for (const source of sources) {
+    let from = 0;
+    for (;;) {
+      const { data, error } = await supabase.from(source.table).select(source.column).range(from, from + PAGE - 1);
+      if (error) {
+        if (!source.required && (error.code === "42P01" || error.code === "PGRST205")) break;
+        throw new Error(`Falha ao ler ${source.table}: ${error.message}`);
       }
+      if (!data || data.length === 0) break;
+      for (const row of data as unknown as Record<string, unknown>[]) {
+        const files = row[source.column];
+        if (!Array.isArray(files)) continue;
+        for (const file of files) {
+          const path = (file as { path?: unknown })?.path;
+          if (typeof path === "string" && path) paths.add(path);
+        }
+      }
+      if (data.length < PAGE) break;
+      from += PAGE;
     }
-
-    if (data.length < PAGE) break;
-    from += PAGE;
   }
 
   return paths;

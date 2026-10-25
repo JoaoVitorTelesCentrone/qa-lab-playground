@@ -95,7 +95,7 @@ export const paidCourses: PaidCourse[] = [
     slug: "cypress",
     title: "Cypress E2E: do zero à arquitetura avançada",
     shortTitle: "Cypress E2E",
-    subtitle: "O carro-chefe técnico: do primeiro teste até CI/CD, arquitetura, relatórios e IA aplicada.",
+    subtitle: "Construa testes E2E e evolua sua suíte com arquitetura, relatórios, CI/CD e uso de IA na automação.",
     level: "Básico ao avançado",
     hours: "18h",
     prerequisite: "JS/TS para QA ou experiência equivalente",
@@ -205,12 +205,12 @@ export const paidCourses: PaidCourse[] = [
 ];
 
 export const courseBundle = {
-  title: "Bundle completo QA Lab v1",
+  title: "Pacote completo QA Lab",
   fullPrice: "R$ 1.385",
   bundlePrice: "R$ 897",
   discount: "R$ 488",
   discountPercent: "≈ 35%",
-  description: "As 5 trilhas do catálogo v1 com desconto para aumentar ticket médio e criar jornada completa.",
+  description: "Cinco trilhas para construir sua prática em QA: dos fundamentos à programação, automação, BDD e gestão da qualidade, com um projeto final em cada trilha.",
 };
 
 export const launchStrategy = [

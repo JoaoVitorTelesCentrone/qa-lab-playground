@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { ArrowRight, BadgeDollarSign, BookOpenCheck, Boxes, CheckCircle2, Clock3, Target, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { courseBundle, launchStrategy, paidCourses } from "@/lib/paid-course-catalog";
+import { courseBundle, paidCourses } from "@/lib/paid-course-catalog";
 
 export const metadata = {
   title: "Catálogo de Cursos",
-  description: "Catálogo de lançamento das trilhas pagas v1 do QA Lab.",
+  description: "Aprenda QA com fundamentos, programação e automação aplicados a projetos. Compare as trilhas e veja o que você vai produzir em cada uma.",
 };
 
 const accentClass = {
@@ -22,15 +22,14 @@ export default function CoursesCatalogPage() {
         <div>
           <Badge variant="outline" className="gap-2">
             <BookOpenCheck className="size-3.5" />
-            Catálogo de lançamento v1
+            Cursos com prática
           </Badge>
           <h1 className="mt-6 max-w-4xl text-4xl font-black leading-tight text-off-white sm:text-6xl">
-            Trilhas pagas QA Lab para formar do fundamento à gestão da qualidade.
+            Aprenda, aplique e construa algo para mostrar.
           </h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-[#AAB2BC]">
-            5 trilhas priorizadas para lançamento: Fundamentos de QA, JS/TS para QA, Cypress E2E,
-            BDD com Cucumber e PDCA/Gestão da Qualidade. A estratégia combina entrada acessível,
-            trilha técnica carro-chefe e diferenciação por processo.
+            Estude fundamentos, programação, automação e gestão da qualidade com um objetivo concreto.
+            Cada trilha apresenta o que você vai praticar e qual projeto vai produzir ao final.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a href="#trilhas" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-neon px-5 text-sm font-black text-[#101319]">
@@ -38,7 +37,7 @@ export default function CoursesCatalogPage() {
               <ArrowRight className="size-4" />
             </a>
             <a href="#bundle" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-white/15 px-5 text-sm font-bold text-off-white">
-              Ver bundle
+              Ver pacote completo
               <Trophy className="size-4" />
             </a>
           </div>
@@ -46,13 +45,13 @@ export default function CoursesCatalogPage() {
 
         <aside className="rounded-lg border border-neon/20 bg-neon/[.05] p-5">
           <Boxes className="size-5 text-neon" />
-          <p className="mt-4 text-xs font-bold uppercase tracking-[0.18em] text-neon">Resumo v1</p>
+          <p className="mt-4 text-sm font-semibold text-neon">Encontre seu próximo passo</p>
           <div className="mt-4 grid gap-3">
             {[
               ["5 trilhas", "catálogo inicial"],
               ["≈ 62 horas", "conteúdo total"],
-              ["R$ 197 a R$ 397", "ticket individual"],
-              ["R$ 897", "bundle completo"],
+              ["R$ 197 a R$ 397", "por trilha"],
+              ["R$ 897", "pacote completo"],
             ].map(([value, label]) => (
               <div key={value} className="rounded-lg border border-white/10 bg-[#171B21] p-4">
                 <p className="text-xl font-black text-off-white">{value}</p>
@@ -67,9 +66,9 @@ export default function CoursesCatalogPage() {
         <div className="flex items-start gap-4">
           <Target className="mt-1 size-5 shrink-0 text-mint" />
           <div>
-            <h2 className="text-2xl font-black text-off-white">Estratégia de lançamento</h2>
+            <h2 className="text-2xl font-black text-off-white">Do conceito ao projeto</h2>
             <div className="mt-5 grid gap-3 md:grid-cols-2">
-              {launchStrategy.map((item) => (
+              {["Entenda o conceito e a regra que precisa verificar.", "Aplique o conteúdo em exercícios e cenários de teste.", "Registre os resultados e explique suas decisões.", "Reúna o aprendizado no projeto final da trilha."].map((item) => (
                 <div key={item} className="flex gap-3 rounded-lg border border-white/10 bg-[#101319] p-4 text-sm leading-6 text-[#AAB2BC]">
                   <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-neon" />
                   {item}
@@ -94,7 +93,7 @@ export default function CoursesCatalogPage() {
                 <th className="px-5 py-4">Carga</th>
                 <th className="px-5 py-4">Pré-requisito</th>
                 <th className="px-5 py-4">Preço</th>
-                <th className="px-5 py-4">Papel no funil</th>
+                <th className="px-5 py-4">O que você vai produzir</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
@@ -107,7 +106,7 @@ export default function CoursesCatalogPage() {
                   <td className="px-5 py-4">{course.hours}</td>
                   <td className="px-5 py-4">{course.prerequisite}</td>
                   <td className="px-5 py-4 font-black text-neon">{course.price}</td>
-                  <td className="px-5 py-4">{course.funnelRole}</td>
+                  <td className="px-5 py-4">{course.finalDeliverable}</td>
                 </tr>
               ))}
             </tbody>
@@ -157,12 +156,12 @@ export default function CoursesCatalogPage() {
             <h2 className="mt-4 text-3xl font-black text-off-white">{courseBundle.title}</h2>
             <p className="mt-4 text-base leading-8 text-[#AAB2BC]">{courseBundle.description}</p>
             <p className="mt-5 text-sm leading-7 text-[#AAB2BC]">
-              Soma individual: <strong className="text-off-white">{courseBundle.fullPrice}</strong>. Bundle sugerido:
+              Soma individual: <strong className="text-off-white">{courseBundle.fullPrice}</strong>. Pacote sugerido:
               <strong className="text-neon"> {courseBundle.bundlePrice}</strong>, economia de {courseBundle.discount}.
             </p>
           </div>
           <div className="rounded-lg border border-white/10 bg-[#171B21] p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-neon">Oferta âncora</p>
+            <p className="text-sm font-semibold text-neon">Pacote completo</p>
             <p className="mt-3 text-5xl font-black text-neon">{courseBundle.bundlePrice}</p>
             <p className="mt-2 text-sm text-[#AAB2BC]">{courseBundle.discountPercent} de desconto vs. compra individual</p>
           </div>

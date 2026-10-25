@@ -3,7 +3,7 @@ import { ConclusionClient } from "./conclusion-client";
 import { systemChallenges } from "@/lib/system-challenges";
 import { labs } from "@/lib/playground/catalog";
 import { buildCase } from "@/lib/product/case";
-import { getJourney, getLabState, getSessionUser, listCertificates, listSubmissions } from "@/lib/product/store";
+import { getJourney, getLabState, getPortfolioCaseDraft, getSessionUser, listCertificates, listSubmissions } from "@/lib/product/store";
 import { buildTrackProgress, trackForLab } from "@/lib/product/tracks";
 import { certificateStats, eligibility } from "@/lib/product/certificate";
 import { createClient } from "@/lib/supabase/server";
@@ -37,7 +37,8 @@ export default async function ConclusionPage({ params }: { params: Promise<{ num
   // página vazia dizendo que falta entregar.
   if (state.submissions.length === 0) redirect(`/labs/${number}`);
 
-  const item = buildCase(state.submissions[0], lab, challenge)!;
+  const draft = await getPortfolioCaseDraft(user.id, state.submissions[0].id);
+  const item = buildCase(state.submissions[0], lab, challenge, draft.customization)!;
   const track = trackForLab(challenge.number);
   const progress = track ? buildTrackProgress(track, journey.labs) : null;
 
@@ -60,6 +61,7 @@ export default async function ConclusionPage({ params }: { params: Promise<{ num
 
   return <ConclusionClient
     item={item}
+    hasUnpublishedChanges={draft.hasUnpublishedChanges}
     olderCount={state.submissions.length - 1}
     name={profile?.full_name?.trim() || user.email.split("@")[0]}
     profile={{ username: profile?.username ?? "", portfolioPublic: Boolean(profile?.portfolio_public) }}

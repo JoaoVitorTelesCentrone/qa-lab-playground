@@ -27,6 +27,7 @@ type Props = {
   linkedin: string;
   github: string;
   entries: PortfolioEntry[];
+  featuredSubmissionIds: string[];
   projects: PortfolioProject[];
   stats: PortfolioStats;
   skills: string[];
@@ -35,16 +36,22 @@ type Props = {
 };
 
 export function PortfolioView(props: Props) {
-  const { username, name, bio, role, linkedin, github, entries, projects, skills, sections } = props;
+  const { username, name, bio, role, linkedin, github, entries, featuredSubmissionIds, projects, skills, sections } = props;
   // O filtro era por severidade; sem esse campo, o recorte que ainda importa
   // para quem varre o portfólio é o tipo de trabalho.
   const [kind, setKind] = useState<"todas" | "investigacao" | "fluxo">("todas");
 
-  const projectName = (id: string) => projects.find((project) => project.id === id)?.name ?? "";
+  const projectName = (entry: PortfolioEntry) => projects.find((project) => project.id === entry.projectId || project.entries.some((item) => item.id === entry.id))?.name ?? "";
   const filtered = kind === "todas" ? entries : entries.filter((entry) => entry.labMode === kind);
+  const featuredEntries = featuredSubmissionIds.flatMap((id) => {
+    const entry = entries.find((item) => item.id === id);
+    return entry ? [entry] : [];
+  });
+  const featuredIds = new Set(featuredEntries.map((entry) => entry.id));
+  const recentEntries = entries.filter((entry) => !featuredIds.has(entry.id)).slice(0, 3);
 
-  if (entries.length === 0) {
-    return <div className="mt-10">
+  if (entries.length === 0 && projects.length === 0) {
+    return <div className="portfolio-work mt-10">
       <p className="rounded-xl border border-dashed border-border px-4 py-12 text-center text-sm text-muted-foreground">
         Nenhum projeto publicado ainda.
       </p>
@@ -52,7 +59,7 @@ export function PortfolioView(props: Props) {
     </div>;
   }
 
-  return <Tabs defaultValue="visao-geral" className="mt-12">
+  return <Tabs defaultValue="visao-geral" className="portfolio-work mt-12">
     <TabsList variant="line" className="w-full justify-start border-b border-border pb-1.5">
       <TabsTrigger value="visao-geral">Visão geral</TabsTrigger>
       <TabsTrigger value="projetos">Projetos</TabsTrigger>
@@ -61,21 +68,26 @@ export function PortfolioView(props: Props) {
     </TabsList>
 
     <TabsContent value="visao-geral" className="pt-8">
+      {featuredEntries.length > 0 && <>
+        <SectionTitle>Em destaque</SectionTitle>
+        <div className="mt-4 grid gap-3">{featuredEntries.map((entry) => <EvidenceCard key={entry.id} entry={entry} username={username} showProject={projectName(entry)} />)}</div>
+      </>}
+
       <SectionTitle>Projetos</SectionTitle>
-      <div className="mt-4 grid gap-4">
+      <div className="portfolio-project-grid mt-4 grid gap-4">
         {projects.map((project) => <ProjectCard key={project.id} project={project} username={username} />)}
       </div>
 
-      <SectionTitle className="mt-12">Evidências recentes</SectionTitle>
-      <div className="mt-4 grid gap-3">
-        {entries.slice(0, 3).map((entry) => <EvidenceCard key={entry.id} entry={entry} username={username} showProject={projectName(entry.projectId)} />)}
-      </div>
+      {recentEntries.length > 0 && <SectionTitle className="portfolio-work mt-12">Evidências recentes</SectionTitle>}
+      {recentEntries.length > 0 && <div className="mt-4 grid gap-3">
+          {recentEntries.map((entry) => <EvidenceCard key={entry.id} entry={entry} username={username} showProject={projectName(entry)} />)}
+      </div>}
 
       <CustomSections sections={sections} className="mt-12" />
     </TabsContent>
 
     <TabsContent value="projetos" className="pt-8">
-      <div className="grid gap-4">
+      <div className="portfolio-project-grid grid gap-4">
         {projects.map((project) => <ProjectCard key={project.id} project={project} username={username} />)}
       </div>
     </TabsContent>
@@ -93,7 +105,8 @@ export function PortfolioView(props: Props) {
       </div>
 
       <div className="mt-5 grid gap-3">
-        {filtered.map((entry) => <EvidenceCard key={entry.id} entry={entry} username={username} showProject={projectName(entry.projectId)} />)}
+        {filtered.map((entry) => <EvidenceCard key={entry.id} entry={entry} username={username} showProject={projectName(entry)} />)}
+        {filtered.length === 0 && <p className="rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">Nenhuma evidência publicada.</p>}
       </div>
     </TabsContent>
 

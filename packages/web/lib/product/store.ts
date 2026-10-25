@@ -5,12 +5,14 @@
 // verdade: nenhuma dessas funções lê ou escreve em localStorage.
 
 import { createClient } from "@/lib/supabase/server";
-import { removeEvidenceFiles, signOwnAttachments } from "./evidence-storage";
+import { evidenceFilesExist, removeEvidenceFile, removeEvidenceFiles, reserveEvidenceUpload, signOwnAttachments } from "./evidence-storage";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { buildJourney, emptyJourney, toAttachments, type Attachment, type Enrollment, type Journey, type ScenarioRun, type Submission } from "./journey";
 import { certificateCode, isCertificateCode, normalizeCode } from "./certificate";
 import { normalizeUsername } from "./username";
 import { isMissingTable, normalizeSectionBody, normalizeSectionTitle, sortSections, SECTION_LIMITS, type PortfolioSection } from "./portfolio-sections";
+import { MAX_PORTFOLIO_PROJECT_IMAGE_BYTES, MAX_PORTFOLIO_PROJECT_MEDIA, MAX_PORTFOLIO_PROJECT_MEDIA_BYTES, MAX_PORTFOLIO_PROJECT_MEDIA_TOTAL_BYTES, normalizePortfolioProjectMedia, portfolioProjectMediaFolder, type PortfolioProjectDraft, type PortfolioProjectDraftInput, type PortfolioProjectMedia } from "./portfolio-projects";
+import { isOwnEvidencePath } from "./evidence-attachments";
 
 type SupabaseClient = Awaited<ReturnType<typeof createClient>>;
 
@@ -213,6 +215,279 @@ export async function setSubmissionPublished(userId: string, submissionId: strin
   return data;
 }
 
+export async function getPortfolioCaseDraft(userId: string, submissionId: string): Promise<{ customization: Record<string, string>; hasUnpublishedChanges: boolean }> {
+  const supabase = await createClient();
+  const [draft, submission] = await Promise.all([
+    supabase.from("portfolio_case_drafts").select("customization").eq("user_id", userId).eq("submission_id", submissionId).maybeSingle(),
+    supabase.from("lab_submissions").select("published,published_portfolio_case").eq("user_id", userId).eq("id", submissionId).maybeSingle(),
+  ]);
+  const parse = (value: unknown) => value && typeof value === "object" && !Array.isArray(value)
+    ? Object.fromEntries(Object.entries(value).filter((entry): entry is [string, string] => typeof entry[1] === "string"))
+    : {};
+  const customization = draft.error ? {} : parse(draft.data?.customization);
+  const published = parse(submission.data?.published_portfolio_case);
+  const fields = ["title", "context", "approach", "findings", "decision", "reflection"];
+  const hasUnpublishedChanges = Boolean(submission.data?.published && fields.some((field) => customization[field] !== published[field]));
+  return { customization, hasUnpublishedChanges };
+}
+
+export async function savePortfolioCaseDraft(userId: string, submissionId: string, customization: Record<string, string>) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("portfolio_case_drafts").upsert({
+    submission_id: submissionId,
+    user_id: userId,
+    customization,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: "submission_id" });
+  if (error) throw new Error(error.message);
+}
+
+const PROJECT_COLUMNS = "id,user_id,source,name,summary,role,period,links,media,case_submission_ids,sort_order,updated_at";
+
+function toPortfolioProjectDraft(row: Record<string, unknown>, publishedIds: Set<string>): PortfolioProjectDraft {
+  return {
+    id: String(row.id),
+    sortOrder: Number.isFinite(Number(row.sort_order)) ? Number(row.sort_order) : 0,
+    source: row.source === "profissional" ? "profissional" : "pessoal",
+    name: String(row.name ?? ""),
+    summary: String(row.summary ?? ""),
+    role: String(row.role ?? ""),
+    period: String(row.period ?? ""),
+    links: Array.isArray(row.links) ? row.links.filter((value): value is string => typeof value === "string") : [],
+    media: normalizePortfolioProjectMedia(row.media, String(row.user_id ?? ""), String(row.id)) ?? [],
+    caseSubmissionIds: Array.isArray(row.case_submission_ids) ? row.case_submission_ids.map(String) : [],
+    published: publishedIds.has(String(row.id)),
+    updatedAt: String(row.updated_at ?? ""),
+  };
+}
+
+export async function listPortfolioProjects(userId: string): Promise<PortfolioProjectDraft[]> {
+  const supabase = await createClient();
+  const [projects, publications] = await Promise.all([
+    supabase.from("portfolio_projects").select(PROJECT_COLUMNS).eq("user_id", userId).order("sort_order", { ascending: true }).order("updated_at", { ascending: false }),
+    supabase.from("portfolio_project_publications").select("project_id").eq("user_id", userId),
+  ]);
+  if (projects.error) return [];
+  const publishedIds = new Set((publications.data ?? []).map((row) => String(row.project_id)));
+  const drafts = (projects.data ?? []).map((row) => toPortfolioProjectDraft(row as Record<string, unknown>, publishedIds));
+  const media = drafts.flatMap((project) => project.media);
+  if (media.length === 0) return drafts;
+  const signed = await signOwnAttachments(media);
+  let cursor = 0;
+  return drafts.map((project) => ({ ...project, media: project.media.map((file) => ({ ...file, ...signed[cursor++] })) }));
+}
+
+export type PortfolioProjectInput = PortfolioProjectDraftInput;
+
+export async function reorderPortfolioProjects(projectIds: string[]) {
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("reorder_portfolio_projects", { project_ids: projectIds });
+  if (error) throw new Error(error.message);
+  return { projectIds };
+}
+
+export async function createPortfolioProject(userId: string, input: PortfolioProjectInput): Promise<PortfolioProjectDraft> {
+  const supabase = await createClient();
+  const { data: existing, error: existingError } = await supabase.from("portfolio_projects").select("sort_order").eq("user_id", userId).order("sort_order", { ascending: false }).limit(1).maybeSingle();
+  if (existingError) throw new Error(existingError.message);
+  const { data, error } = await supabase.from("portfolio_projects").insert({
+    user_id: userId,
+    source: input.source,
+    name: input.name,
+    summary: input.summary,
+    role: input.role,
+    period: input.period,
+    links: input.links,
+    case_submission_ids: input.caseSubmissionIds,
+    sort_order: Number(existing?.sort_order ?? -1) + 1,
+  }).select(PROJECT_COLUMNS).single();
+  if (error || !data) throw new Error(error?.message ?? "Não foi possível criar o projeto.");
+  return toPortfolioProjectDraft(data as Record<string, unknown>, new Set());
+}
+
+const PROJECT_MEDIA_EXTENSIONS: Record<string, string> = {
+  "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp", "video/mp4": ".mp4", "video/webm": ".webm",
+};
+
+function checkProjectMediaLimits(current: PortfolioProjectMedia[], size: number, type: string) {
+  if (current.length >= MAX_PORTFOLIO_PROJECT_MEDIA) throw new Error(`Cada projeto pode ter até ${MAX_PORTFOLIO_PROJECT_MEDIA} mídias.`);
+  if (!Number.isSafeInteger(size) || size <= 0) throw new Error("O arquivo está vazio ou tem tamanho inválido.");
+  if (size > MAX_PORTFOLIO_PROJECT_MEDIA_BYTES) throw new Error("O arquivo passou do limite de 10 MB.");
+  if (!PROJECT_MEDIA_EXTENSIONS[type]) throw new Error("Use uma imagem JPG, PNG ou WebP, ou um vídeo MP4 ou WebM.");
+  if (type.startsWith("image/") && size > MAX_PORTFOLIO_PROJECT_IMAGE_BYTES) throw new Error("A imagem precisa ficar abaixo de 3 MB. Reduza as dimensões ou exporte em WebP.");
+  if (current.reduce((total, item) => total + item.size, size) > MAX_PORTFOLIO_PROJECT_MEDIA_TOTAL_BYTES) throw new Error("O projeto pode armazenar até 20 MB de mídia no total.");
+}
+
+async function projectMediaDraft(userId: string, projectId: string) {
+  const supabase = await createClient();
+  const { data: project, error: projectError } = await supabase.from("portfolio_projects").select("id,media").eq("user_id", userId).eq("id", projectId).maybeSingle();
+  if (projectError || !project) throw new Error("Projeto não encontrado.");
+  const current = normalizePortfolioProjectMedia(project.media, userId, projectId);
+  if (!current) throw new Error("A lista de mídias deste projeto precisa ser revisada.");
+  return { supabase, current };
+}
+
+export async function preparePortfolioProjectMediaUpload(userId: string, projectId: string, size: number, type: string) {
+  const { current } = await projectMediaDraft(userId, projectId);
+  checkProjectMediaLimits(current, size, type);
+  const path = `${userId}/${portfolioProjectMediaFolder(projectId)}/${crypto.randomUUID()}${PROJECT_MEDIA_EXTENSIONS[type]}`;
+  await reserveEvidenceUpload(userId, path, size, type);
+  return { path };
+}
+
+export async function finalizePortfolioProjectMediaUpload(userId: string, projectId: string, path: string, name: string) {
+  if (!isOwnEvidencePath(path, userId, portfolioProjectMediaFolder(projectId))) throw new Error("Caminho da mídia inválido.");
+  if (!name.trim() || name.length > 180) throw new Error("Nome da mídia inválido.");
+  const { supabase, current } = await projectMediaDraft(userId, projectId);
+  if (current.some((file) => file.path === path)) throw new Error("Esta mídia já foi adicionada.");
+  const { data: stored, error: storageError } = await supabase.storage.from("lab-evidence").info(path);
+  if (storageError || !stored) throw new Error("Arquivo não encontrado no Storage. Envie novamente.");
+  if (typeof stored.size !== "number" || typeof stored.contentType !== "string") throw new Error("Não foi possível conferir tamanho e tipo do arquivo.");
+  checkProjectMediaLimits(current, stored.size, stored.contentType);
+  if (!path.endsWith(PROJECT_MEDIA_EXTENSIONS[stored.contentType])) throw new Error("O tipo do arquivo não corresponde ao caminho enviado.");
+  const attachment = { name: name.trim(), url: "", path, size: stored.size, type: stored.contentType };
+  const next: PortfolioProjectMedia[] = [...current, { ...attachment, url: "", visibility: "private", isCover: false }];
+  const { error } = await supabase.from("portfolio_projects").update({ media: next, updated_at: new Date().toISOString() }).eq("user_id", userId).eq("id", projectId);
+  if (error) throw new Error(error.message);
+  const [signed] = await signOwnAttachments([attachment]);
+  return { ...signed, visibility: "private" as const, isCover: false };
+}
+
+export async function setPortfolioProjectMediaVisibility(userId: string, projectId: string, path: string, visibility: "private" | "public") {
+  const supabase = await createClient();
+  const { data: project, error } = await supabase.from("portfolio_projects").select("id,media").eq("user_id", userId).eq("id", projectId).maybeSingle();
+  if (error || !project) throw new Error("Projeto não encontrado.");
+  const current = normalizePortfolioProjectMedia(project.media, userId, projectId);
+  if (!current) throw new Error("A lista de mídias deste projeto precisa ser revisada.");
+  if (!current.some((file) => file.path === path)) throw new Error("Mídia não encontrada.");
+  const next = current.map((file) => file.path === path ? { ...file, visibility, isCover: visibility === "private" ? false : file.isCover } : file);
+
+  // Tornar privado tira o arquivo da publicação imediatamente, mesmo que a
+  // pessoa ainda não tenha atualizado o projeto. Tornar público exige publicar
+  // um novo snapshot.
+  if (visibility === "private") {
+    const { data: publication, error: publicationError } = await supabase.from("portfolio_project_publications").select("media").eq("user_id", userId).eq("project_id", projectId).maybeSingle();
+    if (publicationError) throw new Error(publicationError.message);
+    const publishedMedia = normalizePortfolioProjectMedia(publication?.media, userId, projectId);
+    if (publishedMedia?.some((file) => file.path === path)) {
+      const { error: publicationUpdateError } = await supabase.from("portfolio_project_publications").update({ media: publishedMedia.filter((file) => file.path !== path) }).eq("user_id", userId).eq("project_id", projectId);
+      if (publicationUpdateError) throw new Error(publicationUpdateError.message);
+    }
+  }
+  const { error: updateError } = await supabase.from("portfolio_projects").update({ media: next, updated_at: new Date().toISOString() }).eq("user_id", userId).eq("id", projectId);
+  if (updateError) throw new Error(updateError.message);
+  return { media: next };
+}
+
+export async function setPortfolioProjectMediaCover(userId: string, projectId: string, path: string, isCover: boolean) {
+  const supabase = await createClient();
+  const { data: project, error } = await supabase.from("portfolio_projects").select("id,media").eq("user_id", userId).eq("id", projectId).maybeSingle();
+  if (error || !project) throw new Error("Projeto não encontrado.");
+  const current = normalizePortfolioProjectMedia(project.media, userId, projectId);
+  if (!current) throw new Error("A lista de mídias deste projeto precisa ser revisada.");
+  const selected = current.find((file) => file.path === path);
+  if (!selected) throw new Error("Mídia não encontrada.");
+  if (isCover && !selected.type.startsWith("image/")) throw new Error("Escolha uma imagem pública para a capa.");
+  if (isCover && selected.visibility !== "public") throw new Error("Torne a imagem pública antes de usá-la como capa.");
+  const next = current.map((file) => ({ ...file, isCover: isCover && file.path === path }));
+  const { error: updateError } = await supabase.from("portfolio_projects").update({ media: next, updated_at: new Date().toISOString() }).eq("user_id", userId).eq("id", projectId);
+  if (updateError) throw new Error(updateError.message);
+  return { media: next };
+}
+
+export async function removePortfolioProjectMedia(userId: string, projectId: string, path: string) {
+  const supabase = await createClient();
+  const { data: project, error } = await supabase.from("portfolio_projects").select("id,media").eq("user_id", userId).eq("id", projectId).maybeSingle();
+  if (error || !project) throw new Error("Projeto não encontrado.");
+  const current = normalizePortfolioProjectMedia(project.media, userId, projectId);
+  if (!current) throw new Error("A lista de mídias deste projeto precisa ser revisada.");
+  if (!current.some((file) => file.path === path)) throw new Error("Mídia não encontrada.");
+  const next = current.filter((file) => file.path !== path);
+  const { error: updateError } = await supabase.from("portfolio_projects").update({ media: next, updated_at: new Date().toISOString() }).eq("user_id", userId).eq("id", projectId);
+  if (updateError) throw new Error(updateError.message);
+
+  const { data: publication, error: publicationError } = await supabase.from("portfolio_project_publications").select("media").eq("user_id", userId).eq("project_id", projectId).maybeSingle();
+  const publishedMedia = normalizePortfolioProjectMedia(publication?.media, userId, projectId) ?? [];
+  if (!publicationError && !publishedMedia.some((file) => file.path === path)) await removeEvidenceFile(path);
+  return { media: next };
+}
+
+export async function updatePortfolioProject(userId: string, projectId: string, input: PortfolioProjectInput): Promise<PortfolioProjectDraft> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("portfolio_projects").update({
+    source: input.source,
+    name: input.name,
+    summary: input.summary,
+    role: input.role,
+    period: input.period,
+    links: input.links,
+    case_submission_ids: input.caseSubmissionIds,
+    updated_at: new Date().toISOString(),
+  }).eq("user_id", userId).eq("id", projectId).select(PROJECT_COLUMNS).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("Projeto não encontrado.");
+  return toPortfolioProjectDraft(data as Record<string, unknown>, new Set());
+}
+
+export async function setPortfolioProjectPublished(userId: string, projectId: string, published: boolean) {
+  const supabase = await createClient();
+  if (!published) {
+    const { error } = await supabase.from("portfolio_project_publications").delete().eq("user_id", userId).eq("project_id", projectId);
+    if (error) throw new Error(error.message);
+    return { published: false };
+  }
+
+  const { data: project, error: projectError } = await supabase.from("portfolio_projects").select(PROJECT_COLUMNS).eq("user_id", userId).eq("id", projectId).maybeSingle();
+  if (projectError || !project) throw new Error("Projeto não encontrado.");
+  const ids = Array.isArray(project.case_submission_ids) ? project.case_submission_ids.map(String) : [];
+  if (ids.length > 0) {
+    const { data: cases, error: casesError } = await supabase.from("lab_submissions").select("id").eq("user_id", userId).eq("published", true).in("id", ids);
+    if (casesError || (cases ?? []).length !== new Set(ids).size) throw new Error("Todos os cases vinculados precisam estar publicados no seu portfólio.");
+  }
+  const media = normalizePortfolioProjectMedia(project.media, userId, projectId);
+  if (!media) throw new Error("A lista de mídias deste projeto precisa ser revisada.");
+  if (!(await evidenceFilesExist(media))) throw new Error("Uma mídia não está mais disponível no Storage. Remova e envie o arquivo novamente.");
+  const publicMedia = media.filter((file) => file.visibility === "public");
+  const { data: previousPublication } = await supabase.from("portfolio_project_publications").select("media").eq("user_id", userId).eq("project_id", projectId).maybeSingle();
+  const previousMedia = normalizePortfolioProjectMedia(previousPublication?.media, userId, projectId) ?? [];
+  const snapshot = {
+    project_id: project.id,
+    user_id: userId,
+    source: project.source,
+    name: project.name,
+    summary: project.summary,
+    role: project.role,
+    period: project.period,
+    links: project.links,
+    sort_order: project.sort_order,
+    media: publicMedia,
+    case_submission_ids: ids,
+    published_at: new Date().toISOString(),
+  };
+  const { error } = await supabase.from("portfolio_project_publications").upsert(snapshot, { onConflict: "project_id" });
+  if (error) throw new Error(error.message);
+  const keep = new Set(media.map((file) => file.path));
+  await removeEvidenceFiles(previousMedia.filter((file) => !keep.has(file.path)).map((file) => file.path));
+  return { published: true };
+}
+
+export async function deletePortfolioProject(userId: string, projectId: string) {
+  const supabase = await createClient();
+  const [{ data: project }, { data: publication }] = await Promise.all([
+    supabase.from("portfolio_projects").select("media").eq("user_id", userId).eq("id", projectId).maybeSingle(),
+    supabase.from("portfolio_project_publications").select("media").eq("user_id", userId).eq("project_id", projectId).maybeSingle(),
+  ]);
+  if (!project) throw new Error("Projeto não encontrado.");
+  const media = [
+    ...(normalizePortfolioProjectMedia(project.media, userId, projectId) ?? []),
+    ...(normalizePortfolioProjectMedia(publication?.media, userId, projectId) ?? []),
+  ];
+  const { data, error } = await supabase.from("portfolio_projects").delete().eq("user_id", userId).eq("id", projectId).select("id").maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("Projeto não encontrado.");
+  await removeEvidenceFiles([...new Set(media.map((file) => file.path))]);
+}
+
 export type PortfolioSettings = { username: string; portfolioPublic: boolean; portfolioHeadline: string };
 
 export { normalizeUsername } from "./username";
@@ -229,6 +504,21 @@ export async function savePortfolioSettings(userId: string, patch: Partial<Portf
   if (error) throw new Error(error.code === "23505" ? "Este nome de usuário já está em uso." : error.message);
   if (!data) throw new Error("Perfil não encontrado.");
   return { username: data.username ?? "", portfolioPublic: Boolean(data.portfolio_public), portfolioHeadline: data.portfolio_headline ?? "" };
+}
+
+/** Salva até três cases publicados, preservando a ordem escolhida pela pessoa. */
+export async function saveFeaturedPortfolioCases(userId: string, submissionIds: string[]) {
+  const supabase = await createClient();
+  if (submissionIds.length > 0) {
+    const { data, error } = await supabase.from("lab_submissions").select("id").eq("user_id", userId).eq("published", true).in("id", submissionIds);
+    if (error) throw new Error(error.message);
+    if ((data ?? []).length !== submissionIds.length) throw new Error("Escolha apenas cases publicados no seu portfólio.");
+  }
+
+  const { data, error } = await supabase.from("profiles").update({ portfolio_featured_submission_ids: submissionIds }).eq("id", userId).select("portfolio_featured_submission_ids").maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("Perfil não encontrado.");
+  return { submissionIds: data.portfolio_featured_submission_ids as string[] };
 }
 
 // ============================================================

@@ -1,6 +1,7 @@
 import { Compass, Bug, ShieldCheck, type LucideIcon } from "lucide-react";
 import { posts } from "@/lib/blog-posts";
 import { CollaborateCta } from "@/components/blog/collaborate-cta";
+import { PracticeCta } from "@/components/blog/practice-cta";
 import {
   BlogHighlights,
   type BlogAccent,
@@ -37,6 +38,7 @@ export default function BlogPage() {
             articles,
           }}
         />
+        <PracticeCta />
         <CollaborateCta />
       </div>
     </main>

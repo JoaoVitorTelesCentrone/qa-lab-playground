@@ -23,6 +23,8 @@ npm-debug.log*
 .web-*.log
 
 # local validation artifacts
+.tmp/
+supabase/.temp/
 packages/web/.tmp/
 packages/web/test-results/
 packages/web/supabase/.temp/

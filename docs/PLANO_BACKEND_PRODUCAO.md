@@ -4,6 +4,8 @@
 
 **Arquitetura escolhida:** Next.js na Vercel + Supabase Free.
 
+**Ambientes confirmados pelo responsável:** o QA Lab tem um único banco remoto. Não presumir um segundo projeto Supabase para staging nem usar os projetos memente/3dAgency. Validar migrações no Supabase local isolado e fazer smoke controlado no único remoto antes de abrir acesso real.
+
 **Objetivo:** publicar e validar login, dados, arquivos e rotas da API do QA Lab sem migrar para MongoDB nem contratar uma VPS agora.
 
 ## 1. O que já existe
@@ -36,19 +38,19 @@ As chaves públicas do Supabase podem chegar ao navegador. `SUPABASE_SERVICE_ROL
 
 - [ ] Identificar o projeto Supabase **do QA Lab** que será usado em produção e registrar apenas seu *project ref*, sem salvar segredos neste documento.
 - [ ] Identificar o projeto Vercel, o diretório raiz de build (`packages/web`), o domínio e o plano da conta.
-- [ ] Definir um ambiente de teste separado. O plano Supabase Free permite até dois projetos ativos; se ambos estiverem ocupados, usar um banco local para testes de migração e executar um smoke controlado antes de publicar.
+- [ ] Preparar o Supabase local isolado para ensaiar migrações, RLS e fluxos. A prévia da aplicação pode ser publicada na Vercel, mas não deve apontar para o banco remoto como se fosse um staging isolado.
 - [ ] Confirmar se haverá venda/checkout ativo no lançamento. O Vercel Hobby é destinado a uso pessoal não comercial; se houver uso comercial, escolher um plano ou hospedagem compatível antes de habilitar pagamentos.
 
-**Pronto quando:** os projetos, domínio e ambiente de teste estiverem identificados e o destino de cada mudança estiver claro.
+**Pronto quando:** o único projeto remoto, o domínio e o ambiente local de teste estiverem identificados e o destino de cada mudança estiver claro.
 
 ### Etapa 2 — Preparar o Supabase
 
 - [ ] Fazer um backup/exportação antes de alterar o esquema remoto.
 - [ ] Comparar a tabela de histórico de migrações do projeto com `packages/web/supabase/migrations` e `supabase/migrations`; documentar a ordem real e resolver divergências antes de aplicar scripts.
-- [ ] Aplicar as migrações faltantes no ambiente de teste e depois em produção. Confirmar especialmente `0030_atomic_lab_completion.sql`, `20261019232810_expenseflow_portfolio_case.sql`, `20261021222551_mentorship_waitlist_attribution.sql` e `20261021233458_mentorship_order_attribution.sql`.
+- [ ] Aplicar as migrações faltantes no Supabase local, conferir o resultado e só então aplicá-las ao único projeto remoto após backup e comparação do histórico. Para o portfólio atual, confirmar em ordem as cinco migrações `20261023*_portfolio*.sql` e `20261023214640_evidence_upload_quota.sql`; para os demais fluxos, conferir `0030_atomic_lab_completion.sql`, `20261021222551_mentorship_waitlist_attribution.sql` e `20261021233458_mentorship_order_attribution.sql`. A migração histórica do ExpenseFlow não faz parte do fluxo atual.
 - [ ] Conferir tabelas, funções SQL, triggers, políticas RLS e o bucket privado de evidências. Validar que dois usuários diferentes não consigam ler ou alterar dados um do outro.
 - [ ] Configurar no Supabase Auth a URL do site e os redirecionamentos de login, recuperação de senha e OAuth, se OAuth estiver habilitado.
-- [ ] Reexecutar `bun run mentorship:readiness` em `packages/web`, apontando ao ambiente de teste e depois ao destino de produção; tratar cada falha antes de avançar.
+- [ ] Reexecutar `bun run mentorship:readiness` em `packages/web`, primeiro no ambiente local e depois no único projeto remoto; tratar cada falha antes de avançar.
 
 **Pronto quando:** as migrações necessárias constarem no histórico, as colunas UTM existirem, a leitura/gravação funcionarem e o isolamento entre usuários for comprovado.
 
@@ -65,7 +67,7 @@ As chaves públicas do Supabase podem chegar ao navegador. `SUPABASE_SERVICE_ROL
 ### Etapa 4 — Validar os fluxos do backend
 
 - [ ] Executar localmente `bun test packages/web`, `bun run lint` e `bun run build` antes do deploy.
-- [ ] Em ambiente de teste, criar duas contas: cadastro, login, logout e recuperação de senha devem funcionar com as URLs reais.
+- [ ] No Supabase local, validar cadastro, login, logout e recuperação de senha com duas contas de teste. Após publicar, repetir um smoke limitado com contas descartáveis e as URLs reais no único projeto remoto.
 - [ ] Salvar e recuperar progresso de um Lab, projeto/board e uma evidência com arquivo; confirmar persistência após sair e entrar novamente.
 - [ ] Tentar acesso cruzado entre as duas contas para validar RLS e links assinados de arquivos.
 - [ ] Verificar as rotas `/api/v1/*` usadas pelo lançamento. Registrar status HTTP, resposta e logs para falhas relevantes.
@@ -95,7 +97,7 @@ As chaves públicas do Supabase podem chegar ao navegador. `SUPABASE_SERVICE_ROL
 
 | Item | Situação / decisão |
 | --- | --- |
-| Supabase Free | Já existe uma conta; confirmar o projeto do QA Lab e seus limites atuais no painel. |
+| Supabase Free | Há um único banco remoto do QA Lab; confirmar seu project ref e limites no painel. O ensaio prévio usa Supabase local. |
 | Vercel | Código no GitHub; vínculo, plano, variáveis e deploy de produção precisam ser confirmados. |
 | Domínio | Opcional para teste no domínio `vercel.app`; necessário se houver URL própria. |
 | VPS e MongoDB | Fora deste plano. A arquitetura atual não precisa deles para publicar o backend. |

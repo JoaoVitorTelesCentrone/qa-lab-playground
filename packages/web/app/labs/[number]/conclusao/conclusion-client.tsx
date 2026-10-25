@@ -39,8 +39,9 @@ type TrackSummary = {
   certificateCode: string | null;
 };
 
-export function ConclusionClient({ item, olderCount, name, profile, track, siteUrl }: {
+export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name, profile, track, siteUrl }: {
   item: QaCase;
+  hasUnpublishedChanges: boolean;
   olderCount: number;
   name: string;
   profile: { username: string; portfolioPublic: boolean };
@@ -52,6 +53,9 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
   const [username, setUsername] = useState(profile.username || normalizeUsername(name));
   const [isPublic, setIsPublic] = useState(profile.portfolioPublic);
   const [published, setPublished] = useState(item.submission.published);
+  const [customization, setCustomization] = useState(item.customization);
+  const [caseSaved, setCaseSaved] = useState(true);
+  const [hasDraftChanges, setHasDraftChanges] = useState(hasUnpublishedChanges);
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
   const [copied, setCopied] = useState("");
@@ -60,10 +64,11 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
   const cardRef = useRef<HTMLDivElement>(null);
 
   const live = isPublic && published && username.length >= 3;
+  const previewItem = useMemo(() => ({ ...item, customization }), [item, customization]);
   // A URL vem do servidor, não de window.location: o aluno pode estar em um
   // preview ou em localhost, e o link que ele publica precisa ser o canônico.
   const caseUrl = `${siteUrl}/portfolio/${username}/${item.labSlug}`;
-  const generated = useMemo(() => linkedInPost(item, { name, url: caseUrl }), [item, name, caseUrl]);
+  const generated = useMemo(() => linkedInPost(previewItem, { name, url: caseUrl }), [previewItem, name, caseUrl]);
 
   // O texto sugerido acompanha a URL enquanto o aluno não mexer nele — senão
   // quem edita antes de definir o endereço publica um link que não resolve.
@@ -75,7 +80,21 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
     window.setTimeout(() => setCopied(""), 2000);
   }
 
+  async function saveCase() {
+    setBusy("case"); setError("");
+    const response = await fetch("/api/v1/portfolio/case", {
+      method: "PATCH", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ submissionId: item.submission.id, customization }),
+    });
+    const body = await response.json().catch(() => null);
+    setBusy("");
+    if (!response.ok) { setError(body?.error?.message ?? "Não foi possível salvar o case."); return false; }
+    setCaseSaved(true);
+    return true;
+  }
+
   async function publish() {
+    if (!caseSaved && !(await saveCase())) return;
     setBusy("publish");
     setError("");
     const settings = await fetch("/api/v1/portfolio", {
@@ -104,6 +123,7 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
       return;
     }
     setPublished(true);
+    setHasDraftChanges(false);
     router.refresh();
   }
 
@@ -186,13 +206,14 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
 
   function downloadCase() {
     const content = [
-      `# ${item.title}`,
+      `# ${customization.title || item.title}`,
       "",
       `**Lab ${item.label} · ${item.area}**`,
       "",
       "## Objetivo",
       "",
-      item.objective,
+      customization.context || item.objective,
+      ...(customization.approach ? ["", "## Abordagem", "", customization.approach] : []),
       "",
       "## Comportamento esperado (oráculo)",
       "",
@@ -205,6 +226,9 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
         ? ["", "## Anexos", "", ...item.submission.attachments.map((file) => `- [${file.name}](${file.url})`)]
         : []),
       "",
+      ...(customization.findings ? ["## O que encontrei", "", customization.findings, ""] : []),
+      ...(customization.decision ? ["## Decisão e risco", "", customization.decision, ""] : []),
+      ...(customization.reflection ? ["## Aprendizados e limites", "", customization.reflection, ""] : []),
       "## Roteiro do Lab",
       "",
       ...item.labSteps.map((step, index) => `${index + 1}. ${step}`),
@@ -256,7 +280,7 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
 
     <div className="mt-9 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
       <section className="rounded-xl border border-border bg-card p-6 sm:p-8" aria-label="Prévia do case">
-        <CaseView item={item} />
+        <CaseView item={previewItem} />
         {olderCount > 0 && <p className="mt-6 border-t border-border pt-4 text-xs text-muted-foreground">
           Você tem {olderCount} entrega(s) anterior(es) neste Lab. O case público mostra sempre a mais recente. <Link href="/perfil" className="text-primary">Ver histórico</Link>
         </p>}
@@ -294,6 +318,12 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
                   </Button>
                   <Button asChild size="sm" variant="outline"><Link href={`/portfolio/${username}/${item.labSlug}`} target="_blank" rel="noopener noreferrer">Abrir <ExternalLink className="size-3.5" /></Link></Button>
                 </div>
+                {hasDraftChanges && <>
+                  <p className="mt-3 text-xs leading-5 text-muted-foreground">A página pública continua com a versão anterior enquanto você revisa esta.</p>
+                  <Button type="button" size="sm" className="mt-2 w-full" disabled={busy === "publish" || busy === "case"} onClick={publish}>
+                    {busy === "publish" || busy === "case" ? <Loader2 className="size-3.5 animate-spin" /> : <Globe className="size-3.5" />} Publicar versão atualizada
+                  </Button>
+                </>}
                 <Button type="button" size="sm" variant="ghost" className="mt-2 px-0 text-muted-foreground" disabled={busy === "publish"} onClick={unpublish}>
                   {busy === "publish" && <Loader2 className="size-3.5 animate-spin" />} Despublicar este case
                 </Button>
@@ -342,10 +372,29 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
       </div>
     </div>
 
+    <section className="mt-8 rounded-xl border border-border bg-card p-6 sm:p-8" aria-labelledby="personalizar-case">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div><p className="qa-eyebrow">Seu trabalho, sua narrativa</p><h2 id="personalizar-case" className="mt-2 text-xl font-semibold">Personalize o case</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">O briefing do Lab já vem preenchido. Conte como você investigou, o que encontrou e por que recomenda essa decisão. Só aparece no portfólio depois de publicar.</p></div>
+        {!caseSaved
+          ? <Badge variant="outline">Alterações não salvas</Badge>
+          : hasDraftChanges && <Badge variant="outline">Nova versão salva; ainda não publicada</Badge>}
+      </div>
+      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        <CaseField label="Título do case" value={customization.title} maxLength={120} placeholder="Ex.: Encontrei uma falha no cálculo do frete" onChange={(title) => { setCustomization((current) => ({ ...current, title })); setCaseSaved(false); setHasDraftChanges(true); }} />
+        <CaseField label="Contexto" value={customization.context} maxLength={3000} rows={4} placeholder="Qual problema ou risco você investigou?" onChange={(context) => { setCustomization((current) => ({ ...current, context })); setCaseSaved(false); setHasDraftChanges(true); }} />
+        <CaseField label="Abordagem" value={customization.approach} maxLength={5000} rows={5} placeholder="Como você organizou os testes e escolheu os cenários?" onChange={(approach) => { setCustomization((current) => ({ ...current, approach })); setCaseSaved(false); setHasDraftChanges(true); }} />
+        <CaseField label="O que encontrou" value={customization.findings} maxLength={5000} rows={5} placeholder="Descreva os resultados e inclua evidências relevantes." onChange={(findings) => { setCustomization((current) => ({ ...current, findings })); setCaseSaved(false); setHasDraftChanges(true); }} />
+        <CaseField label="Decisão e risco" value={customization.decision} maxLength={3000} rows={4} placeholder="O que recomenda fazer? Qual risco permanece?" onChange={(decision) => { setCustomization((current) => ({ ...current, decision })); setCaseSaved(false); setHasDraftChanges(true); }} />
+        <CaseField label="Aprendizados e limites" value={customization.reflection} maxLength={3000} rows={4} placeholder="O que aprendeu e o que este teste não comprova?" onChange={(reflection) => { setCustomization((current) => ({ ...current, reflection })); setCaseSaved(false); setHasDraftChanges(true); }} />
+      </div>
+      <Button type="button" className="mt-5" variant="outline" disabled={busy === "case" || caseSaved} onClick={saveCase}>{busy === "case" ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />} {caseSaved ? "Case salvo" : "Salvar personalização"}</Button>
+      {error && <p role="alert" className="mt-3 text-xs text-destructive">{error}</p>}
+    </section>
+
     {/* O card fica fora da tela em tamanho real: html-to-image captura o nó como
         ele é, então não dá para escalar aqui — só mostrar uma prévia reduzida. */}
     <div aria-hidden="true" className="pointer-events-none fixed left-[-9999px] top-0">
-      <CaseCardView ref={cardRef} item={item} author={name} />
+      <CaseCardView ref={cardRef} item={previewItem} author={name} />
     </div>
 
     <section className="mt-10 rounded-xl border border-border bg-card p-6 sm:p-8" aria-labelledby="imagem">
@@ -363,7 +412,7 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
           aria-label="Prévia da imagem"
         >
           <div className="origin-top-left" style={{ transform: `scale(${PREVIEW_WIDTH / CASE_CARD_SIZE.width})`, width: CASE_CARD_SIZE.width, height: CASE_CARD_SIZE.height }}>
-            <CaseCardView item={item} author={name} />
+            <CaseCardView item={previewItem} author={name} />
           </div>
         </div>
 
@@ -418,4 +467,19 @@ export function ConclusionClient({ item, olderCount, name, profile, track, siteU
       <Button asChild variant="ghost"><Link href="/perfil">Meu portfólio</Link></Button>
     </nav>
   </div></main>;
+}
+
+function CaseField({ label, value, maxLength, placeholder, onChange, rows = 3 }: {
+  label: string;
+  value: string;
+  maxLength: number;
+  placeholder: string;
+  onChange: (value: string) => void;
+  rows?: number;
+}) {
+  return <label className="grid gap-1.5 text-sm font-medium">
+    <span>{label}</span>
+    <Textarea value={value} maxLength={maxLength} rows={rows} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} className="min-h-24 resize-y text-sm leading-6" />
+    <span className="text-right text-[11px] font-normal text-muted-foreground">{value.length}/{maxLength}</span>
+  </label>;
 }

@@ -62,6 +62,10 @@ export type Submission = {
   /** Publicada no portfólio público do aluno. Privada por padrão. */
   published: boolean;
   createdAt: string;
+  /** Snapshot aprovado para leitura no portfÃ³lio; nunca contÃ©m o rascunho. */
+  portfolioCase?: {
+    title?: string; context?: string; approach?: string; findings?: string; decision?: string; reflection?: string;
+  };
 };
 
 export type ScenarioRun = {

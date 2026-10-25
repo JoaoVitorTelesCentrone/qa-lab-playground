@@ -25,7 +25,6 @@ const eslintConfig = defineConfig([
     "app/waitlist/**",
     "components/api-runner/**",
     "components/layout/**",
-    "components/onboarding/**",
     "components/pdca/**",
     "hooks/use-mission-progress.ts",
   ]),

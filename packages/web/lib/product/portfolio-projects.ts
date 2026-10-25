@@ -15,7 +15,44 @@
 
 import { practiceApps } from "./apps";
 import type { PortfolioEntry } from "./portfolio-format";
+import type { Attachment } from "./journey";
+import { toAttachments } from "./journey";
+import { isOwnEvidencePath } from "./evidence-attachments";
 import { countLinks } from "./evidence-text";
+
+export const MAX_PORTFOLIO_PROJECT_MEDIA = 4;
+export const MAX_PORTFOLIO_PROJECT_MEDIA_BYTES = 10 * 1024 * 1024;
+export const MAX_PORTFOLIO_PROJECT_MEDIA_TOTAL_BYTES = 20 * 1024 * 1024;
+export const MAX_PORTFOLIO_PROJECT_IMAGE_BYTES = 3 * 1024 * 1024;
+export const PORTFOLIO_PROJECT_MEDIA_TYPES = ["image/jpeg", "image/png", "image/webp", "video/mp4", "video/webm"] as const;
+
+export function portfolioProjectMediaFolder(projectId: string) {
+  return `portfolio-project-${projectId}`;
+}
+
+export type PortfolioProjectMedia = Attachment & { visibility: "private" | "public"; isCover: boolean };
+
+export function normalizePortfolioProjectMedia(raw: unknown, userId: string, projectId: string): PortfolioProjectMedia[] | null {
+  if (raw == null) return [];
+  if (!Array.isArray(raw) || raw.length > MAX_PORTFOLIO_PROJECT_MEDIA) return null;
+  const files = toAttachments(raw);
+  if (files.length !== raw.length) return null;
+  const folder = portfolioProjectMediaFolder(projectId);
+  if (files.some((file) => !isOwnEvidencePath(file.path, userId, folder)
+    || !PORTFOLIO_PROJECT_MEDIA_TYPES.includes(file.type as typeof PORTFOLIO_PROJECT_MEDIA_TYPES[number])
+    || file.size <= 0 || file.size > (file.type.startsWith("image/") ? MAX_PORTFOLIO_PROJECT_IMAGE_BYTES : MAX_PORTFOLIO_PROJECT_MEDIA_BYTES))) return null;
+  if (files.reduce((total, file) => total + file.size, 0) > MAX_PORTFOLIO_PROJECT_MEDIA_TOTAL_BYTES) return null;
+  let hasCover = false;
+  return files.map((file, index) => {
+    const rawFile = raw[index] as Record<string, unknown>;
+    // Mídias existentes eram públicas junto com o projeto; manter esse estado
+    // evita mudar silenciosamente publicações antigas durante a implantação.
+    const visibility = rawFile.visibility === undefined || rawFile.visibility === "public" ? "public" : "private";
+    const isCover = !hasCover && rawFile.isCover === true && visibility === "public" && file.type.startsWith("image/");
+    if (isCover) hasCover = true;
+    return { ...file, url: "", visibility, isCover };
+  });
+}
 
 export type PortfolioProject = {
   id: string;
@@ -25,10 +62,89 @@ export type PortfolioProject = {
   source: "qa-lab" | "pessoal" | "profissional";
   /** Rota do ambiente, para quem quiser testar o mesmo sistema. */
   route: string;
+  sortOrder?: number;
+  role?: string;
+  period?: string;
+  links?: string[];
+  media?: Attachment[];
+  cover?: Attachment;
   /** Áreas e tipos de teste cobertos — os chips do card. */
   tags: string[];
   entries: PortfolioEntry[];
   stats: PortfolioStats;
+};
+
+export type PortfolioProjectDraft = {
+  id: string;
+  sortOrder: number;
+  source: "pessoal" | "profissional";
+  name: string;
+  summary: string;
+  role: string;
+  period: string;
+  links: string[];
+  media: PortfolioProjectMedia[];
+  caseSubmissionIds: string[];
+  published: boolean;
+  updatedAt: string;
+};
+
+export function normalizePortfolioProjectLinks(raw: unknown): string[] | null {
+  if (raw == null) return [];
+  if (!Array.isArray(raw) || raw.length > 3 || raw.some((value) => typeof value !== "string")) return null;
+  const links = raw.map((value) => (value as string).trim()).filter(Boolean);
+  if (links.length > 3) return null;
+  const normalized: string[] = [];
+  for (const link of links) {
+    if (link.length > 500) return null;
+    try {
+      const url = new URL(link);
+      if (!(["https:", "http:"].includes(url.protocol)) || url.username || url.password) return null;
+      normalized.push(url.toString());
+    } catch {
+      return null;
+    }
+  }
+  return [...new Set(normalized)];
+}
+
+export function parsePortfolioProjectInput(raw: Record<string, unknown>) {
+  const source = raw.source;
+  const name = typeof raw.name === "string" ? raw.name.trim() : "";
+  const summary = typeof raw.summary === "string" ? raw.summary.trim() : "";
+  const role = typeof raw.role === "string" ? raw.role.trim() : "";
+  const period = typeof raw.period === "string" ? raw.period.trim() : "";
+  const links = normalizePortfolioProjectLinks(raw.links);
+  const rawCaseIds = raw.caseSubmissionIds;
+  const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const caseSubmissionIds = Array.isArray(rawCaseIds) && rawCaseIds.length <= 12 && rawCaseIds.every((id) => typeof id === "string" && uuid.test(id))
+    ? [...new Set(rawCaseIds as string[])]
+    : null;
+
+  const details: Record<string, string> = {};
+  if (source !== "pessoal" && source !== "profissional") details.source = "Escolha pessoal ou profissional.";
+  if (name.length < 3 || name.length > 100) details.name = "Use de 3 a 100 caracteres.";
+  if (summary.length > 1800) details.summary = "Use até 1800 caracteres.";
+  if (role.length > 160) details.role = "Use até 160 caracteres.";
+  if (period.length > 80) details.period = "Use até 80 caracteres.";
+  if (links === null) details.links = "Informe até três links HTTP ou HTTPS válidos.";
+  if (caseSubmissionIds === null) details.caseSubmissionIds = "Selecione até 12 cases válidos.";
+  if (Object.keys(details).length > 0) return { input: null, details };
+
+  return {
+    input: { source, name, summary, role, period, links: links!, caseSubmissionIds: caseSubmissionIds! } as PortfolioProjectDraftInput,
+    details: {},
+  };
+}
+
+export type PortfolioProjectDraftInput = {
+  source: "pessoal" | "profissional";
+  name: string;
+  summary: string;
+  role: string;
+  period: string;
+  links: string[];
+  caseSubmissionIds: string[];
 };
 
 export type PortfolioStats = {

@@ -14,10 +14,15 @@ export function ProjectCard({ project, username }: { project: PortfolioProject; 
     href={`/portfolio/${username}/projeto/${project.id}`}
     className="group block rounded-xl border border-border/70 bg-card/40 p-6 transition hover:border-primary/60 hover:bg-card/70"
   >
+    {project.cover?.url && <div className="-mx-6 -mt-6 mb-5 aspect-[16/7] overflow-hidden rounded-t-xl bg-muted">
+      {/* eslint-disable-next-line @next/next/no-img-element -- URL assinada de mídia no Storage privado */}
+      <img src={project.cover.url} alt={`Capa do projeto ${project.name}`} loading="lazy" decoding="async" className="size-full object-cover transition duration-300 group-hover:scale-[1.02]" />
+    </div>}
     <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">{sourceLabels[project.source]}</p>
 
     <h3 className="mt-3 text-xl font-semibold tracking-[-0.02em] group-hover:text-primary">{project.name}</h3>
     {project.summary && <p className="mt-1.5 max-w-xl text-sm leading-6 text-muted-foreground">{project.summary}</p>}
+    {(project.role || project.period) && <p className="mt-3 text-xs text-muted-foreground">{[project.role, project.period].filter(Boolean).join(" · ")}</p>}
 
     {project.tags.length > 0 && <div className="mt-4 flex flex-wrap gap-1.5">
       {project.tags.map((tag) => <span key={tag} className="rounded-full border border-border px-2.5 py-0.5 text-[11px] text-muted-foreground">{tag}</span>)}

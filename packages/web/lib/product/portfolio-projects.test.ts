@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { labs } from "@/lib/playground/catalog";
 import { systemChallenges } from "@/lib/system-challenges";
 import { toEntries } from "./portfolio-format";
-import { buildProjects, portfolioSkills, statsFor } from "./portfolio-projects";
+import { buildProjects, normalizePortfolioProjectMedia, portfolioSkills, statsFor } from "./portfolio-projects";
 import type { Submission } from "./journey";
 
 const financas = labs.find((lab) => systemChallenges.find((item) => item.id === lab.slug)?.area === "Financas")!;
@@ -20,6 +20,18 @@ const submission = (over: Partial<Submission> = {}): Submission => ({
 });
 
 describe("projetos do portfólio", () => {
+  test("mídias antigas seguem públicas, novos estados privados são preservados e estados inválidos falham fechados", () => {
+    const userId = "11111111-1111-4111-8111-111111111111";
+    const projectId = "22222222-2222-4222-8222-222222222222";
+    const file = { name: "demo.webp", url: "", path: `${userId}/portfolio-project-${projectId}/33333333-3333-4333-8333-333333333333.webp`, size: 512, type: "image/webp" };
+    expect(normalizePortfolioProjectMedia([file], userId, projectId)?.[0].visibility).toBe("public");
+    expect(normalizePortfolioProjectMedia([{ ...file, isCover: true }], userId, projectId)?.[0].isCover).toBe(true);
+    const privateMedia = normalizePortfolioProjectMedia([{ ...file, visibility: "private", isCover: true }], userId, projectId)?.[0];
+    expect(privateMedia?.visibility).toBe("private");
+    expect(privateMedia?.isCover).toBe(false);
+    expect(normalizePortfolioProjectMedia([{ ...file, visibility: "unknown" }], userId, projectId)?.[0].visibility).toBe("private");
+  });
+
   test("agrupa evidências por ambiente e nomeia a loja pelo domínio que ela simula", () => {
     const projects = buildProjects(toEntries([submission(), submission({ id: "2", labSlug: loja.slug })]));
     expect(projects.map((project) => project.id).sort()).toEqual(["financas", "qa-lab"]);

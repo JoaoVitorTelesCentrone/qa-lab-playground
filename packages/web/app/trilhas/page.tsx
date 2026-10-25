@@ -34,8 +34,8 @@ export default async function TracksPage() {
   return <main className="mx-auto max-w-5xl px-5 py-12 sm:px-8">
     <header className="max-w-3xl">
       <p className="text-xs font-bold uppercase tracking-[.2em] text-mint">Aprendizado guiado</p>
-      <h1 className="mt-4 text-4xl font-black text-off-white sm:text-6xl">Trilhas feitas de Labs, não de conteúdo solto.</h1>
-      <p className="mt-5 text-lg leading-8 text-[#AAB2BC]">Escolha uma competência, percorra os Labs na ordem e acompanhe o que já concluiu. Cada Lab é uma unidade prática; a trilha é o caminho completo.</p>
+      <h1 className="qa-page-title mt-4 text-off-white">Trilhas feitas de Labs, não de conteúdo solto.</h1>
+      <p className="mt-4 max-w-2xl text-base leading-7 text-[#AAB2BC]">Escolha uma competência, percorra os Labs na ordem e acompanhe o que já concluiu. Cada Lab é uma unidade prática; a trilha é o caminho completo.</p>
     </header>
 
     <section className="mt-12 grid gap-5 md:grid-cols-2" aria-label="Trilhas disponíveis">
