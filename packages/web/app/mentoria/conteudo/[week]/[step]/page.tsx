@@ -87,14 +87,14 @@ export default async function ContentStepPage({ params }: { params: Promise<{ we
   const sliceForLesson = <T,>(items: readonly T[]) => lessonIndex === null ? [] : items.slice(Math.ceil(lessonIndex * items.length / week.lessons.length), Math.ceil((lessonIndex + 1) * items.length / week.lessons.length));
   const chapterSections = sliceForLesson(chapter.sections);
 
-  return <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8">
+  return <main className="ca-reading ca-legacy-step">
     <nav aria-label="Navegação do tema" className="mb-7">
       <Link href={`/conteudo/temas/${theme.slug}#unidade-${number}`} className="group inline-flex min-h-9 items-center gap-2 text-sm font-medium text-[#AAB2BC] transition-colors hover:text-off-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint focus-visible:ring-offset-4 focus-visible:ring-offset-[#101319]">
         <ArrowLeft aria-hidden="true" className="size-4 transition-transform group-hover:-translate-x-0.5" />
         <span>{theme.title}</span>
       </Link>
     </nav>
-    <header className="max-w-[72ch]">
+    <header className="ca-reading-header">
       <p className="text-sm font-medium text-[#AAB2BC]">Parte {number - theme.units[0] + 1} <span aria-hidden="true">·</span> Etapa {index + 1} de {steps.length}</p>
       <h1 className="mt-3 text-3xl font-black tracking-[-.03em] text-off-white sm:text-4xl">{step.title}</h1>
       {step.slug !== "desafio" && <p className="mt-3 text-lg leading-8 text-[#C8CFD7]">{step.description}</p>}

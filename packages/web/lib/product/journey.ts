@@ -4,7 +4,7 @@
 // home e o perfil renderizam. Nenhuma regra de progresso mora em componente.
 
 import { labs, type Lab } from "@/lib/playground/catalog";
-import { practiceApps, type PracticeAppId } from "./apps";
+import { liveApps, type PracticeAppId } from "./apps";
 import { regressionPacks } from "@/lib/regression-packs";
 
 export type EnrollmentStatus = "started" | "completed" | "abandoned";
@@ -148,7 +148,7 @@ export function buildJourney(rawEnrollments: Enrollment[], rawSubmissions: Submi
 }
 
 export function buildCoverage(runs: ScenarioRun[]): AppCoverage[] {
-  return practiceApps.map((app) => {
+  return liveApps.map((app) => {
     const total = regressionPacks.find((pack) => pack.id === app.id)?.scenarios.length ?? 0;
     const appRuns = runs.filter((run) => run.appId === app.id);
     const executed = new Set(appRuns.map((run) => run.scenarioId)).size;

@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { practiceApps } from "@/lib/product/apps";
+import { liveApps } from "@/lib/product/apps";
 import { bugsForApp, plantedBugs } from "@/lib/product/practice/bugs";
 import { scenariosForBug } from "@/lib/regression-packs";
 import type { PracticeSettings } from "@/lib/product/practice/store";
@@ -65,7 +65,7 @@ export function InstructorConsole({ settings }: { settings: PracticeSettings }) 
 
     {error && <p role="alert" className="mt-4 rounded-md border border-destructive/30 p-3 text-sm text-destructive">{error}</p>}
 
-    <div className="mt-8 grid gap-6">{practiceApps.map((app) => {
+    <div className="mt-8 grid gap-6">{liveApps.map((app) => {
       const bugs = bugsForApp(app.id);
       if (bugs.length === 0) return null;
 

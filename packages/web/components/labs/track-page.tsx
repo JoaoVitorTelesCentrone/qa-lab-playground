@@ -14,7 +14,7 @@ const stepIcons = { completed: CheckCircle2, started: CircleDot, abandoned: Circ
 
 export function TrackPage({ progress, signedIn, certificateCode }: { progress: TrackProgress; signedIn: boolean; certificateCode: string | null }) {
   const { track, nextLab } = progress;
-  const app = findPracticeApp(track.appId);
+  const app = track.appId === "broto" ? { name: "Broto Space", route: "/conteudo/broto" } : findPracticeApp(track.appId);
   // Passo agendado não aparece na lista — só o que já dá pra abrir de verdade.
   const steps = progress.steps.filter((step) => step.lab.status === "liberado");
   const completed = steps.filter((step) => step.status === "completed").length;

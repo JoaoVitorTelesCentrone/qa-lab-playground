@@ -14,8 +14,8 @@ O repositório já contém desafio gratuito, ambientes de prática, Labs, portf�
 
 ## 2. Andamento da implementação
 
-- **Implementado no código — métrica principal:** o painel administrativo calcula contas com evidência até sete dias após o cadastro e mostra numerador, tamanho da coorte elegível e mediana do tempo até a primeira evidência. Combina `lab_completed` atômico com versões completas do desafio ExpenseFlow persistidas em `deliverables`, deduplicadas por conta. A definição de coorte está testada; a integridade dos dados de staging ainda precisa ser conferida.
-- **Instrumentação inicial:** publicação do case ExpenseFlow emite `case_published`; o painel conta contas únicas que publicaram durante o período, sem incluir dados pessoais nos eventos.
+- **Implementado no código — métrica principal:** o painel administrativo calcula contas com evidência até sete dias após o cadastro e mostra numerador, tamanho da coorte elegível e mediana do tempo até a primeira evidência. Combina `lab_completed` atômico com entregas completas do desafio legado persistidas em `deliverables`, deduplicadas por conta. A definição de coorte está testada; a integridade dos dados de staging ainda precisa ser conferida.
+- **Instrumentação inicial:** publicação de case emite `case_published`; o painel conta contas únicas que publicaram durante o período, sem incluir dados pessoais nos eventos.
 - **Funil da mentoria:** solicitações, checkouts iniciados e pagamentos confirmados agora emitem eventos e aparecem como contas únicas no painel de 30 dias.
 - **Atribuição da lista e inscrição:** UTM source, medium e campaign passam por validação e são guardados como identificadores curtos. A área admin mostra a origem por lead e resume origens dos últimos 30 dias. A campanha também segue da landing para a inscrição, pelo cadastro e até a reserva paga, onde a primeira origem conhecida é preservada. As duas migrations de atribuição ainda precisam ser aplicadas em staging/produção.
 - **Gate preparado:** `docs/STAGING_GATE_QA_LAB.md` registra ambiente, responsável, comandos e evidência para cada jornada. O script de readiness verifica as colunas de atribuição.
@@ -26,7 +26,7 @@ O repositório já contém desafio gratuito, ambientes de prática, Labs, portf�
 
 | Evidência no projeto | Implicação |
 | --- | --- |
-| A home pública destaca o ExpenseFlow Free Challenge; o catálogo mantém três Labs liberados. | Concentrar a primeira experiência no desafio e em um próximo passo claro. |
+| A home pública destaca aprender QA na prática; o catálogo mantém três Labs liberados com o caso fictício do Broto. | Concentrar a primeira experiência no desafio e em um próximo passo claro. |
 | A mentoria tem conteúdo, turma, entregas, revisão, certificados e fluxo de admissão implementados no código. | Executar o piloto real antes de adicionar outra trilha ou mais recursos administrativos. |
 | O runbook registra o gate de staging como pendente: projeto, três perfis, checkout sandbox e remetente de e-mail. | Tratar essa validação como prioridade de lançamento, com evidências e responsáveis. |
 | Há `activity_events` e painel de métricas; os cálculos atuais cobrem início e conclusão de Labs, mas não o funil completo até case e mentoria. | Definir eventos e coortes consistentes antes de otimizar aquisição. |

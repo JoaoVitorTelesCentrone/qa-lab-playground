@@ -20,7 +20,7 @@ export const practiceApps: PracticeApp[] = [
 export function findPracticeApp(id: string) { return practiceApps.find((app) => app.id === id); }
 export function isPracticeAppId(value: string): value is PracticeAppId { return practiceApps.some((app) => app.id === value); }
 
-export const liveApps: PracticeApp[] = practiceApps;
+export const liveApps: PracticeApp[] = practiceApps.filter((app) => app.id !== "financas");
 
 export type RoadmapEnvironment = { id: string; name: string; route: string; summary: string };
 
@@ -33,7 +33,7 @@ export const roadmapEnvironments: RoadmapEnvironment[] = [
   { id: "trilhas", name: "Trilhas", route: "/trilhas", summary: "Percursos guiados de pratica." },
   { id: "labs", name: "Labs", route: "/labs", summary: "Missoes e ambientes de QA." },
   { id: "lab", name: "QA Labs de decisao", route: "/lab", summary: "Refinamento, triagem, logs e comunicacao." },
-  { id: "financas", name: "Financas", route: "/financas", summary: "Fluxos financeiros para investigar." },
+  { id: "broto", name: "Broto Space", route: "/conteudo/broto", summary: "Caso fictício para investigar um produto real." },
   { id: "agendamentos", name: "Agendamentos", route: "/agendamentos", summary: "Disponibilidade, conflito e reagendamento." },
   { id: "shop", name: "QA Lab Shop", route: "/shop/products", summary: "Catalogo, carrinho e checkout." },
   { id: "crm", name: "CRM", route: "/crm", summary: "Funil comercial e indicadores." },

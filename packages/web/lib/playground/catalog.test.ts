@@ -36,11 +36,13 @@ describe("catálogo de Labs", () => {
     expect(isLabReleased({ releaseDate: "2027-01-01" }, new Date("2026-12-31T12:00:00.000Z"))).toBe(false);
   });
 
-  test("lançamento enxuto: só 3 desafios de Finanças estão liberados", () => {
+  test("lançamento enxuto: só 3 desafios do Broto estão liberados", () => {
     const liberados = labs.filter((lab) => lab.status === "liberado");
     expect(liberados).toHaveLength(3);
     expect(liberados.map((lab) => lab.number).sort((a, b) => a - b)).toEqual([101, 103, 105]);
-    expect(liberados.every((lab) => lab.route.startsWith("/financas"))).toBe(true);
+    expect(liberados.every((lab) => lab.requiredFeature === "Broto" && lab.route === "/conteudo/broto")).toBe(true);
+    expect(labs.filter((lab) => lab.requiredFeature === "Broto")).toHaveLength(10);
+    expect(labs.some((lab) => lab.route.startsWith("/financas"))).toBe(false);
     expect(labs.filter((lab) => lab.status === "agendado").length).toBe(labs.length - 3);
   });
 });

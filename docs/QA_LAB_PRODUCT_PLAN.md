@@ -288,5 +288,5 @@ Evitar usar apenas quantidade de cliques, páginas visitadas ou pontos acumulado
   cinco trilhas num único desafio.
 
 O estado do catálogo público é menor que o conteúdo existente: três Labs de
-Finanças estão liberados; os demais desafios ficam fora da vitrine até a decisão
+Broto estão liberados; os demais desafios ficam fora da vitrine até a decisão
 de expansão registrada em `QA_LAB_DECISIONS.md`.

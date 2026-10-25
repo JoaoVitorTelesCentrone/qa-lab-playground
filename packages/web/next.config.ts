@@ -21,6 +21,8 @@ const nextConfig: NextConfig = {
       { source: "/missoes/:path*", destination: "/lab", permanent: true },
       { source: "/datas/:path*", destination: "/lab", permanent: true },
       { source: "/despesas", destination: "/conteudo/broto", permanent: true },
+      { source: "/financas/:path*", destination: "/conteudo/broto", permanent: false },
+      { source: "/trilhas/financas-do-zero", destination: "/trilhas/broto-na-pratica", permanent: false },
       { source: "/playground/expenseflow/:path*", destination: "/conteudo/broto", permanent: true },
       { source: "/playground/entregas/:path*", destination: "/lab", permanent: true },
       { source: "/playground/conclusao/:path*", destination: "/lab", permanent: true },

@@ -37,9 +37,9 @@ export default async function MentorshipThemePage({ params }: { params: Promise<
   const totalLessons = units.reduce((count, unit) => count + unit.lessons.length, 0);
   const completedCount = completedKeys.filter((key) => units.some((unit) => unit.lessons.some((lesson) => lesson.key === key))).length;
 
-  return <main className="mx-auto max-w-4xl px-5 py-10 sm:px-8">
+  return <main className="ca-shell ca-interior">
     <Link href="/conteudo" className="inline-flex min-h-10 items-center gap-2 text-sm font-bold text-mint hover:text-neon"><ArrowLeft aria-hidden="true" className="size-4" />Todos os temas</Link>
-    <header className="mt-6">
+    <header className="ca-reading-header">
       <h1 className="text-3xl font-black tracking-[-.03em] text-off-white sm:text-4xl">{theme.title}</h1>
       <p className="mt-3 max-w-[65ch] text-base leading-7 text-[#C8CFD7]">{theme.promise}</p>
       <p className="mt-4 text-sm text-[#AAB2BC]">Tema {themeIndex + 1} de {mentorshipThemes.length} · {totalLessons} aulas · 2 missões no Broto</p>
@@ -48,7 +48,7 @@ export default async function MentorshipThemePage({ params }: { params: Promise<
       {dashboard && <p className="mt-3 text-xs text-[#AAB2BC]">{completedCount}/{totalLessons} aulas concluídas · {progress.approved}/{progress.total} missões aprovadas</p>}
     </header>
 
-    <section className="mt-10" aria-label="Aulas e atividades do tema">
+    <section className="ca-reading-section" aria-label="Aulas e atividades do tema">
       <p className="border-b border-white/15 pb-4 text-sm leading-6 text-[#AAB2BC]">Aulas → Quiz → Exemplo → Missão. Estude por vídeo ou leitura e aplique no Broto.</p>
       {units.map((unit, index) => <section key={unit.number} id={`unidade-${unit.number}`} className="scroll-mt-24 pt-8">
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">

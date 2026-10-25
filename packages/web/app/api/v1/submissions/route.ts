@@ -1,6 +1,6 @@
 import { FieldReader, fail, ok, readJson, validated, withUser } from "@/lib/product/api";
 import { deleteSubmission, getSubmissionLabSlug, listSubmissions, submitEvidence, updateSubmission } from "@/lib/product/store";
-import { evaluateEvidence, evaluateLab101Evidence } from "@/lib/product/evaluation";
+import { evaluateEvidence } from "@/lib/product/evaluation";
 import { validateEvidenceAttachments } from "@/lib/product/evidence-attachments";
 import { evidenceFilesExist } from "@/lib/product/evidence-storage";
 import { labs } from "@/lib/playground/catalog";
@@ -47,10 +47,7 @@ export function POST(request: Request) {
         evidence: evidence.trim(),
         attachments,
       });
-      return ok({
-        submission,
-        feedback: lab.number === 101 ? evaluateLab101Evidence(evidence) : null,
-      }, 201);
+      return ok({ submission }, 201);
     }),
   );
 }

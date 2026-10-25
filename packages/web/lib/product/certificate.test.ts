@@ -4,9 +4,9 @@ import type { LabProgress, Submission } from "./journey";
 import { buildTrackProgress, findTrack } from "./tracks";
 import { certificateCode, certificateLinkedInPost, certificateStats, eligibility, isCertificateCode, linkedInCredentialFields, type Certificate } from "./certificate";
 
-// financas-do-zero é a única trilha com Labs liberados (101, 103 e 105) no
+// A trilha do Broto é a única com Labs liberados (101, 103 e 105) no
 // lançamento enxuto — ver [[qa-lab-lancamento-enxuto]].
-const track = findTrack("financas-do-zero")!;
+const track = findTrack("broto-na-pratica")!;
 const releasedNumbers = track.labNumbers.filter((number) => labs.find((lab) => lab.number === number)?.status === "liberado");
 
 function progress(numbers: number[]): LabProgress[] {

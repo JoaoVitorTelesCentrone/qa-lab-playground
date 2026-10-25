@@ -1,12 +1,12 @@
 # QA Lab Playground - Registro de Decisoes
 
-Ultima atualizacao: 2026-09-23
+Ultima atualizacao: 2026-10-25
 
 Este documento registra decisoes de produto e arquitetura do QA Lab Playground. A motivacao e parte da decisao: sem ela, mudancas futuras tendem a desfazer escolhas intencionais.
 
 ## Estado implementado em 2026-09-23
 
-O codigo em producao do produto segue hoje um lancamento enxuto: o catalogo lista tres Labs liberados, todos de Financas; os demais desafios ficam agendados. O conteudo dos desafios continua no registry e nao exige migration para ser publicado. A rota direta de um Lab agendado agora redireciona para `/waitlist`, e as APIs de progresso, evidencias e anexos recusam Labs agendados.
+Atualização de 2026-10-25: o catálogo mantém três Labs liberados (`101`, `103`, `105`), agora ligados ao caso fictício do Broto Space. Os outros exercícios do mesmo bloco também usam o Broto, mas seguem agendados. O conteúdo dos desafios continua no registry e não exige migração para ser publicado. A rota direta de um Lab agendado redireciona para `/waitlist`, e as APIs de progresso, evidências e anexos recusam Labs agendados.
 
 Isso diverge do plano inicial abaixo de 30 Labs com liberacao semanal. A cadencia de 30 continua sendo uma proposta registrada, nao o comportamento ativo do catalogo. Antes de mudar a lista liberada, atualizar `LAUNCH_ORDER` em `packages/web/lib/playground/catalog.ts` e confirmar que o ambiente do Lab tambem esta pronto.
 

@@ -5,15 +5,15 @@ import { toEntries } from "./portfolio-format";
 import { buildProjects, normalizePortfolioProjectMedia, portfolioSkills, statsFor } from "./portfolio-projects";
 import type { Submission } from "./journey";
 
-const financas = labs.find((lab) => systemChallenges.find((item) => item.id === lab.slug)?.area === "Financas")!;
-const investigacao = labs.find((lab) => systemChallenges.find((item) => item.id === lab.slug)?.mode === "investigacao" && systemChallenges.find((item) => item.id === lab.slug)?.area === "Financas")!;
+const broto = labs.find((lab) => systemChallenges.find((item) => item.id === lab.slug)?.area === "Broto")!;
+const investigacao = labs.find((lab) => systemChallenges.find((item) => item.id === lab.slug)?.mode === "investigacao" && systemChallenges.find((item) => item.id === lab.slug)?.area === "Broto")!;
 const loja = labs.find((lab) => systemChallenges.find((item) => item.id === lab.slug)?.area === "Catalogo")!;
 
 const submission = (over: Partial<Submission> = {}): Submission => ({
   id: "1",
-  labSlug: financas.slug,
-  evidence: "O saldo não atualiza. O valor anterior continua no topo depois de salvar.",
-  attachments: [{ name: "saldo.png", url: "https://storage.test/saldo.png", path: "u/l/saldo.png", size: 512, type: "image/png" }],
+  labSlug: broto.slug,
+  evidence: "Ao retornar ao caso fictício, o pensamento não aparece na lista esperada.",
+  attachments: [{ name: "retomada.png", url: "https://storage.test/retomada.png", path: "u/l/retomada.png", size: 512, type: "image/png" }],
   published: true,
   createdAt: "2026-08-10T10:00:00Z",
   ...over,
@@ -34,7 +34,7 @@ describe("projetos do portfólio", () => {
 
   test("agrupa evidências por ambiente e nomeia a loja pelo domínio que ela simula", () => {
     const projects = buildProjects(toEntries([submission(), submission({ id: "2", labSlug: loja.slug })]));
-    expect(projects.map((project) => project.id).sort()).toEqual(["financas", "qa-lab"]);
+    expect(projects.map((project) => project.id).sort()).toEqual(["broto", "qa-lab"]);
     expect(projects.find((project) => project.id === "qa-lab")?.name).toBe("E-commerce");
   });
 
@@ -44,7 +44,7 @@ describe("projetos do portfólio", () => {
       submission({ id: "2", labSlug: investigacao.slug }),
       submission({ id: "3", labSlug: loja.slug }),
     ]));
-    expect(projects[0].id).toBe("financas");
+    expect(projects[0].id).toBe("broto");
     expect(projects[0].stats.evidences).toBe(2);
   });
 

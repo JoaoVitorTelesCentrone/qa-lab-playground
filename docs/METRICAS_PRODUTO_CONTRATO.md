@@ -5,9 +5,9 @@ O painel em `/lab/metricas` é restrito aos e-mails de `QALAB_ADMIN_EMAILS` e us
 | Indicador | Fonte | Identidade e deduplicação | Janela |
 | --- | --- | --- | --- |
 | Novas contas | `profiles.created_at` | `profiles.id` | Cadastro nos últimos 30 dias |
-| Primeira evidência em 7 dias | `activity_events.lab_completed` e versões ExpenseFlow em `deliverables` que passam na validação e no checklist completo | Primeiro timestamp válido por `user_id` | Cadastro na janela de 30 dias, com D+7 completo; evidência entre cadastro e D+7 |
+| Primeira evidência em 7 dias | `activity_events.lab_completed` e entregas válidas do desafio legado em `deliverables` | Primeiro timestamp válido por `user_id` | Cadastro na janela de 30 dias, com D+7 completo; evidência entre cadastro e D+7 |
 | Tempo até primeira evidência | Mesmas fontes acima | Mediana das primeiras evidências da coorte elegível que entregou | Horas entre cadastro e entrega, somente até D+7 |
-| Case publicado | `activity_events.case_published` após publicação ExpenseFlow | `user_id` único | Evento nos últimos 30 dias |
+| Case publicado | `activity_events.case_published` após publicação de um case | `user_id` único | Evento nos últimos 30 dias |
 | Interesse, checkout, pagamento da mentoria | `mentorship_application_submitted`, `mentorship_checkout_started`, `mentorship_payment_confirmed` | `user_id` único por etapa | Cada evento nos últimos 30 dias |
 | Erros | `activity_events.api_error` | Uma ocorrência por evento | Últimos 30 dias |
 

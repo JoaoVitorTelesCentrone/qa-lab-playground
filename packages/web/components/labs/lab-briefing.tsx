@@ -24,7 +24,7 @@ import { findLabByNumber, labLabel } from "@/lib/playground/catalog";
 import type { SystemChallenge } from "@/lib/system-challenges";
 import type { Attachment, EnrollmentStatus, Submission } from "@/lib/product/journey";
 import type { TrackProgress } from "@/lib/product/tracks";
-import { evaluateEvidence, type Evaluation, type Lab101Feedback } from "@/lib/product/evaluation";
+import { evaluateEvidence, type Evaluation } from "@/lib/product/evaluation";
 
 const steps = [
   { label: "Contexto" },
@@ -49,7 +49,6 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [state, setState] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState("");
-  const [feedback, setFeedback] = useState<Lab101Feedback | null>(null);
   const [starting, setStarting] = useState(false);
 
   const lab = findLabByNumber(challenge.number);
@@ -94,8 +93,6 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
         setError(body?.error?.message ?? "Não foi possível salvar a evidência. Tente novamente.");
         return;
       }
-      const payload = await response.json().catch(() => null);
-      setFeedback(payload?.data?.feedback ?? null);
       setState("done");
       setEvidence("");
       setAttachments([]);
@@ -186,12 +183,12 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
 
       {step === 2 && <section>
         <h2 className="text-sm font-semibold text-muted-foreground">Ambiente do Lab</h2>
-        <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">Abra o ambiente em outra aba, execute o roteiro e volte aqui para registrar a evidência.</p>
+        <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">{challenge.area === "Broto" ? "Leia o caso fictício, abra o Broto a partir dele e volte aqui para registrar o que observou." : "Abra o ambiente em outra aba, execute o roteiro e volte aqui para registrar a evidência."}</p>
         <div className="mt-5 flex flex-wrap gap-2">
-          <Button asChild><Link href={surface} target="_blank" rel="noopener noreferrer">Abrir ambiente do Lab <ExternalLink className="size-4" /></Link></Button>
+          <Button asChild><Link href={surface} target="_blank" rel="noopener noreferrer">{challenge.area === "Broto" ? "Abrir caso de treino" : "Abrir ambiente do Lab"} <ExternalLink className="size-4" /></Link></Button>
           {signedIn && status === "nao-iniciado" && <Button type="button" variant="outline" disabled={starting} onClick={() => void start()}>{starting && <Loader2 className="size-4 animate-spin" />} {starting ? "Iniciando..." : "Marcar como iniciado"}</Button>}
         </div>
-        {!signedIn && <p className="mt-4 text-sm text-muted-foreground">Você pode explorar o ambiente agora. <Link href={`/login?next=${encodeURIComponent(`/labs/${challenge.number}`)}`} className="font-medium text-primary underline underline-offset-4">Entre na sua conta</Link> para registrar o progresso e entregar a evidência.</p>}
+        {!signedIn && <p className="mt-4 text-sm text-muted-foreground">Você pode ler o caso e começar a investigação agora. <Link href={`/login?next=${encodeURIComponent(`/labs/${challenge.number}`)}`} className="font-medium text-primary underline underline-offset-4">Entre na sua conta do QA Lab</Link> para registrar o progresso e entregar a evidência.</p>}
         {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
       </section>}
 
@@ -219,7 +216,6 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
         {state === "done" && <div role="status" aria-live="polite" className="mt-5 rounded-md border border-primary/30 bg-primary/[0.04] p-4">
           <p className="text-sm font-medium text-primary">Evidência salva. Lab concluído.</p>
           <p className="mt-2 text-sm text-muted-foreground">Sua entrega virou um case: contexto do sistema, o que você provou, passos de reprodução e um post pronto para o LinkedIn.</p>
-          {feedback && <p className="mt-3 rounded-md bg-background p-3 text-sm text-foreground">{feedback.message}</p>}
           <div className="mt-3 flex flex-wrap gap-2">
             <Button asChild size="sm"><Link href={`/labs/${challenge.number}/conclusao`}>Ver meu case <ArrowRight className="size-4" /></Link></Button>
             {nextInTrack

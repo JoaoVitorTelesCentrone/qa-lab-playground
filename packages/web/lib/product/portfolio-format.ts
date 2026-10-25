@@ -43,7 +43,7 @@ export function toEntries(submissions: Submission[]): PortfolioEntry[] {
  * todas são o mesmo sistema testado, então viram um projeto só.
  */
 export function projectIdForArea(area: string): string {
-  const direct: Record<string, string> = { Financas: "financas", Agendamentos: "agendamentos", CRM: "crm" };
+  const direct: Record<string, string> = { Broto: "broto", Financas: "financas", Agendamentos: "agendamentos", CRM: "crm" };
   return direct[area] ?? "qa-lab";
 }
 

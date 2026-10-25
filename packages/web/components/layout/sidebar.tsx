@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {
   FlaskConical, Home, LayoutGrid, BookOpen,
-  CalendarDays, Wallet, Rocket, Linkedin, User, LogIn,
+  CalendarDays, Sprout, Rocket, Linkedin, User, LogIn,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -17,7 +17,7 @@ const navItems = [
   { href: "/elementos",       label: "Elementos",       mobileLabel: "Elementos", icon: LayoutGrid,   exact: false },
   { href: "/blog",            label: "Blog",            mobileLabel: "Blog",      icon: BookOpen,     exact: false },
   { href: "/datas",           label: "Datas",           mobileLabel: "Datas",     icon: CalendarDays, exact: false },
-  { href: "/despesas",        label: "Despesas",        mobileLabel: "Despesas",  icon: Wallet,       exact: false },
+  { href: "/conteudo/broto",  label: "Caso Broto",      mobileLabel: "Broto",     icon: Sprout,       exact: false },
   { href: "/proximos-passos", label: "Próximos Passos", mobileLabel: "Futuro",    icon: Rocket,       exact: false },
 ];
 

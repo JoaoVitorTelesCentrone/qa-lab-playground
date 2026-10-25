@@ -21,10 +21,19 @@ test("@smoke playground legado leva à página atual do Lab", async ({ page }) =
   await expect(page.getByRole("heading", { name: /Qualidade se aprende fazendo perguntas melhores/i })).toBeVisible();
 });
 
-test("@smoke rotas antigas do ExpenseFlow levam ao caso BrotoSpace", async ({ page }) => {
+test("@smoke rota legada do desafio leva ao caso Broto", async ({ page }) => {
   await page.goto("/playground/expenseflow");
   await expect(page).toHaveURL(/\/conteudo\/broto\/?$/);
   await expect(page.getByRole("link", { name: "Abrir o Broto", exact: true })).toHaveAttribute("href", "https://www.brotospace.com/");
+});
+
+test("@smoke Labs liberados e rota antiga de Finanças levam ao Broto", async ({ page }) => {
+  await page.goto("/labs/101");
+  await expect(page.getByRole("heading", { name: "Investigar a captura e a retomada de um pensamento" })).toBeVisible();
+  await page.getByRole("button", { name: "Etapa 3: Ambiente" }).click();
+  await expect(page.getByRole("link", { name: /Abrir caso de treino/ })).toHaveAttribute("href", "/conteudo/broto");
+  await page.goto("/financas");
+  await expect(page).toHaveURL(/\/conteudo\/broto\/?$/);
 });
 
 test("@smoke anônimo não envia evidência à API do produto", async ({ request }) => {

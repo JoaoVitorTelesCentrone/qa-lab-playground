@@ -16,7 +16,7 @@
 **CTA de consideração:** entrar na lista de interesse da mentoria.  
 **CTA de venda:** ver a oferta publicada e solicitar uma vaga.
 
-O desafio gratuito ExpenseFlow é a porta de entrada; a mentoria usa também as práticas e o case do Broto Space. A mensagem precisa explicar essa passagem sem sugerir que o desafio gratuito e a mentoria são o mesmo produto.
+Os Labs gratuitos usam um caso fictício no Broto Space como porta de entrada. A mentoria aprofunda a mesma jornada com missões, evidências e feedback humano; a mensagem deve explicar essa continuidade sem sugerir que a prática gratuita inclui acompanhamento.
 
 ### Resultado que o marketing deve produzir
 
@@ -40,7 +40,7 @@ Evitar dizer que “o mercado exige” uma lista universal de ferramentas. Falar
 ### Quatro séries recorrentes
 
 1. **QA em 60 segundos — você liberaria?** Um comportamento suspeito, uma evidência curta e uma pergunta de decisão. O vídeo seguinte mostra a análise e o risco residual.
-2. **Bug Hunt ExpenseFlow** Um desafio reproduzível: observar, registrar passos e separar fato de hipótese. A pessoa pode enviar a atividade a um colega para comparar achados.
+2. **Investigação no Broto** Um desafio reproduzível com dados fictícios: observar, registrar passos e separar fato de hipótese. A pessoa pode enviar a atividade a um colega para comparar achados.
 3. **Do clique à decisão** Uma demonstração curta de como um bug report, um teste de API ou um quality gate muda uma decisão de produto.
 4. **Case em construção** Bastidores do currículo e de evidências sintéticas; durante a turma, progresso de alunos somente com autorização específica para divulgação.
 
@@ -183,7 +183,7 @@ Publicar somente quando o link tiver todos os campos comerciais aprovados. Se ai
 4. Evidência mínima que outra pessoa consegue conferir.
 5. Impacto possível — separado do que ainda é hipótese.
 6. Qual decisão a evidência apoia; o que ainda falta saber.
-7. **Fecho:** Pratique no desafio gratuito ExpenseFlow → [link].
+7. **Fecho:** Pratique no caso gratuito do Broto → [link].
 
 ### Três ganchos alternativos para Shorts/Reels/TikTok
 

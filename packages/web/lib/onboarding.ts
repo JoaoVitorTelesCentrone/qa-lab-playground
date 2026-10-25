@@ -12,7 +12,7 @@ export function onboardingSteps(lab: TourLab | null): TourStep[] {
   const route = `/labs/${lab.number}`;
   return [...steps,
     { title: "Entenda o que investigar.", text: "Leia o objetivo, confira os dados de teste e veja o que precisa aparecer na entrega. Essa é a sua missão.", route, selector: '[data-onboarding="lab-step-0"]', labStep: 0, action: "Ver ambiente" },
-    { title: "Agora, teste o sistema.", text: "Abra o ambiente em outra aba e compare o esperado com o observado. Você pode explorar com dados de treino, mesmo sem conta.", route, selector: '[data-onboarding="lab-step-2"]', labStep: 2, action: "Ver entrega" },
+    { title: "Agora, teste o sistema.", text: "Abra o caso de treino, copie os dados fictícios e siga para o Broto. Para praticar no produto, use uma conta de estudo; aqui você pode ler o roteiro sem entrar.", route, selector: '[data-onboarding="lab-step-2"]', labStep: 2, action: "Ver entrega" },
     { title: "Transforme a descoberta em evidência.", text: "Registre os passos, o resultado e sua conclusão. Entre na sua conta quando quiser salvar. Você pode reabrir este guia em Primeiros passos.", route, selector: '[data-onboarding="lab-step-3"]', labStep: 3, action: "Concluir" },
   ];
 }

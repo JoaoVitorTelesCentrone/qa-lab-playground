@@ -59,7 +59,7 @@ describe("minha jornada", () => {
     expect(journey.recent).toHaveLength(0);
   });
 
-  test("cobre os 4 ambientes e conta cada cenário uma única vez", () => {
+  test("cobre os ambientes atuais e conta cada cenário uma única vez", () => {
     const pack = regressionPacks[0];
     const runs: ScenarioRun[] = [
       { appId: pack.id, scenarioId: pack.scenarios[0].id, status: "passou" },
@@ -67,9 +67,8 @@ describe("minha jornada", () => {
       { appId: pack.id, scenarioId: pack.scenarios[1].id, status: "falhou" },
     ];
     const coverage = buildJourney([], [], runs).coverage;
-    expect(coverage).toHaveLength(4);
-    // Finanças roda um recorte de 20 cenários; os outros três seguem com 35.
-    expect(coverage.every((item) => item.total === (item.id === "financas" ? 20 : 35))).toBe(true);
+    expect(coverage).toHaveLength(3);
+    expect(coverage.every((item) => item.total === 35)).toBe(true);
     const first = coverage.find((item) => item.id === pack.id)!;
     expect(first.executed).toBe(2);
     expect(first.failed).toBe(2);

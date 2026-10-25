@@ -1,12 +1,19 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, Sprout } from "lucide-react";
 import LegacyContentPage from "@/app/mentoria/conteudo/page";
 import { getMentorshipDashboard } from "@/lib/mentorship/store";
-import { mentorshipPathV2, pathV2Assignments, pathV2Progress } from "@/lib/mentorship/path-v2";
+import { mentorshipPathV2, pathV2Assignments, pathV2ChapterHref, pathV2PracticeKey, pathV2Progress } from "@/lib/mentorship/path-v2";
 import { getSessionUser } from "@/lib/product/store";
 
-export const metadata = { title: "Conteúdo por módulos | QA Lab", description: "Estude QA por competências, com teoria e prática no Broto Space e nos labs." };
+export const metadata = { title: "Conteúdo por módulos | QA Lab", description: "Estude QA por competências, pratique no Broto e transforme a investigação em evidência." };
 export const dynamic = "force-dynamic";
+
+const route = [
+  { number: "01", title: "Observe", description: "Entenda a jornada antes de testar." },
+  { number: "02", title: "Investigue", description: "Escolha riscos e faça perguntas melhores." },
+  { number: "03", title: "Registre", description: "Guarde o que aconteceu, com contexto." },
+  { number: "04", title: "Decida", description: "Transforme evidência em próximo passo." },
+];
 
 export default async function ContentCatalogPage() {
   const user = await getSessionUser();
@@ -18,15 +25,42 @@ export default async function ContentCatalogPage() {
   const approved = new Set([...latest].filter(([, status]) => status === "approved").map(([key]) => key));
   const progress = pathV2Progress(completed, approved, completed);
   const next = progress.find((item) => !item.complete);
+  const resumeChapter = next?.module.chapters.find((chapter) => chapter.lessonKeys.some((key) => !completed.has(key)) || chapter.practices.some((_, index) => !completed.has(pathV2PracticeKey(chapter, index))) || (chapter.assignmentKey && !approved.has(chapter.assignmentKey))) ?? next?.module.chapters[0];
+  const journeyComplete = dashboard?.enrollment.programVersion === "v2" && !next;
+  const startHref = journeyComplete ? "/mentoria/app" : next && resumeChapter ? pathV2ChapterHref(next.module, resumeChapter) : pathV2ChapterHref(mentorshipPathV2[0], mentorshipPathV2[0].chapters[0]);
 
-  return <main className="mx-auto max-w-5xl px-5 py-10 sm:px-8">
-    <header className="max-w-3xl"><h1 className="qa-page-title text-off-white">Aprenda por competências. Mostre o que sabe fazer.</h1><p className="mt-4 max-w-2xl text-base leading-7 text-[#C8CFD7]">Sete módulos, capítulos no tamanho certo e prática que vira evidência. Explore livremente; a mentoria acompanha suas entregas.</p></header>
-    {dashboard?.enrollment.programVersion === "v2" ? <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-y border-white/15 py-5"><p className="text-sm text-[#C8CFD7]">{next ? `Continue em ${next.module.title}.` : "Percurso concluído. Revise seu case e feedback."}</p><Link href="/mentoria/app" className="inline-flex min-h-11 items-center gap-2 font-bold text-mint hover:text-neon">Minha mentoria <ArrowRight aria-hidden="true" className="size-4" /></Link></div> : <p className="mt-8 border-y border-white/15 py-4 text-sm text-[#C8CFD7]">O catálogo é aberto. <Link href="/login?next=/mentoria/app" className="font-bold text-mint underline underline-offset-4">Entre na mentoria para salvar o progresso.</Link></p>}
-    <ol aria-label="Módulos de aprendizagem" className="mt-10 divide-y divide-white/15 border-y border-white/15">{mentorshipPathV2.map((module, index) => {
-      const item = progress[index];
-      const assignmentCount = pathV2Assignments.filter((assignment) => assignment.moduleId === module.id).length;
-      return <li key={module.id} className="grid gap-5 py-7 md:grid-cols-[minmax(0,1fr)_12rem] md:items-center"><div><p className="text-xs font-bold text-mint">Módulo {index + 1}</p><h2 className="mt-2 text-2xl font-black text-off-white"><Link href={`/conteudo/modulos/${module.slug}`} className="hover:text-mint">{module.title}</Link></h2><p className="mt-2 text-sm leading-6 text-[#C8CFD7]">{module.summary}</p></div><div className="text-sm text-[#AAB2BC]"><p>{module.chapters.length} capítulos · {assignmentCount} {assignmentCount === 1 ? "entrega" : "entregas"}</p>{dashboard?.enrollment.programVersion === "v2" && <p className="mt-2 text-xs text-mint">{item.lessonsDone}/{item.lessonsTotal} aulas · {item.practicesDone}/{item.practicesTotal} práticas · {item.assignmentsDone}/{item.assignmentsTotal} entregas</p>}<Link href={`/conteudo/modulos/${module.slug}`} className="mt-3 inline-flex min-h-10 items-center gap-1 font-bold text-mint hover:text-neon">Abrir módulo <ArrowRight aria-hidden="true" className="size-4" /></Link></div></li>;
-    })}</ol>
-    <p className="mt-8 text-sm leading-6 text-[#AAB2BC]">Os encontros ao vivo seguem o calendário da turma. Os capítulos não são travados por semana.</p>
+  return <main className="ca-shell">
+    <header className="ca-hero">
+      <div className="ca-hero-copy">
+        <span className="ca-kicker">Aprendizado em campo / 07 módulos</span>
+        <h1 className="ca-display">Aprenda QA <em>fazendo.</em></h1>
+        <p className="ca-intro">Investigue um produto, experimente com dados de treino e transforme o que descobriu em evidência. Cada capítulo aproxima teoria, prática e uma entrega que você consegue explicar.</p>
+        <div className="ca-hero-actions">
+          <Link href={startHref} className="ca-button">{journeyComplete ? "Ver meu case" : dashboard?.enrollment.programVersion === "v2" && next ? "Continuar meu percurso" : "Começar pelo primeiro capítulo"}<ArrowRight aria-hidden="true" className="size-4" /></Link>
+          <Link href="/conteudo/broto" className="ca-text-link">Conhecer o caso Broto <Sprout aria-hidden="true" className="size-4" /></Link>
+        </div>
+        <p className="text-xs leading-6" style={{ color: "var(--ca-muted)" }}>{dashboard?.enrollment.programVersion === "v2" ? next ? `Seu próximo módulo: ${next.module.title}.` : "Percurso concluído. Seu case e seu feedback estão na mentoria." : "Leitura aberta. Na mentoria, você salva progresso e recebe feedback nas entregas."}</p>
+      </div>
+      <ol className="ca-route" aria-label="Como se aprende QA no conteúdo">
+        {route.map((item) => <li key={item.number} className="ca-route-item"><span className="ca-route-num">/ {item.number}</span><strong className="ca-route-title">{item.title}</strong><span className="ca-route-desc">{item.description}</span></li>)}
+      </ol>
+    </header>
+
+    <section aria-labelledby="modulos-title" className="pb-8">
+      <div className="ca-section-head"><h2 id="modulos-title">Seu mapa de prática.</h2><p>Sete competências. Capítulos curtos. Uma investigação que ganha profundidade a cada passo.</p></div>
+      <ol className="ca-module-list">{mentorshipPathV2.map((module, index) => {
+        const item = progress[index];
+        const assignmentCount = pathV2Assignments.filter((assignment) => assignment.moduleId === module.id).length;
+        return <li key={module.id} className="ca-module-row"><Link href={`/conteudo/modulos/${module.slug}`} aria-label={`Abrir módulo ${index + 1}: ${module.title}`}>
+          <span className="ca-module-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+          <span><strong className="ca-module-title">{module.title}</strong><span className="ca-module-summary">{module.summary}</span></span>
+          <span className="ca-module-meta">{module.chapters.length} capítulos<br />{assignmentCount} {assignmentCount === 1 ? "entrega" : "entregas"}{dashboard?.enrollment.programVersion === "v2" && <><br /><span style={{ color: "var(--ca-green)" }}>{item.complete ? <><Check aria-hidden="true" className="inline size-3" /> Concluído</> : `${item.lessonsDone}/${item.lessonsTotal} aulas concluídas`}</span></>}</span>
+          <ArrowUpRight aria-hidden="true" className="ca-module-arrow size-5" />
+        </Link></li>;
+      })}</ol>
+    </section>
+
+    <aside className="ca-case-callout" aria-labelledby="broto-case-title"><div><span className="ca-kicker" style={{ color: "#335b3b" }}>O caso que atravessa o percurso</span><h2 id="broto-case-title" className="mt-4">Um pensamento vira uma investigação.</h2><p>Use a mesma história fictícia no Broto para observar captura, organização, ação e retomada. Seus dados pessoais ficam fora das evidências.</p></div><Link href="/conteudo/broto" className="inline-flex min-h-12 items-center gap-2">Preparar o caso <ArrowRight aria-hidden="true" className="size-4" /></Link></aside>
+    <p className="pb-14 text-sm" style={{ color: "var(--ca-muted)" }}>Os encontros ao vivo seguem o calendário da turma. Os capítulos ficam disponíveis para leitura livre.</p>
   </main>;
 }

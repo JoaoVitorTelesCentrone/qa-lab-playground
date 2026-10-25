@@ -27,8 +27,8 @@ export default async function MentorshipContentPage() {
   const currentTheme = dashboard && !dashboard.isComplete && dashboard.enrollment.status !== "completed" ? mentorshipThemes.find((theme) => dashboard.currentWeek >= theme.units[0] && dashboard.currentWeek <= theme.units[1]) : null;
 
   return (
-    <main className="mx-auto max-w-5xl px-5 py-10 sm:px-8">
-      <header className="max-w-3xl">
+    <main className="ca-shell ca-interior ca-legacy-catalog">
+      <header className="ca-reading-header">
         <h1 className="text-4xl font-black tracking-[-.03em] text-off-white sm:text-5xl">Aprenda por temas. Mostre o que sabe fazer.</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-[#C8CFD7] sm:text-lg">6 temas com aulas e missões práticas.</p>
       </header>

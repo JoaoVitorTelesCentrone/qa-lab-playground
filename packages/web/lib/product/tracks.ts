@@ -11,7 +11,7 @@ import type { EnrollmentStatus, LabProgress } from "./journey";
 export type Track = {
   slug: string;
   name: string;
-  appId: PracticeAppId;
+  appId: PracticeAppId | "broto";
   /** O que a trilha treina. */
   objective: string;
   /** O que o aluno consegue fazer ao terminar. */
@@ -34,14 +34,14 @@ const criticalFlows: Track = {
 
 // Uma trilha por ambiente de prática, com os 10 Labs daquele ambiente na ordem
 // em que o aluno precisa entender o domínio: primeiro validar o fluxo normal,
-// depois investigar onde ele quebra. Os números vêm do catálogo — Finanças
+// depois investigar onde ele quebra. Os números vêm do catálogo — Broto
 // 101-110, Agendamentos 111-120 e CRM 121-130.
-const financeFlows: Track = {
-  slug: "financas-do-zero",
-  name: "Finanças ponta a ponta",
-  appId: "financas",
-  objective: "Testar um controle financeiro completo: lançamento, orçamento, meta e o total que precisa fechar com a lista.",
-  outcome: "Você consegue provar que um cálculo exibido diverge dos dados que o alimentam, com evidência reproduzível.",
+const brotoFlows: Track = {
+  slug: "broto-na-pratica",
+  name: "Investigue o Broto",
+  appId: "broto",
+  objective: "Percorrer a jornada de captura, organização e retomada do caso fictício no Broto.",
+  outcome: "Você consegue investigar um produto real, separar observação de hipótese e entregar evidência reproduzível sem dados pessoais.",
   // Os três Labs já liberados formam o primeiro bloco contínuo da trilha.
   // Os demais preservam a sequência planejada depois desse bloco.
   labNumbers: [101, 103, 105, 102, 104, 106, 107, 108, 109, 110],
@@ -72,10 +72,10 @@ const crmFlows: Track = {
  */
 export const TRACKS_ENABLED = true;
 
-export const learningTracks: Track[] = [criticalFlows, financeFlows, bookingFlows, crmFlows];
+export const learningTracks: Track[] = [criticalFlows, brotoFlows, bookingFlows, crmFlows];
 
 export function findTrack(slug: string) {
-  return learningTracks.find((track) => track.slug === slug);
+  return learningTracks.find((track) => track.slug === (slug === "financas-do-zero" ? "broto-na-pratica" : slug));
 }
 
 export type TrackStep = {

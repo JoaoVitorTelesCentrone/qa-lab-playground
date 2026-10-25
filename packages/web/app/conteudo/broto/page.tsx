@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Sprout } from "lucide-react";
 import { CareerTemplate } from "@/components/mentorship/career-toolkit";
 import { brotoSpaceSite } from "@/lib/mentorship/brotospace-track";
 import { brotoTrainingCase } from "@/lib/mentorship/broto-training-case";
@@ -14,31 +14,25 @@ export const metadata = {
 const seedText = brotoTrainingCase.seed.map((entry) => `${entry.label}: ${entry.text}`).join("\n\n");
 
 export default function BrotoTrainingPage() {
-  return <main className="mx-auto max-w-4xl px-5 py-10 text-off-white sm:px-8 sm:py-14">
-    <Link href="/conteudo" className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-mint hover:text-neon"><ArrowLeft aria-hidden="true" className="size-4" /> Todos os temas</Link>
-    <header className="mt-7 max-w-[72ch]">
-      <h1 className="text-3xl font-black tracking-[-.03em] sm:text-4xl">Uma jornada para usar do início ao fim.</h1>
-      <p className="mt-4 text-base leading-7 text-[#C8CFD7]">Use o mesmo caso fictício em todas as missões. Assim, cada aula acrescenta uma pergunta de QA ao que você já observou no Broto.</p>
-      <a href={brotoSpaceSite.url} target="_blank" rel="noreferrer" className="mt-6 inline-flex min-h-11 items-center gap-2 bg-mint px-5 text-sm font-bold text-[#101319] hover:bg-neon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint">Abrir o Broto <ArrowUpRight aria-hidden="true" className="size-4" /></a>
+  return <main className="ca-shell ca-interior">
+    <Link href="/conteudo" className="ca-back"><ArrowLeft aria-hidden="true" className="size-4" /> Mapa de módulos</Link>
+    <header className="ca-interior-hero">
+      <div><span className="ca-kicker"><Sprout aria-hidden="true" className="size-4" /> Caso de treino / Broto Space</span><h1 className="mt-5">Uma história. Sete olhares de QA.</h1><p>Use o mesmo pensamento fictício em cada missão. Primeiro observe a jornada; depois volte a ela com novas perguntas sobre risco, teste, automação e evidência.</p><a href={brotoSpaceSite.url} target="_blank" rel="noreferrer" className="ca-button mt-7">Abrir o Broto <ArrowUpRight aria-hidden="true" className="size-4" /></a></div>
+      <div className="ca-hero-aside"><strong>01</strong>caso fictício<br />do início ao fim<p className="mt-4">Dados sintéticos<br />Conta de estudo<br />Evidência sem informações pessoais</p></div>
     </header>
 
-    <section className="mt-12 border-t border-white/15 pt-8" aria-labelledby="preparo-broto">
-      <h2 id="preparo-broto" className="text-2xl font-bold">Prepare sua conta e os dados</h2>
-      <p className="mt-3 max-w-[72ch] text-sm leading-6 text-[#C8CFD7]">{brotoTrainingCase.account} Identifique seus registros com <strong className="text-off-white">{brotoTrainingCase.label}</strong> para encontrá-los de novo.</p>
-      <CareerTemplate label="Textos fictícios para copiar" text={seedText} />
-      <p className="mt-3 text-xs leading-5 text-[#AAB2BC]">Use os recursos que estiverem disponíveis na sua conta. Se uma ligação entre registros não existir, anote a observação; não presuma que a interface deveria oferecê-la.</p>
+    <section aria-labelledby="preparo-broto" className="mt-12 grid gap-7 lg:grid-cols-[minmax(0,.6fr)_minmax(0,1fr)] lg:gap-12">
+      <div><span className="ca-kicker">Antes de começar</span><h2 id="preparo-broto" className="mt-4 text-3xl font-extrabold tracking-[-.05em] sm:text-4xl">Prepare sua conta e o contexto.</h2><p className="mt-4 text-sm leading-7" style={{ color: "var(--ca-muted)" }}>{brotoTrainingCase.account} Identifique os registros com <strong style={{ color: "var(--ca-text)" }}>{brotoTrainingCase.label}</strong> para encontrá-los de novo.</p><p className="mt-5 text-xs leading-6" style={{ color: "var(--ca-muted)" }}>Use os recursos disponíveis na sua conta. Se uma ligação entre registros não existir, registre a observação; não presuma que deveria estar ali.</p></div>
+      <div className="ca-paper"><span className="ca-kicker" style={{ color: "var(--ca-copper)" }}>Massa de teste</span><h3 className="mt-3 text-xl font-bold">Textos prontos para usar</h3><p className="mt-2 text-sm leading-6">Copie estes dados fictícios para praticar sem expor sua vida pessoal.</p><div className="mt-5"><CareerTemplate label="Textos fictícios do caso" text={seedText} /></div></div>
     </section>
 
-    <section className="mt-12 border-t border-white/15 pt-8" aria-labelledby="jornada-broto">
-      <h2 id="jornada-broto" className="text-2xl font-bold">Percorra a jornada</h2>
-      <ol className="mt-6 divide-y divide-white/10">{brotoTrainingCase.stages.map((stage, index) => <li key={stage.title} className="grid gap-2 py-5 sm:grid-cols-[2rem_1fr]"><span className="font-bold tabular-nums text-mint">{index + 1}.</span><div><h3 className="text-lg font-bold">{stage.title}</h3><p className="mt-2 text-sm leading-6 text-[#C8CFD7]">{stage.action}</p><p className="mt-2 text-sm leading-6 text-[#AAB2BC]"><strong className="text-off-white">Observe:</strong> {stage.observe}</p><p className="mt-1 text-sm leading-6 text-[#AAB2BC]"><strong className="text-off-white">Guarde:</strong> {stage.evidence}</p></div></li>)}</ol>
-      <CareerTemplate label="Nota curta de evidência" text={brotoTrainingCase.noteTemplate} />
+    <section aria-labelledby="jornada-broto" className="mt-16"><div className="ca-section-head"><h2 id="jornada-broto">Percorra a jornada.</h2><p>Quatro passos, uma pergunta por vez. Guarde o que a interface mostrou antes de interpretar.</p></div>
+      <ol className="ca-step-list">{brotoTrainingCase.stages.map((stage, index) => <li key={stage.title}><span className="ca-step-no">{String(index + 1).padStart(2, "0")}</span><div><h3>{stage.title}</h3><p>{stage.action}</p><p><strong style={{ color: "var(--ca-text)" }}>Observe:</strong> {stage.observe}</p><p><strong style={{ color: "var(--ca-text)" }}>Guarde:</strong> {stage.evidence}</p></div></li>)}</ol>
+      <div className="ca-paper mt-7"><h3 className="font-bold">Sua nota de evidência</h3><p className="mt-2 text-sm">Um registro curto ajuda outra pessoa a continuar a investigação.</p><div className="mt-4"><CareerTemplate label="Nota de evidência" text={brotoTrainingCase.noteTemplate} /></div></div>
     </section>
 
-    <section className="mt-12 border-t border-white/15 pt-8" aria-labelledby="missoes-broto">
-      <h2 id="missoes-broto" className="text-2xl font-bold">Use este caso nas missões</h2>
-      <p className="mt-2 text-sm leading-6 text-[#AAB2BC]">O caso continua o mesmo; o olhar de QA muda a cada tema.</p>
-      <div className="mt-5 divide-y divide-white/10">{mentorshipThemes.map((theme) => <div key={theme.id} className="grid gap-3 py-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] sm:gap-6"><div><h3 className="font-bold">{theme.title}</h3><p className="mt-1 text-xs leading-5 text-[#AAB2BC]">{theme.summary}</p></div><div className="flex flex-col items-start gap-2">{getThemeUnits(theme).map((unit, index) => <Link key={unit.number} href={contentStepHref(unit.number, "desafio")} className="inline-flex min-h-9 items-center gap-2 text-sm font-semibold text-mint hover:text-neon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint">Missão {index + 1}: {unit.assignment.title}<ArrowRight aria-hidden="true" className="size-3.5 shrink-0" /></Link>)}</div></div>)}</div>
+    <section aria-labelledby="missoes-broto" className="mt-16 pb-12"><div className="ca-section-head"><h2 id="missoes-broto">Mude o olhar. Mantenha o caso.</h2><p>O produto é o mesmo; o risco e a técnica mudam a cada tema.</p></div>
+      <ol className="ca-module-list">{mentorshipThemes.map((theme, index) => <li key={theme.id} className="ca-module-row"><div className="grid gap-4 py-6 md:grid-cols-[4rem_minmax(0,1fr)_minmax(12rem,.8fr)] md:gap-6"><span className="ca-module-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><div><h3 className="ca-module-title">{theme.title}</h3><p className="ca-module-summary">{theme.summary}</p></div><div className="grid content-start gap-2">{getThemeUnits(theme).map((unit, unitIndex) => <Link key={unit.number} href={contentStepHref(unit.number, "desafio")} className="ca-text-link">Missão {unitIndex + 1}: {unit.assignment.title}<ArrowRight aria-hidden="true" className="size-4 shrink-0" /></Link>)}</div></div></li>)}</ol>
     </section>
   </main>;
 }

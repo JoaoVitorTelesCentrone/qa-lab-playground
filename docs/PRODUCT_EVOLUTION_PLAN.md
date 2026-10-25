@@ -12,7 +12,7 @@ Público prioritário: quem está começando em QA ou precisa construir repertó
 
 | Área | Estado observado | Consequência para o plano |
 | --- | --- | --- |
-| Catálogo | `LAUNCH_ORDER` libera três Labs de Finanças (`101`, `103`, `105`); os demais estão agendados. | Melhorar a jornada desses três antes de abrir novos ambientes. |
+| Catálogo | `LAUNCH_ORDER` libera três Labs do Broto (`101`, `103`, `105`); os demais estão agendados. | Melhorar a jornada desses três antes de abrir novos ambientes. |
 | Aprendizagem | Há briefing, envio de evidência, conclusão, progresso, trilhas, portfólio e certificado no código. | O trabalho principal é conectar, explicar e validar o ciclo completo. |
 | Oferta paga | Há oferta Pro vitalícia de R$ 297 e fluxo de Checkout Pro com webhook. | Validar compra e direito de acesso em staging antes de ampliar aquisição paga. |
 | Lista de interesse | A página depende de `NEXT_PUBLIC_LEAD_FORM_URL` e abre um formulário externo. | Confirmar configuração e captura efetiva; a mensagem atual confirma a abertura, não o cadastro. |
@@ -33,7 +33,7 @@ As semanas indicam ordem e janela de planejamento, não uma promessa de prazo se
 | Semanas 1–2 | P0: acesso em qualquer tela | Revisar home, catálogo, Lab 01, envio de evidência, conclusão, perfil, portfólio e checkout em 320, 375, 768, 834 e 1024 px, teclado e zoom. Corrigir o elemento que transborda em vez de depender apenas do corte global. | Sem scroll lateral da página, perda de conteúdo ou controles inacessíveis nos fluxos principais. |
 | Semanas 2–4 | P1: medir o funil | Registrar cadastro, início do Lab, primeira evidência, publicação do case, visita ao preço, início e resultado do checkout. Definir coortes e eventos únicos; medir falhas por etapa. | Um painel mostra o funil de novos usuários e permite localizar onde a jornada para. |
 | Semanas 3–5 | P1: primeira vitória | Fazer o Lab 01 conduzir claramente por objetivo → investigação → evidência → feedback → case. Reduzir decisões paralelas na home e manter o próximo passo visível após cadastro e conclusão. | Uma pessoa nova completa o primeiro Lab e encontra seu case sem ajuda externa. |
-| Semanas 5–8 | P1: continuidade | Organizar os Labs 01–03 como sequência de Finanças; mostrar por que cada próximo Lab desenvolve uma competência; usar o perfil para retomar pendências e revisar evidências. | Quem conclui o primeiro Lab entende e consegue iniciar o segundo. |
+| Semanas 5–8 | P1: continuidade | Organizar os Labs 01–03 como sequência do caso fictício no Broto; mostrar por que cada próximo Lab desenvolve uma competência; usar o perfil para retomar pendências e revisar evidências. | Quem conclui o primeiro Lab entende e consegue iniciar o segundo. |
 | Semanas 7–10 | P2: valor pago | Explicar com precisão o que o Pro dá acesso **hoje** e separar conteúdo disponível de conteúdo planejado. Melhorar feedback, rubricas e exportação de case onde isso aumentar valor percebido. | A oferta corresponde ao acesso efetivo e compradores conseguem usar o benefício prometido. |
 | Semanas 9–12 | P2: expansão controlada | Liberar um pequeno lote de Labs de um único ambiente ou trilha, escolhido por demanda e qualidade do fluxo atual. Cada Lab recebe briefing, ambiente pronto, critérios de evidência, feedback e instrumentação. | Novo conteúdo melhora retorno e conclusão sem aumentar erros ou abandono. |
 

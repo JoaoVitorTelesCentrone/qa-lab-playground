@@ -16,7 +16,7 @@ A inconsistência atual nasce de misturar duas coisas diferentes no mesmo lugar.
 
 | Tipo | Exemplos | Onde vive | Mutável? |
 |------|----------|-----------|----------|
-| **Conteúdo autoral** | stories do ExpenseFlow, missões de CI/CD, situações do People Lab | código/TS, versionado, com **id estável** | Não pelo usuário. Só por nós, centralmente. |
+| **Conteúdo autoral** | missões do Broto, CI/CD e situações do People Lab | código/TS, versionado, com **id estável** | Não pelo usuário. Só por nós, centralmente. |
 | **Estado do usuário** | status movido, resposta escrita, missão resolvida | Supabase, chave `(user_id, content_id)` | Sim, e isolado por usuário. |
 | **Artefato do usuário** | bug report, test design, projeto, story criada do zero | Supabase, linhas que o usuário **possui** | Sim, criação/edição/remoção livre. |
 

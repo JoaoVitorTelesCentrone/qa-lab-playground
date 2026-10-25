@@ -73,7 +73,7 @@ Os apps são ambientes que o aluno testa. Os Labs são missões sobre esses ambi
 > **Estado em 2026-09-23:** as fases 0 a 4 têm implementação no repositório,
 > incluindo quatro ambientes de prática, trilhas, evidências, portfólio, packs
 > de regressão e métricas. O catálogo público está em lançamento enxuto, com
-> três Labs de Finanças liberados. Implementação local não confirma migrações,
+> três Labs do Broto liberados após a atualização de 2026-10-25. Implementação local não confirma migrações,
 > configuração ou validação em produção; os gates restantes estão em
 > **Pendências**.
 

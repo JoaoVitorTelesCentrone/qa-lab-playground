@@ -17,7 +17,7 @@ Gravar em blocos curtos; zoom legível, dados sintéticos, legendas revisadas, s
 | Tema | Aula | Formato | Demonstração/entrega |
 |---|---|---|---|
 | 1 | O que um QA decide | Vídeo | Priorizar um risco e explicar o impacto |
-| 1 | Exploração guiada | Demo | Percorrer uma jornada no ExpenseFlow e registrar evidência |
+| 1 | Exploração guiada | Demo | Percorrer o caso fictício no Broto e registrar evidência |
 | 2 | Teste exploratório | Vídeo | Escrever charter, timebox e debrief |
 | 3 | Técnicas que economizam tempo | Vídeo | Derivar equivalências, limites e casos de decisão |
 | 4 | Bug report que resolve | Vídeo | Reproduzir, comparar esperado/atual e recomendar ação |

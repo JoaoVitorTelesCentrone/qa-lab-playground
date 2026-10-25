@@ -6,7 +6,7 @@
 // específico antes de dizer o que estava sendo testado, e nenhum recrutador
 // consegue escanear.
 //
-// Hoje um projeto é um ambiente do QA Lab (Finanças, E-commerce, Agendamentos,
+// Hoje um projeto é um ambiente do QA Lab (Broto, E-commerce, Agendamentos,
 // CRM). O tipo já nasce com `source` para o dia em que a pessoa cadastrar
 // projeto próprio ou de empresa aqui — o portfólio inteiro dela, não só o que
 // ela fez nos nossos exercícios.
@@ -181,6 +181,7 @@ const fallback = { name: "Projeto", summary: "", route: "/labs" };
 
 /** Nome, resumo e rota do ambiente por trás do projeto. */
 export function projectMeta(id: string) {
+  if (id === "broto") return { name: "Broto Space", summary: "Investigação da jornada de captura, organização e retomada com dados fictícios.", route: "/conteudo/broto" };
   const app = practiceApps.find((item) => item.id === id);
   const base = app ? { name: app.name, summary: app.summary, route: app.route } : fallback;
   return { ...base, name: displayNames[id] ?? base.name };

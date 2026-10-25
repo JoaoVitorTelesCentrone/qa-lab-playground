@@ -10,20 +10,19 @@ const features = [
   ["Atendimento", "Abertura de ticket", "/shop/modules/suporte"], ["Atendimento", "Fila, filtros e SLA", "/shop/modules/suporte"], ["Atendimento", "Conversa e anexos", "/shop/modules/suporte"], ["Atendimento", "Base de ajuda", "/shop/modules/suporte"], ["Operacao", "Estoque minimo", "/shop/modules/operacao"], ["Operacao", "Fornecedores", "/shop/modules/operacao"], ["Operacao", "Promocoes", "/shop/modules/operacao"], ["Operacao", "Regras e aprovacao de preco", "/shop/modules/operacao"], ["Relatorios", "Dashboard, metricas e datas", "/shop/modules/relatorios"], ["Governanca", "Auditoria, permissoes, flags e alertas", "/shop/modules/automacao"],
 ] as const;
 
-// Features dos ambientes de pratica que nasceram na Fase 3. Diferente da loja,
-// cada uma traz a propria massa de teste: o dado que o aluno usa vem do seed
-// daquele ambiente (lib/product/practice/seed.ts), nao do usuario da loja.
+// Features dos ambientes de pratica. O Broto usa o caso ficticio guiado em
+// /conteudo/broto; os ambientes locais usam seu proprio seed de teste.
 //
 // O quinto campo e o id do desvio plantado que cai neste ponto. Ele existe para
 // a pista dizer ONDE ligar e O QUE esperar: sem isso a dica virava a mesma
 // frase generica em todos os desafios, e o aluno nao sabia qual desvio ligar
 // nem que sintoma procurar. String vazia = ponto sem desvio proprio.
 const practiceFeatures = [
-  ["Financas", "Lancamentos e saldo do periodo", "/financas#lancamentos", "Massa restaurada: salario 6.800, aluguel 1.850 (recorrente), mercado 430,90, internet 129,90 (recorrente), freelance 1.200 e farmacia 87,40.", "financas.total-ignora-recorrente"],
-  ["Financas", "Orcamento por categoria e alerta de estouro", "/financas#orcamentos", "Orcamentos do seed e quanto ja esta gasto: Moradia 2.200 com 1.979,90 (aluguel + internet), Alimentacao 900 com 430,90 e Saude 300 com 87,40. Para estourar Moradia falta mais de 220,10 — exatamente 220,10 fecha no limite e nao deve alertar. Lance a despesa na categoria acentuada (Alimentacao e Saude tem acento no seed): categoria diferente nao entra na conta do orcamento.", "financas.orcamento-sem-alerta"],
-  ["Financas", "Metas de reserva", "/financas#metas", "Metas do seed: reserva de emergencia 12.300 de 20.000 e viagem 1.450 de 8.000.", ""],
-  ["Financas", "Busca, filtro e ordenacao de lancamentos", "/financas#lancamentos", "Busque por Mercado, filtre por despesa e categoria Moradia, ordene por valor.", ""],
-  ["Financas", "Exportacao dos lancamentos em CSV", "/financas#lancamentos", "Aplique um filtro antes de exportar e compare o arquivo com a tela.", ""],
+  ["Broto", "Captura e retomada de um pensamento", "/conteudo/broto", "Use os textos fictícios do caso de treino. Registre um pensamento na Mente, saia da tela e volte ao registro.", ""],
+  ["Broto", "Organização do problema e do objetivo", "/conteudo/broto", "Use o problema e o objetivo do caso de treino. Observe os recursos disponíveis na sua conta e separe o que conseguiu fazer do que é apenas hipótese.", ""],
+  ["Broto", "Próximo passo e contexto da jornada", "/conteudo/broto", "Use o próximo passo fictício do caso de treino. Compare o estado antes e depois de registrá-lo e de retomar a jornada.", ""],
+  ["Broto", "Exploração móvel e interrupção da captura", "/conteudo/broto", "Inicie o caso de treino em um viewport móvel, interrompa a tarefa e retome. Registre dispositivo, estado e dúvidas.", ""],
+  ["Broto", "Revisita e histórico do crescimento", "/conteudo/broto", "Volte ao mesmo caso em outra sessão e compare o que foi registrado com o histórico ou a revisita disponível.", ""],
   ["Agendamentos", "Grade de horarios e disponibilidade", "/agendamentos#grade", "Dia 18/08/2026 com 10:00 e 14:00 ocupados; atendimento de segunda a sexta das 09:00 as 18:00 e sabado ate as 13:00.", ""],
   ["Agendamentos", "Conflito de horario", "/agendamentos#nova-reserva", "Tente 10:00 de 18/08/2026, ja ocupado por Ana Costa, e o mesmo horario em 25/08/2026, livre.", "agendamentos.conflito-permitido"],
   ["Agendamentos", "Reagendamento", "/agendamentos#agenda", "Mova Bruno Dias de 14:00 para 15:00 no mesmo dia e confira a grade antes e depois.", "agendamentos.conflito-permitido"],
@@ -74,50 +73,63 @@ export const systemChallenges: SystemChallenge[] = allFeatures.flatMap(({ area, 
     // de herdar o texto genérico usado pelos demais pontos do catálogo.
     if (number === 101) {
       return {
-        id: "desafio-101", number, area: "Financas", mode, route,
-        title: "Validar lançamentos e saldo do período",
+        id: "desafio-101", number, area: "Broto", mode, route,
+        title: "Investigar a captura e a retomada de um pensamento",
         difficulty: "Basico" as const,
-        objective: "Validar lançamentos e o saldo do período de janeiro de 2024, documentando discrepâncias com evidências reproduzíveis.",
-        testData: "Massa carregada automaticamente: 12 lançamentos identificados de #001 a #012. Período de análise: janeiro/2024. Use “Restaurar massa” antes de uma nova tentativa.",
-        expected: "O saldo correto do período é R$ 1.730,00. A tela exibe R$ 1.530,00: investigue e explique a diferença de R$ 200,00.",
+        objective: "Investigar se um pensamento fictício pode ser registrado e encontrado novamente no Broto, distinguindo comportamento observado de hipótese.",
+        testData: "Use a conta de estudo e o pensamento fictício do caso de treino em /conteudo/broto. Não inclua e-mail, senha ou reflexões pessoais nas evidências.",
+        expected: "Depois de registrar o pensamento, a pessoa deve conseguir encontrá-lo ao voltar. Se a interface não oferecer uma etapa esperada, registre a dúvida sem presumir defeito.",
         steps: [
-          "Abra Finanças e confirme que os 12 lançamentos #001–#012 foram carregados.",
-          "Some receitas e despesas do período de janeiro de 2024 e compare com o saldo exibido.",
-          "Investigue duplicidade, data fora do período, tipo/categoria e valores de borda; registre somente o que conseguir provar.",
-          "Entregue uma evidência com passos de reprodução, resultado observado, resultado esperado e impacto.",
+          "Leia o caso de treino e abra o Broto com uma conta de estudo.",
+          "Registre o pensamento fictício na Mente, saia da tela e tente encontrá-lo novamente.",
+          "Compare o estado antes e depois da retomada; repita com uma interrupção ou em viewport móvel se puder.",
+          "Entregue passos reproduzíveis, resultado observado, expectativa ou dúvida e impacto, sem dados pessoais.",
         ],
         acceptance: [
-          "Período, lançamentos consultados e cálculo ficam claros na evidência",
-          "Pelo menos três achados são descritos com IDs, passos e resultado observado",
-          "Saldo esperado, saldo exibido e a diferença são comparados explicitamente",
+          "Conta de estudo, dado fictício e condição do teste ficam claros sem expor acesso",
+          "A evidência descreve a captura, a saída e a retomada com o resultado observado",
+          "Regra confirmada, hipótese e impacto são separados com clareza",
         ],
-        plantedBug: "A massa é intencionalmente inconsistente. Não há resposta escondida no briefing: investigue os registros e explique a diferença que você conseguir reproduzir.",
+        plantedBug: "Este é um produto real, sem defeito plantado. Registre apenas o que conseguir observar; uma investigação sem falha também pode gerar uma boa evidência.",
       };
     }
     if (number === 103) {
       return {
-        id: "desafio-103", number, area: "Financas", mode, route,
-        title: "Validar orçamento por categoria e alerta de estouro",
+        id: "desafio-103", number, area: "Broto", mode, route,
+        title: "Investigar problema, objetivo e organização do caso",
         difficulty: "Basico" as const,
-        objective: "Validar o consumo de orçamento por categoria e o alerta quando o limite é ultrapassado.",
-        testData: "Massa carregada: orçamentos Moradia R$ 2.200, Alimentação R$ 900 e Saúde R$ 300. Crie despesas na mesma categoria para testar limite e estouro.",
-        expected: "No limite o alerta não deve aparecer; acima do limite, deve aparecer. Com o desvio controlado ativo, o alerta deixa de ser exibido.",
-        steps: ["Abra Finanças > Orçamentos.", "Registre despesas na categoria do orçamento até o limite e depois acima dele.", "Compare barra, valor consumido e alerta."],
-        acceptance: ["Categoria e valores usados ficam claros", "Resultado no limite e acima do limite são comparados", "Evidência separa comportamento esperado e observado"],
-        plantedBug: "Use o modo instrutor para ativar o desvio de alerta de orçamento e registrar o sintoma reproduzível.",
+        objective: "Investigar como o Broto ajuda a distinguir um pensamento, um problema e um objetivo na jornada do caso de treino.",
+        testData: "Use o problema e o objetivo fictícios de /conteudo/broto. Observe somente os recursos disponíveis na sua conta.",
+        expected: "A pessoa deve entender o que conseguiu registrar e recuperar. Relações entre registros que não aparecerem devem ser tratadas como pergunta de produto.",
+        steps: ["Abra o caso de treino e identifique problema e objetivo.", "Use os recursos disponíveis no Broto para organizar esses registros.", "Volte aos registros e compare o que a interface mostrou com o que você esperava encontrar."],
+        acceptance: ["Os dados fictícios usados são identificados", "A organização e a revisita são descritas com passos reproduzíveis", "Observações e hipóteses sobre relações entre registros são separadas"],
+        plantedBug: "Não há desvio controlado: documente a experiência real e formule perguntas quando uma regra não estiver clara.",
       };
     }
     if (number === 105) {
       return {
-        id: "desafio-105", number, area: "Financas", mode, route,
-        title: "Validar metas de reserva",
+        id: "desafio-105", number, area: "Broto", mode, route,
+        title: "Investigar o próximo passo e a retomada da jornada",
         difficulty: "Basico" as const,
-        objective: "Validar progresso, valor restante e conclusão de metas de reserva.",
-        testData: "Massa carregada: Reserva de emergência R$ 12.300 de R$ 20.000 e Viagem R$ 1.450 de R$ 8.000. Edite uma meta para valor acima do alvo.",
-        expected: "O progresso deve ficar limitado a 100% e o valor restante a R$ 0,00. Com o desvio controlado ativo, o sistema mostra percentual acima de 100% e restante negativo.",
-        steps: ["Abra Finanças > Metas.", "Edite uma meta até o alvo e depois acima dele.", "Registre percentual, restante e estado de conclusão."],
-        acceptance: ["Valores do alvo e do acumulado são identificados", "Caso de borda acima do alvo é testado", "Resultado esperado e observado são documentados"],
-        plantedBug: "Use o modo instrutor para ativar o desvio de meta acima do limite e registrar o sintoma reproduzível.",
+        objective: "Investigar se o próximo passo fictício continua compreensível quando a pessoa retorna à jornada do Broto.",
+        testData: "Use o próximo passo e os demais textos fictícios do caso de treino em /conteudo/broto.",
+        expected: "Ao retomar a jornada, a pessoa deve conseguir identificar o que registrou e qual ação ainda faz sentido. Qualquer ligação não disponível deve ser anotada como hipótese.",
+        steps: ["Abra o caso de treino e registre o próximo passo com os recursos disponíveis.", "Saia da jornada e retorne ao mesmo caso em outra sessão.", "Compare o estado visível antes e depois e anote o que a interface permite concluir."],
+        acceptance: ["O próximo passo fictício e as condições de retomada são identificados", "Estados antes e depois são comparados", "Conclusão e dúvidas se apoiam em evidência sem dados pessoais"],
+        plantedBug: "Não há resposta escondida nem defeito plantado; investigue o comportamento observável.",
+      };
+    }
+    if (area === "Broto") {
+      return {
+        id: `desafio-${number}`, number, area, mode, route,
+        title: `${flow ? "Validar" : "Investigar"} ${title[0].toLowerCase()}${title.slice(1)}`,
+        difficulty: flow ? "Basico" as const : "Intermediario" as const,
+        objective: `${flow ? "Descrever o comportamento observável de" : "Investigar riscos em"} ${title.toLowerCase()} no Broto com evidência reproduzível.`,
+        testData: `${sample} Use somente a conta de estudo e os dados fictícios de /conteudo/broto.`,
+        expected: "O registro e a retomada devem ser compreensíveis para a pessoa usuária; confirme as regras disponíveis antes de tratá-las como oráculo.",
+        steps: ["Leia o caso de treino e prepare os textos fictícios.", `Explore ${title.toLowerCase()} no Broto e registre o estado inicial.`, "Saia e retorne à jornada; compare o observado com a expectativa confirmada ou com a hipótese aberta.", "Documente passos, resultado, impacto e limites da investigação sem dados pessoais."],
+        acceptance: ["Dados e condições do teste são identificados", "O resultado observado tem passos reproduzíveis", "Hipóteses são separadas de regras confirmadas"],
+        plantedBug: "O Broto não tem defeitos plantados para este Lab. Registre a investigação mesmo quando não encontrar uma falha.",
       };
     }
     return {

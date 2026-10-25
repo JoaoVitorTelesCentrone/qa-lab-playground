@@ -3,9 +3,9 @@ import { labs } from "@/lib/playground/catalog";
 import type { LabProgress } from "./journey";
 import { buildTrackProgress, findTrack, learningTracks, trackForLab, trackHasReleasedLab, TRACKS_ENABLED } from "./tracks";
 
-// financas-do-zero, não fluxos-criticos: é a única trilha com Labs liberados
+// A trilha do Broto é a única com Labs liberados
 // no lançamento enxuto (101, 103 e 105) — ver [[qa-lab-lancamento-enxuto]].
-const track = findTrack("financas-do-zero")!;
+const track = findTrack("broto-na-pratica")!;
 
 function progress(labNumber: number, status: LabProgress["status"]): LabProgress {
   const lab = labs.find((item) => item.number === labNumber)!;
@@ -14,7 +14,7 @@ function progress(labNumber: number, status: LabProgress["status"]): LabProgress
 
 describe("trilha de aprendizagem", () => {
   test("há uma trilha por ambiente de prática", () => {
-    expect(learningTracks.map((item) => item.appId).sort()).toEqual(["agendamentos", "crm", "financas", "qa-lab"]);
+    expect(learningTracks.map((item) => item.appId).sort()).toEqual(["agendamentos", "broto", "crm", "qa-lab"]);
     expect(new Set(learningTracks.map((item) => item.slug)).size).toBe(learningTracks.length);
   });
 
@@ -34,7 +34,7 @@ describe("trilha de aprendizagem", () => {
   test("os Labs da trilha apontam para o ambiente da trilha", () => {
     for (const item of learningTracks.filter((candidate) => candidate.appId !== "qa-lab")) {
       const routes = item.labNumbers.map((number) => labs.find((lab) => lab.number === number)!.route);
-      expect(routes.every((route) => route.startsWith(`/${item.appId}`))).toBe(true);
+      expect(routes.every((route) => item.appId === "broto" ? route === "/conteudo/broto" : route.startsWith(`/${item.appId}`))).toBe(true);
     }
   });
 

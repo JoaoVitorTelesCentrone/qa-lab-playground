@@ -26,7 +26,7 @@ Acesse `http://localhost:3000` (ou a porta exibida pelo script de desenvolviment
 - `/labs/:number` — briefing, ambiente de prática e entrega de evidência; Labs agendados vão para a lista de interesse.
 - `/trilhas` — percursos de aprendizagem.
 - `/playground/*` e `/shop/*` — microdesafios e QA Lab Shop.
-- `/financas`, `/agendamentos` e `/crm` — ambientes de prática.
+- `/conteudo/broto` — caso fictício para praticar no Broto Space; `/agendamentos` e `/crm` — ambientes de prática locais.
 - `/api-playground` e `/api/docs` — exploração e documentação da API de treino.
 - `/lab/*` — workspace, CI/CD, People Lab, design de testes, triagem e logs.
 - `/boards` — board Kanban/Scrum pessoal e demonstração pública.
