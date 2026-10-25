@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ChevronDown, ExternalLink } from "lucide-react";
 import { CompleteLessonButton, MentorshipPortfolioForm, SubmissionForm } from "@/components/mentorship/mentorship-actions";
 import { LessonVideo } from "@/components/mentorship/lesson-video";
+import { LessonReading } from "@/components/mentorship/lesson-reading";
 import { brotoLessonActions } from "@/lib/mentorship/broto-training-case";
 import { extraTheoryV2, findPathV2Assignment, findPathV2Chapter, findPathV2Lesson, findPathV2Module, mentorshipPathV2, pathV2Assignments, pathV2ChapterHref, pathV2Chapters, pathV2PracticeKey } from "@/lib/mentorship/path-v2";
 import { lessonTheory } from "@/lib/mentorship/lesson-theory";
@@ -47,21 +48,17 @@ export default async function ChapterPage({ params }: { params: Promise<{ module
       const materialUrl = published.get(key)?.material_url;
       return <details key={key} id={key} name="chapter-lessons" open={lessonIndex === 0} className="group scroll-mt-24 py-2">
         <summary className="flex min-h-16 cursor-pointer list-none items-center gap-3 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint [&::-webkit-details-marker]:hidden">
-          <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-full border border-white/15 text-xs font-semibold tabular-nums text-[#AAB2BC]">{String(lessonIndex + 1).padStart(2, "0")}</span>
-          <span className="min-w-0 flex-1"><span role="heading" aria-level={3} className="block text-base font-bold text-off-white">{lesson.title}</span><span className="mt-1 block text-sm text-[#AAB2BC]">{lesson.duration}{videoUrl ? " · Vídeo disponível" : ""}</span></span>
+          <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-full border border-white/20 text-xs font-semibold tabular-nums text-[#BECFC4] group-open:border-mint/40 group-open:bg-mint/15 group-open:text-[#ACDBBC]">{String(lessonIndex + 1).padStart(2, "0")}</span>
+          <span className="min-w-0 flex-1"><span role="heading" aria-level={3} className="block text-lg font-bold leading-7 text-off-white">{lesson.title}</span><span className="mt-1 block text-sm text-[#BECFC4]">{lesson.duration}{videoUrl ? " · Vídeo disponível" : ""}</span></span>
           {canTrack && completed.has(key) && <span className="shrink-0 text-xs font-semibold text-mint">Concluída</span>}
           <ChevronDown aria-hidden="true" className="size-4 shrink-0 text-mint transition-transform group-open:rotate-180" />
         </summary>
-        <article className="pb-7 pl-12 sm:pl-12">
+        <article className="pb-8 pt-2 sm:pl-12">
           {videoUrl && <div className="mt-2"><LessonVideo url={videoUrl} title={lesson.title} /></div>}
           {materialUrl && <a href={materialUrl} target="_blank" rel="noreferrer" className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-mint underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-mint">Abrir material de apoio<span className="sr-only">: {lesson.title}</span><ExternalLink aria-hidden="true" className="size-4" /></a>}
-          <div className="mt-5 max-w-[68ch] space-y-6 text-base leading-7 text-[#C8CFD7]"><p className="font-semibold text-off-white">{theory.objective}</p>
-            {theory.sections.slice(0, 1).map((section) => <section key={section.title}><h4 className="font-bold text-off-white">{section.title}</h4><p className="mt-2 whitespace-pre-line">{section.text}</p></section>)}
-            {theory.sections.length > 1 && <details className="border-t border-white/10 pt-4"><summary className="min-h-11 cursor-pointer py-2 font-semibold text-mint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint">Aprofundar a teoria</summary><div className="mt-4 space-y-5">{theory.sections.slice(1).map((section) => <section key={section.title}><h4 className="font-bold text-off-white">{section.title}</h4><p className="mt-2 whitespace-pre-line">{section.text}</p></section>)}</div></details>}
-            <section className="border-t border-mint/25 pt-4"><h4 className="font-bold text-off-white">No Broto Space</h4><p className="mt-2">{brotoAction ?? chapter.practices[0]?.task}</p></section>
-            <details className="border-t border-white/10 pt-4"><summary className="min-h-11 cursor-pointer py-2 font-semibold text-mint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint">Ver exemplo no lab</summary><p className="mt-3">{theory.workedExample}</p></details>
-            <details className="border-t border-white/10 pt-4"><summary className="min-h-11 cursor-pointer py-2 font-semibold text-mint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint">Confira seu entendimento</summary><p className="mt-3">{theory.exercise}</p><p className="mt-3 text-sm text-[#AAB2BC]"><strong className="text-off-white">Uma resposta possível:</strong> {theory.answer}</p></details>
-            {canTrack ? <div className="border-t border-white/10 pt-4"><CompleteLessonButton lessonKey={key} completed={completed.has(key)} /></div> : <p className="border-t border-white/10 pt-4 text-sm text-[#AAB2BC]">Leitura livre. <Link href="/mentoria" className="font-semibold text-mint underline underline-offset-4">Entre na mentoria para salvar seu progresso.</Link></p>}
+          <div className="mt-5">
+            <LessonReading theory={theory} brotoAction={brotoAction ?? chapter.practices[0]?.task} />
+            {canTrack ? <div className="mt-6 pt-2"><CompleteLessonButton lessonKey={key} completed={completed.has(key)} /></div> : <p className="mt-6 text-sm leading-6 text-[#BECFC4]">Leitura livre. <Link href="/mentoria" className="font-semibold text-[#ACDBBC] underline underline-offset-4 hover:text-off-white">Entre na mentoria para salvar seu progresso.</Link></p>}
           </div>
         </article>
       </details>;
