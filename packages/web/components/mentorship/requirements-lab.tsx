@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { canExportRequirements, createRequirementsAttempt, exportRequirementsMarkdown, hasResponse, parseRequirementsDraft, requirementsExperiment, revealRequirements, type ExperimentResponse, type RequirementsAttempt } from "@/lib/mentorship/requirements-experiment";
 
-const draftKey = "qa-lab:requirements-experiment:v1";
+const draftKey = "qa-lab:requirements-experiment:broto:v2";
 const fieldClass = "mt-2 w-full rounded-lg border border-white/25 bg-[#101319] p-3 text-base leading-7 text-off-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint";
 const buttonClass = "rounded-lg border border-white/25 px-4 py-3 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint disabled:cursor-not-allowed disabled:opacity-40";
 
@@ -60,7 +60,7 @@ export function RequirementsLab() {
     {stage === 2 && <section className="mt-6 space-y-7">
       <ul className="space-y-3 rounded-lg bg-white/5 p-5 text-base leading-7 text-[#D9DEE4]">{requirementsExperiment.rules.map(rule => <li key={rule}>{rule}</li>)}</ul>
       <details className="border-y border-white/15 py-4"><summary className="cursor-pointer text-mint">Consultar minha resposta inicial (preservada)</summary><Snapshot response={attempt.baseline!} /></details>
-      <p className="max-w-[70ch] leading-7 text-[#C8CFD7]">Revise os cenários citando R1–R4. Investigue fronteiras monetárias, papéis, equipe e estado. Informe quais dúvidas foram resolvidas e quais ainda restam; se não houver dúvidas, explique por quê.</p>
+      <p className="max-w-[70ch] leading-7 text-[#C8CFD7]">Revise os cenários citando R1–R4. Investigue tamanho do texto, autoria, repetição e preservação do vínculo entre pensamento e ação. Informe quais dúvidas foram resolvidas e quais ainda restam; se não houver dúvidas, explique por quê.</p>
       <ResponseFields response={attempt.revised} onChange={value => updateResponse("revised", value)} prefix="revised" revised />
       <button disabled={!hasResponse(attempt.revised)} className={`${buttonClass} bg-mint text-[#101319]`} onClick={() => setStage(3)}>Comparar respostas</button>
     </section>}

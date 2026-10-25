@@ -17,23 +17,23 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
       {
         title: "Construir um modelo antes de escolher testes",
         paragraphs: [
-          "Um produto não é uma coleção de telas: é um conjunto de atores, objetivos, regras, estados e efeitos sobre dados. Para modelá-lo, escolha uma jornada importante e descreva quem inicia a ação, quais pré-condições precisam existir, quais decisões o sistema toma e o que deve permanecer verdadeiro ao final. No sistema, a criação de uma despesa muda uma lista, um saldo pendente, as permissões de aprovação e possivelmente um relatório. Cada efeito cria uma pergunta de teste diferente. Um mapa simples dessas relações é mais útil do que começar com uma lista genérica de cliques.",
-          "O modelo também precisa registrar o que se sabe e a fonte desse conhecimento. Uma regra descrita no briefing, um comportamento observado e uma suposição da equipe não têm o mesmo peso. Se a regra de quem aprova despesas não está clara, você pode explorar o comportamento atual, mas não deve chamar de defeito qualquer resultado que contradiga apenas sua hipótese. Escreva a dúvida, identifique quem pode respondê-la e prepare exemplos concretos para a conversa. Essa disciplina evita tanto bugs falsos quanto decisões baseadas em expectativas inventadas.",
+          "Um produto reúne atores, objetivos, regras, estados e efeitos sobre dados. Escolha uma jornada importante e descreva quem inicia a ação, suas pré-condições, as decisões do sistema e o que deve continuar verdadeiro no final. No BrotoSpace, capturar um pensamento deve permitir retomar o conteúdo e compreender seu contexto; se houver vínculo com desafio ou ação, investigue sua preservação. Cada efeito cria uma pergunta diferente. Faça esse mapa antes de começar uma lista genérica de cliques e registre o que ainda depende de confirmação.",
+          "O modelo precisa registrar o que se sabe e a fonte. Uma regra do briefing, um comportamento observado e uma suposição têm pesos diferentes. Se não está claro como o BrotoSpace preserva o vínculo entre pensamento e ação, explore o comportamento atual e documente a dúvida antes de classificar um resultado como defeito. Identifique quem pode esclarecer e prepare exemplos concretos com conteúdo fictício. Isso evita bugs baseados em expectativas inventadas e torna a conversa sobre o produto verificável.",
         ],
       },
       {
         title: "Priorizar risco sem fingir precisão",
         paragraphs: [
-          "Risco de produto combina um evento possível com uma consequência relevante. Descreva-o na forma ‘se ocorrer X em condição Y, então Z pode acontecer’. Em seguida, avalie impacto, chance de ocorrência, alcance, detectabilidade e possibilidade de recuperar o estado. Não é necessário converter tudo em uma nota exata: escalas como alto, médio e baixo são suficientes quando acompanhadas de justificativa. Um total financeiro incorreto pode merecer atenção antes de um desalinhamento visual frequente porque a consequência e a dificuldade de perceber o erro são maiores.",
+          "Risco de produto combina um evento possível com uma consequência relevante. Descreva-o na forma ‘se ocorrer X em condição Y, então Z pode acontecer’. Em seguida, avalie impacto, chance de ocorrência, alcance, detectabilidade e possibilidade de recuperar o estado. Não é necessário converter tudo em uma nota exata: escalas como alto, médio e baixo são suficientes quando acompanhadas de justificativa. Um crescimento exibido incorretamente pode merecer atenção antes de um desalinhamento visual frequente porque a consequência e a dificuldade de perceber o erro são maiores.",
           "A prioridade de teste muda quando surgem evidências novas. Se a equipe mostra que um cálculo é feito em serviço já coberto por testes confiáveis, você pode transferir tempo para a autorização por perfil. Se um defeito aparece em produção, a probabilidade estimada deixa de ser hipótese. Registre o que mudou e por quê. O mapa de risco deve orientar a próxima investigação, não virar um documento estático: para cada risco relevante, proponha uma condição inicial, uma observação verificável e uma decisão que o resultado ajudará a tomar.",
         ],
       },
     ],
     caseStudy: {
-      title: "Relatório de reembolso divergente",
-      context: "Uma gestora aprova uma despesa de R$ 40 e deixa outra de R$ 60 pendente. O relatório mostra R$ 100 como total aprovado.",
-      reasoning: "O comportamento observado é a divergência entre o relatório e os estados das despesas. Antes de concluir que o cálculo está errado, confirme período, filtros, moeda e perfil; depois repita com dados identificáveis e compare lista, relatório e estado após recarga.",
-      conclusion: "Se a divergência persistir sob as mesmas condições, há evidência de risco financeiro. O relatório deve indicar os valores, a regra esperada, as condições de reprodução e quais variações ainda não foram cobertas.",
+      title: "Relatório de retomada de pensamentos divergente",
+      context: "No cenário sintético do BrotoSpace, três ações estão concluídas e uma permanece pendente. O resumo de crescimento conta quatro conclusões.",
+      reasoning: "O comportamento observado é a divergência entre os estados das ações e a contagem de conclusões no cenário de treino. Confira conta, período e filtros; compare o histórico com o resumo e repita após recarga usando registros identificáveis.",
+      conclusion: "Se a divergência persistir, há evidência de risco para a confiança no crescimento exibido. Registre contagem, estados, regra esperada, condições de reprodução e as variações ainda não cobertas.",
     },
   },
   2: {
@@ -41,7 +41,7 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
       {
         title: "Exploração como desenho e execução simultâneos",
         paragraphs: [
-          "No teste exploratório, aprender, propor um experimento e executá-lo acontecem durante a mesma sessão. Isso exige uma missão explícita, não improvisação irrestrita. Um charter útil identifica área, risco, usuário, dados, restrições de ambiente e tempo disponível. ‘Testar agendamentos’ é amplo demais; ‘investigar se a troca de data preserva um horário inválido antes da confirmação’ indica o comportamento e a decisão em foco. A missão pode mudar diante de um achado relevante, mas a mudança precisa ser anotada para que a cobertura continue inteligível.",
+          "No teste exploratório, aprender, propor um experimento e executá-lo acontecem na mesma sessão. Isso exige uma missão explícita. Um charter identifica área, risco, pessoa, dados, restrições e tempo. ‘Testar o BrotoSpace’ é amplo demais; ‘investigar se a captura interrompida permite retomar o pensamento fictício’ delimita comportamento e decisão. Confirme a regra de salvamento antes de usar a ausência de um rascunho como defeito. Se um achado mudar a missão, anote o desvio para manter a cobertura compreensível.",
           "Durante a execução, altere uma variável importante por vez quando precisar entender causalidade. Se você troca usuário, data e tipo de serviço antes de observar o resultado, fica difícil saber o que produziu a diferença. Use notas leves com ação, dado, resultado e próxima pergunta; guarde evidência no momento em que o estado ainda existe. Reserve parte do timebox para reproduzir achados e fazer o debrief. Uma sessão que só produz cliques e capturas, sem síntese do que foi aprendido, oferece pouco apoio para a próxima decisão.",
         ],
       },
@@ -66,21 +66,21 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
         title: "Escolher a técnica a partir da forma da regra",
         paragraphs: [
           "Partição de equivalência ajuda quando várias entradas devem receber o mesmo tratamento. Primeiro identifique classes válidas e inválidas; depois escolha representantes que possam revelar diferença entre classes. Valores limite focam as bordas onde comparações inclusivas ou exclusivas costumam falhar. Se a regra aceita quantidades de 1 a 10, os valores 0, 1, 10 e 11 têm mais informação que quatro números no meio da faixa. Documente também formato, campo vazio e unidade, porque uma borda numérica não cobre por si só a validação da entrada.",
-          "Uma tabela de decisão é mais adequada quando o resultado depende de condições combinadas, como perfil, status e valor. Liste condições, combinações possíveis e ações esperadas, eliminando combinações impossíveis com justificativa. Para entidades que mudam ao longo do tempo, modele estados e eventos: uma despesa pode estar pendente, aprovada ou reprovada, e cada transição permitida tem uma regra. Técnicas diferentes iluminam estruturas diferentes do requisito; usá-las como checklist universal gera casos sem propósito e deixa lacunas em regras complexas.",
+          "Uma tabela de decisão é mais adequada quando o resultado depende de condições combinadas, como autoria, sessão e estado da ação. Liste condições, combinações possíveis e ações esperadas, eliminando combinações impossíveis com justificativa. Para entidades que mudam ao longo do tempo, modele estados e eventos: no modelo didático, uma ação pode estar pendente ou concluída, e cada transição permitida tem uma regra. Técnicas diferentes iluminam estruturas diferentes do requisito; usá-las como checklist universal gera casos sem propósito e deixa lacunas em regras complexas.",
         ],
       },
       {
         title: "Transformar cobertura em evidência de decisão",
         paragraphs: [
-          "Um cenário profissional contém pré-condição, entrada, ação, resultado observável e vínculo com uma regra ou risco. ‘Testar valor inválido’ não informa o que executar nem o que verificar. ‘Com valor zero e perfil de colaborador, salvar uma despesa deve ser impedido sem criar registro’ define uma condição, um esperado e um efeito persistido. Esse nível de clareza permite revisão antes da execução e diagnóstico depois de uma falha. Quando a regra for incerta, marque o esperado como hipótese e peça confirmação.",
+          "Um cenário profissional contém pré-condição, entrada, ação, resultado observável e vínculo com uma regra ou risco. ‘Testar valor inválido’ não informa o que executar nem o que verificar. ‘No cenário sintético, salvar um pensamento vazio deve ser impedido sem criar registro’ define uma condição, um esperado e um efeito persistido. Esse nível de clareza permite revisão antes da execução e diagnóstico depois de uma falha. Quando a regra for incerta, marque o esperado como hipótese e peça confirmação.",
           "Cobertura não é contagem bruta de cenários. Dois casos que atravessam a mesma classe e a mesma condição podem ser redundantes; um único caso que combina cinco regras pode ser difícil de diagnosticar. Procure um conjunto pequeno que torne falhas localizáveis e riscos importantes observáveis. Registre cortes deliberados, como combinações raras ou estados sem ambiente de teste. A matriz final deve permitir responder: quais regras receberam evidência, quais só foram inferidas e quais permanecem sem verificação.",
         ],
       },
     ],
     caseStudy: {
       title: "Regra de limite com autorização",
-      context: "Uma despesa aceita valores entre R$ 1 e R$ 100, mas apenas uma gestora pode aprová-la.",
-      reasoning: "Separe as classes de valor da regra de papel. Teste 0, 1, 100 e 101 no cadastro; depois use uma despesa válida para verificar aprovação por colaborador e gestora. Assim, uma falha de autorização não fica mascarada por valor inválido.",
+      context: "No exercício didático inspirado no BrotoSpace, o texto de um pensamento aceita de 1 a 100 caracteres e somente sua autora pode editá-lo. São regras sintéticas do exercício, a confirmar antes de aplicar no produto.",
+      reasoning: "Separe comprimento do texto de autoria. No cenário sintético, teste 0, 1, 100 e 101 caracteres com a conta autora; depois use texto válido para comparar edição própria e tentativa por outra conta. Assim, uma entrada inválida não mascara uma falha de autorização.",
       conclusion: "A evidência deve apontar exatamente qual regra falhou e qual estado ficou persistido. Não conclua que toda a autorização está coberta apenas porque um perfil foi rejeitado.",
     },
   },
@@ -102,9 +102,9 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
       },
     ],
     caseStudy: {
-      title: "Defeito em relatório financeiro",
-      context: "O relatório aprovado diverge da soma dos itens aprovados, mas o cadastro e a consulta de despesas passaram.",
-      reasoning: "O relato deve incluir valores concretos, período, filtros, perfil e passos. Na recomendação, separe cobertura dos fluxos que passaram da falha do cálculo; não use o número total de testes verdes para diluir o risco financeiro.",
+      title: "Defeito no crescimento exibido",
+      context: "O resumo de crescimento conta uma ação pendente como concluída no cenário de treino, embora a captura e a retomada do pensamento tenham passado.",
+      reasoning: "O relato deve incluir contagens, estados, período, filtros, conta e passos. Separe a cobertura de captura da falha de crescimento; a quantidade de testes verdes não elimina o risco de a pessoa interpretar um progresso que não ocorreu.",
       conclusion: "Uma decisão defensável pode bloquear a liberação do relatório até correção e regressão dos estados afetados, ou isolar a função com mitigação explícita. A escolha depende do uso real e do risco aceito.",
     },
   },
@@ -126,9 +126,9 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
       },
     ],
     caseStudy: {
-      title: "Escolher onde verificar o total aprovado",
-      context: "O sistema calcula o total de despesas aprovadas e o exibe em relatório.",
-      reasoning: "Use teste de regra para combinações de valores e estados, teste de API para persistência e um smoke de interface que aprove uma despesa e confira o total. Deixe a exploração visual e de clareza do relatório para revisão humana.",
+      title: "Escolher onde verificar a contagem de ações concluídas",
+      context: "O cenário de treino do BrotoSpace conta ações concluídas para representar crescimento, preservando a distinção entre pendente e concluída.",
+      reasoning: "Use teste de regra para combinações de estados, integração autorizada para persistência e um smoke que conclua a ação sintética e confira o resultado. Deixe a interpretação e a clareza do crescimento para exploração humana; o laboratório não comprova a implementação real do BrotoSpace.",
       conclusion: "A matriz deve explicar por que cada camada existe, quais dados prepara, qual falha detecta e quais riscos continuam fora da automação.",
     },
   },
@@ -137,7 +137,7 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
       {
         title: "Um E2E confiável protege comportamento, não passos",
         paragraphs: [
-          "Estruture um teste web em preparação, ação e verificação de resultado de negócio. ‘Clicar em salvar’ é uma ação; ‘a despesa aparece com valor, categoria e status corretos após recarga’ é uma afirmação verificável. Nomeie o teste pelo comportamento esperado e mantenha assertions próximas do risco. Se uma jornada longa cobre muitos resultados independentes, quebre-a em testes menores ou use verificações intermediárias para localizar a falha. O teste deve funcionar sozinho, com dados próprios e sem depender da ordem de execução da suíte.",
+          "Estruture um teste web em preparação, ação e verificação de resultado de negócio. ‘Clicar em salvar’ é uma ação; ‘o pensamento reaparece com texto e contexto preservados após recarga’ é uma afirmação verificável. Nomeie o teste pelo comportamento esperado e mantenha assertions próximas do risco. Se uma jornada longa cobre muitos resultados independentes, quebre-a em testes menores ou use verificações intermediárias para localizar a falha. O teste deve funcionar sozinho, com dados próprios e sem depender da ordem de execução da suíte.",
           "Seletores semânticos, como papel e nome acessível, acompanham a intenção da pessoa usuária e tendem a resistir a mudanças irrelevantes no HTML. Use contratos explícitos quando não houver semântica suficiente. Evite classes de estilo, posição de elemento e cadeias profundas de CSS como identidade do alvo. Antes de adicionar um seletor de teste, pergunte se a interface deveria ter um rótulo acessível. A qualidade do teste e a acessibilidade frequentemente melhoram juntas quando o comportamento é descrito de forma observável.",
         ],
       },
@@ -150,8 +150,8 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
       },
     ],
     caseStudy: {
-      title: "Smoke de cadastro de despesa",
-      context: "Um teste cadastra uma despesa e termina assim que o botão de salvar responde.",
+      title: "Smoke de captura e retomada no BrotoSpace",
+      context: "Um teste captura um pensamento no BrotoSpace e termina assim que o controle responde, sem reencontrar o registro.",
       reasoning: "O clique não demonstra persistência. Gere um valor identificável, preencha campos por rótulo, aguarde a linha na lista, confirme valor e status e recarregue a página. Capture trace se qualquer etapa falhar.",
       conclusion: "O teste passa a proteger a jornada de criação e consulta. Execute-o isoladamente com dados novos para provar que o resultado não depende de estado deixado por outra spec.",
     },
@@ -168,14 +168,14 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
       {
         title: "Autorização por objeto e segurança dos dados",
         paragraphs: [
-          "Autenticação responde quem é a pessoa ou o sistema; autorização responde o que esse ator pode fazer com aquele recurso. Um usuário autenticado não deve conseguir ler ou alterar a despesa de outra pessoa apenas trocando o identificador na URL. Teste o mesmo objeto com papéis diferentes e compare resposta e efeito persistido, sempre em ambiente autorizado com contas e dados de treino. Um erro de autorização pode aparecer tanto como exposição de dados quanto como modificação indevida, mesmo quando o status de outras operações está correto.",
+          "Autenticação responde quem é a pessoa ou o sistema; autorização responde o que esse ator pode fazer com aquele recurso. Um usuário autenticado não deve conseguir ler ou alterar o pensamento privado de outra pessoa apenas trocando o identificador na URL. Teste o mesmo objeto com papéis diferentes e compare resposta e efeito persistido, sempre em ambiente autorizado com contas e dados de treino. Um erro de autorização pode aparecer tanto como exposição de dados quanto como modificação indevida, mesmo quando o status de outras operações está correto.",
           "Não publique tokens em coleções, repositórios ou capturas. Separe variáveis de ambiente, use credenciais limitadas e remova dados pessoais de exemplos. Ao relatar uma falha, registre método, recurso, papel, condição e resultado sem incluir segredo reutilizável. A qualidade do diagnóstico depende de reproduzir o risco com segurança. Na ausência de contrato ou ambiente de teste autorizado, documente a lacuna e faça a prática na API de treino; observar endpoints internos no navegador não concede permissão para explorá-los.",
         ],
       },
     ],
     caseStudy: {
-      title: "Consulta de despesa de outra conta",
-      context: "Duas contas de treino criam despesas diferentes; a segunda tenta consultar o ID criado pela primeira.",
+      title: "Privacidade de pensamentos entre contas",
+      context: "No cenário sintético de privacidade inspirado no BrotoSpace, duas contas têm pensamentos diferentes e uma tenta consultar o registro da outra. Execute a reprodução apenas em laboratório que ofereça esse contrato.",
       reasoning: "Verifique autenticação, papel, escopo de acesso e resposta. Compare também se algum campo privado aparece no corpo de erro. Repita com recurso próprio para confirmar que o endpoint funciona na condição permitida.",
       conclusion: "A suíte deve demonstrar tanto a operação legítima quanto a restrição por objeto. Um status isolado não basta se dados de outra conta ainda forem expostos.",
     },
@@ -247,7 +247,7 @@ export const theoryExpansion: Record<number, TheoryExpansion> = {
     ],
     caseStudy: {
       title: "Pipeline verde com falha conhecida",
-      context: "O smoke principal passou, mas existe um defeito aberto no relatório de despesas aprovado para alguns perfis.",
+      context: "O smoke de captura passou, mas uma investigação confirmou perda do contexto de uma ação ao retomar o caso no BrotoSpace.",
       reasoning: "O gate automático informa apenas sobre os cenários executados. Avalie alcance do defeito, uso do relatório, mitigação disponível e possibilidade de desligar a função sem afetar dados. Documente quem aceita o risco e qual sinal será observado.",
       conclusion: "A decisão pode ser bloquear, limitar a liberação ou seguir com exceção controlada. Qualquer opção precisa declarar evidência, lacuna, responsável e condição de reavaliação.",
     },

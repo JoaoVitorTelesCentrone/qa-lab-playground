@@ -46,7 +46,7 @@ describe("login do QA Lab", () => {
   },
   7: {
     title: "Contrato de API em código",
-    introduction: "Este exemplo usa a API de agendamentos do projeto. O padrão é transferível para despesas: criar dado próprio, capturar ID, conferir campos, alterar com autorização e verificar o resultado.",
+    introduction: "Este exemplo usa a API de agendamentos local do QA Lab como apoio técnico ao caso do BrotoSpace. Transfira o método: criar dado próprio, capturar ID, conferir campos, alterar com autorização e verificar persistência. Os endpoints locais não representam a API do BrotoSpace.",
     examples: [
       { title: "Playwright API: criar, alterar e validar resposta", language: "typescript", code: `import { expect, test } from "@playwright/test";
 

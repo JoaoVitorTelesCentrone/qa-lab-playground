@@ -10,7 +10,7 @@ export default function RequirementsLabPage() {
       <p className="text-sm text-mint">Prática científica · Semana 3 · Cerca de 30 minutos</p>
       <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Uma história, duas interpretações</h1>
       <p className="mt-4 text-lg leading-8 text-[#C8CFD7]">Desenhe testes para uma regra incompleta. Depois, confronte sua interpretação com critérios verificáveis e explique o que mudou.</p>
-      <p className="mt-3 text-sm leading-6 text-[#AAB2BC]">Cenário sintético inspirado em pesquisa sobre clareza de requisitos. As regras desta atividade pertencem somente a este exercício.</p>
+      <p className="mt-3 text-sm leading-6 text-[#AAB2BC]">Cenário de pensamentos e ações inspirado no BrotoSpace e em pesquisa sobre clareza de requisitos. As regras desta atividade pertencem somente a este exercício.</p>
     </header>
     <RequirementsLab />
     <details className="mt-12 border-t border-white/15 pt-5 text-sm leading-7 text-[#C8CFD7]">

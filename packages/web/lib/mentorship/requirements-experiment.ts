@@ -1,14 +1,14 @@
 export const requirementsExperiment = {
   id: "requirements-clarity",
-  version: "1.0",
+  version: "2.0",
   rubricVersion: "1.0",
-  seed: "expense-approval-01",
-  brief: "Uma gestora pode aprovar despesas da equipe dentro do limite permitido. Despesas inválidas devem ser recusadas.",
+  seed: "broto-thought-action-01",
+  brief: "No cenário didático do BrotoSpace, a pessoa pode transformar um pensamento próprio em uma próxima ação. Entradas inválidas devem ser recusadas.",
   rules: [
-    "R1 — Apenas uma gestora pode aprovar uma despesa de outra pessoa da sua própria equipe. A solicitante não pode aprovar a própria despesa.",
-    "R2 — O valor deve ser maior que R$ 0,00 e menor ou igual a R$ 500,00. Valores monetários têm duas casas decimais.",
-    "R3 — Somente despesas pendentes podem ser aprovadas. Aprovar uma despesa já aprovada ou rejeitada deve ser recusado.",
-    "R4 — Uma tentativa recusada preserva o estado da despesa e informa o motivo. Uma aprovação válida muda o estado para aprovada.",
+    "R1 — Somente a pessoa autora pode transformar seu pensamento em ação; outra conta não pode ler nem alterar o registro privado.",
+    "R2 — Neste exercício, o título da ação deve conter de 1 a 100 caracteres após remover espaços nas pontas. Esse limite é sintético e não descreve uma regra confirmada do produto.",
+    "R3 — Neste exercício, cada pensamento origina no máximo uma ação. Repetir a transformação deve retomar a mesma ação sem duplicá-la.",
+    "R4 — Uma tentativa recusada preserva pensamento e vínculos e informa o motivo. Uma transformação válida conserva a referência ao pensamento de origem após recarga.",
   ],
 } as const;
 
@@ -58,13 +58,13 @@ export function exportRequirementsMarkdown(attempt: RequirementsAttempt) {
     "# Experimento: uma história, duas interpretações", "",
     `Lab: ${requirementsExperiment.id} | Cenário: ${requirementsExperiment.version} | Rubrica: ${requirementsExperiment.rubricVersion} | Seed: ${requirementsExperiment.seed}`,
     `Início: ${attempt.startedAt}`, "",
-    "Adaptação didática com cenário sintético. Respostas declaradas pelo aluno; não constituem execução certificada nem replicação de um artigo.", "",
+    "Adaptação didática inspirada no BrotoSpace, com regras sintéticas próprias do exercício. Respostas declaradas pelo aluno; não constituem execução no produto nem replicação de um artigo.", "",
     "## História inicial", requirementsExperiment.brief, "",
     "## Antes do esclarecimento", "### Perguntas e hipóteses", attempt.baseline.questions, "### Cenários e resultados esperados", attempt.baseline.scenarios, "",
     "## Critérios esclarecidos", ...requirementsExperiment.rules.map(rule => `- ${rule}`), "",
     "## Depois do esclarecimento", "### Perguntas resolvidas e dúvidas restantes", attempt.revised.questions, "### Cenários ligados às regras", attempt.revised.scenarios, "",
     "## Comparação e limites", attempt.conclusion, "",
-    "## Revisão do mentor", "- Distingue regra, hipótese e dúvida.", "- Cobre fronteiras de valor, papéis, equipe e estado.", "- Resultados esperados citam R1–R4 e são observáveis.", "- Explica mudanças e limitações sem inferir causalidade de uma única tentativa.", "",
+    "## Revisão do mentor", "- Distingue regra, hipótese e dúvida.", "- Cobre tamanho de texto, autoria, duplicação e preservação do vínculo.", "- Resultados esperados citam R1–R4 e são observáveis.", "- Explica mudanças e limitações sem inferir causalidade de uma única tentativa.", "",
     "Fonte de inspiração: https://doi.org/10.15282/ijsecs.12.1.2026.1.0147", "",
   ].join("\n");
 }

@@ -7,27 +7,27 @@ export type MentorshipLessonGuide = {
 export const mentorshipLessonGuides: Record<string, MentorshipLessonGuide> = {
   "mentoria.w01.l1": {
     idea: "QA ajuda o time a decidir com menos incerteza. Comece pela pergunta que o teste precisa responder: qual falha poderia prejudicar o usuário ou o negócio? Uma lista grande de casos só tem valor quando esclarece riscos relevantes.",
-    example: "No sistema, conferir que o botão Salvar funciona é pouco. Se uma despesa for salva com valor incorreto, o relatório de reembolsos pode levar a uma decisão financeira errada.",
+    example: "No BrotoSpace, uma confirmação de captura precisa corresponder a um pensamento que continua acessível ao retornar. Se o texto desaparecer após recarga, a pessoa perde contexto e confiança no produto.",
     apply: "Escreva três perguntas de risco antes de abrir o ambiente. Para cada uma, diga que observação mudaria sua decisão.",
   },
   "mentoria.w01.l2": {
     idea: "Um briefing descreve objetivos e restrições, mas quase sempre deixa regras implícitas. Procure atores, dados, estados, cálculos e integrações; transforme lacunas em perguntas que podem ser respondidas por produto, código ou experimento.",
-    example: "Se o briefing diz que o usuário acompanha reembolsos, pergunte quem pode aprovar, quais despesas entram no total aprovado e como o status muda após uma decisão.",
-    apply: "Monte uma tabela com regra conhecida, hipótese e pergunta aberta para o fluxo de despesas.",
+    example: "Se o briefing diz que a pessoa transforma pensamentos em ações, pergunte como o contexto é preservado, quem pode acessar o registro e o que significa concluir a ação.",
+    apply: "Monte uma tabela com regra conhecida, hipótese e pergunta aberta para captura, organização e retomada no BrotoSpace.",
   },
   "mentoria.w01.l3": {
     idea: "Explorar não e clicar sem direção. Escolha um risco, execute um caminho curto, compare o resultado com a regra e registre evidências. Ao encontrar algo inesperado, teste uma variação para separar defeito de configuração ou dado.",
-    example: "Cadastre uma despesa, consulte a lista, aprove com outro perfil e consulte o relatório. Registre cada estado observado antes de concluir que houve falha.",
+    example: "Capture o pensamento fictício do caso, relacione-o a um desafio quando o recurso estiver disponível e volte após recarregar. Registre os estados observados antes de concluir que houve falha.",
     apply: "Percorra um fluxo do sistema e produza uma nota com ação, resultado, hipótese e próximo experimento.",
   },
   "mentoria.w02.l1": {
     idea: "Uma sessão exploratoria tem missao, tempo e registro. A missao limita o foco; o registro separa o que você fez do que concluiu. Quando o tempo termina, sintetize cobertura, achados e lacunas.",
-    example: "Em vez de testar todos os agendamentos, investigue por 40 minutos o que acontece quando a data muda depois de selecionar um horario.",
+    example: "Em vez de explorar todo o BrotoSpace sem objetivo, investigue por 30 minutos se o pensamento pode ser reencontrado depois de interromper e retomar a captura.",
     apply: "Escreva um charter de uma frase e um timebox antes de abrir o Lab Exploratorio.",
   },
   "mentoria.w02.l2": {
     idea: "Heuristicas são perguntas que ampliam o olhar: o que muda nas bordas, com dados ausentes, com repetição, com interrupção ou com dois usuários? Elas não garantem cobertura; ajudam a descobrir onde investigar.",
-    example: "Num agendamento, experimente horario no início e no fim do expediente, duas reservas simultaneas e retorno após perder a conexão.",
+    example: "No BrotoSpace, varie texto vazio, texto longo, interrupção e retorno em outra sessão; confirme a regra de cada condição antes de classificar um achado.",
     apply: "Escolha três heuristicas, anote o que cada uma revelou e indique uma lacuna que ainda ficou aberta.",
   },
   "mentoria.w03.l1": {
@@ -42,17 +42,17 @@ export const mentorshipLessonGuides: Record<string, MentorshipLessonGuide> = {
   },
   "mentoria.w04.l1": {
     idea: "Um bug report precisa permitir reprodução e decisão. Registre ambiente, precondicoes, passos minimos, resultado atual, resultado esperado e evidência. Diferencie o tamanho do dano da urgência para corrigir.",
-    example: "Se o relatório aprovado diverge da soma dos itens aprovados, mostre perfil, status, valores, soma esperada e impacto para o usuário.",
+    example: "Se o resumo de crescimento diverge dos estados das ações no cenário sintético, mostre conta de estudo, período, contagem esperada e impacto para quem acompanha seu progresso.",
     apply: "Escreva um relato que outra pessoa consiga reproduzir sem falar com você.",
   },
   "mentoria.w04.l2": {
     idea: "Uma recomendação de release combina impacto, alcance, probabilidade, mitigacao e incerteza. O papel de QA e mostrar evidências e opções, deixando clara a decisão proposta e o que ainda precisa ser observado.",
-    example: "Uma divergência no total aprovado pode bloquear a release; um desalinhamento visual pode seguir com correção planejada, dependendo do contexto.",
+    example: "Uma divergência na contagem de ações concluídas pode bloquear a release; um desalinhamento visual pode seguir com correção planejada, dependendo do contexto.",
     apply: "Para cada defeito relatado, escreva em cinco linhas se liberaria, bloquearia ou investigaria mais, e por que.",
   },
   "mentoria.w05.l1": {
     idea: "Automatize verificações repetidas e valiosas cujo resultado seja observavel. Considere frequência, risco, estabilidade, custo de manter e camada adequada. Uma suite grande de testes frágeis pode reduzir a confiança do time.",
-    example: "A soma de despesas pode ter um teste de regra rápido; uma interface em mudança constante pode pedir exploração manual até o fluxo estabilizar.",
+    example: "Uma regra confirmada de conclusão de ação pode ter um teste rápido; uma interface em mudança constante pode pedir exploração manual até a jornada estabilizar.",
     apply: "Pontue dez verificações e escolha três candidatos para automatizar primeiro.",
   },
   "mentoria.w05.l2": {
@@ -62,17 +62,17 @@ export const mentorshipLessonGuides: Record<string, MentorshipLessonGuide> = {
   },
   "mentoria.w06.l1": {
     idea: "Um teste executável prepara o estado, executa uma ação e verifica um resultado de negócio. Nomeie o comportamento; evite depender da ordem de outros testes e garanta que uma falha aponte para a etapa relevante.",
-    example: "Ao criar uma despesa válida, verifique que ela aparece na consulta com valor e categoria corretos, não apenas que o botão foi clicado.",
+    example: "Ao capturar um pensamento fictício no BrotoSpace, verifique que ele pode ser reencontrado com texto e contexto preservados, além de conferir o acionamento do controle.",
     apply: "Escreva um smoke que rode sozinho e explique como os dados iniciais são criados ou restaurados.",
   },
   "mentoria.w06.l2": {
     idea: "Seletores por papel, nome e label acompanham a intenção do usuário. Espere estados observaveis em vez de pausas fixas. Controle massa e dependências para que o mesmo teste passe localmente e no CI.",
-    example: "Troque um seletor CSS profundo pelo botão 'Salvar despesa' e espere a despesa aparecer na lista, sem sleep de dois segundos.",
+    example: "Troque um seletor CSS profundo pelo papel e nome acessível reais do controle de captura. Espere o pensamento específico aparecer sem sleep de dois segundos.",
     apply: "Revise um teste frágil e registre o seletor, a espera e o dado que você alterou.",
   },
   "mentoria.w07.l1": {
     idea: "Uma API é um contrato de comportamento. Valide status, schema, tipos, regra de negócio e efeito persistido. Teste erros esperados; uma resposta 200 com dado de outro usuário é uma falha grave.",
-    example: "Depois de criar uma despesa, consulte o recurso e confirme dono, valor e categoria; em seguida tente um identificador inexistente.",
+    example: "A partir da privacidade do pensamento no BrotoSpace, modele verificações de autoria e conteúdo. Execute criação e consulta na API Lab local e registre a diferença entre o contrato praticado e a hipótese sobre o produto.",
     apply: "Liste pelo menos uma assertion de transporte, uma de regra e uma de autorização.",
   },
   "mentoria.w07.l2": {
@@ -82,7 +82,7 @@ export const mentorshipLessonGuides: Record<string, MentorshipLessonGuide> = {
   },
   "mentoria.w08.l1": {
     idea: "Uma suite saudavel separa intenção de detalhe de interface sem esconder o comportamento. Use fixtures e helpers pequenos para reduzir repetição; acompanhe duração, instabilidade e utilidade dos testes.",
-    example: "Um helper que cria despesa de teste pode ser útil; um helper generico que clica em qualquer elemento obscurece o fluxo protegido.",
+    example: "Um helper que prepara pensamento fictício pode ser útil; um helper genérico que clica em qualquer elemento obscurece o comportamento protegido.",
     apply: "Escolha uma abstração e explique que duplicacao ela remove e que informacao preserva.",
   },
   "mentoria.w08.l2": {

@@ -7,14 +7,14 @@ export type AppliedExample = {
 
 const examples: Record<number, AppliedExample> = {
   1: {
-    situation: "Uma despesa aparece como aprovada na lista do sistema, mas o total aprovado no relatório não corresponde à soma das despesas aprovadas.",
-    reasoning: "Antes de concluir que o cálculo falhou, confira o perfil selecionado, o status e os valores de cada despesa visível. Compare a soma manual com o relatório e repita após restaurar os dados de treino. O risco é uma decisão de reembolso baseada em número incorreto.",
-    transfer: "Percorra lista, aprovações e relatórios. Anote quais despesas entram no total e que observação confirmaria a divergência.",
+    situation: "Um pensamento capturado no BrotoSpace aparece na primeira visita, mas deixa de ser encontrado depois de recarregar a Mente.",
+    reasoning: "Antes de concluir que o conteúdo foi perdido, confira conta, filtro, texto e caminho de retomada. Repita com um pensamento fictício identificável e registre o estado antes e depois. O risco é interromper o ciclo entre capturar, compreender e agir.",
+    transfer: "Percorra captura, organização e retomada do caso no BrotoSpace. Anote o que foi preservado e que observação distinguiria perda de registro de dificuldade para encontrá-lo.",
     evidence: "No mapa de risco, registre evento, impacto, prioridade e uma pergunta de negócio para esse fluxo.",
   },
   2: {
-    situation: "Voce tem 40 minutos para explorar uma tela de agendamento e percebe que alterar a data pode manter um horario indisponivel selecionado.",
-    reasoning: "Uma sessão exploratoria precisa de missao e limite. Escolha investigar mudança de data e disponibilidade; registre o que fez, o que viu e o que ainda e hipótese. Nao transforme toda observação em defeito sem confirmar a regra.",
+    situation: "Você tem 40 minutos para explorar a captura no BrotoSpace e percebe que uma interrupção pode dificultar a retomada do pensamento fictício.",
+    reasoning: "Uma sessão exploratória precisa de missão e limite. Escolha investigar captura, interrupção e retorno; registre o que fez, o que viu e o que ainda é hipótese. Confirme a regra antes de tratar uma observação como defeito.",
     transfer: "No Lab Exploratorio, escreva o charter antes de abrir a interface. Use as notas para decidir qual area merece a próxima sessão.",
     evidence: "Entregue charter, notas reproduzíveis, achados e uma próxima pergunta de investigação.",
   },
@@ -25,25 +25,25 @@ const examples: Record<number, AppliedExample> = {
     evidence: "Entregue cenários de caminho feliz, erro e limite, com prioridade justificada.",
   },
   4: {
-    situation: "Ao somar as despesas aprovadas visíveis, você obtém um valor diferente do total aprovado exibido no relatório.",
+    situation: "Ao voltar ao desafio fictício no BrotoSpace, uma ação anteriormente vinculada não apresenta o mesmo contexto observado antes da recarga.",
     reasoning: "Um relato útil permite que outra pessoa reproduza o problema. Informe estado inicial, passos minimos, resultado observado e regra que sustenta o esperado. Diferencie severidade do impacto de negócio e prioridade de correção.",
-    transfer: "Use o template de bug report para registrar perfil, despesas consideradas, soma esperada e total exibido.",
+    transfer: "Use o template de bug report para registrar conta de teste, pensamento, desafio, estado anterior e contexto observado ao retornar.",
     evidence: "Entregue dois relatos reproduzíveis e uma recomendação de release para cada risco.",
   },
   5: {
     situation: "O time quer automatizar todos os caminhos do sistema e também uma área hipotética cujo comportamento ainda muda toda semana.",
-    reasoning: "Automacao compensa quando protege risco frequente com resultado observavel e custo de manutenção aceitavel. Um cálculo financeiro estável pode ser bom candidato; uma exploração visual em area instável pode continuar manual.",
+    reasoning: "Automacao compensa quando protege risco frequente com resultado observavel e custo de manutenção aceitavel. Uma regra estável de conclusão de ação pode ser bom candidato; uma exploração visual em area instável pode continuar manual.",
     transfer: "Compare fluxos por risco, repetição, estabilidade e camada de teste. Escreva por que automatizaria alguns e adiaria outros.",
     evidence: "Entregue uma matriz de candidatos com três escolhas, dois descartes e critérios claros.",
   },
   6: {
     situation: "Um teste clica no botão Salvar e espera dois segundos antes de procurar a confirmacao. Ele passa localmente e falha no CI.",
-    reasoning: "O teste precisa esperar o estado que prova a regra, como a despesa persistida ou uma mensagem de sucesso, e usar um seletor ligado ao nome acessivel do controle. Uma pausa fixa não garante que a operacao terminou.",
+    reasoning: "O teste precisa esperar o estado que prova a regra, como o pensamento persistido ou uma mensagem de sucesso, e usar um seletor ligado ao nome acessivel do controle. Uma pausa fixa não garante que a operacao terminou.",
     transfer: "No workspace de automação, escreva um smoke com preparacao de dados, ação e assertions sobre o resultado de negócio.",
     evidence: "Entregue a spec e explique como ela isola dados e ajuda a diagnosticar uma falha.",
   },
   7: {
-    situation: "Uma API responde 200 ao consultar uma despesa, mas entrega um registro pertencente a outro usuário.",
+    situation: "No cenário didático inspirado na privacidade do BrotoSpace, uma consulta responde 200, mas expõe o pensamento privado de outra conta. A reprodução técnica exige um ambiente e contrato autorizados.",
     reasoning: "Status HTTP sozinho não prova contrato. Verifique campos, regra de negócio, persistência e autorização por objeto. O teste deve usar duas identidades de treino e mostrar que a segunda não acessa o recurso da primeira.",
     transfer: "No API Playground, encadeie criação e consulta, depois repita com dado inválido e com outro usuário quando o ambiente permitir.",
     evidence: "Entregue requests reproduzíveis e assertions para sucesso, erro e isolamento de acesso.",
