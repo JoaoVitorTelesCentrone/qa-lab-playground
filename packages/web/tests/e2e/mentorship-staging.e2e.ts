@@ -1,16 +1,16 @@
 import { expect, test } from "@playwright/test";
+import { mentorshipPathV2 } from "../../lib/mentorship/path-v2";
 
 test.describe("mentoria: smoke publico e responsivo", () => {
-  test("roadmap e 12 modulos exibem teoria, enunciado e Broto Space", async ({ page }) => {
-    test.setTimeout(90_000);
+  test("catálogo v2 apresenta os sete módulos e seus capítulos", async ({ page }) => {
     await page.goto("/mentoria/conteudo");
-    await expect(page.getByRole("heading", { name: /Conteúdo de qualidade de software/i })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /Teste um produto real: Broto Space/i })).toBeVisible();
-    for (let week = 1; week <= 12; week++) {
-      await page.goto(`/mentoria/conteudo/${week}`);
-      await expect(page.getByText("Enunciado completo do lab")).toBeVisible();
-      await expect(page.getByText("Projeto transversal · site real")).toBeVisible();
-      await expect(page.getByRole("heading", { name: "Aulas desta semana" })).toBeVisible();
+    await expect(page).toHaveURL(/\/conteudo\/?$/);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    for (const courseModule of mentorshipPathV2) {
+      await page.goto(`/conteudo/modulos/${courseModule.slug}`);
+      await expect(page.getByRole("heading", { level: 1, name: courseModule.title })).toBeVisible();
+      await page.goto(`/conteudo/modulos/${courseModule.slug}/${courseModule.chapters[0].slug}`);
+      await expect(page.getByRole("heading", { level: 1, name: courseModule.chapters[0].title })).toBeVisible();
     }
   });
 

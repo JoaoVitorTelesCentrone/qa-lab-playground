@@ -68,7 +68,7 @@ export function buildMetrics(events: ActivityEvent[], signups: Signup[] = [], no
   const signupByUser = new Map(eligibleSignups.map((signup) => [signup.userId, Date.parse(signup.createdAt)]));
   const firstEvidenceByUser = new Map<string, number>();
   for (const event of events) {
-    if (event.name !== "lab_completed") continue;
+    if (event.name !== "lab_completed" && event.name !== "challenge_evidence_submitted") continue;
     const signupAt = signupByUser.get(event.userId);
     if (signupAt === undefined) continue;
     const submittedAt = Date.parse(event.createdAt);

@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test:e2e": "playwright test",
     "test:e2e:smoke": "playwright test --grep @smoke",
+    "test:e2e:mentorship": "bun scripts/test-mentorship-local.ts",
     "research:update": "bun scripts/update-research-library.ts",
     "research:index": "bun scripts/export-research-articles-index.ts",
     "mentorship:readiness": "bun --env-file=.env.local scripts/check-mentorship-readiness.ts",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
+    "@types/bun": "^1.4.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

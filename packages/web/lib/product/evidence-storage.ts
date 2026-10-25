@@ -24,24 +24,40 @@ const BUCKET = "lab-evidence";
  */
 const SIGNED_URL_TTL = 60 * 60;
 
-/** Extensão a partir do nome original; sem ela o Storage serve o arquivo sem tipo. */
-function extensionOf(name: string) {
-  const match = /\.([a-z0-9]{1,8})$/i.exec(name.trim());
-  return match ? `.${match[1].toLowerCase()}` : "";
-}
+const FILE_EXTENSIONS: Record<string, string> = {
+  "image/jpeg": ".jpg", "image/png": ".png", "image/gif": ".gif",
+  "image/webp": ".webp", "video/mp4": ".mp4", "video/webm": ".webm",
+  "application/pdf": ".pdf",
+};
 
 /**
  * Nome do arquivo dentro do bucket. O primeiro segmento é o id do usuário
  * porque é isso que as policies do Storage checam.
  */
-function pathFor(userId: string, labSlug: string, fileName: string) {
+function pathFor(userId: string, labSlug: string, fileType: string) {
   const safeLab = labSlug.replace(/[^a-z0-9-]/gi, "").slice(0, 60) || "lab";
-  return `${userId}/${safeLab}/${crypto.randomUUID()}${extensionOf(fileName)}`;
+  const extension = FILE_EXTENSIONS[fileType];
+  if (!extension) throw new Error("Formato de arquivo não aceito.");
+  return `${userId}/${safeLab}/${crypto.randomUUID()}${extension}`;
+}
+
+/** A reserva é feita no servidor; a policy do Storage exige o caminho exato. */
+export async function reserveEvidenceUpload(userId: string, path: string, size: number, type: string) {
+  const admin = createAdminClient();
+  const { error } = await admin.rpc("reserve_evidence_upload", {
+    owner_id: userId, object_path: path, file_bytes: size, file_type: type,
+  });
+  if (error) throw new Error(error.message);
+}
+
+export function isEvidenceUploadLimitError(error: unknown) {
+  return error instanceof Error && (/^Limite de armazenamento da conta:|^Limite diario de envios atingido\.|^Aguarde os envios em andamento/.test(error.message));
 }
 
 export async function uploadEvidenceFile(userId: string, labSlug: string, file: File): Promise<Attachment> {
   const supabase = await createClient();
-  const path = pathFor(userId, labSlug, file.name);
+  const path = pathFor(userId, labSlug, file.type);
+  await reserveEvidenceUpload(userId, path, file.size, file.type);
 
   const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
     contentType: file.type,
@@ -66,7 +82,9 @@ export async function evidenceFilesExist(attachments: Attachment[]): Promise<boo
   if (attachments.length === 0) return true;
   const supabase = await createClient();
   const results = await Promise.all(attachments.map((file) => supabase.storage.from(BUCKET).exists(file.path)));
-  const failure = results.find((result) => result.error);
+  // Storage's HEAD endpoint reports a missing object as 400 or 404 depending
+  // on the Storage version; absence is invalid evidence, not an API outage.
+  const failure = results.find((result) => result.error && !("statusCode" in result.error && ["400", "404"].includes(String(result.error.statusCode))));
   if (failure?.error) throw new Error(`Não foi possível conferir o anexo: ${failure.error.message}`);
   return results.every((result) => result.data === true);
 }

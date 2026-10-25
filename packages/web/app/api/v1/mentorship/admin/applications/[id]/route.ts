@@ -4,6 +4,7 @@ import { notifyMentorshipUsers } from "@/lib/mentorship/store";
 import { fail, ok, readJson } from "@/lib/product/api";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {

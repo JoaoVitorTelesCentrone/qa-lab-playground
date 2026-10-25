@@ -1,6 +1,9 @@
 import { createHmac, timingSafeEqual } from "crypto";
+import { providerUrl } from "@/lib/test-provider";
 
-const apiUrl = "https://api.mercadopago.com";
+function apiUrl() {
+  return providerUrl("https://api.mercadopago.com", process.env.QALAB_TEST_MERCADO_PAGO_URL);
+}
 
 export function mercadoPagoConfigured() {
   return Boolean(process.env.MERCADO_PAGO_ACCESS_TOKEN && process.env.MERCADO_PAGO_WEBHOOK_SECRET);
@@ -26,7 +29,7 @@ export async function createPreference(input: {
   const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
   if (!token) throw new Error("Mercado Pago não configurado.");
   const base = input.siteUrl.replace(/\/$/, "");
-  const response = await fetch(`${apiUrl}/checkout/preferences`, {
+  const response = await fetch(`${apiUrl()}/checkout/preferences`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -68,7 +71,7 @@ export function verifyWebhookSignature(input: { signature: string | null; reques
 export async function getPayment(paymentId: string) {
   const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
   if (!token) throw new Error("Mercado Pago não configurado.");
-  const response = await fetch(`${apiUrl}/v1/payments/${encodeURIComponent(paymentId)}`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
+  const response = await fetch(`${apiUrl()}/v1/payments/${encodeURIComponent(paymentId)}`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
   if (!response.ok) throw new Error("Não foi possível consultar o pagamento no Mercado Pago.");
   return response.json() as Promise<{ id: number; status: string; external_reference?: string; transaction_amount?: number; currency_id?: string; collector_id?: number; status_detail?: string }>;
 }

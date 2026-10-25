@@ -1,8 +1,8 @@
 import { fail, ok, withUser } from "@/lib/product/api";
-import { requireEnrollment, MentorshipAccessError } from "@/lib/mentorship/access";
+import { requireWritableEnrollment, MentorshipAccessError } from "@/lib/mentorship/access";
 import { findMentorshipAssignment } from "@/lib/mentorship/catalog";
 import { findPathV2Assignment } from "@/lib/mentorship/path-v2";
-import { uploadEvidenceFile } from "@/lib/product/evidence-storage";
+import { uploadEvidenceFile, isEvidenceUploadLimitError } from "@/lib/product/evidence-storage";
 import { ALLOWED_TYPES, MAX_FILE_BYTES, formatBytes } from "@/lib/product/evidence-limits";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export function POST(request: Request) {
   return withUser(async (user) => {
     try {
-      const { enrollment } = await requireEnrollment();
+      const { enrollment } = await requireWritableEnrollment();
       const form = await request.formData();
       const file = form.get("file");
       const assignmentKey = form.get("assignmentKey");
@@ -23,6 +23,7 @@ export function POST(request: Request) {
       return ok(attachment, 201);
     } catch (error) {
       if (error instanceof MentorshipAccessError) return fail(error.message, error.status);
+      if (isEvidenceUploadLimitError(error)) return fail((error as Error).message, 429);
       return fail(error instanceof Error ? error.message : "Nao foi possivel enviar o anexo.", 500);
     }
   });

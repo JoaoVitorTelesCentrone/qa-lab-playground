@@ -1,58 +1,86 @@
 # Runbook da Mentoria QA Lab
 
-Este documento descreve a publicação e a validação da fase 6. O gate do piloto só passa depois de executar os cenários num projeto Supabase de staging com três perfis (aluno, mentor e admin), checkout em sandbox e nenhum P0/P1 aberto.
+O QA Lab tem um único Supabase remoto. O ensaio automatizado usa um Supabase local isolado; uma prévia da Vercel conectada ao remoto compartilha seus dados e não é staging isolado.
 
-## Publicar em staging
+## Ensaio local obrigatório da v2
 
-1. Faça backup do banco de staging e aplique, em ordem, todas as migrations em `packages/web/supabase/migrations`, incluindo `0029_mentorship_hardening_email.sql`, `20261021222551_mentorship_waitlist_attribution.sql` e `20261021233458_mentorship_order_attribution.sql`. A aplicação depende do trigger `touch_mentorship_updated_at` da migration 0024.
-2. Configure as variáveis de ambiente do app: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SITE_URL`, `MENTORSHIP_EMAIL_ENABLED`, `MENTORSHIP_FROM_EMAIL`, `RESEND_API_KEY` e `CRON_SECRET`.
-3. Configure `MENTORSHIP_EMAIL_ENABLED=true` somente após verificar o domínio remetente no Resend. Gere um `CRON_SECRET` forte e configure o mesmo valor na Vercel. O cron está agendado diariamente; dispare o endpoint uma vez com o header `Authorization: Bearer <CRON_SECRET>` para validar o processamento controlado.
-4. Confirme que o e-mail de staging usa remetente e destinatários autorizados. O worker não envia nada enquanto a flag de e-mail estiver desabilitada ou faltarem credenciais.
-5. Para o fluxo mutante, crie um aluno de staging descartável ainda sem tentativas na semana escolhida, associe o mentor à turma e configure `MENTORSHIP_E2E_STUDENT_EMAIL/PASSWORD/ID`, `MENTORSHIP_E2E_MENTOR_EMAIL/PASSWORD`, `MENTORSHIP_E2E_ADMIN_EMAIL/PASSWORD`, `MENTORSHIP_E2E_COHORT_ID` e `MENTORSHIP_E2E_WEEK`. Habilite `MENTORSHIP_E2E_MUTATIONS_ENABLED=true` apenas no ambiente local seguro apontado para staging. O teste cria matrícula e entrega; use uma conta nova para repetir a jornada.
-
-## Validação automatizada
-
-Na pasta `packages/web`:
+Requisitos: Bun, Docker em execução e Chromium do Playwright instalado. Na pasta `packages/web`:
 
 ```powershell
-bun run test:e2e
+bunx playwright install chromium
+bun run test:e2e:mentorship
 ```
 
-Os testes sem credenciais cobrem a página pública e o redirecionamento da área autenticada em viewport mobile. A jornada mutante usa admin, aluno e mentor para matricular, enviar PDF, pedir ajustes, reenviar e aprovar. Configure também `MENTORSHIP_E2E_STUDENT_USERNAME` e uma entrega final já aprovada para validar a publicação pública do portfólio.
+O executor:
 
-O smoke da admissão cobre a página pública mobile e impede que visitantes anônimos criem inscrição ou checkout. Para a jornada mutante de admissão, configure `MENTORSHIP_ADMISSION_E2E_ENABLED=true`, `MENTORSHIP_ADMISSION_E2E_STUDENT_EMAIL/PASSWORD`, `MENTORSHIP_ADMISSION_E2E_COHORT_ID` e `MENTORSHIP_E2E_ADMIN_EMAIL/PASSWORD` em staging. Use aluno novo e turma aberta: o teste cria solicitação e bolsa, confirma a matrícula e verifica acesso ao diagnóstico. O checkout do Mercado Pago da mentoria precisa ainda de compra sandbox e webhook validados manualmente. O teste `QA_E2E_CHECKOUT_ENABLED=true` cobre apenas a preferência do QA Lab Pro.
+- prepara `.tmp/mentorship-local` com o catálogo atual de migrações e o projeto `qa-lab-mentorship-tests`;
+- usa API em `127.0.0.1:58421`, banco em `127.0.0.1:58422` e aplicação em `127.0.0.1:3180`;
+- substitui explicitamente o `SUPABASE_PROJECT_ID` remoto que Bun pode carregar de `.env.local`;
+- aplica migrações locais pendentes, executa pgTAP, faz build e inicia a aplicação com variáveis locais;
+- cria contas e turmas descartáveis por teste para aluno, colega, mentor, mentor de outra turma e admin;
+- testa diagnóstico, progresso, upload real, revisão, ajuste, reenvio, materiais, encontros, replays, privacidade, matrícula, case e certificado;
+- usa provedores HTTP locais para Mercado Pago e Resend. Auth, banco, Storage, rotas, assinatura do webhook e conciliação são reais no ambiente local;
+- falha se o ambiente obrigatório estiver ausente. Nenhum desses cenários é aceito como ignorado no job de CI.
 
-Para rodar apenas os cenários mutantes: `bun run test:e2e -- tests/e2e/mentorship-journey.e2e.ts`.
+Não aponta esse executor ao remoto. Os provedores de teste também recusam uso com um Supabase remoto. O teste de pagamento local não substitui uma compra sandbox no provedor real; o teste de e-mail local não comprova entrega em uma caixa postal externa.
 
-Execute as verificações SQL de permissões num banco de teste Supabase com pgTAP disponível:
+Para repetir sem reconstruir um build local já válido: `bun run test:e2e:mentorship -- --running --no-build`. Reconstrua após mudar código da aplicação. A suíte pública continua em `bun run test:e2e:smoke`; os smoke tests autenticados antigos por credencial são opcionais e não substituem a suíte local obrigatória.
 
-```powershell
-supabase test db
-```
+O workflow `quality.yml` possui um job separado para a mentoria. Em falha, publica traces e capturas como artefato de sete dias.
 
-`packages/web/supabase/tests/mentorship_hardening.test.sql` valida RLS ativo, privilégio restrito de `read_at` e acesso fechado ao outbox. `payment_reconciliation.test.sql` valida reembolso, eventos tardios, capacidade e privilégios de compra/perfil. Não execute esses testes apontando para produção.
+## Preparar a publicação
 
-## Roteiro manual do piloto (3 perfis)
+1. Fixe o commit candidato e confira o histórico do único remoto. Compare as duas árvores históricas de migrações; não aplique SQL pela simples existência de um arquivo.
+2. Faça backup. Execute o ensaio local antes de alterar o remoto.
+3. Inclua as migrações necessárias ao candidato, especialmente:
+   - `0024_mentorship_core.sql`, `0029_mentorship_hardening_email.sql` e as migrações de admissão, conciliação e atribuição;
+   - as migrações do portfólio e quota usadas pela versão publicada;
+   - `20261025023653_mentorship_notification_outbox_atomic.sql`: grava notificação e outbox na mesma transação;
+   - `20261025023740_evidence_upload_owner_parameter.sql`: corrige o parâmetro de dono na reserva de uploads.
+4. Configure Auth, URLs de retorno, bucket privado e variáveis: Supabase público e service role, `NEXT_PUBLIC_SITE_URL`, credenciais do Mercado Pago, Resend e `CRON_SECRET`. Segredos ficam somente no servidor.
+5. Publique o mesmo candidato validado e faça smoke controlado com contas de teste no remoto. Registre evidências em `STAGING_GATE_QA_LAB.md`.
 
-| Perfil | Jornada e evidência esperada |
+A notificação possui um fallback idempotente no código para a gravação da outbox. A garantia de atomicidade depende da nova migração; não marque esse requisito como liberado no remoto sem conferir sua aplicação.
+
+## E-mail: envio por evento, recuperação e alertas
+
+Após persistir uma notificação, a aplicação processa a fila do destinatário usando `after()`. O processamento respeita um orçamento de tempo; mensagens restantes permanecem duráveis. Há claim por mensagem, chave idempotente no provedor, recuperação de locks antigos, retentativas e tratamento de falhas transitórias de Auth.
+
+O endpoint `/api/cron/mentorship-emails` gera lembretes, processa até 100 candidatos por execução e informa saúde da fila. O painel admin mostra mensagens aguardando, idade da mais antiga, atrasos acima de 15 minutos e falhas definitivas. Worker desabilitado, atraso ou falha definitiva fazem o cron retornar 503 para sinalizar o problema ao agendador.
+
+O cron diário da Vercel permanece como contingência. Para recuperação frequente, habilite o workflow `mentorship-emails.yml` no GitHub:
+
+| Configuração do repositório | Valor |
 | --- | --- |
-| Aluno | Abrir checkout do Mercado Pago em sandbox; concluir pagamento de teste; confirmar matrícula/turma; entrar no painel; enviar uma entrega com arquivo; reenviar após pedido de ajustes; marcar aula concluída; publicar um caso no portfólio. |
-| Mentor | Entrar na fila da turma; abrir a entrega do aluno; registrar feedback e pedir ajuste; confirmar presença em sessão; conferir que itens de outra turma não aparecem. |
-| Admin | Criar turma e matrícula de staging; abrir painel de métricas; conferir alunos ativos, progresso de entrega/aula, presença, reviews acima de 72h e fila de e-mail; publicar sessão futura. |
+| Variable `MENTORSHIP_EMAIL_WORKER_ENABLED` | `true` depois de configurar o endpoint |
+| Variable `MENTORSHIP_EMAIL_CRON_URL` | URL HTTPS publicada terminando em `/api/cron/mentorship-emails` |
+| Secret `MENTORSHIP_CRON_SECRET` | Mesmo segredo de `CRON_SECRET` na aplicação |
 
-Para notificação, agende uma sessão em até 36 horas e mantenha uma entrega em revisão por mais de 48 horas. Execute o endpoint de cron, confira notificação interna/outbox e recebimento no inbox de teste; repita o cron e confirme que não cria duplicatas. Inspecione no provedor o resultado de entrega e, em seguida, valide a fila de falhas com um endereço inválido controlado.
+O workflow solicita execução a cada cinco minutos, com exclusão de concorrência e falha visível. Agendamentos do GitHub podem atrasar; não prometa um horário exato de entrega. Uma instalação com agendador próprio pode chamar o mesmo endpoint autenticado. O limite diário do Vercel Hobby impede simplesmente trocar seu cron por frequência de minutos nesse plano. [Documentação de frequência dos crons](https://vercel.com/docs/cron-jobs/usage-and-pricing).
 
-Em desktop e em 390 px de largura, percorra página pública, login, painel, formulário de entrega e portfólio. Navegue os formulários por teclado, confirme foco visível, rótulos acessíveis, mensagens de erro anunciadas e ausência de rolagem horizontal da página. Tabelas podem rolar horizontalmente dentro do próprio painel.
+Antes de ativar `MENTORSHIP_EMAIL_ENABLED=true`, verifique o remetente no Resend e receba uma mensagem em uma caixa de teste autorizada. Primeiro valide uma confirmação e um feedback; depois repita o processamento e confirme ausência de duplicatas. Em falha, preserve `last_error`, investigue a fila e corrija a configuração. Não apague mensagens pendentes para esconder o alerta.
 
-## Gate, suporte e recuperação
+## Ensaio manual com integrações reais
 
-- Registre URL, commit, migration aplicada, navegador/dispositivo, perfil, passos, resultado e evidência para cada cenário.
-- Gate passa apenas com três perfis exercitados, checkout em sandbox, matrícula, upload, revisão, portfólio e sessão verificados, e nenhum P0/P1 em aberto. O smoke E2E não substitui essa execução manual.
-- Em falha de e-mail, mantenha `MENTORSHIP_EMAIL_ENABLED=false`, verifique remetente, segredo do cron e fila `queued/failed`, corrija configuração e dispare novamente. Jobs têm retentativa e deduplicação; preserve `last_error` ao abrir incidente.
-- Em incidente de acesso/dados, pause a abertura da turma, preserve logs e evidências, revogue sessões/credenciais afetadas e siga o processo de restauração do projeto Supabase. Não altere linhas de outbox ou notificações diretamente para contornar RLS.
-- Suporte coleta user ID, turma, horário UTC, URL e ID da entrega; nunca pede senha, token de sessão ou chave de serviço.
+| Perfil | Jornada |
+| --- | --- |
+| Aluno | Oferta → cadastro/retorno → pagamento sandbox → matrícula na turma correta → diagnóstico → capítulo → anexo → envio → ajuste → reenvio → aprovação |
+| Mentor | Fila da própria turma → rubrica → feedback → revisão do reenvio → encontro/presença; outra turma permanece inacessível |
+| Admin | Oferta/turma → confirmação de acesso → agenda → material/replay → métricas → saúde da fila |
+| Visitante | Case publicado aparece; rascunho e case despublicado não aparecem; materiais restritos e arquivos privados não são expostos |
 
-## Resultado atual
+No Mercado Pago real, confira aprovado, pendente, recusado, webhook repetido, reembolso, pagamento tardio e capacidade da última vaga. Compra Pro não comprova compra da mentoria. Valide o recebedor e os valores pelo servidor; retorno do navegador não concede matrícula.
 
-O código e os artefatos de validação da fase 6 estão preparados. O gate de staging permanece pendente até serem fornecidos um projeto de staging, credenciais de três perfis, configuração do Mercado Pago sandbox e remetente de e-mail verificado.
-Use `docs/STAGING_GATE_QA_LAB.md` para registrar os resultados de cada jornada, o commit e as evidências.
+Na v2, use `/mentoria/encontros` para pauta, agenda, compromissos e replay. Confirme que expiração remove o link da resposta da aplicação. Revogação de um link que já foi copiado depende também das regras do provedor de vídeo.
+
+Em 390 px e desktop, use teclado, foco visível, zoom, mensagens de erro, envio/reenvio e materiais. Confirme que o aluno concluinte consulta o histórico sem controles de nova entrega. A conclusão exige 40 aulas, 48 práticas e 12 entregas aprovadas; o case final exige as onze aprovações anteriores.
+
+## Suporte e recuperação
+
+- Registre URL, commit, migrações, perfil, horário, cenário e evidência.
+- Em incidente de acesso, preserve logs e suspenda a abertura. Não contorne regras com edição manual de permissões.
+- Em falha de deploy, retorne ao candidato anterior compatível. Mudanças de banco exigem correção revisada e backup, não reversão cega.
+- Suporte coleta user ID, turma, URL e ID da entrega. Nunca solicita senha, token ou service role.
+- Oferta, agenda, produção dos vídeos e prazo de atendimento precisam estar definidos antes da venda.
+
+A liberação pública continua condicionada à validação do remoto e dos provedores reais; resultados locais demonstram a implementação e suas integrações locais.

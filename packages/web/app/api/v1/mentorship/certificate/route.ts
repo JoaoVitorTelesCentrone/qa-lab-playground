@@ -10,7 +10,7 @@ export async function POST() {
     const user = await getSessionUser();
     if (!user) return fail("Entre na sua conta para emitir seu certificado.", 401);
     const result = await issueMentorshipCertificate(user.id);
-    if (!result.certificate) return fail("Conclua as 12 entregas aprovadas e todas as aulas para liberar o certificado.", 409, { approvedAssignments: String(result.approvedAssignments), requiredAssignments: String(result.requiredAssignments), completedLessons: String(result.completedLessons), requiredLessons: String(result.requiredLessons) });
+    if (!result.certificate) return fail("Conclua as entregas, aulas e práticas exigidas pela sua trilha para liberar o certificado.", 409, { approvedAssignments: String(result.approvedAssignments), requiredAssignments: String(result.requiredAssignments), completedLessons: String(result.completedLessons), requiredLessons: String(result.requiredLessons), completedPractices: String(result.completedPractices), requiredPractices: String(result.requiredPractices) });
     return ok(result);
   } catch (error) {
     if (error instanceof MentorshipAccessError) return fail(error.message, error.status);

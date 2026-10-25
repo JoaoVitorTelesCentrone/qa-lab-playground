@@ -1,16 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-
-type EmailJob = {
-  id: string;
-  notification_id: string | null;
-  user_id: string;
-  kind: string;
-  dedupe_key: string;
-  subject: string;
-  body: string;
-  href: string | null;
-  attempts: number;
-};
+import { runEmailBatch, type EmailJob, type EmailQueueStore } from "./email-worker";
+import { sessionHref } from "./sessions";
+import { providerUrl } from "@/lib/test-provider";
 
 const configured = () => process.env.MENTORSHIP_EMAIL_ENABLED === "true" && Boolean(process.env.RESEND_API_KEY && process.env.MENTORSHIP_FROM_EMAIL);
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
@@ -20,7 +11,7 @@ export async function sendMentorshipEmail(job: EmailJob, recipient: string) {
   const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
   const path = job.href && job.href.startsWith("/") && !job.href.startsWith("//") ? job.href : "/mentoria/app";
   const url = `${baseUrl}${path}`;
-  const response = await fetch("https://api.resend.com/emails", {
+  const response = await fetch(`${providerUrl("https://api.resend.com", process.env.QALAB_TEST_RESEND_URL)}/emails`, {
     method: "POST",
     headers: { authorization: `Bearer ${process.env.RESEND_API_KEY}`, "content-type": "application/json", "Idempotency-Key": job.dedupe_key },
     body: JSON.stringify({
@@ -41,10 +32,12 @@ export async function sendMentorshipEmail(job: EmailJob, recipient: string) {
 async function queueReminder(admin: ReturnType<typeof createAdminClient>, input: { userId: string; kind: string; dedupeKey: string; subject: string; body: string; href: string }) {
   const { data: notification, error: notificationError } = await admin.from("mentorship_notifications").upsert({ user_id: input.userId, kind: "system", dedupe_key: input.dedupeKey, title: input.subject, body: input.body, href: input.href }, { onConflict: "dedupe_key", ignoreDuplicates: true }).select("id").maybeSingle();
   if (notificationError) throw new Error(notificationError.message);
-  if (!notification) return false;
-  const { error } = await admin.from("mentorship_email_outbox").upsert({ notification_id: notification.id, user_id: input.userId, kind: input.kind, dedupe_key: input.dedupeKey, subject: input.subject, body: input.body, href: input.href }, { onConflict: "dedupe_key", ignoreDuplicates: true });
+  // Recover when the previous run persisted a notification but not its outbox row.
+  const existing = notification ?? (await admin.from("mentorship_notifications").select("id").eq("dedupe_key", input.dedupeKey).single()).data;
+  if (!existing) throw new Error("REMINDER_NOTIFICATION_UNAVAILABLE");
+  const { error } = await admin.from("mentorship_email_outbox").upsert({ notification_id: existing.id, user_id: input.userId, kind: input.kind, dedupe_key: input.dedupeKey, subject: input.subject, body: input.body, href: input.href }, { onConflict: "dedupe_key", ignoreDuplicates: true });
   if (error) throw new Error(error.message);
-  return true;
+  return Boolean(notification);
 }
 
 export async function enqueueMentorshipReminders(now = new Date()) {
@@ -63,7 +56,7 @@ export async function enqueueMentorshipReminders(now = new Date()) {
   let queued = 0;
   for (const session of sessions ?? []) {
     const recipients = (enrollments ?? []).filter((enrollment) => enrollment.cohort_id === session.cohort_id);
-    for (const enrollment of recipients) queued += Number(await queueReminder(admin, { userId: enrollment.user_id, kind: "reminder", dedupeKey: `session-reminder:${session.id}:${enrollment.user_id}`, subject: `Encontro da Mentoria se aproxima · semana ${session.week_number}`, body: `${session.title} começa em breve. Confira a pauta e o link no painel da Mentoria.`, href: `/mentoria/semanas/${session.week_number}` }));
+    for (const enrollment of recipients) queued += Number(await queueReminder(admin, { userId: enrollment.user_id, kind: "reminder", dedupeKey: `session-reminder:${session.id}:${enrollment.user_id}`, subject: `Encontro da Mentoria se aproxima · semana ${session.week_number}`, body: `${session.title} começa em breve. Confira a pauta e o link nos encontros da turma.`, href: sessionHref(session.id) }));
   }
   const staffByCohort = new Map<string, string[]>();
   for (const assignment of staffAssignments ?? []) staffByCohort.set(assignment.cohort_id, [...(staffByCohort.get(assignment.cohort_id) ?? []), assignment.staff_user_id]);
@@ -75,35 +68,56 @@ export async function enqueueMentorshipReminders(now = new Date()) {
   return { queued };
 }
 
-export async function processMentorshipEmailQueue(limit = 30) {
-  if (!configured()) return { configured: false, sent: 0, failed: 0, pending: 0 };
+export async function processMentorshipEmailQueue(limit = 100, options: { userIds?: string[]; budgetMs?: number } = {}) {
+  if (!configured()) return { configured: false, sent: 0, failed: 0, pending: 0, health: null };
   const admin = createAdminClient();
   const now = new Date();
   const staleBefore = new Date(now.getTime() - 15 * 60 * 1000).toISOString();
-  await admin.from("mentorship_email_outbox").update({ status: "queued", locked_at: null }).eq("status", "sending").lt("locked_at", staleBefore);
-  const { data: jobs, error } = await admin.from("mentorship_email_outbox").select("id,notification_id,user_id,kind,dedupe_key,subject,body,href,attempts").eq("status", "queued").lte("available_at", now.toISOString()).order("created_at", { ascending: true }).limit(Math.max(1, Math.min(limit, 100)));
-  if (error) throw new Error(error.message);
-  let sent = 0;
-  let failed = 0;
-  for (const job of (jobs ?? []) as EmailJob[]) {
-    const claim = await admin.from("mentorship_email_outbox").update({ status: "sending", locked_at: new Date().toISOString(), attempts: job.attempts + 1 }).eq("id", job.id).eq("status", "queued").select("id").maybeSingle();
-    if (claim.error || !claim.data) continue;
-    const { data: authResult, error: authError } = await admin.auth.admin.getUserById(job.user_id);
-    const recipient = authResult.user?.email;
-    try {
-      if (authError || !recipient) throw new Error("RECIPIENT_EMAIL_UNAVAILABLE");
-      await sendMentorshipEmail(job, recipient);
-      await admin.from("mentorship_email_outbox").update({ status: "sent", sent_at: new Date().toISOString(), locked_at: null, last_error: null }).eq("id", job.id);
-      sent += 1;
-    } catch (cause) {
-      const message = cause instanceof Error ? cause.message : "UNKNOWN_EMAIL_ERROR";
-      const attempts = job.attempts + 1;
-      const permanentlyFailed = attempts >= 5 || message === "RECIPIENT_EMAIL_UNAVAILABLE";
-      const delayMinutes = Math.min(6 * 60, 5 * (2 ** Math.max(0, attempts - 1)));
-      await admin.from("mentorship_email_outbox").update({ status: permanentlyFailed ? "failed" : "queued", locked_at: null, available_at: new Date(Date.now() + delayMinutes * 60_000).toISOString(), last_error: message.slice(0, 500) }).eq("id", job.id);
-      failed += 1;
-    }
+  const { error: recoveryError } = await admin.from("mentorship_email_outbox").update({ status: "queued", locked_at: null }).eq("status", "sending").lt("locked_at", staleBefore);
+  if (recoveryError) throw new Error(recoveryError.message);
+  let query = admin.from("mentorship_email_outbox").select("id,notification_id,user_id,kind,dedupe_key,subject,body,href,attempts").eq("status", "queued").lte("available_at", now.toISOString()).order("created_at", { ascending: true }).limit(Math.max(1, Math.min(limit, 200)));
+  if (options.userIds) {
+    if (!options.userIds.length) return { configured: true, sent: 0, failed: 0, pending: 0, health: null };
+    query = query.in("user_id", options.userIds);
   }
-  const { count } = await admin.from("mentorship_email_outbox").select("id", { count: "exact", head: true }).eq("status", "queued");
-  return { configured: true, sent, failed, pending: count ?? 0 };
+  const { data: jobs, error } = await query;
+  if (error) throw new Error(error.message);
+  const store: EmailQueueStore = {
+    async claim(job, lockedAt) {
+      const result = await admin.from("mentorship_email_outbox").update({ status: "sending", locked_at: lockedAt, attempts: job.attempts + 1 }).eq("id", job.id).eq("status", "queued").eq("attempts", job.attempts).select("id").maybeSingle();
+      if (result.error) throw new Error(result.error.message);
+      return Boolean(result.data);
+    },
+    async recipient(userId) {
+      const { data, error } = await admin.auth.admin.getUserById(userId);
+      if (error) throw new Error("RECIPIENT_LOOKUP_FAILED");
+      if (!data.user?.email) throw new Error("RECIPIENT_EMAIL_UNAVAILABLE");
+      return data.user.email;
+    },
+    async sent(id, lockedAt) {
+      const result = await admin.from("mentorship_email_outbox").update({ status: "sent", sent_at: new Date().toISOString(), locked_at: null, last_error: null }).eq("id", id).eq("status", "sending").eq("locked_at", lockedAt).select("id").single();
+      if (result.error) throw new Error("EMAIL_DELIVERY_PERSIST_FAILED");
+    },
+    async retry(id, lockedAt, values) {
+      const result = await admin.from("mentorship_email_outbox").update({ ...values, locked_at: null }).eq("id", id).eq("status", "sending").eq("locked_at", lockedAt).select("id").single();
+      if (result.error) throw new Error("EMAIL_RETRY_PERSIST_FAILED");
+    },
+  };
+  const delivery = await runEmailBatch((jobs ?? []) as EmailJob[], store, sendMentorshipEmail, options);
+  const health = await getMentorshipEmailHealth();
+  if (health.failed || health.overdue) console.error("Mentorship email queue needs attention", health);
+  return { configured: true, ...delivery, pending: health.queued, health };
+}
+
+export async function getMentorshipEmailHealth() {
+  const admin = createAdminClient();
+  const [pending, failed, oldest, overdue] = await Promise.all([
+    admin.from("mentorship_email_outbox").select("id", { count: "exact", head: true }).in("status", ["queued", "sending"]),
+    admin.from("mentorship_email_outbox").select("id", { count: "exact", head: true }).eq("status", "failed"),
+    admin.from("mentorship_email_outbox").select("created_at").in("status", ["queued", "sending"]).order("created_at").limit(1).maybeSingle(),
+    admin.from("mentorship_email_outbox").select("id", { count: "exact", head: true }).in("status", ["queued", "sending"]).lt("created_at", new Date(Date.now() - 15 * 60_000).toISOString()),
+  ]);
+  const error = pending.error ?? failed.error ?? oldest.error ?? overdue.error;
+  if (error) throw new Error(error.message);
+  return { queued: pending.count ?? 0, failed: failed.count ?? 0, overdue: overdue.count ?? 0, oldestQueuedAt: oldest.data?.created_at ?? null };
 }

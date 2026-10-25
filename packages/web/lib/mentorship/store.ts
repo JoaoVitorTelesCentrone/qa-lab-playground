@@ -2,10 +2,14 @@ import { randomUUID } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDisplayName, trackEvent } from "@/lib/product/store";
 import { findMentorshipAssignment, findMentorshipLesson, findMentorshipWeek, mentorshipTrackForWeek, mentorshipWeeks } from "./catalog";
-import { findPathV2Assignment, findPathV2Lesson, pathV2Assignments, pathV2Chapters, pathV2LessonKeys, pathV2PracticeKeys } from "./path-v2";
+import { findPathV2Assignment, findPathV2Lesson, pathV2Assignments, pathV2ChapterHref, pathV2Chapters, pathV2LessonKeys, pathV2PracticeKeys } from "./path-v2";
+import { visibleSession, sessionHref } from "./sessions";
+import { scheduleMentorshipEmails } from "./email-dispatch";
+import { getMentorshipEmailHealth } from "./email";
 import { assertStaffForCohort, getEnrollmentForUser, requireEnrollment, requireStaff, requireWritableEnrollment } from "./access";
 import type { MentorshipReview, MentorshipSubmission } from "./types";
-import { signAuthorizedAttachments, signOwnAttachments } from "@/lib/product/evidence-storage";
+import { evidenceFilesExist, signAuthorizedAttachments, signOwnAttachments } from "@/lib/product/evidence-storage";
+import { validateEvidenceAttachments } from "@/lib/product/evidence-attachments";
 import { toAttachments, type Attachment } from "@/lib/product/journey";
 import { isMissingTable } from "@/lib/product/portfolio-sections";
 
@@ -31,8 +35,9 @@ export async function notifyMentorshipUsers(userIds: string[], input: Mentorship
       body: input.body.slice(0, 1000),
       href: input.href ?? null,
     }))).select("id,user_id");
-    if (error || !notifications?.length) return;
-    await admin.from("mentorship_email_outbox").insert(notifications.map((notification) => ({
+    if (error) throw new Error(error.message);
+    if (!notifications?.length) return;
+    const { error: queueError } = await admin.from("mentorship_email_outbox").upsert(notifications.map((notification) => ({
       notification_id: notification.id,
       user_id: notification.user_id,
       kind: input.kind,
@@ -40,9 +45,12 @@ export async function notifyMentorshipUsers(userIds: string[], input: Mentorship
       subject: input.title.slice(0, 180),
       body: input.body.slice(0, 2000),
       href: input.href ?? null,
-    })));
-  } catch {
-    // Notifications are additive; a missing/unapplied migration must not block the core flow.
+    })), { onConflict: "dedupe_key", ignoreDuplicates: true });
+    if (queueError) throw new Error(queueError.message);
+    scheduleMentorshipEmails(ids);
+  } catch (error) {
+    // Access/payment is already committed. Surface delivery failures to operations.
+    console.error("Mentorship notification could not be queued", { message: error instanceof Error ? error.message : "Unknown error" });
   }
 }
 
@@ -149,13 +157,7 @@ export async function getMentorshipDashboard(userId: string) {
   const v2 = enrollment.programVersion === "v2";
   const v2Approved = pathV2Assignments.filter((assignment) => latestByAssignment.get(assignment.key)?.status === "approved").length;
   const currentV2 = pathV2Chapters.find(({ chapter }) => chapter.assignmentKey && latestByAssignment.get(chapter.assignmentKey)?.status !== "approved") ?? pathV2Chapters[pathV2Chapters.length - 1];
-  const visibleSessions: MentorshipSessionRow[] = (sessions ?? []).map((session: MentorshipSessionRow) => {
-    const expiresAt = session.recording_available_until ? new Date(session.recording_available_until).getTime() : null;
-    if (session.recording_url && expiresAt !== null && Number.isFinite(expiresAt) && expiresAt <= Date.now()) {
-      return { ...session, recording_url: null };
-    }
-    return session;
-  });
+  const visibleSessions = (sessions ?? []).map((session: MentorshipSessionRow) => visibleSession(session));
   return {
     enrollment,
     cohort,
@@ -202,13 +204,13 @@ type MentorshipSubmissionInput = { assignmentKey: string; content: Record<string
 
 async function validateSubmissionReferences(userId: string, input: MentorshipSubmissionInput, enrollmentId: string, requireFinalEvidence = false) {
   if ((input.attachments?.length ?? 0) > 6) throw new Error("A entrega aceita no maximo seis anexos.");
-  const attachments = (input.attachments ?? []).map((file) => {
-    if (!file || typeof file.path !== "string" || !file.path.startsWith(`${userId}/`)) throw new Error("Um dos anexos nao pertence a sua conta.");
-    return { name: String(file.name).slice(0, 180), url: "", path: file.path, size: Number(file.size) || 0, type: String(file.type).slice(0, 120) };
-  });
+  const uploadScope = `mentoria-${input.assignmentKey}`.replace(/[^a-z0-9-]/gi, "").slice(0, 60);
+  const attachments = validateEvidenceAttachments(input.attachments ?? [], userId, uploadScope);
+  if (!attachments) throw new MentorshipSubmissionValidationError("Um dos anexos nao pertence a esta entrega da sua conta.");
+  if (!await evidenceFilesExist(attachments)) throw new MentorshipSubmissionValidationError("Um dos anexos nao foi encontrado. Envie o arquivo novamente.");
   if (input.labSubmissionId) {
     const { data, error } = await createAdminClient().from("lab_submissions").select("id").eq("id", input.labSubmissionId).eq("user_id", userId).maybeSingle();
-    if (error || !data) throw new Error("A evidencia de Lab selecionada nao pertence a sua conta.");
+    if (error || !data) throw new MentorshipSubmissionValidationError("A evidencia de Lab selecionada nao pertence a sua conta.");
   }
   if (input.assignmentKey === "mentoria.w12.assignment") {
     const tracks = ["manual", "automation", "cicd", "performance"] as const;
@@ -558,11 +560,12 @@ export async function reviewMentorshipSubmission(submissionId: string, input: { 
   const { data: student } = await admin.from("mentorship_enrollments").select("user_id").eq("id", submission.enrollment_id).maybeSingle();
   if (student?.user_id) {
     const weekNumber = [...Array(12)].findIndex((_, index) => findMentorshipWeek(index + 1)?.assignment.key === submission.assignment_key) + 1;
+    const chapter = pathV2Chapters.find((item) => item.chapter.assignmentKey === submission.assignment_key);
     await notifyMentorshipUsers([student.user_id], {
       kind: "review",
       title: decision === "approved" ? "Entrega aprovada" : "Feedback do mentor disponivel",
       body: decision === "approved" ? "Sua entrega foi aprovada. Confira a proxima missao da jornada." : `Seu mentor revisou a entrega. Ajustes: ${input.improvements.trim().slice(0, 700) || input.nextAction.trim().slice(0, 700)}`,
-      href: weekNumber > 0 ? `/mentoria/semanas/${weekNumber}` : "/mentoria/app",
+      href: chapter ? `${pathV2ChapterHref(chapter.module, chapter.chapter)}#entrega-heading` : weekNumber > 0 ? `/mentoria/semanas/${weekNumber}` : "/mentoria/app",
     });
   }
   return toReview(review as Record<string, unknown>);
@@ -626,7 +629,7 @@ export async function createLiveSession(input: {
     kind: recordingUrl ? "recording" : "live_session",
     title: recordingUrl ? "Gravacao liberada" : "Novo encontro ao vivo publicado",
     body: recordingUrl ? `A gravacao da semana ${input.weekNumber} ja esta disponivel.` : `O encontro da semana ${input.weekNumber} foi publicado. Confira data, pauta e link.`,
-    href: "/mentoria/app",
+    href: sessionHref(data.id),
   });
   return data;
 }
@@ -803,7 +806,7 @@ export async function mentorCohorts() {
 export async function getMentorshipAdminOverview() {
   await requireStaff("admin");
   const admin = createAdminClient();
-  const [cohortResult, enrollmentResult, sessionResult, submissionResult, profileResult, staffResult, cohortStaffResult, lessonContentResult, authResult, attendanceResult, lessonProgressResult, activityResult, emailQueueResult, failedEmailCountResult] = await Promise.all([
+  const [cohortResult, enrollmentResult, sessionResult, submissionResult, profileResult, staffResult, cohortStaffResult, lessonContentResult, authResult, attendanceResult, lessonProgressResult, activityResult, emailQueue] = await Promise.all([
     admin.from("mentorship_cohorts").select("id,name,code,starts_on,ends_on,status,capacity,program_version,created_at").order("starts_on", { ascending: false }).limit(100),
     admin.from("mentorship_enrollments").select("id,cohort_id,user_id,level,status,goal,diagnostic_score,joined_at,created_at").order("created_at", { ascending: false }).limit(1000),
     admin.from("mentorship_live_sessions").select("id,cohort_id,week_number,title,agenda,starts_at,ends_at,meeting_url,recording_url,recording_available_until").order("starts_at", { ascending: false }).limit(200),
@@ -816,10 +819,9 @@ export async function getMentorshipAdminOverview() {
     admin.from("mentorship_attendance").select("session_id,enrollment_id,status,updated_at").limit(10000),
     admin.from("mentorship_lesson_progress").select("enrollment_id,lesson_key,status,completed_at").limit(10000),
     admin.from("activity_events").select("name,props,created_at").in("name", ["diagnostic_completed", "lesson_completed", "assignment_submitted", "review_completed", "live_attendance_marked", "weekly_commitment_saved", "mentorship_certificate_issued"]).gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()).limit(10000),
-    admin.from("mentorship_email_outbox").select("id", { count: "exact", head: true }).in("status", ["queued", "sending"]),
-    admin.from("mentorship_email_outbox").select("id", { count: "exact", head: true }).eq("status", "failed"),
+    getMentorshipEmailHealth(),
   ]);
-  const firstError = cohortResult.error ?? enrollmentResult.error ?? sessionResult.error ?? submissionResult.error ?? profileResult.error ?? staffResult.error ?? cohortStaffResult.error ?? authResult.error ?? attendanceResult.error ?? lessonProgressResult.error ?? activityResult.error ?? emailQueueResult.error ?? failedEmailCountResult.error;
+  const firstError = cohortResult.error ?? enrollmentResult.error ?? sessionResult.error ?? submissionResult.error ?? profileResult.error ?? staffResult.error ?? cohortStaffResult.error ?? authResult.error ?? attendanceResult.error ?? lessonProgressResult.error ?? activityResult.error;
   if (firstError) throw new Error(firstError.message);
   const profileById = new Map((profileResult.data ?? []).map((profile) => [profile.id, profile]));
   const people = (authResult.data?.users ?? []).map((authUser) => {
@@ -861,7 +863,6 @@ export async function getMentorshipAdminOverview() {
     const pendingOverSla = submissions.filter((row) => rosterIds.has(row.enrollment_id) && ["submitted", "in_review"].includes(row.status) && row.submitted_at && nowMs - new Date(row.submitted_at).getTime() > 72 * 60 * 60 * 1000).length;
     return { cohortId: cohort.id, cohortName: cohort.name, activeStudents: roster.filter((row) => row.status === "active").length, progressPercent, lessonPercent, attendancePercent: expectedAttendances ? Math.round(presentCount / expectedAttendances * 100) : null, pendingOverSla, recentEvents: activityCounts.get(cohort.id) ?? 0 };
   });
-  const emailQueue = { queued: emailQueueResult.count ?? 0, failed: failedEmailCountResult.count ?? 0 };
   return { cohorts, enrollments, sessions, submissions, people, staff: staffResult.data ?? [], cohortStaff: cohortStaffResult.data ?? [], lessonContent: lessonContentResult.error ? [] : lessonContentResult.data ?? [], cohortMetrics, emailQueue };
 }
 

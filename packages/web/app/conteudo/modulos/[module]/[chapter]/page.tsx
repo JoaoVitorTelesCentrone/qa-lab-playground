@@ -21,7 +21,8 @@ export default async function ChapterPage({ params }: { params: Promise<{ module
   if (!courseModule || !chapter) notFound();
   const user = await getSessionUser();
   const dashboard = user ? await getMentorshipDashboard(user.id) : null;
-  const canTrack = dashboard?.enrollment.programVersion === "v2" && dashboard.enrollment.status !== "paused";
+  const canReadHistory = dashboard?.enrollment.programVersion === "v2";
+  const canTrack = canReadHistory && dashboard?.enrollment.status === "active";
   const completed = new Set((dashboard?.lessons ?? []).filter((row) => row.status === "completed").map((row) => row.lesson_key));
   const published = new Map((dashboard?.lessonContent ?? []).map((item) => [item.lesson_key, item]));
   const assignment = chapter.assignmentKey ? findPathV2Assignment(chapter.assignmentKey) : null;
@@ -29,8 +30,8 @@ export default async function ChapterPage({ params }: { params: Promise<{ module
   const currentSubmission = attempts[0] ?? null;
   const approvedPrevious = assignment?.key === "mentoria.v2.case-final.assignment" ? pathV2Assignments.filter((item) => item.key !== assignment.key && (dashboard?.submissions ?? []).some((submission) => submission.assignmentKey === item.key && submission.status === "approved")).length : 0;
   const finalSubmission = assignment?.key === "mentoria.v2.case-final.assignment" ? attempts.find((item) => item.status === "approved") : null;
-  const finalCase = finalSubmission && canTrack ? await getOwnMentorshipCase(finalSubmission.id) : null;
-  const reviewsBySubmission = canTrack && attempts.length ? await listReviewsForSubmissions(user!.id, attempts.map((item) => item.id)) : new Map();
+  const finalCase = finalSubmission && canReadHistory ? await getOwnMentorshipCase(finalSubmission.id) : null;
+  const reviewsBySubmission = canReadHistory && attempts.length ? await listReviewsForSubmissions(user!.id, attempts.map((item) => item.id)) : new Map();
   const index = pathV2Chapters.findIndex((item) => item.chapter.id === chapter.id);
   const next = pathV2Chapters[index + 1];
   const previous = pathV2Chapters[index - 1];
@@ -43,6 +44,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ module
       const source = /^mentoria\.w(\d+)\.l(\d+)$/.exec(key);
       const brotoAction = source ? brotoLessonActions[Number(source[1])]?.[Number(source[2]) - 1] : undefined;
       const videoUrl = published.get(key)?.video_url || lesson.videoUrl;
+      const materialUrl = published.get(key)?.material_url;
       return <details key={key} id={key} name="chapter-lessons" open={lessonIndex === 0} className="group scroll-mt-24 py-2">
         <summary className="flex min-h-16 cursor-pointer list-none items-center gap-3 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint [&::-webkit-details-marker]:hidden">
           <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-full border border-white/15 text-xs font-semibold tabular-nums text-[#AAB2BC]">{String(lessonIndex + 1).padStart(2, "0")}</span>
@@ -52,6 +54,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ module
         </summary>
         <article className="pb-7 pl-12 sm:pl-12">
           {videoUrl && <div className="mt-2"><LessonVideo url={videoUrl} title={lesson.title} /></div>}
+          {materialUrl && <a href={materialUrl} target="_blank" rel="noreferrer" className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-mint underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-mint">Abrir material de apoio<span className="sr-only">: {lesson.title}</span><ExternalLink aria-hidden="true" className="size-4" /></a>}
           <div className="mt-5 max-w-[68ch] space-y-6 text-base leading-7 text-[#C8CFD7]"><p className="font-semibold text-off-white">{theory.objective}</p>
             {theory.sections.slice(0, 1).map((section) => <section key={section.title}><h4 className="font-bold text-off-white">{section.title}</h4><p className="mt-2 whitespace-pre-line">{section.text}</p></section>)}
             {theory.sections.length > 1 && <details className="border-t border-white/10 pt-4"><summary className="min-h-11 cursor-pointer py-2 font-semibold text-mint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint">Aprofundar a teoria</summary><div className="mt-4 space-y-5">{theory.sections.slice(1).map((section) => <section key={section.title}><h4 className="font-bold text-off-white">{section.title}</h4><p className="mt-2 whitespace-pre-line">{section.text}</p></section>)}</div></details>}

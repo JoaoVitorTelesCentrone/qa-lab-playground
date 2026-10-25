@@ -28,6 +28,7 @@ export type RoadmapEnvironment = { id: string; name: string; route: string; summ
 // navegação; `liveApps` continua representando os apps do lançamento na home e
 // nos packs de regressão.
 export const roadmapEnvironments: RoadmapEnvironment[] = [
+  { id: "playground", name: "Web Playground", route: "/playground", summary: "Componentes e fluxos para testes na web." },
   { id: "api-playground", name: "API Playground", route: "/api-playground", summary: "Requests, contratos e cenarios de erro." },
   { id: "trilhas", name: "Trilhas", route: "/trilhas", summary: "Percursos guiados de pratica." },
   { id: "labs", name: "Labs", route: "/labs", summary: "Missoes e ambientes de QA." },

@@ -3,6 +3,7 @@ import { createAdminClient, hasServiceRole } from "@/lib/supabase/admin";
 import { getPayment, verifyWebhookSignature } from "@/lib/billing/mercado-pago";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 export async function POST(request: Request) {
   const url = new URL(request.url);

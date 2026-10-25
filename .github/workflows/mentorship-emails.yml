@@ -1,0 +1,29 @@
+name: Mentorship email recovery
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mentorship-email-recovery
+  cancel-in-progress: false
+
+jobs:
+  deliver:
+    if: vars.MENTORSHIP_EMAIL_WORKER_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Process durable outbox and reminders
+        env:
+          WORKER_URL: ${{ vars.MENTORSHIP_EMAIL_CRON_URL }}
+          WORKER_SECRET: ${{ secrets.MENTORSHIP_CRON_SECRET }}
+        run: |
+          test -n "$WORKER_URL" && test -n "$WORKER_SECRET"
+          case "$WORKER_URL" in https://*/api/cron/mentorship-emails) ;; *) echo 'Configure the HTTPS worker endpoint'; exit 1 ;; esac
+          curl --fail-with-body --silent --show-error --max-time 70 \
+            --header "Authorization: Bearer $WORKER_SECRET" "$WORKER_URL"

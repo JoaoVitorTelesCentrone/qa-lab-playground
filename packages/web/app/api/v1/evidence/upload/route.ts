@@ -10,7 +10,7 @@
 // é a rede de segurança, este é o que devolve mensagem em português.
 
 import { fail, ok, withUser } from "@/lib/product/api";
-import { uploadEvidenceFile, removeEvidenceFile } from "@/lib/product/evidence-storage";
+import { uploadEvidenceFile, removeEvidenceFile, isEvidenceUploadLimitError } from "@/lib/product/evidence-storage";
 import { ALLOWED_TYPES, MAX_FILE_BYTES, formatBytes } from "@/lib/product/evidence-limits";
 import { labs } from "@/lib/playground/catalog";
 
@@ -42,8 +42,13 @@ export function POST(request: Request) {
       return fail("Formato não aceito. Use imagem (png, jpg, gif, webp), vídeo (mp4, webm) ou PDF.", 415);
     }
 
-    const attachment = await uploadEvidenceFile(user.id, labSlug, file);
-    return ok(attachment, 201);
+    try {
+      const attachment = await uploadEvidenceFile(user.id, labSlug, file);
+      return ok(attachment, 201);
+    } catch (error) {
+      if (isEvidenceUploadLimitError(error)) return fail((error as Error).message, 429);
+      throw error;
+    }
   });
 }
 
