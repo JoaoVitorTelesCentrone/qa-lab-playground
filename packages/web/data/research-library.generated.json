@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-25T13:43:59.374Z",
+  "updatedAt": "2026-10-26T16:09:18.390Z",
   "items": [
     {
       "id": "doi-doi-org-10-63158-journalisi-v8i5-1823",
@@ -2281,6 +2281,30 @@
       "discoveredAt": "2026-09-01T14:10:27.703Z"
     },
     {
+      "id": "doi-doi-org-10-1038-s41598-026-44202-3",
+      "title": "An explainable AI framework for enhanced software defect prediction using transformer-assisted boosting",
+      "abstract": "Accurate defect prediction is essential for better software quality to avoid cost overruns, schedule delays, and reduced system reliability due to software defects. This study presents a Transformer Assisted Boosting Framework (TABF) that combines XGBoost with the Transformer’s self-attention to achieve higher predictive accuracy and interpretability. The framework is evaluated using the NASA Metrics Data Program (MDP) and the Code4Code dataset, which comprises software metrics such as cyclomatic complexity, Halstead’s properties, and lines of code. Experimental results demonstrate that the performance of TABF, with AUC scores of 0.95 and ROC of 0.96, is superior to classical machine learning models, such as Random Forest and SVM, with accuracies of 92.5% and 94.3%, respectively. SHapley Additive exPlanations (SHAP) are used to explain feature importance, uncovering that lines of code and McCabe’s cyclomatic complexity are among the most important predictors of software defects. These insights are used for defect management and resource allocation, as well as to improve software reliability. TABF unifies high-performance predictive modeling with explainability and closes the gap between machine learning or deep learning-based defect prediction models and their use by software quality assurance practitioners in practice.",
+      "authors": [
+        "Qi Kun",
+        "Z. Shaikh",
+        "Jing Yang",
+        "Gyanendra Kumar",
+        "Heba Abdelgader Mohammed",
+        "Por Lip Yee"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-06-04",
+      "source": "Semantic Scholar",
+      "venue": "Scientific Reports",
+      "doi": "https://doi.org/10.1038/s41598-026-44202-3",
+      "url": "https://doi.org/10.1038/s41598-026-44202-3",
+      "topics": [
+        "Medicine"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-26T16:09:18.390Z"
+    },
+    {
       "id": "doi-doi-org-10-9734-jamcs-2026-v41i62161",
       "title": "Evaluating SMOTE-based Class Imbalance Handling in Software Defect Prediction",
       "abstract": "Class imbalance remains a persistent challenge in software defect prediction because defective modules are usually much fewer than non-defective modules. This imbalance can reduce a model's ability to identify the minority class and can also make performance interpretation misleading when evaluation relies on unsuitable measures. This paper evaluates the effect of the Synthetic Minority Over-sampling Technique (SMOTE) on defect prediction performance in a focused and leakage-safe empirical setting. The study compares Logistic Regression, Random Forest and k-Nearest Neighbors on the AEEEM_JDT benchmark dataset using imbalance-aware metrics. The findings show that SMOTE improved threshold-based performance for Random Forest and k-Nearest Neighbors, while Logistic Regression showed almost no improvement in F1-score and a decline in MCC. Random Forest improved from 0.566 to 0.627 in F1-score and from 0.499 to 0.535 in MCC, while k-Nearest Neighbors improved from 0.533 to 0.628 in F1-score and from 0.476 to 0.523 in MCC. However, PR-AUC decreased for all three models after SMOTE, indicating that better classification at a selected operating point did not necessarily produce better ranking quality across thresholds. The results suggest that SMOTE should be treated as a conditional imbalance-handling technique rather than a universally beneficial preprocessing step. Its usefulness depends on the classifier and on whether the practical objective is fixed-threshold defect detection or risk ranking.",
@@ -2449,6 +2473,26 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-09-14T15:54:35.333Z"
+    },
+    {
+      "id": "doi-doi-org-10-1002-spe-70081",
+      "title": "A Unified Deep Learning Based Feature Representation Approach for Effective Software Defect Prediction",
+      "abstract": "Accurate software defect prediction (SDP) is critical to the success of any software project. Earlier studies have largely used static, semantic or structural features either in isolation or in pairs, offering a partial view of the source code. In reality, static features depict the statistical characteristics, semantic features depict the context and structural features depict data and control dependencies of the code. We propose a strong SDP model that integrates three types of features, achieving a holistic view of the source code, ultimately thereby enabling more robust and generalizable predictions.",
+      "authors": [
+        "Ruchika Malhotra",
+        "Priya Singh"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-05-09",
+      "source": "Semantic Scholar",
+      "venue": "Software, Practice & Experience",
+      "doi": "https://doi.org/10.1002/spe.70081",
+      "url": "https://doi.org/10.1002/spe.70081",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-26T16:09:18.390Z"
     },
     {
       "id": "doi-doi-org-10-1109-icctac68277-2026-11524570",
@@ -3027,6 +3071,27 @@
       "discoveredAt": "2026-08-15T22:37:48.767Z"
     },
     {
+      "id": "doi-doi-org-10-1007-s10586-026-05961-w",
+      "title": "Efficient software defect prediction using fuzzy K-member clustering and metaheuristic-driven ensemble feature learning model",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Shima Javadimoghadam",
+        "Seyed Mojtaba Sabagh-Jafari",
+        "A. K. Bardsiri"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-02-12",
+      "source": "Semantic Scholar",
+      "venue": "Cluster Computing",
+      "doi": "https://doi.org/10.1007/s10586-026-05961-w",
+      "url": "https://doi.org/10.1007/s10586-026-05961-w",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-26T16:09:18.390Z"
+    },
+    {
       "id": "doi-doi-org-10-1007-s10115-026-02696-3",
       "title": "A transformer-based stacked ensemble framework for software defect prediction",
       "abstract": "Resumo nao disponivel na fonte indexada.",
@@ -3401,6 +3466,25 @@
       ],
       "query": "software quality assurance",
       "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
+      "id": "doi-doi-org-10-32604-cmc-2026-088522",
+      "title": "Privacy-Aware and Explainable Federated Learning Model for Software Defect Prediction",
+      "abstract": ": Software defect prediction (SDP) plays a crucial role in improving software reliability by identifying defect-prone modules during the early stages of the software development process. Traditional SDP approaches typically rely on centralized data collection, which raises significant privacy and confidentiality concerns when software repositories (SR) belong to different organizations. Moreover, most existing federated learning (FL) based SDP models primarily focus on predictive performance and lack interpretability, thereby limiting the developer’s trust and practical adoption. To address such challenges, this paper proposes a Privacy-Aware Explainable FL Framework for SDP that enables collaborative model training without sharing the raw project data. The proposed framework integrates FL with Explainable Artificial Intelligence (XAI) techniques to provide transparent and interpretable SDP across distributed SR. Federated aggregation mechanism is used to preserve data privacy while improving cross-project generalization, and SHAP-based explainability is incorporated to identify the most influential software metrics (SM) contributing to SDP. The framework is evaluated using benchmark software defect datasets like PROMISE and NASA MDP. The model is being assessed using various metrics like Accuracy, Precision, Recall, F1-score, Matthews correlation coefficient (MCC), and Area Under the Receiver Operating Characteristic Curve (AUC-ROC). Experimental results have demonstrated that the proposed framework achieves better predictive performance while maintaining privacy and enhancing interpretability, when compared with conventional centralized approaches.",
+      "authors": [
+        "Abdulaziz Alhumam"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "Computers, Materials &amp; Continua",
+      "doi": "https://doi.org/10.32604/cmc.2026.088522",
+      "url": "https://doi.org/10.32604/cmc.2026.088522",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-26T16:09:18.390Z"
     },
     {
       "id": "doi-doi-org-10-63282-3050-922x-ijeret-v7i3p110",
