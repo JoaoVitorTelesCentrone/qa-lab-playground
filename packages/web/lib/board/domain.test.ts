@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isProjectKey, moveInMemory, normalizeAcceptanceCriteria, normalizeColumnName, normalizeComment, normalizeProjectKey, normalizeProjectName, optionalWipLimit } from "./domain";
+import { asWorkItemType, isProjectKey, moveInMemory, normalizeAcceptanceCriteria, normalizeColumnName, normalizeComment, normalizeProjectKey, normalizeProjectName, optionalWipLimit } from "./domain";
 import type { BoardWorkItem } from "./types";
 import { parseBoardUrlState, serializeBoardUrlState } from "./url-state";
 import { isBoardProductPath } from "./access";
@@ -28,6 +28,10 @@ const item = (id: string, columnId: string, rank: number): BoardWorkItem => ({
 });
 
 describe("domínio do board", () => {
+  test("aceita automação como tipo de card e filtro", () => {
+    expect(asWorkItemType("automation")).toBe("automation");
+    expect(parseBoardUrlState(new URLSearchParams("type=automation")).type).toBe("automation");
+  });
   test("normaliza nome e chave do projeto", () => {
     expect(normalizeProjectName("  Meu   produto  ")).toBe("Meu produto");
     expect(normalizeProjectKey("qa-lab_2026")).toBe("QALAB2026");

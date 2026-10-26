@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { LayoutDashboard } from "lucide-react";
 import { getSessionUser } from "@/lib/product/store";
+import { createClient } from "@/lib/supabase/server";
 import { BoardError, ensurePersonalBoard, listBoards } from "@/lib/board/store";
 import { BoardsIndexClient } from "./boards-index-client";
 import { BoardClient } from "./[boardId]/board-client";
@@ -15,10 +16,17 @@ export default async function BoardsPage() {
 
   let boards;
   let personalBoard;
+  let canCreateBoard = false;
   let unavailable: BoardError | null = null;
   try {
     personalBoard = await ensurePersonalBoard();
-    boards = await listBoards();
+    const supabase = await createClient();
+    const [boardList, profile] = await Promise.all([
+      listBoards(),
+      supabase.from("profiles").select("plan").eq("id", user.id).maybeSingle(),
+    ]);
+    boards = boardList;
+    canCreateBoard = profile.data?.plan === "pro" || profile.data?.plan === "team";
   } catch (error) {
     if (!(error instanceof BoardError)) throw error;
     if (error.code === "PRO_REQUIRED") return <BoardClient initial={demoBoard} viewerId={user.id} publicDemo />;
@@ -34,5 +42,5 @@ export default async function BoardsPage() {
       </section>
     </main>;
   if (personalBoard?.created) redirect(`/boards/${personalBoard.boardId}`);
-  return <BoardsIndexClient initialBoards={boards ?? []} />;
+  return <BoardsIndexClient initialBoards={boards ?? []} canCreateBoard={canCreateBoard} />;
 }

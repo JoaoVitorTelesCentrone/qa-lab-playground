@@ -1,5 +1,5 @@
 export const boardKinds = ["kanban", "scrum"] as const;
-export const workItemTypes = ["epic", "story", "task", "bug", "test", "subtask"] as const;
+export const workItemTypes = ["epic", "story", "task", "bug", "test", "automation", "subtask"] as const;
 export const workItemPriorities = ["lowest", "low", "medium", "high", "highest"] as const;
 export const boardColumnCategories = ["todo", "in_progress", "done"] as const;
 export const boardColumnColors = ["slate", "blue", "amber", "violet", "green", "coral"] as const;

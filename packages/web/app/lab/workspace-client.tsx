@@ -7,6 +7,7 @@ import {
   ArrowRight,
   BookOpen,
   Bug,
+  FileCode2,
   CheckCircle2,
   ClipboardCheck,
   Code2,
@@ -70,12 +71,14 @@ const labModules = [
   { id: "criteria", title: "Acceptance Criteria Lab", description: "Transforme PBIs vagos em criterios testaveis, exemplos e perguntas abertas.", href: "/lab/criterios", icon: ListChecks, tone: "blue", status: "Real lab", category: "Produto e requisitos", outcome: "Criterios testaveis" },
   { id: "stories", title: "Historias", description: "Organize historias, criterios e fluxo de trabalho em um board de produto.", href: "/lab/historias", icon: Route, tone: "blue", status: "Board", category: "Produto e requisitos", outcome: "Fluxo de produto" },
   { id: "studio", title: "Test Design Studio", description: "Transforme contexto, riscos e requisitos em cenarios, casos e plano de teste.", href: "/lab/studio", icon: Sparkles, tone: "neon", status: "Studio", category: "Produto e requisitos", outcome: "Design de teste" },
+  { id: "bdd", title: "Gerador de BDD", description: "Monte cenarios Dado, Quando, Entao e exporte um arquivo .feature.", href: "/lab/bdd", icon: FileCode2, tone: "mint", status: "Ferramenta", category: "Produto e requisitos", outcome: "Cenarios Gherkin" },
   { id: "triage", title: "Bug Triage Lab", description: "Classifique bugs, defina prioridade, dono e proximo passo com evidencias.", href: "/lab/triagem", icon: Bug, tone: "coral", status: "Real lab", category: "Defeitos e investigacao", outcome: "Decisao de bug" },
   { id: "logs", title: "Log Investigation Lab", description: "Investigue logs, metricas e relatos para formar hipotese e acao.", href: "/lab/logs", icon: SearchCode, tone: "mint", status: "Real lab", category: "Defeitos e investigacao", outcome: "Analise tecnica" },
   { id: "execution", title: "Execution & Defect Hub", description: "Execute casos do Studio, registre evidencias e acompanhe defeitos.", href: "/lab/execution", icon: Target, tone: "mint", status: "Hub", category: "Defeitos e investigacao", outcome: "Evidencia e defeitos" },
   { id: "api", title: "API Lab", description: "Teste endpoints, leia respostas e transforme falhas em bug reports.", href: "/api-playground", icon: Code2, tone: "mint", status: "Ferramenta", category: "Defeitos e investigacao", outcome: "Teste de API" },
   { id: "playground", title: "Playground", description: "Pratique em sistemas com falhas intencionais e gere seus primeiros entregaveis.", href: "/playground", icon: PlayCircle, tone: "coral", status: "Aberto", category: "Entrega e automacao", outcome: "Pratica completa" },
   { id: "test-suite", title: "Test Suite", description: "Organize pastas, specs, fixtures, page objects e massas de teste em um workspace pessoal.", href: "/test-suite", icon: TestTube2, tone: "neon", status: "Ferramenta", category: "Entrega e automacao", outcome: "Automacao organizada" },
+  { id: "test-board", title: "Board de testes", description: "Crie cards de casos de teste e automacao, priorize e acompanhe cada etapa.", href: "/boards", icon: FolderKanban, tone: "blue", status: "Board", category: "Entrega e automacao", outcome: "Planejamento visual" },
   { id: "cicd", title: "Trilha CI/CD", description: "Percorra Labs de pipeline, quality gates, rollback e decisões de entrega.", href: "/trilhas/cicd", icon: Workflow, tone: "coral", status: "Trilha", category: "Entrega e automacao", outcome: "Decisão de release" },
   { id: "people", title: "People Lab", description: "Treine comunicacao, conflito, alinhamento e decisoes dificeis de QA.", href: "/lab/pessoas", icon: Users, tone: "blue", status: "Lab", category: "Carreira e operacao", outcome: "Comunicacao" },
   { id: "skills", title: "Competencias", description: "Veja sinais de progresso por pratica, entregaveis, execucao e colaboracao.", href: "/lab/competencias", icon: CheckCircle2, tone: "mint", status: "Progresso", category: "Carreira e operacao", outcome: "Mapa de evolucao" },
@@ -201,6 +204,11 @@ export function WorkspaceClient({ name, email, plan, projects, drafts, favorites
           <Stat icon={CheckCircle2} label="Missoes concluidas" value={String(completedMissions)} />
           <Stat icon={Target} label="Sessoes registradas" value={String(sessions.length)} />
         </aside>
+      </section>
+
+      <section className="mt-10 grid gap-4 sm:grid-cols-2" aria-label="Ferramentas de testes do aluno">
+        <Link href="/lab/bdd" className="group rounded-2xl border border-mint/25 bg-mint/[.045] p-5 transition hover:border-mint/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint"><FileCode2 className="size-6 text-mint" aria-hidden="true" /><h2 className="mt-4 text-lg font-black text-off-white">Gerador de BDD</h2><p className="mt-2 text-sm leading-6 text-[#AAB2BC]">Escreva cenários, revise o Gherkin e salve no seu workspace.</p><span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-mint">Criar cenário <ArrowRight className="size-4" aria-hidden="true" /></span></Link>
+        <Link href="/boards" className="group rounded-2xl border border-[#7BA7E8]/25 bg-[#7BA7E8]/[.045] p-5 transition hover:border-[#7BA7E8]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9BC0F5]"><FolderKanban className="size-6 text-[#9BC0F5]" aria-hidden="true" /><h2 className="mt-4 text-lg font-black text-off-white">Board de testes</h2><p className="mt-2 text-sm leading-6 text-[#AAB2BC]">Planeje casos manuais e automações em cards com prioridade e status.</p><span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#9BC0F5]">Abrir board <ArrowRight className="size-4" aria-hidden="true" /></span></Link>
       </section>
 
       <section className="mt-10">

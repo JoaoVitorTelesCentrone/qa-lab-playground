@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, KanbanSquare, LayoutDashboard, Plus } from "lucide-react";
+import { ArrowRight, FileCode2, KanbanSquare, LayoutDashboard, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,9 +12,9 @@ import type { BoardSummary } from "@/lib/board/types";
 
 type ApiResult<T> = { data?: T; error?: { message?: string } };
 
-export function BoardsIndexClient({ initialBoards }: { initialBoards: BoardSummary[] }) {
+export function BoardsIndexClient({ initialBoards, canCreateBoard }: { initialBoards: BoardSummary[]; canCreateBoard: boolean }) {
   const router = useRouter();
-  const [open, setOpen] = useState(initialBoards.length === 0);
+  const [open, setOpen] = useState(canCreateBoard && initialBoards.length === 0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -46,9 +46,9 @@ export function BoardsIndexClient({ initialBoards }: { initialBoards: BoardSumma
       <div>
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[.18em] text-primary"><LayoutDashboard className="size-4" /> Planejamento e execução</div>
         <h1 className="mt-3 text-4xl font-black tracking-tight">Boards</h1>
-        <p className="mt-3 max-w-2xl text-muted-foreground">Organize histórias, tarefas, bugs e testes em um fluxo compartilhado.</p>
+        <p className="mt-3 max-w-2xl text-muted-foreground">Organize casos de teste, automações, histórias e bugs em colunas de trabalho.</p>
       </div>
-      <Sheet open={open} onOpenChange={setOpen}>
+      <div className="flex flex-wrap gap-2"><Button asChild variant="outline"><Link href="/lab/bdd"><FileCode2 /> Gerador de BDD</Link></Button>{canCreateBoard && <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild><Button><Plus /> Novo board</Button></SheetTrigger>
         <SheetContent className="w-full overflow-y-auto sm:max-w-md">
           <SheetHeader>
@@ -63,7 +63,7 @@ export function BoardsIndexClient({ initialBoards }: { initialBoards: BoardSumma
             <Button className="w-full" disabled={saving}>{saving ? "Criando…" : "Criar projeto e board"}</Button>
           </form>
         </SheetContent>
-      </Sheet>
+      </Sheet>}</div>
     </header>
 
     {initialBoards.length > 0 ? <section className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -77,8 +77,8 @@ export function BoardsIndexClient({ initialBoards }: { initialBoards: BoardSumma
     </section> : <section className="mt-10 rounded-2xl border border-dashed border-border p-12 text-center">
       <KanbanSquare className="mx-auto size-8 text-muted-foreground" />
       <h2 className="mt-5 text-xl font-bold">Seu primeiro board começa aqui</h2>
-      <p className="mt-2 text-sm text-muted-foreground">Crie um projeto e receba quatro colunas configuradas automaticamente.</p>
-      <Button className="mt-6" onClick={() => setOpen(true)}><Plus /> Criar board</Button>
+      <p className="mt-2 text-sm text-muted-foreground">{canCreateBoard ? "Crie um projeto e receba quatro colunas configuradas automaticamente." : "Seu board pessoal aparecerá aqui assim que estiver disponível."}</p>
+      {canCreateBoard && <Button className="mt-6" onClick={() => setOpen(true)}><Plus /> Criar board</Button>}
     </section>}
   </main>;
 }

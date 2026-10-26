@@ -15,7 +15,7 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ArrowLeft, ArrowRight, Bug, CircleDot, FlaskConical, GripVertical, KanbanSquare, ListTodo, Plus, Search, Sparkles, SquareCheckBig } from "lucide-react";
+import { ArrowLeft, ArrowRight, Bug, CircleDot, Code2, FileCode2, FlaskConical, GripVertical, KanbanSquare, ListTodo, Plus, Search, Sparkles, SquareCheckBig } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,7 @@ import { ItemDetails } from "./item-details";
 
 type ApiResult<T> = { data?: T; error?: { message?: string } };
 
-const typeLabels: Record<WorkItemType, string> = { epic: "Épico", story: "História", task: "Tarefa", bug: "Bug", test: "Teste", subtask: "Subtarefa" };
+const typeLabels: Record<WorkItemType, string> = { epic: "Épico", story: "História", task: "Tarefa", bug: "Bug", test: "Caso de teste", automation: "Automação", subtask: "Subtarefa" };
 const priorityLabels: Record<WorkItemPriority, string> = { lowest: "Muito baixa", low: "Baixa", medium: "Média", high: "Alta", highest: "Crítica" };
 const priorityClasses: Record<WorkItemPriority, string> = { lowest: "text-muted-foreground", low: "text-sky-400", medium: "text-primary", high: "text-amber-400", highest: "text-destructive" };
 const columnColors: Record<string, string> = { blue: "bg-sky-400", amber: "bg-amber-400", violet: "bg-violet-400", green: "bg-emerald-400", slate: "bg-slate-400" };
@@ -39,6 +39,7 @@ const columnColors: Record<string, string> = { blue: "bg-sky-400", amber: "bg-am
 function WorkItemTypeIcon({ type }: { type: WorkItemType }) {
   if (type === "bug") return <Bug className="size-3.5 text-primary" />;
   if (type === "test") return <FlaskConical className="size-3.5 text-primary" />;
+  if (type === "automation") return <Code2 className="size-3.5 text-primary" />;
   if (type === "task" || type === "subtask") return <SquareCheckBig className="size-3.5 text-primary" />;
   if (type === "epic") return <Sparkles className="size-3.5 text-primary" />;
   return <CircleDot className="size-3.5 text-primary" />;
@@ -147,11 +148,19 @@ export function BoardClient({ initial, viewerId, publicDemo = false }: { initial
     event.preventDefault();
     setSaving(true);
     const form = new FormData(event.currentTarget);
+    const type = String(form.get("type"));
+    const description = String(form.get("description") ?? "").trim();
+    const sections = type === "test"
+      ? [["Pré-condições", form.get("preconditions")], ["Passos", form.get("steps")], ["Resultado esperado", form.get("expected")]]
+      : type === "automation"
+        ? [["Ferramenta ou framework", form.get("framework")], ["Fluxo a automatizar", form.get("flow")], ["Asserções", form.get("assertions")]]
+        : [];
+    const details = sections.map(([label, value]) => String(value ?? "").trim() ? `${label}:\n${String(value).trim()}` : "").filter(Boolean).join("\n\n");
     try {
       const response = await fetch(`/api/v1/boards/${initial.board.id}/items`, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ title: form.get("title"), description: form.get("description"), type: form.get("type"), priority: form.get("priority"), inBacklog: view === "backlog" }),
+        body: JSON.stringify({ title: form.get("title"), description: [description, details].filter(Boolean).join("\n\n"), type, priority: form.get("priority"), inBacklog: view === "backlog" }),
       });
       const result = await response.json() as ApiResult<BoardWorkItem>;
       if (!response.ok || !result.data) throw new Error(result.error?.message ?? "Não foi possível criar o item.");
@@ -198,7 +207,8 @@ export function BoardClient({ initial, viewerId, publicDemo = false }: { initial
           <Button asChild variant="ghost" size="icon-sm"><Link href="/boards" aria-label="Voltar para boards"><ArrowLeft /></Link></Button>
           <div><p className="font-mono text-xs font-bold text-primary">{initial.board.project.key}</p><h1 className="text-xl font-black">{initial.board.name}</h1><p className="text-xs text-muted-foreground">{initial.board.project.name}</p></div>
         </div>
-        <div className="flex flex-1 items-center justify-end gap-2">
+        <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
+          <Button asChild variant="outline" size="sm"><Link href="/lab/bdd"><FileCode2 className="size-4" /> Gerador de BDD</Link></Button>
           <div className="relative w-full max-w-sm"><Search className="absolute left-3 top-3 size-4 text-muted-foreground" /><Input value={query} onChange={(event) => setQuery(event.target.value)} className="pl-9" placeholder="Buscar por chave ou título" /></div>
           {!canEdit && <span className="whitespace-nowrap rounded-md border border-border bg-muted/30 px-3 py-2 text-xs font-bold text-muted-foreground">Somente leitura</span>}
           {(initial.viewerRole === "owner" || initial.viewerRole === "admin") && <BoardSettings boardId={initial.board.id} boardName={initial.board.name} projectId={initial.board.project.id} projectName={initial.board.project.name} columns={columns} onColumnsChange={setColumns} />}
@@ -306,6 +316,7 @@ function BacklogList({ items, canEdit, open, plan }: { items: BoardWorkItem[]; c
 }
 
 function CreateItemSheet({ open, onOpenChange, saving, inBacklog, onSubmit }: { open: boolean; onOpenChange: (open: boolean) => void; saving: boolean; inBacklog: boolean; onSubmit: (event: FormEvent<HTMLFormElement>) => void }) {
+  const [type, setType] = useState<WorkItemType>("test");
   return <Sheet open={open} onOpenChange={onOpenChange}>
     <SheetTrigger asChild><Button><Plus /> Criar item</Button></SheetTrigger>
     <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
@@ -313,10 +324,12 @@ function CreateItemSheet({ open, onOpenChange, saving, inBacklog, onSubmit }: { 
       <form onSubmit={onSubmit} className="space-y-5 px-4 pb-8">
         <div className="space-y-2"><Label htmlFor="item-title">Título</Label><Input id="item-title" name="title" required maxLength={180} autoFocus placeholder="Ex.: Validar recuperação de senha" /></div>
         <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-2"><Label htmlFor="item-type">Tipo</Label><select id="item-type" name="type" className="field w-full">{Object.entries(typeLabels).filter(([type]) => type !== "subtask").map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></div>
+          <div className="space-y-2"><Label htmlFor="item-type">Tipo</Label><select id="item-type" name="type" value={type} onChange={(event) => setType(event.target.value as WorkItemType)} className="field w-full">{Object.entries(typeLabels).filter(([value]) => value !== "subtask").map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></div>
           <div className="space-y-2"><Label htmlFor="item-priority">Prioridade</Label><select id="item-priority" name="priority" className="field w-full">{Object.entries(priorityLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></div>
         </div>
         <div className="space-y-2"><Label htmlFor="item-description">Descrição</Label><Textarea id="item-description" name="description" rows={7} maxLength={10000} placeholder="Contexto, objetivo e critérios iniciais…" /></div>
+        {type === "test" && <div className="space-y-4 rounded-lg border border-border bg-muted/20 p-4"><p className="text-xs font-bold text-primary">Detalhes do caso de teste</p><div className="space-y-2"><Label htmlFor="item-preconditions">Pré-condições</Label><Textarea id="item-preconditions" name="preconditions" rows={2} placeholder="Estado necessário antes da execução" /></div><div className="space-y-2"><Label htmlFor="item-steps">Passos</Label><Textarea id="item-steps" name="steps" rows={3} placeholder="1. Abrir…\n2. Informar…" /></div><div className="space-y-2"><Label htmlFor="item-expected">Resultado esperado</Label><Textarea id="item-expected" name="expected" rows={2} placeholder="Comportamento observável" /></div></div>}
+        {type === "automation" && <div className="space-y-4 rounded-lg border border-border bg-muted/20 p-4"><p className="text-xs font-bold text-primary">Plano de automação</p><div className="space-y-2"><Label htmlFor="item-framework">Ferramenta ou framework</Label><Input id="item-framework" name="framework" placeholder="Ex.: Playwright" /></div><div className="space-y-2"><Label htmlFor="item-flow">Fluxo a automatizar</Label><Textarea id="item-flow" name="flow" rows={2} placeholder="Ex.: login com credenciais válidas" /></div><div className="space-y-2"><Label htmlFor="item-assertions">Asserções</Label><Textarea id="item-assertions" name="assertions" rows={2} placeholder="O que a suíte deve comprovar" /></div></div>}
         <Button className="w-full" disabled={saving}>{saving ? "Criando…" : "Criar item"}</Button>
       </form>
     </SheetContent>

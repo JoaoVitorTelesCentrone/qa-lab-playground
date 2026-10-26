@@ -76,7 +76,7 @@ function mapColumn(row: UnknownRow): BoardColumn {
 }
 
 export function mapWorkItem(row: UnknownRow): BoardWorkItem {
-  const allowedTypes = new Set(["epic", "story", "task", "bug", "test", "subtask"]);
+  const allowedTypes = new Set(["epic", "story", "task", "bug", "test", "automation", "subtask"]);
   const allowedPriorities = new Set(["lowest", "low", "medium", "high", "highest"]);
   const severity = ["low", "medium", "high", "critical"].includes(asString(row.severity)) ? asString(row.severity) as BoardWorkItem["severity"] : null;
   return {
@@ -143,7 +143,7 @@ function fromDbError(error: DbError): BoardError {
   if (raw.includes("42P01") || raw.includes("42883") || raw.includes("PGRST202") || raw.includes("PGRST205") || raw.includes("schema cache") || raw.includes("does not exist")) {
     return new BoardError("O Board V2 ainda não está disponível: aplique as migrações 0016 a 0021 do board.", 503, "BOARD_UNAVAILABLE");
   }
-  if (raw.includes("PRO_REQUIRED")) return new BoardError("O Board é exclusivo dos planos Pro e Team.", 403, "PRO_REQUIRED");
+  if (raw.includes("PRO_REQUIRED")) return new BoardError("Esta ação exige o plano Pro ou Team.", 403, "PRO_REQUIRED");
   if (raw.includes("PROJECT_KEY_TAKEN") || raw.includes("23505")) return new BoardError("Esta chave de projeto já está em uso.", 409, "PROJECT_KEY_TAKEN");
   if (raw.includes("VERSION_CONFLICT")) return new BoardError("Este item foi alterado em outra sessão. Atualize o board e tente novamente.", 409, "VERSION_CONFLICT");
   if (raw.includes("COLUMN_NOT_EMPTY")) return new BoardError("Mova ou arquive os itens desta coluna antes de removê-la.", 409, "COLUMN_NOT_EMPTY");

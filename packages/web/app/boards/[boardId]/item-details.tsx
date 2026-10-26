@@ -14,7 +14,7 @@ import type { BoardChecklistItem, BoardColumn, BoardComment, BoardWorkItem, Boar
 type ApiResult<T> = { data?: T; error?: { message?: string } };
 type Tab = "details" | "comments" | "activity";
 
-const typeLabels: Record<WorkItemType, string> = { epic: "Épico", story: "História", task: "Tarefa", bug: "Bug", test: "Teste", subtask: "Subtarefa" };
+const typeLabels: Record<WorkItemType, string> = { epic: "Épico", story: "História", task: "Tarefa", bug: "Bug", test: "Caso de teste", automation: "Automação", subtask: "Subtarefa" };
 const priorityLabels: Record<WorkItemPriority, string> = { lowest: "Muito baixa", low: "Baixa", medium: "Média", high: "Alta", highest: "Crítica" };
 const severityLabels = { low: "Baixa", medium: "Média", high: "Alta", critical: "Crítica" } as const;
 
