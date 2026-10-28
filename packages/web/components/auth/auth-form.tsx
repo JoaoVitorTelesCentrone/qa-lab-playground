@@ -84,7 +84,7 @@ export function AuthForm({ mode, next = "/lab", configured, googleEnabled = fals
   }
 
   return (
-    <div className="mx-auto grid min-h-[calc(100vh-8rem)] w-full max-w-5xl items-center gap-10 px-5 py-12 lg:grid-cols-[1fr_28rem] lg:px-8">
+    <div className="qa-auth mx-auto grid min-h-[calc(100vh-8rem)] w-full max-w-5xl items-center gap-10 px-5 py-12 lg:grid-cols-[1fr_28rem] lg:px-8">
       <section className="hidden max-w-xl lg:block" aria-labelledby="auth-context-title">
         <div className="inline-flex size-12 items-center justify-center rounded-xl bg-mint/10 text-mint"><ShieldCheck className="size-6" /></div>
         <h2 id="auth-context-title" className="mt-6 max-w-lg text-4xl font-black tracking-[-0.03em] text-off-white">{isLogin ? "Continue sua prática de onde parou." : "Sua primeira evidência começa com uma prática."}</h2>
@@ -96,7 +96,7 @@ export function AuthForm({ mode, next = "/lab", configured, googleEnabled = fals
         </ul>
       </section>
 
-      <div className="w-full rounded-2xl bg-[#171B21] p-6 shadow-[0_22px_65px_-24px_rgba(0,0,0,.72)] sm:p-8">
+      <div className="qa-auth-card w-full p-6 sm:p-8">
         <div className="text-center"><Link href="/" aria-label="Voltar ao início" className="inline-flex size-11 items-center justify-center rounded-xl bg-mint/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint"><FlaskConical className="size-5 text-mint" /></Link><h1 className="mt-5 text-3xl font-black tracking-[-0.03em] text-off-white">{isLogin ? "Entrar no QA Lab" : "Criar sua conta"}</h1><p className="mt-2 text-sm leading-6 text-[#AAB2BC]">{isLogin ? "Continue seus Labs e acompanhe suas entregas." : "Aprenda QA na prática e salve as evidências do que você sabe fazer."}</p></div>
 
         {!configured && <div role="alert" className="mt-6 rounded-xl bg-[#F0C040]/10 p-4 text-sm leading-6 text-[#F4CF68]">As contas ainda não estão configuradas neste ambiente. Adicione a URL e a chave pública do Supabase para continuar.</div>}

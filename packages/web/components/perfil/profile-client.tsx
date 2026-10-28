@@ -13,7 +13,7 @@ type Profile = {
 
 export function ProfileClient({ email, profile }: { email: string; profile: Profile }) {
   return (
-    <main className="mx-auto w-full max-w-3xl px-5 py-8 sm:px-8 lg:py-10">
+    <main className="qa-profile mx-auto w-full max-w-3xl px-5 py-8 sm:px-8 lg:py-10">
       <ProfileHero
         name={profile?.full_name ?? ""}
         email={email}

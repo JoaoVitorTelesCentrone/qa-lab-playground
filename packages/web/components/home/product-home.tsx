@@ -13,7 +13,7 @@ const steps = [
 export function ProductHome() {
   return <div className="qa-home">
     <main className="mx-auto max-w-6xl px-5 py-6 sm:px-8 sm:py-10 lg:py-12">
-      <section data-onboarding="home-intro" className="qa-next-lab rounded-3xl border border-primary/20" aria-labelledby="home-title">
+      <section data-onboarding="home-intro" className="qa-next-lab" aria-labelledby="home-title">
         <div className="qa-home-grid">
           <div className="qa-next-content">
             <h1 id="home-title" className="qa-page-title qa-page-title-hero text-foreground">Aprenda QA na prática.</h1>

@@ -1,11 +1,11 @@
 .content-atlas {
-  --ca-bg: #101715;
-  --ca-surface: #18221e;
-  --ca-line: #35483d;
-  --ca-text: #f2f3eb;
-  --ca-muted: #becbc0;
-  --ca-green: #95d4a7;
-  --ca-copper: #f0b886;
+  --ca-bg: var(--field-bg);
+  --ca-surface: var(--field-surface);
+  --ca-line: var(--field-line);
+  --ca-text: var(--field-text);
+  --ca-muted: var(--field-muted);
+  --ca-green: var(--field-green);
+  --ca-copper: var(--field-copper);
   color: var(--ca-text);
   background: var(--ca-bg);
   min-height: 70vh;

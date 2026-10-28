@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-28T00:00:00Z",
+  "title": "Design System: QA Lab",
+  "extensions": {
+    "colorMeta": {
+      "field-bg": { "role": "neutral", "displayName": "Fundo de campo", "canonical": "#101715" },
+      "field-surface": { "role": "neutral", "displayName": "Superfície", "canonical": "#18221e" },
+      "field-green": { "role": "primary", "displayName": "Verde de ação", "canonical": "#95d4a7" },
+      "field-copper": { "role": "secondary", "displayName": "Cobre editorial", "canonical": "#f0b886" }
+    },
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "desktop", "value": "900px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão primário",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal de cada área.",
+      "html": "<button class=\"ds-button-primary\">Começar prática</button>",
+      "css": ".ds-button-primary{padding:12px 20px;background:#95d4a7;color:#0d1c13;border:0;border-radius:2px;font:700 14px Inter,sans-serif;cursor:pointer}.ds-button-primary:hover{background:#a9dfb8}.ds-button-primary:focus-visible{outline:2px solid #95d4a7;outline-offset:3px}"
+    },
+    {
+      "name": "Cartão",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Painel informativo plano da plataforma.",
+      "html": "<article class=\"ds-card\">Investigue e registre o que encontrou.</article>",
+      "css": ".ds-card{padding:24px;background:#18221e;color:#f2f3eb;border:1px solid #35483d;border-radius:2px;font:400 16px/1.6 Inter,sans-serif}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Caderno de campo",
+    "overview": "A plataforma tem a atmosfera de um espaço de investigação: escuro, legível e direto.",
+    "keyCharacteristics": ["Hierarquia editorial", "Superfícies planas", "Verde para ação"],
+    "rules": [],
+    "dos": ["Use contraste, espaçamento e hierarquia tipográfica para guiar a leitura."],
+    "donts": ["Não substitua os temas de portfólios públicos ou o visual dos ambientes de prática."]
+  }
+}

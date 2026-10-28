@@ -49,5 +49,5 @@ export function AccountNav({ configured }: { configured: boolean }) {
   }, [configured]);
   const label = authenticated ? displayName || "Minha conta" : "Entrar";
   const accessibleLabel = authenticated ? `Perfil de ${label}` : label;
-  return <Link href={authenticated ? "/perfil" : "/login"} aria-label={accessibleLabel} title={label} className="inline-flex h-9 items-center gap-2 rounded-lg border border-white/10 px-3 text-xs font-bold text-[#AAB2BC] transition hover:border-mint/30 hover:text-mint"><CircleUserRound className="size-4 shrink-0" aria-hidden="true" /><span className="hidden max-w-32 truncate sm:inline">{label}</span></Link>;
+  return <Link href={authenticated ? "/perfil" : "/login"} aria-label={accessibleLabel} title={label} className="inline-flex h-9 items-center gap-2 border border-border px-3 text-xs font-bold text-muted-foreground transition hover:border-primary hover:text-primary"><CircleUserRound className="size-4 shrink-0" aria-hidden="true" /><span className="hidden max-w-32 truncate sm:inline">{label}</span></Link>;
 }

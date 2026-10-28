@@ -20,7 +20,7 @@ export function SiteFooter() {
   if (WITHOUT_FOOTER.includes(pathname)) return null;
 
   return (
-    <footer className="border-t border-border">
+    <footer className="border-t border-border bg-background">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 py-3.5 text-xs text-muted-foreground sm:px-8">
         <span>© {new Date().getFullYear()} QA Lab</span>
         <OnboardingLink className="inline-flex min-h-11 items-center transition hover:text-primary">Primeiros passos</OnboardingLink>
