@@ -53,7 +53,7 @@ export function PortfolioFeaturedEditor({ submissions, initialSelection }: {
 
   return <section className="rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="portfolio-featured-title">
     <div className="flex items-center gap-2.5"><Sparkles className="size-4 text-primary" aria-hidden="true" /><h2 id="portfolio-featured-title" className="text-base font-semibold">Trabalhos em destaque</h2></div>
-    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Escolha até três cases publicados para aparecerem primeiro no seu portfólio. Para mudar a ordem, desmarque e selecione novamente na ordem desejada.</p>
+    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Escolha até três cases publicados. A ordem de seleção define a ordem no portfólio.</p>
 
     {available.length === 0
       ? <p className="mt-4 rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">Quando você publicar um case, poderá escolhê-lo para destaque aqui.</p>

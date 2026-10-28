@@ -26,15 +26,17 @@ export function TrackPage({ progress, signedIn, certificateCode }: { progress: T
     <Link href="/labs" className="text-sm text-primary">← Todos os Labs</Link>
 
     <header className="mt-6">
-      <p className="qa-eyebrow">Trilha</p>
-      <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">{track.name}</h1>
+      <h1 className="text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">{track.name}</h1>
       <p className="mt-3 text-muted-foreground">{track.objective}</p>
-      <p className="mt-4 rounded-md border border-border bg-muted/40 p-3 text-sm"><strong>Ao terminar:</strong> {track.outcome}</p>
-      {app && <p className="mt-3 text-sm text-muted-foreground">Ambiente: <Link href={app.route} className="text-primary">{app.name}</Link></p>}
+      <details className="mt-3 text-sm">
+        <summary className="w-fit cursor-pointer text-primary">O que você vai aprender</summary>
+        <p className="mt-2 max-w-2xl leading-6 text-muted-foreground">{track.outcome}</p>
+      </details>
+      {app && <p className="mt-3 text-sm text-muted-foreground">Praticar em <Link href={app.route} className="text-primary underline-offset-4 hover:underline">{app.name}</Link></p>}
     </header>
 
     {signedIn && <section className="mt-8" aria-label="Progresso na trilha">
-      <div className="flex items-center justify-between text-sm"><span className="font-medium">{completed} de {total} Labs concluídos</span><span className="font-mono text-xs text-muted-foreground">{percent}%</span></div>
+      <div className="text-sm font-medium">{completed} de {total} Labs concluídos</div>
       <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted" role="img" aria-label={`${percent}% da trilha concluída`}><div className="h-full rounded-full bg-primary" style={{ width: `${percent}%` }} /></div>
       {nextLab
         ? <Button asChild className="mt-5"><Link href={`/labs/${nextLab.number}`}>{completed === 0 ? "Começar" : "Continuar"}: {nextLab.title} <ArrowRight className="size-4" /></Link></Button>
@@ -42,19 +44,21 @@ export function TrackPage({ progress, signedIn, certificateCode }: { progress: T
       <TrackCertificate trackSlug={track.slug} eligible={status.eligible} missing={status.missing} code={certificateCode} />
     </section>}
 
-    {!signedIn && <p className="mt-8 rounded-md border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
-      <Link href={`/login?next=/trilhas/${track.slug}`} className="text-primary">Entre na sua conta</Link> para salvar o progresso da trilha. Os Labs abaixo podem ser abertos mesmo sem login.
+    {!signedIn && <p className="mt-8 text-sm text-muted-foreground">
+      <Link href={`/login?next=/trilhas/${track.slug}`} className="text-primary underline-offset-4 hover:underline">Entre para salvar seu progresso</Link>. Os Labs estão abertos sem login.
     </p>}
 
-    <ol className="mt-10 grid gap-3">{steps.map((step) => <Step key={step.lab.slug} step={step} signedIn={signedIn} />)}</ol>
+    {steps.length > 0
+      ? <ol className="mt-8 divide-y divide-border">{steps.map((step) => <Step key={step.lab.slug} step={step} signedIn={signedIn} />)}</ol>
+      : <p className="mt-8 text-sm text-muted-foreground">Ainda não há Labs liberados nesta trilha. <Link href="/labs" className="text-primary underline-offset-4 hover:underline">Ver Labs disponíveis</Link>.</p>}
   </div></main>;
 }
 
 function Step({ step, signedIn }: { step: TrackStep; signedIn: boolean }) {
   const Icon = stepIcons[step.status];
   const done = step.status === "completed";
-  return <li className="flex items-start gap-4 rounded-xl border border-border p-4">
-    <span className="flex flex-col items-center gap-1.5 pt-0.5">
+  return <li className="grid grid-cols-[2rem_minmax(0,1fr)] gap-x-3 gap-y-3 py-5 sm:grid-cols-[2rem_minmax(0,1fr)_auto] sm:gap-x-4">
+    <span className="row-span-2 flex flex-col items-center gap-1.5 pt-0.5 sm:row-span-1">
       <Icon className={done ? "size-5 text-primary" : "size-5 text-muted-foreground"} aria-hidden="true" />
       <span className="font-mono text-xs text-muted-foreground">{String(step.position).padStart(2, "0")}</span>
     </span>
@@ -69,6 +73,6 @@ function Step({ step, signedIn }: { step: TrackStep; signedIn: boolean }) {
     </div>
     {/* Passo concluído leva ao case, não de volta ao briefing: quem já entregou
         quer publicar, não reler o enunciado. */}
-    <Button asChild variant={done ? "ghost" : "outline"} size="sm"><Link href={done ? `/labs/${step.lab.number}/conclusao` : `/labs/${step.lab.number}`}>{done ? "Ver case" : "Abrir"}</Link></Button>
+    <Button className="col-start-2 w-fit sm:col-auto" asChild variant={done ? "ghost" : "outline"} size="sm"><Link href={done ? `/labs/${step.lab.number}/conclusao` : `/labs/${step.lab.number}`}>{done ? "Ver case" : "Abrir"}</Link></Button>
   </li>;
 }

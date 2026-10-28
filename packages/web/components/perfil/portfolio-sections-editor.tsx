@@ -98,7 +98,7 @@ export function PortfolioSectionsEditor({ sections: initial, available }: { sect
         <div className="min-w-0 max-w-2xl flex-1">
           <h2 id="secoes-title" className="text-base font-semibold">Seções da página pública</h2>
           <p className="mt-1 text-sm leading-6 text-muted-foreground">
-            Texto livre para o que a evidência não conta — formação, certificações, ferramentas. Aparecem na sua página pública, na ordem definida aqui, e só quando marcadas como visíveis.
+            Adicione formação, certificações ou ferramentas. Só seções visíveis aparecem no portfólio.
           </p>
         </div>
         <Button type="button" size="sm" variant="outline" disabled={!available || full || creating !== null} onClick={() => setCreating({ title: "", body: "" })}>
@@ -156,8 +156,7 @@ export function PortfolioSectionsEditor({ sections: initial, available }: { sect
       {sections.length === 0
         ? available && !creating && (
             <div className="mt-4 rounded-lg border border-dashed border-border px-5 py-10 text-center">
-              <p className="text-sm text-muted-foreground">Nenhuma seção criada ainda.</p>
-              <p className="mt-1 text-xs text-muted-foreground">Sua página pública continua mostrando projetos e evidências.</p>
+              <p className="text-sm text-muted-foreground">Nenhuma seção criada.</p>
             </div>
           )
         : (

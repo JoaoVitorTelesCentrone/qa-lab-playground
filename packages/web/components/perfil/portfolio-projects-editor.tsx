@@ -66,7 +66,7 @@ export function PortfolioProjectsEditor({ projects, submissions, username, portf
       <div className="flex items-center gap-2.5"><BriefcaseBusiness className="size-4 text-primary" aria-hidden="true" /><h2 id="portfolio-projects-title" className="text-base font-semibold">Projetos do portfólio</h2></div>
       {!creating && <Button type="button" size="sm" variant="outline" onClick={() => setCreating(true)}><Plus className="size-3.5" /> Novo projeto</Button>}
     </div>
-    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Apresente projetos pessoais ou profissionais e reúna neles os cases de QA que já publicou. Salvar alterações não troca a versão pública; publique quando estiver pronto.</p>
+    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Reúna projetos e cases de QA. Salvar não publica; publique quando estiver pronto.</p>
     {!portfolioPublic && <p className="mt-3 rounded-lg border border-border bg-background p-3 text-xs leading-5 text-muted-foreground">Seu portfólio está privado. Projetos publicados só ficam acessíveis quando você também publica a página do portfólio.</p>}
 
     {creating && <div className="mt-5"><ProjectForm submissions={submissions} onCancel={() => setCreating(false)} onSave={(project) => { replace(project); setCreating(false); }} /></div>}

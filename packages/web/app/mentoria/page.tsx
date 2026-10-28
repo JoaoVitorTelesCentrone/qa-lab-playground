@@ -38,7 +38,7 @@ export default async function MentorshipLandingPage({ searchParams }: { searchPa
       <div className="mentoria-hero-main">
       <div className="mentoria-hero-content">
         <h1 id="mentoria-title">Chegue à próxima entrevista com <em>algo para mostrar.</em></h1>
-        <p>Comece no Broto Space, receba feedback humano e construa um case que mostra como você pensa.</p>
+        <p>Investigue o Broto Space, receba feedback de um mentor e construa seu case.</p>
         <div className="mentoria-actions">
           <Button asChild size="lg"><Link href={enrollmentHref}>{openOffer ? "Ver turma aberta" : "Entrar na lista de interesse"}<ArrowRight aria-hidden="true" className="size-4" /></Link></Button>
           <Link className="mentoria-text-link" href="#metodo">Veja como funciona <ArrowUpRight aria-hidden="true" size={16} /></Link>
@@ -52,7 +52,6 @@ export default async function MentorshipLandingPage({ searchParams }: { searchPa
     <section id="metodo" className="mentoria-method" aria-labelledby="method-title">
       <div className="mentoria-section-head">
         <h2 id="method-title">O que vai para o seu case?</h2>
-        <p>Seu raciocínio, do problema à decisão.</p>
       </div>
       <ol className="mentoria-steps">
         {steps.map((step) => <li key={step.title}>
@@ -68,7 +67,7 @@ export default async function MentorshipLandingPage({ searchParams }: { searchPa
         </figure>
         <div className="mentoria-outcome-copy">
           <h3>Seu trabalho fica visível.</h3>
-          <p>Do Broto Space ao QA Lab: investigue jornadas, registre evidências e transforme suas decisões em um case revisado por mentor.</p>
+          <p>Registre evidências no Broto Space e transforme suas decisões em um case revisado por mentor.</p>
           <Link href="/conteudo" className="mentoria-text-link">Explorar conteúdo aberto <ArrowUpRight aria-hidden="true" size={16} /></Link>
         </div>
       </div>
@@ -76,8 +75,8 @@ export default async function MentorshipLandingPage({ searchParams }: { searchPa
 
     <section className="mentoria-real" aria-labelledby="real-title">
       <div className="mentoria-real-copy">
-        <h2 id="real-title">Aprenda em um sistema real, com quem vive a área.</h2>
-        <p>Explore três superfícies do Broto Space. Em cada uma, uma pergunta de QA vira evidência para discutir com o mentor.</p>
+        <h2 id="real-title">Pratique em três áreas do Broto Space.</h2>
+        <p>Cada jornada transforma uma pergunta de QA em evidência para discutir com seu mentor.</p>
         <a href={brotoSpaceSite.url} target="_blank" rel="noreferrer" className="mentoria-real-link">Conhecer o Broto Space <ArrowUpRight aria-hidden="true" size={17} /></a>
       </div>
       <BrotoInvestigation />

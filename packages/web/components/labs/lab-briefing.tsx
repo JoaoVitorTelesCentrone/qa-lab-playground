@@ -108,7 +108,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
   const exitHref = trackProgress ? `/trilhas/${trackProgress.track.slug}` : "/labs";
 
   return <main className="qa-system"><div className="mx-auto max-w-5xl px-5 py-8 sm:px-8 sm:py-12">
-    {trackProgress && trackStep && <p className="text-xs text-muted-foreground">{trackProgress.track.name} · passo {trackStep.position} de {trackProgress.total} · {trackProgress.completed} concluído(s)</p>}
+    {trackProgress && trackStep && <p className="text-xs text-muted-foreground">{trackProgress.track.name} · etapa {trackStep.position}/{trackProgress.total}</p>}
 
     <Breadcrumb className="mt-2">
       <BreadcrumbList className="gap-1.5 text-sm">
@@ -132,7 +132,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
       {status === "completed" && <Badge variant="secondary" className="gap-1"><CheckCircle2 className="size-3" /> concluído</Badge>}
       {status === "started" && <Badge variant="secondary">em andamento</Badge>}
     </header>
-    <p className="mt-3 text-sm text-muted-foreground">Lab {label} · {challenge.area} · {challenge.difficulty} · {challenge.mode}</p>
+    <p className="mt-3 text-sm text-muted-foreground">{challenge.area} · {challenge.difficulty} · {challenge.mode}</p>
 
     {/* Quem volta a um Lab já entregue precisa de um caminho de uma linha até o
         case — sem isso a entrega antiga fica enterrada no histórico. */}
@@ -163,15 +163,20 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
     <div data-onboarding="lab-panel" className="mt-6 rounded-xl bg-card p-5 sm:p-8">
       <div key={step} className="qa-lab-step-panel">
       {step === 0 && <section>
-        <h2 className="text-sm font-semibold text-muted-foreground">Objetivo</h2>
+        <h2 className="text-sm font-semibold text-muted-foreground">Missão</h2>
         <p className="mt-2 text-base leading-7">{challenge.objective}</p>
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        <dl className="mt-5 grid gap-4 border-y border-border py-4 sm:grid-cols-2">
           <Brief label="Dados de teste" value={challenge.testData} />
-          <Brief label="Oráculo" value={challenge.expected} />
-          <Brief label="Pista de investigação" value={challenge.plantedBug} />
-        </div>
-        <h3 className="mt-8 text-sm font-semibold">O que precisa aparecer na entrega</h3>
-        <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">{challenge.acceptance.map((criterion) => <li key={criterion} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><span>{criterion}</span></li>)}</ul>
+          <Brief label="Resultado esperado" value={challenge.expected} />
+        </dl>
+        <details className="mt-4">
+          <summary className="w-fit cursor-pointer text-sm font-medium text-primary">Pista de investigação</summary>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{challenge.plantedBug}</p>
+        </details>
+        <details className="mt-3">
+          <summary className="w-fit cursor-pointer text-sm font-medium text-primary">Critérios da entrega ({challenge.acceptance.length})</summary>
+          <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">{challenge.acceptance.map((criterion) => <li key={criterion} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><span>{criterion}</span></li>)}</ul>
+        </details>
       </section>}
 
       {step === 1 && <section>
@@ -188,15 +193,18 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
           <Button asChild><Link href={surface} target="_blank" rel="noopener noreferrer">{challenge.area === "Broto" ? "Abrir caso de treino" : "Abrir ambiente do Lab"} <ExternalLink className="size-4" /></Link></Button>
           {signedIn && status === "nao-iniciado" && <Button type="button" variant="outline" disabled={starting} onClick={() => void start()}>{starting && <Loader2 className="size-4 animate-spin" />} {starting ? "Iniciando..." : "Marcar como iniciado"}</Button>}
         </div>
-        {!signedIn && <p className="mt-4 text-sm text-muted-foreground">Você pode ler o caso e começar a investigação agora. <Link href={`/login?next=${encodeURIComponent(`/labs/${challenge.number}`)}`} className="font-medium text-primary underline underline-offset-4">Entre na sua conta do QA Lab</Link> para registrar o progresso e entregar a evidência.</p>}
         {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
       </section>}
 
       {step === 3 && <section>
         <h2 className="text-sm font-semibold text-muted-foreground">Entrega de evidência</h2>
-        <p className="mt-1 text-xs text-muted-foreground">Escreva o que encontrou e anexe a prova. Sem evidência, o Lab continua em aberto.</p>
+        <p className="mt-1 text-xs text-muted-foreground">Registre o que encontrou e anexe a prova para concluir o Lab.</p>
+        <div className="mt-5">
+          <h3 className="text-sm font-semibold">Revise antes de enviar</h3>
+          <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">{challenge.acceptance.map((criterion) => <li key={criterion} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><span>{criterion}</span></li>)}</ul>
+        </div>
 
-        {!signedIn ? <p className="mt-5 rounded-md border border-border bg-muted/40 p-4 text-sm">Para salvar sua evidência, <Link href={`/login?next=${encodeURIComponent(`/labs/${challenge.number}`)}`} className="font-medium text-primary underline underline-offset-4">entre na sua conta</Link>. Depois você volta a este Lab.</p> : <form className="mt-5 grid gap-5" onSubmit={submit} noValidate>
+        {!signedIn ? <p className="mt-5 rounded-md border border-border bg-muted/40 p-4 text-sm"><Link href={`/login?next=${encodeURIComponent(`/labs/${challenge.number}`)}`} className="font-medium text-primary underline underline-offset-4">Entre na sua conta</Link> para salvar a evidência e o progresso.</p> : <form className="mt-5 grid gap-5" onSubmit={submit} noValidate>
           <EvidenceField
             labSlug={challenge.id}
             value={evidence}
@@ -215,7 +223,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
             fazia o aluno acumular entregas sem nunca ter o que mostrar. */}
         {state === "done" && <div role="status" aria-live="polite" className="mt-5 rounded-md border border-primary/30 bg-primary/[0.04] p-4">
           <p className="text-sm font-medium text-primary">Evidência salva. Lab concluído.</p>
-          <p className="mt-2 text-sm text-muted-foreground">Sua entrega virou um case: contexto do sistema, o que você provou, passos de reprodução e um post pronto para o LinkedIn.</p>
+          <p className="mt-2 text-sm text-muted-foreground">Sua entrega virou um case com contexto, evidências e passos para reproduzir.</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Button asChild size="sm"><Link href={`/labs/${challenge.number}/conclusao`}>Ver meu case <ArrowRight className="size-4" /></Link></Button>
             {nextInTrack
@@ -240,6 +248,6 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
 }
 
 function Brief({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-md border border-border bg-background p-3 text-sm"><strong>{label}</strong><p className="mt-1 text-muted-foreground">{value}</p></div>;
+  return <div><dt className="text-sm font-semibold">{label}</dt><dd className="mt-1 text-sm leading-6 text-muted-foreground">{value}</dd></div>;
 }
 

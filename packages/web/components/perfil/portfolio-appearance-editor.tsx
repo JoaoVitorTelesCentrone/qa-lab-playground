@@ -42,7 +42,7 @@ export function PortfolioAppearanceEditor({ initialAppearance }: { initialAppear
 
   return <section className="min-w-0 rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="portfolio-appearance-title">
     <h2 id="portfolio-appearance-title" className="text-base font-semibold">Aparência do portfólio</h2>
-    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Escolha como apresentar seus trabalhos. Confira a prévia antes de salvar; salvar atualiza a aparência da página pública.</p>
+    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Escolha um layout e uma paleta. Salvar atualiza a página pública.</p>
     <fieldset disabled={busy} className="mt-6">
       <legend className="text-sm font-medium">Composição da página</legend>
       <div className="mt-3 grid gap-3 sm:grid-cols-3">{PORTFOLIO_LAYOUTS.map((layout) => <label key={layout.id} className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 focus-within:outline-2 focus-within:outline-ring ${appearance.layout === layout.id ? "border-primary bg-primary/5" : "border-border"}`}>

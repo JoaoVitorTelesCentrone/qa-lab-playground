@@ -32,8 +32,8 @@ export function LabCatalog({ progress = [] }: { progress?: Array<Pick<LabProgres
     <header data-onboarding="lab-catalog" className="border-b border-border pb-4 sm:pb-5">
       <div className="flex flex-wrap items-end justify-between gap-x-5 gap-y-3">
         <div className="max-w-2xl">
-          <h1 className="qa-page-title">Escolha o que testar</h1>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">Cada Lab é uma missão em um ambiente de prática. Investigue, registre o que encontrou e transforme a entrega em um case.</p>
+          <h1 className="qa-page-title">Escolha um Lab</h1>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">Investigue uma missão e registre o que encontrou.</p>
         </div>
         <p className="text-xs text-muted-foreground"><strong className="text-foreground">{completed} de {labs.length}</strong> concluídos</p>
       </div>

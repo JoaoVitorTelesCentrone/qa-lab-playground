@@ -32,14 +32,13 @@ export default async function ContentCatalogPage() {
   return <main className="ca-shell">
     <header className="ca-hero">
       <div className="ca-hero-copy">
-        <span className="ca-kicker">Aprendizado em campo / 07 módulos</span>
         <h1 className="ca-display">Aprenda QA <em>fazendo.</em></h1>
-        <p className="ca-intro">Investigue um produto, experimente com dados de treino e transforme o que descobriu em evidência. Cada capítulo aproxima teoria, prática e uma entrega que você consegue explicar.</p>
+        <p className="ca-intro">Aprenda fundamentos de QA, pratique no Broto e transforme descobertas em evidências.</p>
         <div className="ca-hero-actions">
           <Link href={startHref} className="ca-button">{journeyComplete ? "Ver meu case" : dashboard?.enrollment.programVersion === "v2" && next ? "Continuar meu percurso" : "Começar pelo primeiro capítulo"}<ArrowRight aria-hidden="true" className="size-4" /></Link>
           <Link href="/conteudo/broto" className="ca-text-link">Conhecer o caso Broto <Sprout aria-hidden="true" className="size-4" /></Link>
         </div>
-        <p className="text-xs leading-6" style={{ color: "var(--ca-muted)" }}>{dashboard?.enrollment.programVersion === "v2" ? next ? `Seu próximo módulo: ${next.module.title}.` : "Percurso concluído. Seu case e seu feedback estão na mentoria." : "Leitura aberta. Na mentoria, você salva progresso e recebe feedback nas entregas."}</p>
+        <p className="text-xs leading-6" style={{ color: "var(--ca-muted)" }}>{dashboard?.enrollment.programVersion === "v2" ? next ? `Próximo módulo: ${next.module.title}.` : "Percurso concluído. Veja seu case e feedback na mentoria." : "Leitura livre. Progresso e feedback nas entregas são da mentoria."}</p>
       </div>
       <ol className="ca-route" aria-label="Como se aprende QA no conteúdo">
         {route.map((item) => <li key={item.number} className="ca-route-item"><span className="ca-route-num">/ {item.number}</span><strong className="ca-route-title">{item.title}</strong><span className="ca-route-desc">{item.description}</span></li>)}
@@ -47,7 +46,7 @@ export default async function ContentCatalogPage() {
     </header>
 
     <section aria-labelledby="modulos-title" className="pb-8">
-      <div className="ca-section-head"><h2 id="modulos-title">Seu mapa de prática.</h2><p>Sete competências. Capítulos curtos. Uma investigação que ganha profundidade a cada passo.</p></div>
+      <div className="ca-section-head"><h2 id="modulos-title">Módulos da trilha.</h2></div>
       <ol className="ca-module-list">{mentorshipPathV2.map((module, index) => {
         const item = progress[index];
         const assignmentCount = pathV2Assignments.filter((assignment) => assignment.moduleId === module.id).length;
@@ -60,7 +59,7 @@ export default async function ContentCatalogPage() {
       })}</ol>
     </section>
 
-    <aside className="ca-case-callout" aria-labelledby="broto-case-title"><div><span className="ca-kicker" style={{ color: "#335b3b" }}>O caso que atravessa o percurso</span><h2 id="broto-case-title" className="mt-4">Um pensamento vira uma investigação.</h2><p>Use a mesma história fictícia no Broto para observar captura, organização, ação e retomada. Seus dados pessoais ficam fora das evidências.</p></div><Link href="/conteudo/broto" className="inline-flex min-h-12 items-center gap-2">Preparar o caso <ArrowRight aria-hidden="true" className="size-4" /></Link></aside>
-    <p className="pb-14 text-sm" style={{ color: "var(--ca-muted)" }}>Os encontros ao vivo seguem o calendário da turma. Os capítulos ficam disponíveis para leitura livre.</p>
+    <aside className="ca-case-callout" aria-labelledby="broto-case-title"><div><h2 id="broto-case-title">Um caso acompanha o percurso.</h2><p>Investigue a história fictícia do Broto. Seus dados pessoais ficam fora das evidências.</p></div><Link href="/conteudo/broto" className="inline-flex min-h-12 items-center gap-2">Preparar o caso <ArrowRight aria-hidden="true" className="size-4" /></Link></aside>
+    <p className="pb-14 text-sm" style={{ color: "var(--ca-muted)" }}>Encontros seguem o calendário da turma; capítulos ficam abertos para leitura.</p>
   </main>;
 }
