@@ -1,0 +1,30 @@
+name: Gherkin smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bdd-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Require an explicitly configured test target
+        env:
+          BDD_TARGET_URL: ${{ vars.BDD_TARGET_URL }}
+        run: |
+          if [ -z "$BDD_TARGET_URL" ]; then
+            echo "Configure BDD_TARGET_URL with an authorized test environment."
+            exit 1
+          fi
+      - run: npm ci
+        working-directory: examples/gherkin-track-starter
+      - run: npm run bdd:smoke
+        working-directory: examples/gherkin-track-starter
+        env:
+          BASE_URL: ${{ vars.BDD_TARGET_URL }}

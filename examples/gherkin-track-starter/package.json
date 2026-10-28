@@ -1,0 +1,15 @@
+{
+  "name": "qa-lab-gherkin-track-starter",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Projeto inicial para a trilha de Gherkin e BDD do QA Lab",
+  "scripts": {
+    "bdd": "cucumber-js",
+    "bdd:smoke": "cucumber-js --tags @smoke",
+    "bdd:dry": "cucumber-js --dry-run"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "13.3.0"
+  }
+}

@@ -1,0 +1,4 @@
+release_id,prod_sessions_14d,preprod_defects_confirmed,prod_defects_confirmed,high_severity_prod_defects,eligible_smoke_runs,smoke_first_pass_runs,smoke_pass_after_retry,smoke_failed_after_retry,feedback_p95_minutes
+rel-101,100000,8,2,1,100,93,5,2,18
+rel-102,120000,5,1,0,120,114,4,2,12
+rel-103,90000,6,3,1,100,90,7,3,24

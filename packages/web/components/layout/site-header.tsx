@@ -19,6 +19,8 @@ export function SiteHeader() {
   const labActive = pathname === "/labs" || pathname.startsWith("/labs/");
   const tracksActive = pathname === "/trilhas" || pathname.startsWith("/trilhas/");
   const contentActive = pathname === "/conteudo" || pathname.startsWith("/conteudo/");
+  const blogActive = pathname === "/blog" || pathname.startsWith("/blog/");
+  const referencesActive = pathname === "/pesquisa" || pathname.startsWith("/pesquisa/");
   const mentorshipActive = pathname.startsWith("/mentoria");
   const toolsActive = pathname === "/ferramentas" || pathname === "/lab/bdd" || pathname === "/boards" || pathname.startsWith("/boards/");
 
@@ -42,6 +44,12 @@ export function SiteHeader() {
           </Link>
           <Link href="/conteudo" aria-current={contentActive ? "page" : undefined} className={cn("border-b px-2.5 py-2 text-sm font-medium transition-colors", contentActive ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground")}>
             Conteúdo
+          </Link>
+          <Link href="/blog" aria-current={blogActive ? "page" : undefined} className={cn("border-b px-2.5 py-2 text-sm font-medium transition-colors", blogActive ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground")}>
+            Blog
+          </Link>
+          <Link href="/pesquisa" aria-current={referencesActive ? "page" : undefined} className={cn("border-b px-2.5 py-2 text-sm font-medium transition-colors", referencesActive ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground")}>
+            Referências
           </Link>
           <Link href="/ferramentas" aria-current={toolsActive ? "page" : undefined} className={cn("border-b px-2.5 py-2 text-sm font-medium transition-colors", toolsActive ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground")}>Ferramentas</Link>
         </nav>
@@ -68,6 +76,8 @@ export function SiteHeader() {
               <Link href="/trilhas" onClick={() => setMenuOpen(false)} aria-current={tracksActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Trilhas</Link>
               <Link href="/mentoria" onClick={() => setMenuOpen(false)} className="text-base font-medium hover:text-primary">Mentoria</Link>
               <Link href="/conteudo" onClick={() => setMenuOpen(false)} aria-current={contentActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Conteúdo</Link>
+              <Link href="/blog" onClick={() => setMenuOpen(false)} aria-current={blogActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Blog</Link>
+              <Link href="/pesquisa" onClick={() => setMenuOpen(false)} aria-current={referencesActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Referências</Link>
               <Link href="/ferramentas" onClick={() => setMenuOpen(false)} aria-current={toolsActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Ferramentas</Link>
               <div className="mt-auto flex flex-col gap-2">
                 <Button asChild variant="outline" className="w-full"><Link href="/login" onClick={() => setMenuOpen(false)}>Entrar na minha conta</Link></Button>

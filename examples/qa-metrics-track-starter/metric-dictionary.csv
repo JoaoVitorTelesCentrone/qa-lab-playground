@@ -1,0 +1,6 @@
+metric,question,formula,population,window,caveat
+escape_fraction,Qual parcela dos defeitos confirmados foi detectada em produção?,prod_defects_confirmed / (preprod_defects_confirmed + prod_defects_confirmed),Same release cohort,First 14 days after release,Depends on defect discovery and release attribution; not total product defect density
+smoke_first_pass,Qual parcela dos smokes elegíveis passou sem retry?,first_pass_runs / eligible_first_runs,Non-cancelled smoke runs,Per release,Keep retry recoveries and unknown failures visible
+feedback_p95,Quanto demora para receber um sinal útil de regressão?,95th percentile(first useful result timestamp - commit timestamp),Commits with eligible smoke run,Per week,Separate queue time from execution time and report missing runs
+change_fail_rate,Qual parcela dos deploys exigiu intervenção imediata?,deployments_requiring_immediate_intervention / production_deployments,One application or service,Rolling window,Use DORA definition and avoid attribution to QA alone
+critical_risk_coverage,Quais riscos críticos têm evidência recente?,critical risks with current test evidence / critical risks in agreed model,Agreed risk register,Per release,An unweighted percentage may hide uncovered high-impact risks

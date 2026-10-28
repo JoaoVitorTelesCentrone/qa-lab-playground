@@ -1,0 +1,11 @@
+{
+  "name": "qa-lab-k6-track-starter",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Projeto inicial para a trilha de performance testing com k6 do QA Lab",
+  "scripts": {
+    "smoke": "k6 run tests/smoke.js",
+    "baseline": "k6 run tests/baseline.js",
+    "browser": "k6 run tests/browser.js"
+  }
+}

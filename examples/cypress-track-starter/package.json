@@ -1,0 +1,15 @@
+{
+  "name": "qa-lab-cypress-track-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Projeto inicial da Trilha Cypress do QA Lab",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:smoke": "cypress run --spec 'cypress/e2e/smoke/**/*.cy.ts'"
+  },
+  "devDependencies": {
+    "cypress": "16.2.0",
+    "typescript": "^5.9.3"
+  }
+}

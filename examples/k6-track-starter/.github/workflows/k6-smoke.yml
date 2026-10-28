@@ -1,0 +1,29 @@
+name: k6 smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: grafana/setup-k6-action@v1
+        with:
+          k6-version: "2.2.0"
+      - name: Require an explicitly configured test target
+        env:
+          K6_TARGET_URL: ${{ vars.K6_TARGET_URL }}
+        run: |
+          if [ -z "$K6_TARGET_URL" ]; then
+            echo "Configure the repository variable K6_TARGET_URL with an authorized test environment."
+            exit 1
+          fi
+      - uses: grafana/run-k6-action@v1
+        env:
+          BASE_URL: ${{ vars.K6_TARGET_URL }}
+        with:
+          path: examples/k6-track-starter/tests/smoke.js

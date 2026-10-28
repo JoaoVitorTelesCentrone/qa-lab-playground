@@ -124,7 +124,7 @@ export const paidCourses: PaidCourse[] = [
       { number: 10, title: "Testes de API", content: "cy.request para contrato e preparação de estado.", duration: "1h" },
       { number: 11, title: "Page Object e app actions", content: "Organização por página, domínio e ações do app.", duration: "1h" },
       { number: 12, title: "Sessão e autenticação", content: "cy.session, performance e segurança de credenciais.", duration: "1h" },
-      { number: 13, title: "Ambientes, arquivos, visual e a11y", content: "Cypress.env, upload/download, iframes, cypress-axe e visual testing.", duration: "1h30" },
+      { number: 13, title: "Ambientes, arquivos, visual e a11y", content: "cy.env para segredos, Cypress.expose para configuração pública, upload/download, iframes e cypress-axe.", duration: "1h30" },
       { number: 14, title: "Component testing", content: "Testar componentes React/Vue isolados.", duration: "1h30" },
       { number: 15, title: "CI/CD e paralelização", content: "GitHub Actions, Cypress Cloud, sharding e evidências.", duration: "1h30" },
       { number: 16, title: "Plugins, cy.task e multi-domínio", content: "Node events, cy.origin e fluxos cross-domain.", duration: "1h" },

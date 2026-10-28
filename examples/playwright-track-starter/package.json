@@ -1,0 +1,17 @@
+{
+  "name": "qa-lab-playwright-track-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Projeto inicial da Trilha Playwright do QA Lab",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report",
+    "install:browsers": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "typescript": "5.9.3"
+  }
+}
