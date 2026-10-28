@@ -6,8 +6,6 @@ describe("requiresAuthentication", () => {
     "/mentoria",
     "/mentoria/app",
     "/mentoria/conteudo/1",
-    "/conteudo",
-    "/conteudo/modulos/fundamentos",
     "/boards",
     "/boards/demo",
     "/boards/6a939b31-2ddc-45d7-b649-062ad33b24f8",
@@ -16,7 +14,7 @@ describe("requiresAuthentication", () => {
     expect(requiresAuthentication(pathname)).toBe(true);
   });
 
-  test.each(["/", "/login", "/cadastro", "/mentor", "/mentoria-aberta", "/conteudos", "/lab", "/lab/bdd-public"])(
+  test.each(["/", "/login", "/cadastro", "/mentor", "/mentoria-aberta", "/conteudos", "/conteudo", "/conteudo/modulos/fundamentos", "/conteudo/broto", "/lab", "/lab/bdd-public"])(
     "mantem %s publico",
     (pathname) => {
       expect(requiresAuthentication(pathname)).toBe(false);

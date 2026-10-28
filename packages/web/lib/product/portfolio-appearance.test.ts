@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { DEFAULT_PORTFOLIO_APPEARANCE, isPortfolioAppearance, normalizePortfolioAppearance, PORTFOLIO_PALETTES } from "./portfolio-appearance";
+import { DEFAULT_PORTFOLIO_APPEARANCE, isPortfolioAppearance, normalizePortfolioAppearance, PORTFOLIO_LAYOUTS, PORTFOLIO_PALETTES } from "./portfolio-appearance";
 
 function luminance(hex: string) {
   const values = hex.slice(1).match(/../g)!.map((part) => {
@@ -29,6 +29,13 @@ describe("aparência do portfólio", () => {
         expect(contrast(palette.accent, surface)).toBeGreaterThanOrEqual(3);
       }
       expect(contrast(palette.onAccent, palette.accent)).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+  test("todos os estilos oferecidos podem ser salvos", () => {
+    for (const layout of PORTFOLIO_LAYOUTS) {
+      for (const palette of PORTFOLIO_PALETTES) {
+        expect(isPortfolioAppearance({ layout: layout.id, palette: palette.id })).toBe(true);
+      }
     }
   });
 });

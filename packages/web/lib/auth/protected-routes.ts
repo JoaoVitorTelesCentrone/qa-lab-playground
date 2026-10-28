@@ -1,4 +1,4 @@
-const AUTHENTICATED_ROUTE_PREFIXES = ["/mentoria", "/conteudo", "/boards", "/lab/bdd"] as const;
+const AUTHENTICATED_ROUTE_PREFIXES = ["/mentoria", "/boards", "/lab/bdd"] as const;
 
 export function requiresAuthentication(pathname: string) {
   return AUTHENTICATED_ROUTE_PREFIXES.some(
