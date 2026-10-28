@@ -5,6 +5,8 @@ const items = [
   { href: "/mentoria/encontros", label: "Encontros" },
   { href: "/mentoria/carreira", label: "Carreira" },
   { href: "/mentoria/dinamicas", label: "Dinâmicas" },
+  { href: "/lab/bdd", label: "Gerador de BDD" },
+  { href: "/boards", label: "Board de testes" },
 ] as const;
 
 export function MentorshipNav({ current }: { current: typeof items[number]["href"] }) {

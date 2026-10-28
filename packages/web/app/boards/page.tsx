@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 export default async function BoardsPage() {
   const user = await getSessionUser();
-  if (!user) return <BoardClient initial={demoBoard} viewerId="demo-viewer" publicDemo />;
+  if (!user) redirect("/login?next=%2Fboards");
 
   let boards;
   let personalBoard;

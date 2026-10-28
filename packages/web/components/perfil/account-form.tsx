@@ -42,9 +42,6 @@ export function AccountForm({ email, fields, onChange, state, onSubmit }: {
           <Field label="Nome" htmlFor="conta-nome">
             <input id="conta-nome" value={fields.fullName} onChange={(e) => onChange("fullName", e.target.value)} maxLength={80} className="field w-full" />
           </Field>
-          <Field label="Username" htmlFor="conta-username">
-            <input id="conta-username" value={fields.username} onChange={(e) => onChange("username", e.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))} minLength={3} maxLength={30} className="field w-full" />
-          </Field>
           <Field label="E-mail · não editável" htmlFor="conta-email">
             <input id="conta-email" value={email} disabled readOnly className="field w-full cursor-not-allowed bg-muted/40 text-muted-foreground" />
           </Field>

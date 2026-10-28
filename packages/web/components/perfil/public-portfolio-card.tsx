@@ -9,7 +9,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Check, Copy, Download, ExternalLink, Globe, Loader2, Lock } from "lucide-react";
+import { Check, ChevronDown, Copy, Download, ExternalLink, Globe, Loader2, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PortfolioExportPanel } from "@/components/portfolio/portfolio-export-panel";
@@ -139,21 +139,26 @@ export function PublicPortfolioCard({ portfolio, username, onUsername, name }: {
         </Button>
       </div>
 
-      <div className="mt-5"><PortfolioExportPanel key={username} username={username} enabled={isPublic && ready} /></div>
-
-      {items.length > 0 && (
-        <div className="mt-5 border-t border-border pt-5">
-          <p className="text-xs font-medium text-muted-foreground">Evidências registradas</p>
-          <p className="mt-2.5 text-sm text-muted-foreground">
-            {items.length} entrega(s) · {items.reduce((total, item) => total + item.attachments.length, 0)} arquivo(s) anexado(s)
-          </p>
-          <p className="mt-3 text-xs leading-5 text-muted-foreground">Backup pessoal: inclui também suas evidências privadas.</p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            <Button type="button" size="sm" variant="outline" onClick={() => downloadBackup("evidencias-qa-lab.md", toMarkdown(toEntries(items), { name }), "text/markdown;charset=utf-8")}><Download className="size-3.5" /> Markdown</Button>
-            <Button type="button" size="sm" variant="outline" onClick={() => downloadBackup("evidencias-qa-lab.json", JSON.stringify(toEntries(items), null, 2), "application/json;charset=utf-8")}><Download className="size-3.5" /> JSON</Button>
-          </div>
+      <details className="group mt-5 border-t border-border">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+          Exportar e fazer backup
+          <ChevronDown className="size-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden="true" />
+        </summary>
+        <div className="grid gap-5 pb-1">
+          <PortfolioExportPanel key={username} username={username} enabled={isPublic && ready} />
+          {items.length > 0 && (
+            <div className="border-t border-border pt-4">
+              <p className="text-sm text-muted-foreground">
+                {items.length} entrega(s) · {items.reduce((total, item) => total + item.attachments.length, 0)} arquivo(s). O backup inclui também as evidências privadas.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button type="button" size="sm" variant="outline" onClick={() => downloadBackup("evidencias-qa-lab.md", toMarkdown(toEntries(items), { name }), "text/markdown;charset=utf-8")}><Download className="size-3.5" /> Markdown</Button>
+                <Button type="button" size="sm" variant="outline" onClick={() => downloadBackup("evidencias-qa-lab.json", JSON.stringify(toEntries(items), null, 2), "application/json;charset=utf-8")}><Download className="size-3.5" /> JSON</Button>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </details>
     </section>
   );
 }

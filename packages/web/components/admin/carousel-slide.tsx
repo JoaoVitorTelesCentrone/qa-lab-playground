@@ -1,75 +1,64 @@
 import { forwardRef } from "react";
 import type { CarouselSlide } from "@/lib/product/carousel";
+import styles from "./carousel-slide.module.css";
 
-const SLIDE_WIDTH = 1080;
-const SLIDE_HEIGHT = 1350;
+export const CAROUSEL_SLIDE_SIZE = { width: 1080, height: 1080 } as const;
 
-export const CarouselSlideView = forwardRef<HTMLDivElement, { slide: CarouselSlide; index: number; total: number }>(
-  function CarouselSlideView({ slide, index, total }, ref) {
+export const CAROUSEL_STYLES = [
+  { id: "dossie", label: "Dossiê", description: "Investigação e evidência", color: "#b9ef63" },
+  { id: "radar", label: "Radar", description: "Risco e sinais", color: "#c4f46a" },
+  { id: "caderno", label: "Caderno", description: "Notas de campo", color: "#c85843" },
+  { id: "terminal", label: "Terminal", description: "API e automação", color: "#78ead7" },
+  { id: "cartaz", label: "Cartaz", description: "Opinião e manifesto", color: "#f07862" },
+] as const;
+
+export type CarouselStyle = (typeof CAROUSEL_STYLES)[number]["id"];
+
+function titleSize(title: string, kind: CarouselSlide["kind"]) {
+  const length = title.length;
+  const base = kind === "content" || kind === "list" ? 91 : 106;
+  if (length > 75) return 57;
+  if (length > 58) return 65;
+  if (length > 44) return 73;
+  if (length > 32) return 84;
+  return base;
+}
+
+export const CarouselSlideView = forwardRef<HTMLDivElement, { slide: CarouselSlide; index: number; total: number; design: CarouselStyle }>(
+  function CarouselSlideView({ slide, index, total, design }, ref) {
+    const alternating = (design === "dossie" || design === "cartaz") && (index === 1 || index === 3);
+    const className = [styles.canvas, styles[design], styles[slide.kind], alternating ? styles.alternate : ""].join(" ");
+
     return (
-      <div
-        ref={ref}
-        style={{ width: SLIDE_WIDTH, height: SLIDE_HEIGHT, background: "#111315", color: "#F8FBF9" }}
-        className="relative flex flex-col overflow-hidden"
-      >
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(76,175,114,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(76,175,114,.05) 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
-          }}
-        />
-        <div className="relative flex flex-1 flex-col justify-between p-20">
-          <div className="flex items-center justify-between">
-            <span style={{ color: "#4CAF72", letterSpacing: "0.18em" }} className="text-[26px] font-bold uppercase">
-              {slide.eyebrow}
-            </span>
-            <span style={{ color: "rgba(248,251,249,0.35)" }} className="text-[24px] font-mono">
-              {String(index + 1).padStart(2, "0")}/{String(total).padStart(2, "0")}
-            </span>
-          </div>
+      <div ref={ref} className={className} data-carousel-slide data-carousel-style={design}>
+        <div className={styles.texture} aria-hidden="true" />
+        <div className={styles.motif} aria-hidden="true"><span /><span /><span /></div>
+        <div className={styles.header}>
+          <div className={styles.logo}>QA <span>LAB</span></div>
+          <div className={styles.series}>{design === "terminal" ? "SESSION: QA_LAB" : design === "caderno" ? "CADERNO DE CAMPO" : design === "radar" ? "RADAR DE RISCO" : design === "cartaz" ? "MANIFESTO QA" : "DOSSIÊ QA"}</div>
+        </div>
 
-          <div className="flex flex-1 flex-col justify-center gap-10 py-10">
-            <h2
-              style={{ letterSpacing: "-0.03em", lineHeight: 1.05 }}
-              className={slide.kind === "cover" ? "text-[92px] font-black" : "text-[68px] font-black"}
-            >
-              {slide.title}
-            </h2>
-            {slide.body && (
-              <p style={{ color: "#CDD5D0", lineHeight: 1.55 }} className="max-w-[880px] text-[36px]">
-                {slide.body}
-              </p>
-            )}
-            {slide.bullets && (
-              <ul className="grid gap-6">
-                {slide.bullets.map((bullet, i) => (
-                  <li key={i} className="flex gap-5 text-[34px]" style={{ lineHeight: 1.4 }}>
-                    <span style={{ color: "#4CAF72" }} className="font-mono font-bold">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span style={{ color: "#E2E8E4" }}>{bullet}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+        <div className={styles.main} data-carousel-content>
+          <div className={styles.eyebrow}>{slide.eyebrow || "QA LAB"}</div>
+          <h2 className={styles.title} style={{ fontSize: titleSize(slide.title, slide.kind) }}>{slide.title}</h2>
+          {slide.body ? <div className={styles.bodyBox}><p className={styles.body}>{slide.body}</p></div> : null}
+          {slide.bullets?.length ? (
+            <ol className={styles.bullets}>
+              {slide.bullets.map((bullet, bulletIndex) => (
+                <li key={`${slide.id}-${bulletIndex}`}>
+                  <span className={styles.bulletNumber}>{String(bulletIndex + 1).padStart(2, "0")}</span>
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ol>
+          ) : null}
+        </div>
 
-          <div className="flex items-center justify-between border-t pt-8" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
-            <span style={{ color: "#4CAF72" }} className="text-[30px] font-black italic">
-              QA Lab
-            </span>
-            {slide.footer && (
-              <span style={{ color: "rgba(248,251,249,0.5)" }} className="text-[24px]">
-                {slide.footer}
-              </span>
-            )}
-          </div>
+        <div className={styles.footer}>
+          <span>{slide.footer || "QA LAB · PRÁTICA COM EVIDÊNCIA"}</span>
+          <span>{String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
         </div>
       </div>
     );
   },
 );
-
-export const CAROUSEL_SLIDE_SIZE = { width: SLIDE_WIDTH, height: SLIDE_HEIGHT };

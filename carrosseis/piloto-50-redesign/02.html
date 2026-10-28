@@ -1,0 +1,31 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><style>
+*{box-sizing:border-box}html,body{margin:0;width:1080px;height:1080px;overflow:hidden}
+body{font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
+.slide{position:relative;width:1080px;height:1080px;overflow:hidden;background:#101a18;color:#f2f4ec}
+.slide:before{content:'';position:absolute;inset:0;opacity:.15;background-image:linear-gradient(#739184 1px,transparent 1px),linear-gradient(90deg,#739184 1px,transparent 1px);background-size:68px 68px;mask-image:linear-gradient(90deg,transparent 4%,black 60%)}
+.paper{background:#e8ede2;color:#14221e}.paper:before{opacity:.12;background-image:linear-gradient(#5c7869 1px,transparent 1px),linear-gradient(90deg,#5c7869 1px,transparent 1px)}
+.lime{background:#b9ef63;color:#14221e}.lime:before{opacity:.12}
+.top,.bottom{position:absolute;left:62px;right:62px;display:flex;align-items:center;justify-content:space-between;z-index:5}
+.top{top:50px}.bottom{bottom:46px;border-top:2px solid currentColor;padding-top:22px;font-size:19px;font-weight:700;letter-spacing:.08em}
+.brand{font-size:30px;font-weight:900;letter-spacing:-.055em}.brand em{font-style:normal;color:#b9ef63}.paper .brand em,.lime .brand em{color:#26634e}
+.series{font-family:Consolas,monospace;font-size:17px;font-weight:700;letter-spacing:.05em}
+.kicker{font-family:Consolas,monospace;font-size:20px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.title{font-size:104px;line-height:.91;letter-spacing:-.075em;font-weight:900;margin:0;text-transform:uppercase}
+.sub{font-size:31px;line-height:1.28;font-weight:600;letter-spacing:-.025em}
+.accent{color:#b9ef63}.paper .accent{color:#26735b}.coral{color:#ff8974}
+.rule{height:2px;background:currentColor;opacity:.5}
+.micro{font-family:Consolas,monospace;font-size:18px;font-weight:700;letter-spacing:.04em}
+.frame{position:absolute;z-index:2;inset:0;padding:148px 62px 118px}
+.round{position:absolute;border:3px solid #b9ef63;border-radius:50%}
+.stamp{display:inline-block;background:#b9ef63;color:#14221e;padding:14px 18px;font-family:Consolas,monospace;font-size:19px;font-weight:900;letter-spacing:.08em;transform:rotate(-4deg)}
+.paper .stamp{background:#164839;color:#f2f4ec}
+</style></head><body><main class="slide paper"><div class="top"><div class="brand">QA <em>LAB</em></div><div class="series">DOSSIÊ 050&nbsp; / &nbsp;IA + QA</div></div>
+    <div class="frame">
+      <div class="kicker" style="color:#26735b">01 / SEPARAR TAREFA DE DECISÃO</div>
+      <h2 class="title" style="font-size:89px;margin-top:46px;max-width:850px">A MÁQUINA<br><span class="accent">GANHA TEMPO.</span></h2>
+      <div style="position:absolute;left:62px;right:62px;top:445px;border:3px solid #183c31;background:#f6f7ee;box-shadow:17px 17px 0 #a6bdae;padding:28px 34px 30px">
+        <div class="micro" style="color:#26735b;border-bottom:2px solid #b1c7b8;padding-bottom:18px">AUTOMAÇÃO / RESULTADO DE EXECUÇÃO</div>
+        <div style="display:flex;gap:30px;align-items:center;margin-top:25px"><div style="font-size:82px;font-weight:900;letter-spacing:-.08em">200</div><div style="height:72px;width:2px;background:#93a99a"></div><div style="font-family:Consolas,monospace;font-size:24px;line-height:1.5">GET /pedido/312<br>status: <b>ok</b></div><div style="margin-left:auto;color:#26735b;font-size:62px;font-weight:900">✓</div></div>
+      </div>
+      <div style="position:absolute;left:62px;right:62px;top:760px;display:flex;align-items:flex-start;gap:24px"><span class="stamp">PERGUNTA DO QA</span><p style="font-size:42px;line-height:1.05;letter-spacing:-.055em;font-weight:900;margin:0;max-width:560px">Mas a regra de negócio foi atendida?</p></div>
+    </div><div class="bottom"><span>QA LAB&nbsp; • &nbsp;IDEIAS PARA TESTAR MELHOR</span><span>02 / 05</span></div></main></body></html>

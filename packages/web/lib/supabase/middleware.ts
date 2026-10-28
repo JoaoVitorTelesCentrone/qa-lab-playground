@@ -1,6 +1,22 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { requestedPath, requiresAuthentication } from "@/lib/auth/protected-routes";
 import { getSupabaseConfig, isSupabaseConfigured } from "./config";
+
+function redirectToLogin(request: NextRequest, sessionResponse: NextResponse) {
+  const loginUrl = request.nextUrl.clone();
+  loginUrl.pathname = "/login";
+  loginUrl.search = "";
+  loginUrl.searchParams.set(
+    "next",
+    requestedPath(request.nextUrl.pathname, request.nextUrl.search),
+  );
+
+  const redirectResponse = NextResponse.redirect(loginUrl);
+  sessionResponse.cookies.getAll().forEach((cookie) => redirectResponse.cookies.set(cookie));
+  redirectResponse.headers.set("Cache-Control", "private, no-store");
+  return redirectResponse;
+}
 
 // Renova a sessão do Supabase a cada request. É aqui (e não nos Server
 // Components) que os cookies de auth são reescritos — sem isto o access token
@@ -8,15 +24,20 @@ import { getSupabaseConfig, isSupabaseConfigured } from "./config";
 // Ver https://supabase.com/docs/guides/auth/server-side/nextjs
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
+  const protectedRoute = requiresAuthentication(request.nextUrl.pathname);
 
-  // Sem env de Supabase o app roda em modo anônimo: não há o que renovar.
-  if (!isSupabaseConfigured()) return response;
+  // Em uma rota privada, configuração ausente nunca pode liberar conteúdo.
+  if (!isSupabaseConfigured()) {
+    return protectedRoute ? redirectToLogin(request, response) : response;
+  }
 
   // Visitante novo não possui sessão para validar ou renovar. Além de evitar
   // uma chamada externa inútil, isso mantém login/cadastro disponíveis mesmo
   // durante uma instabilidade momentânea do projeto Supabase.
   const hasAuthCookie = request.cookies.getAll().some(({ name }) => name.startsWith("sb-") && name.includes("auth-token"));
-  if (!hasAuthCookie) return response;
+  if (!hasAuthCookie) {
+    return protectedRoute ? redirectToLogin(request, response) : response;
+  }
 
   const { url, key } = getSupabaseConfig();
 
@@ -28,12 +49,13 @@ export async function updateSession(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet, headers) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           response = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options),
           );
+          Object.entries(headers).forEach(([name, value]) => response.headers.set(name, value));
         },
       },
     },
@@ -41,7 +63,13 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANTE: getClaims() valida e renova o token. Não inserir lógica entre
   // createServerClient e esta chamada, sob risco de sessões intermitentes.
-  await supabase.auth.getClaims();
+  const { data } = await supabase.auth.getClaims();
+
+  if (protectedRoute && !data?.claims?.sub) {
+    return redirectToLogin(request, response);
+  }
+
+  if (protectedRoute) response.headers.set("Cache-Control", "private, no-store");
 
   return response;
 }

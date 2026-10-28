@@ -1,15 +1,13 @@
 import { redirect } from "next/navigation";
 import { ProfileClient } from "@/components/perfil/profile-client";
 import { createClient } from "@/lib/supabase/server";
-import { getJourney, getSessionUser, listPortfolioProjects, listPortfolioSections, listSubmissions } from "@/lib/product/store";
-import { buildTrackProgress, learningTracks, trackHasReleasedLab } from "@/lib/product/tracks";
+import { getSessionUser } from "@/lib/product/store";
 import { selectWithOptionalColumn } from "@/lib/product/profile-columns";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Meu portfólio | QA Lab", robots: { index: false, follow: false } };
+export const metadata = { title: "Meu perfil | QA Lab", robots: { index: false, follow: false } };
 
 type Profile = {
-  portfolio_appearance?: unknown;
   full_name: string | null;
   username: string | null;
   bio: string | null;
@@ -18,8 +16,6 @@ type Profile = {
   role: string | null;
   plan: string | null;
   portfolio_public: boolean | null;
-  portfolio_headline: string | null;
-  portfolio_featured_submission_ids?: string[] | null;
 };
 
 export default async function ProfilePage() {
@@ -27,21 +23,11 @@ export default async function ProfilePage() {
   if (!user) redirect("/login?next=%2Fperfil");
 
   const supabase = await createClient();
-  const [profile, journey, submissions, sections, projects] = await Promise.all([
-    selectWithOptionalColumn<Profile>(
-      (columns) => supabase.from("profiles").select(columns).eq("id", user.id).maybeSingle() as PromiseLike<{ data: Profile | null; error: { code?: string; message?: string } | null }>,
-      "full_name,username,bio,linkedin_url,role,plan,portfolio_public,portfolio_headline",
-      ["github_url", "portfolio_featured_submission_ids", "portfolio_appearance"],
-    ),
-    getJourney(user.id),
-    listSubmissions(user.id),
-    listPortfolioSections(user.id),
-    listPortfolioProjects(user.id),
-  ]);
+  const profile = await selectWithOptionalColumn<Profile>(
+    (columns) => supabase.from("profiles").select(columns).eq("id", user.id).maybeSingle() as PromiseLike<{ data: Profile | null; error: { code?: string; message?: string } | null }>,
+    "full_name,username,bio,linkedin_url,role,plan,portfolio_public",
+    ["github_url"],
+  );
 
-  const tracks = learningTracks
-    .filter(trackHasReleasedLab)
-    .map((track) => buildTrackProgress(track, journey.labs));
-
-  return <ProfileClient email={user.email} profile={profile} journey={journey} tracks={tracks} submissions={submissions} sections={sections} projects={projects} />;
+  return <ProfileClient email={user.email} profile={profile} />;
 }

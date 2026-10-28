@@ -1,0 +1,25 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><style>
+*{box-sizing:border-box}html,body{width:1080px;height:1080px;margin:0;overflow:hidden}
+body{font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
+.canvas{position:relative;width:1080px;height:1080px;overflow:hidden}
+.top,.foot{position:absolute;z-index:20;left:58px;right:58px;display:flex;align-items:center;justify-content:space-between}
+.top{top:45px}.foot{bottom:42px;padding-top:18px;border-top:2px solid currentColor;font-size:17px;font-weight:800;letter-spacing:.06em}
+.logo{font-size:29px;font-weight:900;letter-spacing:-.055em}.logo span{color:var(--accent)}
+.meta,.label,.code{font-family:Consolas,'Courier New',monospace;font-weight:700;letter-spacing:.05em}
+.meta{font-size:17px}.label{font-size:19px;text-transform:uppercase}
+.big{font-size:99px;line-height:.91;letter-spacing:-.075em;font-weight:900;text-transform:uppercase;margin:0}
+.body{font-size:30px;line-height:1.18;font-weight:700;letter-spacing:-.035em}
+.quiet{opacity:.66}.accent{color:var(--accent)}.coral{color:var(--coral)}
+.rule{height:2px;background:currentColor;opacity:.5}.inner{position:absolute;inset:138px 58px 115px;z-index:3}
+
+      .canvas{--accent:#78ead7;--coral:#ff806d;background:#0d141a;color:#e9f5f1}
+      .canvas:before{content:'';position:absolute;inset:0;background:linear-gradient(#ffffff09 1px,transparent 1px);background-size:100% 6px;pointer-events:none}
+      .top,.foot{color:#d7eee7}.logo span{color:#78ead7}
+      .mono{font-family:Consolas,'Courier New',monospace}.prompt{font-family:Consolas,monospace;color:#78ead7;font-size:22px;font-weight:700}
+      .window{border:2px solid #5d8b88;background:#121f25;box-shadow:16px 16px 0 #78ead71c}
+      .window-head{border-bottom:2px solid #5d8b88;padding:15px 20px;font-family:Consolas,monospace;font-size:19px;color:#78ead7}
+      .dot{display:inline-block;width:13px;height:13px;border-radius:50%;background:#ff806d;margin-right:9px}.dot:nth-child(2){background:#d7d76b}.dot:nth-child(3){background:#78ead7}
+      .readout{font-family:Consolas,monospace;font-size:25px;line-height:1.5}
+      .key{color:#78ead7}.warn{color:#ff806d}
+      .mint-panel{background:#78ead7;color:#10221f}.mint-panel .top,.mint-panel .foot{color:#10221f}.mint-panel .logo span{color:#236b5a}
+    </style></head><body><main class="canvas 03-terminal-de-decisoes n2 "><div class="top"><div class="logo">QA <span>LAB</span></div><div class="meta">SESSION: QA_LAB_050</div></div><div class="inner"><div class="prompt">&gt; ler_saida_execucao()</div><h2 class="big" style="font-size:91px;margin-top:42px">RETORNO<br><span class="accent">200 OK.</span></h2><div class="window" style="position:absolute;top:365px;left:0;right:0"><div class="window-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; run #312 / suite: checkout</div><div class="readout" style="padding:30px 33px 40px"><div><span class="key">GET</span> /pedido/312</div><div>http_status .......... <span class="key">200</span></div><div>assertions ........... <span class="key">PASS</span></div><div>duplicidade ......... <span class="warn">NÃO VERIFICADA</span></div></div></div><div class="body" style="position:absolute;bottom:9px;max-width:900px">A resposta da API não valida sozinha a regra de negócio.</div></div><div class="foot"><span>EXECUTE / OBSERVE / DECIDE</span><span>02 / 05</span></div></main></body></html>

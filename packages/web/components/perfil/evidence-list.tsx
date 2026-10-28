@@ -12,7 +12,7 @@ import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
 import { labLabel, labs } from "@/lib/playground/catalog";
 import type { Portfolio } from "./use-portfolio";
 
-export function EvidenceList({ portfolio }: { portfolio: Portfolio }) {
+export function EvidenceList({ portfolio, embedded = false }: { portfolio: Portfolio; embedded?: boolean }) {
   const { items, busy, togglePublished } = portfolio;
   const published = items.filter((item) => item.published).length;
   const latestByLab = new Set<string>();
@@ -25,8 +25,8 @@ export function EvidenceList({ portfolio }: { portfolio: Portfolio }) {
   }
 
   return (
-    <section className="rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="evidencias-title">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+    <section className={embedded ? "min-w-0" : "rounded-xl border border-border bg-card p-5 sm:p-6"} aria-labelledby="evidencias-title">
+      <div className={embedded ? "sr-only" : "flex flex-wrap items-center justify-between gap-2"}>
         <div className="flex items-center gap-2.5">
           <ClipboardCheck className="size-4 text-primary" aria-hidden="true" />
           <h2 id="evidencias-title" className="text-base font-semibold">Evidências</h2>

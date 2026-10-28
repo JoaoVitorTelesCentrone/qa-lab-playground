@@ -57,7 +57,7 @@ export function FloatingOnboarding({ lab, children }: { lab: TourLab | null; chi
   const saved = useSyncExternalStore(subscribe, readSaved, serverSnapshot);
   const [edited, setEdited] = useState<TourState | null>(null);
   const [storageUnavailable, setStorageUnavailable] = useState(false);
-  const [minimized, setMinimized] = useState(false);
+  const [minimized, setMinimized] = useState(true);
   const [placement, setPlacement] = useState<keyof typeof placementClasses>("bottom-right");
   const heading = useRef<HTMLHeadingElement>(null);
   const launcher = useRef<HTMLButtonElement>(null);
@@ -92,13 +92,6 @@ export function FloatingOnboarding({ lab, children }: { lab: TourLab | null; chi
     });
   }
   const closeOnEscape = useEffectEvent(() => close());
-
-  // First visit only; dismissing or completing the guide prevents auto-open.
-  useEffect(() => {
-    if (tour || !["/", "/labs"].includes(pathname)) return;
-    const timer = setTimeout(() => save({ version: 1, step: pathname === "/labs" ? 1 : 0, status: "active" }), 900);
-    return () => clearTimeout(timer);
-  }, [pathname, save, tour]);
 
   useEffect(() => {
     if (!open) return;

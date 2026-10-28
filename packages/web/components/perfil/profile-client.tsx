@@ -1,39 +1,39 @@
 "use client";
 
-// Dashboard pessoal do aluno: quem ele é, quanto andou, o que já publicou e os
-// dados da conta. Usa os tokens do design system (border/card/muted/primary)
-// como o resto do produto — nada de paleta paralela.
-//
-// A página é montada no servidor (app/perfil/page.tsx), então aqui não há
-// carregamento inicial: os únicos estados assíncronos são os das ações
-// (salvar, publicar, excluir), sinalizados no próprio botão.
-
-import { PortfolioAppearanceEditor } from "./portfolio-appearance-editor";
-import { useState } from "react";
+import Link from "next/link";
+import { useState, type ReactNode } from "react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { normalizeProfileLink } from "@/lib/product/profile-links";
 import { isMissingColumn } from "@/lib/product/profile-columns";
-import { usePortfolio } from "./use-portfolio";
 import { ProfileHero } from "./profile-hero";
-import { ProfileStats } from "./profile-stats";
-import { ProgressSection } from "./progress-section";
-import { PublicPortfolioCard } from "./public-portfolio-card";
-import { EvidenceList } from "./evidence-list";
 import { AccountForm, type AccountFields, type SaveState } from "./account-form";
 import { DangerZone } from "./danger-zone";
-import { PortfolioSectionsEditor } from "./portfolio-sections-editor";
-import { PortfolioProjectsEditor } from "./portfolio-projects-editor";
-import { PortfolioFeaturedEditor } from "./portfolio-featured-editor";
-import type { Journey, Submission } from "@/lib/product/journey";
-import type { TrackProgress } from "@/lib/product/tracks";
-import type { PortfolioSectionsResult } from "@/lib/product/store";
-import type { PortfolioProjectDraft } from "@/lib/product/portfolio-projects";
 
-type Profile = { portfolio_appearance?: unknown; full_name?: string | null; username?: string | null; bio?: string | null; linkedin_url?: string | null; github_url?: string | null; role?: string | null; plan?: string | null; portfolio_public?: boolean | null; portfolio_headline?: string | null; portfolio_featured_submission_ids?: string[] | null } | null;
+type Profile = {
+  full_name?: string | null;
+  username?: string | null;
+  bio?: string | null;
+  linkedin_url?: string | null;
+  github_url?: string | null;
+  role?: string | null;
+  plan?: string | null;
+  portfolio_public?: boolean | null;
+} | null;
 
-export function ProfileClient({ email, profile, journey, tracks, submissions, sections, projects }: { email: string; profile: Profile; journey: Journey; tracks: TrackProgress[]; submissions: Submission[]; sections: PortfolioSectionsResult; projects: PortfolioProjectDraft[] }) {
-  // O username é editado em dois lugares (dados da conta e endereço do
-  // portfólio); um estado só evita que um card mostre o valor antigo do outro.
+function Disclosure({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <details className="group border-t border-border">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-5 py-4 text-sm text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        {title}
+        <ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+      </summary>
+      <div className="pb-5">{children}</div>
+    </details>
+  );
+}
+
+export function ProfileClient({ email, profile }: { email: string; profile: Profile }) {
   const [fields, setFields] = useState<AccountFields>({
     fullName: profile?.full_name ?? "",
     username: profile?.username ?? "",
@@ -48,31 +48,27 @@ export function ProfileClient({ email, profile, journey, tracks, submissions, se
     setFields((current) => ({ ...current, [key]: value }));
   }
 
-  const portfolio = usePortfolio({
-    submissions,
-    username: fields.username,
-    onUsername: (value) => change("username", value),
-    portfolioPublic: Boolean(profile?.portfolio_public),
-    portfolioHeadline: profile?.portfolio_headline ?? "",
-  });
-
   async function save(event: React.FormEvent) {
-    event.preventDefault(); setState("saving");
+    event.preventDefault();
+    setState("saving");
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { window.location.assign("/login"); return; }
-    // Guardamos a URL já canônica: o topo do portfólio mostra os dois links
-    // rotulados, e link torto ali é pior que link nenhum.
+
     const linkedinUrl = normalizeProfileLink(fields.linkedin, "linkedin");
     const githubUrl = normalizeProfileLink(fields.github, "github");
     if ((fields.linkedin.trim() && !linkedinUrl) || (fields.github.trim() && !githubUrl)) { setState("invalid-link"); return; }
     setFields((current) => ({ ...current, linkedin: linkedinUrl, github: githubUrl }));
 
-    const values = { full_name: fields.fullName.trim().slice(0, 80), username: fields.username.trim().toLowerCase() || null, bio: fields.bio.trim().slice(0, 280), linkedin_url: linkedinUrl || null, role: fields.role };
+    const values = {
+      full_name: fields.fullName.trim().slice(0, 80),
+      username: fields.username.trim().toLowerCase() || null,
+      bio: fields.bio.trim().slice(0, 280),
+      linkedin_url: linkedinUrl || null,
+      role: fields.role,
+    };
     const { error } = await supabase.from("profiles").update({ ...values, github_url: githubUrl || null }).eq("id", user.id);
 
-    // Enquanto a migração 0010 não sobe, `github_url` não existe: o resto do
-    // perfil ainda salva, e o aviso diz por que o GitHub não foi junto.
     if (error && isMissingColumn(error, "github_url")) {
       const retry = await supabase.from("profiles").update(values).eq("id", user.id);
       setState(retry.error ? "error" : "saved-sem-github");
@@ -85,12 +81,13 @@ export function ProfileClient({ email, profile, journey, tracks, submissions, se
     const supabase = createClient();
     const { error } = await supabase.rpc("delete_own_account");
     if (error) return "Não foi possível excluir a conta. Tente novamente em instantes.";
-    await supabase.auth.signOut(); window.location.assign("/");
+    await supabase.auth.signOut();
+    window.location.assign("/");
     return null;
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-[1200px] gap-4 px-5 py-8 sm:px-8 sm:gap-5 lg:py-10">
+    <main className="mx-auto w-full max-w-3xl px-5 py-8 sm:px-8 lg:py-10">
       <ProfileHero
         name={fields.fullName}
         email={email}
@@ -98,34 +95,30 @@ export function ProfileClient({ email, profile, journey, tracks, submissions, se
         role={fields.role}
         bio={fields.bio}
         username={fields.username}
-        isPublic={portfolio.isPublic}
       />
 
-      <ProfileStats journey={journey} />
+      <Link
+        href="/perfil/portfolio"
+        className="group mt-7 flex items-center justify-between gap-5 border-y border-border py-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        <span>
+          <span className="block text-base font-semibold transition-colors group-hover:text-primary">Meu portfólio</span>
+          <span className="mt-1 block text-sm text-muted-foreground">
+            {profile?.portfolio_public ? "Página pública ativa" : "Publique seus cases e projetos em uma página separada"}
+          </span>
+        </span>
+        <ArrowRight className="size-5 shrink-0 text-primary transition-transform group-hover:translate-x-1" aria-hidden="true" />
+      </Link>
 
-      <div className="grid min-w-0 items-start gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-        <ProgressSection tracks={tracks} coverage={journey.coverage} />
-        <PublicPortfolioCard
-          portfolio={portfolio}
-          username={fields.username}
-          onUsername={(value) => change("username", value)}
-          name={fields.fullName || fields.username || "QA Lab"}
-        />
+      <div className="mt-8">
+        <AccountForm email={email} fields={fields} onChange={change} state={state} onSubmit={save} />
       </div>
 
-      <PortfolioAppearanceEditor initialAppearance={profile?.portfolio_appearance} />
-
-      <PortfolioSectionsEditor sections={sections.sections} available={sections.available} />
-
-      <PortfolioProjectsEditor projects={projects} submissions={submissions} username={fields.username} portfolioPublic={portfolio.isPublic} />
-
-      <PortfolioFeaturedEditor submissions={submissions} initialSelection={profile?.portfolio_featured_submission_ids ?? []} />
-
-      <EvidenceList portfolio={portfolio} />
-
-      <AccountForm email={email} fields={fields} onChange={change} state={state} onSubmit={save} />
-
-      <DangerZone onDelete={deleteAccount} />
-    </div>
+      <div className="mt-8">
+        <Disclosure title="Excluir conta">
+          <DangerZone onDelete={deleteAccount} />
+        </Disclosure>
+      </div>
+    </main>
   );
 }

@@ -9,7 +9,7 @@ test("@smoke guia flutua sobre as páginas e acompanha a prática real", async (
   const guide = page.getByRole("dialog", { name: "Aprenda QA fazendo." });
   await expect(guide).toHaveAttribute("aria-modal", "false");
   expect(await guide.evaluate((element) => getComputedStyle(element).position)).toBe("fixed");
-  await expect(page.locator('[data-onboarding="home-intro"]')).toHaveAttribute("data-onboarding-highlight", "true");
+  await expect(page.locator('[data-onboarding="home-cta"]')).toHaveAttribute("data-onboarding-highlight", "true");
   await guide.getByRole("button", { name: "Explorar Labs", exact: true }).click();
   await expect(page).toHaveURL(/\/labs$/);
   await expect(page.locator('[data-onboarding="lab-101"]')).toHaveAttribute("data-onboarding-highlight", "true");
@@ -18,7 +18,7 @@ test("@smoke guia flutua sobre as páginas e acompanha a prática real", async (
   await expect(page.locator('[data-onboarding="lab-step-0"]')).toHaveAttribute("aria-current", "step");
   await page.getByRole("dialog").getByRole("button", { name: "Ver ambiente" }).click();
   await expect(page.locator('[data-onboarding="lab-step-2"]')).toHaveAttribute("aria-current", "step");
-  await expect(page.locator('[data-onboarding="lab-panel"]').getByRole("link", { name: "Abrir ambiente do Lab" })).toBeVisible();
+  await expect(page.locator('[data-onboarding="lab-panel"]').getByRole("link", { name: "Abrir caso de treino" })).toBeVisible();
   await page.getByRole("dialog").getByRole("button", { name: "Ver entrega" }).click();
   await expect(page.locator('[data-onboarding="lab-step-3"]')).toHaveAttribute("aria-current", "step");
   await expect(page.getByRole("heading", { name: "Entrega de evidência", exact: true })).toBeVisible();
@@ -30,8 +30,12 @@ test("@smoke guia flutua sobre as páginas e acompanha a prática real", async (
   await expect(page.getByRole("dialog")).toHaveCount(0);
 });
 
-test("fecha com Escape, não reaparece e pode ser retomado sem trocar de página", async ({ page }) => {
+test("começa fechado, fecha com Escape e pode ser retomado sem trocar de página", async ({ page }) => {
   await page.goto("/");
+  await expect(page.getByRole("button", { name: "Abrir guia de primeiros passos" })).toBeVisible();
+  await page.waitForTimeout(1100);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.getByRole("button", { name: "Abrir guia de primeiros passos" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toHaveCount(0);
@@ -68,6 +72,8 @@ test("funciona com armazenamento bloqueado e dados antigos inválidos", async ({
     Storage.prototype.setItem = () => { throw new Error("Storage disabled"); };
   }, storageKey);
   await page.goto("/");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.getByRole("button", { name: "Abrir guia de primeiros passos" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
   await expect(page.getByRole("dialog").getByRole("status").filter({ hasText: /não será lembrada/ })).toBeVisible();
   await page.getByRole("dialog").getByRole("button", { name: "Explorar Labs", exact: true }).click();
