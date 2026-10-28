@@ -95,10 +95,10 @@
 .ca-reading-section { padding-block: 2.7rem; border-bottom: 1px solid var(--ca-line); }
 .ca-reading-section h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); letter-spacing: -.045em; font-weight: 800; }
 .ca-reading-section > p { max-width: 66ch; color: var(--ca-muted); line-height: 1.65; }
-.ca-reading-section details { border-bottom: 1px solid var(--ca-line); }
-.ca-reading-section details:first-of-type { border-top: 1px solid var(--ca-line); }
-.ca-reading-section summary { border-radius: 0; }
-.ca-reading-section details[open] { background: #1a261f; padding-inline: 1rem; }
+.ca-reading-section > div > details { border-bottom: 1px solid var(--ca-line); }
+.ca-reading-section > div > details:first-of-type { border-top: 1px solid var(--ca-line); }
+.ca-reading-section > div > details > summary { border-radius: 0; }
+.ca-reading-section > div > details[open] { background: #1a261f; padding-inline: 1rem; }
 .ca-reading-section article { max-width: 70ch; }
 .ca-reading-section ol li { border-color: var(--ca-line); }
 .ca-reading [aria-labelledby="entrega-heading"] { padding-block: 2.7rem; border-bottom: 1px solid var(--ca-line); }

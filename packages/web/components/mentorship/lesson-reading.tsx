@@ -25,7 +25,9 @@ export function LessonReading({ theory, brotoAction }: { theory: LessonTheory; b
         <span className="flex-1">Exemplo na prática</span>
         <ChevronDown aria-hidden="true" className="size-4 shrink-0 transition-transform group-open/example:rotate-180 motion-reduce:transition-none" />
       </summary>
-      <p className="px-5 pb-6 pt-1 sm:px-6">{theory.workedExample}</p>
+      <div className="max-w-[65ch] space-y-4 px-5 pb-6 pt-1 text-[0.98rem] leading-7 [text-wrap:pretty] sm:px-6">
+        {theory.workedExample.split("\n\n").map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+      </div>
     </details>
 
     <details className="group/review border-y border-white/15 py-1">

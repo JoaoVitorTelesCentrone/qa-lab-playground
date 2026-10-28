@@ -43,7 +43,9 @@ export function LessonReader({ lesson, index, theory, videoUrl, materialUrl, com
             {showPractice && <div className="mt-10 space-y-8 border-t border-white/10 pt-8">
               <div>
                 <h4 className="text-lg font-bold text-off-white">Exemplo comentado</h4>
-                <p className="mt-3 text-base leading-8 text-[#C8CFD7]">{theory.workedExample}</p>
+                <div className="mt-3 max-w-[65ch] space-y-4 text-base leading-7 text-[#C8CFD7] [text-wrap:pretty]">
+                  {theory.workedExample.split("\n\n").map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                </div>
               </div>
               <div>
                 <h4 className="text-lg font-bold text-off-white">Pratique agora</h4>

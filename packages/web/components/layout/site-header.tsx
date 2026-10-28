@@ -20,9 +20,7 @@ export function SiteHeader() {
   const tracksActive = pathname === "/trilhas" || pathname.startsWith("/trilhas/");
   const contentActive = pathname === "/conteudo" || pathname.startsWith("/conteudo/");
   const mentorshipActive = pathname.startsWith("/mentoria");
-  const toolsActive = pathname === "/ferramentas";
-  const bddActive = pathname === "/lab/bdd";
-  const boardsActive = pathname === "/boards" || pathname.startsWith("/boards/");
+  const toolsActive = pathname === "/ferramentas" || pathname === "/lab/bdd" || pathname === "/boards" || pathname.startsWith("/boards/");
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 py-3 sm:px-6 sm:py-4">
@@ -46,8 +44,6 @@ export function SiteHeader() {
             Conteúdo
           </Link>
           <Link href="/ferramentas" aria-current={toolsActive ? "page" : undefined} className={cn("rounded-full px-2.5 py-2 text-sm font-medium transition-colors", toolsActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>Ferramentas</Link>
-          <Link href="/lab/bdd" aria-current={bddActive ? "page" : undefined} className={cn("rounded-full px-2.5 py-2 text-sm font-medium transition-colors", bddActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>Gerador de BDD</Link>
-          <Link href="/boards" aria-current={boardsActive ? "page" : undefined} className={cn("rounded-full px-2.5 py-2 text-sm font-medium transition-colors", boardsActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>Board</Link>
         </nav>
 
         <div className="flex items-center gap-1.5">
@@ -73,8 +69,6 @@ export function SiteHeader() {
               <Link href="/mentoria" onClick={() => setMenuOpen(false)} className="text-base font-medium hover:text-primary">Mentoria</Link>
               <Link href="/conteudo" onClick={() => setMenuOpen(false)} aria-current={contentActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Conteúdo</Link>
               <Link href="/ferramentas" onClick={() => setMenuOpen(false)} aria-current={toolsActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Ferramentas</Link>
-              <Link href="/lab/bdd" onClick={() => setMenuOpen(false)} aria-current={bddActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Gerador de BDD</Link>
-              <Link href="/boards" onClick={() => setMenuOpen(false)} aria-current={boardsActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Board de testes</Link>
               <div className="mt-auto flex flex-col gap-2">
                 <Button asChild variant="outline" className="w-full rounded-full"><Link href="/login" onClick={() => setMenuOpen(false)}>Entrar na minha conta</Link></Button>
                 <Button asChild className="w-full rounded-full"><OnboardingLink onClick={() => setMenuOpen(false)}>Começar a praticar</OnboardingLink></Button>
