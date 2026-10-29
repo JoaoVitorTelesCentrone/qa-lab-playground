@@ -180,6 +180,10 @@ body:has(:is(.qa-home, .qa-tracks, .mentoria-page, .qa-profile, .qa-tools, .qa-a
   box-shadow: none;
 }
 
+body :is(.qa-site-header, .qa-site-header-menu) [data-slot="button"] {
+  border-radius: 9999px;
+}
+
 @layer base {
   html,
   body {
