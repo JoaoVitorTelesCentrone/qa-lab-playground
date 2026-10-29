@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { ArrowLeft, ArrowRight, BookOpenText, Info, Lightbulb, TriangleAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getPostBySlug, getRelatedPosts, formatDate, posts, type Block } from "@/lib/blog-posts";
@@ -24,7 +24,7 @@ const calloutIcon = {
 };
 
 export function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }));
+  return posts.filter((post) => !post.editorial).map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -114,6 +114,7 @@ export default async function StudyPostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
+  if (post.editorial) permanentRedirect(`/blog/${post.slug}`);
 
   const related = getRelatedPosts(post.slug, 3);
   const track = studyTracks.find((item) => item.postSlugs.includes(post.slug));

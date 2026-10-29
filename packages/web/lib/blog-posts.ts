@@ -32,8 +32,20 @@ export interface BlogPost {
   destaque?: boolean;
   /** Lançamento enxuto: só posts com publicado=true aparecem no /blog. */
   publicado?: boolean;
+  editorial?: {
+    seriesId: string;
+    seriesTitle: string;
+    seriesHref: string;
+    color: string;
+    number: number;
+    composition: "field" | "sequence" | "decision";
+    artifact: [string, string, string];
+    source?: { label: string; href: string };
+  };
   blocos: Block[];
 }
+
+import { editorialPosts } from "./blog-editorial";
 
 // ==============================
 // Posts
@@ -204,10 +216,12 @@ const allPosts: BlogPost[] = [
 // Helpers
 // ==============================
 
-export const posts: BlogPost[] = allPosts.filter((post) => post.publicado);
+export const posts: BlogPost[] = [...allPosts.filter((post) => post.publicado), ...editorialPosts];
+
+const postsBySlug = new Map(posts.map((post) => [post.slug, post]));
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
-  return posts.find((p) => p.slug === slug);
+  return postsBySlug.get(slug);
 }
 
 export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
