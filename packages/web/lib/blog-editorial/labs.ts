@@ -10,7 +10,7 @@ export const labSeries: EditorialSeries[] = [
         example: "Um pedido recebe mensagem de sucesso, mas não aparece no histórico. O pagamento pode ter sido aceito enquanto o registro do pedido falhou. Sem verificar o estado final, o teste teria aprovado uma experiência quebrada.",
         steps: ["Defina um pedido de treino com produto, endereço e forma de pagamento controlados.", "Registre preço, quantidade e estado em cada passagem da jornada.", "Após concluir, volte ao histórico e confirme que o mesmo pedido persiste."],
         caution: "Evite pedidos reais ou cobranças em ambientes de produção durante uma prática.",
-        exercise: "Percorra a compra da QA Lab Shop e marque três pontos em que um sistema poderia confirmar sucesso antes de persistir o resultado."
+        exercise: "No BrotoSpace, registre uma ideia sintética, saia da jornada e volte para conferir se ela continua disponível. Marque três pontos em que a interface poderia confirmar sucesso antes de persistir o registro."
       },
       {
         slug: "falhas-entre-carrinho-e-pagamento", title: "Falhas que passam entre carrinho e pagamento", summary: "Examine valores e estados nas fronteiras do checkout.",

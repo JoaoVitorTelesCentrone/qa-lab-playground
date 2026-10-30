@@ -3,6 +3,7 @@ import { ExternalLink } from "lucide-react";
 import { manualTestingCourses, type ManualTestingTrackSlug } from "@/lib/manual-testing-courses";
 import { getManualTestingProgress } from "@/lib/manual-testing-progress";
 import { ManualTestingTrackOverview } from "./manual-testing-track-client";
+import { brotoSpaceSite } from "@/lib/mentorship/brotospace-track";
 
 export async function ManualTestingTrackPage({ slug }: { slug: ManualTestingTrackSlug }) {
   const course = manualTestingCourses[slug];
@@ -14,7 +15,7 @@ export async function ManualTestingTrackPage({ slug }: { slug: ManualTestingTrac
         <p className="text-sm font-semibold text-primary">Fundamentos · 6 Labs · 3 blocos</p>
         <h1 className="qa-page-title mt-3">{course.introTitle}</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">{course.description}</p>
-        <Link href="/shop/products" className="mt-5 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline">Praticar na QA Lab Shop</Link>
+        <a href={brotoSpaceSite.url} target="_blank" rel="noreferrer" className="mt-5 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline">Praticar no BrotoSpace ↗</a>
       </header>
 
       <section className="mt-8 border-y border-border py-5" aria-label={`Como funciona: ${course.title}`}>

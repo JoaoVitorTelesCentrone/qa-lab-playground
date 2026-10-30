@@ -61,7 +61,7 @@ const definitions = {
     title: "Investigar o sistema",
     competency: "Investigacao",
     reason: "A primeira evolucao forte vem de observar comportamento, levantar hipoteses e transformar achados em bugs acionaveis.",
-    href: "/shop/products",
+    href: "https://www.brotospace.com/",
     cta: "Abrir playground",
     content: "Bug report que acelera decisao + diferenca entre severidade e prioridade.",
     contentHref: "/estudos/como-escrever-um-bug-report-que-ajuda",

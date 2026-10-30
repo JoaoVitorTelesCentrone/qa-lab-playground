@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { findK6Module, k6CourseModules } from "@/lib/k6-course";
 import { K6CompletionButton } from "../k6-track-client";
 import { getK6Progress } from "../progress";
+import { brotoSpaceSite } from "@/lib/mentorship/brotospace-track";
 
 export const dynamic = "force-dynamic";
 
@@ -41,7 +42,7 @@ export default async function K6LabPage({ params }: { params: Promise<{ moduleId
         </div>
         <div className="border-l border-border pl-5">
           <p className="text-xs font-semibold text-muted-foreground">Projeto de prática</p>
-          <Link href="/shop/products" className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-primary underline-offset-4 hover:underline">QA Lab Shop <ExternalLink className="size-3.5" aria-hidden="true" /></Link>
+          <a href={brotoSpaceSite.url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-primary underline-offset-4 hover:underline">BrotoSpace <ExternalLink className="size-3.5" aria-hidden="true" /></a>
         </div>
       </section>
 

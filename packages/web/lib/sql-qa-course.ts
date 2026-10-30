@@ -109,7 +109,7 @@ export const sqlQAResources = [
 
 export const sqlQAFinalProject = {
   title: "Auditoria de dados de pedidos fictícios",
-  description: "Use o conjunto temporário para verificar e explicar inconsistências sem alterar dados. Ele não está conectado ao banco real da QA Lab Shop.",
+  description: "Use o conjunto temporário para verificar e explicar inconsistências sem alterar dados. Use apenas o conjunto local com dados sintéticos inspirados no BrotoSpace; não há conexão com produção.",
   deliverables: ["Consulta de totais divergentes", "Consulta de registros sem correspondência", "Consulta de valores duplicados ou ausentes", "Resumo do achado, evidência e limite da conclusão"],
 };
 

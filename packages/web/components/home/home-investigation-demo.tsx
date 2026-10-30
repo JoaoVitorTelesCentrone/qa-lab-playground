@@ -1,54 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Check, GitCompareArrows, Sprout } from "lucide-react";
+import { ArrowRight, RotateCcw } from "lucide-react";
 
 export function HomeInvestigationDemo() {
-  const [compared, setCompared] = useState(false);
+  const [showPlan, setShowPlan] = useState(false);
 
-  return <section aria-labelledby="investigation-demo-title" className="rounded-2xl border border-border bg-[#121714] p-4 shadow-[0_18px_55px_rgba(0,0,0,.22)] sm:p-5">
-    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-      <div className="flex items-center gap-2.5">
-        <span className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary"><Sprout aria-hidden="true" className="size-4" /></span>
-        <div>
-          <h2 id="investigation-demo-title" className="text-sm font-semibold">Um pensamento, duas visitas</h2>
-          <p className="text-xs text-muted-foreground">Caso de treino no Broto · Lab 01</p>
-        </div>
-      </div>
-      <span className="rounded-full border border-white/10 px-2.5 py-1 font-mono text-[10px] text-muted-foreground">dado fictício</span>
+  return <div className="qa-home-demo">
+    <div className="qa-home-demo-question">
+      <p>O pensamento continua depois que saio?</p>
     </div>
-
-    <div className="grid grid-cols-2 gap-2.5 py-4 sm:gap-3">
-      <div className="rounded-xl border border-white/10 bg-white/[.025] p-3 sm:p-4">
-        <p className="text-xs text-muted-foreground">Ação de teste</p>
-        <p className="mt-2 text-sm font-medium leading-5">Registrar um pensamento e sair da tela</p>
-      </div>
-      <div className={`rounded-xl border p-3 transition-colors sm:p-4 ${compared ? "border-primary/40 bg-primary/[.07]" : "border-white/10 bg-white/[.025]"}`}>
-        <p className="text-xs text-muted-foreground">Ao voltar</p>
-        <p className={`mt-2 text-sm font-medium leading-5 transition-colors ${compared ? "text-primary" : "text-muted-foreground"}`}>{compared ? "O registro aparece? Onde?" : "O que você verificaria?"}</p>
-      </div>
+    <div className="qa-home-demo-journey" aria-label="Roteiro do caso de demonstração">
+      <div><span>1</span><strong>Registre</strong><p>Use o conteúdo fictício do caso.</p></div>
+      <ArrowRight aria-hidden="true" />
+      <div><span>2</span><strong>Saia e volte</strong><p>Repita o caminho sem atalhos.</p></div>
+      <ArrowRight aria-hidden="true" />
+      <div><span>3</span><strong>Observe</strong><p>Anote onde o registro aparece.</p></div>
     </div>
-
-    <button type="button" onClick={() => setCompared((value) => !value)} aria-expanded={compared} aria-controls="investigation-demo-result" className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-primary/35 bg-primary/[.08] px-4 text-sm font-semibold text-primary transition hover:border-primary/60 hover:bg-primary/[.13] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-      <GitCompareArrows aria-hidden="true" className="size-4" />
-      {compared ? "Ocultar roteiro" : "Ver o que investigar"}
-      <ArrowRight aria-hidden="true" className={`size-4 transition-transform ${compared ? "rotate-90" : ""}`} />
+    <button type="button" onClick={() => setShowPlan((value) => !value)} aria-expanded={showPlan} aria-controls="home-demo-plan">
+      <RotateCcw aria-hidden="true" /> {showPlan ? "Fechar roteiro de investigação" : "Ver roteiro de investigação"}
     </button>
-
-    {compared && <div id="investigation-demo-result" className="qa-demo-result mt-3 rounded-xl border border-amber-400/25 bg-amber-400/[.055] p-3.5 sm:p-4" aria-live="polite">
-      <div className="flex items-start gap-2.5">
-        <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-amber-300/15 text-amber-200"><Check aria-hidden="true" className="size-3.5" /></span>
-        <div className="min-w-0">
-          <p className="text-sm font-semibold text-amber-100">Investigue antes de concluir</p>
-          <p className="mt-1 text-xs leading-5 text-muted-foreground">Use o texto fictício do caso, registre o caminho que percorreu e confira se consegue encontrar o pensamento ao voltar.</p>
-        </div>
-      </div>
-      <div className="mt-3 border-t border-amber-200/10 pt-3 font-mono text-[11px] leading-5 text-[#D7DED9]">
-        <p><span className="text-muted-foreground">Ação</span>       Registrar e sair</p>
-        <p><span className="text-muted-foreground">Observado</span>  Anote o que apareceu</p>
-        <p><span className="text-muted-foreground">Pergunta</span>   É possível retomar?</p>
-      </div>
+    {showPlan && <div id="home-demo-plan" className="qa-home-demo-result" aria-live="polite">
+      <h3>Registre o que você realmente encontrou.</h3>
+      <p>O resultado depende da sua investigação. Não assuma que o pensamento foi salvo ou perdido antes de verificar a tela.</p>
+      <ul><li>Escreva os passos na ordem em que os executou.</li><li>Compare o conteúdo antes e depois de voltar.</li><li>Guarde uma captura sem dados pessoais.</li></ul>
     </div>}
-    <p className="mt-3 text-center text-[11px] text-muted-foreground">Exemplo do Lab 01 · o resultado real depende da sua investigação</p>
-  </section>;
+    <p className="qa-home-demo-note">Exemplo fictício de prática · não representa um resultado confirmado do produto.</p>
+  </div>;
 }

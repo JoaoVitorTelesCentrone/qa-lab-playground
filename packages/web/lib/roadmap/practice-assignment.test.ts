@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { fullRoadmapChallenges } from "./full-catalog.generated";
 import { getPracticeAssignment } from "./practice-assignment";
 import { roadmapEnvironments } from "../product/apps";
+import { brotoSpaceSite } from "../mentorship/brotospace-track";
 
 describe("prática do roadmap", () => {
   test("todos os 518 desafios têm ambiente e tarefa executável", () => {
@@ -9,7 +10,7 @@ describe("prática do roadmap", () => {
     for (const challenge of fullRoadmapChallenges) {
       const practice = getPracticeAssignment(challenge);
       expect(practice.environment.length).toBeGreaterThan(2);
-      expect(practice.route.startsWith("/")).toBe(true);
+      expect(practice.route.startsWith("/") || practice.route === brotoSpaceSite.url).toBe(true);
       expect(practice.setup.length).toBeGreaterThanOrEqual(2);
       expect(practice.actions.length).toBeGreaterThanOrEqual(3);
       expect(practice.evidence.length).toBeGreaterThan(20);
@@ -35,7 +36,9 @@ describe("prática do roadmap", () => {
   test("todo ambiente usado pelo roadmap aparece no menu do header", () => {
     const menuRoots = new Set(roadmapEnvironments.map((item) => item.route.split("/")[1]));
     for (const challenge of fullRoadmapChallenges) {
-      const routeRoot = getPracticeAssignment(challenge).route.split("/")[1];
+      const route = getPracticeAssignment(challenge).route;
+      if (route === brotoSpaceSite.url) continue;
+      const routeRoot = route.split("/")[1];
       expect(menuRoots.has(routeRoot)).toBe(true);
     }
   });

@@ -60,91 +60,16 @@ const allPosts: BlogPost[] = [
     autor: "QA Lab",
     data: "2026-04-28",
     tags: ["Shift-Left", "Estratégia", "Agilidade", "DevOps"],
-    tempoLeitura: 6,
+    tempoLeitura: 3,
     destaque: true,
     publicado: true,
     blocos: [
-      {
-        type: "paragraph",
-        content:
-          "Uma sprint de 15 dias com 14 de desenvolvimento e apenas 1 para o QA. Se você reconhece esse cenário, seu time está vivendo o Gargalo do Teste — e o burnout é só uma questão de tempo.",
-      },
-      {
-        type: "heading",
-        content: "O Mini-Waterfall disfarçado de ágil",
-      },
-      {
-        type: "paragraph",
-        content:
-          "Muitas equipes operam em um modelo que parece ágil no papel, mas na prática é um waterfall comprimido. O teste é tratado como a última fase antes do deploy, e aí vem a pressão absurda: validar em 24 horas o que levou duas semanas para ser construído.",
-      },
-      {
-        type: "callout",
-        variant: "warning",
-        content:
-          "Segundo o relatório Katalon, 55% dos profissionais de QA citam o tempo insuficiente como o principal desafio. Mas o problema vai muito além da agenda apertada.",
-      },
-      {
-        type: "heading",
-        content: "Bugs de última hora não são só falhas técnicas",
-      },
-      {
-        type: "paragraph",
-        content:
-          "Defeitos descobertos às vésperas do deploy não são apenas um problema de engenharia. São riscos financeiros e reputacionais concretos. Um bug de timezone custou 440 milhões de dólares à Knight Capital em 45 minutos. Um erro que, identificado no início da sprint, teria custado horas de trabalho.",
-      },
-      {
-        type: "callout",
-        variant: "danger",
-        content:
-          "Regra empírica da indústria: o custo de corrigir um bug aumenta 10x a cada fase que ele avança. Encontrado no desenvolvimento custa 1x. Em produção, pode custar 100x — em tempo, dinheiro e reputação.",
-      },
-      {
-        type: "heading",
-        content: "Qualidade não é uma fase. É uma mentalidade.",
-      },
-      {
-        type: "paragraph",
-        content:
-          "A raiz do problema é cultural. Enquanto qualidade for vista como responsabilidade exclusiva do QA e como etapa final do processo, o gargalo vai se repetir sprint após sprint. A transformação começa quando qualidade passa a ser uma preocupação de toda a equipe, desde o primeiro dia.",
-      },
-      {
-        type: "heading",
-        content: "Shift Left na prática: três mudanças reais",
-      },
-      {
-        type: "paragraph",
-        content:
-          "Shift Left não é teoria — é uma mudança de comportamento. Aqui estão três práticas que fazem diferença real:",
-      },
-      {
-        type: "ordered-list",
-        items: [
-          "Definition of Done honesta — o código só está pronto se passar por validação e automação. Sem exceções, sem o clássico 'a gente testa depois'.",
-          "Integração Contínua de verdade — commits pequenos e frequentes permitem testes paralelos e constantes. Branches gigantes são bombas-relógio esperando explodir na véspera do release.",
-          "QA no refinamento desde o início — cenários de teste planejados antes da primeira linha de código. Perguntar 'e se?' enquanto ainda dá tempo de ajustar o design custa zero.",
-        ],
-      },
-      {
-        type: "callout",
-        variant: "tip",
-        content:
-          "Mover a qualidade para o início da sprint reduz custos com hotfixes, gera previsibilidade para o negócio e libera o QA para fazer o trabalho estratégico que realmente importa — em vez de apagar incêndios nas últimas horas.",
-      },
-      {
-        type: "heading",
-        content: "O papel do QA muda — e para melhor",
-      },
-      {
-        type: "paragraph",
-        content:
-          "No modelo Shift Left, o QA deixa de ser a última barreira antes do deploy e se torna um parceiro de produto. As perguntas mudam: de 'esse código está correto?' para 'esse comportamento é o que o usuário precisa?'. Essa mudança de perspectiva é o que transforma um time de QA reativo em um time de qualidade estratégico.",
-      },
-      {
-        type: "paragraph",
-        content:
-          "Pare de testar apenas no final. Comece a prevenir falhas desde o dia zero da sprint.",
-      },
+      { type: "paragraph", content: "Uma sprint de quinze dias em que o desenvolvimento ocupa catorze e sobra um para QA parece um problema de agenda. Na prática, é um sinal de que a qualidade entrou tarde demais no processo. Nesse último dia, a pessoa de QA recebe uma mudança grande, ainda está tentando entender as regras e precisa decidir o que vale testar primeiro. Se encontra um problema importante, corrigir e validar de novo compete com a data de entrega. Se não encontra, o silêncio pode ser confundido com confiança, mesmo quando várias áreas nem chegaram a ser investigadas." },
+      { type: "paragraph", content: "Esse arranjo cria uma espécie de mini-waterfall dentro de uma equipe que talvez trabalhe em sprints: alguém define, alguém desenvolve e, só no fim, outra pessoa tenta descobrir se o resultado atende ao combinado. O atraso não está apenas na execução dos testes. Dúvidas que poderiam ser resolvidas no refinamento reaparecem como retrabalho, e decisões de produto ficam escondidas dentro do código até que alguém tente usá-lo de um jeito diferente do esperado." },
+      { type: "paragraph", content: "Pense em uma mudança no fluxo de captura de pensamentos do BrotoSpace. A pessoa consegue registrar uma ideia, sair daquela área e reencontrá-la depois? Se relacioná-la a um desafio ou a uma ação, esse contexto continua visível ao retomar? Uma conversa sobre esses exemplos antes da implementação pode esclarecer qual resultado foi combinado e indicar quais verificações dão mais informação. Descobrir a mesma dúvida depois de pronto costuma envolver mais gente e mais mudanças." },
+      { type: "paragraph", content: "Trazer qualidade para mais perto do início não significa fazer QA aprovar cada linha de código, nem escrever uma lista enorme de testes antes de começar. Significa compartilhar a responsabilidade. Produto ajuda a explicitar o comportamento esperado; desenvolvimento considera casos-limite e facilita a verificação; QA contribui com perguntas sobre risco, uso e evidência. A automação também ajuda, desde que proteja comportamentos importantes e dê retorno frequente. Testes instáveis ou uma suíte lenta podem apenas deslocar o gargalo." },
+      { type: "paragraph", content: "Uma equipe pode começar pequeno: no refinamento, escolher um fluxo e perguntar o que pode falhar e como isso seria percebido; durante a implementação, integrar mudanças menores e executar checagens relevantes; antes de encerrar, combinar que evidência é suficiente e quais riscos permanecem. A definição de pronto deixa de ser uma frase genérica e passa a refletir o que realmente foi construído e verificado." },
+      { type: "paragraph", content: "O resultado esperado não é eliminar todos os defeitos nem prometer que cada entrega será perfeita. É reduzir surpresas, dar tempo para investigar o que importa e tornar explícitas as decisões. QA continua testando; só deixa de ser a última barreira encarregada de compensar, em poucas horas, todas as conversas que o time adiou. Se o teste sempre começa no fim, experimente trazer uma pergunta de qualidade para o próximo refinamento e observe que retrabalho ela evita." },
     ],
   },
   {

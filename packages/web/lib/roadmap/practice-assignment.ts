@@ -13,7 +13,7 @@ type EnvironmentConfig = Pick<PracticeAssignment, "environment" | "route" | "set
 const byModule: Array<[RegExp, EnvironmentConfig]> = [
   [/^1\.7/, { environment: "Web Playground", route: "/playground/elements", setup: ["Abra DevTools (Console e Network).", "Teste em desktop e em viewport mobile."] }],
   [/^1\.8/, { environment: "API Playground", route: "/api-playground", setup: ["Escolha um endpoint do catálogo.", "Prepare um cenário válido e outro inválido."] }],
-  [/^1\.9/, { environment: "Broto — retomada", route: "/conteudo/broto", setup: ["Use o pensamento fictício do caso de treino.", "Registre o estado antes de sair e voltar."] }],
+  [/^1\.9/, { environment: "BrotoSpace", route: "https://www.brotospace.com/", setup: ["Use uma ideia sintética em uma conta de teste autorizada.", "Registre o estado antes de sair e voltar."] }],
   [/^1\.10/, { environment: "Trilha CI/CD", route: "/trilhas/cicd", setup: ["Escolha um Lab ligado a versionamento.", "Use o repositório local como evidência quando o desafio pedir diff ou histórico."] }],
   [/^1\.11/, { environment: "Playground de automação", route: "/playground/elements", setup: ["Escolha um componente ou fluxo estável.", "Defina seletores, dados e oráculo antes de automatizar."] }],
   [/^1\.12/, { environment: "Trilha CI/CD", route: "/trilhas/cicd", setup: ["Abra o Lab relacionado ao pipeline.", "Identifique stages e quality gates atuais."] }],
@@ -22,7 +22,7 @@ const byModule: Array<[RegExp, EnvironmentConfig]> = [
   [/^1\.15/, { environment: "Lab de acessibilidade", route: "/labs/acessibilidade", setup: ["Inicie usando somente teclado.", "Ative o cenário de desvio apenas depois de observar o fluxo normal."] }],
   [/^1\.16/, { environment: "Aplicativo mobile", route: "/lab", setup: ["Use viewport de 320 px e depois 768 px.", "Teste orientação, teclado e interrupção do fluxo."] }],
   [/^1\.17/, { environment: "Broto — crescimento visível", route: "/conteudo/broto", setup: ["Use os dados fictícios do caso de treino.", "Defina o que a visualização de progresso precisa comunicar."] }],
-  [/^1\.[1-6]/, { environment: "QA Lab Shop", route: "/shop/products", setup: ["Escolha um fluxo entre catálogo, carrinho e checkout.", "Use dados controlados e registre a pré-condição."] }],
+  [/^1\.[1-6]/, { environment: "BrotoSpace", route: "https://www.brotospace.com/", setup: ["Escolha uma jornada de captura, organização ou retomada.", "Use conteúdo sintético e registre a pré-condição."] }],
   [/^2\.1/, { environment: "QA Lab People", route: "/lab/pessoas", setup: ["Selecione uma situação de trabalho em time.", "Separe fatos, interesses e decisão necessária."] }],
   [/^2\.2/, { environment: "Refinement Lab", route: "/lab/refinamento", setup: ["Escolha uma história ainda não refinada.", "Anote ambiguidades antes de abrir as sugestões."] }],
   [/^2\.3/, { environment: "Critérios Lab", route: "/lab/criterios", setup: ["Escolha um requisito e registre sua versão inicial.", "Simule uma mudança relevante de regra."] }],
@@ -31,7 +31,7 @@ const byModule: Array<[RegExp, EnvironmentConfig]> = [
   [/^2\.6/, { environment: "Broto — investigação", route: "/conteudo/broto", setup: ["Compare a captura com a retomada do mesmo registro.", "Registre dispositivo, dados fictícios e estado observado."] }],
   [/^2\.7/, { environment: "Agendamentos", route: "/agendamentos/schedule", setup: ["Crie uma massa de cliente, serviço e horário.", "Planeje como restaurar o estado após o teste."] }],
   [/^2\.8/, { environment: "Pack de regressão", route: "/labs/regressao", setup: ["Selecione um cenário estável e um instável.", "Registre tempo, repetição e causa provável de falha."] }],
-  [/^2\.9/, { environment: "QA Lab Shop — operações", route: "/shop/operations", setup: ["Observe primeiro o comportamento existente.", "Mapeie dependências antes de propor mudança."] }],
+  [/^2\.9/, { environment: "BrotoSpace", route: "https://www.brotospace.com/", setup: ["Observe primeiro o comportamento existente.", "Mapeie dependências antes de propor mudança."] }],
   [/^2\.10/, { environment: "Trilha CI/CD", route: "/trilhas/cicd", setup: ["Escolha um Lab de release.", "Defina evidência mínima para go/no-go."] }],
   [/^2\.11/, { environment: "Logs Investigation Lab", route: "/lab/logs", setup: ["Escolha uma situação real do catálogo.", "Registre fatos e hipóteses separadamente."] }],
   [/^3\./, { environment: "QA Lab People", route: "/lab/pessoas", setup: ["Selecione uma situação compatível com o tema.", "Defina público, contexto e objetivo da conversa."] }],
@@ -44,8 +44,7 @@ const byModule: Array<[RegExp, EnvironmentConfig]> = [
 ];
 
 const baseEnvironments: EnvironmentConfig[] = [
-  { environment: "QA Lab Shop", route: "/shop/products", setup: ["Escolha um fluxo crítico da loja.", "Observe usuário, negócio e comportamento técnico."] },
-  { environment: "Broto Space", route: "/conteudo/broto", setup: ["Escolha um pensamento ou próximo passo do caso fictício.", "Registre o estado inicial."] },
+  { environment: "BrotoSpace", route: "https://www.brotospace.com/", setup: ["Escolha uma jornada crítica de captura, conexão ou retomada.", "Use conteúdo sintético e registre o estado inicial."] },
   { environment: "Agendamentos", route: "/agendamentos/schedule", setup: ["Escolha um serviço e horário.", "Considere conflito, cancelamento e confirmação."] },
   { environment: "CRM", route: "/crm/funnel", setup: ["Escolha uma oportunidade e um estágio.", "Compare informação visual e dados do funil."] },
 ];
@@ -53,8 +52,8 @@ const baseEnvironments: EnvironmentConfig[] = [
 function configFor(challenge: RoadmapChallenge): EnvironmentConfig {
   const matched = byModule.find(([pattern]) => pattern.test(challenge.module));
   if (matched) return matched[1];
-  if (challenge.order <= 20) return baseEnvironments[(challenge.order - 1) % baseEnvironments.length];
-  return { environment: "QA Lab Playground", route: "/playground", setup: ["Escolha um fluxo relacionado ao tema.", "Registre pré-condição e dados antes de começar."] };
+  if (challenge.order <= 20) return baseEnvironments[0];
+  return { environment: "BrotoSpace", route: "https://www.brotospace.com/", setup: ["Escolha uma jornada relacionada ao tema.", "Use conteúdo sintético e registre pré-condição e dados antes de começar."] };
 }
 
 export function getPracticeAssignment(challenge: RoadmapChallenge): PracticeAssignment {

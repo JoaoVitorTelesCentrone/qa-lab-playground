@@ -19,7 +19,7 @@ export const appiumSeleniumModules: AppiumSeleniumModule[] = [
     title: "Escolha o alvo e a camada certa",
     objective: "Separar app nativo, híbrido e mobile web e escolher a ferramenta pela superfície que precisa ser validada.",
     concepts: ["nativo", "híbrido", "mobile web", "emulação", "risco"],
-    practice: "Classifique os fluxos de um app fictício de compras: navegação no browser, carrinho dentro de WebView e permissões nativas. Indique o que precisa de device real e o que cabe em browser desktop responsivo.",
+    practice: "Classifique as jornadas do BrotoSpace em browser móvel, WebView quando aplicável e permissões nativas do app. Indique o que precisa de device real e o que cabe em browser desktop responsivo.",
     deliverable: "Mapa de riscos com alvo, camada de teste e motivo da escolha.",
     checklist: ["Selenium sozinho não é descrito como driver universal de app nativo.", "Emulação de viewport não é confundida com teste em device.", "A ferramenta atende ao risco, não apenas à familiaridade do time."],
     example: `Mobile web no Chrome do Android → sessão remota via Appium + browser.\nApp nativo Android → Appium + UiAutomator2.\nApp nativo iOS → Appium + XCUITest em host macOS.\nRegra de domínio sem UI → testar numa camada mais rápida.`,
@@ -70,7 +70,7 @@ export const appiumSeleniumModules: AppiumSeleniumModule[] = [
     practice: "Troque pausas fixas por espera explícita para um estado observável. Compare accessibility id, resource id e texto visível no app demo.",
     deliverable: "Page Object pequeno com localizadores semânticos e uma espera explícita justificada.",
     checklist: ["Esperas aguardam uma condição útil.", "Não há sleep fixo para mascarar sincronização.", "Page Object encapsula a interface sem esconder asserções de negócio."],
-    example: `WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));\nWebElement title = wait.until(\n  ExpectedConditions.visibilityOfElementLocated(\n    AppiumBy.accessibilityId("home-title")\n  )\n);\nassertEquals("QA Shop", title.getText());`,
+    example: `WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));\nWebElement title = wait.until(\n  ExpectedConditions.visibilityOfElementLocated(\n    AppiumBy.accessibilityId("home-title")\n  )\n);\nassertEquals("<texto observado no BrotoSpace>", title.getText());`,
   },
   {
     id: "mobile-interactions",

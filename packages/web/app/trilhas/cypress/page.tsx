@@ -3,11 +3,12 @@ import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { cypressCourseModules, cypressCourseOutcomes, cypressCourseResources, cypressFinalProject } from "@/lib/cypress-course";
 import { CypressTrackOverview } from "./cypress-track-client";
 import { getCypressProgress } from "./progress";
+import { brotoSpaceSite } from "@/lib/mentorship/brotospace-track";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Trilha Cypress | QA Lab",
-  description: "Aprenda Cypress do primeiro teste ao CI praticando na loja de treino do QA Lab.",
+  description: "Aprenda Cypress do primeiro teste ao CI usando as jornadas do BrotoSpace como contexto de prática.",
 };
 
 export default async function CypressTrackPage() {
@@ -19,10 +20,10 @@ export default async function CypressTrackPage() {
       <header className="mt-8 max-w-3xl">
         <p className="text-sm font-semibold text-primary">Trilha prática · Cypress · 8 semanas</p>
         <h1 className="qa-page-title mt-3">Automação E2E, do primeiro teste ao CI.</h1>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">Construa uma suíte Cypress testando uma loja de treino real. Cada Lab acrescenta uma parte que você vai usar no projeto final.</p>
-        <Link href="/shop/products" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary underline-offset-4 hover:underline">
-          Abrir a loja de treino <ArrowUpRight className="size-4" aria-hidden="true" />
-        </Link>
+        <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">Construa uma suíte Cypress a partir das jornadas de captura, organização e retomada do BrotoSpace. Cada Lab acrescenta uma parte que você vai usar no projeto final.</p>
+        <a href={brotoSpaceSite.url} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary underline-offset-4 hover:underline">
+          Praticar no BrotoSpace <ArrowUpRight className="size-4" aria-hidden="true" />
+        </a>
       </header>
 
       <CypressTrackOverview modules={cypressCourseModules} initialCompleted={progress.completed} signedIn={progress.signedIn} />

@@ -19,7 +19,7 @@ export const playwrightCourseModules: PlaywrightTrackModule[] = [
     title: "Prepare o projeto e rode a primeira spec",
     objective: "Configurar Playwright Test, escolher um alvo local seguro e executar um teste em modo headed e headless.",
     concepts: ["@playwright/test", "playwright.config.ts", "baseURL", "test runner"],
-    practice: "Crie um projeto de testes separado, configure a URL da QA Lab Shop e valide uma página com uma asserção visível.",
+    practice: "Crie um projeto de testes separado, configure a URL do BrotoSpace e valide um comportamento que você observou.",
     deliverable: "Configuração reproduzível com comando de execução e primeiro teste independente.",
     checklist: ["A versão está registrada no package.json e no lockfile.", "A URL vem da configuração ou ambiente, não está espalhada nas specs.", "O mesmo teste executa no navegador e headless sem espera fixa."],
     code: `// playwright.config.ts
@@ -28,7 +28,7 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests",
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "https://www.brotospace.com",
     ...devices["Desktop Chrome"],
   },
 });
@@ -36,9 +36,9 @@ export default defineConfig({
 // tests/home.spec.ts
 import { test, expect } from "@playwright/test";
 
-test("abre a loja de treino", async ({ page }) => {
-  await page.goto("/shop/products");
-  await expect(page.getByRole("heading", { name: /ferramentas para testar melhor/i })).toBeVisible();
+test("abre o BrotoSpace", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveURL(/brotospace\.com/);
 });`,
   },
   {
@@ -48,18 +48,14 @@ test("abre a loja de treino", async ({ page }) => {
     title: "Localize elementos pelo que a pessoa percebe",
     objective: "Usar roles, nomes acessíveis e test IDs intencionais em vez de classes de CSS e caminhos frágeis no DOM.",
     concepts: ["getByRole", "getByLabel", "getByTestId", "locator"],
-    practice: "Na loja de treino, encontre a busca pelo nome acessível, procure um produto e explique quando um test ID é necessário.",
+    practice: "No BrotoSpace, encontre um controle pelo nome acessível observado e explique quando um test ID seria necessário.",
     deliverable: "Dois cenários com locators únicos e ligados ao contrato de acessibilidade ou teste do produto.",
     checklist: ["O locator identifica um elemento só.", "Roles e labels são preferidos quando descrevem o controle.", "Não há seletor baseado em classe visual, posição ou XPath sem motivo."],
-    code: `const search = page.getByRole("textbox", { name: "Buscar produto" });
-await search.fill("Kit Smoke Test");
+    code: `// Inspecione o BrotoSpace e use o nome acessível real do controle.
+const control = page.getByRole("button", { name: "<nome observado>" });
+await expect(control).toBeVisible();
 
-await expect(
-  page.getByRole("heading", { name: "Kit Smoke Test" }),
-).toBeVisible();
-
-// Use um test ID quando não houver um nome estável para a interação.
-await page.getByTestId("add-product-1").click();`,
+// Use um test ID somente quando não houver um nome acessível estável.`,
   },
   {
     id: "auto-wait-assertions",
@@ -71,10 +67,9 @@ await page.getByTestId("add-product-1").click();`,
     practice: "Faça a busca atualizar os resultados e valide o resultado ou mensagem vazia com assertions que aguardam a condição.",
     deliverable: "Spec sem espera fixa, com uma asserção que falharia se o estado esperado nunca aparecesse.",
     checklist: ["As ações esperam visibilidade, estabilidade e interatividade.", "As assertions são aguardadas com `await expect`.", "Timeouts não são aumentados para mascarar lentidão ou flakiness."],
-    code: `await page.getByLabel("Buscar produto").fill("produto inexistente");
-
-await expect(page.getByRole("status"))
-  .toContainText("Nenhum produto encontrado");
+    code: `// Troque o locator e a expectativa pelo estado real que você observou.
+await page.goto("/");
+await expect(page).toHaveURL(/brotospace\.com/);
 
 // Evite: await page.waitForTimeout(1000)
 // Evite: expect(await locator.isVisible()).toBe(true)`,
@@ -86,20 +81,16 @@ await expect(page.getByRole("status"))
     title: "Faça cada teste começar no próprio estado",
     objective: "Isolar cookies, storage e dados para que specs possam rodar sozinhas, em qualquer ordem ou paralelo.",
     concepts: ["BrowserContext", "isolamento", "beforeEach", "dados próprios"],
-    practice: "Limpe o carrinho antes de cada teste e confirme que executar somente o cenário do carrinho produz o mesmo resultado.",
+    practice: "Prepare dados sintéticos antes de cada teste e confirme que executar somente o cenário produz o mesmo resultado.",
     deliverable: "Setup mínimo que prepara apenas o estado necessário para cada cenário.",
     checklist: ["A spec passa sozinha e em ordem diferente.", "Não depende de outro teste ou dado residual.", "A limpeza não apaga dados fora do contexto de teste."],
     code: `test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => {
-    localStorage.removeItem("qa-lab-cart");
-  });
-  await page.goto("/shop/products");
+  await page.goto("/");
 });
 
-test("adiciona um item ao carrinho", async ({ page }) => {
-  await page.getByTestId("add-product-1").click();
-  await page.getByRole("link", { name: /carrinho/i }).click();
-  await expect(page.getByTestId("qty-1")).toHaveText("1");
+test("inicia uma verificação independente", async ({ page }) => {
+  await expect(page).toHaveURL(/brotospace\.com/);
+  // Crie e limpe apenas dados sintéticos pertencentes ao teste.
 });`,
   },
   {
@@ -109,18 +100,13 @@ test("adiciona um item ao carrinho", async ({ page }) => {
     title: "Cubra uma jornada de ponta a ponta",
     objective: "Validar uma jornada real pela interface com começo, ação e resultado que tenha significado para quem usa.",
     concepts: ["fluxo crítico", "estado observável", "setup", "assertion"],
-    practice: "Automatize busca, adição ao carrinho e conferência de quantidade e subtotal na QA Lab Shop.",
+    practice: "Automatize uma jornada observada do BrotoSpace e verifique o resultado após sair e retornar ao contexto.",
     deliverable: "Um teste de jornada independente e focado em um resultado importante.",
     checklist: ["O teste verifica efeito visível, não só navegação.", "Estado inicial é controlado.", "Seletores foram conferidos na aplicação real."],
-    code: `test("adiciona o produto encontrado ao carrinho", async ({ page }) => {
-  await page.addInitScript(() => localStorage.removeItem("qa-lab-cart"));
-  await page.goto("/shop/products");
-  await page.getByLabel("Buscar produto").fill("Kit Smoke Test");
-  await page.getByTestId("add-product-1").click();
-  await page.locator('a[href="/shop/cart"]').click();
-
-  await expect(page.getByTestId("qty-1")).toHaveText("1");
-  await expect(page.getByTestId("cart-subtotal")).toContainText("R$");
+    code: `test("verifica uma jornada do BrotoSpace", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveURL(/brotospace\.com/);
+  // Acrescente passos e expectativas que você confirmou na interface.
 });`,
   },
   {
@@ -130,19 +116,18 @@ test("adiciona um item ao carrinho", async ({ page }) => {
     title: "Use API para preparar e confirmar estado",
     objective: "Combinar a interface com `APIRequestContext` quando isso deixa o teste mais rápido e ainda verifica a jornada certa.",
     concepts: ["request fixture", "pré-condição", "pós-condição", "APIRequestContext"],
-  practice: "Prepare um recurso por um endpoint de fixture oferecido pelo app, valide-o na interface e confira a pós-condição da jornada.",
+  practice: "Use APIRequestContext somente com uma rota de leitura documentada e autorizada. Se não houver API de teste, mantenha a preparação em um mock local e use a interface do BrotoSpace para validar a jornada.",
     deliverable: "Teste híbrido com fronteiras claras: setup via API, comportamento crítico pela UI e pós-condição confiável.",
     checklist: ["O teste não substitui pela API o comportamento de UI que pretende cobrir.", "Credenciais vêm do ambiente e não são commitadas.", "Setup e limpeza usam recurso exclusivo do teste."],
-    code: `test("mostra na loja o estado preparado pela API", async ({ page, request }) => {
-  // Exemplo: use a rota de fixtures documentada pelo seu próprio app de teste.
-  const created = await request.post("/test-support/fixtures", {
-    data: { name: "produto-playwright" },
-  });
-  expect(created.ok()).toBeTruthy();
-  const fixture = await created.json();
-
-  await page.goto("/shop/products");
-  await expect(page.getByTestId("product-" + fixture.id)).toBeVisible();
+    code: `test("usa uma fixture de teste documentada", async ({ page, request }) => {
+  // Configure somente uma rota de leitura documentada e autorizada.
+  const readOnlyUrl = process.env.READ_ONLY_TEST_URL;
+  if (!readOnlyUrl) throw new Error("Configure READ_ONLY_TEST_URL para o ambiente autorizado");
+  const response = await request.get(readOnlyUrl);
+  expect(response.ok()).toBeTruthy();
+  await page.goto("/");
+  await expect(page).toHaveURL(/brotospace\.com/);
+  // Use somente URL documentada e autorizada; não presuma uma API pública.
 });`,
   },
   {
@@ -163,7 +148,7 @@ test("adiciona um item ao carrinho", async ({ page }) => {
   });
 });
 
-await page.goto("/shop/products");
+await page.goto("/");
 await expect(page.getByRole("status"))
   .toContainText("Não foi possível carregar recomendações");`,
   },
@@ -217,22 +202,22 @@ projects: [
     title: "Organize fixtures sem esconder o teste",
     objective: "Extrair setup repetido para fixtures pequenas e manter intenção e asserções visíveis na spec.",
     concepts: ["test.extend", "fixture scope", "Page Object", "composição"],
-    practice: "Extraia um helper para preparar a loja e avalie se um page object reduz duplicação sem ocultar os passos do fluxo.",
+    practice: "Extraia um helper para preparar dados sintéticos do BrotoSpace e avalie se um page object reduz duplicação sem ocultar os passos do fluxo.",
     deliverable: "Fixture ou objeto de página com responsabilidade única e teste ainda legível.",
     checklist: ["Fixture tem ciclo de vida e escopo intencionais.", "Abstração reduz repetição real, não acrescenta camadas sem benefício.", "A spec continua mostrando comportamento e resultado esperado."],
     code: `import { test as base, expect } from "@playwright/test";
 
-type Fixtures = { shopPage: void };
+type Fixtures = { brotoPage: void };
 export const test = base.extend<Fixtures>({
-  shopPage: async ({ page }, use) => {
-    await page.goto("/shop/products");
-    await expect(page.getByRole("heading", { name: /ferramentas para testar melhor/i })).toBeVisible();
+  brotoPage: async ({ page }, use) => {
+    await page.goto("/");
+  await expect(page).toHaveURL(/brotospace\.com/);
     await use();
   },
 });
 
-test("exibe a busca", async ({ page, shopPage }) => {
-  await expect(page.getByLabel("Buscar produto")).toBeVisible();
+test("abre o BrotoSpace", async ({ page, brotoPage }) => {
+  await expect(page).toHaveURL(/brotospace\.com/);
 });`,
   },
   {
@@ -280,17 +265,13 @@ npx playwright test --reporter=html
     title: "Projeto final: suíte cross-browser confiável",
     objective: "Entregar uma suíte pequena e independente que proteja uma jornada de negócio e falhe com evidência acionável.",
     concepts: ["risco", "jornada", "isolamento", "matriz", "diagnóstico"],
-    practice: "Cubra busca e carrinho da loja QA Lab com estado independente, assertions web-first, uma variação de erro e smoke em Chromium; justifique a matriz adicional.",
+    practice: "Cubra uma jornada observada do BrotoSpace com estado independente, assertions web-first, uma variação de erro segura e smoke em Chromium; justifique a matriz adicional.",
     deliverable: "Starter executável, README, specs independentes, configuração de projeto, CI proposto e critérios de triagem.",
     checklist: ["Cada teste roda sozinho e verifica um resultado relevante.", "Locators são estáveis e asserts aguardam estado observável.", "Credenciais e sessões não estão versionadas.", "Trace e screenshot ajudam a investigar falha."],
-    code: `test("busca e adiciona o produto ao carrinho", async ({ page }) => {
-  await page.addInitScript(() => localStorage.removeItem("qa-lab-cart"));
-  await page.goto("/shop/products");
-  await page.getByLabel("Buscar produto").fill("Kit Smoke Test");
-  await expect(page.getByText("Kit Smoke Test")).toBeVisible();
-  await page.getByTestId("add-product-1").click();
-  await page.locator('a[href="/shop/cart"]').click();
-  await expect(page.getByTestId("qty-1")).toHaveText("1");
+    code: `test("abre uma jornada do BrotoSpace", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveURL(/brotospace\.com/);
+  // Acrescente os passos e expectativas confirmados na interface observada.
 });`,
   },
 ];
@@ -312,11 +293,11 @@ export const playwrightCourseResources = [
 ];
 
 export const playwrightFinalProject = {
-  title: "Suíte de regressão da QA Lab Shop",
+  title: "Suíte de regressão do BrotoSpace",
   description: "Uma suíte cross-browser orientada por risco, com fluxo independente, execução rápida no PR e evidência para investigação.",
   deliverables: [
     "Mapa de risco e matriz de browsers/devices",
-    "Specs de busca, carrinho e um caminho de erro",
+    "Specs de captura, retomada e um caminho de erro observado",
     "Configuração com isolamento, relatórios e traces em falha",
     "README com instalação, execução e dados de teste seguros",
   ],

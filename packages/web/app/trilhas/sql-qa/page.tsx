@@ -23,7 +23,7 @@ export default async function SQLQATrackPage() {
       </header>
 
       <aside className="mt-7 border-l-2 border-primary bg-card px-4 py-3 text-sm leading-6 text-muted-foreground">
-        Os exercícios usam dados fictícios em tabelas temporárias locais. Não se conectam à QA Lab Shop nem a um banco real ou compartilhado.
+        Os exercícios usam dados sintéticos e tabelas temporárias locais, inspirados nas jornadas de ideias, desafios e ações do BrotoSpace. Não se conectam ao banco de produção.
       </aside>
 
       <SQLQATrackOverview modules={sqlQAModules} initialCompleted={progress.completed} signedIn={progress.signedIn} />

@@ -3,6 +3,7 @@ import { ExternalLink } from "lucide-react";
 import { playwrightCourseModules, playwrightCourseOutcomes, playwrightCourseResources, playwrightFinalProject } from "@/lib/playwright-course";
 import { PlaywrightTrackOverview } from "./playwright-track-client";
 import { getPlaywrightProgress } from "./progress";
+import { brotoSpaceSite } from "@/lib/mentorship/brotospace-track";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -18,8 +19,8 @@ export default async function PlaywrightTrackPage() {
       <header className="mt-8 max-w-3xl">
         <p className="text-sm font-semibold text-primary">Trilha prática · Playwright · 8 semanas</p>
         <h1 className="qa-page-title mt-3">Automatize jornadas. Investigue cada falha.</h1>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">Construa uma suíte web confiável: do primeiro locator até o CI, usando a QA Lab Shop como projeto de prática.</p>
-        <Link href="/shop/products" className="mt-5 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline">Abrir a loja de treino ↗</Link>
+        <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">Construa uma suíte web confiável: do primeiro locator até o CI, investigando as jornadas reais do BrotoSpace.</p>
+        <a href={brotoSpaceSite.url} target="_blank" rel="noreferrer" className="mt-5 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline">Praticar no BrotoSpace ↗</a>
       </header>
 
       <section className="mt-8 border-y border-border py-5" aria-label="Fluxo de execução Playwright">
@@ -35,7 +36,7 @@ export default async function PlaywrightTrackPage() {
       <PlaywrightTrackOverview modules={playwrightCourseModules} initialCompleted={progress.completed} signedIn={progress.signedIn} />
 
       <section className="mt-8 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-8">
-        <div><h2 className="font-semibold">Projeto inicial</h2><p className="mt-1 text-sm text-muted-foreground">Specs de catálogo e carrinho para ampliar durante os Labs.</p></div>
+        <div><h2 className="font-semibold">Projeto inicial</h2><p className="mt-1 text-sm text-muted-foreground">Specs para investigar captura, organização e retomada de ideias no BrotoSpace.</p></div>
         <a href="https://github.com/JoaoVitorTelesCentrone/qa-lab-playground/tree/main/examples/playwright-track-starter" target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-2 border border-border px-3 text-sm font-semibold text-primary underline-offset-4 hover:border-primary hover:underline">Abrir starter no GitHub <ExternalLink className="size-3.5" aria-hidden="true" /></a>
       </section>
 

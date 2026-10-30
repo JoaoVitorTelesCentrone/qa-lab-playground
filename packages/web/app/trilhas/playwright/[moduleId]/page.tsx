@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { playwrightCourseModules, playwrightCourseResources } from "@/lib/playwright-course";
 import { PlaywrightCompletionButton } from "../playwright-track-client";
 import { getPlaywrightProgress } from "../progress";
+import { brotoSpaceSite } from "@/lib/mentorship/brotospace-track";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +35,7 @@ export default async function PlaywrightLabPage({ params }: { params: Promise<{ 
 
       <section className="grid gap-8 py-7 md:grid-cols-[minmax(0,1fr)_15rem]">
         <div><h2 className="text-lg font-bold">Conceitos</h2><ul className="mt-3 flex flex-wrap gap-2">{module.concepts.map((concept) => <li key={concept} className="border border-border px-2.5 py-1 text-xs text-muted-foreground">{concept}</li>)}</ul></div>
-        <aside className="border-l border-border pl-5"><p className="text-xs font-semibold text-muted-foreground">Projeto de prática</p><Link href="/shop/products" className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-primary underline-offset-4 hover:underline">QA Lab Shop <ExternalLink className="size-3.5" aria-hidden="true" /></Link></aside>
+        <aside className="border-l border-border pl-5"><p className="text-xs font-semibold text-muted-foreground">Projeto de prática</p><a href={brotoSpaceSite.url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-primary underline-offset-4 hover:underline">BrotoSpace <ExternalLink className="size-3.5" aria-hidden="true" /></a></aside>
       </section>
 
       <section className="border-y border-border py-6">
