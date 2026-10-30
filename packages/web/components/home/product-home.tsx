@@ -67,7 +67,7 @@ export function ProductHome() {
         </div>
         <div className="qa-home-mosaic">
           {surfaces.map((surface) => <figure className={`qa-home-mosaic-item ${surface.className}`} key={surface.title}>
-            <Image src={surface.src} alt={surface.alt} fill sizes="(max-width: 700px) 48vw, 33vw" />
+            <div className="qa-home-mosaic-image"><Image src={surface.src} alt={surface.alt} fill sizes="(max-width: 700px) 48vw, 33vw" /></div>
             <figcaption><strong>{surface.title}</strong><span>{surface.note}</span></figcaption>
           </figure>)}
           <div className="qa-home-mosaic-note"><p>Siga a jornada. Registre o que encontrou.</p></div>
