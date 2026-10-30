@@ -91,7 +91,7 @@ const env: Record<string, string | undefined> = {
 
 try {
   await run([...cli, "migration", "up", "--local", "--workdir", local], env);
-  await run([...cli, "test", "db", "--workdir", local, resolve(web, "supabase/tests/mentorship_hardening.test.sql"), resolve(web, "supabase/tests/mentorship_isolation.test.sql"), resolve(web, "supabase/tests/payment_reconciliation.test.sql")], env);
+  await run([...cli, "test", "db", "--workdir", local, resolve(web, "supabase/tests/mentorship_hardening.test.sql"), resolve(web, "supabase/tests/mentorship_isolation.test.sql"), resolve(web, "supabase/tests/payment_reconciliation.test.sql"), resolve(web, "supabase/tests/acquisition_attribution.test.sql")], env);
   if (!process.argv.includes("--no-build")) await run(["bun", "run", "build"], env);
   await run(["bunx", "playwright", "test", "tests/e2e/mentorship-v2.e2e.ts", "tests/e2e/mentorship-staging.e2e.ts", "--grep", "mentoria v2:|catálogo v2|landing apresenta|area do aluno", "--workers=1"], env);
 } finally { gateway.stop(true); }

@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { MentorshipAccessError, requireStaff } from "@/lib/mentorship/access";
 import { notifyMentorshipUsers } from "@/lib/mentorship/store";
+import { admissionDecisionMessage } from "@/lib/mentorship/admission-message";
 import { fail, ok, readJson } from "@/lib/product/api";
 
 export const dynamic = "force-dynamic";
@@ -37,10 +38,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       const message = reason.includes("COHORT_FULL") ? "A turma está cheia e não pode receber outra matrícula." : reason.includes("COHORT_REQUIRED") ? "Selecione uma turma para confirmar essa inscrição." : reason.includes("PAYMENT_REFERENCE_REQUIRED") ? "Informe a referência da confirmação financeira." : "Não foi possível atualizar a inscrição.";
       return fail(message, status);
     }
-    if (decision === "confirmed") await notifyMentorshipUsers([application.user_id], {
-      kind: "system", title: "Sua vaga na Mentoria QA Lab está confirmada",
-      body: "Sua matrícula está ativa. Faça o diagnóstico para começar sua jornada.", href: "/mentoria/diagnostico",
-    });
+    if (application.status !== decision && ["confirmed", "waitlisted", "rejected"].includes(decision)) {
+      await notifyMentorshipUsers([application.user_id], { kind: "system", ...admissionDecisionMessage(decision as "confirmed" | "waitlisted" | "rejected") });
+    }
     return ok({ applicationId: id, decision, enrollment: data });
   } catch (error) {
     if (error instanceof MentorshipAccessError) return fail(error.message, error.status);

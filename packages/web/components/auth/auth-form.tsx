@@ -6,6 +6,7 @@ import { ArrowRight, Chrome, Eye, EyeOff, FlaskConical, Loader2, Lock, Mail, Shi
 import { createClient } from "@/lib/supabase/client";
 import { PasswordRequirements } from "@/components/auth/password-requirements";
 import { PASSWORD_MIN_LENGTH, passwordMeetsRequirements } from "@/lib/auth/password-policy";
+import { storedAttribution } from "@/lib/product/attribution";
 
 type Mode = "login" | "cadastro";
 type Message = { type: "error" | "success"; text: string };
@@ -49,10 +50,19 @@ export function AuthForm({ mode, next = "/lab", configured, googleEnabled = fals
         if (error) setMessage({ type: "error", text: authErrorMessage(error, mode) });
         else window.location.assign(next);
       } else {
+        const attribution = storedAttribution();
         const { data, error } = await supabase.auth.signUp({
           email: normalizedEmail,
           password,
-          options: { data: { full_name: fullName.trim() }, emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
+          options: {
+            data: {
+              full_name: fullName.trim(),
+              ...(attribution.source ? { acquisition_source: attribution.source } : {}),
+              ...(attribution.medium ? { acquisition_medium: attribution.medium } : {}),
+              ...(attribution.campaign ? { acquisition_campaign: attribution.campaign } : {}),
+            },
+            emailRedirectTo: authCallbackUrl(next, attribution),
+          },
         });
         if (error) setMessage({ type: "error", text: authErrorMessage(error, mode) });
         else if (data.session) window.location.assign(next);
@@ -71,9 +81,10 @@ export function AuthForm({ mode, next = "/lab", configured, googleEnabled = fals
     setMessage(null);
     try {
       const supabase = createClient();
+      const attribution = storedAttribution();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
+        options: { redirectTo: authCallbackUrl(next, attribution) },
       });
       if (error) setMessage({ type: "error", text: "Não foi possível iniciar o login com Google. Tente novamente ou use seu e-mail." });
     } catch {
@@ -116,4 +127,13 @@ export function AuthForm({ mode, next = "/lab", configured, googleEnabled = fals
       </div>
     </div>
   );
+}
+
+function authCallbackUrl(next: string, attribution: ReturnType<typeof storedAttribution>) {
+  const url = new URL("/auth/callback", window.location.origin);
+  url.searchParams.set("next", next);
+  if (attribution.source) url.searchParams.set("utm_source", attribution.source);
+  if (attribution.medium) url.searchParams.set("utm_medium", attribution.medium);
+  if (attribution.campaign) url.searchParams.set("utm_campaign", attribution.campaign);
+  return url.toString();
 }

@@ -1,5 +1,5 @@
 begin;
-select plan(13);
+select plan(14);
 
 select set_config('qa.payment.user_one', gen_random_uuid()::text, true);
 select set_config('qa.payment.user_two', gen_random_uuid()::text, true);
@@ -17,9 +17,17 @@ values
 insert into public.mentorship_cohorts (id, code, name, starts_on, ends_on, capacity, status)
 values (current_setting('qa.payment.cohort')::uuid, 'qa-payment-' || left(current_setting('qa.payment.cohort'), 8),
   'Turma de teste de pagamento', current_date, current_date + 84, 1, 'enrollment');
-insert into public.mentorship_offers (id, cohort_id, offer_code, title, price, terms, cancellation_policy, published)
+insert into public.mentorship_offers (id, cohort_id, offer_code, title, price, terms, cancellation_policy, delivery_format, recordings_policy, weekly_rhythm, support_response_hours, expected_outcome, published)
 values (current_setting('qa.payment.offer')::uuid, current_setting('qa.payment.cohort')::uuid,
-  'qa-payment-' || left(current_setting('qa.payment.offer'), 8), 'Mentoria de teste', 297, 'Condições de teste', 'Política de teste', true);
+  'qa-payment-' || left(current_setting('qa.payment.offer'), 8), 'Mentoria de teste', 297, 'Condições de teste', 'Política de teste',
+  'Prática com encontro ao vivo', 'Gravação de teste disponível por 30 dias.', 'Uma unidade por semana.', 72,
+  'Entrega revisada para teste, sem promessa de contratação.', true);
+select throws_ok(
+  format('update public.mentorship_offers set recordings_policy = %L where id = %L', '', current_setting('qa.payment.offer')),
+  '23514',
+  'new row for relation "mentorship_offers" violates check constraint "mentorship_offers_public_details_complete"',
+  'oferta pública não pode perder os detalhes operacionais obrigatórios'
+);
 insert into public.mentorship_orders
   (id, user_id, cohort_id, offer_id, offer_version, offer_title, terms_snapshot, cancellation_policy_snapshot, amount, reservation_expires_at)
 values

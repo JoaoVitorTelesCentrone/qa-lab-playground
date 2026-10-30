@@ -38,6 +38,8 @@ Fontes: `README.md`, `docs/RESUMO_ITERACAO_2026-10-16.md`, `docs/MENTORIA_RUNBOO
 
 ### Fase 1 — tornar o lançamento confiável (semanas 1–2)
 
+**Andamento em 2026-10-30:** suíte local isolada aprovada (57 verificações pgTAP, build, TypeScript e 9 E2E), incluindo os fluxos de admissão e mentoria. As migrations remotas da Fase 1 e Fase 2 foram aplicadas ao único projeto Supabase do QA Lab e conferidas. O projeto remoto não é staging isolado; os testes com perfis, compra e e-mail continuam limitados ao ambiente local até as integrações reais serem autorizadas e validadas. Evidências e próximos passos estão em `docs/STAGING_GATE_QA_LAB.md`.
+
 1. Congelar uma matriz de jornadas e ambientes: desafio gratuito, cadastro, evidência, case, lista de interesse, inscrição, pagamento, matrícula, entrega, revisão e certificado. Para cada jornada, registrar dono, ambiente, estado atual e evidência de teste.
 2. Preparar staging isolado e conferir histórico de migrações, RLS, Storage, variáveis e permissões. Executar os testes SQL de acesso por perfil.
 3. Seguir o runbook com aluno, mentor e admin. Validar compra aprovada, pendente, recusada, webhook repetido, reembolso, capacidade da turma, upload, reenvio, e-mail e acesso cruzado entre turmas.
@@ -100,3 +102,15 @@ Não há linha de base verificada neste documento. Nas primeiras duas semanas, m
 ## 7. Cadência e regra de decisão
 
 Toda semana: olhar o funil, incidentes e fila de revisão. A cada duas semanas: decidir um problema principal, uma hipótese e um experimento; registrar antes/depois. Se há abandono antes da evidência, corrigir a primeira experiência. Se há evidência mas pouco retorno, melhorar feedback e próximo passo. Se há interesse na mentoria mas pouca matrícula, investigar clareza da oferta e pagamento. Novos Labs entram apenas depois que o gate de staging e a operação do piloto estiverem estáveis.
+
+## 8. Estado atualizado da Fase 2 (30/10/2026)
+
+O painel organiza cadastros por semana e origem conhecida, separa coortes do QA Lab das etapas da mentoria, e inclui entradas na lista, erros de upload e primeira revisão por aluno. As migrations `20261028090000_portfolio_more_appearances.sql` e `20261030155830_profile_acquisition_attribution.sql` foram aplicadas ao único projeto remoto do QA Lab (`hyrkebdxqoxijgxxkxrg`) e conferidas no histórico e schema.
+
+Ainda falta medir visitas anônimas à landing e à página da mentoria, conduzir 8–12 sessões reais e corrigir atritos observados, e revisar a jornada com usuários em celular, teclado e ampliação. O roteiro segue em `docs/SESSOES_OBSERVADAS_FASE_2.md`; nenhuma sessão foi registrada como realizada.
+
+## 9. Preparação da Fase 3 (30/10/2026)
+
+O código já oferece fila e rubrica do mentor, histórico de reenvio, limite de 72 horas, indicadores de itens próximos/vencidos, agenda/presença, fila de e-mail e controle de capacidade. Esta entrega adiciona campos operacionais explícitos à oferta pública, bloqueia sua publicação quando esses detalhes estão incompletos, limita a oferta fundadora a 20 vagas e oferece mensagens distintas com próximo passo para confirmação, espera e recusa. O caderno `docs/PILOTO_TURMA_FUNDADORA.md` define o preflight, responsáveis, rotina semanal e registros das duas semanas.
+
+**Gate ainda não executado:** é necessário escolher responsáveis, datas, preço, horários, política real de gravações e contato de suporte; validar compra e e-mail nos provedores autorizados; e operar duas semanas com alunos e mentor. Os campos de configuração e as tabelas de observação não devem ser tratados como resultados reais nem preenchidos com dados fictícios.

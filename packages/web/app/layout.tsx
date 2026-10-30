@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { NavigationProgress } from "@/components/layout/navigation-progress";
 import { FloatingOnboarding } from "@/components/onboarding/floating-onboarding";
 import { labs, labLabel } from "@/lib/playground/catalog";
+import { AttributionCapture } from "@/components/analytics/attribution-capture";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap" });
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="pt-BR">
       <body className={`${inter.variable} ${mono.variable} min-h-screen bg-background font-sans text-foreground antialiased`}>
+        <AttributionCapture />
         <FloatingOnboarding lab={tourLab}>
         <NavigationProgress />
         <SiteHeader />

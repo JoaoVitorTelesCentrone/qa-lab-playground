@@ -13,6 +13,7 @@ import { fail, ok, withUser } from "@/lib/product/api";
 import { uploadEvidenceFile, removeEvidenceFile, isEvidenceUploadLimitError } from "@/lib/product/evidence-storage";
 import { ALLOWED_TYPES, MAX_FILE_BYTES, formatBytes } from "@/lib/product/evidence-limits";
 import { labs } from "@/lib/playground/catalog";
+import { trackEvent } from "@/lib/product/store";
 
 export const dynamic = "force-dynamic";
 
@@ -22,34 +23,41 @@ export function POST(request: Request) {
     try {
       form = await request.formData();
     } catch {
-      return fail("Envie o arquivo como multipart/form-data.", 400);
+      return uploadFailure(user.id, "invalid_multipart", "Envie o arquivo como multipart/form-data.", 400);
     }
 
     const file = form.get("file");
     const labSlug = form.get("labSlug");
-    if (!(file instanceof File)) return fail("Nenhum arquivo recebido.", 400);
-    if (typeof labSlug !== "string" || !labSlug) return fail("Lab não informado.", 400);
+    if (!(file instanceof File)) return uploadFailure(user.id, "missing_file", "Nenhum arquivo recebido.", 400);
+    if (typeof labSlug !== "string" || !labSlug) return uploadFailure(user.id, "missing_lab", "Lab não informado.", 400);
 
     const lab = labs.find((item) => item.slug === labSlug);
-    if (!lab) return fail("Lab não encontrado.", 404);
-    if (lab.status !== "liberado") return fail("Este Lab ainda não foi liberado.", 409);
+    if (!lab) return uploadFailure(user.id, "lab_not_found", "Lab não encontrado.", 404);
+    if (lab.status !== "liberado") return uploadFailure(user.id, "lab_locked", "Este Lab ainda não foi liberado.", 409);
 
-    if (file.size === 0) return fail("O arquivo está vazio.", 400);
+    if (file.size === 0) return uploadFailure(user.id, "empty_file", "O arquivo está vazio.", 400);
     if (file.size > MAX_FILE_BYTES) {
-      return fail(`O arquivo tem ${formatBytes(file.size)} e o limite é ${formatBytes(MAX_FILE_BYTES)}.`, 413);
+      return uploadFailure(user.id, "file_too_large", `O arquivo tem ${formatBytes(file.size)} e o limite é ${formatBytes(MAX_FILE_BYTES)}.`, 413);
     }
     if (!(ALLOWED_TYPES as readonly string[]).includes(file.type)) {
-      return fail("Formato não aceito. Use imagem (png, jpg, gif, webp), vídeo (mp4, webm) ou PDF.", 415);
+      return uploadFailure(user.id, "unsupported_type", "Formato não aceito. Use imagem (png, jpg, gif, webp), vídeo (mp4, webm) ou PDF.", 415);
     }
 
     try {
       const attachment = await uploadEvidenceFile(user.id, labSlug, file);
+      await trackEvent(user.id, "evidence_upload_succeeded", { lab: labSlug, mimeType: file.type, sizeBytes: file.size });
       return ok(attachment, 201);
     } catch (error) {
-      if (isEvidenceUploadLimitError(error)) return fail((error as Error).message, 429);
+      if (isEvidenceUploadLimitError(error)) return uploadFailure(user.id, "upload_limit", (error as Error).message, 429, labSlug);
+      await trackEvent(user.id, "evidence_upload_failed", { reason: "storage_error", status: 500, lab: labSlug });
       throw error;
     }
   });
+}
+
+async function uploadFailure(userId: string, reason: string, message: string, status: number, lab?: string) {
+  await trackEvent(userId, "evidence_upload_failed", { reason, status, ...(lab ? { lab } : {}) });
+  return fail(message, status);
 }
 
 // DELETE /api/v1/evidence/upload?path=... — remove um anexo que o aluno tirou

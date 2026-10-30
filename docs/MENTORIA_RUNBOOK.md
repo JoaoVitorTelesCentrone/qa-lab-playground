@@ -83,4 +83,10 @@ Em 390 px e desktop, use teclado, foco visível, zoom, mensagens de erro, envio/
 - Suporte coleta user ID, turma, URL e ID da entrega. Nunca solicita senha, token ou service role.
 - Oferta, agenda, produção dos vídeos e prazo de atendimento precisam estar definidos antes da venda.
 
+## Operação da turma fundadora
+
+Use `docs/PILOTO_TURMA_FUNDADORA.md` para conferir a publicação, nomear responsáveis e registrar as duas primeiras semanas. A publicação agora bloqueia ofertas sem formato, ritmo/horários, política de gravação, prazo de resposta do suporte e resultado esperado. A turma fundadora também fica limitada a 20 vagas na validação da oferta. Não preencha esses dados com valores de exemplo.
+
+As mensagens internas e por e-mail de confirmação, espera e recusa têm próximos passos diferentes. Confirme o remetente com uma caixa autorizada antes de habilitar envio no ambiente publicado. Alertas de revisão existentes começam antes do SLA de 72 horas; a fila do mentor exibe itens próximos do prazo e vencidos.
+
 A liberação pública continua condicionada à validação do remoto e dos provedores reais; resultados locais demonstram a implementação e suas integrações locais.

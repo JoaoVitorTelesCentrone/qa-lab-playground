@@ -18,7 +18,7 @@ export default async function MentorshipAdminPage() {
   const overview = await getMentorshipAdminOverview();
   const admin = createAdminClient();
   const [offerResult, applicationResult, orderResult] = await Promise.all([
-    admin.from("mentorship_offers").select("id,cohort_id,offer_code,title,summary,price,enrollment_opens_at,enrollment_closes_at,support_contact,terms,cancellation_policy,published,version").order("created_at", { ascending: false }).limit(100),
+    admin.from("mentorship_offers").select("id,cohort_id,offer_code,title,summary,price,enrollment_opens_at,enrollment_closes_at,support_contact,terms,cancellation_policy,delivery_format,recordings_policy,weekly_rhythm,support_response_hours,expected_outcome,published,version").order("created_at", { ascending: false }).limit(100),
     admin.from("mentorship_applications").select("id,user_id,cohort_id,status,offer_id,created_at,decision_note,payment_reference").in("status", ["requested","awaiting_payment","waitlisted"]).order("created_at", { ascending: true }).limit(200),
     admin.from("mentorship_orders").select("id,user_id,cohort_id,status,payment_status,amount,currency,mercado_pago_payment_id,created_at,reservation_expires_at").order("created_at", { ascending: false }).limit(200),
   ]);

@@ -1,6 +1,17 @@
-# Gate de validação — QA Lab
+﻿# Gate de validação — QA Lab
 
 Este registro acompanha `docs/PLANO_PROXIMO_NIVEL_2026-10-21.md` e `docs/MENTORIA_RUNBOOK.md`. O QA Lab tem **um único banco Supabase remoto**. O gate está **pendente** até haver ensaio no Supabase local, smoke controlado no remoto com contas de teste, checkout Mercado Pago sandbox e remetente de e-mail verificado. Não usar projetos de outros produtos como substitutos. Uma prévia Vercel conectada ao banco remoto compartilha dados de produção e não constitui staging isolado.
+
+## Fase 1 — execução local em 2026-10-30
+
+O ensaio isolado foi repetido para o candidato atual usando o projeto Supabase local `qa-lab-mentorship-tests` (API `127.0.0.1:58421`, banco `127.0.0.1:58422`). O executor confirmou o destino local antes de aplicar migrações. Nesta execução, aplicou as duas migrações que faltavam no banco local:
+
+- `20261026165638_student_test_board.sql`
+- `20261028090000_portfolio_more_appearances.sql`
+
+As 50 verificações pgTAP passaram, o build de produção e o TypeScript passaram, e os 9 cenários E2E passaram. A primeira repetição encontrou que o middleware tratava `/mentoria` como rota privada inteira, redirecionando visitantes da landing e de certificados públicos ao login. A regra foi corrigida em `packages/web/lib/auth/protected-routes.ts`: agora protege as áreas administrativas, de aluno, mentor e operação, preservando as rotas públicas. Os 9 E2E passaram após a correção.
+
+**Status da Fase 1:** ensaio local aprovado; gate remoto pendente. O CLI Supabase autenticado acessa o projeto correto e confirma migrations pendentes, mas ainda faltam o smoke remoto e os provedores reais. Nenhuma migration remota foi aplicada.
 
 ## Validação local da mentoria
 
@@ -26,7 +37,7 @@ O portfólio pode ser validado antes de checkout e e-mail. Seu gate está **pend
 | --- | --- |
 | Responsável pela execução | A definir |
 | URL da aplicação local e do deploy candidato | A definir |
-| Supabase project ref remoto | A definir; único banco remoto do QA Lab |
+| Supabase project ref remoto | `hyrkebdxqoxijgxxkxrg` (CLI verificado em 30/10/2026) |
 | Supabase local | A definir; registrar versão e data do ensaio |
 | Commit implantado | A definir |
 | Migrations aplicadas | A definir; incluir `20261021222551_mentorship_waitlist_attribution.sql` e `20261021233458_mentorship_order_attribution.sql` |
@@ -66,3 +77,5 @@ Para cada linha, anexe link privado para captura, log ou ID verificável. Preenc
 | Teclado, zoom e 390 px | Visitante/aluno/mentor | Foco, mensagens de erro, ausência de rolagem horizontal inesperada | Não executado |
 
 **Decisão do gate:** bloquear abertura da turma enquanto qualquer jornada crítica estiver sem evidência, houver P0/P1 aberto, matrícula indevida ou exposição de dados. O piloto de duas semanas e as sessões observadas exigem participantes reais; registrar seus resultados depois da execução, sem inferi-los dos testes de código.
+
+**Corre��o de acesso remoto (30/10/2026):** a integra��o MCP nega acesso, mas o CLI Supabase autenticado lista e consulta o projeto QA Lab `hyrkebdxqoxijgxxkxrg`. O hist�rico remoto vai at� `20261026165638`; as migrations `20261028090000_portfolio_more_appearances.sql` e `20261030155830_profile_acquisition_attribution.sql` est�o pendentes. Foi consultado somente o schema e agregados de valida��o; nenhuma migration foi aplicada ao remoto.

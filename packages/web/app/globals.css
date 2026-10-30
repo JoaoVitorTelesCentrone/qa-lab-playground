@@ -151,7 +151,7 @@
   --info: #166534;
 }
 
-body:has(:is(.qa-home, .qa-tracks, .mentoria-page, .qa-profile, .qa-tools, .qa-auth, .ca-shell, .qa-cypress, .qa-k6, .qa-gherkin, .qa-bug-report, .qa-appium-selenium, .qa-metricas-qa, .qa-testes-api, .qa-playwright, .qa-comunicacao-agil, .qa-mentalidade, .qa-manual-testing, .qa-sql-qa, .qa-ia-generativa)) {
+body:has(:is(.qa-home, .qa-research, .qa-tracks, .mentoria-page, .qa-profile, .qa-tools, .qa-auth, .ca-shell, .qa-cypress, .qa-k6, .qa-gherkin, .qa-bug-report, .qa-appium-selenium, .qa-metricas-qa, .qa-testes-api, .qa-playwright, .qa-comunicacao-agil, .qa-mentalidade, .qa-manual-testing, .qa-sql-qa, .qa-ia-generativa)) {
   --radius: 0.375rem;
   --mint: var(--field-green);
   --neon: var(--field-green);

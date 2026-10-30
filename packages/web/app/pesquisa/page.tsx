@@ -33,26 +33,26 @@ export default function PesquisaPage() {
     sources: new Set(works.map((work) => work.source)).size,
   };
   return (
-    <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
-      <section>
-        <h1 className="max-w-4xl text-4xl font-black leading-tight text-off-white sm:text-6xl">
-          Biblioteca cientifica para estudar qualidade de software.
+    <div className="qa-research mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
+      <section className="border-b border-border pb-9">
+        <h1 className="qa-page-title max-w-4xl text-4xl leading-tight text-foreground sm:text-6xl">
+          Biblioteca científica para estudar qualidade de software.
         </h1>
-        <p className="mt-5 max-w-2xl text-base leading-8 text-[#AAB2BC]">
-          Um espaco dedicado exclusivamente a trabalhos sobre qualidade de software: modelos de qualidade,
+        <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
+          Um espaço dedicado exclusivamente a trabalhos sobre qualidade de software: modelos de qualidade,
           garantia da qualidade, testes, defeitos, confiabilidade e manutenibilidade.
         </p>
       </section>
 
-      <section className="mt-12 grid gap-3 sm:grid-cols-3">
+      <section className="mt-8 grid gap-3 sm:grid-cols-3">
         {[
           [stats.total, "trabalhos indexados"],
-          [stats.topics, "topicos mapeados"],
+          [stats.topics, "tópicos mapeados"],
           [stats.sources, "fontes ativas"],
-        ].map(([value, label]) => (
-          <div key={label} className="rounded-lg border border-white/10 bg-[#171B21] p-5">
-            <p className="text-3xl font-black text-mint">{value}</p>
-            <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-[#8B949E]">{label}</p>
+        ].map(([value, label], index) => (
+          <div key={label} className="border border-border bg-card p-5">
+            <p className={`text-3xl font-bold ${["text-primary", "text-[#9EB8C6]", "text-copper"][index]}`}>{value}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{label}</p>
           </div>
         ))}
       </section>

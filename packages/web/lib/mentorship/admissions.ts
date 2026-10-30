@@ -13,6 +13,11 @@ export type PublicMentorshipOffer = {
   support_contact: string;
   terms: string;
   cancellation_policy: string;
+  delivery_format: string;
+  recordings_policy: string;
+  weekly_rhythm: string;
+  support_response_hours: number;
+  expected_outcome: string;
   version: number;
   cohort: { name: string; starts_on: string; ends_on: string; capacity: number; status: string };
   occupied: number;
@@ -45,7 +50,7 @@ export async function getPublicMentorshipOffers(): Promise<PublicMentorshipOffer
   try {
     const admin = createAdminClient();
     const { data: offers, error } = await admin.from("mentorship_offers")
-      .select("id,cohort_id,offer_code,title,summary,price,currency,enrollment_opens_at,enrollment_closes_at,support_contact,terms,cancellation_policy,version,cohort:mentorship_cohorts!inner(name,starts_on,ends_on,capacity,status)")
+      .select("id,cohort_id,offer_code,title,summary,price,currency,enrollment_opens_at,enrollment_closes_at,support_contact,terms,cancellation_policy,delivery_format,recordings_policy,weekly_rhythm,support_response_hours,expected_outcome,version,cohort:mentorship_cohorts!inner(name,starts_on,ends_on,capacity,status)")
       .eq("published", true).eq("cohort.status", "enrollment").order("enrollment_opens_at", { ascending: true });
     if (error) return [];
     const rows = offers ?? [];

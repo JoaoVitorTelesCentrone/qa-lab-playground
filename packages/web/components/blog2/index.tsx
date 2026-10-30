@@ -1,4 +1,4 @@
-// Bloco "Blog 2" do Watermelon UI (registry `blog-2`). Três ajustes ao
+﻿// Bloco "Blog 2" do Watermelon UI (registry `blog-2`). Três ajustes ao
 // projeto — o resto é o componente original:
 //
 // 1. `FaBookmark` do react-icons virou `Bookmark` do lucide com `fill-current`:
@@ -47,39 +47,11 @@ export interface Blog2Props {
   }) => React.ReactNode;
 }
 
-// Os seis tons do original (violeta, âmbar, esmeralda, laranja, azul, rosa)
-// saíram: aqui são três famílias do tema — verde (`primary`, `dark-green`),
-// azul (`steel`) e cinza chumbo (`chart-4`, `chart-2`) — em opacidades sobre o
-// `background`. A ordem roda verde -> azul -> chumbo, então cada linha de três
-// cards mostra as três famílias uma vez.
-//
-// As opacidades não são arredondadas por acaso; foram calculadas sob duas
-// restrições, e mexer num valor no olho quebra alguma delas:
-//
-// - Piso contra o fundo: o card mais escuro fica em 2.0:1 contra o
-//   `background` (#111315). Abaixo disso ele deixa de parecer um card e vira
-//   um buraco na página.
-// - Teto contra o texto: o card mais claro fica em 4.8:1 contra o texto. Os
-//   verdes do tema são claros demais em opacidade cheia — `primary` puro dá
-//   2.4:1, ilegível.
-//
-// Isso deixa a faixa de luminância utilizável estreita (0.159 -> 0.063), então
-// a separação entre os cards vem mais da matiz do que do brilho: por isso as
-// três famílias alternam em vez de ser um degradê de um verde só.
-//
-// Duas famílias precisam de dois tokens porque um só não cobre a faixa:
-// `chart-2` (#4B5563) satura em L=0.089 e não alcança os tons claros — daí
-// `chart-4` para o chumbo mais claro.
-//
-// Sem variantes `dark:`: o tema é escuro sempre e o projeto nunca aplica a
-// classe `dark`, então as do original eram código morto.
+// Tons escuros mantêm a leitura próxima às outras páginas; a borda indica a cor.
 const colorVariants = [
-  "bg-primary/67 hover:bg-primary/57",
-  "bg-steel/85 hover:bg-steel/75",
-  "bg-chart-4/55 hover:bg-chart-4/45",
-  "bg-dark-green/77 hover:bg-dark-green/67",
-  "bg-steel/62 hover:bg-steel/52",
-  "bg-chart-2/80 hover:bg-chart-2/70",
+  "border-primary/40 bg-card hover:bg-[#22352A]",
+  "border-steel/50 bg-card hover:bg-[#1E3037]",
+  "border-copper/45 bg-card hover:bg-[#352B25]",
 ];
 
 export default function Blog2({
@@ -99,7 +71,7 @@ export default function Blog2({
   const hasHeader = Boolean(header?.heading || header?.description || ctaContent);
 
   return (
-    <section className={cn("bg-background w-full px-4 py-8", className)}>
+    <section className={cn("w-full py-4", className)}>
       <div className="mx-auto max-w-6xl">
         {hasHeader && header && (
           <div className="mb-12 flex flex-col items-center gap-4 text-center md:mb-16">
@@ -129,7 +101,7 @@ export default function Blog2({
               <article
                 key={index}
                 className={cn(
-                  "group relative flex min-h-[360px] flex-col justify-between rounded-4xl p-6 transition-colors duration-300 sm:p-7",
+                  "group relative flex min-h-[320px] flex-col justify-between border-t-2 border-r border-b border-l p-6 transition-colors duration-200 sm:p-7",
                   colorVariants[index % colorVariants.length],
                 )}
               >
@@ -145,7 +117,7 @@ export default function Blog2({
 
                   <div className="flex flex-1 flex-col justify-center py-6">
                     <div className="flex items-start justify-between gap-4">
-                      <h3 className="text-foreground line-clamp-3 text-4xl leading-[1.2] font-medium tracking-tight">
+                      <h3 className="text-foreground line-clamp-4 text-2xl leading-[1.25] font-semibold tracking-tight sm:text-3xl">
                         {post.title}
                       </h3>
                       <ArrowRight

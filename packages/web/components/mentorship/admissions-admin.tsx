@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 type Cohort = { id: string; name: string; status: string; starts_on: string; ends_on: string; capacity: number };
-type Offer = { id: string; cohort_id: string; offer_code: string; title: string; summary: string; price: number; enrollment_opens_at: string | null; enrollment_closes_at: string | null; support_contact: string; terms: string; cancellation_policy: string; published: boolean; version: number };
+type Offer = { id: string; cohort_id: string; offer_code: string; title: string; summary: string; price: number; enrollment_opens_at: string | null; enrollment_closes_at: string | null; support_contact: string; terms: string; cancellation_policy: string; delivery_format: string; recordings_policy: string; weekly_rhythm: string; support_response_hours: number; expected_outcome: string; published: boolean; version: number };
 type Application = { id: string; user_id: string; cohort_id: string | null; status: string; offer_id: string | null; created_at: string; decision_note: string; payment_reference: string | null; person: { fullName: string; email: string } };
 type Order = { id: string; user_id: string; cohort_id: string; status: string; payment_status: string | null; amount: number; currency: string; mercado_pago_payment_id: string | null; created_at: string; reservation_expires_at: string; person: { fullName: string; email: string }; cohort: { name: string } };
 
@@ -27,18 +27,18 @@ export function AdmissionsAdmin({ cohorts, offers, applications, orders }: { coh
 
 function OfferEditor({ cohorts, offers }: { cohorts: Cohort[]; offers: Offer[] }) {
   const router = useRouter();
-  const empty = { cohortId: "", offerCode: "mentoria-turma", title: "Mentoria QA Lab", summary: "", price: "", enrollmentOpensAt: "", enrollmentClosesAt: "", supportContact: "", terms: "", cancellationPolicy: "", published: false };
+  const empty = { cohortId: "", offerCode: "mentoria-turma", title: "Mentoria QA Lab", summary: "", price: "", enrollmentOpensAt: "", enrollmentClosesAt: "", supportContact: "", terms: "", cancellationPolicy: "", deliveryFormat: "", recordingsPolicy: "", weeklyRhythm: "", supportResponseHours: "", expectedOutcome: "", published: false };
   const [form, setForm] = useState(empty);
   const [busy, setBusy] = useState(false); const [error, setError] = useState(""); const [message, setMessage] = useState("");
   function selectCohort(cohortId: string) {
     const offer = offers.find((item) => item.cohort_id === cohortId);
     const dateField = (value: string | null) => value ? new Date(new Date(value).getTime() - new Date(value).getTimezoneOffset() * 60000).toISOString().slice(0,16) : "";
-    setForm(offer ? { cohortId, offerCode: offer.offer_code, title: offer.title, summary: offer.summary, price: String(offer.price), enrollmentOpensAt: dateField(offer.enrollment_opens_at), enrollmentClosesAt: dateField(offer.enrollment_closes_at), supportContact: offer.support_contact, terms: offer.terms, cancellationPolicy: offer.cancellation_policy, published: offer.published } : { ...empty, cohortId });
+    setForm(offer ? { cohortId, offerCode: offer.offer_code, title: offer.title, summary: offer.summary, price: String(offer.price), enrollmentOpensAt: dateField(offer.enrollment_opens_at), enrollmentClosesAt: dateField(offer.enrollment_closes_at), supportContact: offer.support_contact, terms: offer.terms, cancellationPolicy: offer.cancellation_policy, deliveryFormat: offer.delivery_format ?? "", recordingsPolicy: offer.recordings_policy ?? "", weeklyRhythm: offer.weekly_rhythm ?? "", supportResponseHours: offer.support_response_hours ? String(offer.support_response_hours) : "", expectedOutcome: offer.expected_outcome ?? "", published: offer.published } : { ...empty, cohortId });
   }
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setError(""); setMessage("");
     try {
-      const response = await fetch("/api/v1/mentorship/admin/offers", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...form, price: Number(form.price), enrollmentOpensAt: form.enrollmentOpensAt ? new Date(form.enrollmentOpensAt).toISOString() : null, enrollmentClosesAt: form.enrollmentClosesAt ? new Date(form.enrollmentClosesAt).toISOString() : null }) });
+      const response = await fetch("/api/v1/mentorship/admin/offers", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...form, price: Number(form.price), supportResponseHours: Number(form.supportResponseHours), enrollmentOpensAt: form.enrollmentOpensAt ? new Date(form.enrollmentOpensAt).toISOString() : null, enrollmentClosesAt: form.enrollmentClosesAt ? new Date(form.enrollmentClosesAt).toISOString() : null }) });
       const payload = await response.json().catch(() => null);
       if (!response.ok) throw new Error(payload?.error?.message ?? "Não foi possível salvar a oferta.");
       setMessage("Oferta salva."); router.refresh();
@@ -53,7 +53,14 @@ function OfferEditor({ cohorts, offers }: { cohorts: Cohort[]; offers: Offer[] }
     <div className="grid gap-4 sm:grid-cols-2"><Field label="Abre em" type="datetime-local" required={false} value={form.enrollmentOpensAt} onChange={(enrollmentOpensAt) => setForm({ ...form, enrollmentOpensAt })} /><Field label="Fecha em" type="datetime-local" required={false} value={form.enrollmentClosesAt} onChange={(enrollmentClosesAt) => setForm({ ...form, enrollmentClosesAt })} /></div>
     <label className="grid gap-2 text-sm font-semibold text-off-white">Condições da oferta<textarea required className={inputClass} rows={4} maxLength={8000} value={form.terms} onChange={(event) => setForm({ ...form, terms: event.target.value })} /></label>
     <label className="grid gap-2 text-sm font-semibold text-off-white">Cancelamento<textarea required className={inputClass} rows={4} maxLength={4000} value={form.cancellationPolicy} onChange={(event) => setForm({ ...form, cancellationPolicy: event.target.value })} /></label>
-    <label className="flex items-start gap-3 text-sm leading-6 text-[#D9DEE4]"><input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} className="mt-1 size-4 accent-[#9FE870]" /><span>Publicar oferta. A turma também precisa estar com matrículas abertas.</span></label>
+    <fieldset className="grid gap-4 border border-white/10 p-4"><legend className="px-2 text-sm font-bold text-neon">Informações operacionais exibidas ao aluno</legend>
+      <label className="grid gap-2 text-sm font-semibold text-off-white">Formato<textarea className={inputClass} rows={2} maxLength={500} value={form.deliveryFormat} onChange={(event) => setForm({ ...form, deliveryFormat: event.target.value })} placeholder="Ex.: prática assíncrona com encontros ao vivo; informe duração e fuso dos encontros." /></label>
+      <label className="grid gap-2 text-sm font-semibold text-off-white">Ritmo semanal<textarea className={inputClass} rows={2} maxLength={1000} value={form.weeklyRhythm} onChange={(event) => setForm({ ...form, weeklyRhythm: event.target.value })} placeholder="Dias, horários e carga esperada. Se ainda não definidos, não publique a oferta." /></label>
+      <label className="grid gap-2 text-sm font-semibold text-off-white">Disponibilidade das gravações<textarea className={inputClass} rows={2} maxLength={1000} value={form.recordingsPolicy} onChange={(event) => setForm({ ...form, recordingsPolicy: event.target.value })} placeholder="Diga se haverá gravação, quando será publicada e por quanto tempo ficará disponível." /></label>
+      <Field label="Prazo de primeira resposta do suporte (horas)" type="number" value={form.supportResponseHours} onChange={(supportResponseHours) => setForm({ ...form, supportResponseHours })} required={false} />
+      <label className="grid gap-2 text-sm font-semibold text-off-white">Resultado esperado<textarea className={inputClass} rows={3} maxLength={1000} value={form.expectedOutcome} onChange={(event) => setForm({ ...form, expectedOutcome: event.target.value })} placeholder="Descreva entregas e competências observáveis; não prometa emprego ou contratação." /></label>
+    </fieldset>
+    <label className="flex items-start gap-3 text-sm leading-6 text-[#D9DEE4]"><input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} className="mt-1 size-4 accent-[#9FE870]" /><span>Publicar oferta. A turma também precisa estar com matrículas abertas e todos os detalhes operacionais preenchidos.</span></label>
     <Notice error={error} message={message} /><Button type="submit" disabled={busy || !cohorts.length}>{busy ? "Salvando…" : offers.some((offer) => offer.cohort_id === form.cohortId) ? "Atualizar oferta" : "Salvar oferta"}</Button>
   </form>;
 }

@@ -269,7 +269,7 @@ test.describe("mentoria v2: banco local e três perfis", () => {
 
   test("checkout da mentoria: reserva, assinatura, pagamento, repetição e reembolso", async ({ page, lab }) => {
     await checked(lab.admin.from("mentorship_enrollments").delete().eq("id", lab.enrollmentId));
-    const offer = await checked(lab.admin.from("mentorship_offers").insert({ cohort_id: lab.cohortId, offer_code: `qa-${lab.cohortId}`, title: "Oferta local de teste", price: 297, currency: "BRL", terms: "Condições locais de teste", cancellation_policy: "Política local de teste", support_contact: "suporte@example.test", published: true, version: 1 }).select("id").single());
+    const offer = await checked(lab.admin.from("mentorship_offers").insert({ cohort_id: lab.cohortId, offer_code: `qa-${lab.cohortId}`, title: "Oferta local de teste", price: 297, currency: "BRL", terms: "Condições locais de teste", cancellation_policy: "Política local de teste", support_contact: "suporte@example.test", delivery_format: "Prática assíncrona e encontro ao vivo", recordings_policy: "Gravação publicada após revisão e disponível até o fim da turma.", weekly_rhythm: "Uma semana de prática por vez.", support_response_hours: 72, expected_outcome: "Entregas revisadas e case demonstrável, sem promessa de emprego.", published: true, version: 1 }).select("id").single());
     await signIn(page, lab.actors.student, "/mentoria/inscricao");
     const checkout = await page.request.post("/api/v1/mentorship/checkout", { data: { offerId: offer.id, offerVersion: 1, acceptedTerms: true } });
     expect(checkout.status(), await checkout.text()).toBe(201);

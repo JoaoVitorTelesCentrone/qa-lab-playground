@@ -211,7 +211,7 @@ export async function setSubmissionPublished(userId: string, submissionId: strin
   const { data, error } = await supabase.from("lab_submissions").update({ published }).eq("user_id", userId).eq("id", submissionId).select("id,published").maybeSingle();
   if (error) throw new Error(error.message);
   if (!data) throw new Error("Evidência não encontrada.");
-  await track(supabase, userId, published ? "evidence_published" : "evidence_unpublished", { submission: submissionId });
+  await track(supabase, userId, published ? "case_published" : "evidence_unpublished", { submission: submissionId });
   return data;
 }
 
@@ -466,6 +466,7 @@ export async function setPortfolioProjectPublished(userId: string, projectId: st
   };
   const { error } = await supabase.from("portfolio_project_publications").upsert(snapshot, { onConflict: "project_id" });
   if (error) throw new Error(error.message);
+  if (!previousPublication) await track(supabase, userId, "case_published", { project: projectId });
   const keep = new Set(media.map((file) => file.path));
   await removeEvidenceFiles(previousMedia.filter((file) => !keep.has(file.path)).map((file) => file.path));
   return { published: true };

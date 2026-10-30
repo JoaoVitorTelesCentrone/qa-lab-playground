@@ -1,4 +1,15 @@
-const AUTHENTICATED_ROUTE_PREFIXES = ["/mentoria", "/boards", "/lab/bdd"] as const;
+const AUTHENTICATED_ROUTE_PREFIXES = [
+  "/mentoria/admin",
+  "/mentoria/app",
+  "/mentoria/diagnostico",
+  "/mentoria/encontros",
+  "/mentoria/inscricao/status",
+  "/mentoria/mentor",
+  "/mentoria/performance",
+  "/mentoria/semanas",
+  "/boards",
+  "/lab/bdd",
+] as const;
 
 export function requiresAuthentication(pathname: string) {
   return AUTHENTICATED_ROUTE_PREFIXES.some(

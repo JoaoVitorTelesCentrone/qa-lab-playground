@@ -20,7 +20,7 @@ export const editorialPosts: BlogPost[] = editorialSeries.flatMap((series) =>
       resumo: story.summary,
       autor: "QA Lab",
       data: "2026-10-28",
-      tags: [series.title, series.section],
+      tags: [],
       tempoLeitura: Math.max(2, Math.ceil(words / 170)),
       publicado: true,
       editorial: {
@@ -35,12 +35,9 @@ export const editorialPosts: BlogPost[] = editorialSeries.flatMap((series) =>
       },
       blocos: [
         { type: "paragraph", content: story.opening },
-        { type: "heading", content: "Um caso concreto" },
         { type: "paragraph", content: story.example },
-        { type: "heading", content: "Como aplicar" },
         { type: "ordered-list", items: story.steps },
-        { type: "callout", variant: "warning", content: story.caution },
-        { type: "heading", content: "Experimente agora" },
+        { type: "paragraph", content: story.caution },
         { type: "paragraph", content: story.exercise },
       ],
     };

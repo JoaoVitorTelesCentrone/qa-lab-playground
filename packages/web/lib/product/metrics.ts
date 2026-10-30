@@ -13,7 +13,24 @@ export type ActivityEvent = {
   props: Record<string, unknown>;
 };
 
-export type Signup = { userId: string; createdAt: string };
+export type Signup = {
+  userId: string;
+  createdAt: string;
+  acquisitionSource?: string | null;
+  acquisitionMedium?: string | null;
+  acquisitionCampaign?: string | null;
+};
+
+export type CohortMetrics = {
+  key: string;
+  signups: number;
+  eligibleUsers: number;
+  startedUsers: number;
+  evidenceUsers: number;
+  abandonedUsers: number;
+  evidenceRate: number | null;
+};
+export type ReviewedSubmission = { studentId: string; reviewedAt: string };
 
 export type Metrics = {
   /** Contas que geraram pelo menos um evento no período. */
@@ -33,7 +50,12 @@ export type Metrics = {
   medianHoursToFirstEvidence: number | null;
   /** Contas que publicaram o case sistema no período lido. */
   casesPublished: number;
-  mentorshipFunnel: { applications: number; checkouts: number; payments: number };
+  mentorshipFunnel: { waitlistLeads: number; applications: number; checkouts: number; payments: number; firstReviewedSubmissions: number };
+  /** Weekly signup cohorts; only users with seven complete days count in stage rates. */
+  weeklyCohorts: CohortMetrics[];
+  /** First-touch acquisition source; users without UTMs stay visible as direct/unknown. */
+  acquisitionSources: CohortMetrics[];
+  uploads: { successful: number; failed: number };
   errors: number;
   /** Eventos por dia, do mais antigo ao mais recente. */
   daily: Array<{ date: string; events: number; started: number; completed: number }>;
@@ -45,15 +67,21 @@ export type Metrics = {
 
 const day = (iso: string) => iso.slice(0, 10);
 
-export function buildMetrics(events: ActivityEvent[], signups: Signup[] = [], now = new Date()): Metrics {
+export function buildMetrics(events: ActivityEvent[], signups: Signup[] = [], now = new Date(), waitlistLeads = 0, reviewedSubmissions: ReviewedSubmission[] = []): Metrics {
   const started = events.filter((event) => event.name === "lab_started");
   const completed = events.filter((event) => event.name === "lab_completed");
   const errors = events.filter((event) => event.name === "api_error");
   const casesPublished = new Set(events.filter((event) => event.name === "case_published").map((event) => event.userId));
   const mentorshipFunnel = {
+    waitlistLeads,
     applications: new Set(events.filter((event) => event.name === "mentorship_application_submitted").map((event) => event.userId)).size,
     checkouts: new Set(events.filter((event) => event.name === "mentorship_checkout_started").map((event) => event.userId)).size,
     payments: new Set(events.filter((event) => event.name === "mentorship_payment_confirmed").map((event) => event.userId)).size,
+    firstReviewedSubmissions: countFirstReviewsInWindow(reviewedSubmissions, now),
+  };
+  const uploads = {
+    successful: events.filter((event) => event.name === "evidence_upload_succeeded").length,
+    failed: events.filter((event) => event.name === "evidence_upload_failed").length,
   };
 
   const users = new Set(events.map((event) => event.userId));
@@ -68,7 +96,7 @@ export function buildMetrics(events: ActivityEvent[], signups: Signup[] = [], no
   const signupByUser = new Map(eligibleSignups.map((signup) => [signup.userId, Date.parse(signup.createdAt)]));
   const firstEvidenceByUser = new Map<string, number>();
   for (const event of events) {
-    if (event.name !== "lab_completed" && event.name !== "challenge_evidence_submitted") continue;
+    if (event.name !== "lab_completed") continue;
     const signupAt = signupByUser.get(event.userId);
     if (signupAt === undefined) continue;
     const submittedAt = Date.parse(event.createdAt);
@@ -110,11 +138,86 @@ export function buildMetrics(events: ActivityEvent[], signups: Signup[] = [], no
     medianHoursToFirstEvidence,
     casesPublished: casesPublished.size,
     mentorshipFunnel,
+    weeklyCohorts: buildSignupBreakdown(events, signups, now, (signup) => cohortWeek(signup.createdAt)),
+    acquisitionSources: buildSignupBreakdown(events, signups, now, signupSource),
+    uploads,
     errors: errors.length,
     daily: [...days.entries()].map(([date, bucket]) => ({ date, ...bucket })).sort((a, b) => a.date.localeCompare(b.date)),
     topLabs: rank(started, completed),
     topErrors: countBy(errors.map((event) => String(event.props.message ?? "erro sem mensagem"))).map(([message, total]) => ({ message, total })).slice(0, 10),
   };
+}
+
+function countFirstReviewsInWindow(submissions: ReviewedSubmission[], now: Date) {
+  const since = now.getTime() - 30 * 24 * 60 * 60 * 1000;
+  const firstReviewByStudent = new Map<string, number>();
+  for (const submission of submissions) {
+    const timestamp = Date.parse(submission.reviewedAt);
+    if (!submission.studentId || !Number.isFinite(timestamp)) continue;
+    firstReviewByStudent.set(submission.studentId, Math.min(timestamp, firstReviewByStudent.get(submission.studentId) ?? Infinity));
+  }
+  return [...firstReviewByStudent.values()].filter((timestamp) => timestamp >= since && timestamp <= now.getTime()).length;
+}
+
+function cohortWeek(iso: string) {
+  const date = new Date(iso);
+  if (!Number.isFinite(date.getTime())) return "data inválida";
+  const monday = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const daysSinceMonday = (monday.getUTCDay() + 6) % 7;
+  monday.setUTCDate(monday.getUTCDate() - daysSinceMonday);
+  return monday.toISOString().slice(0, 10);
+}
+
+function signupSource(signup: Signup) {
+  return signup.acquisitionSource?.trim().toLowerCase() || "Direto / sem UTM";
+}
+
+function buildSignupBreakdown(
+  events: ActivityEvent[],
+  signups: Signup[],
+  now: Date,
+  keyForSignup: (signup: Signup) => string,
+): CohortMetrics[] {
+  const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+  const milestones = new Map<string, { startedAt: number | null; evidenceAt: number | null }>();
+  for (const event of events) {
+    const current = milestones.get(event.userId) ?? { startedAt: null, evidenceAt: null };
+    const timestamp = Date.parse(event.createdAt);
+    if (!Number.isFinite(timestamp)) continue;
+    if (event.name === "lab_started") current.startedAt = Math.min(timestamp, current.startedAt ?? Infinity);
+    if (event.name === "lab_completed") current.evidenceAt = Math.min(timestamp, current.evidenceAt ?? Infinity);
+    milestones.set(event.userId, current);
+  }
+
+  const groups = new Map<string, { signups: number; eligible: number; started: number; evidence: number; abandoned: number }>();
+  const seen = new Set<string>();
+  for (const signup of signups) {
+    if (seen.has(signup.userId)) continue;
+    seen.add(signup.userId);
+    const signupAt = Date.parse(signup.createdAt);
+    const key = keyForSignup(signup);
+    const group = groups.get(key) ?? { signups: 0, eligible: 0, started: 0, evidence: 0, abandoned: 0 };
+    group.signups += 1;
+    if (Number.isFinite(signupAt) && signupAt + sevenDaysMs <= now.getTime()) {
+      group.eligible += 1;
+      const userMilestones = milestones.get(signup.userId);
+      const startedInWindow = userMilestones?.startedAt !== null && userMilestones?.startedAt !== undefined && userMilestones.startedAt >= signupAt && userMilestones.startedAt <= signupAt + sevenDaysMs;
+      const evidenceInWindow = userMilestones?.evidenceAt !== null && userMilestones?.evidenceAt !== undefined && userMilestones.evidenceAt >= signupAt && userMilestones.evidenceAt <= signupAt + sevenDaysMs;
+      if (startedInWindow) group.started += 1;
+      if (evidenceInWindow) group.evidence += 1;
+      if (startedInWindow && !evidenceInWindow) group.abandoned += 1;
+    }
+    groups.set(key, group);
+  }
+  return [...groups.entries()].map(([key, group]) => ({
+    key,
+    signups: group.signups,
+    eligibleUsers: group.eligible,
+    startedUsers: group.started,
+    evidenceUsers: group.evidence,
+    abandonedUsers: group.abandoned,
+    evidenceRate: group.eligible ? Math.round((group.evidence / group.eligible) * 100) : null,
+  })).sort((a, b) => b.key.localeCompare(a.key));
 }
 
 function rank(started: ActivityEvent[], completed: ActivityEvent[]) {

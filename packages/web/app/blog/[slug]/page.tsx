@@ -1,9 +1,9 @@
-import type { CSSProperties } from "react";
+﻿import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Calendar, Clock3 } from "lucide-react";
 import { notFound } from "next/navigation";
-import { formatDate, getPostBySlug, posts, type Block, type BlogPost } from "@/lib/blog-posts";
+import { formatDate, getPostBySlug, posts, type Block } from "@/lib/blog-posts";
 import { CollaborateCta } from "@/components/blog/collaborate-cta";
 import { PracticeCta } from "@/components/blog/practice-cta";
 
@@ -37,46 +37,24 @@ function BlockView({ block }: { block: Block }) {
   return <hr />;
 }
 
-function EditorialArtifact({ post }: { post: BlogPost }) {
-  const editorial = post.editorial;
-  if (!editorial) return null;
-  return (
-    <div className="qa-editorial-artifact" data-composition={editorial.composition} aria-label="Resumo visual: três passos do artigo">
-      <div className="qa-editorial-artifact-head"><span>QA LAB / NOTA {String(editorial.number).padStart(2, "0")}</span><span>{editorial.seriesTitle}</span></div>
-      <div className="qa-editorial-artifact-content">
-        {editorial.artifact.map((step, index) => (
-          <div className="qa-editorial-artifact-step" key={step} style={{ "--step": index } as CSSProperties}>
-            <span>{String(index + 1).padStart(2, "0")}</span><p>{step}</p>
-          </div>
-        ))}
-      </div>
-      <div className="qa-editorial-artifact-foot"><span>Observe</span><span>→</span><span>Decida</span><span>→</span><span>Pratique</span></div>
-    </div>
-  );
-}
-
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
-  const siblings = post.editorial ? posts.filter((item) => item.editorial?.seriesId === post.editorial?.seriesId && item.slug !== post.slug) : [];
 
   return (
     <main className="qa-blog qa-editorial-article" style={post.editorial ? { "--essay-accent": post.editorial.color } as CSSProperties : undefined}>
       <article className="mx-auto max-w-6xl px-5 pb-16 pt-8 sm:px-8 lg:pb-24 lg:pt-12">
         <nav className="qa-editorial-breadcrumb" aria-label="Navegação estrutural">
           <Link href="/blog"><ArrowLeft className="size-4" aria-hidden="true" /> Blog</Link>
-          {post.editorial && <><span aria-hidden="true">/</span><Link href={post.editorial.seriesHref}>{post.editorial.seriesTitle}</Link></>}
         </nav>
 
-        <header className={`qa-editorial-article-hero ${post.editorial ? "has-artifact" : ""}`} data-composition={post.editorial?.composition}>
+        <header className="qa-editorial-article-hero">
           <div className="qa-editorial-article-title">
-            <span className="qa-editorial-eyebrow">{post.editorial?.seriesTitle ?? post.tags[0] ?? "QA Lab"}</span>
             <h1>{post.titulo}</h1>
             <p>{post.resumo}</p>
             <div className="qa-editorial-article-meta"><span><Calendar className="size-4" aria-hidden="true" />{formatDate(post.data)}</span><span><Clock3 className="size-4" aria-hidden="true" />{post.tempoLeitura} min de leitura</span></div>
           </div>
-          <EditorialArtifact post={post} />
         </header>
 
         <div className="qa-editorial-reading-layout">
@@ -92,7 +70,6 @@ export default async function BlogPostPage({ params }: Props) {
               </aside>
             ) : <PracticeCta postSlug={post.slug} />}
           </div>
-          {post.editorial && <aside className="qa-editorial-aside" aria-label="Mais artigos desta trilha"><span className="qa-editorial-eyebrow">Na mesma trilha</span>{siblings.map((item) => <Link key={item.slug} href={`/blog/${item.slug}`}>{item.titulo}<ArrowRight className="size-4" aria-hidden="true" /></Link>)}</aside>}
         </div>
         <div className="mt-16"><CollaborateCta /></div>
       </article>
