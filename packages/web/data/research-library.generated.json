@@ -1,6 +1,30 @@
 {
-  "updatedAt": "2026-10-29T16:11:01.949Z",
+  "updatedAt": "2026-10-30T15:57:47.659Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-21227-xa0z-xh92",
+      "title": "\"Automation Software Testing Course | Artifact Geeks\"",
+      "abstract": "\"Build your technical knowledge with the Automation Software Testing Course at Artifact Geeks. Learn software testing fundamentals, test automation concepts, Selenium basics, test execution, and defect identification. This course helps aspiring testers understand how automation improves software quality, reduces repetitive tasks, and increases testing efficiency. Develop knowledge of test case creation, bug tracking, and quality assurance practices used in software development. Whether you are a beginner or looking to enhance your existing skills, Artifact Geeks can help you strengthen your technical foundation and prepare for career opportunities in software testing, quality assurance, and automation testing. Gain confidence through practical learning and build skills relevant to today's evolving technology industry.\"",
+      "authors": [
+        "Artifact Geeks"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-29",
+      "source": "OpenAlex",
+      "venue": "IEEE DataPort",
+      "doi": "https://doi.org/10.21227/xa0z-xh92",
+      "url": "https://doi.org/10.21227/xa0z-xh92",
+      "topics": [
+        "Artifact (error)",
+        "Software engineering",
+        "Automation",
+        "Computer science",
+        "Manual testing",
+        "Software quality analyst"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-30T15:57:47.659Z"
+    },
     {
       "id": "doi-doi-org-10-1142-s0218194027500021",
       "title": "A Risk-Aware Stratified Undersampling Method for Imbalanced Software Defect Prediction",
