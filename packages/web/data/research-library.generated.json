@@ -1,6 +1,55 @@
 {
-  "updatedAt": "2026-10-30T15:57:47.659Z",
+  "updatedAt": "2026-10-31T15:21:44.126Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23792394",
+      "title": "Software Quality Assurance and the Transformative Role of Machine Learning in Testing",
+      "abstract": "Software defects can affect software quality and increase the cost of software maintenance. Machine learning can help identify defective software modules and support software testing. This study compares three machine learning models for software defect prediction using the NASA PROMISE JM1 dataset. The models are Decision Tree, Bagged Trees, and Support Vector Machine (SVM). The dataset contains 13,204 software modules, including 2,103 defective modules and 11,101 clean modules. Exploratory data analysis was performed to examine the class distribution, missing values, software metrics, outliers, and correlations. The models were evaluated using accuracy, precision, recall, F1-score, and the area under the receiver operating characteristic curve (ROC-AUC). Bagged Trees achieved the highest accuracy of 85.19% and the highest ROC-AUC of 0.741. However, its recall was only 8.57%, which means that it failed to identify many defective modules. SVM achieved an accuracy of 83.30%, a recall of 34.05%, an F1-score of 39.34%, and a ROC-AUC of 0.671. Decision Tree achieved an accuracy of 80.72% and a ROC-AUC of 0.620. Among the three models, SVM achieved the highest recall and F1-score. These results show that high accuracy does not always mean that a model can identify defective software modules effectively. Therefore, several performance measures should be considered when evaluating machine learning models for software defect prediction.",
+      "authors": [
+        "Sumya Akter",
+        "Israt Jahan Sarker"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-30",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23792394",
+      "url": "https://doi.org/10.5281/zenodo.23792394",
+      "topics": [
+        "Machine learning",
+        "Artificial intelligence",
+        "Support vector machine",
+        "Computer science",
+        "Decision tree",
+        "Software"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-10-31T15:21:44.126Z"
+    },
+    {
+      "id": "doi-doi-org-10-5281-zenodo-23809272",
+      "title": "Computing replication package: Auditing Class Rebalancing and Decision Thresholds in Software Defect Prediction under Feature-Group Separation",
+      "abstract": "This record contains the replication materials accompanying the manuscript “Auditing Class Rebalancing and Decision Thresholds in Software Defect Prediction under Feature-Group Separation.” The package provides the analysis code, aggregate and fold-level results, provenance manifests, experimental protocols, source transformations, saved verification outputs, and an independent verification script. The study evaluates five NASA PROMISE datasets and a deterministic external cohort of 18 Apache projects using logistic regression and random forest with no rebalancing, class weighting, and SMOTE under conventional and exact-feature-grouped evaluation. The package supports verification of fold-to-project aggregation, project-level contrasts, exact sign-flip tests, Holm corrections, and descriptive bootstrap intervals. The 18 external projects belong to a common Apache data lineage and are not treated as 18 independent organizations. Third-party NASA/PROMISE and IND-JLMIV+R raw feature tables, per-record labels and predictions, and exact feature-group identifiers are not redistributed. Therefore, this is an auditable compact evidence package rather than a complete end-to-end replay archive. Users should obtain third-party inputs from the cited sources and follow their original terms. Original code, aggregate evidence, manifests, protocols, and documentation are released under CC BY 4.0. Third-party materials retain their original terms.",
+      "authors": [
+        "Fengqi Wang"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-10-30",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.23809272",
+      "url": "https://doi.org/10.5281/zenodo.23809272",
+      "topics": [
+        "Computer science",
+        "Replication (statistics)",
+        "Class (philosophy)",
+        "Software",
+        "Aggregate (composite)",
+        "Data mining"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-31T15:21:44.126Z"
+    },
     {
       "id": "doi-doi-org-10-21227-xa0z-xh92",
       "title": "\"Automation Software Testing Course | Artifact Geeks\"",
@@ -2917,6 +2966,25 @@
       "discoveredAt": "2026-08-26T09:59:35.201Z"
     },
     {
+      "id": "doi-doi-org-10-55529-ijitc-61-46-55",
+      "title": "Software defect prediction using ensemble machine learning on open-source code repositories",
+      "abstract": "Software defect prediction is an important software quality assurance exercise which helps the development teams to allocate the testing software resource effectively and identify the modules that are prone to the risk of fault before the software is introduced to the market. Single-classifier methods that are traditional are usually affected by the bias-variance trade-offs, and poor cross-heterogeneous-codebase generalization. This paper provides a Postulation of ensemble machine learning structure involving the incorporation of Random Forest, XGBoost, Support Vector Machine (SVM), and LightGBM to be able to be base learner in a stacking meta-ensemble architecture in order to take defect prediction of open-source software projects details. The models used in the proposed framework are based on the Chidamber-Kemerer (CK) object-oriented measures of feature engineering of six open-source projects, namely Camel, Jedit, Xerces, Ant, Log4j, and Lucene. In order to overcome the class disparity that exists in sets of defects, Synthetic Minority Oversampling Technique (SMOTE) is used during preprocessing. A logistic regression meta-learner thereof is a combination of the probability output of the four base classifiers and in this way the stacking ensemble is able to identify a wide range of decision boundaries and accurately reduce prediction error. Strategic 10-fold cross-validation experimental validation with proposed ensemble model on benchmark PROMISE and NASA MDP datasets show that the ensemble model has an accuracy of 94.3 and 93.1 as well as the recall of 92.7 and F1-score of 92.9 and an AUC-ROC of 0.97. These scores are the improvements of 3.3 to 10.6 percentages points as compared to single classifiers. The Wilcoxon signed-rank tests are found to have no statistical significance (p < 0.05). The paper also compares the cross-project transferability, ranking of the feature importance, and states that the measures of complexity and coupling are the most pertinent ones as far as detecting the defects are concerned. The results indicate that ensemble stacking is practically viable and a strengthened and broad applicability of the method in managing the quality of software on a large scale in industries.",
+      "authors": [
+        "Dr.Nadia Yas"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-04-02",
+      "source": "Semantic Scholar",
+      "venue": "International journal of information technology and computer engineering",
+      "doi": "https://doi.org/10.55529/ijitc.61.46.55",
+      "url": "https://doi.org/10.55529/ijitc.61.46.55",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-31T15:21:44.126Z"
+    },
+    {
       "id": "doi-doi-org-10-1088-1742-6596-3206-1-012031",
       "title": "The Software Quality Assurance programme of the ASTRI Mini-Array project",
       "abstract": "The ASTRI Mini-Array is a gamma-ray experiment led by Istituto Nazionale di Astrofisica with the partnership of the Instituto de Astrofisica de Canarias, Fundacion Galileo Galilei, Universidade de Sao Paulo (Brazil) North-West University (South Africa) and the University of Geneve. The ASTRI Mini-Array consists of nine innovative Imaging Atmospheric Cherenkov Telescopes that are being installed at the Teide Astronomical Observatory (∽2400 m a.s.l.) in Tenerife (Canary Islands, Spain). The ASTRI Mini-Array software will cover the entire life cycle of the experiment, including scheduling, operations and data dissemination. The on-site control software will allow the operator to communicate remotely to the array (including automated reaction to critical environmental conditions). Due to the high-speed (10 Gbit/s) networking connection available between Canary Islands and Italy, all data will be delivered every night to the ASTRI Data Centre in Rome for their processing and dissemination. The ASTRI team made experience with ASTRI-Horn, the first Italian dual-mirror Cherenkov telescope, prototype of the ASTRI Mini-Array project. Exploiting lessons learned from ASTRI-Horn, we decided to adopt an iterative incremental model for the software development in order to provide more software releases according to the project schedule. We have implemented a Quality Assurance (QA) programme specific for the software, which defines the strategy and the organization for the management of the quality control. In this contribution we present the layout and the contents of the ASTRI Mini-Array QA software programme, describing the organization adopted for its management and reporting some examples of how it has been applied so far.",
@@ -3024,6 +3092,28 @@
       "discoveredAt": "2026-08-15T22:37:48.767Z"
     },
     {
+      "id": "doi-doi-org-10-1109-wccst67302-2026-11496268",
+      "title": "Feature Selection and Dimensionality Reduction for Software Defect Prediction Using Hybrid Ensemble Learning",
+      "abstract": "In the digital era, The Software Defect Prediction (SDP) is being very vital tool that enhances the reliability of software and decreases the expenses of software maintenance through predicting defect-prone modules at very early stages of development. In this paper, the researcher proposed a streamlined hybrid model using ensemble technique that combines feature selection, dimensionality reduction, and various classification methods to create one pipeline. Information Gain (IG) and Principal Component Analysis (PCA) are utilized to select the most pertinent software metrics and to reduce dimension respectively. To reduce the imbalance between the classes and improve the generalization, data preprocessing methods such as normalization and the resampling method by using SMOTE are used. The proposed model is a combination of the five heterogeneous classifiers that consist of the RF, SVM, naive bayes, decision tree, and KNN with an average voting mechanism. As it is experimentally validated on NASA KC1 dataset, the hybrid ensemble performs even better than the individual classifiers with the accuracy of 96% with improved precision, F1-score, and recall. The findings indicate the usefulness of feature optimization and ensemble learning in terms of improving the accuracy, strength the interpretability. This is a method of scalable and dependable solution to software quality assurance systems in real-life situations.",
+      "authors": [
+        "Damanjit Singh",
+        "Ramandeep Kaur",
+        "Inderpal Singh",
+        "Anurag Sharma"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-03-26",
+      "source": "Semantic Scholar",
+      "venue": "2026 World Conference on Computational Science and Technology (WcCST)",
+      "doi": "https://doi.org/10.1109/WcCST67302.2026.11496268",
+      "url": "https://doi.org/10.1109/WcCST67302.2026.11496268",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-31T15:21:44.126Z"
+    },
+    {
       "id": "doi-doi-org-10-63163-jpehss-v4i1-1640",
       "title": "ENHANCING SOFTWARE QUALITY THROUGH MACHINE LEARNING DRIVEN DEFECT PREDICTION MODEL",
       "abstract": "Software defects are among the key problems in software engineering as it compromises software reliability, boosts up maintenance expenses and impacts software quality. Traditionally, defects are discovered using a time-consuming technique and, in a large and complex software system, it is not so efficient. This study was interested in software defect prediction application of machine learning techniques to improve software quality assurance in the early stage in this regard. Designing a machine learning model that can predict and detect the defect prone software modules at an early stage of Software Development Life Cycle (SDLC) is the prime objective of research. Historical Software Defect Data sets from PROMISE repository were used in the study. To improve data quality, the following data cleaning, class balancing, data normalization and missing value imputation techniques were employed. The most relevant software metrics were also selected using feature selection techniques like Principal Component Analysis (PCA). Different machine learning algorithms were implemented and tested including Random Forest, Support Vector Machine (SVM) and Naïve Bayes with the performance metrics of accuracy, precision, recall, and F1-score. The outcomes of the experiments showed that the use of machine learning technique had a positive impact on the software defect detection prediction accuracy. Among the models implemented the complex and elaborated models gave better results, with the best model being the Random Forest model. The study shows that machine learning defect prediction models could be beneficial for software developers to reduce the amount of software testing and software maintenance cost, software reliability and software quality as well as at the early stage of software development to identify software components that may be at risk of failure. Moreover, the study emphasized on data pre-processing and feature selection approaches to boost the prediction accuracy and to perform successful software quality assurance procedures.",
@@ -3064,6 +3154,28 @@
       ],
       "query": "software defect prediction",
       "discoveredAt": "2026-08-26T09:59:35.201Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-icmlas67792-2026-11483809",
+      "title": "A Hybrid Ensemble Method for Accurate Software Defect Prediction",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Viswanath Kurnool",
+        "Sarala Devi Kurakula",
+        "Amrusha Ulindala",
+        "Keerthan Reddy Morareddy"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-03-11",
+      "source": "Semantic Scholar",
+      "venue": "2026 International Conference on Machine Learning and Autonomous Systems (ICMLAS)",
+      "doi": "https://doi.org/10.1109/ICMLAS67792.2026.11483809",
+      "url": "https://doi.org/10.1109/ICMLAS67792.2026.11483809",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-10-31T15:21:44.126Z"
     },
     {
       "id": "doi-doi-org-10-1007-s44196-026-01174-6",
