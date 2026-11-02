@@ -47,7 +47,7 @@ export const collaborationSeries: EditorialSeries[] = [
         example: "‘Validamos compra com cartão e cupom em desktop; não conseguimos exercitar estorno porque o sandbox estava indisponível; o risco é um pedido não voltar ao estado correto.’ Essa frase é mais acionável que ‘sem bugs’.",
         steps: ["Diga quais cenários e ambientes foram cobertos.", "Separe defeitos encontrados de riscos ainda não verificados.", "Explique impacto possível e proponha mitigação ou próximo teste."],
         caution: "Não converta ‘não encontrei defeito’ em ‘não existe defeito’. São afirmações diferentes.",
-        exercise: "Escreva uma atualização de release com dois testes concluídos, uma limitação e uma recomendação."
+        exercise: "Escreva uma atualização de release com dois testes executados, ambiente e evidência de cada um, uma limitação e uma recomendação com responsável ou próximo passo. Separe resultado observado de risco ainda aberto e evite concluir ‘sem bugs’ a partir dos casos cobertos."
       },
       {
         slug: "qualidade-e-responsabilidade-do-time", title: "Qualidade é responsabilidade do time inteiro", summary: "QA amplia a informação disponível; não é uma barreira solitária antes do deploy.",

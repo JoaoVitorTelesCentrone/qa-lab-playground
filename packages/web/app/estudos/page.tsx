@@ -158,7 +158,7 @@ export default function EstudosPage() {
               <h3 className="mt-4 text-lg font-black leading-snug text-off-white">{post.titulo}</h3>
               <p className="mt-3 flex-1 text-sm leading-6 text-[#8B949E]">{post.resumo}</p>
               <p className="mt-5 text-xs font-bold uppercase tracking-[0.16em] text-mint">
-                {formatDate(post.data)} - {post.tempoLeitura} min
+                {post.publishedAt ? `${formatDate(post.publishedAt)} - ` : ""}{post.tempoLeitura} min
               </p>
             </Link>
           ))}

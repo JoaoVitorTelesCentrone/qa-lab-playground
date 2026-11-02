@@ -31,6 +31,15 @@ export type CohortMetrics = {
   evidenceRate: number | null;
 };
 export type ReviewedSubmission = { studentId: string; reviewedAt: string };
+export type BlogMetrics = {
+  views: number;
+  readers: number;
+  practiceClicks: number;
+  practiceArrivals: number;
+  practiceClickers: number;
+  seriesNavigations: number;
+  topArticles: Array<{ slug: string; readers: number }>;
+};
 
 export type Metrics = {
   /** Contas que geraram pelo menos um evento no período. */
@@ -51,6 +60,8 @@ export type Metrics = {
   /** Contas que publicaram o case sistema no período lido. */
   casesPublished: number;
   mentorshipFunnel: { waitlistLeads: number; applications: number; checkouts: number; payments: number; firstReviewedSubmissions: number };
+  /** Blog activity from authenticated accounts only; anonymous visits are intentionally absent. */
+  blog: BlogMetrics;
   /** Weekly signup cohorts; only users with seven complete days count in stage rates. */
   weeklyCohorts: CohortMetrics[];
   /** First-touch acquisition source; users without UTMs stay visible as direct/unknown. */
@@ -83,6 +94,18 @@ export function buildMetrics(events: ActivityEvent[], signups: Signup[] = [], no
     successful: events.filter((event) => event.name === "evidence_upload_succeeded").length,
     failed: events.filter((event) => event.name === "evidence_upload_failed").length,
   };
+  const blogViews = events.filter((event) => event.name === "blog_article_view" && typeof event.props.slug === "string");
+  const blogClicks = events.filter((event) => event.name === "blog_practice_cta_click" && typeof event.props.slug === "string");
+  const blogArrivals = events.filter((event) => event.name === "blog_practice_arrival" && typeof event.props.slug === "string");
+  const blogReaders = new Set(blogViews.map((event) => `${event.userId}\u0000${event.props.slug}`));
+  const blogClickers = new Set(blogClicks.map((event) => `${event.userId}\u0000${event.props.slug}`));
+  const readersBySlug = new Map<string, Set<string>>();
+  for (const event of blogViews) {
+    const slug = String(event.props.slug);
+    const readers = readersBySlug.get(slug) ?? new Set<string>();
+    readers.add(event.userId);
+    readersBySlug.set(slug, readers);
+  }
 
   const users = new Set(events.map((event) => event.userId));
   const signupDays = new Map(signups.map((signup) => [signup.userId, day(signup.createdAt)]));
@@ -138,6 +161,15 @@ export function buildMetrics(events: ActivityEvent[], signups: Signup[] = [], no
     medianHoursToFirstEvidence,
     casesPublished: casesPublished.size,
     mentorshipFunnel,
+    blog: {
+      views: blogViews.length,
+      readers: blogReaders.size,
+      practiceClicks: blogClicks.length,
+      practiceArrivals: blogArrivals.length,
+      practiceClickers: blogClickers.size,
+      seriesNavigations: events.filter((event) => event.name === "blog_series_navigation").length,
+      topArticles: [...readersBySlug.entries()].map(([slug, readers]) => ({ slug, readers: readers.size })).sort((a, b) => b.readers - a.readers || a.slug.localeCompare(b.slug)).slice(0, 10),
+    },
     weeklyCohorts: buildSignupBreakdown(events, signups, now, (signup) => cohortWeek(signup.createdAt)),
     acquisitionSources: buildSignupBreakdown(events, signups, now, signupSource),
     uploads,

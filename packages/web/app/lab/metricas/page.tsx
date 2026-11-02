@@ -45,6 +45,24 @@ export default async function MetricsPage() {
       </dl>
     </section>
 
+    <section className="mt-10" aria-labelledby="blog-metrics-title">
+      <h2 id="blog-metrics-title" className="text-lg font-semibold">Blog · últimos 30 dias</h2>
+      <dl className="mt-3 grid divide-y divide-border rounded-xl border border-border sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-5">
+        <Stat label="Leituras registradas" value={metrics.blog.views} hint={`${metrics.blog.readers} pares únicos de conta e artigo`} />
+        <Stat label="Cliques para praticar" value={metrics.blog.practiceClicks} hint={`${metrics.blog.practiceClickers} pares únicos de conta e artigo`} />
+        <Stat label="Chegadas à prática" value={metrics.blog.practiceArrivals} hint="abertura registrada de uma trilha ou Lab" />
+        <Stat label="Navegações na série" value={metrics.blog.seriesNavigations} hint="cliques para continuar a sequência de artigos" />
+        <Stat label="Artigos com leitura" value={metrics.blog.topArticles.length} hint="artigos lidos por contas autenticadas" />
+      </dl>
+      <p className="mt-3 text-xs leading-5 text-muted-foreground">A medição inclui somente contas autenticadas e não representa visitas anônimas. Leituras e cliques são eventos; os pares únicos deduplicam a mesma conta no mesmo artigo.</p>
+      <div className="mt-6">
+        <h3 className="text-sm font-medium">Artigos mais lidos por contas únicas</h3>
+        {metrics.blog.topArticles.length === 0
+          ? <p className="mt-3 text-sm text-muted-foreground">Nenhuma leitura autenticada registrada neste período.</p>
+          : <ol className="mt-3 divide-y divide-border border-y border-border">{metrics.blog.topArticles.map((item) => <li key={item.slug} className="flex items-center justify-between gap-3 py-3 text-sm"><span className="min-w-0 truncate font-mono text-xs">{item.slug}</span><span className="text-xs text-muted-foreground">{item.readers} conta(s)</span></li>)}</ol>}
+      </div>
+    </section>
+
     <section className="mt-10" aria-labelledby="daily-title">
       <h2 id="daily-title" className="text-lg font-semibold">Uso por dia</h2>
       {metrics.daily.length === 0

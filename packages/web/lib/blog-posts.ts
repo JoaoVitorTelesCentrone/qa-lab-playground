@@ -26,7 +26,10 @@ export interface BlogPost {
   titulo: string;
   resumo: string;
   autor: string;
-  data: string;
+  /** Only set when publication history has been verified. */
+  publishedAt?: string;
+  /** Last substantive editorial update; omit when it is unknown. */
+  updatedAt?: string;
   tags: string[];
   tempoLeitura: number;
   destaque?: boolean;
@@ -36,6 +39,7 @@ export interface BlogPost {
     seriesId: string;
     seriesTitle: string;
     seriesHref: string;
+    section: string;
     color: string;
     number: number;
     composition: "field" | "sequence" | "decision";
@@ -58,7 +62,7 @@ const allPosts: BlogPost[] = [
     resumo:
       "14 dias de desenvolvimento, 1 dia para o QA. Se o seu time vive esse ciclo, o problema não é agenda — é cultura. Entenda por que qualidade não é uma fase e como o Shift Left muda tudo.",
     autor: "QA Lab",
-    data: "2026-04-28",
+    publishedAt: "2026-04-28",
     tags: ["Shift-Left", "Estratégia", "Agilidade", "DevOps"],
     tempoLeitura: 3,
     destaque: true,
@@ -153,10 +157,28 @@ export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
   const post = getPostBySlug(slug);
   if (!post) return [];
 
+  const candidates = posts.filter((candidate) => candidate.slug !== slug);
+  const score = (candidate: BlogPost) => {
+    if (post.editorial?.seriesId && candidate.editorial?.seriesId === post.editorial.seriesId) return 3;
+    if (post.editorial?.section && candidate.editorial?.section === post.editorial.section) return 2;
+    if (candidate.tags.some((tag) => post.tags.includes(tag))) return 1;
+    return 0;
+  };
+
+  return candidates
+    .map((candidate) => ({ candidate, relevance: score(candidate) }))
+    .filter(({ relevance }) => relevance > 0)
+    .sort((a, b) => b.relevance - a.relevance || a.candidate.titulo.localeCompare(b.candidate.titulo, "pt-BR"))
+    .slice(0, limit)
+    .map(({ candidate }) => candidate);
+}
+
+export function getSeriesPosts(slug: string): BlogPost[] {
+  const post = getPostBySlug(slug);
+  if (!post?.editorial) return [];
   return posts
-    .filter((p) => p.slug !== slug)
-    .filter((p) => p.tags.some((t) => post.tags.includes(t)))
-    .slice(0, limit);
+    .filter((candidate) => candidate.editorial?.seriesId === post.editorial?.seriesId)
+    .sort((a, b) => (a.editorial?.number ?? 0) - (b.editorial?.number ?? 0));
 }
 
 export function formatDate(dateStr: string): string {

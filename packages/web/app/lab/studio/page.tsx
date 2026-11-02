@@ -3,6 +3,7 @@ import { ArrowRight, FolderKanban, Plus, TestTube2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createStudio } from "./actions";
+import { BlogPracticeArrival } from "@/components/blog/blog-event";
 
 export const metadata = {
   title: "Test Design Studio | QA Lab",
@@ -32,7 +33,7 @@ export default async function StudioPage() {
   const assignedProjects = new Set(workspaces.map((workspace) => workspace.project_id));
   const availableProjects = projects.filter((project) => !assignedProjects.has(project.id));
 
-  return <main className="mx-auto max-w-6xl px-5 py-12 sm:px-8">
+  return <><BlogPracticeArrival /><main className="mx-auto max-w-6xl px-5 py-12 sm:px-8">
     <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p className="text-xs font-black uppercase tracking-[.2em] text-neon">Test Design Studio</p>
@@ -73,5 +74,5 @@ export default async function StudioPage() {
         <button className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-neon px-4 text-xs font-black text-[#101319] hover:bg-neon/90"><Plus className="size-4" /> Criar</button>
       </form> : <p className="mt-5 text-sm text-[#8B949E]">Todos os projetos ativos já possuem Studio. Crie outro projeto no <Link href="/lab" className="font-bold text-mint hover:underline">workspace</Link> para adicionar um novo.</p>}
     </section>
-  </main>;
+  </main></>;
 }

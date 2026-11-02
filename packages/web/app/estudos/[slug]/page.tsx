@@ -141,7 +141,7 @@ export default async function StudyPostPage({ params }: PageProps) {
         <div className="mt-7 flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.16em] text-[#8B949E]">
           <span>{post.autor}</span>
           <span className="text-white/20">/</span>
-          <span>{formatDate(post.data)}</span>
+          {post.publishedAt && <span>{formatDate(post.publishedAt)}</span>}
           <span className="text-white/20">/</span>
           <span>{post.tempoLeitura} min</span>
         </div>

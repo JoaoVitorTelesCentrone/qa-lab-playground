@@ -39,7 +39,7 @@ export const labSeries: EditorialSeries[] = [
         example: "No Broto, registre um pensamento fictício com uma frase única. Saia da Mente, recarregue e volte. Compare texto, ordem e contexto; não basta encontrar um card com o mesmo título se o conteúdo mudou.",
         steps: ["Crie um texto de treino identificável e registre o estado inicial.", "Saia da tela, recarregue e volte pelo caminho normal do usuário.", "Compare conteúdo e contexto, inclusive edição e organização, se fizeram parte da ação."],
         caution: "Use texto fictício; a prática não exige colocar informações pessoais no sistema de treino.",
-        exercise: "Execute a jornada de salvar, sair e voltar no Broto e anote exatamente o que permanece e o que muda."
+        exercise: "Use somente o texto fictício do caso de treino. Antes de sair, registre o conteúdo e o contexto exibidos; depois volte pelo fluxo disponível e compare o mesmo item. Entregue uma tabela esperado (conforme regra confirmada), observado e evidência para texto, organização e contexto. Se a regra não estiver disponível, marque o esperado como pendente em vez de inferi-lo."
       },
       {
         slug: "testes-de-retomada-de-contexto", title: "Testes de retomada de contexto", summary: "Verifique se a pessoa consegue continuar de onde parou.",
@@ -47,7 +47,7 @@ export const labSeries: EditorialSeries[] = [
         example: "Uma nota continua salva, mas reaparece em outra seção sem a etiqueta que a organizava. Os bytes do texto persistiram; o contexto que ajudava a encontrar a ideia se perdeu. Para a pessoa, o trabalho ainda foi prejudicado.",
         steps: ["Registre texto, local, marcadores e estado antes de sair.", "Volte por caminhos diferentes, como menu, busca e página inicial.", "Compare se a tarefa pode continuar sem reconstruir informações manualmente."],
         caution: "Não reduza retomada a ‘o registro existe no banco’. A experiência de encontrá-lo também importa.",
-        exercise: "Salve duas notas fictícias em categorias distintas e verifique se a organização continua compreensível após nova sessão."
+        exercise: "Crie duas entradas fictícias com identificadores fáceis de distinguir e registre, antes de sair, título, categoria e estado visíveis. Retome por dois caminhos disponíveis e entregue uma comparação antes/depois com evidência. Diga se cada diferença contraria uma regra confirmada ou se ainda precisa de decisão de produto."
       },
       {
         slug: "investigar-perda-silenciosa-de-informacao", title: "Investigando perda silenciosa de informações", summary: "Procure falhas que não exibem erro, mas alteram a intenção da pessoa.",
@@ -55,7 +55,7 @@ export const labSeries: EditorialSeries[] = [
         example: "Você edita um pensamento e vê o novo texto. Ao abrir outra área e voltar, a versão antiga reaparece. A mensagem de sucesso indicava uma operação, mas não garantiu que o estado final persistiu.",
         steps: ["Use conteúdo de treino fácil de distinguir em versões diferentes.", "Compare tela, retorno após navegação e retorno após recarga.", "Se houver divergência, isole a transição e registre horário, ação e versão observada."],
         caution: "Uma falha sem alerta pode ser mais difícil de perceber; documente o impacto sobre confiança e retomada.",
-        exercise: "Altere uma nota fictícia duas vezes e descubra qual versão aparece em cada caminho de retorno."
+        exercise: "Com uma nota fictícia, salve as versões A e B e anote o estado visível após cada salvamento. Navegue para outra área, volte e depois recarregue; entregue uma linha por transição com versão esperada (se confirmada), versão observada e evidência. Se houver divergência, escreva os passos mínimos para reproduzi-la e a pergunta que falta para classificar como defeito."
       }
     ]
   },
