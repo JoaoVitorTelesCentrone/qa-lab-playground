@@ -1,6 +1,52 @@
 {
-  "updatedAt": "2026-11-02T19:31:26.413Z",
+  "updatedAt": "2026-11-03T17:05:50.639Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1007-s10664-026-10989-y",
+      "title": "HAM-Net: hybrid attention and multi-instance learning for cross-project software defect prediction",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Hong-Liang Dai",
+        "Yu-Xuan Mao",
+        "Xiao-Wen Liao",
+        "Qing-Yi Fu",
+        "Man-Na Fu"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-03",
+      "source": "Crossref",
+      "venue": "Empirical Software Engineering",
+      "doi": "https://doi.org/10.1007/s10664-026-10989-y",
+      "url": "https://doi.org/10.1007/s10664-026-10989-y",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-11-03T17:05:50.639Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s10664-026-10971-8",
+      "title": "Empirical insights on the use of large language models in software verification and validation: evidence from the Brazilian IT industry",
+      "abstract": "Abstract Artificial Intelligence (AI) has created new possibilities for improving Verification and Validation (V&V) activities in software engineering. Among recent advances, Large Language Models (LLMs) have gained attention for their potential to automate tasks such as test generation, defect detection, and requirements analysis. Although interest in these technologies has increased, their use in industrial environments is still limited and not well understood. Concerns remain about their reliability, transparency, and ethical implications, especially when applied in safety-critical or regulated domains. This paper reports an exploratory empirical study based on a survey with 39 software professionals from different sectors and company sizes in Brazil. The questionnaire investigates the reported use of conventional V&V tools, AI-based testing solutions, and LLM-supported practices, as well as perceptions of effectiveness, workflow integration, cost, and governance challenges. Respondents reported perceived benefits, such as support for automation, test-case creation, code understanding, and efficiency-oriented tasks, along with difficulties related to integration, transparency, reliability, hallucinations, over-reliance, data misuse, and governance. By documenting current practices, perceptions, and expectations, this study offers an exploratory empirical view of how AI and LLMs are being selectively incorporated into industrial V&V activities in Brazil. The findings may inform discussions on responsible AI adoption in software engineering and provide preliminary, practitioner-informed insights for future research and governance-oriented decision-making. Given the exploratory design, convenience sample, and self-reported data, these findings should be interpreted as indicative perceptions rather than statistically generalizable evidence.",
+      "authors": [
+        "Guilherme Bolfe",
+        "Filipe Garcia Silva",
+        "Elder de Macedo Rodrigues",
+        "Maicon Bernardino",
+        "Fabio Paulo Basso"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-03",
+      "source": "Crossref",
+      "venue": "Empirical Software Engineering",
+      "doi": "https://doi.org/10.1007/s10664-026-10971-8",
+      "url": "https://doi.org/10.1007/s10664-026-10971-8",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-11-03T17:05:50.639Z"
+    },
     {
       "id": "doi-doi-org-10-21203-rs-3-rs-11300160-v1",
       "title": "A Hybrid Feature Fusion Framework for Just-in-Time Software Defect Prediction using LLM Reasoning and CodeBERT Embeddings",
