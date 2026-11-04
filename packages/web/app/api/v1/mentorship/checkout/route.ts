@@ -1,6 +1,7 @@
 import { createPreference, mercadoPagoMentorshipConfigured } from "@/lib/billing/mercado-pago";
 import { createAdminClient, hasServiceRole } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { fail, ok, readJson } from "@/lib/product/api";
 import { trackEvent } from "@/lib/product/store";
 import { normalizeWaitlistAttribution } from "@/lib/mentorship/waitlist-request";
@@ -8,6 +9,9 @@ import { normalizeWaitlistAttribution } from "@/lib/mentorship/waitlist-request"
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  // Sem Supabase configurado ninguém pode estar autenticado; responder 401 é
+  // melhor do que estourar 500 antes de checar a sessão.
+  if (!isSupabaseConfigured()) return fail("Entre ou crie uma conta para continuar.", 401);
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return fail("Entre ou crie uma conta para continuar.", 401);

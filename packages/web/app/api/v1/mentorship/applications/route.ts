@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { notifyMentorshipUsers } from "@/lib/mentorship/store";
 import { fail, ok, readJson } from "@/lib/product/api";
 import { trackEvent } from "@/lib/product/store";
@@ -7,6 +8,9 @@ import { trackEvent } from "@/lib/product/store";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  // Sem Supabase configurado ninguém pode estar autenticado; responder 401 é
+  // melhor do que estourar 500 antes de checar a sessão.
+  if (!isSupabaseConfigured()) return fail("Entre ou crie uma conta para entrar na lista de interesse.", 401);
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return fail("Entre ou crie uma conta para entrar na lista de interesse.", 401);
