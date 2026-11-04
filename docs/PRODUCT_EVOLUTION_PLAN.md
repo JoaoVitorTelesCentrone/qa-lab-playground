@@ -12,7 +12,7 @@ Público prioritário: quem está começando em QA ou precisa construir repertó
 
 | Área | Estado observado | Consequência para o plano |
 | --- | --- | --- |
-| Catálogo | `LAUNCH_ORDER` libera três Labs do Broto (`101`, `103`, `105`); os demais estão agendados. | Melhorar a jornada desses três antes de abrir novos ambientes. |
+| Catálogo | `LAUNCH_ORDER` libera três Labs do Broto (`101`, `103`, `105`); o Lab 102 tem conteúdo próprio e aguarda validação manual e política de certificado para entrar na posição 04; os demais estão agendados. | Melhorar a jornada desses três e validar o 102 antes de abrir novos ambientes. |
 | Aprendizagem | Há briefing, envio de evidência, conclusão, progresso, trilhas, portfólio e certificado no código. | O trabalho principal é conectar, explicar e validar o ciclo completo. |
 | Oferta paga | Há oferta Pro vitalícia de R$ 297 e fluxo de Checkout Pro com webhook. | Validar compra e direito de acesso em staging antes de ampliar aquisição paga. |
 | Lista de interesse | A página depende de `NEXT_PUBLIC_LEAD_FORM_URL` e abre um formulário externo. | Confirmar configuração e captura efetiva; a mensagem atual confirma a abertura, não o cadastro. |

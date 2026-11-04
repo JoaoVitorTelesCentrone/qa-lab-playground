@@ -288,5 +288,7 @@ Evitar usar apenas quantidade de cliques, páginas visitadas ou pontos acumulado
   cinco trilhas num único desafio.
 
 O estado do catálogo público é menor que o conteúdo existente: três Labs de
-Broto estão liberados; os demais desafios ficam fora da vitrine até a decisão
-de expansão registrada em `QA_LAB_DECISIONS.md`.
+Broto estão liberados; o Lab 102 já tem conteúdo próprio e aguarda validação
+manual e definição da política de certificado para entrar na posição 04; os
+demais desafios ficam fora da vitrine até a decisão de expansão registrada em
+`QA_LAB_DECISIONS.md`.

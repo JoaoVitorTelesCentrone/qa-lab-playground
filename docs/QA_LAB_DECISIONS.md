@@ -1,6 +1,6 @@
 # QA Lab Playground - Registro de Decisoes
 
-Ultima atualizacao: 2026-10-25
+Ultima atualizacao: 2026-11-04
 
 Este documento registra decisoes de produto e arquitetura do QA Lab Playground. A motivacao e parte da decisao: sem ela, mudancas futuras tendem a desfazer escolhas intencionais.
 
@@ -9,6 +9,8 @@ Este documento registra decisoes de produto e arquitetura do QA Lab Playground. 
 Atualização de 2026-10-25: o catálogo mantém três Labs liberados (`101`, `103`, `105`), agora ligados ao caso fictício do Broto Space. Os outros exercícios do mesmo bloco também usam o Broto, mas seguem agendados. O conteúdo dos desafios continua no registry e não exige migração para ser publicado. A rota direta de um Lab agendado redireciona para `/waitlist`, e as APIs de progresso, evidências e anexos recusam Labs agendados.
 
 Isso diverge do plano inicial abaixo de 30 Labs com liberacao semanal. A cadencia de 30 continua sendo uma proposta registrada, nao o comportamento ativo do catalogo. Antes de mudar a lista liberada, atualizar `LAUNCH_ORDER` em `packages/web/lib/playground/catalog.ts` e confirmar que o ambiente do Lab tambem esta pronto.
+
+Atualização de 2026-11-04: o Lab 102 recebeu conteúdo próprio e está pronto para a próxima liberação, na posição 04 da trilha. Ele continua fora do catálogo público até duas confirmações: validação manual do fluxo logado do BrotoSpace com conta de estudo e definição da política de certificado. A recomendação é manter válidos os certificados já emitidos e exigir os quatro Labs liberados para novas emissões. A liberação exige acrescentar `102` ao fim de `LAUNCH_ORDER` e atualizar os testes de catálogo e trilha.
 
 O checkout implementado e uma compra unica do Pro por R$ 297 com Checkout Pro e webhook assinado. Os precos Free/Pro/Time/Assessment abaixo sao uma proposta anterior e nao descrevem o catalogo de cobranca ativo.
 

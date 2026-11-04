@@ -119,6 +119,28 @@ export const systemChallenges: SystemChallenge[] = allFeatures.flatMap(({ area, 
         plantedBug: "Não há resposta escondida nem defeito plantado; investigue o comportamento observável.",
       };
     }
+    if (number === 102) {
+      return {
+        id: "desafio-102", number, area: "Broto", mode, route,
+        title: "Investigar riscos na captura e retomada de um pensamento",
+        difficulty: "Intermediario" as const,
+        objective: "Investigar riscos de perda ou mudança de contexto ao registrar um pensamento fictício e retomá-lo depois no Broto.",
+        testData: "Use a conta de estudo e o pensamento fictício do caso de treino em /conteudo/broto. Antes de salvar, anote o texto e o contexto exibidos; depois saia da Mente, recarregue e volte ao registro. Repita com uma interrupção no meio da captura e, se possível, em viewport móvel. Não inclua e-mail, senha ou reflexões pessoais.",
+        expected: "O pensamento registrado deve continuar disponível e compreensível ao retornar, inclusive após recarregar ou interromper a tarefa. Se a interface não confirmar uma regra, registre a dúvida em vez de tratá-la como defeito.",
+        steps: [
+          "Leia o caso de treino e registre o pensamento fictício na Mente; anote texto e contexto exibidos antes de sair.",
+          "Saia da tela e volte ao registro; compare texto, posição e contexto com o que foi anotado.",
+          "Repita com recarregamento e com uma interrupção no meio da captura; registre o que mudou em cada tentativa.",
+          "Documente passos, resultado observado, expectativa ou dúvida, impacto e limites da investigação sem dados pessoais.",
+        ],
+        acceptance: [
+          "Conta de estudo, pensamento fictício e condições de cada tentativa ficam claros sem expor acesso",
+          "A evidência distingue perda do registro, dificuldade de encontrá-lo e mudança de contexto",
+          "Regra confirmada, hipótese e impacto são separados com clareza",
+        ],
+        plantedBug: "O Broto é um produto real, sem defeito plantado. Registre a investigação mesmo quando não encontrar uma falha; uma dúvida bem formulada também é evidência.",
+      };
+    }
     if (area === "Broto") {
       return {
         id: `desafio-${number}`, number, area, mode, route,

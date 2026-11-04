@@ -57,7 +57,11 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
   const surface = surfaceRoute(challenge);
   const issueFor = (field: string) => evaluation?.issues.find((issue) => issue.field === field)?.message;
   const trackStep = trackProgress?.steps.find((item) => item.lab.slug === challenge.id);
-  const nextInTrack = trackProgress?.steps.find((item) => item.position > (trackStep?.position ?? 0) && item.status !== "completed")?.lab ?? null;
+  // Passos agendados não entram na sugestão: eles levariam à waitlist. Se ainda
+  // houver um passo agendado à frente, a mensagem não pode dizer que a trilha
+  // terminou.
+  const nextInTrack = trackProgress?.steps.find((item) => item.position > (trackStep?.position ?? 0) && item.status !== "completed" && item.lab.status === "liberado")?.lab ?? null;
+  const hasScheduledAhead = trackProgress?.steps.some((item) => item.position > (trackStep?.position ?? 0) && item.lab.status !== "liberado") ?? false;
 
   async function start() {
     if (!signedIn || starting) return;
@@ -230,7 +234,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
               ? <Button asChild size="sm" variant="outline"><Link href={`/labs/${nextInTrack.number}`}>Próximo Lab da trilha</Link></Button>
               : <Button asChild size="sm" variant="outline"><Link href="/labs">Escolher o próximo Lab</Link></Button>}
           </div>
-          {!nextInTrack && trackProgress && <p className="mt-3 text-xs text-muted-foreground">Você concluiu todos os Labs da trilha {trackProgress.track.name} — o certificado te espera na conclusão.</p>}
+          {!nextInTrack && trackProgress && <p className="mt-3 text-xs text-muted-foreground">{hasScheduledAhead ? `Você concluiu os Labs liberados da trilha ${trackProgress.track.name}. Os próximos passos ainda não estão disponíveis.` : `Você concluiu todos os Labs da trilha ${trackProgress.track.name} — o certificado te espera na conclusão.`}</p>}
         </div>}
 
         <SubmissionHistory labSlug={challenge.id} submissions={submissions} />
