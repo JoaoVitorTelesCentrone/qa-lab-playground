@@ -38,7 +38,17 @@ jobs:
         run: bunx playwright install --with-deps chromium
 
       - name: Run launch smoke tests
-        run: bun run --filter '@qa-lab/web' test:e2e:smoke
+        run: |
+          set -o pipefail
+          FORCE_COLOR=0 bun run --filter '@qa-lab/web' test:e2e:smoke 2>&1 | tee playwright-smoke.log
+
+      - name: Publish smoke test failures
+        if: failure()
+        run: |
+          echo "## Smoke test failures" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          tail -n 120 playwright-smoke.log >> "$GITHUB_STEP_SUMMARY" || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
 
   mentorship:
     name: Mentorship v2, permissions and payments
