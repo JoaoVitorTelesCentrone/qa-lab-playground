@@ -1,6 +1,34 @@
 {
-  "updatedAt": "2026-11-03T17:05:50.639Z",
+  "updatedAt": "2026-11-04T17:17:29.359Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1007-s10664-026-10952-x",
+      "title": "Incubation and Beyond: A Comparative Analysis of ASF Projects Sustainability Impacts on Software Quality",
+      "abstract": "Abstract Context: Free and Open Source Software (FOSS) communities’ sustainability, meaning to remain operational without signs of weakening or interruptions to its development, is fundamental for the resilience and continuity of society’s digital infrastructure. Many of our digital services and products either leverage or entirely rely on FOSS somewhere in their software stack. However, FOSS sustainability is a multifaceted concept, and the impact of its decline on community products is less known. Objective: In this study, we sought to understand how the different aspects of FOSS sustainability impact software quality from a developmental trajectory perspective. Specifically, we aim to investigate whether and how incubation of FOSS projects or bypassing incubation correlates with software quality outcomes. Method: We selected 342 FOSS projects from the Apache Software Foundation that have either graduated, retired, or bypassed their incubator program (development trajectory phases specific for Apache FOSS projects). We used 16 sustainability metrics to examine their impact on eight software quality metrics (defect density, code coverage, medium risk complexity, very high risk complexity, number of large files, very large function size count, code duplication percentage, and most complex function LOC). We analyzed the decline in the sustainability metrics and their relationship with our selected software quality metrics using Bayesian data analysis, which incorporates probability distributions to represent the regression coefficients and intercepts. Results: We found that our selected sustainability metrics exhibit distinct relationships with software quality across different project trajectories. Graduated projects demonstrated the strongest sustainability-software quality (SWQ) relationship. In contrast, retired projects exhibited weaker relationships, despite receiving similar governance support during incubation. Bypassed projects, while not outperforming graduated ones, showed comparable sustainability-SWQ relationships. Conclusion: While structured incubation strengthens sustainability and SWQ in graduated projects, retired projects struggle to maintain strong sustainability-SWQ relationships, indicating that additional factors internal and specific to projects influence sustainability. This effect was evident among bypassed projects; their self-reliant sustainability practices yielded stronger sustainability-software quality (SWQ) compared to the retired ones.",
+      "authors": [
+        "Adam Alami",
+        "Steffan Klockmann",
+        "L SORENSEN",
+        "Raúl Pardo",
+        "Johan Linåker"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-03",
+      "source": "OpenAlex",
+      "venue": "Empirical Software Engineering",
+      "doi": "https://doi.org/10.1007/s10664-026-10952-x",
+      "url": "https://doi.org/10.1007/s10664-026-10952-x",
+      "topics": [
+        "Sustainability",
+        "Software",
+        "Quality (philosophy)",
+        "Software quality",
+        "Leverage (statistics)",
+        "Business"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-11-04T17:17:29.359Z"
+    },
     {
       "id": "doi-doi-org-10-1007-s10664-026-10989-y",
       "title": "HAM-Net: hybrid attention and multi-instance learning for cross-project software defect prediction",
