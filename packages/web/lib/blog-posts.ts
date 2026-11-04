@@ -80,7 +80,7 @@ const allPosts: BlogPost[] = [
     slug: "como-escrever-um-bug-report-que-ajuda",
     titulo: "Como escrever um bug report que realmente ajuda",
     resumo: "Um bom relato reduz dúvidas, acelera a reprodução e deixa claro por que o problema merece atenção.",
-    autor: "QA Lab", data: "2026-05-05", tags: ["Bugs", "Comunicação", "Prática"], tempoLeitura: 5,
+    autor: "QA Lab", publishedAt: "2026-05-05", tags: ["Bugs", "Comunicação", "Prática"], tempoLeitura: 5,
     blocos: [
       { type: "paragraph", content: "Um bug report não é apenas um registro técnico. Ele conecta investigação, produto e engenharia para permitir uma decisão rápida e segura." },
       { type: "heading", content: "Comece pelo impacto" },
@@ -94,7 +94,7 @@ const allPosts: BlogPost[] = [
     slug: "severidade-e-prioridade-nao-sao-a-mesma-coisa",
     titulo: "Severidade e prioridade não são a mesma coisa",
     resumo: "Separar impacto técnico de urgência de negócio melhora a triagem e evita discussões baseadas apenas em opinião.",
-    autor: "QA Lab", data: "2026-05-12", tags: ["Risco", "Triagem", "Produto"], tempoLeitura: 4,
+    autor: "QA Lab", publishedAt: "2026-05-12", tags: ["Risco", "Triagem", "Produto"], tempoLeitura: 4,
     blocos: [
       { type: "paragraph", content: "Severidade descreve o tamanho do dano causado pelo defeito. Prioridade indica quando ele deve ser tratado dentro do contexto atual do produto." },
       { type: "heading", content: "Um exemplo simples" },
@@ -106,7 +106,7 @@ const allPosts: BlogPost[] = [
     slug: "charter-de-teste-exploratorio-na-pratica",
     titulo: "Charter de teste exploratório na prática",
     resumo: "Direcione uma sessão exploratória com foco suficiente para aprender sem transformar exploração em roteiro rígido.",
-    autor: "QA Lab", data: "2026-05-19", tags: ["Exploratório", "Estratégia", "Heurísticas"], tempoLeitura: 6,
+    autor: "QA Lab", publishedAt: "2026-05-19", tags: ["Exploratório", "Estratégia", "Heurísticas"], tempoLeitura: 6,
     blocos: [
       { type: "paragraph", content: "Um charter define missão, alvo e riscos de uma sessão. Ele evita exploração aleatória, mas preserva espaço para seguir descobertas relevantes." },
       { type: "heading", content: "Estrutura mínima" },
@@ -118,7 +118,7 @@ const allPosts: BlogPost[] = [
     slug: "bdd-alem-do-dado-quando-entao",
     titulo: "BDD além do Dado, Quando, Então",
     resumo: "Gherkin organiza exemplos, mas BDD começa na conversa sobre regras, riscos e comportamentos observáveis.",
-    autor: "QA Lab", data: "2026-05-26", tags: ["BDD", "Gherkin", "Colaboração"], tempoLeitura: 5,
+    autor: "QA Lab", publishedAt: "2026-05-26", tags: ["BDD", "Gherkin", "Colaboração"], tempoLeitura: 5,
     blocos: [
       { type: "paragraph", content: "Cenários bem formatados podem continuar ruins. BDD não é uma técnica de tradução automática de requisitos: é uma forma colaborativa de descobrir exemplos antes da implementação." },
       { type: "heading", content: "Prefira comportamento observável" },
@@ -130,7 +130,7 @@ const allPosts: BlogPost[] = [
     slug: "estrategia-de-testes-baseada-em-risco",
     titulo: "Estratégia de testes baseada em risco",
     resumo: "Quando não é possível testar tudo, risco ajuda a decidir onde profundidade e velocidade realmente importam.",
-    autor: "QA Lab", data: "2026-06-02", tags: ["Risco", "Estratégia", "Planejamento"], tempoLeitura: 7,
+    autor: "QA Lab", publishedAt: "2026-06-02", tags: ["Risco", "Estratégia", "Planejamento"], tempoLeitura: 7,
     blocos: [
       { type: "paragraph", content: "Cobertura não é sinônimo de quantidade. Uma estratégia útil concentra esforço onde probabilidade de falha e impacto se combinam de forma mais perigosa." },
       { type: "heading", content: "Mapeie antes de executar" },

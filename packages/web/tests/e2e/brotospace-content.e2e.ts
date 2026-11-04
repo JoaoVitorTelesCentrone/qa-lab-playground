@@ -4,7 +4,8 @@ import { readFile } from "node:fs/promises";
 test("@smoke a primeira aula apresenta captura e retomada no BrotoSpace", async ({ page }) => {
   await page.goto("/conteudo/modulos/produto-risco/produto-jornada");
   const main = page.locator("main");
-  await expect(main).toContainText("No BrotoSpace, salvar um pensamento");
+  await expect(main).toContainText("No BrotoSpace");
+  await expect(main).toContainText("Salve um pensamento com o texto fictício do caso de treino");
   expect(await main.textContent()).not.toMatch(/despesa|reembolso|ExpenseFlow|R\$/i);
   await page.goto("/conteudo/broto");
   await expect(page.getByRole("link", { name: "Abrir o Broto", exact: true })).toHaveAttribute("href", "https://www.brotospace.com/");

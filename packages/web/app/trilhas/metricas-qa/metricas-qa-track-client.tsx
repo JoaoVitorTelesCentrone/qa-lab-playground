@@ -1,42 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+import { useLocalProgress } from "@/app/trilhas/_components/local-progress";
 import { setQaMetricsLabCompletion } from "./actions";
 import type { QaMetricsModule } from "@/lib/qa-metrics-course";
 
 const STORAGE_KEY = "qa:metrics-track:v1";
-
-function readLocalProgress() {
-  try {
-    const value: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]");
-    if (!Array.isArray(value)) return new Set<string>();
-    return new Set(value.filter((item): item is string => typeof item === "string" && /^[a-z0-9-]{1,80}$/.test(item)));
-  } catch {
-    return new Set<string>();
-  }
-}
-
-function writeLocalProgress(completed: Set<string>) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...completed]));
-  } catch {
-    // Sem armazenamento local disponível, o progresso continua visível nesta sessão.
-  }
-}
 
 export function QaMetricsTrackOverview({ modules, initialCompleted, signedIn }: {
   modules: QaMetricsModule[];
   initialCompleted: string[];
   signedIn: boolean;
 }) {
-  const [completed, setCompleted] = useState(() => new Set(initialCompleted));
-
-  useEffect(() => {
-    if (signedIn) return;
-    const validIds = new Set(modules.map((module) => module.id));
-    setCompleted(new Set([...readLocalProgress()].filter((id) => validIds.has(id))));
-  }, [modules, signedIn]);
+  const validIds = new Set(modules.map((module) => module.id));
+  const [serverCompleted] = useState(() => new Set(initialCompleted.filter((id) => validIds.has(id))));
+  const [localCompleted] = useLocalProgress(STORAGE_KEY);
+  const completed = signedIn ? serverCompleted : new Set([...localCompleted].filter((id) => validIds.has(id)));
 
   const doneCount = completed.size;
   const percent = Math.round((doneCount / modules.length) * 100);
@@ -108,23 +88,20 @@ export function QaMetricsCompletionButton({ moduleId, initialCompleted, signedIn
   initialCompleted: boolean;
   signedIn: boolean;
 }) {
-  const [completed, setCompleted] = useState(initialCompleted);
+  const [serverCompleted, setServerCompleted] = useState(initialCompleted);
+  const [localCompleted, updateLocalCompleted] = useLocalProgress(STORAGE_KEY);
+  const completed = signedIn ? serverCompleted : localCompleted.has(moduleId);
   const [message, setMessage] = useState("");
   const [pending, startTransition] = useTransition();
-
-  useEffect(() => {
-    if (!signedIn && readLocalProgress().has(moduleId)) setCompleted(true);
-  }, [moduleId, signedIn]);
 
   function toggleCompletion() {
     const nextValue = !completed;
     setMessage("");
     if (!signedIn) {
-      const next = readLocalProgress();
-      if (nextValue) next.add(moduleId);
-      else next.delete(moduleId);
-      writeLocalProgress(next);
-      setCompleted(nextValue);
+      updateLocalCompleted((next) => {
+        if (nextValue) next.add(moduleId);
+        else next.delete(moduleId);
+      });
       return;
     }
 
@@ -134,7 +111,7 @@ export function QaMetricsCompletionButton({ moduleId, initialCompleted, signedIn
         setMessage(result.error);
         return;
       }
-      setCompleted(nextValue);
+      setServerCompleted(nextValue);
     });
   }
 

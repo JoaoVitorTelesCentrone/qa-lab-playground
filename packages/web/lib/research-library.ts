@@ -110,7 +110,6 @@ function isSoftwareQualityWork(work: ResearchWork) {
   if (work.source === "Curated") return true;
 
   const title = work.title.toLowerCase();
-  const text = [title, work.abstract, work.venue].join(" ").toLowerCase();
   return title.includes("software") && softwareQualityTerms.some((term) => title.includes(term));
 }
 

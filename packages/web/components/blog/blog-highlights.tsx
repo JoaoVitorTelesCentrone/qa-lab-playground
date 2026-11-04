@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -114,11 +115,13 @@ function ArticleCard({ article }: { article: BlogHighlightArticle }) {
     <Card className="group flex h-full flex-col overflow-hidden rounded-2xl border-border bg-card pt-0 pb-4 shadow-sm transition-all hover:shadow-md">
       <div className="relative h-60 overflow-hidden sm:h-64">
         {article.imageSrc ? (
-          <img
+          <Image
             src={article.imageSrc}
             alt={article.imageAlt ?? ""}
-            className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
+            fill
+            unoptimized
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div

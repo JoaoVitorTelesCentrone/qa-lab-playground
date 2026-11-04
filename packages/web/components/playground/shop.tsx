@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Heart, Minus, PackageCheck, Plus, ShoppingCart, Star, Trash2, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -215,7 +215,6 @@ export function CartPage() {
 export function CheckoutPage() {
   const bug = useSearchParams().get("bug");
   const router = useRouter();
-  const instanceId = useId().replace(/\W/g, "").slice(0, 6);
   const { items, save, remote, activeBugs } = useCart();
   const rows = items.map((item) => ({ ...item, product: shopProducts.find((product) => product.id === item.productId)! })).filter((item) => item.product);
   const [coupon, setCoupon] = useState(""); const [zip, setZip] = useState(""); const [delivery, setDelivery] = useState<"padrao" | "expressa">("padrao");

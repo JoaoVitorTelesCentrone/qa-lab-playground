@@ -8,35 +8,35 @@ import { getAppiumSeleniumProgress } from "../progress";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ moduleId: string }> }) {
-  const module = findAppiumSeleniumModule((await params).moduleId);
-  return module ? { title: `${module.title} | Trilha Appium e Selenium`, description: module.objective } : {};
+  const lesson = findAppiumSeleniumModule((await params).moduleId);
+  return lesson ? { title: `${lesson.title} | Trilha Appium e Selenium`, description: lesson.objective } : {};
 }
 
 export default async function AppiumSeleniumLabPage({ params }: { params: Promise<{ moduleId: string }> }) {
   const { moduleId } = await params;
-  const module = findAppiumSeleniumModule(moduleId);
-  if (!module) notFound();
+  const lesson = findAppiumSeleniumModule(moduleId);
+  if (!lesson) notFound();
 
   const progress = await getAppiumSeleniumProgress();
-  const index = appiumSeleniumModules.findIndex((item) => item.id === module.id);
+  const index = appiumSeleniumModules.findIndex((item) => item.id === lesson.id);
   const previous = appiumSeleniumModules[index - 1];
   const next = appiumSeleniumModules[index + 1];
-  const completed = progress.completed.includes(module.id);
+  const completed = progress.completed.includes(lesson.id);
 
   return <main className="qa-appium-selenium min-h-[calc(100vh-4rem)] bg-background text-foreground">
     <article className="mx-auto max-w-4xl px-5 py-9 sm:px-8 sm:py-12">
       <Link href="/trilhas/appium-selenium" className="inline-flex items-center gap-2 text-sm text-muted-foreground underline-offset-4 hover:text-primary hover:underline"><ArrowLeft className="size-4" aria-hidden="true" /> Trilha Appium + Selenium</Link>
       <header className="mt-8 border-b border-border pb-7">
-        <p className="text-sm font-semibold text-primary">Lab {String(index + 1).padStart(2, "0")} · Semana {module.week} · {module.duration}</p>
-        <h1 className="qa-page-title mt-3">{module.title}</h1>
-        <p className="mt-4 max-w-3xl text-base leading-7 text-muted-foreground">{module.objective}</p>
+        <p className="text-sm font-semibold text-primary">Lab {String(index + 1).padStart(2, "0")} · Semana {lesson.week} · {lesson.duration}</p>
+        <h1 className="qa-page-title mt-3">{lesson.title}</h1>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-muted-foreground">{lesson.objective}</p>
       </header>
 
       <section className="grid gap-8 py-7 md:grid-cols-[minmax(0,1fr)_15rem]">
         <div>
           <h2 className="text-lg font-bold">Conceitos deste Lab</h2>
           <ul className="mt-3 flex flex-wrap gap-2">
-            {module.concepts.map((concept) => <li key={concept} className="border border-border px-2.5 py-1 text-xs text-muted-foreground">{concept}</li>)}
+            {lesson.concepts.map((concept) => <li key={concept} className="border border-border px-2.5 py-1 text-xs text-muted-foreground">{concept}</li>)}
           </ul>
         </div>
         <div className="border-l border-border pl-5">
@@ -47,27 +47,27 @@ export default async function AppiumSeleniumLabPage({ params }: { params: Promis
 
       <section className="border-y border-border py-6">
         <h2 className="text-lg font-bold">Prática</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground">{module.practice}</p>
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground">{lesson.practice}</p>
         <div className="mt-5">
           <h3 className="text-sm font-semibold">Exemplo</h3>
-          <pre className="mt-3 max-h-[30rem] overflow-auto border border-border bg-[#111614] p-4 text-xs leading-6 text-[#e3eee5] sm:text-sm"><code>{module.example}</code></pre>
+          <pre className="mt-3 max-h-[30rem] overflow-auto border border-border bg-[#111614] p-4 text-xs leading-6 text-[#e3eee5] sm:text-sm"><code>{lesson.example}</code></pre>
         </div>
       </section>
 
       <section className="grid gap-8 py-7 md:grid-cols-2">
         <div>
           <h2 className="text-lg font-bold">O que entregar</h2>
-          <p className="mt-3 text-sm leading-7 text-muted-foreground">{module.deliverable}</p>
+          <p className="mt-3 text-sm leading-7 text-muted-foreground">{lesson.deliverable}</p>
         </div>
         <div>
           <h2 className="text-lg font-bold">Revise antes de concluir</h2>
           <ul className="mt-3 grid gap-2">
-            {module.checklist.map((item) => <li key={item} className="flex gap-2 text-sm leading-6 text-muted-foreground"><span className="text-primary" aria-hidden="true">□</span><span>{item}</span></li>)}
+            {lesson.checklist.map((item) => <li key={item} className="flex gap-2 text-sm leading-6 text-muted-foreground"><span className="text-primary" aria-hidden="true">□</span><span>{item}</span></li>)}
           </ul>
         </div>
       </section>
 
-      <AppiumSeleniumCompletionButton moduleId={module.id} initialCompleted={completed} signedIn={progress.signedIn} />
+      <AppiumSeleniumCompletionButton moduleId={lesson.id} initialCompleted={completed} signedIn={progress.signedIn} />
 
       <nav className="mt-6 flex flex-wrap items-center justify-between gap-4" aria-label="Navegação dos Labs">
         {previous ? <Link href={`/trilhas/appium-selenium/${previous.id}`} className="inline-flex items-center gap-2 text-sm text-muted-foreground underline-offset-4 hover:text-primary hover:underline"><ArrowLeft className="size-4" aria-hidden="true" /> Anterior: {previous.title}</Link> : <span />}

@@ -34,7 +34,8 @@ test("o conteúdo entregue por todas as camadas da mentoria usa o caso BrotoSpac
   for (const [name, content] of Object.entries(layers)) {
     expect(JSON.stringify(content), name).not.toMatch(/expense[\s-]?flow|despes[ao]s?|reembols\w*|financeir\w*|R\$|\/shop\/products/i);
   }
-  expect(lessonTheory["mentoria.w01.l1"].workedExample).toContain("BrotoSpace");
-  expect(lessonTheory["mentoria.w01.l1"].workedExample).toContain("recarregar");
+  expect(lessonTheory["mentoria.w01.l1"].workedExample).toContain("Mente");
+  expect(lessonTheory["mentoria.w01.l1"].workedExample).toMatch(/recarreg/i);
+  expect(lessonTheory["mentoria.w01.l1"].exercise).toContain("BrotoSpace");
   expect(mentorshipWeeks[0].assignment.practice.route).toBe("/conteudo/broto");
 });

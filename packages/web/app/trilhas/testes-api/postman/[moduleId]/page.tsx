@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic";
 
 export default async function PostmanApiModulePage({ params }: { params: Promise<{ moduleId: string }> }) {
   const { moduleId } = await params;
-  const module = apiTestingPostmanModules.find((item) => item.id === moduleId);
-  if (!module) notFound();
+  const lesson = apiTestingPostmanModules.find((item) => item.id === moduleId);
+  if (!lesson) notFound();
   const progress = await getApiTestingProgress();
-  return <ApiModuleLesson module={module} track="postman" completed={progress.completed.includes(module.id)} signedIn={progress.signedIn} />;
+  return <ApiModuleLesson module={lesson} track="postman" completed={progress.completed.includes(lesson.id)} signedIn={progress.signedIn} />;
 }

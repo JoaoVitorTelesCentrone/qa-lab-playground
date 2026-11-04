@@ -1,17 +1,21 @@
 import { expect, test } from "@playwright/test";
 
-test("@smoke apresenta o QA Lab e os Labs disponíveis", async ({ page }) => {
+test("@smoke apresenta o QA Lab e os caminhos de prática", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Aprenda QA na prática.", exact: true })).toBeVisible();
-  const practiceSection = page.getByRole("region", { name: "Aprenda em um sistema real" });
-  await expect(practiceSection).toBeVisible();
-  await expect(practiceSection.getByRole("link", { name: "Explorar os Labs" })).toHaveAttribute("href", "/labs");
-  await expect(page.getByRole("link", { name: /Ir para o Broto Space/i })).toHaveCount(0);
-  await expect(page.locator("main").getByRole("link", { name: "Começar a praticar", exact: true })).toHaveAttribute("href", "/comecar");
-  await page.locator("main").getByRole("link", { name: "Como funciona o QA Lab", exact: true }).click();
-  await expect(page).toHaveURL(/\/lab\/?$/);
-  await expect(page.getByRole("heading", { name: /Qualidade se aprende fazendo perguntas melhores/i })).toBeVisible();
-  await page.getByRole("link", { name: /Conhecer os Labs/i }).click();
+  await expect(page.getByRole("heading", { name: "Aprenda QA no BrotoSpace.", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Começar a praticar", exact: true })).toHaveAttribute("href", "/comecar");
+  await expect(page.getByRole("link", { name: "Abrir o BrotoSpace", exact: true })).toHaveAttribute("href", "https://www.brotospace.com/");
+
+  await page.getByRole("link", { name: "Veja como funciona", exact: true }).click();
+  await expect(page).toHaveURL(/#como-funciona$/);
+  await expect(page.getByRole("heading", { name: "Uma ideia. Duas visitas.", exact: true })).toBeVisible();
+
+  const routes = page.getByRole("navigation", { name: "Escolha por onde continuar." });
+  await expect(routes.getByRole("link", { name: /^Labs/ })).toHaveAttribute("href", "/labs");
+  await expect(routes.getByRole("link", { name: /^Trilhas/ })).toHaveAttribute("href", "/trilhas");
+  await expect(routes.getByRole("link", { name: /^Conteúdo/ })).toHaveAttribute("href", "/conteudo");
+
+  await routes.getByRole("link", { name: /^Labs/ }).click();
   await expect(page).toHaveURL(/\/labs\/?$/);
 });
 

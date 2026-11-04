@@ -1,32 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+import { useLocalProgress } from "@/app/trilhas/_components/local-progress";
 import { setManualTestingCompletion } from "../_actions/manual-testing-actions";
 import type { ManualTestingCourse, ManualTestingModule, ManualTestingTrackSlug } from "@/lib/manual-testing-courses";
 
 function storageKey(slug: ManualTestingTrackSlug) { return `qa:${slug}:progress:v1`; }
 
-function readLocalProgress(slug: ManualTestingTrackSlug) {
-  try {
-    const value: unknown = JSON.parse(localStorage.getItem(storageKey(slug)) ?? "[]");
-    if (!Array.isArray(value)) return new Set<string>();
-    return new Set(value.filter((item): item is string => typeof item === "string" && /^[a-z0-9-]{1,80}$/.test(item)));
-  } catch { return new Set<string>(); }
-}
-
-function writeLocalProgress(slug: ManualTestingTrackSlug, completed: Set<string>) {
-  try { localStorage.setItem(storageKey(slug), JSON.stringify([...completed])); } catch { /* Progresso fica visível nesta sessão. */ }
-}
-
 export function ManualTestingTrackOverview({ course, initialCompleted, signedIn }: {
   course: ManualTestingCourse; initialCompleted: string[]; signedIn: boolean;
 }) {
   const validIds = new Set(course.modules.map((module) => module.id));
-  const [completed, setCompleted] = useState(() => new Set(initialCompleted.filter((id) => validIds.has(id))));
-  useEffect(() => {
-    if (!signedIn) setCompleted(new Set([...readLocalProgress(course.slug)].filter((id) => validIds.has(id))));
-  }, [course.slug, signedIn]);
+  const [serverCompleted] = useState(() => new Set(initialCompleted.filter((id) => validIds.has(id))));
+  const [localCompleted] = useLocalProgress(storageKey(course.slug));
+  const completed = signedIn ? serverCompleted : new Set([...localCompleted].filter((id) => validIds.has(id)));
   const next = course.modules.find((module) => !completed.has(module.id));
   const done = course.modules.filter((module) => completed.has(module.id)).length;
   const percent = course.modules.length ? Math.round(done / course.modules.length * 100) : 0;
@@ -51,23 +39,26 @@ export function ManualTestingTrackOverview({ course, initialCompleted, signedIn 
 export function ManualTestingCompletionButton({ slug, module, initialCompleted, signedIn }: {
   slug: ManualTestingTrackSlug; module: ManualTestingModule; initialCompleted: boolean; signedIn: boolean;
 }) {
-  const [completed, setCompleted] = useState(initialCompleted);
+  const [serverCompleted, setServerCompleted] = useState(initialCompleted);
+  const [localCompleted, updateLocalCompleted] = useLocalProgress(storageKey(slug));
+  const completed = signedIn ? serverCompleted : localCompleted.has(module.id);
   const [message, setMessage] = useState("");
   const [pending, startTransition] = useTransition();
-  useEffect(() => { if (!signedIn && readLocalProgress(slug).has(module.id)) setCompleted(true); }, [module.id, signedIn, slug]);
 
   function toggleCompletion() {
     const nextValue = !completed;
     setMessage("");
     if (!signedIn) {
-      const next = readLocalProgress(slug);
-      if (nextValue) next.add(module.id); else next.delete(module.id);
-      writeLocalProgress(slug, next); setCompleted(nextValue); return;
+      updateLocalCompleted((next) => {
+        if (nextValue) next.add(module.id);
+        else next.delete(module.id);
+      });
+      return;
     }
     startTransition(async () => {
       const result = await setManualTestingCompletion(slug, module.id, nextValue);
       if (!result.ok) { setMessage(result.error); return; }
-      setCompleted(nextValue);
+      setServerCompleted(nextValue);
     });
   }
 

@@ -31,15 +31,13 @@ describe("updateSession", () => {
     expect(response.headers.get("cache-control")).toBe("private, no-store");
   });
 
-  test("redireciona visitante do conteudo", async () => {
+  test("mantem o conteudo publico acessivel", async () => {
     const response = await updateSession(
       new NextRequest("https://qa-lab.test/conteudo/modulos/fundamentos"),
     );
 
-    expect(response.status).toBe(307);
-    expect(new URL(response.headers.get("location")!).searchParams.get("next")).toBe(
-      "/conteudo/modulos/fundamentos",
-    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get("location")).toBeNull();
   });
 
   test.each(["/boards", "/boards/demo", "/lab/bdd"])(

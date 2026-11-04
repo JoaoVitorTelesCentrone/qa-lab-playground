@@ -142,7 +142,6 @@ function compactAuthors(authors: Array<string | null | undefined>) {
 
 function isRelevantText(parts: Array<string | null | undefined>) {
   const normalizedTitle = parts[0]?.toLowerCase() ?? "";
-  const haystack = parts.filter(Boolean).join(" ").toLowerCase();
 
   // The title must explicitly name a software-quality concern. Abstract-only
   // matches are commonly incidental mentions in work from unrelated fields.
