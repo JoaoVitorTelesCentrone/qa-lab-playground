@@ -1,6 +1,30 @@
 {
-  "updatedAt": "2026-11-05T17:26:09.083Z",
+  "updatedAt": "2026-11-06T16:47:34.602Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-70267-cai-v3n6-120132",
+      "title": "Software Defect Prediction under Label Scarcity: A Few-Shot Prototypical Learning and Adaptive Fusion Method",
+      "abstract": "Software defect prediction is a core means of software quality assurance and can reduce operation and maintenance costs by allocating testing resources in advance. However, in early project stages and cross-organizational reuse scenarios, defect labels are commonly scarce and classes are highly imbalanced. Most existing defect prediction methods assume sufficient training labels. Fixed model strategies have difficulty adapting to different label budgets, and evaluation based on random splitting can produce optimistic bias because duplicated samples leak across data subsets. This study proposes ProtoStar, a software defect prediction framework for label-scarce settings. Its core is a few-shot prototype engine that jointly trains with focal loss and supervised contrastive loss. The framework combines this engine with a label-budget-adaptive fusion mechanism selected through out-of-fold validation and an honest evaluation pipeline based on deduplicated grouped splitting, thereby achieving robust defect-risk ranking at low labeling cost. Systematic evaluation on 13 National Aeronautics and Space Administration Metrics Data Program (NASA MDP) datasets shows that the method significantly outperforms strong supervised baselines in k-shot few-shot and total-budget-constrained cold-start settings. Adaptive fusion effectively avoids ensemble overfitting. For cross-project prediction, the defect-hit enrichment among the top 20% high-risk modules reaches 1.28-1.76 times the base rate, providing a feasible technical approach to software quality assurance under limited labeling.",
+      "authors": [
+        "Chengang Zhang"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-05",
+      "source": "OpenAlex",
+      "venue": "Computers and artificial intelligence.",
+      "doi": "https://doi.org/10.70267/cai.v3n6.120132",
+      "url": "https://doi.org/10.70267/cai.v3n6.120132",
+      "topics": [
+        "Computer science",
+        "Software",
+        "Machine learning",
+        "Ranking (information retrieval)",
+        "Data mining",
+        "Pipeline (software)"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-11-06T16:47:34.602Z"
+    },
     {
       "id": "doi-doi-org-10-1007-s10664-026-10952-x",
       "title": "Incubation and Beyond: A Comparative Analysis of ASF Projects Sustainability Impacts on Software Quality",
