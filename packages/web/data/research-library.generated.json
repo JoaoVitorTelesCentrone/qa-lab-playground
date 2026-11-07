@@ -1,6 +1,32 @@
 {
-  "updatedAt": "2026-11-06T16:47:34.602Z",
+  "updatedAt": "2026-11-07T15:41:11.449Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-24013430",
+      "title": "Lagrangian-Optimized PCA and SMOTE–AdaBoost for Software Defect Prediction: JM1 Five-Fold Experimental Code and Results",
+      "abstract": "This archive contains Python/Jupyter Notebook code and experimental results for a five-fold evaluation of Lagrangian-Optimized PCA integrated with SMOTE–AdaBoost for software defect prediction using the publicly available JM1 dataset (OpenML ID 1053). The archive includes the experimental notebook, fold-level performance results, mean scores, standard deviations, and statistical comparison results for six predictive pipelines. The evaluation examines dimensionality reduction, class-imbalance handling, and predictive performance using recall, precision, specificity, G-mean, F1-score, accuracy, and ROC-AUC. This deposit documents the JM1 five-component experiment and does not constitute a complete replication archive for the additional benchmark datasets.",
+      "authors": [
+        "Cecilia Okumu",
+        "George Okeyo",
+        "Dennis Raburu"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-06",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.24013430",
+      "url": "https://doi.org/10.5281/zenodo.24013430",
+      "topics": [
+        "Computer science",
+        "Benchmark (surveying)",
+        "Code (set theory)",
+        "Software",
+        "Curse of dimensionality",
+        "Data mining"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-11-07T15:41:11.449Z"
+    },
     {
       "id": "doi-doi-org-10-70267-cai-v3n6-120132",
       "title": "Software Defect Prediction under Label Scarcity: A Few-Shot Prototypical Learning and Adaptive Fusion Method",
@@ -1494,6 +1520,27 @@
       "discoveredAt": "2026-09-07T15:04:56.332Z"
     },
     {
+      "id": "doi-doi-org-10-1109-worldsuas70880-2026-11767012",
+      "title": "The Role of Human Factors in Enhancing Software Quality Assurance (SQA)",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Bhanvi Gupta",
+        "Sarthak Rathi",
+        "Kovid Gupta"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-04",
+      "source": "Semantic Scholar",
+      "venue": "2026 IEEE World Skills Conference on Universal Data Analytics and Sciences (WorldSUAS)",
+      "doi": "https://doi.org/10.1109/WorldSUAS70880.2026.11767012",
+      "url": "https://doi.org/10.1109/WorldSUAS70880.2026.11767012",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-11-07T15:41:11.449Z"
+    },
+    {
       "id": "doi-doi-org-10-1002-9781394422791-ch21",
       "title": "Quality Assurance of Software Incorporating Graph Neural Networks for Defect Prediction",
       "abstract": "Resumo nao disponivel na fonte indexada.",
@@ -2343,6 +2390,29 @@
       ],
       "query": "software defect prediction",
       "discoveredAt": "2026-10-23T14:15:48.716Z"
+    },
+    {
+      "id": "doi-doi-org-10-1145-3820355-3820394",
+      "title": "Invited Paper: Quality Without Control - Evidence-Driven Software Quality Assurance for Cross-Domain Systems",
+      "abstract": "Modern software systems increasingly operate as decentralized architectures spanning multiple administrative domains, cloud environments, and execution contexts. While software quality assurance (QA) has advanced significantly through practices such as continuous integration, observability, and runtime validation, these approaches rely on assumptions of centralized control, trusted observability, and domain-local reasoning that no longer hold in cross-domain settings. In such environments, control is distributed, observability is partial and heterogeneous, and system behavior emerges from interactions between independently managed components. As a result, existing QA techniques cannot provide meaningful system-wide guarantees. We argue that QA must be rethought as an evidence-driven, cross-domain process with direct implications for software architecture. We identify three key requirements: (1) composable quality metrics that remain meaningful across heterogeneous systems, (2) continuous runtime measurement under partial visibility, and (3) verifiable evidence mechanisms that enable trust across domains. Drawing on cloud-native and decentralized systems, we outline how techniques such as provenance tracking, attestation, and cryptographic verification can support this shift. This perspective reframes software quality as a continuously assessed, ecosystem-level property, providing a foundation for QA in increasingly decentralized and autonomous systems.",
+      "authors": [
+        "Stefan Tai",
+        "Maria C. Borges",
+        "Sebastian Werner",
+        "Mi-Jung Choi",
+        "K. Wolter"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-07-05",
+      "source": "Semantic Scholar",
+      "venue": "ApPLIED",
+      "doi": "https://doi.org/10.1145/3820355.3820394",
+      "url": "https://doi.org/10.1145/3820355.3820394",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-11-07T15:41:11.449Z"
     },
     {
       "id": "doi-doi-org-10-1145-3803437-3805580",
