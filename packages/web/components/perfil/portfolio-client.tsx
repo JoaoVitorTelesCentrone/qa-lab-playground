@@ -14,7 +14,6 @@ import { PortfolioSectionsEditor } from "./portfolio-sections-editor";
 import { PortfolioProjectsEditor } from "./portfolio-projects-editor";
 import { PortfolioFeaturedEditor } from "./portfolio-featured-editor";
 import { AccountForm, type AccountFields, type SaveState } from "./account-form";
-import { DangerZone } from "./danger-zone";
 import type { Submission } from "@/lib/product/journey";
 import type { PortfolioSectionsResult } from "@/lib/product/store";
 import type { PortfolioProjectDraft } from "@/lib/product/portfolio-projects";
@@ -35,7 +34,7 @@ type PortfolioProfile = {
 function Disclosure({ title, description, children }: { title: string; description: string; children: ReactNode }) {
   return (
     <details className="group border-y border-border py-1">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-5 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-5 py-4">
         <span>
           <span className="block text-sm font-semibold">{title}</span>
           <span className="mt-1 block text-sm leading-6 text-muted-foreground">{description}</span>
@@ -105,15 +104,6 @@ export function PortfolioClient({ email, profile, submissions, sections, project
     setSaveState(error ? "error" : "saved");
   }
 
-  async function deleteAccount() {
-    const supabase = createClient();
-    const { error } = await supabase.rpc("delete_own_account");
-    if (error) return "Não foi possível excluir a conta. Tente novamente em instantes.";
-    await supabase.auth.signOut();
-    window.location.assign("/");
-    return null;
-  }
-
   return (
     <main className="mx-auto w-full max-w-4xl px-5 py-8 sm:px-8 lg:py-10">
       <Link href="/perfil" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
@@ -132,26 +122,22 @@ export function PortfolioClient({ email, profile, submissions, sections, project
           onUsername={(username) => change("username", username)}
           name={fields.fullName || fields.username || "QA Lab"}
         />
-        <Disclosure title="Evidências" description={`${portfolio.items.length} ${portfolio.items.length === 1 ? "registrada" : "registradas"} · ${published} ${published === 1 ? "publicada" : "publicadas"}`}>
+        {/* Quatro grupos, na ordem em que a pessoa monta a página: o que
+            publicar, o que mais mostrar, como fica e quem é. Sair e excluir a
+            conta moram no perfil. */}
+        <Disclosure title="Entregas e destaques" description={`${portfolio.items.length} ${portfolio.items.length === 1 ? "registrada" : "registradas"} · ${published} ${published === 1 ? "publicada" : "publicadas"} · escolha até três cases para aparecer primeiro.`}>
           <EvidenceList portfolio={portfolio} embedded />
+          <PortfolioFeaturedEditor submissions={submissions} initialSelection={profile?.portfolio_featured_submission_ids ?? []} />
+        </Disclosure>
+        <Disclosure title="Projetos e seções" description={`${projects.length} ${projects.length === 1 ? "projeto" : "projetos"} · ${sections.sections.length} ${sections.sections.length === 1 ? "seção" : "seções"} · reúna trabalhos e conte mais sobre você.`}>
+          <PortfolioProjectsEditor projects={projects} submissions={submissions} username={fields.username} portfolioPublic={portfolio.isPublic} />
+          <PortfolioSectionsEditor sections={sections.sections} available={sections.available} />
         </Disclosure>
         <Disclosure title="Aparência" description="Escolha o layout e as cores do seu portfólio.">
           <PortfolioAppearanceEditor initialAppearance={profile?.portfolio_appearance} />
         </Disclosure>
-        <Disclosure title="Seções públicas" description={`${sections.sections.length} ${sections.sections.length === 1 ? "criada" : "criadas"} · personalize o conteúdo da página.`}>
-          <PortfolioSectionsEditor sections={sections.sections} available={sections.available} />
-        </Disclosure>
-        <Disclosure title="Projetos" description={`${projects.length} ${projects.length === 1 ? "projeto" : "projetos"} · reúna trabalhos e cases de QA.`}>
-          <PortfolioProjectsEditor projects={projects} submissions={submissions} username={fields.username} portfolioPublic={portfolio.isPublic} />
-        </Disclosure>
-        <Disclosure title="Trabalhos em destaque" description="Escolha até três cases para aparecer primeiro.">
-          <PortfolioFeaturedEditor submissions={submissions} initialSelection={profile?.portfolio_featured_submission_ids ?? []} />
-        </Disclosure>
-        <Disclosure title="Dados do perfil" description="Nome, bio e links exibidos no seu portfólio.">
+        <Disclosure title="Dados públicos" description="Nome, bio e links exibidos no seu portfólio.">
           <AccountForm email={email} fields={fields} onChange={change} state={saveState} onSubmit={saveProfile} />
-        </Disclosure>
-        <Disclosure title="Excluir conta" description="Remova permanentemente sua conta e todos os dados associados.">
-          <DangerZone onDelete={deleteAccount} />
         </Disclosure>
       </div>
     </main>

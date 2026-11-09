@@ -40,7 +40,7 @@ export function PortfolioAppearanceEditor({ initialAppearance }: { initialAppear
     } finally { setBusy(false); }
   }
 
-  return <section className="min-w-0 rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="portfolio-appearance-title">
+  return <section className="min-w-0 rounded-md border border-border bg-card p-5 sm:p-6" aria-labelledby="portfolio-appearance-title">
     <h2 id="portfolio-appearance-title" className="text-base font-semibold">Aparência do portfólio</h2>
     <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Escolha um layout e uma paleta. Salvar atualiza a página pública.</p>
     <fieldset disabled={busy} className="mt-6">

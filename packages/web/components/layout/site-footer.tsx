@@ -7,6 +7,7 @@
 // O catálogo de Labs é uma tela de duas colunas com a coluna da esquerda fixa,
 // e uma faixa de links no fim da rolagem competia com ela.
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
 
@@ -21,10 +22,14 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t border-border bg-background">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 py-3.5 text-xs text-muted-foreground sm:px-8">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-5 py-3 text-sm text-muted-foreground sm:px-8">
         <span>© {new Date().getFullYear()} QA Lab</span>
-        <OnboardingLink className="inline-flex min-h-11 items-center transition hover:text-primary">Primeiros passos</OnboardingLink>
-        <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="transition hover:text-primary">LinkedIn</a>
+        <nav aria-label="Rodapé" className="flex flex-wrap items-center gap-x-5">
+          <OnboardingLink className="inline-flex min-h-11 items-center transition hover:text-foreground">Primeiros passos</OnboardingLink>
+          <Link href="/planos" className="inline-flex min-h-11 items-center transition hover:text-foreground">Planos</Link>
+          <Link href="/mentoria" className="inline-flex min-h-11 items-center transition hover:text-foreground">Mentoria</Link>
+          <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center transition hover:text-foreground">LinkedIn<span className="sr-only"> (abre em nova aba)</span></a>
+        </nav>
       </div>
     </footer>
   );

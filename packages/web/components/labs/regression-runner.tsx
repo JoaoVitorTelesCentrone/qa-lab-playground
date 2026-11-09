@@ -109,7 +109,7 @@ export function RegressionRunner({ signedIn, initialRuns, instructor = false }: 
       const executed = pack.scenarios.filter((scenario) => runs[key(pack.id, scenario.id)]).length;
       const failed = pack.scenarios.filter((scenario) => runs[key(pack.id, scenario.id)] === "falhou").length;
 
-      return <section key={pack.id} id={pack.id} className="scroll-mt-20 rounded-xl border border-border p-5">
+      return <section key={pack.id} id={pack.id} className="scroll-mt-20 rounded-md border border-border p-5">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-2xl font-semibold">{pack.name}</h2>

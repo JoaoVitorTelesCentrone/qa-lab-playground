@@ -31,7 +31,7 @@ export function AccountForm({ email, fields, onChange, state, onSubmit }: {
   const done = state.startsWith("saved");
 
   return (
-    <section id="dados-da-conta" className="scroll-mt-24 rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="conta-title">
+    <section id="dados-da-conta" className="scroll-mt-24 rounded-md border border-border bg-card p-5 sm:p-6" aria-labelledby="conta-title">
       <div className="flex items-center gap-2.5">
         <UserCog className="size-4 text-primary" aria-hidden="true" />
         <h2 id="conta-title" className="text-base font-semibold">Dados da conta</h2>

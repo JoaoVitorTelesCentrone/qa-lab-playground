@@ -81,7 +81,7 @@ function contentFor(seed: LabSeed, number: number): LabContent {
 
 export const labs: Lab[] = systemChallenges.map((challenge) => {
   const track: LabTrack = challenge.area === "API" ? "API e Contrato" : "UI Automation";
-  const content = contentFor({ title: challenge.title, objective: challenge.objective, requiredFeature: challenge.area, delivery: "Evidencia registrada no proprio Lab.", route: challenge.route }, challenge.number);
+  const content = contentFor({ title: challenge.title, objective: challenge.objective, requiredFeature: challenge.area, delivery: "Evidência registrada no próprio Lab.", route: challenge.route }, challenge.number);
   const position = launchPosition(challenge.number);
   const released = position !== null;
   const status: LabStatus = released ? "liberado" : "agendado";
@@ -97,7 +97,7 @@ export const labs: Lab[] = systemChallenges.map((challenge) => {
     releaseDate: released ? SEMANA_1 : AGENDADO,
     objective: challenge.objective,
     requiredFeature: challenge.area,
-    delivery: "Resultado observado, passos de reproducao e severidade registrados no Lab.",
+    delivery: "Resultado observado, passos de reprodução e severidade registrados no Lab.",
     acceptanceCriteria: challenge.acceptance,
     tags: [challenge.area.toLowerCase(), challenge.mode, status],
     route: challenge.route,

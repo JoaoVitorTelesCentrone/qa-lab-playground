@@ -279,7 +279,7 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
     </p>
 
     <div className="mt-9 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
-      <section className="rounded-xl border border-border bg-card p-6 sm:p-8" aria-label="Prévia do case">
+      <section className="rounded-md border border-border bg-card p-6 sm:p-8" aria-label="Prévia do case">
         <CaseView item={previewItem} />
         {olderCount > 0 && <p className="mt-6 border-t border-border pt-4 text-xs text-muted-foreground">
           Você tem {olderCount} entrega(s) anterior(es) neste Lab. O case público mostra sempre a mais recente. <Link href="/perfil" className="text-primary">Ver histórico</Link>
@@ -287,7 +287,7 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
       </section>
 
       <div className="grid gap-6">
-        <section className="rounded-xl border border-border bg-card p-5" aria-labelledby="publicar">
+        <section className="rounded-md border border-border bg-card p-5" aria-labelledby="publicar">
           <h2 id="publicar" className="flex items-center gap-2 text-sm font-medium">
             {live ? <Globe className="size-4 text-primary" aria-hidden="true" /> : <Lock className="size-4 text-muted-foreground" aria-hidden="true" />}
             {live ? "Case publicado" : "Publicar o case"}
@@ -344,7 +344,7 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
           </Button>
         </section>
 
-        {track && <section className="rounded-xl border border-border bg-card p-5" aria-labelledby="trilha">
+        {track && <section className="rounded-md border border-border bg-card p-5" aria-labelledby="trilha">
           <h2 id="trilha" className="flex items-center gap-2 text-sm font-medium"><Award className="size-4 text-primary" aria-hidden="true" /> Trilha {track.name}</h2>
           <p className="mt-2 text-xs text-muted-foreground">{track.completed} de {track.required} Labs liberados concluídos · {track.stats.evidence} evidência(s)</p>
           <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-muted">
@@ -372,7 +372,7 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
       </div>
     </div>
 
-    <section className="mt-8 rounded-xl border border-border bg-card p-6 sm:p-8" aria-labelledby="personalizar-case">
+    <section className="mt-8 rounded-md border border-border bg-card p-6 sm:p-8" aria-labelledby="personalizar-case">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div><p className="qa-eyebrow">Seu trabalho, sua narrativa</p><h2 id="personalizar-case" className="mt-2 text-xl font-semibold">Personalize o case</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">O briefing do Lab já vem preenchido. Conte como você investigou, o que encontrou e por que recomenda essa decisão. Só aparece no portfólio depois de publicar.</p></div>
         {!caseSaved
@@ -397,7 +397,7 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
       <CaseCardView ref={cardRef} item={previewItem} author={name} />
     </div>
 
-    <section className="mt-10 rounded-xl border border-border bg-card p-6 sm:p-8" aria-labelledby="imagem">
+    <section className="mt-10 rounded-md border border-border bg-card p-6 sm:p-8" aria-labelledby="imagem">
       <h2 id="imagem" className="flex items-center gap-2 text-lg font-semibold"><ImageIcon className="size-5 text-primary" aria-hidden="true" /> Imagem do case</h2>
       <p className="mt-1.5 max-w-xl text-sm leading-6 text-muted-foreground">
         Post com imagem alcança mais que post com link. Publique este card e deixe o link do case no primeiro comentário ou no fim do texto.
@@ -430,7 +430,7 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
       </div>
     </section>
 
-    <section className="mt-10 rounded-xl border border-border bg-card p-6 sm:p-8" aria-labelledby="post">
+    <section className="mt-10 rounded-md border border-border bg-card p-6 sm:p-8" aria-labelledby="post">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 id="post" className="flex items-center gap-2 text-lg font-semibold"><Linkedin className="size-5 text-primary" aria-hidden="true" /> Post pronto para o LinkedIn</h2>
@@ -464,7 +464,7 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
     <nav className="mt-8 flex flex-wrap gap-2 border-t border-border pt-6">
       <Button asChild variant="outline"><Link href={`/labs/${item.labNumber}`}>Voltar ao Lab</Link></Button>
       <Button asChild variant="outline"><Link href="/labs">Escolher o próximo Lab</Link></Button>
-      <Button asChild variant="ghost"><Link href="/perfil">Meu portfólio</Link></Button>
+      <Button asChild variant="ghost"><Link href="/perfil/portfolio">Meu portfólio</Link></Button>
     </nav>
   </div></main>;
 }

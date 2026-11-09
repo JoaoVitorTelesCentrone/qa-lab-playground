@@ -12,9 +12,9 @@
 // localStorage: o histórico exibido aqui vem do banco a cada render.
 
 import Link from "next/link";
-import { useState } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, ChevronRight, ExternalLink, FlaskConical, Loader2, Send } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, ChevronRight, ExternalLink, FlaskConical, Info, Loader2, Send } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
@@ -26,12 +26,26 @@ import type { Attachment, EnrollmentStatus, Submission } from "@/lib/product/jou
 import type { TrackProgress } from "@/lib/product/tracks";
 import { evaluateEvidence, type Evaluation } from "@/lib/product/evaluation";
 
+// `slug` vai para a URL (?etapa=) — recarregar ou compartilhar o link mantém o
+// aluno na mesma etapa.
 const steps = [
-  { label: "Contexto" },
-  { label: "Roteiro" },
-  { label: "Ambiente" },
-  { label: "Entrega" },
+  { label: "Contexto", slug: "contexto" },
+  { label: "Roteiro", slug: "roteiro" },
+  { label: "Ambiente", slug: "ambiente" },
+  { label: "Entrega", slug: "entrega" },
 ] as const;
+
+const difficultyLabel: Record<SystemChallenge["difficulty"], string> = { Basico: "Básico", Intermediario: "Intermediário", Avancado: "Avançado" };
+const modeLabel: Record<SystemChallenge["mode"], string> = { fluxo: "Validar um fluxo", investigacao: "Investigar um risco" };
+
+// Caminhos internos citados no texto ("/conteudo/broto") viram link: pedir que
+// o aluno copie a rota de cabeça era um atrito à toa.
+function withLinks(text: string): ReactNode {
+  return text.split(/(?<=^|[\s(])(\/[a-z0-9][a-z0-9/_?=&#-]*[a-z0-9])/gi).map((part, index) =>
+    index % 2 === 1
+      ? <Link key={index} href={part} target="_blank" rel="noopener noreferrer" className="font-medium text-primary underline underline-offset-4">{part}</Link>
+      : <Fragment key={index}>{part}</Fragment>);
+}
 
 // O desafio aponta para a superfície do módulo quando a área não tem rota própria.
 function surfaceRoute(challenge: SystemChallenge) {
@@ -43,7 +57,42 @@ function surfaceRoute(challenge: SystemChallenge) {
 
 export function LabBriefing({ challenge, status, submissions, trackProgress, signedIn }: { challenge: SystemChallenge; status: EnrollmentStatus | "nao-iniciado"; submissions: Submission[]; trackProgress: TrackProgress | null; signedIn: boolean }) {
   const router = useRouter();
-  const [step, setStep] = useState(0);
+  const [step, setStepState] = useState(0);
+  // Etapas já abertas ganham um check. Quem concluiu o Lab vê todas marcadas.
+  const [visited, setVisited] = useState<Set<number>>(() => new Set(status === "completed" ? [0, 1, 2, 3] : [0]));
+  const panelHeading = useRef<HTMLHeadingElement>(null);
+  const moveFocus = useRef(false);
+
+  // Lê ?etapa= depois de montar (evita divergir do HTML do servidor).
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("etapa");
+    const index = steps.findIndex((item) => item.slug === slug);
+    if (index > 0) {
+      setStepState(index);
+      setVisited((current) => new Set(current).add(index));
+    }
+  }, []);
+
+  // Ao trocar de etapa pelo teclado ou pelos botões, o foco vai para o título
+  // do painel: o leitor de tela anuncia o conteúdo novo em vez de ficar parado
+  // no botão que acabou de ser apertado.
+  useEffect(() => {
+    if (!moveFocus.current) return;
+    moveFocus.current = false;
+    panelHeading.current?.focus();
+  }, [step]);
+
+  function setStep(next: number | ((current: number) => number)) {
+    const index = typeof next === "function" ? next(step) : next;
+    if (index === step || index < 0 || index >= steps.length) return;
+    moveFocus.current = true;
+    setStepState(index);
+    setVisited((seen) => new Set(seen).add(index));
+    const url = new URL(window.location.href);
+    if (index === 0) url.searchParams.delete("etapa");
+    else url.searchParams.set("etapa", steps[index].slug);
+    window.history.replaceState(window.history.state, "", url);
+  }
   const [evidence, setEvidence] = useState("");
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
@@ -111,7 +160,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
 
   const exitHref = trackProgress ? `/trilhas/${trackProgress.track.slug}` : "/labs";
 
-  return <main className="qa-system"><div className="mx-auto max-w-5xl px-5 py-8 sm:px-8 sm:py-12">
+  return <main className="qa-system"><div className="mx-auto max-w-5xl px-5 pb-28 pt-8 sm:px-8 sm:py-12">
     {trackProgress && trackStep && <p className="text-xs text-muted-foreground">{trackProgress.track.name} · etapa {trackStep.position}/{trackProgress.total}</p>}
 
     <Breadcrumb className="mt-2">
@@ -136,7 +185,17 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
       {status === "completed" && <Badge variant="secondary" className="gap-1"><CheckCircle2 className="size-3" /> concluído</Badge>}
       {status === "started" && <Badge variant="secondary">em andamento</Badge>}
     </header>
-    <p className="mt-3 text-sm text-muted-foreground">{challenge.area} · {challenge.difficulty} · {challenge.mode}</p>
+    <p className="mt-3 text-sm text-muted-foreground">{challenge.area} · {difficultyLabel[challenge.difficulty] ?? challenge.difficulty} · {modeLabel[challenge.mode] ?? challenge.mode}{lab ? ` · cerca de ${lab.minutes} min` : ""}</p>
+
+    {/* Aviso logo no início, não só na Entrega: descobrir que precisa de conta
+        depois de investigar o Lab inteiro era o pior momento da jornada. */}
+    {!signedIn && <p className="mt-5 flex gap-3 border-y border-border py-3 text-sm leading-6 text-muted-foreground">
+      <Info className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+      <span>Você pode explorar este Lab sem conta. Para entregar a evidência e salvar o progresso,{" "}
+        <Link href={`/login?next=${encodeURIComponent(`/labs/${challenge.number}`)}`} className="font-medium text-primary underline underline-offset-4">entre</Link> ou{" "}
+        <Link href={`/cadastro?next=${encodeURIComponent(`/labs/${challenge.number}`)}`} className="font-medium text-primary underline underline-offset-4">crie uma conta grátis</Link>.
+      </span>
+    </p>}
 
     {/* Quem volta a um Lab já entregue precisa de um caminho de uma linha até o
         case — sem isso a entrega antiga fica enterrada no histórico. */}
@@ -145,70 +204,87 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
       <ArrowRight className="size-4 shrink-0 text-primary" aria-hidden="true" />
     </Link>}
 
-    {/* Passo a passo horizontal: cada etapa é um botão; só o conteúdo do passo atual aparece abaixo. */}
-    <ol className="mt-6 grid grid-cols-2 gap-2 border-b border-border pb-3 sm:mt-9 sm:flex" aria-label="Etapas do Lab">
-      {steps.map((item, index) => <li key={item.label} className="min-w-0 sm:shrink-0">
-        <button
-          type="button"
-          aria-label={`Etapa ${index + 1}: ${item.label}`}
-          data-onboarding={`lab-step-${index}`}
-          aria-current={index === step ? "step" : undefined}
-          onClick={() => setStep(index)}
-          className={`flex min-h-11 w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:w-auto sm:pr-4 ${index === step ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}
-        >
-          <span className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs ${index === step ? "bg-primary-foreground/20" : "border border-border"}`}>
-            {index + 1}
-          </span>
-          <span>{item.label}</span>
-        </button>
-      </li>)}
+    {/* Passo a passo horizontal: cada etapa é um botão; só o conteúdo do passo
+        atual aparece abaixo. No celular as quatro ficam numa linha (número em
+        cima, nome embaixo) para continuar lendo como sequência, não como abas. */}
+    <ol className="mt-6 grid grid-cols-4 gap-1 border-b border-border pb-3 sm:mt-9 sm:flex sm:gap-2" aria-label="Etapas do Lab">
+      {steps.map((item, index) => {
+        const current = index === step;
+        const seen = visited.has(index) && !current;
+        return <li key={item.label} className="min-w-0 sm:shrink-0">
+          <button
+            type="button"
+            aria-label={`Etapa ${index + 1}: ${item.label}${seen ? ", já aberta" : ""}`}
+            data-onboarding={`lab-step-${index}`}
+            aria-current={current ? "step" : undefined}
+            onClick={() => setStep(index)}
+            className={`flex min-h-14 w-full flex-col items-center justify-center gap-1 rounded-sm px-1 py-2 text-center text-xs font-medium transition sm:min-h-11 sm:w-auto sm:flex-row sm:gap-2 sm:px-3 sm:pr-4 sm:text-left sm:text-sm ${current ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
+          >
+            <span className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs ${current ? "bg-primary-foreground/20" : seen ? "bg-primary/15 text-primary" : "border border-border"}`}>
+              {seen ? <Check className="size-3.5" aria-hidden="true" /> : index + 1}
+            </span>
+            <span className="truncate">{item.label}</span>
+          </button>
+        </li>;
+      })}
     </ol>
 
-    <div data-onboarding="lab-panel" className="mt-6 rounded-xl bg-card p-5 sm:p-8">
+    <div data-onboarding="lab-panel" className="mt-6 rounded-md bg-card p-5 sm:p-8">
       <div key={step} className="qa-lab-step-panel">
       {step === 0 && <section>
-        <h2 className="text-sm font-semibold text-muted-foreground">Missão</h2>
+        <h2 ref={panelHeading} tabIndex={-1} className="text-sm font-semibold text-muted-foreground outline-none">Missão</h2>
         <p className="mt-2 text-base leading-7">{challenge.objective}</p>
         <dl className="mt-5 grid gap-4 border-y border-border py-4 sm:grid-cols-2">
-          <Brief label="Dados de teste" value={challenge.testData} />
+          <Brief label="Dados de teste" value={withLinks(challenge.testData)} />
           <Brief label="Resultado esperado" value={challenge.expected} />
         </dl>
-        <details className="mt-4">
-          <summary className="w-fit cursor-pointer text-sm font-medium text-primary">Pista de investigação</summary>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{challenge.plantedBug}</p>
-        </details>
-        <details className="mt-3">
-          <summary className="w-fit cursor-pointer text-sm font-medium text-primary">Critérios da entrega ({challenge.acceptance.length})</summary>
+        <div className="mt-5">
+          <h3 className="text-sm font-semibold">O que a entrega precisa ter</h3>
           <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">{challenge.acceptance.map((criterion) => <li key={criterion} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><span>{criterion}</span></li>)}</ul>
+        </div>
+        {/* A pista fica escondida e avisa o que revela: abrir sem querer tirava
+            a descoberta, que é justamente o que vira case. */}
+        <details className="mt-5 border-t border-border pt-2">
+          <summary className="flex min-h-11 w-fit cursor-pointer items-center text-sm font-medium text-primary">Precisa de uma pista? Ela indica onde olhar</summary>
+          <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">{withLinks(challenge.plantedBug)}</p>
         </details>
       </section>}
 
       {step === 1 && <section>
-        <h2 className="text-sm font-semibold text-muted-foreground">Roteiro de execução</h2>
+        <h2 ref={panelHeading} tabIndex={-1} className="text-sm font-semibold text-muted-foreground outline-none">Roteiro de execução</h2>
         <ol className="mt-5 divide-y divide-border border-y border-border">
           {challenge.steps.map((item, index) => <li key={item} className="flex gap-5 py-4 text-sm"><span className="font-mono text-xs text-primary">{String(index + 1).padStart(2, "0")}</span><p className="max-w-2xl leading-6">{item}</p></li>)}
         </ol>
       </section>}
 
       {step === 2 && <section>
-        <h2 className="text-sm font-semibold text-muted-foreground">Ambiente do Lab</h2>
+        <h2 ref={panelHeading} tabIndex={-1} className="text-sm font-semibold text-muted-foreground outline-none">Ambiente do Lab</h2>
         <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">{challenge.area === "Broto" ? "Leia o caso fictício, abra o Broto a partir dele e volte aqui para registrar o que observou." : "Abra o ambiente em outra aba, execute o roteiro e volte aqui para registrar a evidência."}</p>
-        <div className="mt-5 flex flex-wrap gap-2">
-          <Button asChild><Link href={surface} target="_blank" rel="noopener noreferrer">{challenge.area === "Broto" ? "Abrir caso de treino" : "Abrir ambiente do Lab"} <ExternalLink className="size-4" /></Link></Button>
-          {signedIn && status === "nao-iniciado" && <Button type="button" variant="outline" disabled={starting} onClick={() => void start()}>{starting && <Loader2 className="size-4 animate-spin" />} {starting ? "Iniciando..." : "Marcar como iniciado"}</Button>}
+        <div className="mt-5 flex flex-wrap items-center gap-3">
+          {/* Abrir o ambiente já conta como início do Lab: o antigo botão
+              "Marcar como iniciado" era um passo manual que ninguém entendia. */}
+          <Button asChild><Link href={surface} target="_blank" rel="noopener noreferrer" onClick={() => { if (signedIn && status === "nao-iniciado") void start(); }}>{challenge.area === "Broto" ? "Abrir caso de treino" : "Abrir ambiente do Lab"} <ExternalLink className="size-4" aria-hidden="true" /><span className="sr-only">(abre em nova aba)</span></Link></Button>
+          {starting && <span role="status" className="inline-flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" aria-hidden="true" /> Registrando o início do Lab...</span>}
+          {!starting && signedIn && status === "started" && <span className="text-sm text-muted-foreground">Lab em andamento. Quando terminar, siga para a Entrega.</span>}
         </div>
         {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
       </section>}
 
       {step === 3 && <section>
-        <h2 className="text-sm font-semibold text-muted-foreground">Entrega de evidência</h2>
+        <h2 ref={panelHeading} tabIndex={-1} className="text-sm font-semibold text-muted-foreground outline-none">Entrega de evidência</h2>
         <p className="mt-1 text-xs text-muted-foreground">Registre o que encontrou e anexe a prova para concluir o Lab.</p>
         <div className="mt-5">
           <h3 className="text-sm font-semibold">Revise antes de enviar</h3>
           <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">{challenge.acceptance.map((criterion) => <li key={criterion} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><span>{criterion}</span></li>)}</ul>
         </div>
 
-        {!signedIn ? <p className="mt-5 rounded-md border border-border bg-muted/40 p-4 text-sm"><Link href={`/login?next=${encodeURIComponent(`/labs/${challenge.number}`)}`} className="font-medium text-primary underline underline-offset-4">Entre na sua conta</Link> para salvar a evidência e o progresso.</p> : <form className="mt-5 grid gap-5" onSubmit={submit} noValidate>
+        {!signedIn ? <div className="mt-5 rounded-sm border border-border bg-muted/40 p-4 text-sm">
+          <p>Para entregar, você precisa de uma conta. Depois de entrar, você volta direto para esta etapa.</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Button asChild size="sm"><Link href={`/cadastro?next=${encodeURIComponent(`/labs/${challenge.number}?etapa=entrega`)}`}>Criar conta grátis</Link></Button>
+            <Button asChild size="sm" variant="outline"><Link href={`/login?next=${encodeURIComponent(`/labs/${challenge.number}?etapa=entrega`)}`}>Já tenho conta</Link></Button>
+          </div>
+        </div> : <form className="mt-5 grid gap-5" onSubmit={submit} noValidate>
           <EvidenceField
             labSlug={challenge.id}
             value={evidence}
@@ -251,7 +327,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
   </div></main>;
 }
 
-function Brief({ label, value }: { label: string; value: string }) {
+function Brief({ label, value }: { label: string; value: ReactNode }) {
   return <div><dt className="text-sm font-semibold">{label}</dt><dd className="mt-1 text-sm leading-6 text-muted-foreground">{value}</dd></div>;
 }
 

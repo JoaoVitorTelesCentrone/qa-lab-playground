@@ -16,5 +16,5 @@ export function CheckoutButton({ offerId, signedIn }: { offerId: string; signedI
       window.location.assign(payload.checkoutUrl);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Tente novamente."); setLoading(false); }
   }
-  return <div><button type="button" onClick={checkout} disabled={loading} className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-neon px-5 text-sm font-black text-[#101319] disabled:opacity-60">{loading && <Loader2 className="size-4 animate-spin" />}{signedIn ? "Quero acesso Pro" : "Criar conta e continuar"}</button>{error && <p role="alert" className="mt-3 text-xs leading-5 text-coral">{error}</p>}</div>;
+  return <div><button type="button" onClick={checkout} disabled={loading} className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-sm bg-primary px-5 text-sm font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-60">{loading && <Loader2 className="size-4 animate-spin" />}{signedIn ? "Quero acesso Pro" : "Criar conta e continuar"}</button>{error && <p role="alert" className="mt-3 text-xs leading-5 text-[var(--negative-foreground)]">{error}</p>}</div>;
 }

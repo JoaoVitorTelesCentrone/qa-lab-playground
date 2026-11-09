@@ -25,7 +25,7 @@ export function EvidenceList({ portfolio, embedded = false }: { portfolio: Portf
   }
 
   return (
-    <section className={embedded ? "min-w-0" : "rounded-xl border border-border bg-card p-5 sm:p-6"} aria-labelledby="evidencias-title">
+    <section className={embedded ? "min-w-0" : "rounded-md border border-border bg-card p-5 sm:p-6"} aria-labelledby="evidencias-title">
       <div className={embedded ? "sr-only" : "flex flex-wrap items-center justify-between gap-2"}>
         <div className="flex items-center gap-2.5">
           <ClipboardCheck className="size-4 text-primary" aria-hidden="true" />

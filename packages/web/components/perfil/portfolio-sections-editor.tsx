@@ -93,7 +93,7 @@ export function PortfolioSectionsEditor({ sections: initial, available }: { sect
   }
 
   return (
-    <section className="rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="secoes-title">
+    <section className="rounded-md border border-border bg-card p-5 sm:p-6" aria-labelledby="secoes-title">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 max-w-2xl flex-1">
           <h2 id="secoes-title" className="text-base font-semibold">Seções da página pública</h2>

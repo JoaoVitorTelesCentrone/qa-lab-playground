@@ -22,7 +22,7 @@ export function EnvironmentShell({ app, settings, signedIn, children }: {
   screen?: string;
   children: ReactNode;
 }) {
-  return <main className="qa-system">
+  return <main className="qa-system qa-practice">
     <div className="mx-auto max-w-6xl px-5 py-6 sm:px-8">
       <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 text-xs">
         <p className="text-muted-foreground">

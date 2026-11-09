@@ -33,16 +33,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="pt-BR">
       <body className={`${inter.variable} ${mono.variable} min-h-screen bg-background font-sans text-foreground antialiased`}>
+        {/* Primeiro elemento focável da página: precisa vir antes do header. */}
+        <a
+          href="#main-content"
+          className="fixed left-4 top-3 z-[300] -translate-y-24 rounded-sm bg-primary px-4 py-3 font-semibold text-primary-foreground transition-transform focus:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
+          Pular para o conteúdo
+        </a>
         <AttributionCapture />
         <FloatingOnboarding lab={tourLab}>
         <NavigationProgress />
         <SiteHeader />
-        <a
-          href="#main-content"
-          className="fixed left-4 top-4 z-[300] -translate-y-20 rounded-md bg-primary px-4 py-3 font-semibold text-primary-foreground shadow-lg transition-transform focus:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        >
-          Pular para o conteúdo
-        </a>
         <div id="main-content" tabIndex={-1} className="outline-none">
           {children}
         </div>

@@ -52,7 +52,7 @@ export function PublicPortfolioCard({ portfolio, username, onUsername, name }: {
   }
 
   return (
-    <section className="min-w-0 rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="portfolio-title">
+    <section className="min-w-0 rounded-md border border-border bg-card p-5 sm:p-6" aria-labelledby="portfolio-title">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 id="portfolio-title" className="text-base font-semibold">Portfólio público</h2>
         <Badge variant={isPublic ? "default" : "ghost"} className={isPublic ? "font-medium" : "border-border font-medium"}>

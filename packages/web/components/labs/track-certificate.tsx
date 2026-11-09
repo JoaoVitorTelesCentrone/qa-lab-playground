@@ -34,7 +34,7 @@ export function TrackCertificate({ trackSlug, eligible, missing, code }: {
   }
 
   if (issued) {
-    return <section className="mt-6 rounded-xl border border-primary/30 bg-primary/[0.04] p-5">
+    return <section className="mt-6 rounded-md border border-primary/30 bg-primary/[0.04] p-5">
       <h2 className="flex items-center gap-2 text-sm font-medium"><Award className="size-4 text-primary" aria-hidden="true" /> Certificado emitido</h2>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">Código <span className="font-mono text-foreground">{issued}</span> — verificável por qualquer pessoa com o link, e pronto para o campo &ldquo;ID da credencial&rdquo; do LinkedIn.</p>
       <Button asChild size="sm" className="mt-3"><Link href={`/certificado/${issued}`}>Ver certificado <ArrowRight className="size-3.5" /></Link></Button>
@@ -42,13 +42,13 @@ export function TrackCertificate({ trackSlug, eligible, missing, code }: {
   }
 
   if (!eligible) {
-    return <p className="mt-6 rounded-xl border border-border bg-muted/40 p-4 text-sm leading-6 text-muted-foreground">
+    return <p className="mt-6 rounded-md border border-border bg-muted/40 p-4 text-sm leading-6 text-muted-foreground">
       <Award className="mr-2 inline size-4" aria-hidden="true" />
       Faltam {missing} Lab(s) para o certificado desta trilha. Ele é público, verificável por código e lista as evidências que você produziu.
     </p>;
   }
 
-  return <section className="mt-6 rounded-xl border border-primary/30 bg-primary/[0.04] p-5">
+  return <section className="mt-6 rounded-md border border-primary/30 bg-primary/[0.04] p-5">
     <h2 className="flex items-center gap-2 text-sm font-medium"><Award className="size-4 text-primary" aria-hidden="true" /> Certificado disponível</h2>
     <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">Você fechou todos os Labs liberados desta trilha, cada um com evidência aceita. O certificado é uma página pública com código de verificação.</p>
     <Button type="button" className="mt-3" disabled={busy} onClick={issue}>
