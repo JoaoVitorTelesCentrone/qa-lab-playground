@@ -13,6 +13,7 @@ import { caseSkills, headline, type QaCase } from "@/lib/product/case";
 import { AttachmentGallery, EvidenceText } from "./evidence-body";
 
 const modeLabels = { fluxo: "Validação de fluxo", investigacao: "Teste exploratório" } as const;
+const deliveryFieldLabels = { did: "o que fiz", expected: "o que esperava", observed: "o que aconteceu", conclusion: "conclusão", severity: "severidade" } as const;
 
 export function CaseView({ item }: { item: QaCase }) {
   const isBug = item.mode === "investigacao";
@@ -62,11 +63,24 @@ export function CaseView({ item }: { item: QaCase }) {
       </ol>
     </Section>
 
-    {item.criteria.length > 0 && <Section title={`Critérios de aceite do Lab (${item.criteria.length})`}>
+    {item.criteria.length > 0 && <Section title={`O que o Lab pede (${item.criteria.length})`}>
       <ul className="grid gap-1.5 text-sm leading-6">
         {item.criteria.map((criterion) => <li key={criterion} className="flex gap-2.5">
-          <span aria-hidden="true" className="text-primary">✓</span>
+          <span aria-hidden="true" className="text-muted-foreground">•</span>
           <span className="text-muted-foreground">{criterion}</span>
+        </li>)}
+      </ul>
+    </Section>}
+
+    {item.deliveryCoverage && <Section title="Cobertura registrada">
+      <p className="mb-3 text-xs leading-5 text-muted-foreground">Este resumo indica quais campos associados estão preenchidos. A revisão do conteúdo continua sendo feita por você e pelo mentor.</p>
+      <ul className="grid gap-2">
+        {item.deliveryCoverage.map(({ criterion, fields, fieldsPresent }) => <li key={criterion} className="flex flex-col gap-1 border-b border-border/60 pb-2 text-sm last:border-0 last:pb-0 sm:flex-row sm:items-start sm:justify-between">
+          <span className="leading-6">{criterion}</span>
+          <span className={`shrink-0 text-xs ${fieldsPresent ? "text-primary" : "text-muted-foreground"}`}>
+            {fieldsPresent ? "Campos preenchidos" : "Campos pendentes"}
+            {fields.length > 0 ? ` · ${fields.map((field) => deliveryFieldLabels[field]).join(", ")}` : " · sem vínculo definido"}
+          </span>
         </li>)}
       </ul>
     </Section>}

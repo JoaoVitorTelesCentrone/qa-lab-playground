@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { labs } from "@/lib/playground/catalog";
+import { labs, releasedLabsInOrder } from "@/lib/playground/catalog";
 import { regressionPacks } from "@/lib/regression-packs";
 import { buildJourney, emptyJourney, type Enrollment, type ScenarioRun, type Submission } from "./journey";
 
-const lab = labs.find((item) => item.status === "liberado")!;
+const lab = releasedLabsInOrder[0]!;
 const other = labs.filter((item) => item.status === "liberado" && item.slug !== lab.slug)[0]!;
 
 function enrollment(overrides: Partial<Enrollment> & { labSlug: string }): Enrollment {

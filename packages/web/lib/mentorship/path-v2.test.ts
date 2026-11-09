@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { mentorshipWeeks } from "./catalog";
 import { lessonTheory } from "./lesson-theory";
-import { extraTheoryV2, findPathV2Assignment, findPathV2Lesson, mentorshipPathV2, pathV2Assignments, pathV2Chapters, pathV2LessonKeys, pathV2PracticeKey, pathV2PracticeKeys, pathV2Progress } from "./path-v2";
+import { extraTheoryV2, findPathV2Assignment, findPathV2Lesson, mentorshipPathV2, pathV2Assignments, pathV2Chapters, pathV2LessonKeys, pathV2PracticeKey, pathV2PracticeKeys, pathV2PathLabs, pathV2Progress } from "./path-v2";
 
 describe("mentoria por módulos v2", () => {
   test("tem capítulos e carga editorial variáveis, sem grade fixa de duas partes", () => {
@@ -42,12 +42,12 @@ describe("mentoria por módulos v2", () => {
     }
   });
 
-  test("módulo só conclui com aulas, práticas e entregas aprovadas", () => {
+  test("módulo só conclui com aulas, Labs entregues e entregas aprovadas", () => {
     const lessons = new Set(pathV2LessonKeys);
-    const practices = new Set(pathV2PracticeKeys);
+    const labs = new Set(pathV2PathLabs);
     const assignments = new Set(pathV2Assignments.map((item) => item.key));
-    expect(pathV2Progress(lessons, assignments, practices).every((item) => item.complete)).toBe(true);
-    practices.delete(pathV2PracticeKeys[0]);
-    expect(pathV2Progress(lessons, assignments, practices)[0].complete).toBe(false);
+    expect(pathV2Progress(lessons, assignments, labs).every((item) => item.complete)).toBe(true);
+    labs.delete(pathV2PathLabs[0]);
+    expect(pathV2Progress(lessons, assignments, labs)[0].complete).toBe(false);
   });
 });

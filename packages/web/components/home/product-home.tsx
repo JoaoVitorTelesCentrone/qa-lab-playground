@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowDownRight, ArrowRight, Check } from "lucide-react";
 import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
-import { labs, labLabel } from "@/lib/playground/catalog";
+import { firstLab as launchFirstLab, labLabel } from "@/lib/playground/catalog";
 import { HomeHeroScreens } from "./home-hero-screens";
 import { HomeReveal } from "./home-reveal";
 import { HomeInvestigationDemo } from "./home-investigation-demo";
@@ -24,7 +24,7 @@ const routes = [
 const difficultyLabel: Record<string, string> = { iniciante: "Iniciante", intermediario: "Intermediário", avancado: "Avançado" };
 
 export function ProductHome() {
-  const firstLab = labs.find((lab) => lab.status === "liberado");
+  const firstLab = launchFirstLab;
   const firstLabHref = firstLab ? `/labs/${firstLab.number}` : "/labs";
   const firstLabName = firstLab ? `Lab ${labLabel(firstLab)}` : "primeiro Lab";
 

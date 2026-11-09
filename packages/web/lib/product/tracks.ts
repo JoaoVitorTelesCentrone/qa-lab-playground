@@ -18,6 +18,11 @@ export type Track = {
   outcome: string;
   /** Labs na ordem do percurso, por número do catálogo. */
   labNumbers: number[];
+  /**
+   * Módulo da mentoria que esta trilha mostra de fora. A trilha segue a ordem
+   * das aulas do módulo e agrupa os Labs por capítulo (ver lesson-labs.ts).
+   */
+  moduleId?: string;
 };
 
 // Fluxos críticos do QA Lab: da descoberta do produto ao pedido confirmado.
@@ -42,26 +47,29 @@ const brotoFlows: Track = {
   appId: "broto",
   objective: "Percorrer a jornada de captura, organização e retomada do caso fictício no Broto.",
   outcome: "Você consegue investigar um produto real, separar observação de hipótese e entregar evidência reproduzível sem dados pessoais.",
-  // Os três Labs já liberados formam o primeiro bloco contínuo da trilha.
-  // Os demais preservam a sequência planejada depois desse bloco.
-  labNumbers: [101, 103, 105, 102, 104, 106, 107, 108, 109, 110],
+  // A ordem é a do módulo 1 da mentoria (os três liberados são o começo do
+  // módulo); os Labs de reforço fecham a trilha.
+  labNumbers: [101, 103, 105, 102, 107, 108, 109, 110, 104, 106],
+  moduleId: "produto-risco",
 };
 
 const bookingFlows: Track = {
-  slug: "agenda-sem-conflito",
-  name: "Agenda sem conflito",
-  appId: "agendamentos",
-  objective: "Testar disponibilidade, conflito de horário, reagendamento e cancelamento em uma agenda de serviços.",
-  outcome: "Você consegue cobrir regras de disponibilidade e concorrência, e mostrar quando a interface e o servidor discordam.",
-  labNumbers: [111, 112, 113, 114, 115, 116, 117, 118, 119, 120],
+  slug: "desenho-de-testes-no-broto",
+  name: "Desenho de testes no Broto",
+  appId: "broto",
+  objective: "Desenhar e comunicar testes no Broto: critérios e oráculos, classes e limites, estados e transições, defeito e evidência.",
+  outcome: "Você consegue transformar o que observa em critérios verificáveis, cobrir limites e estados, e relatar um achado de modo que outra pessoa o reproduza.",
+  // Ordem do módulo 2 da mentoria; reforço no fim.
+  labNumbers: [111, 119, 120, 117, 118, 114, 116, 112, 113, 115],
+  moduleId: "desenho-comunicacao",
 };
 
 const crmFlows: Track = {
-  slug: "funil-comercial",
-  name: "Funil comercial",
-  appId: "crm",
-  objective: "Testar um funil de vendas: contatos, oportunidades, mudança de estágio e as métricas que dependem disso.",
-  outcome: "Você consegue rastrear um número de painel até o dado que o origina e provar onde a conta não fecha.",
+  slug: "dados-e-api-no-broto",
+  name: "Dados e API no Broto",
+  appId: "broto",
+  objective: "Conferir no Broto os números exibidos, os estados salvos e a busca contra o que a rede devolve.",
+  outcome: "Você consegue rastrear um número da tela até o dado que o origina e provar onde a conta não fecha.",
   labNumbers: [121, 122, 123, 124, 125, 126, 127, 128, 129, 130],
 };
 

@@ -3,7 +3,7 @@
 // Módulo puro — recebe as linhas já lidas do Supabase e devolve o resumo que a
 // home e o perfil renderizam. Nenhuma regra de progresso mora em componente.
 
-import { labs, type Lab } from "@/lib/playground/catalog";
+import { labs, releasedLabsInOrder, type Lab } from "@/lib/playground/catalog";
 import { liveApps, type PracticeAppId } from "./apps";
 import { regressionPacks } from "@/lib/regression-packs";
 
@@ -107,7 +107,7 @@ export type Journey = {
   coverage: AppCoverage[];
 };
 
-const releasedLabs = () => labs.filter((lab) => lab.status === "liberado");
+const releasedLabs = () => releasedLabsInOrder;
 
 export function buildJourney(rawEnrollments: Enrollment[], rawSubmissions: Submission[], runs: ScenarioRun[]): Journey {
   // Progresso de um Lab que saiu do lançamento enxuto (ex.: testado antes de

@@ -2,7 +2,9 @@
 // Server Component — o progresso já vem resolvido do banco.
 
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Circle, CircleDot } from "lucide-react";
+import { ArrowRight, CheckCircle2, Circle, CircleDot, Lock } from "lucide-react";
+import { mentorshipPathV2, type ModuleV2 } from "@/lib/mentorship/path-v2";
+import { lessonForLab } from "@/lib/mentorship/lesson-labs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrackCertificate } from "./track-certificate";
@@ -12,8 +14,10 @@ import type { TrackProgress, TrackStep } from "@/lib/product/tracks";
 
 const stepIcons = { completed: CheckCircle2, started: CircleDot, abandoned: Circle, "nao-iniciado": Circle } as const;
 
-export function TrackPage({ progress, signedIn, certificateCode }: { progress: TrackProgress; signedIn: boolean; certificateCode: string | null }) {
+export function TrackPage({ progress, signedIn, certificateCode, canOpen = false }: { progress: TrackProgress; signedIn: boolean; certificateCode: string | null; canOpen?: boolean }) {
   const { track, nextLab } = progress;
+  const pathModule = track.moduleId ? mentorshipPathV2.find((item) => item.id === track.moduleId) ?? null : null;
+  const moduleNumber = pathModule ? mentorshipPathV2.indexOf(pathModule) + 1 : 0;
   const app = track.appId === "broto" ? { name: "Broto Space", route: "/conteudo/broto" } : findPracticeApp(track.appId);
   // Passo agendado não aparece na lista — só o que já dá pra abrir de verdade.
   const steps = progress.steps.filter((step) => step.lab.status === "liberado");
@@ -27,6 +31,7 @@ export function TrackPage({ progress, signedIn, certificateCode }: { progress: T
 
     <header className="mt-6">
       <h1 className="text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">{track.name}</h1>
+      {pathModule && <p className="mt-2 text-sm text-[var(--field-copper)]">Módulo {moduleNumber} da mentoria · {pathModule.title} · {steps.length} de {progress.steps.length} Labs abertos ao público</p>}
       <p className="mt-3 text-muted-foreground">{track.objective}</p>
       <details className="mt-3 text-sm">
         <summary className="w-fit cursor-pointer text-primary">O que você vai aprender</summary>
@@ -48,10 +53,43 @@ export function TrackPage({ progress, signedIn, certificateCode }: { progress: T
       <Link href={`/login?next=/trilhas/${track.slug}`} className="text-primary underline-offset-4 hover:underline">Entre para salvar seu progresso</Link>. Os Labs estão abertos sem login.
     </p>}
 
-    {steps.length > 0
-      ? <ol className="mt-8 divide-y divide-border">{steps.map((step) => <Step key={step.lab.slug} step={step} signedIn={signedIn} />)}</ol>
-      : <p className="mt-8 text-sm text-muted-foreground">Ainda não há Labs liberados nesta trilha. <Link href="/labs" className="text-primary underline-offset-4 hover:underline">Ver Labs disponíveis</Link>.</p>}
+    {pathModule
+      ? <ModuleSteps module={pathModule} steps={progress.steps} signedIn={signedIn} canOpen={canOpen} />
+      : steps.length > 0
+        ? <ol className="mt-8 divide-y divide-border">{steps.map((step) => <Step key={step.lab.slug} step={step} signedIn={signedIn} />)}</ol>
+        : <p className="mt-8 text-sm text-muted-foreground">Ainda não há Labs liberados nesta trilha. <Link href="/labs" className="text-primary underline-offset-4 hover:underline">Ver Labs disponíveis</Link>.</p>}
   </div></main>;
+}
+
+// A trilha de um módulo mostra os capítulos da mentoria. Labs que ainda não
+// estão no catálogo público aparecem como parte da mentoria, sem mandar a
+// pessoa para a lista de espera no meio do caminho.
+function ModuleSteps({ module, steps, signedIn, canOpen }: { module: ModuleV2; steps: TrackStep[]; signedIn: boolean; canOpen: boolean }) {
+  const byChapter = new Map<string, TrackStep[]>();
+  const reinforcement: TrackStep[] = [];
+  for (const step of steps) {
+    const chapterId = lessonForLab(step.lab.number)?.chapter.id;
+    if (chapterId) byChapter.set(chapterId, [...(byChapter.get(chapterId) ?? []), step]);
+    else reinforcement.push(step);
+  }
+  const open = (step: TrackStep) => step.lab.status === "liberado" || canOpen;
+  const groups = [
+    ...module.chapters.filter((chapter) => byChapter.has(chapter.id)).map((chapter) => ({ key: chapter.id, title: `Cap ${chapter.id} · ${chapter.title}`, steps: byChapter.get(chapter.id)! })),
+    ...(reinforcement.length ? [{ key: "reforco", title: "Reforço", steps: reinforcement }] : []),
+  ];
+  return <div className="mt-8 grid gap-8">
+    {groups.map((group) => <section key={group.key} aria-labelledby={`grupo-${group.key}`}>
+      <h2 id={`grupo-${group.key}`} className="text-sm font-semibold text-muted-foreground">{group.title}</h2>
+      <ol className="mt-1 divide-y divide-border">
+        {group.steps.map((step) => open(step)
+          ? <Step key={step.lab.slug} step={step} signedIn={signedIn} />
+          : <li key={step.lab.slug} className="flex flex-wrap items-center justify-between gap-3 py-4 text-sm">
+              <span className="min-w-0"><span className="block font-medium text-muted-foreground">{step.lab.title}</span><span className="text-xs text-muted-foreground">Faz parte da mentoria</span></span>
+              <Link href="/mentoria" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-primary"><Lock className="size-4" aria-hidden="true" /> Conhecer a mentoria</Link>
+            </li>)}
+      </ol>
+    </section>)}
+  </div>;
 }
 
 function Step({ step, signedIn }: { step: TrackStep; signedIn: boolean }) {

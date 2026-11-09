@@ -4,7 +4,7 @@ import { ArrowLeft, BookOpenCheck, CalendarDays, ClipboardList, ExternalLink } f
 import { MentorshipAccessError } from "@/lib/mentorship/access";
 import { CommitmentCheckIn } from "@/components/mentorship/commitment-checkin";
 import { mentorshipWeeks } from "@/lib/mentorship/catalog";
-import { findPathV2Assignment, mentorshipPathV2, pathV2LessonKeys, pathV2PracticeKeys } from "@/lib/mentorship/path-v2";
+import { findPathV2Assignment, mentorshipPathV2, pathV2LessonKeys, pathV2PathLabs } from "@/lib/mentorship/path-v2";
 import { getMentorStudentOverview } from "@/lib/mentorship/store";
 import { getCurrentTimestamp } from "@/lib/mentorship/time";
 
@@ -26,7 +26,8 @@ export default async function MentorStudentPage({ params }: { params: Promise<{ 
   const isV2 = cohort.program_version === "v2";
   const completedLessons = isV2 ? pathV2LessonKeys.filter((key) => completedKeys.has(key)).length : mentorshipWeeks.flatMap((week) => week.lessons).filter((lesson) => completedKeys.has(lesson.key)).length;
   const totalLessons = isV2 ? pathV2LessonKeys.length : mentorshipWeeks.reduce((total, week) => total + week.lessons.length, 0);
-  const completedPractices = pathV2PracticeKeys.filter((key) => completedKeys.has(key)).length;
+  const deliveredLabs = new Set(overview.deliveredLabs);
+  const completedPractices = pathV2PathLabs.filter((labNumber) => deliveredLabs.has(labNumber)).length;
   const attendanceBySession = new Map(attendance.map((item) => [item.session_id, item.status]));
 
   return <main className="mx-auto max-w-5xl px-5 py-10 sm:px-8">
@@ -35,7 +36,7 @@ export default async function MentorStudentPage({ params }: { params: Promise<{ 
     <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <Stat icon={<ClipboardList className="size-5" />} label="Entregas aprovadas" value={submissions.filter((item) => item.status === "approved").length} />
       <Stat icon={<BookOpenCheck className="size-5" />} label="Aulas concluídas" value={`${completedLessons}/${totalLessons}`} />
-      {isV2 && <Stat icon={<BookOpenCheck className="size-5" />} label="Práticas realizadas" value={`${completedPractices}/${pathV2PracticeKeys.length}`} />}
+      {isV2 && <Stat icon={<BookOpenCheck className="size-5" />} label="Labs entregues" value={`${completedPractices}/${pathV2PathLabs.length}`} />}
       <Stat icon={<CalendarDays className="size-5" />} label="Encontros registrados" value={attendance.length} />
       <Stat icon={<ClipboardList className="size-5" />} label="Revisões fora do SLA" value={overdue.length} alert={overdue.length > 0} />
     </section>

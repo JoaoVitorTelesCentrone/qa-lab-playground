@@ -28,9 +28,9 @@ export function EvidenceField({
   disabled,
 }: {
   labSlug: string;
-  value: string;
+  value?: string;
   attachments: Attachment[];
-  onValueChange: (value: string) => void;
+  onValueChange?: (value: string) => void;
   onAttachmentsChange: (attachments: Attachment[]) => void;
   error?: string;
   disabled?: boolean;
@@ -91,7 +91,9 @@ export function EvidenceField({
 
   return (
     <div className="grid gap-3">
-      <Textarea
+      {/* Sem `onValueChange`, o campo é só de anexos: a entrega estruturada
+          do Lab tem os próprios campos de texto. */}
+      {onValueChange && <Textarea
         value={value}
         onChange={(event) => onValueChange(event.target.value)}
         disabled={disabled}
@@ -99,7 +101,7 @@ export function EvidenceField({
         aria-describedby={`${inputId}-hint`}
         placeholder={"O que você testou, o que aconteceu e como reproduzir.\nCole links, escreva passos, anexe print ou vídeo — do jeito que ficar claro."}
         className="min-h-40"
-      />
+      />}
 
       <div
         onDragOver={(event) => { event.preventDefault(); if (!disabled && !full) setDragging(true); }}

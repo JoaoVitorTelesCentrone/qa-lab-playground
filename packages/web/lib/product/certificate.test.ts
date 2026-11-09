@@ -4,8 +4,8 @@ import type { LabProgress, Submission } from "./journey";
 import { buildTrackProgress, findTrack } from "./tracks";
 import { certificateCode, certificateLinkedInPost, certificateStats, eligibility, isCertificateCode, linkedInCredentialFields, type Certificate } from "./certificate";
 
-// A trilha do Broto é a única com Labs liberados (101, 103 e 105) no
-// lançamento enxuto — ver [[qa-lab-lancamento-enxuto]].
+// Todos os Labs estão liberados (decisão de 2026-11-09): o certificado da trilha
+// exige a trilha inteira.
 const track = findTrack("broto-na-pratica")!;
 const releasedNumbers = track.labNumbers.filter((number) => labs.find((lab) => lab.number === number)?.status === "liberado");
 
@@ -32,11 +32,11 @@ function submission(number: number, media?: string): Submission {
 }
 
 describe("elegibilidade do certificado", () => {
-  test("Labs agendados não travam a emissão", () => {
+  test("com todos os Labs da trilha entregues, emite", () => {
     const complete = buildTrackProgress(track, progress(releasedNumbers));
     const result = eligibility(complete);
-    expect(result.required).toBe(releasedNumbers.length);
-    expect(result.required).toBeLessThan(track.labNumbers.length);
+    expect(result.required).toBe(track.labNumbers.length);
+    expect(releasedNumbers).toHaveLength(track.labNumbers.length);
     expect(result.eligible).toBe(true);
     expect(result.missing).toBe(0);
   });
@@ -49,7 +49,7 @@ describe("elegibilidade do certificado", () => {
   });
 
   test("trilha sem nenhum Lab liberado nunca é elegível", () => {
-    const outra = findTrack("funil-comercial")!;
+    const outra = findTrack("dados-e-api-no-broto")!;
     expect(eligibility(buildTrackProgress(outra, [])).eligible).toBe(false);
   });
 });

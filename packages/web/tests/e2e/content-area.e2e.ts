@@ -9,7 +9,7 @@ test("@smoke conteúdo leva do mapa ao capítulo e ao caso do Broto", async ({ p
   await page.getByRole("link", { name: /Abrir capítulo 1: Produto, atores e jornada/ }).click();
   await expect(page.getByRole("heading", { name: "Produto, atores e jornada", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Entenda" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Faça" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Pratique", exact: true })).toBeVisible();
   await page.goto("/conteudo/broto");
   await expect(page.getByRole("link", { name: "Abrir o Broto" })).toHaveAttribute("href", "https://www.brotospace.com/");
   await expect(page.getByRole("button", { name: /Copiar Textos fictícios do caso/ })).toBeVisible();

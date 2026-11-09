@@ -39,13 +39,22 @@ type TrackSummary = {
   certificateCode: string | null;
 };
 
-export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name, profile, track, siteUrl }: {
+/** O passo seguinte: outro Lab da aula, a próxima aula, o próximo capítulo ou o próximo Lab da trilha. */
+export type ConclusionNext = { eyebrow: string; title: string; href: string; meta?: string };
+/** Marco do capítulo (entrega para o mentor) e quantos Labs do capítulo já têm evidência. */
+export type ConclusionMilestone = { title: string; done: number; total: number; href: string };
+
+export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name, profile, track, next, milestone, pathLabel, siteUrl }: {
   item: QaCase;
   hasUnpublishedChanges: boolean;
   olderCount: number;
   name: string;
   profile: { username: string; portfolioPublic: boolean };
   track: TrackSummary | null;
+  next: ConclusionNext | null;
+  milestone: ConclusionMilestone | null;
+  /** Aula da mentoria deste Lab, para quem está matriculado. */
+  pathLabel: string | null;
   /** URL canônica do site, vinda do servidor. */
   siteUrl: string;
 }) {
@@ -272,14 +281,14 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
       </BreadcrumbList>
     </Breadcrumb>
 
-    <p className="qa-eyebrow mt-6">Lab {item.label} concluído</p>
-    <h1 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">Sua entrega virou um case de portfólio.</h1>
+    <p className="mt-6 text-sm font-semibold text-primary">Lab {item.label} concluído{pathLabel ? ` · ${pathLabel}` : ""}</p>
+    <h1 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">Sua entrega virou um case.</h1>
     <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">
-      Abaixo está o case exatamente como um recrutador vai abrir: o contexto do sistema, o que você tinha que provar, o que encontrou e como reproduzir. Publique, copie o texto do post e leve para o LinkedIn.
+      Ao lado está o case como outra pessoa vai ver. Publique para ter um link que você pode mostrar.
     </p>
 
     <div className="mt-9 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
-      <section className="rounded-md border border-border bg-card p-6 sm:p-8" aria-label="Prévia do case">
+      <section className="rounded-sm border border-border bg-card p-6 sm:p-8" aria-label="Prévia do case">
         <CaseView item={previewItem} />
         {olderCount > 0 && <p className="mt-6 border-t border-border pt-4 text-xs text-muted-foreground">
           Você tem {olderCount} entrega(s) anterior(es) neste Lab. O case público mostra sempre a mais recente. <Link href="/perfil" className="text-primary">Ver histórico</Link>
@@ -287,7 +296,7 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
       </section>
 
       <div className="grid gap-6">
-        <section className="rounded-md border border-border bg-card p-5" aria-labelledby="publicar">
+        <section className="rounded-sm border border-primary/40 bg-card p-5" aria-labelledby="publicar">
           <h2 id="publicar" className="flex items-center gap-2 text-sm font-medium">
             {live ? <Globe className="size-4 text-primary" aria-hidden="true" /> : <Lock className="size-4 text-muted-foreground" aria-hidden="true" />}
             {live ? "Case publicado" : "Publicar o case"}
@@ -337,42 +346,53 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
                 </Button>
               </>}
 
-          {error && <p role="alert" className="mt-3 text-xs text-destructive">{error}</p>}
-
-          <Button type="button" size="sm" variant="outline" className="mt-4 w-full" onClick={downloadCase}>
-            <Download className="size-3.5" /> Baixar case em Markdown
-          </Button>
+          {error && <p role="alert" className="mt-3 text-xs text-[var(--negative-foreground)]">{error}</p>}
         </section>
 
-        {track && <section className="rounded-md border border-border bg-card p-5" aria-labelledby="trilha">
-          <h2 id="trilha" className="flex items-center gap-2 text-sm font-medium"><Award className="size-4 text-primary" aria-hidden="true" /> Trilha {track.name}</h2>
-          <p className="mt-2 text-xs text-muted-foreground">{track.completed} de {track.required} Labs liberados concluídos · {track.stats.evidence} evidência(s)</p>
-          <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full bg-primary" style={{ width: `${track.required === 0 ? 0 : Math.round((track.completed / track.required) * 100)}%` }} />
-          </div>
+        {/* Próximo passo: da aula (mentoria) ou da trilha/catálogo (público). */}
+        {next && <Link href={next.href} className="group grid gap-1 rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary">
+          <span className="text-xs font-semibold text-primary">{next.eyebrow}</span>
+          <span className="font-semibold leading-snug">{next.title}</span>
+          <span className="flex items-center justify-between gap-3 text-sm text-muted-foreground">{next.meta ?? "Continuar"}<ArrowRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></span>
+        </Link>}
 
+        {milestone && <Link href={milestone.href} className="grid gap-2 rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary">
+          <span className="text-xs font-semibold text-[var(--field-copper)]">Marco do capítulo · {milestone.title}</span>
+          <span className="text-sm text-muted-foreground">{milestone.done} de {milestone.total} Labs deste capítulo com evidência. Seus cases podem ser usados na entrega para o mentor.</span>
+          <span className="h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden="true"><span className="block h-full rounded-full bg-primary" style={{ width: `${milestone.total === 0 ? 0 : Math.round((milestone.done / milestone.total) * 100)}%` }} /></span>
+        </Link>}
+
+        {/* O certificado só aparece quando já existe ou pode ser emitido. O
+            progresso da trilha mora na página dela, não aqui. */}
+        {track && (certificate || track.eligible) && <section className="rounded-sm border border-border bg-card p-5" aria-labelledby="trilha">
+          <h2 id="trilha" className="flex items-center gap-2 text-sm font-medium"><Award className="size-4 text-primary" aria-hidden="true" /> Trilha {track.name}</h2>
           {certificate
             ? <>
                 <Badge className="mt-4 font-normal">Certificado emitido</Badge>
                 <p className="mt-2 font-mono text-xs text-muted-foreground">{certificate}</p>
-                <Button asChild size="sm" className="mt-3 w-full"><Link href={`/certificado/${certificate}`}>Ver certificado <ArrowRight className="size-3.5" /></Link></Button>
+                <Button asChild size="sm" className="mt-3 w-full"><Link href={`/certificado/${certificate}`}>Ver certificado <ArrowRight className="size-3.5" aria-hidden="true" /></Link></Button>
               </>
-            : track.eligible
-              ? <>
-                  <p className="mt-4 text-xs leading-5 text-muted-foreground">Você fechou todos os Labs liberados desta trilha. O certificado é público e verificável por código — dá para colar em &ldquo;Licenças e certificados&rdquo; do LinkedIn.</p>
-                  <Button type="button" className="mt-3 w-full" disabled={busy === "certificate"} onClick={issueCertificate}>
-                    {busy === "certificate" ? <Loader2 className="size-4 animate-spin" /> : <Award className="size-4" />} Emitir certificado
-                  </Button>
-                </>
-              : <>
-                  <p className="mt-4 text-xs leading-5 text-muted-foreground">Faltam {track.missing} Lab(s) para o certificado da trilha. Ao fechar: {track.outcome}</p>
-                  {track.nextLab && <Button asChild size="sm" className="mt-3 w-full"><Link href={`/labs/${track.nextLab.number}`}>Próximo: {track.nextLab.title} <ArrowRight className="size-3.5" /></Link></Button>}
-                </>}
+            : <>
+                <p className="mt-3 text-xs leading-5 text-muted-foreground">Você fechou todos os Labs liberados desta trilha. O certificado é público e verificável por código.</p>
+                <Button type="button" className="mt-3 w-full" disabled={busy === "certificate"} onClick={issueCertificate}>
+                  {busy === "certificate" ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Award className="size-4" aria-hidden="true" />} Emitir certificado
+                </Button>
+              </>}
         </section>}
       </div>
     </div>
 
-    <section className="mt-8 rounded-md border border-border bg-card p-6 sm:p-8" aria-labelledby="personalizar-case">
+    {/* Tudo o que não é publicar fica recolhido: antes eram nove ações com o mesmo peso. */}
+    <details className="group mt-8 rounded-sm border border-border">
+      <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 text-sm font-semibold sm:px-6">
+        <span>Mais opções <span className="font-normal text-muted-foreground">· personalizar o texto, imagem e post para o LinkedIn, Markdown</span></span>
+        <span aria-hidden="true" className="text-lg text-muted-foreground transition-transform group-open:rotate-45">+</span>
+      </summary>
+      <div className="grid gap-8 border-t border-border p-5 sm:p-6">
+    <Button type="button" size="sm" variant="outline" className="justify-self-start" onClick={downloadCase}>
+      <Download className="size-3.5" aria-hidden="true" /> Baixar case em Markdown
+    </Button>
+    <section className="rounded-sm border border-border bg-card p-6 sm:p-8" aria-labelledby="personalizar-case">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div><p className="qa-eyebrow">Seu trabalho, sua narrativa</p><h2 id="personalizar-case" className="mt-2 text-xl font-semibold">Personalize o case</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">O briefing do Lab já vem preenchido. Conte como você investigou, o que encontrou e por que recomenda essa decisão. Só aparece no portfólio depois de publicar.</p></div>
         {!caseSaved
@@ -397,7 +417,7 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
       <CaseCardView ref={cardRef} item={previewItem} author={name} />
     </div>
 
-    <section className="mt-10 rounded-md border border-border bg-card p-6 sm:p-8" aria-labelledby="imagem">
+    <section className="rounded-sm border border-border bg-card p-6 sm:p-8" aria-labelledby="imagem">
       <h2 id="imagem" className="flex items-center gap-2 text-lg font-semibold"><ImageIcon className="size-5 text-primary" aria-hidden="true" /> Imagem do case</h2>
       <p className="mt-1.5 max-w-xl text-sm leading-6 text-muted-foreground">
         Post com imagem alcança mais que post com link. Publique este card e deixe o link do case no primeiro comentário ou no fim do texto.
@@ -430,7 +450,7 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
       </div>
     </section>
 
-    <section className="mt-10 rounded-md border border-border bg-card p-6 sm:p-8" aria-labelledby="post">
+    <section className="rounded-sm border border-border bg-card p-6 sm:p-8" aria-labelledby="post">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 id="post" className="flex items-center gap-2 text-lg font-semibold"><Linkedin className="size-5 text-primary" aria-hidden="true" /> Post pronto para o LinkedIn</h2>
@@ -460,10 +480,11 @@ export function ConclusionClient({ item, hasUnpublishedChanges, olderCount, name
 
       {!live && <p className="mt-3 text-xs text-muted-foreground">O post já cita o link do case, mas ele só abre para outras pessoas depois que você publicar.</p>}
     </section>
+      </div>
+    </details>
 
     <nav className="mt-8 flex flex-wrap gap-2 border-t border-border pt-6">
-      <Button asChild variant="outline"><Link href={`/labs/${item.labNumber}`}>Voltar ao Lab</Link></Button>
-      <Button asChild variant="outline"><Link href="/labs">Escolher o próximo Lab</Link></Button>
+      <Button asChild variant="ghost"><Link href={`/labs/${item.labNumber}`}>Voltar ao Lab</Link></Button>
       <Button asChild variant="ghost"><Link href="/perfil/portfolio">Meu portfólio</Link></Button>
     </nav>
   </div></main>;

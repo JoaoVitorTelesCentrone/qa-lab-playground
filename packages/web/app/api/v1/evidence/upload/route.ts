@@ -13,6 +13,7 @@ import { fail, ok, withUser } from "@/lib/product/api";
 import { uploadEvidenceFile, removeEvidenceFile, isEvidenceUploadLimitError } from "@/lib/product/evidence-storage";
 import { ALLOWED_TYPES, MAX_FILE_BYTES, formatBytes } from "@/lib/product/evidence-limits";
 import { labs } from "@/lib/playground/catalog";
+import { canOpenLab, labViewer } from "@/lib/labs/access";
 import { trackEvent } from "@/lib/product/store";
 
 export const dynamic = "force-dynamic";
@@ -33,7 +34,7 @@ export function POST(request: Request) {
 
     const lab = labs.find((item) => item.slug === labSlug);
     if (!lab) return uploadFailure(user.id, "lab_not_found", "Lab não encontrado.", 404);
-    if (lab.status !== "liberado") return uploadFailure(user.id, "lab_locked", "Este Lab ainda não foi liberado.", 409);
+    if (!canOpenLab(lab, await labViewer(user.id))) return uploadFailure(user.id, "lab_locked", "Este Lab ainda não foi liberado.", 409);
 
     if (file.size === 0) return uploadFailure(user.id, "empty_file", "O arquivo está vazio.", 400);
     if (file.size > MAX_FILE_BYTES) {

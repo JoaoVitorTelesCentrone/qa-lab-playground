@@ -83,7 +83,9 @@ export const labs: Lab[] = systemChallenges.map((challenge) => {
   const track: LabTrack = challenge.area === "API" ? "API e Contrato" : "UI Automation";
   const content = contentFor({ title: challenge.title, objective: challenge.objective, requiredFeature: challenge.area, delivery: "Evidência registrada no próprio Lab.", route: challenge.route }, challenge.number);
   const position = launchPosition(challenge.number);
-  const released = position !== null;
+  // Decisão de produto (2026-11-09): todos os Labs estão liberados. `position` continua
+  // só nos três do lançamento para manter a numeração 01–03 de URLs e cases publicados.
+  const released = true;
   const status: LabStatus = released ? "liberado" : "agendado";
   return {
     number: challenge.number,
@@ -106,6 +108,14 @@ export const labs: Lab[] = systemChallenges.map((challenge) => {
     postPrompt: `${content.postSegunda}\n\n${challenge.objective}\n\n#QA #QALab`,
   };
 });
+
+/** Labs liberados na ordem de apresentação: os do lançamento (01–03) primeiro, depois o catálogo por número. */
+export const releasedLabsInOrder: Lab[] = labs
+  .filter((lab) => lab.status === "liberado")
+  .sort((a, b) => (a.position ?? Infinity) - (b.position ?? Infinity) || a.number - b.number);
+
+/** O Lab que abre a jornada: o 01 do lançamento. */
+export const firstLab: Lab | undefined = releasedLabsInOrder[0];
 
 export function findLabByNumber(number: number) {
   return labs.find((lab) => lab.number === number);

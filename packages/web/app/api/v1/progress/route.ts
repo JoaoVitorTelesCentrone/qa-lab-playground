@@ -1,6 +1,7 @@
 import { FieldReader, ok, readJson, validated, withUser, fail } from "@/lib/product/api";
 import { getJourney, startLab } from "@/lib/product/store";
 import { labs } from "@/lib/playground/catalog";
+import { canOpenLab, labViewer } from "@/lib/labs/access";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +20,7 @@ export function POST(request: Request) {
 
       const lab = labs.find((item) => item.slug === labSlug);
       if (!lab) return fail("Lab não encontrado.", 404);
-      if (lab.status !== "liberado") return fail("Este Lab ainda não foi liberado.", 409);
+      if (!canOpenLab(lab, await labViewer(user.id))) return fail("Este Lab ainda não foi liberado.", 409);
 
       return ok(await startLab(user.id, lab.slug), 201);
     }),

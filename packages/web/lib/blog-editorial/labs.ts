@@ -60,7 +60,7 @@ export const labSeries: EditorialSeries[] = [
     ]
   },
   {
-    id: "agenda-sem-conflito", title: "Agenda sem conflito", href: "/trilhas/agenda-sem-conflito", section: "Percursos por Labs", color: "#a9c7e8",
+    id: "desenho-de-testes-no-broto", title: "Desenho de testes no Broto", href: "/trilhas/desenho-de-testes-no-broto", section: "Percursos por Labs", color: "#a9c7e8",
     stories: [
       {
         slug: "testar-horarios-simultaneos", title: "Testando horários simultâneos e conflitos", summary: "Verifique se duas pessoas disputando a mesma vaga recebem um resultado coerente.",
@@ -89,7 +89,7 @@ export const labSeries: EditorialSeries[] = [
     ]
   },
   {
-    id: "funil-comercial", title: "Funil comercial", href: "/trilhas/funil-comercial", section: "Percursos por Labs", color: "#d5b5e4",
+    id: "dados-e-api-no-broto", title: "Dados e API no Broto", href: "/trilhas/dados-e-api-no-broto", section: "Percursos por Labs", color: "#d5b5e4",
     stories: [
       {
         slug: "mudancas-de-estagio-sem-perder-dados", title: "Testando mudanças de estágio sem perder dados", summary: "Uma oportunidade deve preservar história e campos relevantes ao avançar.",

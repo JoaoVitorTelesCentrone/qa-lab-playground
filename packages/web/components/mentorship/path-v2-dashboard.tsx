@@ -3,7 +3,7 @@ import { ArrowDown, ArrowRight, CalendarDays, Check, CheckCircle2, Circle, Compa
 import { MentorshipCertificateAction } from "./certificate-action";
 import { MentorshipNav } from "./mentorship-nav";
 import { MentorshipNotifications } from "./notifications";
-import { mentorshipPathV2, pathV2Assignments, pathV2ChapterHref, pathV2Chapters, pathV2PracticeKey, pathV2Progress } from "@/lib/mentorship/path-v2";
+import { mentorshipPathV2, pathV2Assignments, pathV2ChapterHref, pathV2ChapterDone, pathV2Chapters, pathV2PathLabs, pathV2Progress } from "@/lib/mentorship/path-v2";
 import type { getMentorshipCertificateProgress, getMentorshipDashboard } from "@/lib/mentorship/store";
 
 type Dashboard = NonNullable<Awaited<ReturnType<typeof getMentorshipDashboard>>>;
@@ -18,13 +18,14 @@ export function PathV2Dashboard({ dashboard, certificate, now }: { dashboard: Da
   const latest = new Map<string, string>();
   for (const submission of dashboard.submissions) if (!latest.has(submission.assignmentKey)) latest.set(submission.assignmentKey, submission.status);
   const approved = new Set([...latest].filter(([, status]) => status === "approved").map(([key]) => key));
-  const progress = pathV2Progress(completed, approved, completed);
-  const next = pathV2Chapters.find(({ chapter }) => chapter.lessonKeys.some((key) => !completed.has(key)) || chapter.practices.some((_, index) => !completed.has(pathV2PracticeKey(chapter, index))) || (chapter.assignmentKey && !approved.has(chapter.assignmentKey))) ?? pathV2Chapters[pathV2Chapters.length - 1];
+  const delivered = new Set(dashboard.deliveredLabs ?? []);
+  const progress = pathV2Progress(completed, approved, delivered);
+  const next = pathV2Chapters.find(({ chapter }) => !pathV2ChapterDone(chapter, completed, approved, delivered)) ?? pathV2Chapters[pathV2Chapters.length - 1];
   const nextSession = (dashboard.sessions ?? []).find((session) => new Date(session.starts_at).getTime() >= now);
   const totalLessons = pathV2Chapters.reduce((sum, item) => sum + item.chapter.lessonKeys.length, 0);
-  const totalPractices = pathV2Chapters.reduce((sum, item) => sum + item.chapter.practices.length, 0);
+  const totalPractices = pathV2PathLabs.length;
   const lessonsDone = pathV2Chapters.reduce((sum, item) => sum + item.chapter.lessonKeys.filter((key) => completed.has(key)).length, 0);
-  const practicesDone = progress.reduce((sum, item) => sum + item.practicesDone, 0);
+  const practicesDone = progress.reduce((sum, item) => sum + item.labsDone, 0);
   const done = dashboard.isComplete && progress.every((item) => item.complete);
   const overall = Math.round((progress.filter((item) => item.complete).length / mentorshipPathV2.length) * 100);
   const nextHref = pathV2ChapterHref(next.module, next.chapter);
@@ -58,7 +59,7 @@ export function PathV2Dashboard({ dashboard, certificate, now }: { dashboard: Da
 
     <section aria-label="Seu progresso" className="mt-5 grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
       <ProgressMetric label="Aulas concluídas" value={`${lessonsDone} / ${totalLessons}`} detail="Conteúdo estudado" />
-      <ProgressMetric label="Práticas realizadas" value={`${practicesDone} / ${totalPractices}`} detail="Aplicação por capítulo" />
+      <ProgressMetric label="Labs entregues" value={`${practicesDone} / ${totalPractices}`} detail="A prática de cada aula" />
       <ProgressMetric label="Entregas aprovadas" value={`${dashboard.completedWeeks} / ${pathV2Assignments.length}`} detail="Com revisão do mentor" />
       <ProgressMetric label="Módulos completos" value={`${progress.filter((item) => item.complete).length} / ${mentorshipPathV2.length}`} detail="Percurso por competência" />
     </section>
@@ -80,7 +81,7 @@ export function PathV2Dashboard({ dashboard, certificate, now }: { dashboard: Da
                 <summary className="flex min-h-[4.25rem] cursor-pointer list-none items-center justify-between gap-3 rounded-lg px-3 py-2 transition hover:bg-white/[.035] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8ED8A7] [&::-webkit-details-marker]:hidden">
                   <span className="flex min-w-0 items-start gap-3">
                     <span className="pt-0.5 font-mono text-[10px] font-semibold tabular-nums text-[#809087]">{String(index + 1).padStart(2, "0")}</span>
-                    <span className="min-w-0"><span className="block text-[10px] font-bold uppercase tracking-[.12em] text-[#8ED8A7]">{item.complete ? "Concluído" : moduleIsCurrent ? "Em andamento" : "Na sequência"}</span><span className="mt-1 block text-sm font-semibold leading-5 text-[#E9F0EB] sm:text-base">{item.module.title}</span><span className="mt-1 block text-[11px] leading-5 text-[#93A097]">{item.lessonsDone}/{item.lessonsTotal} aulas · {item.practicesDone}/{item.practicesTotal} práticas · {item.assignmentsDone}/{item.assignmentsTotal} entregas</span></span>
+                    <span className="min-w-0"><span className="block text-[10px] font-bold uppercase tracking-[.12em] text-[#8ED8A7]">{item.complete ? "Concluído" : moduleIsCurrent ? "Em andamento" : "Na sequência"}</span><span className="mt-1 block text-sm font-semibold leading-5 text-[#E9F0EB] sm:text-base">{item.module.title}</span><span className="mt-1 block text-[11px] leading-5 text-[#93A097]">{item.lessonsDone}/{item.lessonsTotal} aulas · {item.labsDone}/{item.labsTotal} Labs · {item.assignmentsDone}/{item.assignmentsTotal} entregas</span></span>
                   </span>
                   <ArrowDown aria-hidden="true" className="size-4 shrink-0 text-[#93A097] transition-transform group-open:rotate-180" />
                 </summary>
@@ -88,7 +89,7 @@ export function PathV2Dashboard({ dashboard, certificate, now }: { dashboard: Da
                   <p className="max-w-2xl pb-2 text-xs leading-5 text-[#AAB7AE]">{item.module.summary}</p>
                   <ol className="divide-y divide-white/[.06]">
                     {moduleChapters.map(({ chapter }) => {
-                      const chapterComplete = chapter.lessonKeys.every((key) => completed.has(key)) && chapter.practices.every((_, practiceIndex) => completed.has(pathV2PracticeKey(chapter, practiceIndex))) && (!chapter.assignmentKey || approved.has(chapter.assignmentKey));
+                      const chapterComplete = pathV2ChapterDone(chapter, completed, approved, delivered);
                       const isNext = chapter.id === next.chapter.id;
                       const StatusIcon = chapterComplete ? CheckCircle2 : isNext ? Compass : Circle;
                       const status = chapterComplete ? "Aprovado" : isNext ? "Próximo" : "A fazer";

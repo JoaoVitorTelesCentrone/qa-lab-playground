@@ -5,7 +5,7 @@ describe("guia flutuante", () => {
   test("usa o Lab fornecido e não inventa uma prática quando não há Lab liberado", () => {
     const steps = onboardingSteps({ number: 103, label: "02", title: "Orçamento" });
     expect(steps[2].route).toBe("/labs/103");
-    expect(steps[3].labStep).toBe(2);
+    expect(steps.slice(2).map((step) => step.labStep)).toEqual([0, 1, 2]);
     expect(onboardingSteps(null).map((step) => step.route)).toEqual(["/", "/labs"]);
   });
 

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { TrackPage } from "@/components/labs/track-page";
 import { buildTrackProgress, findTrack, learningTracks } from "@/lib/product/tracks";
 import { getJourney, getSessionUser, listCertificates } from "@/lib/product/store";
+import { isMentee } from "@/lib/labs/access";
 
 export const dynamic = "force-dynamic";
 
@@ -22,9 +23,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const user = await getSessionUser();
   const journey = user ? await getJourney(user.id) : null;
   const certificates = user ? await listCertificates(user.id) : [];
+  const mentee = await isMentee(user?.id);
   return <TrackPage
     progress={buildTrackProgress(track, journey?.labs ?? [])}
     signedIn={Boolean(user)}
+    canOpen={mentee}
     certificateCode={certificates.find((certificate) => certificate.trackSlug === track.slug)?.code ?? null}
   />;
 }

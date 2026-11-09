@@ -38,8 +38,10 @@ test("@smoke rota legada do desafio leva ao caso Broto", async ({ page }) => {
 test("@smoke Labs liberados e rota antiga de Finanças levam ao Broto", async ({ page }) => {
   await page.goto("/labs/101");
   await expect(page.getByRole("heading", { name: "Investigar a captura e a retomada de um pensamento" })).toBeVisible();
-  await page.getByRole("button", { name: "Etapa 3: Ambiente" }).click();
-  await expect(page.getByRole("link", { name: /Abrir caso de treino/ })).toHaveAttribute("href", "/conteudo/broto");
+  // O caso de treino entra no próprio Lab: dados para copiar no Preparar e o Broto direto no Testar.
+  await expect(page.getByRole("button", { name: /Copiar Pensamento para a Mente/ })).toBeVisible();
+  await page.getByRole("button", { name: /^Etapa 2: Testar/ }).click();
+  await expect(page.getByRole("link", { name: /Abrir o Broto/ })).toHaveAttribute("href", "https://www.brotospace.com/");
   await page.goto("/financas");
   await expect(page).toHaveURL(/\/conteudo\/broto\/?$/);
 });

@@ -4,6 +4,9 @@ import { evaluateEvidence } from "@/lib/product/evaluation";
 import { validateEvidenceAttachments } from "@/lib/product/evidence-attachments";
 import { evidenceFilesExist } from "@/lib/product/evidence-storage";
 import { labs } from "@/lib/playground/catalog";
+import { canOpenLab, labViewer } from "@/lib/labs/access";
+import { checkAcceptanceCoverage, parseDeliveryEvidence } from "@/lib/product/delivery";
+import { systemChallenges } from "@/lib/system-challenges";
 
 export const dynamic = "force-dynamic";
 
@@ -25,8 +28,9 @@ export function POST(request: Request) {
       body.done();
 
       const lab = labs.find((item) => item.slug === labSlug);
-      if (!lab) return fail("Lab não encontrado.", 404);
-      if (lab.status !== "liberado") return fail("Este Lab ainda não foi liberado.", 409);
+      const challenge = systemChallenges.find((item) => item.id === labSlug);
+      if (!lab || !challenge) return fail("Lab não encontrado.", 404);
+      if (!canOpenLab(lab, await labViewer(user.id))) return fail("Este Lab ainda não foi liberado.", 409);
 
       const evidence = typeof raw.evidence === "string" ? raw.evidence : "";
       // Os anexos chegam já subidos (POST /api/v1/evidence/upload devolve o
@@ -39,7 +43,7 @@ export function POST(request: Request) {
       // A avaliação é a mesma do formulário. O servidor é quem decide.
       const evaluation = evaluateEvidence({ evidence, attachments: attachments.length });
       if (!evaluation.passed) {
-        return fail("A entrega ainda não atende aos critérios do Lab.", 422, Object.fromEntries(evaluation.issues.map((issue) => [issue.field, issue.message])));
+        return fail("A entrega ainda não tem evidência suficiente para concluir o Lab.", 422, Object.fromEntries(evaluation.issues.map((issue) => [issue.field, issue.message])));
       }
 
       const submission = await submitEvidence({
@@ -47,7 +51,11 @@ export function POST(request: Request) {
         evidence: evidence.trim(),
         attachments,
       });
-      return ok({ submission }, 201);
+      const fields = parseDeliveryEvidence(evidence);
+      const deliveryCoverage = fields
+        ? checkAcceptanceCoverage(challenge.acceptance, challenge.acceptanceFields ?? [], fields, attachments.length)
+        : null;
+      return ok({ submission, deliveryCoverage }, 201);
     }),
   );
 }
@@ -71,10 +79,16 @@ export function PATCH(request: Request) {
       // deixar a evidência vazia depois que o Lab já foi dado como concluído.
       const evaluation = evaluateEvidence({ evidence, attachments: attachments.length });
       if (!evaluation.passed) {
-        return fail("A entrega ainda não atende aos critérios do Lab.", 422, Object.fromEntries(evaluation.issues.map((issue) => [issue.field, issue.message])));
+        return fail("A entrega ainda não tem evidência suficiente para concluir o Lab.", 422, Object.fromEntries(evaluation.issues.map((issue) => [issue.field, issue.message])));
       }
 
-      return ok(await updateSubmission(user.id, id, { evidence: evidence.trim(), attachments }));
+      const submission = await updateSubmission(user.id, id, { evidence: evidence.trim(), attachments });
+      const challenge = systemChallenges.find((item) => item.id === labSlug);
+      const fields = parseDeliveryEvidence(evidence);
+      const deliveryCoverage = challenge && fields
+        ? checkAcceptanceCoverage(challenge.acceptance, challenge.acceptanceFields ?? [], fields, attachments.length)
+        : null;
+      return ok({ submission, deliveryCoverage });
     }),
   );
 }

@@ -5,9 +5,9 @@
 // evidência ao briefing do Lab e produz três coisas: a página pública, o
 // resumo de capa e o texto do post.
 //
-// A entrega é texto livre mais anexos, então o que estrutura o case vem do
-// briefing do Lab (objetivo, oráculo, roteiro, critérios), não de campos que o
-// aluno preencheu separados. O que é dele é a evidência e os arquivos.
+// O briefing do Lab estrutura o contexto do case. Quando a evidência veio dos
+// campos novos, o case também calcula quais campos ligados a cada critério
+// estão presentes; isso não substitui a leitura do conteúdo.
 //
 // Módulo puro: nenhuma leitura de banco aqui. A página pública e o painel
 // logado renderizam o mesmo modelo, então o que o aluno revisa antes de
@@ -17,6 +17,7 @@ import type { SystemChallenge } from "@/lib/system-challenges";
 import { labLabel, type Lab } from "@/lib/playground/catalog";
 import type { Submission } from "./journey";
 import { summarize } from "./portfolio-format";
+import { checkAcceptanceCoverage, parseDeliveryEvidence, type AcceptanceCoverage } from "./delivery";
 
 export type QaCase = {
   submission: Submission;
@@ -39,6 +40,8 @@ export type QaCase = {
   labSteps: string[];
   /** Critérios de aceite do Lab. Mesma origem do roteiro. */
   criteria: string[];
+  /** Campos preenchidos que dão suporte estrutural a cada critério; não julga o conteúdo. */
+  deliveryCoverage: AcceptanceCoverage[] | null;
   createdAt: string;
   customization: CaseCustomization;
 };
@@ -63,6 +66,10 @@ export function buildCase(submission: Submission, lab: Lab | undefined, challeng
   const safeCustomization = Object.fromEntries(
     Object.keys(emptyCaseCustomization).map((field) => [field, typeof rawCustomization[field as keyof CaseCustomization] === "string" ? rawCustomization[field as keyof CaseCustomization] : ""]),
   ) as CaseCustomization;
+  const fields = parseDeliveryEvidence(submission.evidence);
+  const deliveryCoverage = fields
+    ? checkAcceptanceCoverage(challenge.acceptance, challenge.acceptanceFields ?? [], fields, submission.attachments.length)
+    : null;
   return {
     submission,
     labNumber: lab.number,
@@ -77,6 +84,7 @@ export function buildCase(submission: Submission, lab: Lab | undefined, challeng
     expected: challenge.expected,
     labSteps: challenge.steps,
     criteria: challenge.acceptance,
+    deliveryCoverage,
     createdAt: submission.createdAt,
     customization: safeCustomization,
   };

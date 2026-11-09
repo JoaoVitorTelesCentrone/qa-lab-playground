@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Check, Sprout } from "lucide-react";
 import LegacyContentPage from "@/app/mentoria/conteudo/page";
 import { getMentorshipDashboard } from "@/lib/mentorship/store";
-import { mentorshipPathV2, pathV2Assignments, pathV2ChapterHref, pathV2PracticeKey, pathV2Progress } from "@/lib/mentorship/path-v2";
+import { mentorshipPathV2, pathV2Assignments, pathV2ChapterHref, pathV2ChapterDone, pathV2Progress } from "@/lib/mentorship/path-v2";
 import { getSessionUser } from "@/lib/product/store";
 
 export const metadata = { title: "Conteúdo por módulos | QA Lab", description: "Estude QA por competências, pratique no Broto e transforme a investigação em evidência." };
@@ -23,9 +23,10 @@ export default async function ContentCatalogPage() {
   const latest = new Map<string, string>();
   for (const submission of dashboard?.submissions ?? []) if (!latest.has(submission.assignmentKey)) latest.set(submission.assignmentKey, submission.status);
   const approved = new Set([...latest].filter(([, status]) => status === "approved").map(([key]) => key));
-  const progress = pathV2Progress(completed, approved, completed);
+  const delivered = new Set(dashboard?.deliveredLabs ?? []);
+  const progress = pathV2Progress(completed, approved, delivered);
   const next = progress.find((item) => !item.complete);
-  const resumeChapter = next?.module.chapters.find((chapter) => chapter.lessonKeys.some((key) => !completed.has(key)) || chapter.practices.some((_, index) => !completed.has(pathV2PracticeKey(chapter, index))) || (chapter.assignmentKey && !approved.has(chapter.assignmentKey))) ?? next?.module.chapters[0];
+  const resumeChapter = next?.module.chapters.find((chapter) => !pathV2ChapterDone(chapter, completed, approved, delivered)) ?? next?.module.chapters[0];
   const journeyComplete = dashboard?.enrollment.programVersion === "v2" && !next;
   const startHref = journeyComplete ? "/mentoria/app" : next && resumeChapter ? pathV2ChapterHref(next.module, resumeChapter) : pathV2ChapterHref(mentorshipPathV2[0], mentorshipPathV2[0].chapters[0]);
 

@@ -49,10 +49,34 @@ export async function getJourney(userId: string): Promise<Journey> {
   return buildJourney(toEnrollments(enrollments.data), toSubmissions(submissions.data), toRuns(runs.data));
 }
 
-export async function listSubmissions(userId: string, labSlug?: string): Promise<Submission[]> {
+export type LabStatusEntry = { status: Enrollment["status"]; submissions: number; published: boolean };
+
+/**
+ * Status de todos os Labs que o aluno tocou, liberados ou não. A jornada
+ * (`getJourney`) só olha o catálogo público; a mentoria precisa enxergar os
+ * Labs das aulas, que ficam fora dele. Tabela ausente devolve mapa vazio.
+ */
+export async function getLabStatusMap(userId: string): Promise<Map<string, LabStatusEntry>> {
+  const supabase = await createClient();
+  const [enrollments, submissions] = await Promise.all([
+    supabase.from("lab_enrollments").select("lab_slug,status").eq("user_id", userId),
+    supabase.from("lab_submissions").select("lab_slug,published").eq("user_id", userId),
+  ]);
+  const map = new Map<string, LabStatusEntry>();
+  if (enrollments.error) return map;
+  for (const row of enrollments.data ?? []) map.set(row.lab_slug, { status: row.status as Enrollment["status"], submissions: 0, published: false });
+  for (const row of submissions.error ? [] : submissions.data ?? []) {
+    const entry = map.get(row.lab_slug) ?? { status: "completed" as const, submissions: 0, published: false };
+    map.set(row.lab_slug, { ...entry, submissions: entry.submissions + 1, published: entry.published || Boolean(row.published) });
+  }
+  return map;
+}
+
+export async function listSubmissions(userId: string, labSlug?: string | readonly string[]): Promise<Submission[]> {
   const supabase = await createClient();
   let query = supabase.from("lab_submissions").select(SUBMISSION_COLUMNS).eq("user_id", userId).order("created_at", { ascending: false });
-  if (labSlug) query = query.eq("lab_slug", labSlug);
+  if (typeof labSlug === "string") query = query.eq("lab_slug", labSlug);
+  else if (labSlug?.length) query = query.in("lab_slug", [...labSlug]);
   const { data, error } = await query;
   if (error) return [];
 

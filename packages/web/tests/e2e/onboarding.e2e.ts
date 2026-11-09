@@ -16,11 +16,11 @@ test("@smoke guia flutua sobre as páginas e acompanha a prática real", async (
   await page.getByRole("dialog").getByRole("button", { name: "Abrir Lab 01", exact: true }).click();
   await expect(page).toHaveURL(/\/labs\/101$/);
   await expect(page.locator('[data-onboarding="lab-step-0"]')).toHaveAttribute("aria-current", "step");
-  await page.getByRole("dialog").getByRole("button", { name: "Ver ambiente" }).click();
-  await expect(page.locator('[data-onboarding="lab-step-2"]')).toHaveAttribute("aria-current", "step");
-  await expect(page.locator('[data-onboarding="lab-panel"]').getByRole("link", { name: "Abrir caso de treino" })).toBeVisible();
+  await page.getByRole("dialog").getByRole("button", { name: "Ver o teste" }).click();
+  await expect(page.locator('[data-onboarding="lab-step-1"]')).toHaveAttribute("aria-current", "step");
+  await expect(page.locator('[data-onboarding="lab-panel"]').getByRole("link", { name: /Abrir o Broto/ })).toBeVisible();
   await page.getByRole("dialog").getByRole("button", { name: "Ver entrega" }).click();
-  await expect(page.locator('[data-onboarding="lab-step-3"]')).toHaveAttribute("aria-current", "step");
+  await expect(page.locator('[data-onboarding="lab-step-2"]')).toHaveAttribute("aria-current", "step");
   await expect(page.getByRole("heading", { name: "Entrega de evidência", exact: true })).toBeVisible();
   await page.getByRole("dialog").getByRole("button", { name: "Concluir", exact: true }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
@@ -57,13 +57,13 @@ test("começa fechado, fecha com Escape e pode ser retomado sem trocar de págin
 
 test("guia não bloqueia a página e links antigos abrem o painel flutuante", async ({ page }) => {
   await page.goto("/comecar");
-  await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Aprenda QA fazendo." })).toBeVisible();
   await expect(page).toHaveURL(/\/$/);
   await page.getByRole("navigation", { name: "Navegação principal" }).getByRole("button", { name: "Estudar", exact: true }).click();
   await page.locator('[data-slot="popover-content"]').getByRole("link", { name: /^Trilhas/ }).click();
   await expect(page).toHaveURL(/\/trilhas$/);
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await page.getByRole("dialog").getByRole("button", { name: "Ver esta etapa" }).click();
+  await expect(page.getByRole("dialog", { name: "Aprenda QA fazendo." })).toBeVisible();
+  await page.getByRole("dialog", { name: "Aprenda QA fazendo." }).getByRole("button", { name: "Ver esta etapa" }).click();
   await expect(page).toHaveURL(/\/$/);
 });
 

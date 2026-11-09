@@ -8,6 +8,8 @@
 // a única regra é que exista substância. Um anexo sozinho vale como entrega
 // (um vídeo de repro é evidência legítima), mas texto vazio + zero anexo não.
 
+import { parseDeliveryEvidence } from "./delivery";
+
 export const MIN_LENGTH = 20;
 
 export type EvidenceDraft = {
@@ -25,7 +27,10 @@ export type Evaluation = {
 
 export function evaluateEvidence(draft: EvidenceDraft): Evaluation {
   const issues: EvaluationIssue[] = [];
-  const text = draft.evidence.trim();
+  const structured = parseDeliveryEvidence(draft.evidence);
+  const text = structured
+    ? [structured.did, structured.expected, structured.observed, structured.conclusion].filter(Boolean).join(" ").trim()
+    : draft.evidence.trim();
 
   if (text.length === 0 && draft.attachments === 0) {
     issues.push({ field: "evidence", message: "Escreva a evidência ou anexe um arquivo." });

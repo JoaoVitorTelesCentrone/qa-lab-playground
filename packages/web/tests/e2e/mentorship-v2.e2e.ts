@@ -1,5 +1,6 @@
 import { test, expect, localEnabled, checked, signIn } from "./helpers/mentorship-local";
-import { mentorshipPathV2, pathV2Assignments, pathV2Chapters, pathV2ChapterHref, pathV2LessonKeys, pathV2PracticeKeys } from "../../lib/mentorship/path-v2";
+import { mentorshipPathV2, pathV2Assignments, pathV2Chapters, pathV2ChapterHref, pathV2LessonKeys, pathV2PathLabs } from "../../lib/mentorship/path-v2";
+import { labsForChapter } from "../../lib/mentorship/lesson-labs";
 import type { Page } from "@playwright/test";
 import { createHmac } from "node:crypto";
 
@@ -43,7 +44,9 @@ test.describe("mentoria v2: banco local e três perfis", () => {
       await student.goto(pathV2ChapterHref(mentorshipPathV2[0], opening));
       await student.getByRole("button", { name: "Marcar como concluída", exact: true }).first().click();
       await expect(student.getByRole("button", { name: "Concluída", exact: true }).first()).toBeDisabled();
-      await student.getByRole("region", { name: "Faça", exact: true }).getByRole("button", { name: "Marcar como concluída", exact: true }).first().click();
+      // A prática da aula é um Lab com entrega: o capítulo oferece o link, não um botão de "marcar como feita".
+      await expect(student.locator(`main a[href="/labs/${labsForChapter(opening)[0]}"]`).first()).toBeVisible();
+      await expect(student.getByRole("region", { name: "Faça", exact: true })).toHaveCount(0);
       await student.goto(assignmentUrl);
       await student.getByLabel(/Anexos/).setInputFiles({ name: "evidencia.pdf", mimeType: "application/pdf", buffer: pdf });
       await expect(student.getByRole("link", { name: "evidencia.pdf", exact: true })).toBeVisible();
@@ -232,11 +235,16 @@ test.describe("mentoria v2: banco local e três perfis", () => {
       await review(mentor, "approved");
     } finally { await mentorContext.close(); }
     // Build an almost-complete precondition, then prove each final requirement via real APIs.
-    await checked(lab.admin.from("mentorship_lesson_progress").insert([...pathV2LessonKeys.slice(0, -1), ...pathV2PracticeKeys.slice(0, -1)].map((key) => ({ enrollment_id: lab.enrollmentId, lesson_key: key, status: "completed", completed_at: new Date().toISOString() }))));
+    const labEvidence = "## O que fiz\nExecutei os passos do Lab e registrei cada resultado.\n## O que esperava\nA regra confirmada no briefing.\n## O que aconteceu\nO comportamento observado coincidiu com a regra, sem divergências.\n## Conclusão\nFunciona como esperado";
+    const lastLab = pathV2PathLabs.at(-1)!;
+    await checked(lab.admin.from("mentorship_lesson_progress").insert(pathV2LessonKeys.slice(0, -1).map((key) => ({ enrollment_id: lab.enrollmentId, lesson_key: key, status: "completed", completed_at: new Date().toISOString() }))));
+    await checked(lab.admin.from("lab_submissions").insert(pathV2PathLabs.slice(0, -1).map((number) => ({ user_id: lab.actors.student.id, lab_slug: `desafio-${number}`, evidence: labEvidence }))));
     expect((await page.request.post("/api/v1/mentorship/certificate")).status()).toBe(409);
     expect((await page.request.post(`/api/v1/mentorship/lessons/${pathV2LessonKeys.at(-1)}/progress`)).status()).toBe(200);
     expect((await page.request.post("/api/v1/mentorship/certificate")).status()).toBe(409);
-    expect((await page.request.post(`/api/v1/mentorship/lessons/${pathV2PracticeKeys.at(-1)}/progress`)).status()).toBe(200);
+    // O último Lab entra pela API real de entregas, como no produto.
+    const delivered = await page.request.post("/api/v1/submissions", { data: { labSlug: `desafio-${lastLab}`, evidence: labEvidence } });
+    expect(delivered.status(), await delivered.text()).toBeLessThan(300);
     const issued = await page.request.post("/api/v1/mentorship/certificate");
     expect(issued.status(), await issued.text()).toBe(200);
     const code = (await issued.json()).data.certificate.code;

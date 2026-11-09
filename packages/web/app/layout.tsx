@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import { NavigationProgress } from "@/components/layout/navigation-progress";
 import { FloatingOnboarding } from "@/components/onboarding/floating-onboarding";
-import { labs, labLabel } from "@/lib/playground/catalog";
+import { firstLab as launchFirstLab, labLabel } from "@/lib/playground/catalog";
 import { AttributionCapture } from "@/components/analytics/attribution-capture";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "#101715", colorScheme: "dark" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const firstLab = labs.find((lab) => lab.status === "liberado");
+  const firstLab = launchFirstLab;
   const tourLab = firstLab ? { number: firstLab.number, label: labLabel(firstLab), title: firstLab.title } : null;
   return (
     <html lang="pt-BR">

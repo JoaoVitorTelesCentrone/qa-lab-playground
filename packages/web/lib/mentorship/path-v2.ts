@@ -1,5 +1,6 @@
 import { mentorshipWeeks, type MentorshipAssignment, type MentorshipLesson } from "./catalog";
 import type { LessonTheory } from "./lesson-theory-types";
+import { lessonLabs } from "./lesson-labs-data";
 
 export type PracticeV2 = { task: string; evidence: string };
 export type ChapterV2 = {
@@ -105,14 +106,27 @@ export const pathV2Assignments: readonly AssignmentV2[] = [
   milestone("case-final", "28", "projeto-final", 12, "Case final", "Case sanitizado com evidências anteriores e decisão de release.", ["Que pergunta de produto conecta as evidências?", "Que evidências aprovadas sustentam sua decisão?", "O que não foi testado e qual próximo passo recomenda?"], ["Evidências rastreáveis", "Decisão e risco residual", "Privacidade e autoria"]),
 ];
 export function findPathV2Assignment(key: string) { return pathV2Assignments.find((assignment) => assignment.key === key); }
-export function pathV2Progress(completedLessonKeys: ReadonlySet<string>, approvedAssignmentKeys: ReadonlySet<string>, completedPracticeKeys: ReadonlySet<string> = new Set()) {
+
+// A prática de cada aula é um Lab com entrega (lesson-labs-data.ts). O
+// progresso conta Labs entregues, não um botão de "feito": a entrega é a prova.
+export function pathV2ChapterLabs(chapter: ChapterV2): number[] { return chapter.lessonKeys.flatMap((key) => lessonLabs[key] ?? []); }
+export const pathV2PathLabs: readonly number[] = pathV2Chapters.flatMap(({ chapter }) => pathV2ChapterLabs(chapter));
+
+/** Capítulo concluído: aulas lidas, Labs entregues e marco aprovado (quando houver). */
+export function pathV2ChapterDone(chapter: ChapterV2, completedLessonKeys: ReadonlySet<string>, approvedAssignmentKeys: ReadonlySet<string>, deliveredLabs: ReadonlySet<number>) {
+  return chapter.lessonKeys.every((key) => completedLessonKeys.has(key))
+    && pathV2ChapterLabs(chapter).every((labNumber) => deliveredLabs.has(labNumber))
+    && (!chapter.assignmentKey || approvedAssignmentKeys.has(chapter.assignmentKey));
+}
+
+export function pathV2Progress(completedLessonKeys: ReadonlySet<string>, approvedAssignmentKeys: ReadonlySet<string>, deliveredLabs: ReadonlySet<number> = new Set()) {
   return mentorshipPathV2.map((module) => {
     const lessonKeys = module.chapters.flatMap((chapter) => chapter.lessonKeys);
     const assignments = pathV2Assignments.filter((assignment) => assignment.moduleId === module.id);
-    const practiceKeys = module.chapters.flatMap((chapter) => chapter.practices.map((_, index) => pathV2PracticeKey(chapter, index)));
+    const labNumbers = module.chapters.flatMap((chapter) => pathV2ChapterLabs(chapter));
     const lessonsDone = lessonKeys.filter((key) => completedLessonKeys.has(key)).length;
-    const practicesDone = practiceKeys.filter((key) => completedPracticeKeys.has(key)).length;
+    const labsDone = labNumbers.filter((labNumber) => deliveredLabs.has(labNumber)).length;
     const assignmentsDone = assignments.filter((assignment) => approvedAssignmentKeys.has(assignment.key)).length;
-    return { module, lessonsDone, lessonsTotal: lessonKeys.length, practicesDone, practicesTotal: practiceKeys.length, assignmentsDone, assignmentsTotal: assignments.length, complete: lessonsDone === lessonKeys.length && practicesDone === practiceKeys.length && assignmentsDone === assignments.length };
+    return { module, lessonsDone, lessonsTotal: lessonKeys.length, labsDone, labsTotal: labNumbers.length, assignmentsDone, assignmentsTotal: assignments.length, complete: lessonsDone === lessonKeys.length && labsDone === labNumbers.length && assignmentsDone === assignments.length };
   });
 }

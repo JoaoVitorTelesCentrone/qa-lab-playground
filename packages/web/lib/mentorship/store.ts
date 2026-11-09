@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDisplayName, trackEvent } from "@/lib/product/store";
 import { findMentorshipAssignment, findMentorshipLesson, findMentorshipWeek, mentorshipTrackForWeek, mentorshipWeeks } from "./catalog";
-import { findPathV2Assignment, findPathV2Lesson, pathV2Assignments, pathV2ChapterHref, pathV2Chapters, pathV2LessonKeys, pathV2PracticeKeys } from "./path-v2";
+import { findPathV2Assignment, findPathV2Lesson, pathV2Assignments, pathV2ChapterHref, pathV2Chapters, pathV2LessonKeys, pathV2PathLabs, pathV2PracticeKeys } from "./path-v2";
 import { visibleSession, sessionHref } from "./sessions";
 import { scheduleMentorshipEmails } from "./email-dispatch";
 import { getMentorshipEmailHealth } from "./email";
@@ -119,6 +119,13 @@ function toReview(row: Record<string, unknown>): MentorshipReview {
   };
 }
 
+/** Labs com evidência entregue (por número). Tabela ausente = nenhum. */
+async function deliveredLabNumbers(userId: string): Promise<number[]> {
+  const { data, error } = await createAdminClient().from("lab_submissions").select("lab_slug").eq("user_id", userId);
+  if (error) return [];
+  return [...new Set((data ?? []).map((row) => Number(String(row.lab_slug).replace("desafio-", ""))).filter((value) => Number.isInteger(value) && value > 0))];
+}
+
 export async function getMentorshipDashboard(userId: string) {
   const enrollment = await getEnrollmentForUser(userId);
   if (!enrollment || enrollment.status === "invited" || enrollment.status === "cancelled") return null;
@@ -175,6 +182,8 @@ export async function getMentorshipDashboard(userId: string) {
     completedWeeks: v2 ? v2Approved : completedWeeks,
     totalWeeks: v2 ? pathV2Assignments.length : 12,
     isComplete: v2 ? v2Approved === pathV2Assignments.length : completedWeeks === 12,
+    // A prática de cada aula é um Lab: o progresso de prática vem das entregas.
+    deliveredLabs: v2 ? await deliveredLabNumbers(userId) : [],
   };
 }
 
@@ -332,10 +341,11 @@ async function certificateProgress(userId: string) {
   const admin = createAdminClient();
   const assignmentKeys = enrollment.programVersion === "v2" ? pathV2Assignments.map((item) => item.key) : mentorshipWeeks.map((week) => week.assignment.key);
   const lessonKeys = enrollment.programVersion === "v2" ? pathV2LessonKeys : mentorshipWeeks.flatMap((week) => week.lessons.map((lesson) => lesson.key));
-  const practiceKeys = enrollment.programVersion === "v2" ? pathV2PracticeKeys : [];
+  // Práticas = Labs das aulas com evidência entregue.
+  const practiceLabs = enrollment.programVersion === "v2" ? pathV2PathLabs : [];
   const [submissionsResult, lessonsResult] = await Promise.all([
     admin.from("mentorship_submissions").select("assignment_key,attempt_number,status").eq("enrollment_id", enrollment.id).in("assignment_key", assignmentKeys).order("attempt_number", { ascending: false }),
-    admin.from("mentorship_lesson_progress").select("lesson_key,status").eq("enrollment_id", enrollment.id).in("lesson_key", [...lessonKeys, ...practiceKeys]),
+    admin.from("mentorship_lesson_progress").select("lesson_key,status").eq("enrollment_id", enrollment.id).in("lesson_key", lessonKeys),
   ]);
   if (submissionsResult.error) throw new Error(submissionsResult.error.message);
   if (lessonsResult.error) throw new Error(lessonsResult.error.message);
@@ -344,8 +354,9 @@ async function certificateProgress(userId: string) {
   const approvedAssignments = assignmentKeys.filter((key) => latest.get(key) === "approved").length;
   const completedKeys = new Set((lessonsResult.data ?? []).filter((lesson) => lesson.status === "completed").map((lesson) => lesson.lesson_key));
   const completedLessons = lessonKeys.filter((key) => completedKeys.has(key)).length;
-  const completedPractices = practiceKeys.filter((key) => completedKeys.has(key)).length;
-  return { enrollment, approvedAssignments, requiredAssignments: assignmentKeys.length, completedLessons, requiredLessons: lessonKeys.length, completedPractices, requiredPractices: practiceKeys.length };
+  const delivered = new Set(practiceLabs.length ? await deliveredLabNumbers(userId) : []);
+  const completedPractices = practiceLabs.filter((labNumber) => delivered.has(labNumber)).length;
+  return { enrollment, approvedAssignments, requiredAssignments: assignmentKeys.length, completedLessons, requiredLessons: lessonKeys.length, completedPractices, requiredPractices: practiceLabs.length };
 }
 
 export async function getMentorshipCertificateProgress(userId: string): Promise<MentorshipCertificateProgress> {
@@ -927,6 +938,7 @@ export async function getMentorStudentOverview(enrollmentId: string) {
     cohort,
     studentName: profile?.full_name?.trim() || profile?.username || enrollment.user_id,
     submissions: submissions ?? [], lessons: lessons ?? [], sessions: sessions ?? [], attendance: attendance ?? [], commitments: commitments ?? [],
+    deliveredLabs: await deliveredLabNumbers(enrollment.user_id),
   };
 }
 

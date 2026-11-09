@@ -13,8 +13,8 @@ function progress(labNumber: number, status: LabProgress["status"]): LabProgress
 }
 
 describe("trilha de aprendizagem", () => {
-  test("há uma trilha por ambiente de prática", () => {
-    expect(learningTracks.map((item) => item.appId).sort()).toEqual(["agendamentos", "broto", "crm", "qa-lab"]);
+  test("as trilhas de Labs usam o Broto como ambiente, exceto Fluxos críticos (QA Lab)", () => {
+    expect(learningTracks.map((item) => item.appId).sort()).toEqual(["broto", "broto", "broto", "qa-lab"]);
     expect(new Set(learningTracks.map((item) => item.slug)).size).toBe(learningTracks.length);
   });
 
@@ -42,7 +42,7 @@ describe("trilha de aprendizagem", () => {
     const result = buildTrackProgress(track, []);
     expect(result.completed).toBe(0);
     expect(result.percent).toBe(0);
-    expect(result.total).toBe(3);
+    expect(result.total).toBe(track.labNumbers.length);
     expect(result.nextLab?.number).toBe(track.labNumbers[0]);
     expect(result.steps[0].position).toBe(1);
     expect(result.steps.every((step) => step.status === "nao-iniciado")).toBe(true);
@@ -51,14 +51,13 @@ describe("trilha de aprendizagem", () => {
   test("pula os concluídos ao sugerir o próximo", () => {
     const result = buildTrackProgress(track, [progress(track.labNumbers[0], "completed"), progress(track.labNumbers[1], "started")]);
     expect(result.completed).toBe(1);
-    expect(result.percent).toBe(33);
+    expect(result.percent).toBe(Math.round(100 / track.labNumbers.length));
     expect(result.steps[1].status).toBe("started");
   });
 
-  test("pula um passo agendado ao sugerir o próximo, mesmo se não concluído", () => {
-    // 101 liberado e concluído; o próximo passo disponível é o 103.
-    const result = buildTrackProgress(track, [progress(101, "completed")]);
-    expect(result.nextLab?.number).toBe(103);
+  test("sugere o próximo passo da trilha depois do concluído", () => {
+    const result = buildTrackProgress(track, [progress(track.labNumbers[0], "completed")]);
+    expect(result.nextLab?.number).toBe(track.labNumbers[1]);
   });
 
   test("trilha inteira concluída não sugere próximo Lab", () => {
@@ -79,11 +78,11 @@ describe("trilha de aprendizagem", () => {
     expect(trackHasReleasedLab(track)).toBe(true);
   });
 
-  test("Labs liberados ocupam os primeiros passos sem buracos", () => {
+  test("todos os passos da trilha estão liberados, em ordem e sem buracos", () => {
     const result = buildTrackProgress(track, []);
     const released = result.steps.filter((step) => step.lab.status === "liberado");
-    expect(released.map((step) => step.lab.number)).toEqual([101, 103, 105]);
-    expect(released.map((step) => step.position)).toEqual([1, 2, 3]);
+    expect(released.map((step) => step.lab.number)).toEqual(track.labNumbers);
+    expect(released.map((step) => step.position)).toEqual(track.labNumbers.map((_, index) => index + 1));
   });
 
   test("a busca por Lab continua correta quando religada", () => {

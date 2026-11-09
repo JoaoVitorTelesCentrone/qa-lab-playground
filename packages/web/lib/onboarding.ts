@@ -11,9 +11,9 @@ export function onboardingSteps(lab: TourLab | null): TourStep[] {
   if (!lab) return steps;
   const route = `/labs/${lab.number}`;
   return [...steps,
-    { title: "Entenda o que investigar.", text: "Leia o objetivo, confira os dados de teste e veja o que precisa aparecer na entrega. Essa é a sua missão.", route, selector: '[data-onboarding="lab-step-0"]', labStep: 0, action: "Ver ambiente" },
-    { title: "Agora, teste o sistema.", text: "Abra o caso de treino, copie os dados fictícios e siga para o Broto. Para praticar no produto, use uma conta de estudo; aqui você pode ler o roteiro sem entrar.", route, selector: '[data-onboarding="lab-step-2"]', labStep: 2, action: "Ver entrega" },
-    { title: "Transforme a descoberta em evidência.", text: "Registre os passos, o resultado e sua conclusão. Entre na sua conta quando quiser salvar. Você pode reabrir este guia em Primeiros passos.", route, selector: '[data-onboarding="lab-step-3"]', labStep: 3, action: "Concluir" },
+    { title: "Prepare o teste.", text: "Leia a missão, veja o que precisa entregar e copie os dados fictícios. Tudo está nesta tela.", route, selector: '[data-onboarding="lab-step-0"]', labStep: 0, action: "Ver o teste" },
+    { title: "Agora, teste o sistema.", text: "Abra o Broto com uma conta de estudo e siga o roteiro. Marque os passos e anote o que viu: as anotações viram o rascunho da entrega.", route, selector: '[data-onboarding="lab-step-1"]', labStep: 1, action: "Ver entrega" },
+    { title: "Transforme a descoberta em evidência.", text: "Conte o que fez, o que esperava, o que aconteceu e sua conclusão. Entre na sua conta para enviar. Você pode reabrir este guia em Primeiros passos.", route, selector: '[data-onboarding="lab-step-2"]', labStep: 2, action: "Concluir" },
   ];
 }
 

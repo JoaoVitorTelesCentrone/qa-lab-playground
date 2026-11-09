@@ -36,39 +36,32 @@ describe("catálogo de Labs", () => {
     expect(isLabReleased({ releaseDate: "2027-01-01" }, new Date("2026-12-31T12:00:00.000Z"))).toBe(false);
   });
 
-  test("lançamento enxuto: só 3 desafios do Broto estão liberados", () => {
-    const liberados = labs.filter((lab) => lab.status === "liberado");
-    expect(liberados).toHaveLength(3);
-    expect(liberados.map((lab) => lab.number).sort((a, b) => a - b)).toEqual([101, 103, 105]);
-    expect(liberados.every((lab) => lab.requiredFeature === "Broto" && lab.route === "/conteudo/broto")).toBe(true);
-    expect(labs.filter((lab) => lab.requiredFeature === "Broto")).toHaveLength(10);
+  test("todos os Labs estão liberados e os do Broto continuam no caso Broto", () => {
+    expect(labs.every((lab) => lab.status === "liberado")).toBe(true);
+    expect(labs.length).toBeGreaterThan(130);
+    const broto = labs.filter((lab) => lab.requiredFeature === "Broto");
+    expect(broto).toHaveLength(56);
+    expect(broto.every((lab) => lab.route === "/conteudo/broto")).toBe(true);
     expect(labs.some((lab) => lab.route.startsWith("/financas"))).toBe(false);
-    expect(labs.filter((lab) => lab.status === "agendado").length).toBe(labs.length - 3);
   });
 });
 
-// Numeração de lançamento: o que o aluno lê é a posição na lista de liberação,
-// não o índice do catálogo. Ver o comentário de LAUNCH_ORDER em catalog.ts.
+// Numeração de lançamento: só os três primeiros Labs têm posição própria (01–03),
+// para não quebrar URLs e cases já publicados. Os demais mostram o número do catálogo.
 describe("numeração de lançamento", () => {
-  const released = labs.filter((lab) => lab.status === "liberado");
+  const launch = [101, 103, 105].map((number) => labs.find((lab) => lab.number === number)!);
 
-  test("os Labs liberados são numerados 01, 02, 03… sem buraco", () => {
-    expect(released.map((lab) => labLabel(lab))).toEqual(released.map((_, index) => String(index + 1).padStart(2, "0")));
+  test("os três Labs do lançamento seguem numerados 01, 02, 03", () => {
+    expect(launch.map((lab) => lab.position)).toEqual([1, 2, 3]);
+    expect(launch.map((lab) => labLabel(lab))).toEqual(["01", "02", "03"]);
+    // A rota e o `lab_slug` no banco continuam no número de catálogo.
+    expect(launch.map((lab) => lab.slug)).toEqual(["desafio-101", "desafio-103", "desafio-105"]);
   });
 
-  test("o número lido nunca é o número de catálogo quando eles divergem", () => {
-    const first = released[0];
-    expect(first.position).toBe(1);
-    expect(labLabel(first)).toBe("01");
-    expect(first.number).toBeGreaterThan(3);
-    // A rota e o `lab_slug` no banco continuam no número de catálogo: é o que
-    // deixa a renumeração de vitrine acontecer sem migrar dado nem quebrar link.
-    expect(first.slug).toBe(`desafio-${first.number}`);
-  });
-
-  test("Lab agendado não tem posição de lançamento", () => {
-    const scheduled = labs.filter((lab) => lab.status === "agendado");
-    expect(scheduled.length).toBeGreaterThan(0);
-    expect(scheduled.every((lab) => lab.position === null)).toBe(true);
+  test("os demais Labs mostram o número do catálogo e não têm posição de lançamento", () => {
+    const others = labs.filter((lab) => !launch.includes(lab));
+    expect(others.length).toBeGreaterThan(0);
+    expect(others.every((lab) => lab.position === null)).toBe(true);
+    expect(labLabel(labs.find((lab) => lab.number === 102)!)).toBe("102");
   });
 });
