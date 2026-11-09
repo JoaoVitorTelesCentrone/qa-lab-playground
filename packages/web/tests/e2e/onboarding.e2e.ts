@@ -59,9 +59,8 @@ test("guia não bloqueia a página e links antigos abrem o painel flutuante", as
   await page.goto("/comecar");
   await expect(page.getByRole("dialog", { name: "Aprenda QA fazendo." })).toBeVisible();
   await expect(page).toHaveURL(/\/$/);
-  await page.getByRole("navigation", { name: "Navegação principal" }).getByRole("button", { name: "Estudar", exact: true }).click();
-  await page.locator('[data-slot="popover-content"]').getByRole("link", { name: /^Trilhas/ }).click();
-  await expect(page).toHaveURL(/\/trilhas$/);
+  await page.getByRole("navigation", { name: "Navegação principal" }).getByRole("link", { name: "Caminho", exact: true }).click();
+  await expect(page).toHaveURL(/\/conteudo$/);
   await expect(page.getByRole("dialog", { name: "Aprenda QA fazendo." })).toBeVisible();
   await page.getByRole("dialog", { name: "Aprenda QA fazendo." }).getByRole("button", { name: "Ver esta etapa" }).click();
   await expect(page).toHaveURL(/\/$/);

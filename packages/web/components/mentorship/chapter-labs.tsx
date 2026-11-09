@@ -6,8 +6,6 @@ import type { LabStatusEntry } from "@/lib/product/store";
 // Os Labs de cada aula, com o status real (entrega enviada), não um botão de
 // "marcar como feito". Server component: recebe o status já lido do banco.
 
-type Lesson = { key: string; title: string; duration?: string; labNumbers: readonly number[] };
-
 function statusOf(entry: LabStatusEntry | undefined) {
   if (entry && entry.submissions > 0) return { label: "Entregue", tone: "done" as const };
   if (entry?.status === "started") return { label: "Em andamento", tone: "progress" as const };
@@ -32,15 +30,4 @@ export function LabCard({ number, statuses, canOpen }: { number: number; statuse
   </>;
   const href = !open ? "/mentoria" : status.tone === "done" ? `/labs/${lab.number}/conclusao` : `/labs/${lab.number}`;
   return <Link href={href} className={`flex min-h-16 items-center justify-between gap-4 border px-4 py-3 transition-colors hover:border-[var(--field-green)] ${status.tone === "done" ? "border-[color-mix(in_srgb,var(--field-green)_40%,var(--field-line))]" : "border-[var(--field-line)]"}`}>{body}</Link>;
-}
-
-export function ChapterLabs({ lessons, statuses, canOpen }: { lessons: Lesson[]; statuses: ReadonlyMap<string, LabStatusEntry>; canOpen: boolean }) {
-  const withLabs = lessons.filter((lesson) => lesson.labNumbers.length > 0);
-  if (withLabs.length === 0) return null;
-  return <ol className="mt-6 grid gap-6">
-    {withLabs.map((lesson, index) => <li key={lesson.key} className="grid gap-3">
-      <p className="text-sm"><span className="font-mono text-xs opacity-70">AULA {index + 1}</span> <a href={`#${lesson.key}`} className="font-semibold underline-offset-4 hover:underline">{lesson.title}</a>{lesson.duration ? <span className="opacity-70"> · {lesson.duration}</span> : null}</p>
-      <div className="grid gap-2">{lesson.labNumbers.map((number) => <LabCard key={number} number={number} statuses={statuses} canOpen={canOpen} />)}</div>
-    </li>)}
-  </ol>;
 }

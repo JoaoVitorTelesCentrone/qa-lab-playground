@@ -66,12 +66,12 @@
 :root {
   /* Paleta do caderno de campo: é o tema de toda a plataforma. Os ambientes de
      prática (.qa-practice, .qa-store) restauram a paleta própria mais abaixo. */
-  --field-bg: #101715;
-  --field-surface: #18221e;
-  --field-raised: #213329;
-  --field-line: #35483d;
-  --field-text: #f2f3eb;
-  --field-muted: #becbc0;
+  --field-bg: #131313;
+  --field-surface: #1b1b1b;
+  --field-raised: #262626;
+  --field-line: #3b3b3b;
+  --field-text: #f2f2ef;
+  --field-muted: #b9b9b4;
   --field-green: #95d4a7;
   --field-copper: #f0b886;
   --radius: 0.375rem;
@@ -99,7 +99,7 @@
   --steel-rgb: 61, 126, 166;
 
   --off-white: var(--field-text);
-  --off-white-rgb: 242, 243, 235;
+  --off-white-rgb: 242, 242, 239;
 
   --background: var(--field-bg);
   --foreground: var(--field-text);
@@ -111,7 +111,7 @@
   --popover-foreground: var(--field-text);
 
   --primary: var(--field-green);
-  --primary-foreground: #0d1c13;
+  --primary-foreground: #101010;
 
   --secondary: var(--field-raised);
   --secondary-foreground: var(--field-text);
@@ -600,7 +600,7 @@ html { accent-color: var(--primary); scrollbar-color: var(--field-line) var(--fi
 .qa-home-hero-copy > p { max-width: 48ch; margin-top: 1.5rem; color: var(--field-muted); font-size: clamp(1.2rem, 1.65vw, 1.45rem); line-height: 1.55; }
 .qa-home-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: 2rem; }
 .qa-home-actions a, .qa-home-closing > a { display: inline-flex; min-height: 3.5rem; align-items: center; justify-content: center; gap: .7rem; font-size: 1rem; font-weight: 700; text-decoration: none; }
-.qa-home-primary { padding: .85rem 1.2rem; background: var(--field-green); color: #101715; transition: background-color 160ms ease, transform 160ms ease; }
+.qa-home-primary { padding: .85rem 1.2rem; background: var(--field-green); color: #131313; transition: background-color 160ms ease, transform 160ms ease; }
 .qa-home-primary:hover { background: #b8e6c3; transform: translateY(-2px); }
 .qa-home-primary svg, .qa-home-secondary svg, .qa-home-closing svg, .qa-home-routes svg { width: 1.1rem; height: 1.1rem; }
 .qa-home-secondary { color: var(--field-text); text-decoration: underline !important; text-decoration-color: var(--field-copper) !important; text-underline-offset: .3em; }
@@ -609,7 +609,7 @@ html { accent-color: var(--primary); scrollbar-color: var(--field-line) var(--fi
 .qa-home-hero-frame { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.5s ease; }
 .qa-home-hero-frame.is-active { opacity: 1; }
 .qa-home-hero-frame img { bottom: 3.4rem; height: calc(100% - 3.4rem); object-fit: contain; object-position: center; }
-.qa-home-hero-frame figcaption { position: absolute; right: 1rem; bottom: 1rem; left: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem 1rem; background: #101715; color: var(--field-text); font-size: 1rem; font-weight: 700; }
+.qa-home-hero-frame figcaption { position: absolute; right: 1rem; bottom: 1rem; left: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem 1rem; background: #131313; color: var(--field-text); font-size: 1rem; font-weight: 700; }
 .qa-home-hero-frame figcaption span { color: var(--field-muted); font-size: .9rem; font-weight: 400; text-align: right; }
 .qa-home-media-caption { position: absolute; top: .85rem; left: .85rem; max-width: calc(100% - 4.5rem); padding: .45rem .65rem; background: var(--field-copper); color: #24180f; font-size: .82rem; font-weight: 650; }
 .qa-home-scroll { display: inline-flex; min-height: 2.75rem; align-items: center; gap: .5rem; color: var(--field-copper); font-size: 1rem; text-decoration: none; }
@@ -638,10 +638,10 @@ html { accent-color: var(--primary); scrollbar-color: var(--field-line) var(--fi
 .qa-home-demo-journey strong { display: block; margin-top: 1.15rem; font-size: 1.3rem; }
 .qa-home-demo-journey p { margin-top: .4rem; color: var(--field-muted); font-size: 1rem; line-height: 1.45; }
 .qa-home-demo-journey > svg { color: var(--field-copper); }
-.qa-home-demo > button { display: inline-flex; min-height: 3.25rem; align-items: center; gap: .65rem; margin-top: 1.5rem; padding: .75rem 1rem; background: var(--field-green); color: #101715; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background-color 160ms ease; }
+.qa-home-demo > button { display: inline-flex; min-height: 3.25rem; align-items: center; gap: .65rem; margin-top: 1.5rem; padding: .75rem 1rem; background: var(--field-green); color: #131313; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background-color 160ms ease; }
 .qa-home-demo > button:hover { background: #b8e6c3; }
 .qa-home-demo > button svg { width: 1.1rem; height: 1.1rem; }
-.qa-home-demo-result { max-width: 780px; margin-top: 1.5rem; padding: 1.5rem; background: #101715; animation: qa-demo-reveal 220ms ease-out both; }
+.qa-home-demo-result { max-width: 780px; margin-top: 1.5rem; padding: 1.5rem; background: #131313; animation: qa-demo-reveal 220ms ease-out both; }
 .qa-home-demo-result h3 { font-size: 1.35rem; }
 .qa-home-demo-result p, .qa-home-demo-result li { color: var(--field-muted); font-size: 1rem; line-height: 1.55; }
 .qa-home-demo-result p { margin-top: .5rem; }
@@ -673,7 +673,7 @@ html { accent-color: var(--primary); scrollbar-color: var(--field-line) var(--fi
 .qa-home-hero-copy > p.qa-home-facts { display: flex; max-width: none; flex-wrap: wrap; gap: .35rem 0; margin-top: 1.75rem; color: var(--field-muted); font-size: 1rem; line-height: 1.5; }
 .qa-home-facts span:not(:last-child)::after { content: "·"; padding-inline: .6rem; color: var(--field-muted); }
 .qa-home-facts span:first-child { color: var(--field-text); font-weight: 600; }
-.qa-home-media-toggle { position: absolute; top: .55rem; right: .55rem; z-index: 2; display: inline-flex; width: 2.75rem; height: 2.75rem; align-items: center; justify-content: center; background: #101715; color: var(--field-text); transition: background-color 160ms ease; }
+.qa-home-media-toggle { position: absolute; top: .55rem; right: .55rem; z-index: 2; display: inline-flex; width: 2.75rem; height: 2.75rem; align-items: center; justify-content: center; background: #131313; color: var(--field-text); transition: background-color 160ms ease; }
 .qa-home-media-toggle:hover { background: var(--field-raised); }
 .qa-home-media-toggle svg { width: 1rem; height: 1rem; }
 .qa-home-sheet { max-width: 880px; border: 1px solid var(--field-line); background: var(--field-surface); }

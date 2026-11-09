@@ -16,9 +16,8 @@ const steps = [
 ];
 
 const routes = [
-  { href: "/labs", title: "Labs", text: "Escolha uma missão e pratique uma investigação do início ao fim." },
-  { href: "/conteudo", title: "Conteúdo", text: "Módulos e casos para estudar antes ou depois de uma prática." },
-  { href: "/trilhas", title: "Trilhas", text: "Percursos guiados por tema e ferramenta, como Cypress e Playwright." },
+  { href: "/conteudo", title: "Caminho", text: "Módulos e aulas em ordem, cada aula com seus Labs, e cursos como Cypress e Playwright para aprofundar." },
+  { href: "/labs", title: "Labs", text: "Prefere ir direto à prática? Escolha uma missão e investigue do início ao fim." },
 ];
 
 const difficultyLabel: Record<string, string> = { iniciante: "Iniciante", intermediario: "Intermediário", avancado: "Avançado" };

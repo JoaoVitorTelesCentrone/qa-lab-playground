@@ -14,7 +14,8 @@ test("@smoke capítulo mostra os Labs de cada aula e leva ao Lab certo", async (
   await page.goto(chapterUrl);
   const main = page.locator("main");
   for (const number of labsForChapter(firstChapter)) {
-    await expect(main.locator(`a[href="/labs/${number}"]`).first()).toBeVisible();
+    // Os Labs ficam dentro de cada aula; as aulas fechadas também os têm no DOM.
+    await expect(main.locator(`a[href="/labs/${number}"]`).first()).toBeAttached();
   }
   // A prática não é mais uma frase marcada num botão: não há "marcar como feita".
   await expect(main.getByRole("button", { name: /marcar (como )?feit/i })).toHaveCount(0);

@@ -35,14 +35,14 @@ export const mentorshipLabs: SystemChallenge[] = [
     number: 131, area: "Broto", mode: "investigacao", difficulty: "Intermediario", route: "/conteudo/broto",
     title: "Recomendar o release com base nas evidências do Broto",
     objective: "Escrever um parecer curto de release para o Broto usando as evidências que você já entregou nos Labs anteriores, dizendo o que foi testado, o que não foi e qual decisão elas sustentam.",
-    testData: "Reúna as entregas dos Labs 114 e 116 (crescimento visível e conexões) e dos Labs 117 a 120 (estados e limites). Use só conta de estudo e textos fictícios.",
+    testData: "Reúna as entregas dos Labs {{114}} e {{116}} (crescimento visível e conexões) e dos Labs {{117}} a {{120}} (estados e limites). Use só conta de estudo e textos fictícios.",
     expected: "Um parecer de cinco linhas: o que foi testado, o achado mais importante, a decisão (liberar, bloquear ou investigar), o risco residual e o que mudaria a decisão.",
     steps: ["Releia as entregas anteriores e liste o achado de cada uma, mesmo quando foi só uma dúvida.", "Anote o que você não testou e por que isso importa para quem usa o Broto.", "Escolha liberar, bloquear ou investigar e escreva o motivo em uma frase.", "Diga qual informação nova mudaria sua recomendação."],
     stepObserve: ["Cada achado tem evidência que alguém consegue abrir?", "", "Quem é afetado se isso for para produção?", ""],
     acceptance: ["Cada afirmação do parecer aponta para uma evidência já entregue", "A decisão vem com motivo e risco residual", "O parecer diz o que mudaria a recomendação"],
     plantedBug: "O Broto é um produto real, sem defeito plantado. O parecer pode recomendar liberar: o que importa é que a decisão siga das evidências, não de um defeito encontrado.",
     system: { name: "Broto", url: brotoSpaceSite.url, external: true },
-    prepare: { items: ["Tenha à mão as suas entregas dos Labs 114, 116 e 117 a 120.", "Se alguma não existir, registre isso no parecer como lacuna de cobertura."], reading: { label: "Caso de treino completo", href: "/conteudo/broto" } },
+    prepare: { items: ["Tenha à mão as suas entregas dos Labs {{114}}, {{116}} e {{117}} a {{120}}.", "Se alguma não existir, registre isso no parecer como lacuna de cobertura."], reading: { label: "Caso de treino completo", href: "/conteudo/broto" } },
   }),
 
   // Módulo 3 · Cap 10 · Estratégia e camadas
@@ -120,7 +120,7 @@ export const mentorshipLabs: SystemChallenge[] = [
     stepObserve: ["", "O teste dependia de algum dado que ele não criou?", ""],
     acceptance: ["As duas execuções estão registradas", "O texto de cada execução está identificado", "Qualquer dependência encontrada está descrita"],
     plantedBug: "Se a segunda execução falha, procure um texto fixo ou um registro que já existia na conta.",
-    system: broto, prepare: brotoPrep("Tenha o smoke do Lab 136 funcionando."),
+    system: broto, prepare: brotoPrep("Tenha o smoke do Lab {{136}} funcionando."),
   }),
 
   // Módulo 3 · Cap 13 · Seletores e sincronia
@@ -134,19 +134,19 @@ export const mentorshipLabs: SystemChallenge[] = [
     stepObserve: ["O elemento tem nome acessível?", "", "", ""],
     acceptance: ["O seletor frágil e o motivo da fragilidade estão registrados", "O novo seletor descreve a intenção do elemento", "A justificativa cita o que pode mudar sem quebrar o teste"],
     plantedBug: "Seletor por classe de estilo ou por posição quebra com qualquer ajuste visual. Prefira papel e nome acessível.",
-    system: broto, prepare: brotoPrep("Tenha o smoke do Lab 136 aberto."),
+    system: broto, prepare: brotoPrep("Tenha o smoke do Lab {{136}} aberto."),
   }),
   lab({
     number: 139, area: "Broto", mode: "fluxo", difficulty: "Intermediario", route: "/conteudo/broto",
     title: "Esperar a condição, não o relógio",
     objective: "Trocar uma espera fixa do smoke por uma condição observável na tela do Broto.",
-    testData: "Use o smoke do Lab 136. Observe o que aparece depois de salvar um pensamento e quanto tempo isso leva em duas execuções.",
+    testData: "Use o smoke do Lab {{136}}. Observe o que aparece depois de salvar um pensamento e quanto tempo isso leva em duas execuções.",
     expected: "A condição que o teste deve esperar e por que uma pausa fixa falharia.",
     steps: ["Anote o tempo entre salvar e o pensamento aparecer em duas execuções.", "Identifique o sinal de pronto: o texto visível ou o botão habilitado de novo.", "Escreva a espera por essa condição no lugar de uma pausa em segundos."],
     stepObserve: ["O tempo é sempre o mesmo?", "Há um sinal na tela de que terminou?", ""],
     acceptance: ["A espera fixa e o risco dela estão descritos", "A condição de pronto é observável na tela", "A nova espera cobre o caso mais lento que você viu"],
     plantedBug: "Espere um elemento ou texto visível, nunca um número de segundos.",
-    system: broto, prepare: brotoPrep("Tenha o smoke do Lab 136 aberto."),
+    system: broto, prepare: brotoPrep("Tenha o smoke do Lab {{136}} aberto."),
   }),
 
   // Módulo 3 · Cap 14 · Dados e suíte sustentável
@@ -154,13 +154,13 @@ export const mentorshipLabs: SystemChallenge[] = [
     number: 140, area: "Broto", mode: "fluxo", difficulty: "Intermediario", route: "/conteudo/broto",
     title: "Documentar setup e limpeza de dados do smoke",
     objective: "Deixar o smoke repetível: o que ele precisa antes de rodar e o que ele deixa na conta depois.",
-    testData: "Use o smoke do Lab 136. Cada execução cria um pensamento com texto único na sua conta de estudo.",
+    testData: "Use o smoke do Lab {{136}}. Cada execução cria um pensamento com texto único na sua conta de estudo.",
     expected: "Pré-condições, dados criados pelo teste e passos de limpeza documentados.",
     steps: ["Liste o que precisa existir antes do teste rodar, como a conta e as variáveis de ambiente.", "Liste o que o teste cria na conta a cada execução.", "Descreva como remover o que foi criado ou como o teste evita acumular registros."],
     stepObserve: ["", "O que acontece se o teste rodar dez vezes na mesma conta?", ""],
     acceptance: ["As pré-condições estão explícitas", "Os dados criados estão identificados", "A limpeza permite repetir o teste sem acumular registros"],
     plantedBug: "Se o Broto não permitir remover o registro, a limpeza pode ser usar uma conta de estudo dedicada e registrar o limite disso.",
-    system: broto, prepare: brotoPrep("Tenha o smoke do Lab 136 aberto."),
+    system: broto, prepare: brotoPrep("Tenha o smoke do Lab {{136}} aberto."),
   }),
   lab({
     number: 141, area: "Broto", mode: "investigacao", difficulty: "Avancado", route: "/conteudo/broto",
@@ -212,7 +212,7 @@ export const mentorshipLabs: SystemChallenge[] = [
     stepObserve: ["", "A diferença está no status, no corpo ou no efeito?", ""],
     acceptance: ["O contrato observado está escrito", "A divergência, se houver, está comparada com ele", "O fluxo principal continua verde depois da variação"],
     plantedBug: "O Broto é um produto real, sem defeito plantado, e não há contrato publicado: o contrato é o que você observa. Sem divergência, registre a conclusão.",
-    system: broto, prepare: brotoPrep("Tenha a collection do Lab 143."),
+    system: broto, prepare: brotoPrep("Tenha a collection do Lab {{143}}."),
   }),
 
   // Módulo 4 · Cap 17 · Autenticação e autorização
@@ -220,13 +220,13 @@ export const mentorshipLabs: SystemChallenge[] = [
     number: 145, area: "Broto", mode: "investigacao", difficulty: "Intermediario", route: "/conteudo/broto",
     title: "Comparar um request sem sessão e um autenticado",
     objective: "Ver o que muda na resposta e no efeito quando o mesmo request do Broto é feito com e sem autenticação.",
-    testData: "Use a collection do Lab 143. Reenvie um request protegido sem o token e sem o cookie de sessão, sempre na sua conta de estudo.",
+    testData: "Use a collection do Lab {{143}}. Reenvie um request protegido sem o token e sem o cookie de sessão, sempre na sua conta de estudo.",
     expected: "Resultado e efeito dos dois requests, e se a mensagem de erro revela algo que não deveria.",
     steps: ["Envie o request protegido com a sessão.", "Envie o mesmo request sem token e sem cookie.", "Compare status, corpo e efeito dos dois."],
     stepObserve: ["", "A resposta sem sessão revela dados ou só nega o acesso?", ""],
     acceptance: ["Os dois requests estão registrados com status e efeito", "O token não aparece na evidência", "A conclusão aponta qualquer vazamento de informação"],
     plantedBug: "Não tente adivinhar senhas nem repetir o login em série. Você precisa apenas da diferença entre ter e não ter sessão.",
-    system: broto, prepare: brotoPrep("Tenha a collection do Lab 143."),
+    system: broto, prepare: brotoPrep("Tenha a collection do Lab {{143}}."),
   }),
   lab({
     number: 146, area: "Broto", mode: "investigacao", difficulty: "Avancado", route: "/conteudo/broto",
@@ -246,13 +246,13 @@ export const mentorshipLabs: SystemChallenge[] = [
     number: 147, area: "Broto", mode: "investigacao", difficulty: "Intermediario", route: "/conteudo/broto",
     title: "Reproduzir a espera frágil",
     objective: "Fazer o seu smoke falhar de propósito, desacelerando a rede, e capturar o estado da tela que o teste não observou.",
-    testData: "Use o smoke do Lab 136. No DevTools, aplique o limite de rede (Slow 4G ou Slow 3G) e repita a execução cinco vezes, em conta de estudo.",
+    testData: "Use o smoke do Lab {{136}}. No DevTools, aplique o limite de rede (Slow 4G ou Slow 3G) e repita a execução cinco vezes, em conta de estudo.",
     expected: "Passos para reproduzir a falha e o estado da tela no momento em que ela acontece.",
     steps: ["Aplique o limite de rede e rode o smoke cinco vezes.", "Anote em quantas execuções passou e em quantas falhou.", "Capture a tela e a mensagem do teste quando falha."],
     stepObserve: ["", "A falha é sempre no mesmo passo?", "O que estava na tela que o teste ignorou?"],
     acceptance: ["A falha está reproduzida com a frequência registrada", "O estado no momento da falha está capturado", "A hipótese se apoia na execução"],
     plantedBug: "Se nada falhar, diminua mais a rede ou reduza o timeout. Um teste que espera tempo fixo passa às vezes e falha às vezes.",
-    system: broto, prepare: brotoPrep("Tenha o smoke do Lab 136 funcionando."),
+    system: broto, prepare: brotoPrep("Tenha o smoke do Lab {{136}} funcionando."),
   }),
   lab({
     number: 148, area: "Broto", mode: "investigacao", difficulty: "Avancado", route: "/conteudo/broto",
@@ -264,7 +264,7 @@ export const mentorshipLabs: SystemChallenge[] = [
     stepObserve: ["", "Você mudou mais de uma coisa por vez em algum momento?", ""],
     acceptance: ["As três hipóteses estão escritas", "Cada experimento muda uma única variável", "A conclusão diz qual hipótese os dados sustentam"],
     plantedBug: "Se a falha some só trocando a espera do teste, o problema é a espera, não o produto.",
-    system: broto, prepare: brotoPrep("Tenha a falha do Lab 147 reproduzida."),
+    system: broto, prepare: brotoPrep("Tenha a falha do Lab {{147}} reproduzida."),
   }),
   lab({
     number: 149, area: "Broto", mode: "fluxo", difficulty: "Avancado", route: "/conteudo/broto",
@@ -276,7 +276,7 @@ export const mentorshipLabs: SystemChallenge[] = [
     stepObserve: ["", "Algum caso ainda falha?", ""],
     acceptance: ["O antes e o depois estão comparados", "As repetições estão registradas", "O limite da conclusão está explícito"],
     plantedBug: "Dez execuções verdes aumentam a confiança, mas não provam ausência de falha. Diga isso na entrega.",
-    system: broto, prepare: brotoPrep("Tenha a hipótese do Lab 148 confirmada."),
+    system: broto, prepare: brotoPrep("Tenha a hipótese do Lab {{148}} confirmada."),
   }),
 
   // Módulo 5 · Cap 19 · Git, PR e pipeline
@@ -284,7 +284,7 @@ export const mentorshipLabs: SystemChallenge[] = [
     number: 150, area: "Broto", mode: "fluxo", difficulty: "Intermediario", route: "/conteudo/broto",
     title: "Ler e consertar um workflow",
     objective: "Entender a ordem das etapas de um workflow do GitHub Actions que roda o smoke do Broto e corrigir o que impede o build.",
-    testData: "O workflow abaixo é fictício e protege o smoke que você escreveu no Lab 136. Ele falha antes de rodar qualquer teste.",
+    testData: "O workflow abaixo é fictício e protege o smoke que você escreveu no Lab {{136}}. Ele falha antes de rodar qualquer teste.",
     expected: "As etapas do workflow em ordem, o problema encontrado (com a linha) e a correção.",
     steps: ["Leia o workflow e liste as etapas em ordem.", "Encontre o passo que impede o build e diga qual etapa ele precisa que já tenha acontecido.", "Proponha a correção e explique por que ela resolve."],
     stepObserve: ["Cada etapa depende de qual anterior?", "", ""],
@@ -323,7 +323,7 @@ export const mentorshipLabs: SystemChallenge[] = [
     stepObserve: ["", "A verificação mais lenta precisa rodar em todo commit?", ""],
     acceptance: ["As etapas estão ordenadas por custo", "Cada etapa tem o que verifica", "A etapa que barra a falha está identificada"],
     plantedBug: "Feedback rápido primeiro: lint e testes unitários antes dos testes de ponta a ponta.",
-    system: broto, prepare: { items: ["Pense no smoke que você escreveu no Lab 136 como uma das etapas."] },
+    system: broto, prepare: { items: ["Pense no smoke que você escreveu no Lab {{136}} como uma das etapas."] },
   }),
 
   // Módulo 5 · Cap 20 · Gates, secrets e artefatos
@@ -435,13 +435,13 @@ export const mentorshipLabs: SystemChallenge[] = [
     number: 156, area: "Broto", mode: "investigacao", difficulty: "Avancado", route: "/conteudo/broto",
     title: "Corrigir, reverter ou abrir exceção",
     objective: "Escolher uma resposta proporcional ao impacto de um incidente fictício do crescimento visível.",
-    testData: "Use o log do Lab 154 e estes dados fictícios: a fila de crescimento só cresce depois da versão 2.14.0; na 2.13.2 ela ficava perto de zero; cerca de 38% das pessoas ativas registraram algo na última hora; existe uma feature flag para o novo processamento de crescimento.",
+    testData: "Use o log do Lab {{154}} e estes dados fictícios: a fila de crescimento só cresce depois da versão 2.14.0; na 2.13.2 ela ficava perto de zero; cerca de 38% das pessoas ativas registraram algo na última hora; existe uma feature flag para o novo processamento de crescimento.",
     expected: "Parecer com impacto, ação escolhida, responsável e gatilho para revisar a decisão.",
     steps: ["Resuma o impacto: quem, quantos e desde quando.", "Escolha entre correção, rollback, feature flag ou investigar mais.", "Defina quem acompanha e o que faria você mudar a decisão."],
     stepObserve: ["", "A ação escolhida reduz o impacto agora ou só depois?", ""],
     acceptance: ["O impacto está quantificado com os dados do incidente", "A ação escolhida tem motivo", "Há responsável e gatilho de revisão"],
     plantedBug: "Não há resposta única. O que conta é que a ação siga do impacto e tenha um gatilho para ser revista, não que seja o rollback.",
-    system: broto, prepare: { items: ["Tenha o log do Lab 154 à mão."] },
+    system: broto, prepare: { items: ["Tenha o log do Lab {{154}} à mão."] },
   }),
 
   // Módulo 6 · Cap 23 · Acessibilidade por tarefa

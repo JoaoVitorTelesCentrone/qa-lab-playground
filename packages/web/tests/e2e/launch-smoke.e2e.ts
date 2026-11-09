@@ -16,8 +16,9 @@ test("@smoke apresenta o QA Lab e os caminhos de prática", async ({ page }) => 
 
   const routes = page.getByRole("navigation", { name: "Escolha por onde continuar." });
   await expect(routes.getByRole("link", { name: /^Labs/ })).toHaveAttribute("href", "/labs");
-  await expect(routes.getByRole("link", { name: /^Trilhas/ })).toHaveAttribute("href", "/trilhas");
-  await expect(routes.getByRole("link", { name: /^Conteúdo/ })).toHaveAttribute("href", "/conteudo");
+  await expect(routes.getByRole("link", { name: /^Caminho/ })).toHaveAttribute("href", "/conteudo");
+  // Conteúdo e Trilhas não são mais entradas da home: os cursos ficam em "Aprofundar" dentro do Caminho.
+  await expect(routes.getByRole("link", { name: /^Trilhas/ })).toHaveCount(0);
 
   await routes.getByRole("link", { name: /^Labs/ }).click();
   await expect(page).toHaveURL(/\/labs\/?$/);

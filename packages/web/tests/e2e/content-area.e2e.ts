@@ -3,13 +3,13 @@ import { expect, test } from "@playwright/test";
 test("@smoke conteúdo leva do mapa ao capítulo e ao caso do Broto", async ({ page }) => {
   await page.goto("/conteudo");
   await expect(page.getByRole("heading", { name: "Aprenda QA fazendo." })).toBeVisible();
-  await expect(page.getByRole("list", { name: "Como se aprende QA no conteúdo" }).getByRole("listitem")).toHaveCount(4);
   await page.getByRole("link", { name: /Abrir módulo 1: Produto, risco e exploração/ }).click();
   await expect(page).toHaveURL(/\/conteudo\/modulos\/produto-risco\/?$/);
   await page.getByRole("link", { name: /Abrir capítulo 1: Produto, atores e jornada/ }).click();
   await expect(page.getByRole("heading", { name: "Produto, atores e jornada", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Entenda" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Pratique", exact: true })).toBeVisible();
+  // Cada aula traz os próprios Labs; a primeira vem aberta.
+  await expect(page.getByRole("heading", { name: "Pratique esta aula" }).first()).toBeVisible();
   await page.goto("/conteudo/broto");
   await expect(page.getByRole("link", { name: "Abrir o Broto" })).toHaveAttribute("href", "https://www.brotospace.com/");
   await expect(page.getByRole("button", { name: /Copiar Textos fictícios do caso/ })).toBeVisible();

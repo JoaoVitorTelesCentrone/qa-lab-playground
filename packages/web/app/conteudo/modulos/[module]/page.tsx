@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
-import { findPathV2Module, mentorshipPathV2, pathV2Assignments, pathV2ChapterDone, pathV2ChapterHref, pathV2ChapterLabs } from "@/lib/mentorship/path-v2";
+import { findPathV2Lesson, findPathV2Module, mentorshipPathV2, pathV2Assignments, pathV2ChapterDone, pathV2ChapterHref, pathV2ChapterLabs } from "@/lib/mentorship/path-v2";
 import { getMentorshipDashboard } from "@/lib/mentorship/store";
 import { getSessionUser } from "@/lib/product/store";
 
@@ -27,14 +27,21 @@ export default async function ModulePage({ params }: { params: Promise<{ module:
   return <main className="ca-shell ca-interior">
     <Link href="/conteudo" className="ca-back"><ArrowLeft aria-hidden="true" className="size-4" /> Mapa de módulos</Link>
     <header className="ca-interior-hero">
-      <div><span className="ca-kicker">Módulo {String(moduleIndex + 1).padStart(2, "0")} / {String(mentorshipPathV2.length).padStart(2, "0")}</span><h1 className="mt-5">{courseModule.title}</h1><p>{courseModule.summary}</p><Link href={pathV2ChapterHref(courseModule, resume)} className="ca-button mt-7">{completedChapters > 0 ? "Continuar módulo" : "Começar módulo"}<ArrowRight aria-hidden="true" className="size-4" /></Link></div>
-      <div className="ca-hero-aside"><strong>{String(courseModule.chapters.length).padStart(2, "0")}</strong>capítulos para praticar<br />{assignmentCount} {assignmentCount === 1 ? "entrega avaliada" : "entregas avaliadas"}{dashboard?.enrollment.programVersion === "v2" && <p className="mt-4" style={{ color: "var(--ca-green)" }}>{completedChapters} capítulo(s) concluído(s)</p>}</div>
+      <div>
+        <span className="ca-kicker">Módulo {String(moduleIndex + 1).padStart(2, "0")} / {String(mentorshipPathV2.length).padStart(2, "0")}</span>
+        <h1 className="mt-3">{courseModule.title}</h1>
+        <p>{courseModule.summary}</p>
+        <p className="ca-hero-meta">{courseModule.chapters.length} capítulos · {assignmentCount} {assignmentCount === 1 ? "entrega avaliada" : "entregas avaliadas"}{dashboard?.enrollment.programVersion === "v2" && <> · {completedChapters} concluído(s)</>}</p>
+      </div>
+      <Link href={pathV2ChapterHref(courseModule, resume)} className="ca-button">{completedChapters > 0 ? "Continuar módulo" : "Começar módulo"}<ArrowRight aria-hidden="true" className="size-4" /></Link>
     </header>
-    <section aria-labelledby="chapter-list-heading" className="mt-12"><div className="ca-section-head"><h2 id="chapter-list-heading">Capítulo por capítulo.</h2><p>Leia, experimente e guarde o resultado. A próxima etapa sempre parte do que você já observou.</p></div>
+    <section aria-label="Capítulos do módulo">
       <ol className="ca-chapter-list">{courseModule.chapters.map((chapter, index) => {
         const lessonsDone = chapter.lessonKeys.filter((key) => completed.has(key)).length;
         const approved = chapter.assignmentKey && latest.get(chapter.assignmentKey) === "approved";
-        return <li key={chapter.id}><Link href={pathV2ChapterHref(courseModule, chapter)} aria-label={`Abrir capítulo ${index + 1}: ${chapter.title}`}><span className="ca-chapter-no">{String(index + 1).padStart(2, "0")}</span><span><strong>{chapter.title}</strong><small>{chapter.outcome}</small><small>{chapter.lessonKeys.length} {chapter.lessonKeys.length === 1 ? "aula" : "aulas"} · {pathV2ChapterLabs(chapter).length} {pathV2ChapterLabs(chapter).length === 1 ? "Lab" : "Labs"}{chapter.assignmentKey ? " · entrega com feedback" : ""}{dashboard?.enrollment.programVersion === "v2" && <> · {lessonsDone}/{chapter.lessonKeys.length} aulas{chapter.assignmentKey && (approved ? " · aprovada" : " · entrega pendente")}</>}</small></span>{approved ? <Check aria-hidden="true" className="size-5" /> : <ArrowUpRight aria-hidden="true" className="size-5" />}</Link></li>;
+        const chapterHref = pathV2ChapterHref(courseModule, chapter);
+        return <li key={chapter.id}><Link href={chapterHref} aria-label={`Abrir capítulo ${index + 1}: ${chapter.title}`}><span className="ca-chapter-no">{String(index + 1).padStart(2, "0")}</span><span><strong>{chapter.title}</strong><small>{chapter.outcome}</small><small>{chapter.lessonKeys.length} {chapter.lessonKeys.length === 1 ? "aula" : "aulas"} · {pathV2ChapterLabs(chapter).length} {pathV2ChapterLabs(chapter).length === 1 ? "Lab" : "Labs"}{chapter.assignmentKey ? " · entrega com feedback" : ""}{dashboard?.enrollment.programVersion === "v2" && <> · {lessonsDone}/{chapter.lessonKeys.length} aulas{chapter.assignmentKey && (approved ? " · aprovada" : " · entrega pendente")}</>}</small></span>{approved ? <Check aria-hidden="true" className="size-5" /> : <ArrowUpRight aria-hidden="true" className="size-5" />}</Link>
+          <ul className="ca-chapter-lessons" aria-label={`Aulas do capítulo ${index + 1}`}>{chapter.lessonKeys.map((key) => <li key={key}><Link href={`${chapterHref}#${key}`}>{findPathV2Lesson(key)?.title ?? "Aula"}</Link></li>)}</ul></li>;
       })}</ol>
     </section>
     <nav aria-label="Outros módulos" className="mt-10 flex flex-wrap justify-between gap-4 border-t pt-5 text-sm font-bold" style={{ borderColor: "var(--ca-line)" }}>{moduleIndex > 0 ? <Link href={`/conteudo/modulos/${mentorshipPathV2[moduleIndex - 1].slug}`} className="ca-back"><ArrowLeft aria-hidden="true" className="size-4" />Módulo anterior</Link> : <span />}{moduleIndex < mentorshipPathV2.length - 1 ? <Link href={`/conteudo/modulos/${mentorshipPathV2[moduleIndex + 1].slug}`} className="ca-text-link">Próximo módulo <ArrowRight aria-hidden="true" className="size-4" /></Link> : <Link href="/conteudo" className="ca-text-link">Todos os módulos</Link>}</nav>

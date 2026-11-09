@@ -1,4 +1,4 @@
-import { systemChallenges } from "@/lib/system-challenges";
+import { labPositionOf, systemChallenges } from "@/lib/system-challenges";
 
 export type LabTrack = "UI Automation" | "API e Contrato";
 export type LabDifficulty = "iniciante" | "intermediario" | "avancado";
@@ -58,11 +58,6 @@ export const tracks: LabTrack[] = ["UI Automation", "API e Contrato"];
 // depois que alguém publicar o case dele. Lab novo entra no fim, sempre.
 // Recorte publico atual do lancamento enxuto. A ordem e append-only: um Lab
 // novo entra no fim para nao quebrar certificados, URLs e portfolios existentes.
-const LAUNCH_ORDER: number[] = [101, 103, 105];
-const launchPosition = (number: number) => {
-  const index = LAUNCH_ORDER.indexOf(number);
-  return index === -1 ? null : index + 1;
-};
 const AGENDADO = "2099-01-01";
 
 export function isLabReleased(lab: Pick<Lab, "releaseDate">, now = new Date()) {
@@ -82,9 +77,9 @@ function contentFor(seed: LabSeed, number: number): LabContent {
 export const labs: Lab[] = systemChallenges.map((challenge) => {
   const track: LabTrack = challenge.area === "API" ? "API e Contrato" : "UI Automation";
   const content = contentFor({ title: challenge.title, objective: challenge.objective, requiredFeature: challenge.area, delivery: "Evidência registrada no próprio Lab.", route: challenge.route }, challenge.number);
-  const position = launchPosition(challenge.number);
-  // Decisão de produto (2026-11-09): todos os Labs estão liberados. `position` continua
-  // só nos três do lançamento para manter a numeração 01–03 de URLs e cases publicados.
+  // Decisão de produto (2026-11-09): todos os Labs estão liberados. O número lido
+  // é a posição na ordem de apresentação (lab-order.ts), sem buracos.
+  const position = labPositionOf(challenge.number);
   const released = true;
   const status: LabStatus = released ? "liberado" : "agendado";
   return {
@@ -109,10 +104,13 @@ export const labs: Lab[] = systemChallenges.map((challenge) => {
   };
 });
 
-/** Labs liberados na ordem de apresentação: os do lançamento (01–03) primeiro, depois o catálogo por número. */
+/**
+ * Labs liberados na ordem de apresentação: os do lançamento (01–03) primeiro,
+ * depois o Broto e a mentoria (101 em diante) e, por último, a loja (1–100).
+ */
 export const releasedLabsInOrder: Lab[] = labs
   .filter((lab) => lab.status === "liberado")
-  .sort((a, b) => (a.position ?? Infinity) - (b.position ?? Infinity) || a.number - b.number);
+  .sort((a, b) => (a.position ?? Infinity) - (b.position ?? Infinity));
 
 /** O Lab que abre a jornada: o 01 do lançamento. */
 export const firstLab: Lab | undefined = releasedLabsInOrder[0];
@@ -122,6 +120,7 @@ export function findLabByNumber(number: number) {
 }
 
 /** O número que o aluno lê. Cai no de catálogo se o Lab ainda não foi lançado. */
+// O número lido é a posição do Lab na ordem de apresentação (01, 02, 03, 04…).
 export function labLabel(lab: Pick<Lab, "number" | "position">) {
   return String(lab.position ?? lab.number).padStart(2, "0");
 }

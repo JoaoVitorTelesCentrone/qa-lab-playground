@@ -46,9 +46,9 @@ describe("catálogo de Labs", () => {
   });
 });
 
-// Numeração de lançamento: só os três primeiros Labs têm posição própria (01–03),
-// para não quebrar URLs e cases já publicados. Os demais mostram o número do catálogo.
-describe("numeração de lançamento", () => {
+// Numeração: o número lido é a posição na ordem de apresentação, sem buracos.
+// Os três do lançamento são 01–03; depois o Broto e a mentoria; por último a loja.
+describe("numeração dos Labs", () => {
   const launch = [101, 103, 105].map((number) => labs.find((lab) => lab.number === number)!);
 
   test("os três Labs do lançamento seguem numerados 01, 02, 03", () => {
@@ -58,10 +58,24 @@ describe("numeração de lançamento", () => {
     expect(launch.map((lab) => lab.slug)).toEqual(["desafio-101", "desafio-103", "desafio-105"]);
   });
 
-  test("os demais Labs mostram o número do catálogo e não têm posição de lançamento", () => {
-    const others = labs.filter((lab) => !launch.includes(lab));
-    expect(others.length).toBeGreaterThan(0);
-    expect(others.every((lab) => lab.position === null)).toBe(true);
-    expect(labLabel(labs.find((lab) => lab.number === 102)!)).toBe("102");
+  test("a numeração é contínua: depois do 03 vem o 04, sem pular para o 100", () => {
+    const positions = labs.map((lab) => lab.position!).sort((a, b) => a - b);
+    expect(positions).toEqual(positions.map((_, index) => index + 1));
+    expect(labLabel(labs.find((lab) => lab.number === 102)!)).toBe("04");
+  });
+
+  test("Broto e mentoria vêm antes da loja de treino", () => {
+    const lastPath = Math.max(...labs.filter((lab) => lab.number > 100).map((lab) => lab.position!));
+    const firstStore = Math.min(...labs.filter((lab) => lab.number <= 100).map((lab) => lab.position!));
+    expect(lastPath).toBeLessThan(firstStore);
+    expect(Math.max(...labs.map((lab) => lab.position!))).toBe(labs.length);
+  });
+
+  test("os textos dos Labs citam o número lido e não deixam {{…}} sem resolver", () => {
+    const text = JSON.stringify(systemChallenges);
+    expect(/\{\{\d+\}\}/.test(text)).toBe(false);
+    const smoke = labs.find((lab) => lab.number === 136)!;
+    const hardening = systemChallenges.find((item) => item.number === 137)!;
+    expect(JSON.stringify(hardening)).toContain(`Lab ${labLabel(smoke)}`);
   });
 });

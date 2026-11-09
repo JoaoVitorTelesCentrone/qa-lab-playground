@@ -14,7 +14,7 @@ export function LessonReading({ theory, brotoAction }: { theory: LessonTheory; b
       <div className="space-y-8 pb-5 pt-3">{theory.sections.slice(1).map(section => <TheorySection key={section.title} section={section} />)}</div>
     </details>}
 
-    {brotoAction && <section className="rounded-xl bg-[#1B3025] p-5 text-[#DDEFE3] sm:p-6">
+    {brotoAction && <section className="rounded-xl bg-[#262626] p-5 text-[#e8e8e4] sm:p-6">
       <h4 className="flex items-center gap-3 text-lg font-bold leading-7 text-[#BDE3C9]"><Sprout aria-hidden="true" className="size-5 shrink-0" />No BrotoSpace</h4>
       <p className="mt-3">{brotoAction}</p>
     </section>}

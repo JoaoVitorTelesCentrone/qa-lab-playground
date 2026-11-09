@@ -2,6 +2,7 @@ import { plantedBugs } from "./product/practice/bugs";
 import { brotoTrainingCase } from "./mentorship/broto-training-case";
 import { brotoSpaceSite } from "./mentorship/brotospace-track";
 import { mentorshipLabs } from "./labs/mentorship-labs";
+import { labPositions } from "./playground/lab-order";
 import type { DeliveryFieldId } from "./product/delivery";
 
 /** O que fazer antes de testar: itens marcáveis e textos para copiar. */
@@ -448,7 +449,20 @@ const mentorshipAcceptanceFields: Readonly<Record<number, readonly (readonly Del
   164: [["expected", "observed"], ["conclusion"], ["did", "conclusion"]],
 };
 
-export const systemChallenges: SystemChallenge[] = challenges.map((challenge) => ({
+// Número lido de cada Lab, a partir da ordem de apresentação (lab-order.ts).
+const positions = labPositions(challenges.map((challenge) => challenge.number));
+export const labPositionOf = (number: number) => positions.get(number) ?? null;
+
+// Os textos dos Labs citam outros Labs com {{136}}: é o número de catálogo, e o
+// que aparece é o número lido (Lab 38). Assim a citação acompanha a lista.
+const withLabRefs = <T,>(value: T): T => {
+  if (typeof value === "string") return value.replace(/\{\{(\d+)\}\}/g, (_, number) => String(positions.get(Number(number)) ?? number).padStart(2, "0")) as T;
+  if (Array.isArray(value)) return value.map(withLabRefs) as T;
+  if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, withLabRefs(item)])) as T;
+  return value;
+};
+
+export const systemChallenges: SystemChallenge[] = challenges.map((challenge) => withLabRefs({
   ...challenge,
   acceptanceFields: challenge.acceptanceFields
     ?? freeLabAcceptanceFields[challenge.number]

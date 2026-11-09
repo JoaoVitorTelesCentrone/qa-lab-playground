@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: "QA Lab — Aprenda QA na prática", description: "Teste sistemas, investigue falhas e construa evidências do que você sabe fazer." },
 };
 
-export const viewport: Viewport = { themeColor: "#101715", colorScheme: "dark" };
+export const viewport: Viewport = { themeColor: "#131313", colorScheme: "dark" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const firstLab = launchFirstLab;

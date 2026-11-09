@@ -1,122 +1,87 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { ArrowRight, CheckCircle2, Clock3, Search } from "lucide-react";
-import { LabDetailsPopover } from "./lab-details-popover";
-import { Badge } from "@/components/ui/badge";
+import { useSearchParams } from "next/navigation";
+import { useMemo, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
-import { SelectField, toOptions } from "@/components/ui/select-field";
-import { labs as allLabs, labLabel, type Lab, type LabDifficulty } from "@/lib/playground/catalog";
-import { systemChallenges } from "@/lib/system-challenges";
+import { releasedLabsInOrder as labs, labLabel, type Lab } from "@/lib/playground/catalog";
 import type { LabProgress } from "@/lib/product/journey";
+import "@/app/conteudo/content-atlas.css";
 
-const labs = allLabs.filter((lab) => lab.status === "liberado");
-const difficulties: Array<LabDifficulty | "todas"> = ["todas", "iniciante", "intermediario", "avancado"];
+const PAGE_SIZE = 10;
 
+// Busca sem acento e sem diferenciar maiúsculas: "automação" encontra "automacao".
+const plain = (text: string) => text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+// A lista de Labs tem o mesmo desenho da lista de módulos do Caminho: uma linha
+// por Lab, número grande, título, resumo e contagens à direita. Broto e mentoria
+// vêm primeiro; a loja de treino (1–100) fica no fim.
 export function LabCatalog({ progress = [] }: { progress?: Array<Pick<LabProgress, "status"> & { slug: string }> }) {
   const [query, setQuery] = useState("");
-  const [difficulty, setDifficulty] = useState<LabDifficulty | "todas">("todas");
+  // A página vive na URL (?pagina=3): voltar de um Lab devolve a mesma página.
+  const requested = Number(useSearchParams().get("pagina"));
+  const [chosen, setChosen] = useState<number | null>(null);
+  const page = chosen ?? (Number.isInteger(requested) && requested > 0 ? requested : 1);
+  const listTop = useRef<HTMLElement>(null);
   const byLab = new Map(progress.map((item) => [item.slug, item.status]));
-  const term = query.trim().toLowerCase();
+  const term = plain(query.trim());
   const filtered = useMemo(() => labs.filter((lab) =>
-    (!term || [lab.title, lab.objective, lab.track, ...lab.tags].join(" ").toLowerCase().includes(term)) &&
-    (difficulty === "todas" || lab.difficulty === difficulty)
-  ), [term, difficulty]);
+    !term || plain([lab.title, lab.objective, lab.requiredFeature, lab.difficulty, labLabel(lab)].join(" ")).includes(term)
+  ), [term]);
   const completed = labs.filter((lab) => byLab.get(lab.slug) === "completed").length;
-  const featured = filtered.find((lab) => byLab.get(lab.slug) === "started") ?? filtered.find((lab) => byLab.get(lab.slug) !== "completed") ?? filtered[0];
-  const remaining = filtered.filter((lab) => lab.slug !== featured?.slug);
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const current = Math.min(page, pageCount);
+  const visible = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
 
-  return <main className="qa-system"><div className="mx-auto max-w-6xl px-5 pb-20 pt-10 sm:px-8 lg:pt-14">
-    <header data-onboarding="lab-catalog" className="border-b border-border pb-4 sm:pb-5">
-      <div className="flex flex-wrap items-end justify-between gap-x-5 gap-y-3">
-        <div className="max-w-2xl">
-          <h1 className="qa-page-title">Escolha um Lab</h1>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">Investigue uma missão e registre o que encontrou.</p>
-        </div>
-        <p className="text-xs text-muted-foreground"><strong className="text-foreground">{completed} de {labs.length}</strong> concluídos</p>
-      </div>
-      <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1">
-        <OnboardingLink className="inline-flex min-h-10 items-center gap-1 text-xs font-medium text-primary underline underline-offset-4 hover:text-foreground">Primeiros passos <ArrowRight className="size-3.5" aria-hidden="true" /></OnboardingLink>
-      </div>
-    </header>
+  function goTo(next: number, { scroll = true } = {}) {
+    const target = Math.min(Math.max(1, next), pageCount);
+    setChosen(target);
+    const url = new URL(window.location.href);
+    if (target === 1) url.searchParams.delete("pagina"); else url.searchParams.set("pagina", String(target));
+    window.history.replaceState(null, "", url);
+    if (scroll) listTop.current?.scrollIntoView({ block: "start" });
+  }
 
-    {labs.length > 6 && <div className="mt-8 flex flex-wrap gap-3">
-      <label className="relative min-w-[220px] flex-1">
+  return <div className="content-atlas"><main className="ca-shell">
+    <header data-onboarding="lab-catalog" className="ca-map-head">
+      <div>
+        <h1>Labs</h1>
+        <p>{progress.length > 0 ? `${completed} de ${labs.length} concluídos. ` : ""}Escolha uma missão, investigue e registre o que encontrou.</p>
+      </div>
+      <label className="relative w-full sm:w-72">
         <span className="sr-only">Buscar Lab</span>
         <Search className="pointer-events-none absolute left-3 top-3 size-4 text-muted-foreground" aria-hidden="true" />
-        <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar por tema ou habilidade" className="pl-10" />
+        <Input value={query} onChange={(event) => { setQuery(event.target.value); goTo(1, { scroll: false }); }} placeholder="Buscar por tema, área ou número" className="pl-10" />
       </label>
-      <SelectField value={difficulty} onChange={(next) => setDifficulty(next as LabDifficulty | "todas")} options={toOptions(difficulties)} groupLabel="Nível" aria-label="Filtrar por nível" />
-    </div>}
+    </header>
 
-    {filtered.length === 0 ? <p className="mt-12 border-y border-border py-10 text-sm text-muted-foreground">Nenhum Lab encontrado. Altere a busca ou o nível.</p> : <>
-      <div className="mt-5 flex items-center justify-between gap-4 sm:mt-8">
-        <h2 className="text-lg font-semibold">{byLab.get(featured.slug) === "started" ? "Continue de onde parou" : completed === labs.length ? "Revisite uma missão" : "Comece por aqui"}</h2>
-        <span className="text-xs text-muted-foreground">{filtered.length} {filtered.length === 1 ? "missão disponível" : "missões disponíveis"}</span>
-      </div>
-      <FeaturedLab lab={featured} status={byLab.get(featured.slug)} />
-      <nav aria-label="Mais formas de aprender" className="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-b border-border pb-5 text-xs text-muted-foreground">
-        <Link href="/labs/desafios" className="inline-flex min-h-9 items-center gap-1 underline underline-offset-4 hover:text-primary">Explorar 30 desafios <ArrowRight className="size-3.5" aria-hidden="true" /></Link>
-        <Link href="/lab" className="inline-flex min-h-9 items-center gap-1 underline underline-offset-4 hover:text-primary">Entenda a proposta do QA Lab <ArrowRight className="size-3.5" aria-hidden="true" /></Link>
-      </nav>
-      {remaining.length > 0 && <section className="mt-12" aria-labelledby="other-labs-heading">
-        <h2 id="other-labs-heading" className="mb-4 text-lg font-semibold">Outras missões</h2>
-        <div className="divide-y divide-border border-y border-border">
-          {remaining.map((lab) => <LabRow key={lab.slug} lab={lab} status={byLab.get(lab.slug)} />)}
-        </div>
-      </section>}
-    </>}
-  </div></main>;
-}
-
-function Status({ status }: { status?: LabProgress["status"] }) {
-  if (status === "completed") return <Badge variant="secondary" className="gap-1"><CheckCircle2 className="size-3.5" aria-hidden="true" /> Concluído</Badge>;
-  if (status === "started") return <Badge variant="secondary">Em andamento</Badge>;
-  return null;
-}
-
-function LabMeta({ lab }: { lab: Lab }) {
-  return <span className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-    <span className="capitalize">{lab.difficulty}</span>
-    <span className="inline-flex items-center gap-1"><Clock3 className="size-3.5" aria-hidden="true" /> {lab.minutes} min</span>
-    <span>{lab.acceptanceCriteria.length} critérios de entrega</span>
-  </span>;
-}
-
-function FeaturedLab({ lab, status }: { lab: Lab; status?: LabProgress["status"] }) {
-  return <article data-onboarding={`lab-${lab.number}`} className="mt-4 grid overflow-hidden rounded-md bg-card md:grid-cols-[minmax(0,1fr)_minmax(220px,34%)]">
-    <div className="flex flex-col p-6 sm:p-8 lg:p-10">
-      <div className="flex flex-wrap items-center gap-3"><span className="font-mono text-sm text-primary">LAB {labLabel(lab)}</span><Status status={status} /></div>
-      <h3 className="mt-5 max-w-xl text-2xl font-semibold leading-tight tracking-[-0.025em] sm:text-3xl">{lab.title}</h3>
-      <p className="mt-4 max-w-2xl leading-7 text-muted-foreground">{lab.objective}</p>
-      <div className="mt-6"><LabMeta lab={lab} /></div>
-      <Link href={"/labs/" + lab.number} className="mt-8 inline-flex min-h-11 items-center gap-2 self-start rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-        {status === "started" ? "Continuar Lab" : status === "completed" ? "Revisitar Lab" : "Abrir missão"} <ArrowRight className="size-4" aria-hidden="true" />
-      </Link>
-    </div>
-    <div className="hidden flex-col justify-between border-t border-border bg-secondary p-6 sm:p-8 md:flex md:border-l md:border-t-0">
-      <p className="text-sm font-medium text-primary">O que você vai entregar</p>
-      <p className="mt-3 text-lg leading-7 text-foreground">{lab.delivery}</p>
-      <div className="mt-8 flex items-center justify-between gap-3 border-t border-white/10 pt-5 text-sm text-muted-foreground"><span>{lab.requiredFeature}</span><LabDetailsPopover lab={lab} testData={systemChallenges.find((item) => item.id === lab.slug)?.testData} /></div>
-    </div>
-    <details className="border-t border-border bg-secondary px-6 py-3 md:hidden">
-      <summary className="min-h-11 cursor-pointer content-center text-sm font-medium text-primary">O que você vai entregar</summary>
-      <p className="pb-2 text-sm leading-6 text-foreground">{lab.delivery}</p>
-      <div className="flex items-center justify-between gap-3 border-t border-white/10 pt-3 text-xs text-muted-foreground"><span>{lab.requiredFeature}</span><LabDetailsPopover lab={lab} testData={systemChallenges.find((item) => item.id === lab.slug)?.testData} /></div>
-    </details>
-  </article>;
+    <section ref={listTop} aria-labelledby="labs-title" className="scroll-mt-20 pb-8">
+      <h2 id="labs-title" className="sr-only">Lista de Labs</h2>
+      {filtered.length === 0
+        ? <p className="border-y py-10 text-sm" style={{ borderColor: "var(--ca-line)", color: "var(--ca-muted)" }}>Nenhum Lab encontrado. Altere a busca.</p>
+        : <ol className="ca-module-list">{visible.map((lab) => <LabRow key={lab.slug} lab={lab} status={byLab.get(lab.slug)} />)}</ol>}
+      {filtered.length > PAGE_SIZE && <nav aria-label="Paginação dos Labs" className="ca-pager">
+        <button type="button" onClick={() => goTo(current - 1)} disabled={current === 1}><ArrowLeft aria-hidden="true" className="size-4" /> Anterior</button>
+        <p aria-live="polite">Página <strong>{current}</strong> de {pageCount}<span> · Labs {(current - 1) * PAGE_SIZE + 1}–{Math.min(current * PAGE_SIZE, filtered.length)} de {filtered.length}</span></p>
+        <button type="button" onClick={() => goTo(current + 1)} disabled={current === pageCount}>Próxima <ArrowRight aria-hidden="true" className="size-4" /></button>
+      </nav>}
+    </section>
+  </main></div>;
 }
 
 function LabRow({ lab, status }: { lab: Lab; status?: LabProgress["status"] }) {
-  return <article data-onboarding={`lab-${lab.number}`} className="grid gap-4 py-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-8">
-    <div className="min-w-0">
-      <div className="flex flex-wrap items-center gap-3"><span className="font-mono text-xs text-primary">LAB {labLabel(lab)}</span><Status status={status} /></div>
-      <h3 className="mt-2 text-lg font-semibold leading-snug">{lab.title}</h3>
-      <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">{lab.objective}</p>
-      <div className="mt-3"><LabMeta lab={lab} /></div>
-    </div>
-    <div className="flex items-center gap-2 sm:justify-end"><LabDetailsPopover lab={lab} testData={systemChallenges.find((item) => item.id === lab.slug)?.testData} /><Link href={"/labs/" + lab.number} className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Abrir Lab <ArrowRight className="size-4" aria-hidden="true" /></Link></div>
-  </article>;
+  return <li className="ca-module-row">
+    <Link href={"/labs/" + lab.number} data-onboarding={`lab-${lab.number}`} aria-label={`Abrir Lab ${labLabel(lab)}: ${lab.title}`}>
+      <span className="ca-module-index" aria-hidden="true">{labLabel(lab)}</span>
+      <span><strong className="ca-module-title">{lab.title}</strong><span className="ca-module-summary">{lab.objective}</span></span>
+      <span className="ca-module-meta">
+        {lab.requiredFeature} · <span className="capitalize">{lab.difficulty}</span><br />
+        {lab.minutes} min · {lab.acceptanceCriteria.length} critérios
+        {status === "completed" && <><br /><span style={{ color: "var(--ca-green)" }}><Check aria-hidden="true" className="inline size-3" /> Concluído</span></>}
+        {status === "started" && <><br /><span style={{ color: "var(--ca-green)" }}>Em andamento</span></>}
+      </span>
+      <ArrowUpRight aria-hidden="true" className="ca-module-arrow size-5" />
+    </Link>
+  </li>;
 }

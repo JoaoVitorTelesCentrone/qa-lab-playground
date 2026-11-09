@@ -16,13 +16,12 @@ type NavLink = { href: string; label: string; hint?: string; match: (path: strin
 
 const under = (...prefixes: string[]) => (path: string) => prefixes.some((p) => path === p || path.startsWith(`${p}/`));
 
-// Quatro escolhas no primeiro nível. Labs é o caminho principal e fica a um
-// clique; tudo que é "estudar" mora num grupo só, com uma linha explicando a
-// diferença entre os itens — antes eram sete links do mesmo peso.
+// Duas entradas para aprender e praticar: o Caminho (módulos, aulas e os Labs de
+// cada aula, com os cursos como "Aprofundar") e o catálogo de Labs. Conteúdo e
+// Trilhas deixaram de ser itens do menu: viram partes do Caminho.
+const PATH: NavLink = { href: "/conteudo", label: "Caminho", match: under("/conteudo", "/trilhas") };
 const LABS: NavLink = { href: "/labs", label: "Labs", match: under("/labs") };
-const STUDY: NavLink[] = [
-  { href: "/conteudo", label: "Conteúdo", hint: "Módulos e casos para estudar no seu ritmo", match: under("/conteudo") },
-  { href: "/trilhas", label: "Trilhas", hint: "Percursos guiados por tema e ferramenta", match: under("/trilhas") },
+const MORE: NavLink[] = [
   { href: "/blog", label: "Blog", hint: "Artigos sobre a rotina de quem testa", match: under("/blog") },
   { href: "/pesquisa", label: "Referências", hint: "Pesquisas que embasam a prática", match: under("/pesquisa") },
 ];
@@ -36,16 +35,16 @@ const topItem = (active: boolean) => cn(
   active ? "text-foreground after:opacity-100" : "text-muted-foreground after:opacity-0 hover:text-foreground",
 );
 
-function StudyMenu({ pathname }: { pathname: string }) {
+function MoreMenu({ pathname }: { pathname: string }) {
   const [open, setOpen] = useState(false);
-  const active = STUDY.some((item) => item.match(pathname));
+  const active = MORE.some((item) => item.match(pathname));
   return <Popover open={open} onOpenChange={setOpen}>
     <PopoverTrigger className={cn(topItem(active), "data-[state=open]:text-foreground")}>
-      Estudar<ChevronDown className="size-3.5 transition-transform data-[open=true]:rotate-180" data-open={open} aria-hidden="true" />
+      Mais<ChevronDown className="size-3.5 transition-transform data-[open=true]:rotate-180" data-open={open} aria-hidden="true" />
     </PopoverTrigger>
     <PopoverContent align="start" sideOffset={14} className="w-80 rounded-sm border-border bg-popover p-1.5">
       <ul className="grid">
-        {STUDY.map((item) => {
+        {MORE.map((item) => {
           const current = item.match(pathname);
           return <li key={item.href}>
             <Link href={item.href} onClick={() => setOpen(false)} aria-current={current ? "page" : undefined}
@@ -85,8 +84,9 @@ export function SiteHeader() {
           </Link>
 
           <nav className="hidden items-center lg:flex" aria-label="Navegação principal">
+            <Link href={PATH.href} aria-current={PATH.match(pathname) ? "page" : undefined} className={topItem(PATH.match(pathname))}>{PATH.label}</Link>
             <Link href={LABS.href} aria-current={LABS.match(pathname) ? "page" : undefined} className={topItem(LABS.match(pathname))}>{LABS.label}</Link>
-            <StudyMenu pathname={pathname} />
+            <MoreMenu pathname={pathname} />
             <Link href={TOOLS.href} aria-current={TOOLS.match(pathname) ? "page" : undefined} className={topItem(TOOLS.match(pathname))}>{TOOLS.label}</Link>
             <Link href={MENTORSHIP.href} aria-current={MENTORSHIP.match(pathname) ? "page" : undefined} className={topItem(MENTORSHIP.match(pathname))}>{MENTORSHIP.label}</Link>
           </nav>
@@ -110,13 +110,14 @@ export function SiteHeader() {
 
               <nav aria-label="Navegação principal" className="grid gap-5">
                 <div className="grid gap-1">
-                  <p className="px-3 text-xs font-semibold text-muted-foreground">Praticar</p>
+                  <p className="px-3 text-xs font-semibold text-muted-foreground">Aprender e praticar</p>
+                  <MobileLink item={PATH} pathname={pathname} onNavigate={close} />
                   <MobileLink item={LABS} pathname={pathname} onNavigate={close} />
-                  <MobileLink item={TOOLS} pathname={pathname} onNavigate={close} />
                 </div>
                 <div className="grid gap-1">
-                  <p className="px-3 text-xs font-semibold text-muted-foreground">Estudar</p>
-                  {STUDY.map((item) => <MobileLink key={item.href} item={item} pathname={pathname} onNavigate={close} />)}
+                  <p className="px-3 text-xs font-semibold text-muted-foreground">Mais</p>
+                  <MobileLink item={TOOLS} pathname={pathname} onNavigate={close} />
+                  {MORE.map((item) => <MobileLink key={item.href} item={item} pathname={pathname} onNavigate={close} />)}
                 </div>
                 <div className="grid gap-1">
                   <MobileLink item={MENTORSHIP} pathname={pathname} onNavigate={close} />
