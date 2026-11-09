@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, Bug, Code2, FileCode2, FolderKanban, ListChecks, SearchCode, Sparkles, TestTube2, WandSparkles } from "lucide-react";
+import { toolGuideCategories, toolGuides, type ToolGuideCategory } from "@/lib/tool-guides";
 
 export const metadata = {
   title: "Ferramentas de QA | QA Lab",
@@ -20,6 +21,9 @@ const available = [
   { href: "/lab/triagem", title: "Triagem de bugs", description: "Avalie impacto, prioridade e próximos passos.", icon: Bug },
   { href: "/lab/logs", title: "Investigação de logs", description: "Forme hipóteses a partir dos sinais.", icon: SearchCode },
 ] as const;
+
+const guideGroups = (Object.keys(toolGuideCategories) as ToolGuideCategory[])
+  .map((category) => [category, toolGuides.filter((guide) => guide.category === category)] as const);
 
 export default function ToolsPage() {
   return <main className="qa-tools mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
@@ -48,6 +52,25 @@ export default function ToolsPage() {
           <span className="min-w-0"><span className="block font-semibold">{item.title}</span><span className="mt-1 block text-sm leading-6 text-muted-foreground">{item.description}</span></span>
           <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
         </Link>)}
+      </div>
+    </section>
+
+    <section id="guias" aria-labelledby="tools-guides-title" className="mt-16 scroll-mt-20">
+      <h2 id="tools-guides-title" className="text-lg font-semibold">Guias de estudo das ferramentas do mercado</h2>
+      <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">As ferramentas que aparecem na mentoria, cada uma com documentação oficial, cursos gratuitos e vídeos selecionados.</p>
+      <div className="mt-6 grid gap-8 md:grid-cols-2">
+        {guideGroups.map(([category, guides]) => <div key={category}>
+          <h3 className="text-sm font-semibold">{toolGuideCategories[category].title}</h3>
+          <p className="mt-1 text-sm text-muted-foreground">{toolGuideCategories[category].description}</p>
+          <ul className="mt-3 divide-y divide-border border-y border-border">
+            {guides.map((guide) => <li key={guide.slug}>
+              <Link href={`/ferramentas/${guide.slug}`} className="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-2 py-3 transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+                <span className="min-w-0"><span className="block font-semibold">{guide.name}</span><span className="block truncate text-sm text-muted-foreground">{guide.tagline}</span></span>
+                <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+              </Link>
+            </li>)}
+          </ul>
+        </div>)}
       </div>
     </section>
   </main>;
