@@ -18,8 +18,8 @@ const lab = (seed: Seed): SystemChallenge => ({ ...seed, id: `desafio-${seed.num
 
 // Labs no Broto: cada pessoa cria a própria conta de estudo. Credenciais ficam
 // fora do código e das evidências (em automação, em variáveis de ambiente).
-const broto = { name: "Broto", url: brotoSpaceSite.url, external: true };
-const brotoPrep = (...extra: string[]): NonNullable<SystemChallenge["prepare"]> => ({
+export const broto = { name: "Broto", url: brotoSpaceSite.url, external: true };
+export const brotoPrep = (...extra: string[]): NonNullable<SystemChallenge["prepare"]> => ({
   items: [
     "Crie a sua própria conta de estudo no Broto, com um e-mail que serve só para estudo. Não use a conta pessoal.",
     "Use apenas textos fictícios e guarde e-mail e senha fora do código e das evidências.",

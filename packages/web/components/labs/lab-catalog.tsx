@@ -3,13 +3,21 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Search, Wrench } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { releasedLabsInOrder as labs, labLabel, type Lab } from "@/lib/playground/catalog";
+import { qaToolLabSpecs } from "@/lib/qa-tool-labs";
+import { qaTools } from "@/lib/qa-tools";
 import type { LabProgress } from "@/lib/product/journey";
 import "@/app/conteudo/content-atlas.css";
 
 const PAGE_SIZE = 10;
+
+// Blocos da lista, na ordem em que aparecem: Broto e mentoria, automação por
+// ferramenta e a loja de treino.
+const AUTOMATION_AREAS = ["Cypress", "Playwright", "Selenium e Appium", "k6", "Postman", "Bruno"];
+const QA_TOOL_AREAS = qaTools.map((tool) => tool.title);
+const groupOf = (lab: Lab) => lab.number <= 100 ? "Loja de treino" : QA_TOOL_AREAS.includes(lab.requiredFeature) ? "Ferramentas interativas" : AUTOMATION_AREAS.includes(lab.requiredFeature) ? "Automação por ferramenta" : "Broto e mentoria";
 
 // Busca sem acento e sem diferenciar maiúsculas: "automação" encontra "automacao".
 const plain = (text: string) => text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -48,6 +56,7 @@ export function LabCatalog({ progress = [] }: { progress?: Array<Pick<LabProgres
       <div>
         <h1>Labs</h1>
         <p>{progress.length > 0 ? `${completed} de ${labs.length} concluídos. ` : ""}Escolha uma missão, investigue e registre o que encontrou.</p>
+        <Link href="/lab/ferramentas" className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-md border border-mint/25 px-3 text-xs font-bold text-mint hover:bg-mint/10"><Wrench aria-hidden="true" className="size-3.5" />Abrir {qaTools.length} ferramentas · {qaToolLabSpecs.length} Labs</Link>
       </div>
       <label className="relative w-full sm:w-72">
         <span className="sr-only">Buscar Lab</span>
@@ -60,7 +69,7 @@ export function LabCatalog({ progress = [] }: { progress?: Array<Pick<LabProgres
       <h2 id="labs-title" className="sr-only">Lista de Labs</h2>
       {filtered.length === 0
         ? <p className="border-y py-10 text-sm" style={{ borderColor: "var(--ca-line)", color: "var(--ca-muted)" }}>Nenhum Lab encontrado. Altere a busca.</p>
-        : <ol className="ca-module-list">{visible.map((lab) => <LabRow key={lab.slug} lab={lab} status={byLab.get(lab.slug)} />)}</ol>}
+        : <ol className="ca-module-list">{visible.map((lab, index) => <LabRow key={lab.slug} lab={lab} status={byLab.get(lab.slug)} heading={index === 0 || groupOf(visible[index - 1]) !== groupOf(lab) ? groupOf(lab) : undefined} />)}</ol>}
       {filtered.length > PAGE_SIZE && <nav aria-label="Paginação dos Labs" className="ca-pager">
         <button type="button" onClick={() => goTo(current - 1)} disabled={current === 1}><ArrowLeft aria-hidden="true" className="size-4" /> Anterior</button>
         <p aria-live="polite">Página <strong>{current}</strong> de {pageCount}<span> · Labs {(current - 1) * PAGE_SIZE + 1}–{Math.min(current * PAGE_SIZE, filtered.length)} de {filtered.length}</span></p>
@@ -70,8 +79,9 @@ export function LabCatalog({ progress = [] }: { progress?: Array<Pick<LabProgres
   </main></div>;
 }
 
-function LabRow({ lab, status }: { lab: Lab; status?: LabProgress["status"] }) {
+function LabRow({ lab, status, heading }: { lab: Lab; status?: LabProgress["status"]; heading?: string }) {
   return <li className="ca-module-row">
+    {heading && <h3 className="ca-group-head">{heading}</h3>}
     <Link href={"/labs/" + lab.number} data-onboarding={`lab-${lab.number}`} aria-label={`Abrir Lab ${labLabel(lab)}: ${lab.title}`}>
       <span className="ca-module-index" aria-hidden="true">{labLabel(lab)}</span>
       <span><strong className="ca-module-title">{lab.title}</strong><span className="ca-module-summary">{lab.objective}</span></span>

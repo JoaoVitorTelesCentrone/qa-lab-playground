@@ -2,6 +2,8 @@ import { plantedBugs } from "./product/practice/bugs";
 import { brotoTrainingCase } from "./mentorship/broto-training-case";
 import { brotoSpaceSite } from "./mentorship/brotospace-track";
 import { mentorshipLabs } from "./labs/mentorship-labs";
+import { courseLabs } from "./labs/course-labs";
+import { qaToolLabs } from "./qa-tool-labs";
 import { labPositions } from "./playground/lab-order";
 import type { DeliveryFieldId } from "./product/delivery";
 
@@ -384,7 +386,7 @@ const challenges: SystemChallenge[] = allFeatures.flatMap(({ area, title, route,
       prepare: sample ? { items: [`Abra ${route.split("#")[0]} e use "Restaurar massa" na barra do ambiente para começar do seed.`, "Tenha os dados de teste abaixo à mão."], copy: [{ label: "Dados de teste", text: sample }] } : undefined,
     };
   });
-}).concat(mentorshipLabs);
+}).concat(mentorshipLabs, courseLabs, qaToolLabs);
 
 // Cada critério liga-se às partes da entrega mais próximas do tipo de prova:
 // execução, comparação entre esperado/observado e conclusão. A cobertura só

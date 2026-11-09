@@ -7,6 +7,7 @@
 // Regra: um Lab pertence a no máximo uma aula. Os Labs de reforço ficam fora
 // do caminho principal (`moduleReinforcement`) e não contam para o progresso.
 
+import { courseLabNumbers } from "@/lib/labs/course-labs";
 import { mentorshipPathV2, pathV2Chapters, findPathV2Lesson, type ChapterV2, type ModuleV2 } from "./path-v2";
 
 export { lessonLabs } from "./lesson-labs-data";
@@ -15,8 +16,11 @@ import { lessonLabs } from "./lesson-labs-data";
 /** Labs fora do caminho principal: praticar mais sem contar no progresso. */
 export const moduleReinforcement: Readonly<Record<string, readonly number[]>> = {
   "produto-risco": [104, 106],
+  // Labs de automação por ferramenta, gerados dos cursos (lib/labs/course-labs.ts): praticar mais, sem contar no progresso.
+  "automacao-web": [...courseLabNumbers.cypress, ...courseLabNumbers.playwright, ...courseLabNumbers["selenium-appium"]],
+  "acessibilidade-performance": [...courseLabNumbers.k6],
   "desenho-comunicacao": [112, 113, 115],
-  "api-confiabilidade": [121, 123, 124, 125, 126, 127, 128, 129, 130],
+  "api-confiabilidade": [121, 123, 124, 125, 126, 127, 128, 129, 130, ...courseLabNumbers.postman, ...courseLabNumbers.bruno],
 };
 
 /** Trilhas de curso que aprofundam o módulo. Ficam no fim, sem competir com o caminho. */

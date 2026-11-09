@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { SEMANA_1, findLabByNumber, isLabReleased, labLabel, labs, tracks } from "./catalog";
 import { systemChallenges } from "@/lib/system-challenges";
+import { cypressCourseModules } from "@/lib/cypress-course";
+import { playwrightCourseModules } from "@/lib/playwright-course";
+import { appiumSeleniumModules } from "@/lib/appium-selenium-course";
+import { k6CourseModules } from "@/lib/k6-course";
+import { apiTestingBrunoModules, apiTestingPostmanModules } from "@/lib/api-testing-course";
 
 describe("catálogo de Labs", () => {
   test("um Lab para cada desafio do sistema, sem número repetido", () => {
@@ -77,5 +82,41 @@ describe("numeração dos Labs", () => {
     const smoke = labs.find((lab) => lab.number === 136)!;
     const hardening = systemChallenges.find((item) => item.number === 137)!;
     expect(JSON.stringify(hardening)).toContain(`Lab ${labLabel(smoke)}`);
+  });
+});
+
+describe("Labs de automação por ferramenta (gerados dos cursos)", () => {
+  const areas = ["Cypress", "Playwright", "Selenium e Appium", "k6", "Postman", "Bruno"];
+  const automation = labs.filter((lab) => areas.includes(lab.requiredFeature));
+
+  test("cada módulo de curso virou um Lab", () => {
+    const counts = Object.fromEntries(areas.map((area) => [area, automation.filter((lab) => lab.requiredFeature === area).length]));
+    expect(counts).toEqual({ Cypress: cypressCourseModules.length, Playwright: playwrightCourseModules.length, "Selenium e Appium": appiumSeleniumModules.length, k6: k6CourseModules.length, Postman: apiTestingPostmanModules.length, Bruno: apiTestingBrunoModules.length });
+    expect(automation.every((lab) => lab.status === "liberado")).toBe(true);
+  });
+
+  test("o Lab traz o conteúdo do módulo: prática, entregável, checklist e a aula do curso", () => {
+    const courseModule = cypressCourseModules[1];
+    const challenge = systemChallenges.find((item) => item.title === courseModule.title && item.area === "Cypress")!;
+    expect(challenge.testData).toContain(courseModule.practice);
+    expect(challenge.expected).toBe(courseModule.deliverable);
+    expect(challenge.acceptance).toEqual([...courseModule.checklist]);
+    expect(challenge.prepare?.reading?.href).toBe(`/trilhas/cypress/${courseModule.id}`);
+    expect(challenge.prepare?.copy?.[0].text).toBe(courseModule.code!);
+  });
+
+  test("ficam entre a mentoria e a loja na ordem da lista", () => {
+    const lastMentorship = Math.max(...labs.filter((lab) => lab.number > 100 && !areas.includes(lab.requiredFeature)).map((lab) => lab.position!));
+    const firstAutomation = Math.min(...automation.map((lab) => lab.position!));
+    const lastAutomation = Math.max(...automation.map((lab) => lab.position!));
+    const firstStore = Math.min(...labs.filter((lab) => lab.number <= 100).map((lab) => lab.position!));
+    expect(firstAutomation).toBeGreaterThan(lastMentorship);
+    expect(lastAutomation).toBeLessThan(firstStore);
+  });
+
+  test("os de k6 usam a API local de treino, não o Broto em produção", () => {
+    const k6 = systemChallenges.filter((item) => item.area === "k6");
+    expect(k6.length).toBe(k6CourseModules.length);
+    expect(k6.every((item) => item.route === "/mentoria/performance" && !item.system)).toBe(true);
   });
 });

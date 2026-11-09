@@ -29,6 +29,7 @@ Acesse `http://localhost:3000` (ou a porta exibida pelo script de desenvolviment
 - `/conteudo/broto` — caso fictício para praticar no Broto Space; `/agendamentos` e `/crm` — ambientes de prática locais.
 - `/api-playground` e `/api/docs` — exploração e documentação da API de treino.
 - `/lab/*` — workspace, CI/CD, People Lab, design de testes, triagem e logs.
+- `/lab/ferramentas` — dez bancadas interativas com Labs numerados conforme a cobertura de cada ferramenta: SQL, contrato de API, regressão visual, observabilidade, HTTP, carga, acessibilidade, segurança, massa de teste e estados.
 - `/boards` — board Kanban/Scrum pessoal e demonstração pública.
 - `/perfil` e `/portfolio/:username` — progresso e portfólio.
 

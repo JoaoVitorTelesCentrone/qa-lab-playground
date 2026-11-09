@@ -15,11 +15,17 @@ const launchIndex = (number: number) => {
   return index === -1 ? Infinity : index;
 };
 
+const presentationGroup = (number: number) =>
+  number <= 100 ? 3 : number >= 401 && number < 500 ? 1 : number >= 200 ? 2 : 0;
+
 export function compareLabNumbers(a: number, b: number) {
   const launchA = launchIndex(a);
   const launchB = launchIndex(b);
   if (launchA !== launchB) return launchA < launchB ? -1 : 1;
-  return Number(a <= 100) - Number(b <= 100) || a - b;
+  const groupA = presentationGroup(a);
+  const groupB = presentationGroup(b);
+  if (groupA !== groupB) return groupA - groupB;
+  return a - b;
 }
 
 /** Número lido de cada Lab (1, 2, 3…) a partir dos números de catálogo. */

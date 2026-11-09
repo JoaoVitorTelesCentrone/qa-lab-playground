@@ -2,12 +2,11 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
 import { challengeThemes } from "@/lib/labs/challenges";
 
-export const metadata = {
-  title: "30 desafios de QA | QA Lab",
-  description: "Trinta desafios práticos de QA organizados em seis temas, com tarefas, entregas e Labs para praticar.",
-};
-
 const challengeCount = challengeThemes.reduce((total, theme) => total + theme.challenges.length, 0);
+export const metadata = {
+  title: `${challengeCount} desafios de QA | QA Lab`,
+  description: `${challengeCount} desafios práticos de QA organizados em ${challengeThemes.length} temas, com tarefas, entregas e ferramentas para praticar.`,
+};
 
 export default function ChallengesPage() {
   return <main className="qa-system">

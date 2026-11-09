@@ -92,3 +92,47 @@ bun run test:e2e:mentorship   # exige Docker ligado
 
 Estado na última rodada (após o módulo 4): type-check e lint limpos, 366 testes unitários, 18 e2e públicos e 9 e2e de mentoria com banco local passando.
 Não verificado: o fluxo completo com um mentor real revisando, e os roteiros contra o Broto em produção.
+
+## 7. Labs de automação por ferramenta (9/11/2026)
+
+Os cursos de ferramenta já existiam (Cypress, Playwright, Selenium e Appium, k6, Postman e Bruno), com prática no Broto, entregável, checklist e código de exemplo em cada módulo. Em vez de escrever Labs novos, cada módulo foi transformado em um Lab numerado do catálogo, gerado por `lib/labs/course-labs.ts`:
+
+| Curso | Labs | Números de catálogo |
+| --- | ---: | --- |
+| Cypress | 12 | 201–212 |
+| Playwright | 13 | 221–233 |
+| Selenium e Appium | 12 | 241–252 |
+| k6 | 12 | 261–272 |
+| Postman | 6 | 281–286 |
+| Bruno | 6 | 301–306 |
+
+O conteúdo continua morando nos cursos (`lib/*-course.ts`): prática vira o roteiro, entregável vira o resultado esperado, checklist vira os critérios, o código vira o botão de copiar e o Lab linka a aula do curso. Um módulo novo no fim de um curso ganha o próximo número do bloco e não desloca os outros cursos.
+
+Onde aparecem: no bloco "Automação por ferramenta" da lista de Labs e como "Praticar mais" no último capítulo dos módulos 3 (Cypress, Playwright, Selenium e Appium), 4 (Postman e Bruno) e 6 (k6). Não contam no progresso nem no certificado da mentoria.
+
+Pontos abertos:
+- O progresso do curso (salvo em `/trilhas/<curso>`) e o do Lab (entrega) são separados: concluir um não marca o outro.
+- Os 13 módulos de fundamentos de API (`apiTestingFundamentals`) não viraram Labs; são conteúdo geral, não de ferramenta.
+- O k6 do curso usa a API local de treino, não o Broto em produção; os Labs de k6 abrem `/mentoria/performance`. A janela e o perfil de carga contra o Broto continuam pendentes (seção 3.4).
+- Os Labs 159–164 antigos (carga em "API local") se sobrepõem aos de k6 novos.
+
+## 8. Bancadas interativas de QA
+
+O hub `/lab/ferramentas` agora reúne dez ferramentas locais: SQL Explorer, Contract Inspector, Visual Diff Bench, Trace Explorer, HTTP Request Runner, Load Profile Bench, Accessibility Inspector, Security Probe, Test Data Factory e State Machine Explorer. A quantidade de Labs segue as capacidades distintas de cada bancada, sem meta fixa de dez. Cada Lab tem briefing e critérios próprios e abre a bancada no cenário correspondente. Elas usam dados sintéticos no navegador; nenhuma consulta SQL sai do conjunto `orders` nem executa escrita, e os demais cenários não chamam serviços externos.
+
+| Bancada | Labs | Cobertura distinta |
+| --- | ---: | --- |
+| SQL Explorer | 7 | Valor negativo, consistência de estados, pagamento zerado, identidade duplicada, ambiguidade do zero, recorte auditável e valor atípico. |
+| Contract Inspector | 7 | Tipos, campo ausente, coleção vazia, validação de todos os itens, faixa de quantidade, contrato de erro 422 e seleção de assertions de release. |
+| Visual Diff Bench | 5 | Ação encoberta, corte no mobile, contraste, ausência de regressão e escolha da cobertura visual. |
+| Trace Explorer | 6 | Linha do tempo, causa inicial, backlog, isolamento de requisições, resposta 201 com pagamento pendente e comunicação de impacto. |
+| HTTP Request Runner | 6 | Listagem, autenticação, 404, validação de criação, idempotência e conflito de transição. |
+| Load Profile Bench | 5 | Linha de base, saturação, dependência degradada, pico e gate por SLO. |
+| Accessibility Inspector | 5 | Rótulo, foco, contraste, anúncio de erro e controle sem defeito. |
+| Security Probe | 5 | Entrada suspeita, texto hostil, autorização por dono, limite de taxa e controle válido. |
+| Test Data Factory | 5 | Seed reproduzível, fronteiras, e-mail inválido, duplicidade e campo ausente. |
+| State Machine Explorer | 5 | Caminho válido, salto inválido, cancelamento, reembolso e repetição de ação. |
+
+Os IDs publicados foram preservados; há lacunas entre 401 e 439 após remover missões repetidas. O validador agora escolhe o contrato de sucesso ou de erro pelo status, identifica falhas em cada item e diferencia campo ausente de tipo inválido. A bancada visual mostra a sobreposição sobre a ação principal e o corte do valor no mobile.
+
+O catálogo de desafios ganhou doze práticas novas (IDs 31–42) ligadas às ferramentas, levando os desafios guiados de 30 para 42. Os 56 Labs numerados das bancadas entram também no catálogo `/labs`, além dos 61 Labs de curso já listados acima. Os novos IDs de ferramenta ocupam 441–471.

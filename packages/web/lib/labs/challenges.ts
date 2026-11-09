@@ -88,4 +88,23 @@ export const challengeThemes: readonly ChallengeTheme[] = [
       { id: "30", title: "Monte um case de QA", level: "Avançado", task: "Escolha um desafio concluído e conte contexto, risco, método, evidência, decisão e aprendizado sem expor dados sensíveis.", delivery: "Case de uma página com artefatos verificáveis e sua contribuição explícita.", href: "/perfil", lab: "Meu perfil" },
     ],
   },
+  {
+    id: "ferramentas-praticas",
+    title: "Bancadas de investigação",
+    summary: "Use ferramentas interativas com dados sintéticos para encontrar falhas e sustentar decisões.",
+    challenges: [
+      { id: "31", title: "Encontre valores inválidos com SQL", level: "Iniciante", task: "Consulte pedidos com valor negativo e compare o total com o estado do pagamento.", delivery: "Consulta SELECT reproduzível, linhas suspeitas e regra que deveria protegê-las.", href: "/lab/ferramentas/sql", lab: "SQL Explorer" },
+      { id: "32", title: "Quebre o contrato sem confiar no status", level: "Intermediário", task: "Valide presença e tipo dos campos e confira uma regra de negócio que um HTTP 200 não garante.", delivery: "Assertions de contrato e caminhos exatos da resposta que falharam.", href: "/lab/ferramentas/contrato", lab: "Contract Inspector" },
+      { id: "33", title: "Compare uma release em dois viewports", level: "Intermediário", task: "Compare o checkout de referência com uma release em desktop e mobile; marque todas as diferenças que afetam a tarefa.", delivery: "Lista de diferenças com viewport, componente afetado e impacto para a pessoa usuária.", href: "/lab/ferramentas/visual", lab: "Visual Diff Bench" },
+      { id: "34", title: "Siga uma requisição por trace", level: "Intermediário", task: "Filtre os eventos de um pedido por trace ID e identifique onde o pagamento parou.", delivery: "Linha do tempo correlacionada, serviço da falha e próximo sinal a verificar.", href: "/lab/ferramentas/observabilidade", lab: "Trace Explorer" },
+      { id: "35", title: "Descubra uma resposta 2xx enganosa", level: "Avançado", task: "Combine SQL e contrato de API para conferir se o pedido persistido corresponde à resposta recebida.", delivery: "Evidência cruzada entre registro e payload, hipótese da divergência e teste preventivo.", href: "/lab/ferramentas/sql", lab: "SQL Explorer + Contract Inspector" },
+      { id: "36", title: "Diferencie sintoma de causa", level: "Avançado", task: "Use severidade, trace e ordem temporal para separar erro primário de sinais posteriores da mesma falha.", delivery: "Causa provável, eventos correlacionados e evidência que descartaria a hipótese.", href: "/lab/ferramentas/observabilidade", lab: "Trace Explorer" },
+      { id: "37", title: "Investigue uma resposta HTTP", level: "Iniciante", task: "Envie uma criação válida e uma inválida; compare status, corpo e cabeçalhos.", delivery: "Requisições reproduzíveis e diferença entre 201 e 422.", href: "/lab/ferramentas/http", lab: "HTTP Request Runner" },
+      { id: "38", title: "Encontre o limite de carga", level: "Intermediário", task: "Varie usuários virtuais com duração fixa até violar uma meta de serviço.", delivery: "Configuração, p95, erros e decisão de release.", href: "/lab/ferramentas/carga", lab: "Load Profile Bench" },
+      { id: "39", title: "Inspecione o feedback acessível", level: "Intermediário", task: "Acione um erro de formulário e avalie anúncio, foco e rótulo.", delivery: "Condição reproduzível, falha detectada e impacto para a tarefa.", href: "/lab/ferramentas/acessibilidade", lab: "Accessibility Inspector" },
+      { id: "40", title: "Teste acesso entre usuários", level: "Intermediário", task: "Compare a leitura de um pedido pelo dono e por outro usuário.", delivery: "Códigos 200 e 403, identidade usada e regra de autorização.", href: "/lab/ferramentas/seguranca", lab: "Security Probe" },
+      { id: "41", title: "Gere uma massa de fronteira", level: "Iniciante", task: "Produza registros nos limites da idade e identifique os que falham.", delivery: "Seed, registros, regras e resultado de validação.", href: "/lab/ferramentas/massa", lab: "Test Data Factory" },
+      { id: "42", title: "Explore uma transição inválida", level: "Intermediário", task: "Tente entregar um pedido antes do pagamento e confirme que o estado não mudou.", delivery: "Estado inicial, ação, rejeição e histórico preservado.", href: "/lab/ferramentas/estados", lab: "State Machine Explorer" },
+    ],
+  },
 ];

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowDownRight, ArrowRight, FlaskConical } from "lucide-react";
+import { ArrowDownRight, ArrowRight, FlaskConical, Wrench } from "lucide-react";
 import "./lab-intro.css";
 
 export const metadata = {
@@ -77,6 +77,10 @@ export default function LabPage() {
       <section className="lab-intro-close" aria-labelledby="lab-intro-close-title">
         <div><span>O próximo passo</span><h2 id="lab-intro-close-title">Aprenda, experimente, explique. Depois, faça de novo com mais critério.</h2><p>Os Labs são o lugar para transformar conteúdo em decisão e decisão em evidência. Explore os temas no seu ritmo e escolha o que faz sentido praticar agora.</p></div>
         <Link href="/labs" className="lab-intro-catalog-link">Conhecer os Labs <ArrowRight size={19} aria-hidden="true" /></Link>
+      </section>
+      <section className="mt-8 flex flex-col justify-between gap-5 rounded-xl border border-[#405446] bg-[#19241d] p-6 sm:flex-row sm:items-center sm:p-8" aria-label="Ferramentas interativas">
+        <div><p className="flex items-center gap-2 text-sm font-bold text-[#a8e6b8]"><Wrench size={16} aria-hidden="true" />Ferramentas interativas</p><h2 className="mt-2 text-2xl font-bold tracking-tight">Dados, API, interface, carga, segurança e fluxos.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#bfcec2]">Escolha uma das dez bancadas e pratique com cenários sintéticos, sem conectar a serviços reais.</p></div>
+        <Link href="/lab/ferramentas" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-[#a8e6b8] px-4 text-sm font-bold text-[#122117] hover:bg-[#d0f3d9]">Explorar ferramentas <ArrowRight size={17} aria-hidden="true" /></Link>
       </section>
     </main>
   );

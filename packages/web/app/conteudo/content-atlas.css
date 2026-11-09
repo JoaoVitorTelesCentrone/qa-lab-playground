@@ -89,6 +89,7 @@
 .ca-chapter-list li { border-bottom: 1px solid var(--ca-line); }
 .ca-chapter-list > li > a { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) auto; gap: 1rem; align-items: center; padding: 1.1rem .5rem .5rem; color: inherit; text-decoration: none; transition: background .2s, padding .2s; }
 .ca-chapter-list > li > a:hover { background: #262626; padding-inline: 1rem; }
+.ca-group-head { margin: 0; padding: 1.4rem .4rem .2rem; color: var(--ca-copper); font: 700 .72rem var(--font-jetbrains), monospace; letter-spacing: .14em; text-transform: uppercase; }
 .ca-pager { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1.25rem; }
 .ca-pager p { color: var(--ca-muted); font-size: .85rem; text-align: center; }
 .ca-pager p strong { color: var(--ca-text); }
