@@ -24,7 +24,7 @@ const MORE: NavLink[] = [
   { href: "/blog", label: "Blog", hint: "Artigos sobre a rotina de quem testa", match: under("/blog") },
   { href: "/pesquisa", label: "Referências", hint: "Pesquisas que embasam a prática", match: under("/pesquisa") },
 ];
-const TOOLS: NavLink = { href: "/ferramentas", label: "Ferramentas", match: (p) => under("/ferramentas", "/boards")(p) || p === "/lab/bdd" };
+const TOOLS: NavLink = { href: "/ferramentas", label: "Ferramentas", match: (p) => under("/ferramentas", "/boards", "/lab/ferramentas")(p) || p === "/lab/bdd" };
 const MENTORSHIP: NavLink = { href: "/mentoria", label: "Mentoria", match: under("/mentoria") };
 
 // Item ativo: sublinhado na linha de base do header (DESIGN.md), não pílula.

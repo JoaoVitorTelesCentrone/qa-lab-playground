@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, BookOpen, FlaskConical, GraduationCap, ListVideo, PlayCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, FlaskConical, GraduationCap, ListVideo, PlayCircle, School } from "lucide-react";
 import { findToolGuide, toolGuideCategories, toolGuides, youtubeThumb, youtubeUrl, type GuideLang, type GuideLink, type GuideVideo } from "@/lib/tool-guides";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -97,6 +97,16 @@ export default async function ToolGuidePage({ params }: PageProps) {
         </Link>}
       </aside>
     </header>
+
+    {guide.internalCourse && <Link href={guide.internalCourse.href} className="group mt-10 grid gap-1 border border-primary/50 bg-primary/5 p-5 transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center sm:gap-4">
+      <School className="size-6 text-primary" aria-hidden="true" />
+      <span className="min-w-0">
+        <span className="block text-xs font-semibold uppercase tracking-wide text-primary">Comece pelo curso do QA Lab</span>
+        <span className="mt-1 block text-lg font-semibold">{guide.internalCourse.title}</span>
+        <span className="block text-sm leading-6 text-muted-foreground">{guide.internalCourse.detail}</span>
+      </span>
+      <ArrowRight className="hidden size-5 text-primary transition-transform group-hover:translate-x-1 sm:block" aria-hidden="true" />
+    </Link>}
 
     <Section id="docs" icon={BookOpen} title="Documentação" hint="A fonte oficial. Volte aqui sempre que um vídeo estiver desatualizado.">
       <LinkList items={guide.docs} />

@@ -1,5 +1,10 @@
 import type { MetadataRoute } from "next";
 import { posts } from "@/lib/blog-posts";
+import { qaTools } from "@/lib/qa-tools";
+import { toolGuides } from "@/lib/tool-guides";
+
+// Cursos que os guias de ferramenta recomendam; sem repetir a mesma trilha.
+const trackHrefs = [...new Set(toolGuides.flatMap((guide) => guide.internalCourse ? [guide.internalCourse.href] : []))];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app";
@@ -12,6 +17,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/mentoria/labs/oraculo`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/mentoria/labs/incidente`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/conteudo`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${baseUrl}/labs`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${baseUrl}/trilhas`, changeFrequency: "monthly", priority: 0.7 },
+    ...trackHrefs.map((href) => ({ url: `${baseUrl}${href}`, changeFrequency: "monthly" as const, priority: 0.6 })),
+    { url: `${baseUrl}/ferramentas`, changeFrequency: "monthly", priority: 0.7 },
+    ...toolGuides.map((guide) => ({ url: `${baseUrl}/ferramentas/${guide.slug}`, changeFrequency: "monthly" as const, priority: 0.6 })),
+    { url: `${baseUrl}/lab/ferramentas`, changeFrequency: "monthly", priority: 0.7 },
+    ...qaTools.map((tool) => ({ url: `${baseUrl}/lab/ferramentas/${tool.id}`, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...posts.map((post) => {
       const lastModified = post.updatedAt;
       return {

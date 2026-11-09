@@ -13,7 +13,8 @@
     "research:update": "bun scripts/update-research-library.ts",
     "research:index": "bun scripts/export-research-articles-index.ts",
     "mentorship:readiness": "bun --env-file=.env.local scripts/check-mentorship-readiness.ts",
-    "evidence:clean": "bun --env-file=.env.local scripts/clean-evidence-orphans.ts"
+    "evidence:clean": "bun --env-file=.env.local scripts/clean-evidence-orphans.ts",
+    "guides:check-links": "bun scripts/check-tool-guide-links.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

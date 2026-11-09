@@ -1,67 +1,69 @@
 # O que falta — visão do Claude
 
-> Escrito em 9/11/2026, depois do commit `a86d449`.
+> Escrito em 9/11/2026 e atualizado no mesmo dia, depois da primeira rodada de implementação.
 > É uma opinião, não um plano aprovado. Complementa `docs/PROXIMOS_PASSOS_2026-11.md`.
-> Repete de lá só o que eu colocaria em outra prioridade.
 
-A plataforma já tem muito conteúdo: 164 Labs de mentoria, 61 de curso, 56 de bancada, 21 trilhas e agora 18 guias de ferramenta. O que falta é menos conteúdo novo e mais **amarrar o que existe**, **provar que funciona logado** e **cuidar do básico de lançamento**.
+Legenda: ✅ feito · ⏳ depende do João · ⏸️ adiado de propósito
 
 ---
 
 ## P0 — Antes de cobrar de alguém
 
-| # | O que falta | Por que importa |
+Todos dependem de decisão ou de informação que só o João tem.
+
+| # | O que falta | Estado |
 | --- | --- | --- |
-| 1 | **Termos de uso e política de privacidade.** As páginas não existem e o rodapé não tem link para elas. | Há login, dados de aluno, evidências enviadas e plano Pro pago. Sem esses textos não dá para vender com tranquilidade (LGPD). |
-| 2 | **Política de reembolso do Pro.** | Tem que estar escrita antes da primeira venda. |
-| 3 | **Quem é o mentor.** O bloco "quem conduz" da mentoria está vazio. | É o principal argumento de venda da mentoria. |
-| 4 | **Testar o fluxo logado de ponta a ponta com um mentor de verdade.** Aluno entrega um Lab, mentor revisa, evidência aparece no marco, projeto final referencia os Labs. | Até hoje só o fluxo deslogado e o e2e com banco local foram verificados. É o coração do produto pago. |
-| 5 | **Confirmar as migrações `0010_profile_links` e `0011_portfolio_sections` no Supabase.** | Em agosto estavam pendentes. Sem elas, o campo GitHub do perfil e as seções do portfólio não funcionam. |
+| 1 | **Termos de uso e política de privacidade.** As páginas não existem e o rodapé não tem link. Há login, dados de aluno, evidências e plano pago (LGPD). | ⏳ Precisa de razão social ou CPF do responsável, contato do encarregado de dados, onde os dados ficam (Supabase) e prazo de retenção. Com isso, dá para escrever as duas páginas. |
+| 2 | **Política de reembolso do Pro.** | ⏳ Prazo e condições são decisão comercial. |
+| 3 | **Quem é o mentor.** O bloco "quem conduz" da mentoria está vazio. | ⏳ Nome, foto e trajetória. |
+| 4 | **Testar o fluxo logado de ponta a ponta com um mentor de verdade.** | ⏳ Precisa de uma conta de mentor e uma de aluno no ambiente real. |
+| 5 | **Confirmar as migrações `0010_profile_links` e `0011_portfolio_sections` no Supabase.** | ⏳ Só dá para conferir no painel do Supabase. |
 
 ## P1 — Coerência do que já existe
 
 ### Bancadas (`/lab/ferramentas`)
-1. **Tema.** As bancadas usam cores fixas de tema escuro (`text-white`, `#89939f`, `border-white/10`), mas nem a página nem os componentes usam a classe `.qa-practice`. Pela regra da revisão de UX, a bancada deveria estar dentro de `.qa-practice`. Do contrário, deve aparecer quebrada no tema claro "Caderno de campo". **Abrir no navegador e corrigir.**
-2. **A dificuldade é sorteada pela posição.** Em `lib/qa-tool-labs.ts`, a dificuldade sai de `index % 3`. Hoje o Lab 401 é "Básico" e o 402 "Intermediário" só pela ordem em que aparecem. Cada spec deveria declarar a própria dificuldade.
-3. **Os critérios dos Labs 441–471 vêm de um gabarito.** O `extra-tool-labs.ts` gera "Condição de execução reproduzível / Evidência: … / Conclusão: …" para todos. Os Labs 401–439 têm critérios escritos à mão e são claramente melhores. Vale reescrever os 31 Labs no mesmo nível.
-4. **A lógica das bancadas não tem teste.** `runSafeQuery` e `checkContract` ficam dentro do componente (`components/qa-tools/tool-workbench.tsx`). A convenção do projeto é deixar a regra em `lib/`, como função pura e testada. O validador de contrato e o SQL "seguro" são justamente o tipo de código que precisa de teste.
-5. **O resultado da bancada não é salvo.** Não achei persistência nas bancadas. Falta confirmar se o aluno consegue levar o que viu para a entrega do Lab, por exemplo com um botão "copiar evidência".
+1. ✅ **Tema.** Correção do diagnóstico: a plataforma não tem tema claro (o `:root` também é escuro), então as bancadas não estavam quebradas. Elas só não seguiam a convenção. Agora usam `qa-system qa-practice`, como os outros ambientes de prática.
+2. ✅ **Dificuldade declarada em cada Lab.** Não sai mais de `index % 3`. Cada spec tem `difficulty` e, quando faz sentido, `mode: "fluxo"`.
+3. ✅ **Critérios dos Labs 441–471 escritos à mão.** O `extra-tool-labs.ts` deixou de gerar critérios por gabarito. Cada Lab diz o que a entrega precisa mostrar: status, valor, linha ou estado.
+4. ✅ **Lógica das bancadas extraída e testada.** Está em `lib/qa-tool-engine.ts`, com 27 testes em `qa-tool-engine.test.ts`, um para cada sintoma que os Labs prometem. Os testes acharam três defeitos, já corrigidos:
+   - **Lab 411:** a resposta com `status: "200"` (texto) parava no status e nunca mostrava o `total` em texto, que é justamente o que o Lab pede.
+   - **Lab 411:** o status em texto aparecia como `200`, sem aspas, igual a um número. Agora aparece como `"200"`.
+   - **Lab 451:** com p95 e erros estourados ao mesmo tempo, a mensagem só citava o p95. O critério pede todas as metas violadas.
+   - **Lab 466 (melhoria):** idade ausente agora aparece como "idade ausente", separada de "fora de 18–120".
+5. ✅ **A bancada leva para a entrega.** Ela continua sem salvar nada (de propósito), mas agora tem "Copiar modelo de evidência" (com os critérios do Lab) e "Registrar entrega do Lab", que abre `/labs/<número>`.
 
 ### Labs e mentoria
-6. **Módulo 6 (Labs 157–164) ainda não foi convertido para o Broto**, e os Labs 159–164 se sobrepõem aos de k6 (261–272). Eu aposentaria os antigos de carga em vez de convertê-los.
-7. **Os roteiros do Broto nunca foram conferidos no produto real** (seção 3.5 do PROXIMOS_PASSOS). É o maior risco de o aluno travar num passo que não existe.
-8. **Falta a collection e o contrato de referência do Broto** (Postman, Bruno e OpenAPI). Sem isso, o mentor não tem gabarito para corrigir os Labs 142–146.
-9. **O progresso do curso e o do Lab são separados.** Concluir o módulo do curso de Cypress não marca o Lab 201, e vice-versa. O aluno vai achar que é bug.
+6. ⏳ **Módulo 6 (Labs 157–164) não convertido** e Labs 159–164 sobrepostos aos de k6 (261–272). Recomendo aposentar os antigos de carga. Falta o OK.
+7. ⏳ **Roteiros do Broto nunca conferidos no produto real** (seção 3.5 do PROXIMOS_PASSOS).
+8. ⏳ **Collection e contrato de referência do Broto.** Exigem acesso à API real.
+9. ⏸️ **Progresso do curso e do Lab separados.** Juntar os dois mexe no modelo de dados e na tela de progresso, e merece uma rodada própria.
 
-### Guias de ferramenta (`/ferramentas/[slug]`, feitos hoje)
-10. **Os guias não apontam para os cursos da própria plataforma.** Já existem `/trilhas/cypress`, `/trilhas/playwright`, `/trilhas/k6`, `/trilhas/gherkin`, `/trilhas/sql-qa`, `/trilhas/appium-selenium`, `/trilhas/cicd` e `/trilhas/testes-api`. O guia deveria abrir com "Curso no QA Lab" e só depois listar o material externo. **É a falha mais óbvia do que fiz hoje.**
-11. **As aulas da mentoria não linkam os guias.** O capítulo que cita k6 deveria ter um "Estudar k6" que leve para `/ferramentas/k6`.
-12. **Faltam guias de ferramentas importantes:**
-    - **Jira**: a ferramenta que todo QA usa, e não está na lista.
-    - **axe DevTools / WAVE**: a bancada de acessibilidade só tem o Lighthouse como ferramenta real correspondente.
-    - **OWASP ZAP**: a bancada Security Probe não tem nenhuma ferramenta real correspondente.
-    - **Pact**: teste de contrato de verdade, ligado ao Contract Inspector.
-    - TestRail, Zephyr e Xray (pelo menos um, além do Qase), Robot Framework, Sentry e Kibana.
-13. **Faltam vídeos em português** para Selenium, Appium, Lighthouse, Qase e Jest. Hoje esses guias só têm vídeos em inglês.
-14. **Links vão quebrar.** Vídeo sai do ar, documentação muda de endereço. Falta um script (ou uma GitHub Action mensal) que confira de novo os links pelo oEmbed e pelo status HTTP e avise o que quebrou. O comentário no topo de `lib/tool-guides.ts` já explica como checar.
+### Guias de ferramenta (`/ferramentas/[slug]`)
+10. ✅ **Os guias abrem pelo curso do QA Lab.** Os 12 guias com curso interno mostram "Comece pelo curso do QA Lab" antes do material externo. Um teste garante que a rota de cada curso existe.
+11. ✅ **As aulas da mentoria linkam os guias.** O último capítulo de cada módulo mostra "Estudar as ferramentas: …", ao lado de "Aprofundar". O mapa fica em `guidesForModule` (`lib/tool-guides.ts`), e um teste garante que todo guia aparece em algum módulo.
+12. ✅ **Quatro guias novos:** Jira, axe DevTools, OWASP ZAP e Pact, numa categoria nova, "Acessibilidade e segurança". Agora são 22 guias.
+13. ✅ **Vídeos em português** adicionados para Selenium, Appium, Jest, Lighthouse e Qase. Continuam só em inglês: axe e Pact, porque não achei material em PT-BR de canal confiável.
+14. ✅ **Verificador de links.** `bun run guides:check-links` confere vídeos pelo oEmbed e páginas pelo status HTTP, com 3 tentativas por link. O workflow `.github/workflows/tool-guide-links.yml` roda todo dia 1º do mês. Última execução: 163 links ok, 1 aviso (a Postman Academy bloqueia robôs).
 
 ## P2 — Descoberta e qualidade
 
-15. **O sitemap está desatualizado.** O `app/sitemap.ts` não inclui `/ferramentas`, os 18 guias, `/lab/ferramentas`, `/trilhas/*` nem `/conteudo`. É um ganho fácil de SEO, principalmente com os guias, que são conteúdo público e pesquisável.
-16. **Nenhum teste e2e cobre `/ferramentas/[slug]` nem `/lab/ferramentas`.** Um smoke abrindo cada slug e cada bancada já basta.
-17. **A imagem `public/mentoria/qa-lab-bug-report.webp` ainda mostra a interface antiga.**
-18. **Falta um `.gitattributes`.** Todo commit avisa "LF will be replaced by CRLF". Com `* text=auto eol=lf` o aviso some e os diffs param de mudar o final de linha.
+15. ✅ **Sitemap.** Inclui `/conteudo`, `/labs`, `/trilhas`, os cursos recomendados pelos guias, `/ferramentas`, os 22 guias, `/lab/ferramentas` e as 10 bancadas.
+16. ✅ **E2E.** O `tests/e2e/tools.e2e.ts` cobre o índice, todos os guias (incluindo `rel=noopener` nos links externos), o 404, todas as bancadas e dois Labs de ponta a ponta. Os 4 primeiros são `@smoke` e rodam no CI.
+17. ⏳ **Imagem `public/mentoria/qa-lab-bug-report.webp` desatualizada.** Melhor gerar quando a tela final da mentoria estiver aprovada.
+18. ⏸️ **`.gitattributes`.** Adiado de propósito. Com `core.autocrlf` ligado na máquina, introduzir `eol=lf` agora pode marcar o repositório inteiro como modificado. Vale fazer num commit isolado, com `git add --renormalize .` e conferindo o diff.
 
 ## P3 — Faxina
 
-19. A branch `feat/guias-ferramentas` sobrou, local e no GitHub, e já está incorporada à `main`. Dá para apagar.
-20. Há dois documentos de próximos passos (`PROXIMOS_PASSOS_2026-11.md` e este). Quando um item daqui for aceito, vale mover para lá e manter um só.
-21. Correção: na conversa e no commit `a86d449` eu escrevi "55 Labs" de bancada. O certo são **56**, como diz o PROXIMOS_PASSOS.
+19. ⏳ A branch `feat/guias-ferramentas` ainda existe, local e no GitHub, já incorporada à `main`. Apagar depende de OK.
+20. Há dois documentos de próximos passos. Quando os itens ⏳ forem decididos, vale mover o que sobrar para o PROXIMOS_PASSOS e apagar este.
+21. ✅ Correção registrada: são **56** Labs de bancada, não 55 como dizia o commit `a86d449`.
+
+Extra feito nesta rodada: o item "Ferramentas" do header agora fica ativo também em `/lab/ferramentas`.
 
 ---
 
-## Se fosse para escolher três coisas
+## O que mais destrava agora
 
-1. **Termos, privacidade e reembolso** (P0 1–2). Sem isso não dá para vender.
-2. **Um teste real do fluxo logado com mentor** (P0 4). É o que o aluno paga para ter.
-3. **Ligar guias, cursos internos e Labs** (P1 10–11). O conteúdo já existe; hoje cada parte é uma ilha.
+1. **Os dados para termos, privacidade e reembolso** (P0 1–2). Com eles, as páginas saem em uma rodada.
+2. **Uma conta de mentor para o teste ponta a ponta** (P0 4).
+3. **OK para aposentar os Labs 159–164** (P1 6).

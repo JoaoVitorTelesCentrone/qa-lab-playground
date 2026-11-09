@@ -1,57 +1,270 @@
 import type { QaToolLabSpec } from "./qa-tool-labs";
-import type { QaToolId } from "./qa-tools";
 
-type Row = [number, string, string, string, string, string, string];
-function create(toolId: QaToolId, rows: Row[]): QaToolLabSpec[] {
-  return rows.map(([number, title, objective, starter, action, observation, expected]) => ({
-    number, toolId, title, objective, starter, expected,
-    steps: [action, observation, "Registre requisição ou configuração, resultado e conclusão no Lab."],
-    acceptance: ["Condição de execução reproduzível", `Evidência: ${observation}`, `Conclusão: ${expected}`],
-  }));
-}
+// Labs 441–471: HTTP, carga, acessibilidade, segurança, massa e estados.
+// Cada critério de aceite precisa ser verificável olhando a entrega: cite o que
+// o aluno deve mostrar (status, valor, linha, estado), não uma intenção genérica.
+// Os sintomas prometidos aqui são garantidos por lib/qa-tool-engine.test.ts.
+
+const RECORD = "Registre a requisição ou configuração usada, o resultado e a sua conclusão na entrega do Lab.";
 
 export const extraToolLabSpecs: QaToolLabSpec[] = [
-  ...create("http", [
-    [441, "Leia uma coleção de pedidos", "Examine estrutura, status e cabeçalhos de uma listagem.", "list", "Envie GET /orders com token válido.", "Compare total declarado com itens retornados.", "Listagem 200 coerente e identificador de requisição registrado."],
-    [442, "Reprove acesso sem credencial", "Confirme a barreira de autenticação antes de ver dados de pedidos.", "unauthorized", "Envie GET /orders sem token.", "Compare 401 e corpo com a resposta autorizada.", "Nenhum pedido exposto sem credencial."],
-    [443, "Diferencie recurso ausente", "Separe 404 de falha de autenticação e de rota inválida.", "missing", "Consulte um ID inexistente com token válido.", "Leia o código de erro e contraste com GET /orders/ord_1042.", "404 indica pedido ausente com autenticação válida."],
-    [444, "Valide o corpo da criação", "Encontre a rejeição de quantidade fora da regra.", "invalid", "Envie POST /orders com quantidade zero e depois positiva.", "Compare 422 com 201 e seus corpos.", "A criação só aceita produto preenchido e quantidade inteira positiva."],
-    [445, "Investigue idempotência", "Compare a primeira criação com o replay da mesma chave.", "replay", "Envie POST duas vezes com used-key; depois use new-key.", "Compare IDs, status e sinal replay.", "Repetir a chave não cria outro pedido na simulação."],
-    [446, "Reprove transição via API", "Confira o conflito ao tentar entregar pedido pendente diretamente.", "conflict", "Envie PATCH /orders/ord_1042.", "Leia status 409 e o código de erro.", "A API recusa a transição fora do fluxo."],
-  ]),
-  ...create("carga", [
-    [447, "Estabeleça uma linha de base", "Meça latência e erros em carga baixa.", "normal", "Execute 20 usuários por 30 segundos.", "Registre p50, p95, vazão e erros.", "Linha de base atende às duas metas declaradas."],
-    [448, "Encontre o ponto de saturação", "Aumente usuários até o p95 ultrapassar a meta.", "normal", "Repita o perfil normal com 20, 70 e 120 usuários.", "Compare p95 e vazão entre execuções.", "O ponto de degradação tem configuração e métrica reproduzíveis."],
-    [449, "Avalie dependência degradada", "Isole o efeito de uma dependência mais lenta com a mesma carga.", "degraded", "Compare normal e dependência degradada com 60 usuários.", "Observe p95 e taxa de erro sem alterar a duração.", "A hipótese de dependência usa diferença de métricas sob condições iguais."],
-    [450, "Simule um pico repentino", "Confira o impacto de 120 usuários no perfil de pico.", "spike", "Execute o perfil de pico e reduza a carga pela metade.", "Observe a mudança em erros e vazão.", "A recuperação ou persistência da violação está demonstrada."],
-    [451, "Decida o gate de performance", "Use p95 e erros juntos para uma decisão de release.", "degraded", "Execute ao menos dois perfis com a mesma duração.", "Compare cada métrica às metas de 300 ms e 1%.", "A decisão cita o perfil e todas as metas violadas."],
-  ]),
-  ...create("acessibilidade", [
-    [452, "Encontre o campo sem rótulo", "Inspecione a relação entre texto visível e nome do campo.", "label", "Preencha o e-mail e execute a inspeção.", "Compare a variante com rótulo e a sem rótulo.", "O campo tem nome acessível associado antes da liberação."],
-    [453, "Siga o foco pelo teclado", "Observe se o botão mostra foco ao percorrer o formulário.", "focus", "Use Simular Tab e foque o botão real pelo teclado.", "Compare indicação visual e sequência de foco.", "O foco no controle acionável é visível."],
-    [454, "Investigue baixo contraste", "Detecte a perda de leitura do texto de ajuda.", "contrast", "Compare a variante de contraste com a limpa.", "Identifique o texto afetado e a condição de leitura.", "Texto essencial deve permanecer legível na tarefa."],
-    [455, "Confira anúncio de erro", "Avalie o feedback quando o e-mail é inválido.", "feedback", "Clique Continuar com campo vazio.", "Compare a mensagem visual com a variante que usa role alert.", "O erro precisa ser anunciado além de aparecer visualmente."],
-    [456, "Revise o formulário sem defeitos", "Use uma referência limpa para evitar falso positivo.", "clean", "Preencha e inspecione a variante limpa.", "Compare as quatro checagens com as variantes defeituosas.", "A conclusão distingue ausência de falha plantada de cobertura total."],
-  ]),
-  ...create("seguranca", [
-    [457, "Reprove entrada de busca suspeita", "Compare uma busca comum com uma entrada de injeção sintética.", "injection", "Execute a sonda com termo comum e com ' OR 1=1 --.", "Compare status e evidência de validação.", "Entrada suspeita é recusada sem executar comando."],
-    [458, "Inspecione texto hostil", "Confirme que marcação recebida é exibida como texto.", "xss", "Envie uma string com tags na sonda de texto.", "Compare entrada e saída escapada.", "A marcação não vira código executável."],
-    [459, "Teste acesso entre usuários", "Compare dono e outro usuário no mesmo pedido.", "idor", "Execute o recurso como user_108 e user_221.", "Compare 200, 403 e owner informado.", "A autorização depende do dono do pedido."],
-    [460, "Encontre o limite de tentativas", "Observe a fronteira entre aceitação e bloqueio por taxa.", "rate", "Execute cinco e depois seis tentativas na janela.", "Compare status e retry-after.", "Acima de cinco tentativas a resposta é 429."],
-    [461, "Estabeleça resposta normal", "Use uma requisição sem ataque como controle para a triagem.", "normal", "Execute o controle e depois uma sonda de risco.", "Compare códigos e evidências sem inferir vulnerabilidade pela rejeição.", "O controle válido funciona e a defesa específica pode ser avaliada."],
-  ]),
-  ...create("massa", [
-    [462, "Gere dados reproduzíveis", "Comprove que seed e parâmetros fixos repetem a mesma massa.", "valid", "Gere duas vezes com seed 42 e quatro registros.", "Compare IDs, e-mails e idades.", "A mesma configuração gera a mesma saída."],
-    [463, "Explore limites de idade", "Cubra abaixo, dentro e acima da faixa aceita.", "boundary", "Gere a massa de limites.", "Classifique 17, 18, 120 e 121 pela regra.", "Somente 18 e 120 passam o limite inclusivo."],
-    [464, "Detecte e-mail inválido", "Inclua um registro sem formato de e-mail.", "invalid-email", "Gere a variante de e-mail inválido.", "Localize o ID e a regra que falhou.", "O validador identifica a linha exata."],
-    [465, "Ache identidade duplicada", "Verifique unicidade de e-mail entre registros.", "duplicate", "Gere ao menos dois registros duplicados.", "Compare e-mails e IDs nas linhas.", "O segundo uso do e-mail é apontado."],
-    [466, "Separe ausência de invalidez", "Observe campos ausentes em vez de apenas formato incorreto.", "missing", "Gere a variante com campo ausente.", "Compare avisos de e-mail e idade com o caso inválido.", "Ausência é descrita separadamente da regra de formato."],
-  ]),
-  ...create("estados", [
-    [467, "Percorra o caminho válido", "Monte o ciclo completo de um pedido.", "created", "Acione Pagar, Despachar e Entregar.", "Confira estado e histórico após cada ação.", "O histórico preserva a sequência created → delivered."],
-    [468, "Reprove salto de etapa", "Tente entregar antes de pagar e despachar.", "created", "Acione Entregar imediatamente.", "Compare mensagem e estado antes e depois.", "A transição inválida não muda o pedido."],
-    [469, "Teste cancelamento permitido", "Confirme a regra de cancelamento antes do pagamento.", "created", "Acione Cancelar e depois Pagar.", "Observe o estado terminal e a rejeição seguinte.", "Pedido cancelado não volta ao fluxo de pagamento."],
-    [470, "Teste reembolso permitido", "Avalie reembolso após pagamento e antes do envio.", "paid", "Acione Reembolsar e depois Despachar.", "Confira histórico e bloqueio do envio.", "Reembolso encerra o fluxo antes de shipped."],
-    [471, "Investigue repetição de ação", "Confira que repetir pagamento não duplica a transição.", "created", "Acione Pagar e depois Repetir última ação.", "Compare estado e eventos no histórico.", "A segunda tentativa é rejeitada e o estado permanece paid."],
-  ]),
+  // ---------- HTTP Request Runner ----------
+  {
+    number: 441, toolId: "http", difficulty: "Basico", mode: "fluxo", starter: "list",
+    title: "Leia uma coleção de pedidos",
+    objective: "Examine estrutura, status e cabeçalhos de uma listagem antes de testar casos de erro.",
+    expected: "Listagem 200 coerente, com o identificador de requisição registrado.",
+    steps: ["Envie GET /orders com o token qa-token.", "Compare o campo total com a quantidade de itens em items.", RECORD],
+    acceptance: ["Status 200 e o cabeçalho x-request-id aparecem na evidência", "O total declarado foi conferido contra o número de itens", "A conclusão diz se a listagem é coerente e por quê"],
+  },
+  {
+    number: 442, toolId: "http", difficulty: "Basico", starter: "unauthorized",
+    title: "Reprove acesso sem credencial",
+    objective: "Confirme que nenhum dado de pedido aparece antes da autenticação.",
+    expected: "401 sem nenhum pedido no corpo, comparado com a resposta autorizada.",
+    steps: ["Envie GET /orders sem token.", "Repita com qa-token e compare status e corpo.", RECORD],
+    acceptance: ["As duas requisições (com e sem token) estão na evidência", "O corpo do 401 foi lido e não contém nenhum identificador de pedido", "A conclusão separa o que a API protege do que ela devolve"],
+  },
+  {
+    number: 443, toolId: "http", difficulty: "Intermediario", starter: "missing",
+    title: "Diferencie recurso ausente",
+    objective: "Separe 404 de pedido inexistente de uma falha de autenticação ou de rota inválida.",
+    expected: "404 com código ORDER_NOT_FOUND, contrastado com GET /orders/ord_1042.",
+    steps: ["Consulte /orders/ord_9999 com token válido.", "Compare com /orders/ord_1042 e com a mesma rota sem token.", RECORD],
+    acceptance: ["O código de erro ORDER_NOT_FOUND foi citado", "Há uma requisição de controle que devolve 200", "A conclusão explica por que o 404 não é problema de autenticação"],
+  },
+  {
+    number: 444, toolId: "http", difficulty: "Intermediario", starter: "invalid",
+    title: "Valide o corpo da criação",
+    objective: "Encontre a fronteira da regra de criação: quantidade precisa ser inteira e positiva.",
+    expected: "422 para quantidade 0 e 201 para quantidade positiva, com os dois corpos comparados.",
+    steps: ["Envie POST /orders com quantity 0.", "Repita com quantity 2 e depois com um valor não inteiro, como 1.5.", RECORD],
+    acceptance: ["Pelo menos um caso rejeitado (422) e um aceito (201) estão na evidência", "O campo fields do 422 foi lido", "A regra de criação foi escrita com as próprias palavras"],
+  },
+  {
+    number: 445, toolId: "http", difficulty: "Avancado", starter: "replay",
+    title: "Investigue idempotência",
+    objective: "Confirme que repetir a mesma Idempotency-Key não cria um segundo pedido.",
+    expected: "Primeira criação 201, repetição 200 com replay: true e o mesmo id; chave nova cria outro pedido.",
+    steps: ["Envie POST duas vezes com a chave used-key.", "Envie uma terceira vez com new-key e liste os pedidos.", RECORD],
+    acceptance: ["Os ids da primeira criação e da repetição são iguais", "A listagem final mostra quantos pedidos foram de fato criados", "A conclusão explica o risco que a idempotência evita (cobrança ou pedido duplicado)"],
+  },
+  {
+    number: 446, toolId: "http", difficulty: "Intermediario", starter: "conflict",
+    title: "Reprove transição via API",
+    objective: "Confirme que a API recusa entregar um pedido que ainda está pendente.",
+    expected: "409 com código INVALID_TRANSITION e o pedido continua pending.",
+    steps: ["Envie PATCH /orders/ord_1042 pedindo status delivered.", "Consulte GET /orders/ord_1042 em seguida.", RECORD],
+    acceptance: ["O 409 e o código INVALID_TRANSITION estão na evidência", "A consulta posterior mostra que o estado não mudou", "A conclusão liga o 409 à regra de fluxo do pedido"],
+  },
+
+  // ---------- Load Profile Bench ----------
+  {
+    number: 447, toolId: "carga", difficulty: "Basico", mode: "fluxo", starter: "normal",
+    title: "Estabeleça uma linha de base",
+    objective: "Meça latência e erros em carga baixa antes de comparar qualquer outro perfil.",
+    expected: "p50, p95, vazão e taxa de erro de 20 usuários por 30 segundos, dentro das metas.",
+    steps: ["Execute o perfil normal com 20 usuários por 30 segundos.", "Anote p50, p95, vazão e erros.", RECORD],
+    acceptance: ["As quatro métricas estão na evidência, com unidade", "A configuração (perfil, usuários, duração) permite repetir o teste", "As duas metas (p95 ≤ 300 ms e erros < 1%) foram comparadas"],
+  },
+  {
+    number: 448, toolId: "carga", difficulty: "Intermediario", starter: "normal",
+    title: "Encontre o ponto de saturação",
+    objective: "Aumente a carga até o p95 passar da meta e identifique onde isso acontece.",
+    expected: "Tabela com pelo menos três cargas e a primeira que viola o p95.",
+    steps: ["Repita o perfil normal com 20, 70 e 120 usuários, sempre por 30 segundos.", "Compare p95 e vazão entre as execuções.", RECORD],
+    acceptance: ["Pelo menos três execuções com a mesma duração", "A primeira carga que viola o p95 está identificada", "A conclusão nota o que aconteceu com a vazão quando o p95 subiu"],
+  },
+  {
+    number: 449, toolId: "carga", difficulty: "Intermediario", starter: "degraded",
+    title: "Avalie dependência degradada",
+    objective: "Isole o efeito de uma dependência lenta mantendo a carga igual.",
+    expected: "Normal e degradado com 60 usuários e mesma duração, com a diferença de p95 e erros.",
+    steps: ["Execute normal e dependência degradada com 60 usuários por 30 segundos.", "Compare p95 e taxa de erro sem mudar mais nada.", RECORD],
+    acceptance: ["As duas execuções usam a mesma carga e duração", "A diferença de p95 e de erros está calculada", "A hipótese sobre a dependência cita os números, não só a impressão"],
+  },
+  {
+    number: 450, toolId: "carga", difficulty: "Intermediario", starter: "spike",
+    title: "Simule um pico repentino",
+    objective: "Observe o impacto de 120 usuários no perfil de pico e se o sistema se recupera com menos carga.",
+    expected: "Pico com 120 usuários e nova execução com 60, com erros e vazão comparados.",
+    steps: ["Execute o perfil de pico com 120 usuários.", "Reduza para 60 usuários e execute de novo.", RECORD],
+    acceptance: ["As duas execuções de pico estão na evidência", "A mudança na taxa de erro e na vazão está descrita", "A conclusão diz se a violação persiste com metade da carga"],
+  },
+  {
+    number: 451, toolId: "carga", difficulty: "Avancado", starter: "degraded",
+    title: "Decida o gate de performance",
+    objective: "Use p95 e erros juntos para decidir se a release pode seguir.",
+    expected: "Decisão de liberar ou bloquear, citando o perfil e todas as metas violadas.",
+    steps: ["Execute ao menos dois perfis com a mesma duração.", "Compare cada métrica com as metas de 300 ms e 1%.", RECORD],
+    acceptance: ["A decisão (liberar ou bloquear) está explícita", "Todas as metas violadas estão citadas, não só a primeira", "O perfil que motivou a decisão está identificado"],
+  },
+
+  // ---------- Accessibility Inspector ----------
+  {
+    number: 452, toolId: "acessibilidade", difficulty: "Basico", starter: "label",
+    title: "Encontre o campo sem rótulo",
+    objective: "Verifique se o texto visível do campo é o nome que a tecnologia assistiva anuncia.",
+    expected: "Campo de e-mail sem rótulo associado, comparado com a variante correta.",
+    steps: ["Preencha o e-mail e execute a inspeção na variante sem rótulo.", "Repita na variante sem defeito.", RECORD],
+    acceptance: ["A checagem de rótulo falhou numa variante e passou na outra", "A evidência explica a diferença entre texto visível e rótulo associado", "O impacto para quem usa leitor de tela foi descrito"],
+  },
+  {
+    number: 453, toolId: "acessibilidade", difficulty: "Basico", starter: "focus",
+    title: "Siga o foco pelo teclado",
+    objective: "Observe se o botão mostra onde está o foco quando se navega só pelo teclado.",
+    expected: "Sequência de foco registrada e o botão sem indicação visual identificado.",
+    steps: ["Use Simular Tab e depois a tecla Tab real até o botão Continuar.", "Compare a indicação visual com a variante sem defeito.", RECORD],
+    acceptance: ["A ordem do foco (campo, botão, inspeção) está registrada", "O elemento sem foco visível está identificado", "A conclusão diz por que isso bloqueia quem não usa mouse"],
+  },
+  {
+    number: 454, toolId: "acessibilidade", difficulty: "Intermediario", starter: "contrast",
+    title: "Investigue baixo contraste",
+    objective: "Detecte o texto de ajuda que ficou difícil de ler.",
+    expected: "Texto afetado identificado e comparado com a variante legível.",
+    steps: ["Compare a variante de contraste com a limpa.", "Identifique o texto afetado e em que condição ele fica ilegível.", RECORD],
+    acceptance: ["O texto de ajuda afetado está citado", "A comparação usa a variante limpa como referência", "A conclusão cita o critério de contraste da WCAG (1.4.3) ou explica a perda de leitura"],
+  },
+  {
+    number: 455, toolId: "acessibilidade", difficulty: "Intermediario", starter: "feedback",
+    title: "Confira anúncio de erro",
+    objective: "Avalie se a mensagem de e-mail inválido é anunciada, além de aparecer na tela.",
+    expected: "Mensagem visível sem role=alert na variante com defeito, comparada com a correta.",
+    steps: ["Clique em Continuar com o campo vazio.", "Compare com a variante sem defeito, que usa role=alert.", RECORD],
+    acceptance: ["As duas variantes foram comparadas", "A evidência aponta a ausência do anúncio, não só a mensagem visual", "A conclusão explica o que o usuário de leitor de tela deixa de saber"],
+  },
+  {
+    number: 456, toolId: "acessibilidade", difficulty: "Avancado", starter: "clean",
+    title: "Revise o formulário sem defeitos",
+    objective: "Use a variante limpa como referência sem concluir que ela está totalmente acessível.",
+    expected: "As quatro checagens passando e uma lista do que a inspeção não cobre.",
+    steps: ["Preencha e inspecione a variante limpa.", "Compare as quatro checagens com as variantes defeituosas.", RECORD],
+    acceptance: ["As quatro checagens passaram e estão na evidência", "Nenhum defeito foi inventado", "Há pelo menos dois aspectos de acessibilidade que esta inspeção não verifica"],
+  },
+
+  // ---------- Security Probe ----------
+  {
+    number: 457, toolId: "seguranca", difficulty: "Basico", starter: "injection",
+    title: "Reprove entrada de busca suspeita",
+    objective: "Compare uma busca comum com uma tentativa de injeção sintética.",
+    expected: "Termo comum aceito (200) e ' OR 1=1 -- rejeitado (400) sem executar comando.",
+    steps: ["Execute a sonda com um termo comum, como caderno.", "Repita com ' OR 1=1 --.", RECORD],
+    acceptance: ["As duas sondas estão na evidência com status", "A evidência da rejeição foi lida e citada", "A conclusão não afirma vulnerabilidade a partir de uma rejeição"],
+  },
+  {
+    number: 458, toolId: "seguranca", difficulty: "Intermediario", starter: "xss",
+    title: "Inspecione texto hostil",
+    objective: "Confirme que a marcação recebida é exibida como texto e não executada.",
+    expected: "Entrada com <script> e saída escapada (&lt;script&gt;) lado a lado.",
+    steps: ["Envie uma string com tags na sonda de texto.", "Compare a entrada com a saída devolvida.", RECORD],
+    acceptance: ["Entrada e saída aparecem lado a lado na evidência", "Os caracteres escapados estão apontados", "A conclusão explica o que aconteceria se a marcação fosse interpretada"],
+  },
+  {
+    number: 459, toolId: "seguranca", difficulty: "Intermediario", starter: "idor",
+    title: "Teste acesso entre usuários",
+    objective: "Compare o dono e outro usuário acessando o mesmo pedido.",
+    expected: "200 para user_108 (dono) e 403 para user_221, com o owner informado.",
+    steps: ["Execute o acesso a ord_1042 como user_108.", "Repita como user_221.", RECORD],
+    acceptance: ["Os dois atores e os dois status estão na evidência", "O campo owner foi lido", "A conclusão liga a decisão ao dono do pedido, não ao fato de estar logado"],
+  },
+  {
+    number: 460, toolId: "seguranca", difficulty: "Intermediario", starter: "rate",
+    title: "Encontre o limite de tentativas",
+    objective: "Ache a fronteira exata entre aceitação e bloqueio por excesso de tentativas.",
+    expected: "Cinco tentativas aceitas (200) e a sexta bloqueada (429) com retry-after.",
+    steps: ["Execute com 5 tentativas na janela.", "Repita com 6.", RECORD],
+    acceptance: ["A fronteira 5 → 6 está demonstrada", "O retry-after foi citado", "A conclusão diz por que testar o valor exato da fronteira importa"],
+  },
+  {
+    number: 461, toolId: "seguranca", difficulty: "Avancado", mode: "fluxo", starter: "normal",
+    title: "Estabeleça resposta normal",
+    objective: "Use uma requisição sem ataque como controle antes de interpretar qualquer defesa.",
+    expected: "Controle aceito e uma sonda de risco comparada a ele.",
+    steps: ["Execute o controle válido.", "Execute uma sonda de risco à sua escolha e compare.", RECORD],
+    acceptance: ["O controle aceito está na evidência", "A sonda escolhida e seu resultado estão lado a lado com o controle", "A conclusão explica por que a rejeição sozinha não prova que a defesa está correta"],
+  },
+
+  // ---------- Test Data Factory ----------
+  {
+    number: 462, toolId: "massa", difficulty: "Basico", mode: "fluxo", starter: "valid",
+    title: "Gere dados reproduzíveis",
+    objective: "Comprove que a mesma seed e os mesmos parâmetros geram exatamente a mesma massa.",
+    expected: "Duas gerações com seed 42 e quatro registros, idênticas.",
+    steps: ["Gere a massa válida com seed 42 e 4 registros.", "Gere de novo com a mesma configuração e compare.", RECORD],
+    acceptance: ["A configuração (modo, seed, quantidade) está registrada", "IDs, e-mails e idades das duas gerações foram comparados", "A conclusão explica por que reprodutibilidade importa para reabrir um bug"],
+  },
+  {
+    number: 463, toolId: "massa", difficulty: "Intermediario", starter: "boundary",
+    title: "Explore limites de idade",
+    objective: "Cubra abaixo, dentro e acima da faixa aceita de idade.",
+    expected: "17 e 121 reprovados; 18 e 120 aceitos (limite inclusivo).",
+    steps: ["Gere a massa de limites.", "Classifique 17, 18, 120 e 121 pela regra de 18 a 120.", RECORD],
+    acceptance: ["Os quatro valores estão classificados", "Os dois valores reprovados conferem com o validador", "A conclusão diz se o limite é inclusivo e como você confirmou"],
+  },
+  {
+    number: 464, toolId: "massa", difficulty: "Basico", starter: "invalid-email",
+    title: "Detecte e-mail inválido",
+    objective: "Inclua um registro sem formato de e-mail e veja o validador apontá-lo.",
+    expected: "ID exato da linha com e-mail inválido e a regra que falhou.",
+    steps: ["Gere a variante de e-mail inválido.", "Localize a linha apontada pelo validador.", RECORD],
+    acceptance: ["O ID da linha (por exemplo, qa-42-2) está citado", "O valor inválido aparece na evidência", "A regra de formato foi escrita com as próprias palavras"],
+  },
+  {
+    number: 465, toolId: "massa", difficulty: "Intermediario", starter: "duplicate",
+    title: "Ache identidade duplicada",
+    objective: "Verifique se o e-mail é único entre os registros.",
+    expected: "O segundo uso do mesmo e-mail apontado, com os dois IDs envolvidos.",
+    steps: ["Gere a variante com e-mail duplicado.", "Compare e-mails e IDs das linhas.", RECORD],
+    acceptance: ["Os dois IDs que compartilham o e-mail estão citados", "A evidência mostra qual ocorrência o validador marcou", "A conclusão diz onde a unicidade deveria ser garantida (tela, API ou banco)"],
+  },
+  {
+    number: 466, toolId: "massa", difficulty: "Avancado", starter: "missing",
+    title: "Separe ausência de invalidez",
+    objective: "Observe campos ausentes em vez de apenas formato incorreto.",
+    expected: "E-mail ausente e idade ausente relatados à parte do caso de formato inválido.",
+    steps: ["Gere a variante com campo ausente.", "Compare os avisos com os da variante de e-mail inválido.", RECORD],
+    acceptance: ["Os avisos de ausência estão na evidência", "A diferença entre ausente e inválido está explicada", "A conclusão diz por que um teste que só checa formato deixaria a ausência passar"],
+  },
+
+  // ---------- State Machine Explorer ----------
+  {
+    number: 467, toolId: "estados", difficulty: "Basico", mode: "fluxo", starter: "created",
+    title: "Percorra o caminho válido",
+    objective: "Monte o ciclo completo de um pedido, de criado a entregue.",
+    expected: "Histórico com created → paid → shipped → delivered.",
+    steps: ["Acione Pagar, Despachar e Entregar, nessa ordem.", "Confira estado e histórico após cada ação.", RECORD],
+    acceptance: ["As três transições aceitas estão no histórico", "O estado final é delivered", "A conclusão lista as ações que deixam de estar disponíveis no fim"],
+  },
+  {
+    number: 468, toolId: "estados", difficulty: "Basico", starter: "created",
+    title: "Reprove salto de etapa",
+    objective: "Tente entregar um pedido antes de pagar e despachar.",
+    expected: "Transição rejeitada e o pedido continua created.",
+    steps: ["Acione Entregar logo no início.", "Compare mensagem e estado antes e depois.", RECORD],
+    acceptance: ["A mensagem de rejeição está na evidência", "O estado antes e depois é o mesmo (created)", "A conclusão diz qual etapa foi pulada"],
+  },
+  {
+    number: 469, toolId: "estados", difficulty: "Intermediario", starter: "created",
+    title: "Teste cancelamento permitido",
+    objective: "Confirme que cancelar antes do pagamento é permitido e encerra o fluxo.",
+    expected: "Cancelamento aceito e pagamento posterior rejeitado.",
+    steps: ["Acione Cancelar.", "Tente Pagar em seguida.", RECORD],
+    acceptance: ["O cancelamento aceito e a rejeição do pagamento estão no histórico", "O estado final é cancelled", "A conclusão chama cancelled de estado terminal e explica o que isso significa"],
+  },
+  {
+    number: 470, toolId: "estados", difficulty: "Intermediario", starter: "paid",
+    title: "Teste reembolso permitido",
+    objective: "Avalie o reembolso depois do pagamento e antes do envio.",
+    expected: "Reembolso aceito a partir de paid e envio posterior rejeitado.",
+    steps: ["A partir de paid, acione Reembolsar.", "Tente Despachar em seguida.", RECORD],
+    acceptance: ["O reembolso aceito e o envio rejeitado estão no histórico", "O estado final é refunded", "A conclusão diz em que momento do fluxo o reembolso deixaria de ser possível"],
+  },
+  {
+    number: 471, toolId: "estados", difficulty: "Avancado", starter: "created",
+    title: "Investigue repetição de ação",
+    objective: "Confirme que repetir o pagamento não duplica a transição.",
+    expected: "Segunda tentativa de pagar rejeitada e o estado permanece paid.",
+    steps: ["Acione Pagar e depois Repetir última ação.", "Compare estado e eventos no histórico.", RECORD],
+    acceptance: ["O histórico mostra uma transição aceita e uma rejeitada", "O estado final é paid", "A conclusão relaciona o caso a um clique duplo ou a uma requisição repetida na vida real"],
+  },
 ];

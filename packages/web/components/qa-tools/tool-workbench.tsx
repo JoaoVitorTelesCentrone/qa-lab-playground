@@ -6,93 +6,13 @@ import { ArrowLeft, Check, CircleAlert, Copy, Database, Play, RotateCcw, ShieldC
 import { findQaTool, type QaToolId } from "@/lib/qa-tools";
 import { qaToolLabForNumber, qaToolLabsFor } from "@/lib/qa-tool-labs";
 import { AdvancedWorkbench } from "@/components/qa-tools/advanced-workbenches";
+import { checkContract, faultyResponse, responseForStarter, runSafeQuery, validResponse, type ContractCheck, type Order, type QueryResult, type QueryRow } from "@/lib/qa-tool-engine";
 
-type Order = { id: string; customer: string; status: string; total: number };
-type QueryRow = Partial<Order>;
-const orders: Order[] = [
-  { id: "QL-1042", customer: "Ana Lima", status: "paid", total: 189.9 },
-  { id: "QL-1043", customer: "Caio Nunes", status: "pending", total: 74.5 },
-  { id: "QL-1044", customer: "Bia Rocha", status: "refunded", total: 0 },
-  { id: "QL-1045", customer: "Leo Alves", status: "paid", total: 1299 },
-  { id: "QL-1046", customer: "Duda Reis", status: "pending", total: -29.9 },
-  { id: "QL-1047", customer: "Ivo Melo", status: "paid", total: 89.9 },
-  { id: "QL-1048", customer: "Nina Luz", status: "cancelled", total: 215 },
-  { id: "QL-1049", customer: "Ravi Dias", status: "paid", total: 0 },
-  { id: "QL-1050", customer: "Lia Ramos", status: "refunded", total: 65 },
-  { id: "QL-1050", customer: "Lia Ramos", status: "pending", total: 65 },
-  { id: "QL-1051", customer: "Caio Nunes", status: "pending", total: 720 },
-];
 const samples = [
   "SELECT id, customer, status, total FROM orders WHERE status = 'pending' ORDER BY total DESC",
   "SELECT id, customer, status, total FROM orders WHERE total < 0",
   "SELECT id, customer, status, total FROM orders WHERE status = 'paid' ORDER BY total DESC LIMIT 3",
 ];
-
-type QueryResult = { rows: QueryRow[]; error?: string };
-function runSafeQuery(query: string): QueryResult {
-  const match = query.trim().match(/^SELECT\s+(\*|[a-z_,\s]+)\s+FROM\s+orders(?:\s+WHERE\s+(status\s*=\s*'(?:paid|pending|refunded|cancelled)'|(?:id|customer)\s*=\s*'[^']{1,80}'|total\s*(?:<|>|=)\s*-?\d+(?:\.\d+)?))?(?:\s+ORDER\s+BY\s+(id|customer|status|total)\s+(ASC|DESC))?(?:\s+LIMIT\s+(\d+))?\s*;?$/i);
-  if (!match) return { rows: [], error: "Consulta não reconhecida. Use SELECT em orders, com filtro opcional por status ou total." };
-  const [, selected, rawWhere, rawOrder, rawDirection, rawLimit] = match;
-  const columns = selected === "*" ? ["id", "customer", "status", "total"] : selected.split(",").map((column) => column.trim().toLowerCase());
-  if (!columns.length || columns.some((column) => !["id", "customer", "status", "total"].includes(column))) return { rows: [], error: "Coluna desconhecida. Disponíveis: id, customer, status e total." };
-  let result = [...orders];
-  if (rawWhere) {
-    const status = rawWhere.match(/^status\s*=\s*'([^']+)'$/i);
-    const total = rawWhere.match(/^total\s*(<|>|=)\s*(-?\d+(?:\.\d+)?)$/i);
-    const textFilter = rawWhere.match(/^(id|customer)\s*=\s*'([^']+)'$/i);
-    if (status) result = result.filter((row) => row.status === status[1].toLowerCase());
-    else if (textFilter) result = result.filter((row) => row[textFilter[1].toLowerCase() as "id" | "customer"] === textFilter[2]);
-    else if (total) result = result.filter((row) => total[1] === "<" ? row.total < Number(total[2]) : total[1] === ">" ? row.total > Number(total[2]) : row.total === Number(total[2]));
-  }
-  if (rawOrder) result.sort((a, b) => String(a[rawOrder.toLowerCase() as keyof Order]).localeCompare(String(b[rawOrder.toLowerCase() as keyof Order]), undefined, { numeric: true }) * ((rawDirection ?? "ASC").toUpperCase() === "DESC" ? -1 : 1));
-  if (rawLimit) result = result.slice(0, Math.min(Number(rawLimit), 100));
-  return { rows: result.map((row) => Object.fromEntries(columns.map((column) => [column, row[column as keyof Order]])) as QueryRow) };
-}
-
-const expectedContract = { status: "number", data: "object", "data.id": "string", "data.total": "number", "data.items": "array", "data.items[].product": "string", "data.items[].quantity": "number" } as const;
-const validResponse = { status: 200, data: { id: "ord_1042", total: 189.9, items: [{ product: "Caderno A5", quantity: 2 }] } };
-const faultyResponse = { status: "200", data: { id: "ord_1042", total: "189.90", items: [{ product: "Caderno A5", quantity: 0 }] } };
-function valueAtPath(input: unknown, path: string): unknown {
-  if (path === "data.items[].product" || path === "data.items[].quantity") {
-    const list = (input as { data?: { items?: unknown[] } })?.data?.items;
-    return Array.isArray(list) ? list.map((item) => (item as Record<string, unknown>)?.[path.endsWith("product") ? "product" : "quantity"]) : undefined;
-  }
-  return path.split(".").reduce<unknown>((current, part) => current && typeof current === "object" ? (current as Record<string, unknown>)[part] : undefined, input);
-}
-function valueType(value: unknown) { return Array.isArray(value) ? "array" : value === null ? "null" : typeof value; }
-type ContractCheck = { path: string; expected: string; actual: string; ok: boolean };
-function checkContract(input: unknown): ContractCheck[] {
-  const root = input && typeof input === "object" && !Array.isArray(input) ? input as Record<string, unknown> : {};
-  const status = root.status;
-  const checks: ContractCheck[] = [{ path: "status", expected: "HTTP 200 ou 422", actual: String(status ?? "ausente"), ok: status === 200 || status === 422 }];
-  if (status === 422) {
-    const error = root.error && typeof root.error === "object" && !Array.isArray(root.error) ? root.error as Record<string, unknown> : {};
-    checks.push({ path: "error", expected: "object", actual: valueType(root.error), ok: valueType(root.error) === "object" });
-    for (const key of ["code", "message"] as const) {
-      const value = error[key];
-      checks.push({ path: `error.${key}`, expected: "string não vazia", actual: value === undefined ? "ausente" : valueType(value), ok: typeof value === "string" && value.trim().length > 0 });
-    }
-    checks.push({ path: "data", expected: "ausente", actual: valueType(root.data), ok: root.data === undefined });
-    return checks;
-  }
-  if (status !== 200) return checks;
-  for (const [path, expected] of Object.entries(expectedContract)) {
-    if (path === "status" || path.includes("[]")) continue;
-    const value = valueAtPath(input, path);
-    checks.push({ path, expected, actual: value === undefined ? "ausente" : valueType(value), ok: valueType(value) === expected });
-  }
-  const items = valueAtPath(input, "data.items");
-  if (Array.isArray(items)) {
-    items.forEach((item, index) => {
-      const entry = item && typeof item === "object" && !Array.isArray(item) ? item as Record<string, unknown> : {};
-      const product = entry.product;
-      const quantity = entry.quantity;
-      checks.push({ path: `data.items[${index}].product`, expected: "string não vazia", actual: product === undefined ? "ausente" : valueType(product), ok: typeof product === "string" && product.trim().length > 0 });
-      checks.push({ path: `data.items[${index}].quantity`, expected: "inteiro positivo", actual: String(quantity ?? "ausente"), ok: typeof quantity === "number" && Number.isInteger(quantity) && quantity > 0 });
-    });
-  }
-  return checks;
-}
 
 type EventRow = { time: string; level: "INFO" | "WARN" | "ERROR"; service: string; trace: string; message: string };
 const events: EventRow[] = [
@@ -122,7 +42,7 @@ export function ToolWorkbench({ toolId, labNumber }: { toolId: QaToolId; labNumb
     url.searchParams.set("lab", String(number));
     window.history.replaceState(null, "", url);
   }
-  return <main className="mx-auto max-w-7xl px-5 py-8 sm:px-8 sm:py-12">
+  return <main className="qa-system qa-practice"><div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 sm:py-12">
     <Link href="/lab/ferramentas" className="inline-flex items-center gap-2 text-xs text-[#9AA4AF] hover:text-white"><ArrowLeft className="size-3.5" />Ferramentas</Link>
     <header className="mt-7 flex flex-col gap-4 border-b border-white/10 pb-7 sm:flex-row sm:items-end sm:justify-between">
       <div className="max-w-3xl"><div className={`flex items-center gap-2 text-sm font-bold ${tool.accent}`}><Icon className="size-4" />{tool.shortTitle}</div><h1 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">{tool.title}</h1><p className="mt-3 text-sm leading-6 text-[#AAB2BC]">{tool.task} Tudo roda no navegador com uma massa fictícia.</p></div>
@@ -133,7 +53,40 @@ export function ToolWorkbench({ toolId, labNumber }: { toolId: QaToolId; labNumb
       <label className="text-xs font-semibold text-[#9AA4AF]">Escolha outro Lab<select aria-label="Escolha um Lab desta ferramenta" value={selectedNumber} onChange={(event) => selectLab(Number(event.target.value))} className="mt-2 block min-h-11 w-full rounded-md border border-white/10 bg-[#0d1014] px-3 text-sm text-white">{labs.map((item, index) => <option key={item.number} value={item.number}>{String(index + 1).padStart(2, "0")} · {item.title}</option>)}</select><span className="mt-2 block font-normal leading-5 text-[#697581]">Cada missão tem briefing, critérios e um cenário de início próprio.</span></label>
     </section>
     <div className="mt-5" key={`${toolId}-${lab.number}`}>{toolId === "sql" ? <SqlBench starterQuery={lab.starter} /> : toolId === "contrato" ? <ContractBench starter={lab.starter} /> : toolId === "visual" ? <VisualBench starter={lab.starter} /> : toolId === "observabilidade" ? <TraceBench starterTrace={lab.starter} /> : <AdvancedWorkbench toolId={toolId} starter={lab.starter} />}</div>
-  </main>;
+    <EvidenceHandoff labNumber={lab.number} labTitle={lab.title} acceptance={lab.acceptance} />
+  </div></main>;
+}
+
+/** Ponte entre a bancada e a entrega: a bancada não salva nada, então o aluno leva a evidência para o Lab. */
+function EvidenceHandoff({ labNumber, labTitle, acceptance }: { labNumber: number; labTitle: string; acceptance: string[] }) {
+  const [copied, setCopied] = useState(false);
+  const template = [
+    `Lab ${labNumber} · ${labTitle}`,
+    "",
+    "Configuração usada (requisição, consulta, filtros ou parâmetros):",
+    "",
+    "Resultado observado (status, valores, linhas ou mensagens):",
+    "",
+    "Conclusão (fato, hipótese e o que ainda falta confirmar):",
+    "",
+    "Critérios de aceite:",
+    ...acceptance.map((item) => `- [ ] ${item}`),
+  ].join("\n");
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(template);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch { setCopied(false); }
+  }
+  return <section aria-labelledby="handoff-title" className="mt-6 flex flex-col gap-4 rounded-xl border border-mint/25 bg-mint/[.04] p-5 sm:flex-row sm:items-center sm:justify-between">
+    <div><h2 id="handoff-title" className="text-sm font-bold text-white">Terminou a investigação?</h2><p className="mt-1 max-w-2xl text-xs leading-5 text-[#AAB2BC]">A bancada não guarda o que você fez. Copie o modelo, preencha com o que observou e registre a entrega no Lab.</p></div>
+    <div className="flex flex-wrap gap-2">
+      <button type="button" onClick={() => void copy()} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-white/15 px-4 text-sm font-semibold text-white hover:border-mint/50"><Copy className="size-4" />{copied ? "Modelo copiado" : "Copiar modelo de evidência"}</button>
+      <Link href={`/labs/${labNumber}`} className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-mint px-4 text-sm font-black text-[#101319] hover:bg-mint/90">Registrar entrega do Lab</Link>
+    </div>
+    <span role="status" className="sr-only">{copied ? "Modelo de evidência copiado." : ""}</span>
+  </section>;
 }
 
 function Panel({ title, children, className = "" }: { title: string; children: ReactNode; className?: string }) {
@@ -180,20 +133,6 @@ function ContractBench({ starter }: { starter: string }) {
   </div>;
 }
 
-function responseForStarter(starter: string) {
-  const response = JSON.parse(JSON.stringify(validResponse)) as typeof validResponse;
-  if (starter === "id-ausente") delete (response.data as Partial<typeof response.data>).id;
-  if (starter === "quantidade-zero") response.data.items[0].quantity = 0;
-  if (starter === "lista-vazia") response.data.items = [];
-  if (starter === "segundo-item") response.data.items.push({ product: "Caneta azul", quantity: 0 });
-  if (starter === "id-nulo") (response.data as { id: unknown }).id = null;
-  if (starter === "total-texto") (response.data as { total: unknown }).total = "189.90";
-  if (starter === "quantidade-negativa") response.data.items[0].quantity = -1;
-  if (starter === "erro-422") return { status: 422, error: { code: "PAYMENT_REVIEW", message: "Pagamento em análise" } };
-  if (starter === "tipos") return faultyResponse;
-  return response;
-}
-
 function Metric({ label, value, danger = false }: { label: string; value: string; danger?: boolean }) { return <div className="rounded-lg border border-white/10 px-2 py-3"><strong className={`block text-lg ${danger ? "text-rose-300" : "text-white"}`}>{value}</strong><span className="text-[11px] text-[#89939f]">{label}</span></div>; }
 
 type VisualIssue = "banner" | "clip" | "contrast";
@@ -233,8 +172,4 @@ function TraceBench({ starterTrace }: { starterTrace: string }) {
 
 function EmptyPrompt({ text }: { text: string }) { return <div className="flex min-h-32 flex-col items-center justify-center rounded-lg border border-dashed border-white/10 px-5 text-center"><Database className="size-5 text-[#64707c]" /><p className="mt-3 max-w-sm text-xs leading-5 text-[#89939f]">{text}</p></div>; }
 function ToolError({ children }: { children: ReactNode }) { return <div role="alert" className="flex items-start gap-2 rounded-lg border border-rose-300/20 bg-rose-300/[.05] p-3 text-xs leading-5 text-rose-200"><CircleAlert className="mt-0.5 size-4 shrink-0" />{children}</div>; }
-
-
-
-
 

@@ -6,7 +6,7 @@ import { qaToolLabsFor, qaToolLabSpecs } from "@/lib/qa-tool-labs";
 export const metadata = { title: "Ferramentas de QA | QA Lab", description: "Bancadas interativas para praticar dados, API, performance, acessibilidade, segurança e fluxos." };
 
 export default function ToolsPage() {
-  return <main className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
+  return <main className="qa-system qa-practice"><div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
     <Link href="/lab" className="text-xs text-[#9AA4AF] hover:text-white">Meu Lab</Link>
     <header className="mt-7 max-w-3xl border-b border-white/10 pb-8">
       <div className="flex items-center gap-2 text-sm font-semibold text-mint"><Wrench className="size-4" /> Ferramentas interativas</div>
@@ -29,5 +29,5 @@ export default function ToolsPage() {
         </article>;
       })}
     </section>
-  </main>;
+  </div></main>;
 }

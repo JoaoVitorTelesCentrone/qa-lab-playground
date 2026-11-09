@@ -23,7 +23,7 @@ export type GuideVideo = {
   official?: boolean;
 };
 
-export type ToolGuideCategory = "automacao" | "api" | "performance" | "base" | "processo";
+export type ToolGuideCategory = "automacao" | "api" | "performance" | "risco" | "base" | "processo";
 
 export type ToolGuide = {
   slug: string;
@@ -32,6 +32,8 @@ export type ToolGuide = {
   tagline: string;
   summary: string;
   qaFocus: string[];
+  /** Curso da própria plataforma sobre a ferramenta: é o primeiro passo recomendado. */
+  internalCourse?: { href: string; title: string; detail: string };
   /** Simulador do QA Lab que treina a mesma habilidade, quando existe. */
   practice?: { href: string; label: string };
   docs: GuideLink[];
@@ -43,6 +45,7 @@ export const toolGuideCategories: Record<ToolGuideCategory, { title: string; des
   automacao: { title: "Automação de testes", description: "Frameworks para automatizar fluxos de interface, mobile e unidade." },
   api: { title: "APIs", description: "Clientes para explorar e testar APIs e o contrato que as descreve." },
   performance: { title: "Performance e observabilidade", description: "Carga, métricas de página e leitura de sinais em produção." },
+  risco: { title: "Acessibilidade e segurança", description: "Riscos que a regressão funcional não pega." },
   base: { title: "Base técnica", description: "O que todo QA usa todo dia, mesmo sem perceber." },
   processo: { title: "Processo e gestão", description: "Especificação por exemplos e gestão de casos de teste." },
 };
@@ -116,6 +119,8 @@ export const toolGuides: ToolGuide[] = [
       { title: "Test Automation University", url: "https://testautomationu.applitools.com/", lang: "en", note: "Cursos gratuitos de Selenium em Java, Python e C#." },
     ],
     videos: [
+      { title: "Aprenda a Automatizar Seus Testes Web do Zero com Selenium WebDriver!", channel: "Julio de Lima", lang: "pt", youtubeId: "ZFOdetBp55U", kind: "video" },
+      { title: "Automação de Testes Com Selenium Para Iniciantes [Curso Completo]", channel: "Inove Teste", lang: "pt", youtubeId: "PLedtsFT8ymsgVCqgLvPiSrfYeGdujcqvv", kind: "playlist" },
       { title: "Selenium Tutorial For Beginners | Selenium with Java Full Course", channel: "UltimateQA", lang: "en", youtubeId: "aIfP8rOx66E", kind: "video" },
       { title: "Selenium WebDriver Tutorial In 3 Hours", channel: "TestMu AI (LambdaTest)", lang: "en", youtubeId: "HpL6EX2kjq4", kind: "video" },
       { title: "Selenium Course for Beginners (Python)", channel: "freeCodeCamp.org", lang: "en", youtubeId: "j7VZsCCnptM", kind: "video" },
@@ -136,6 +141,8 @@ export const toolGuides: ToolGuide[] = [
       { title: "Test Automation University", url: "https://testautomationu.applitools.com/", lang: "en", note: "Tem cursos gratuitos de Appium para Android e iOS." },
     ],
     videos: [
+      { title: "Automatizando Juntos: Appium – parte 2", channel: "Iterasys", lang: "pt", youtubeId: "1JZZvz-UmYo", kind: "video" },
+      { title: "Live de Python #144 – Appium, automatizando aplicativos móveis", channel: "Eduardo Mendes", lang: "pt", youtubeId: "R1vm0RF66C8", kind: "video" },
       { title: "Appium – Mobile Automation Testing from Scratch in 2 hours", channel: "Rahul Shetty Academy", lang: "en", youtubeId: "Fx3ud5wMHYc", kind: "video" },
       { title: "Appium 2.0 Full Course for Beginners", channel: "Vinoth Rathinam", lang: "en", youtubeId: "bu_7YCDa4YA", kind: "video" },
       { title: "Appium Tutorial for Beginners (playlist)", channel: "Bhau-Automation Lab", lang: "en", youtubeId: "PLk9dTrObC0OKS76RJ4NU6ieCSc3Ce3mCh", kind: "playlist" },
@@ -154,6 +161,8 @@ export const toolGuides: ToolGuide[] = [
     ],
     courses: [],
     videos: [
+      { title: "QArentena 39 – Escrevendo Testes Unitários com Jest", channel: "Iterasys", lang: "pt", youtubeId: "djPtfZiu7t4", kind: "video" },
+      { title: "Aulão de Unit Tests em Node.js com Jest", channel: "LuizTools", lang: "pt", youtubeId: "MduPtbLg49M", kind: "video" },
       { title: "Jest Crash Course – Unit Testing in JavaScript", channel: "Traversy Media", lang: "en", youtubeId: "7r4xVDI2vho", kind: "video" },
       { title: "JavaScript Testing with Jest – Crash Course", channel: "freeCodeCamp.org", lang: "en", youtubeId: "IPiUDhwnZxA", kind: "video" },
     ],
@@ -261,6 +270,7 @@ export const toolGuides: ToolGuide[] = [
       { title: "Learn Accessibility (web.dev)", url: "https://web.dev/learn/accessibility", lang: "en", note: "Curso gratuito do Google sobre acessibilidade." },
     ],
     videos: [
+      { title: "Lighthouse: avalie a performance do site durante o desenvolvimento!", channel: "Visie Padrões Web", lang: "pt", youtubeId: "2yNivz6CfOY", kind: "video" },
       { title: "Web Performance: Always Auditing with Lighthouse", channel: "This Dot Media", lang: "en", youtubeId: "ofG0QLqrcf8", kind: "video" },
       { title: "Chrome DevTools for Performance Engineers – Lighthouse", channel: "QAInsights", lang: "en", youtubeId: "Mff7H1c6-hY", kind: "video" },
     ],
@@ -430,12 +440,141 @@ export const toolGuides: ToolGuide[] = [
     ],
     courses: [],
     videos: [
+      { title: "Gerenciando testes com Qase.io #01", channel: "Priscila Caimi", lang: "pt", youtubeId: "f6X-tJDDD0U", kind: "video" },
+      { title: "Aprenda a utilizar o repositório de testes – Qase", channel: "Aprendendo a Fazer TI", lang: "pt", youtubeId: "C7Tv2MBIjDU", kind: "video" },
       { title: "Using Qase: Test Repository", channel: "Qase", lang: "en", youtubeId: "1Mng3GNEHMw", kind: "video", official: true },
       { title: "Using Qase: Test Cases", channel: "Qase", lang: "en", youtubeId: "bidHMkx3OdM", kind: "video", official: true },
       { title: "Using Qase: Test Suites", channel: "Qase", lang: "en", youtubeId: "G5f1Ds390_E", kind: "video", official: true },
     ],
   },
+  {
+    slug: "pact",
+    name: "Pact",
+    category: "api",
+    tagline: "Teste de contrato guiado pelo consumidor, entre serviços.",
+    summary: "Em vez de subir todos os serviços para um teste ponta a ponta, o consumidor registra o que espera da API e o provedor verifica se cumpre. Pega quebra de contrato no pull request, antes de chegar em homologação.",
+    qaFocus: ["Consumidor, provedor e o arquivo de pacto", "Matchers: validar formato em vez de valor exato", "Verificação do provedor no CI", "Pact Broker e a pergunta can-i-deploy"],
+    practice: { href: "/lab/ferramentas/contrato", label: "Contract Inspector" },
+    docs: [
+      { title: "Documentação oficial do Pact", url: "https://docs.pact.io/", lang: "en", note: "Conceitos e guias por linguagem." },
+      { title: "Guia de 5 minutos", url: "https://docs.pact.io/5-minute-getting-started-guide", lang: "en", note: "O fluxo completo em um exemplo curto." },
+    ],
+    courses: [
+      { title: "Pact University", url: "https://docs.pact.io/university", lang: "en", note: "Workshops oficiais e gratuitos, em várias linguagens." },
+    ],
+    videos: [
+      { title: "Introduction to contract testing with PactFlow (série)", channel: "PactFlow", lang: "en", youtubeId: "PLwy9Bnco-IpfZ72VQ7hce8GicVZs7nm0i", kind: "playlist", official: true },
+      { title: "Demo – Contract testing with Pact JS", channel: "PactFlow", lang: "en", youtubeId: "6Qd-kq1AzZI", kind: "video", official: true },
+      { title: "Best practices for writing consumer tests", channel: "PactFlow", lang: "en", youtubeId: "oPuHb9Rl8Zo", kind: "video", official: true },
+    ],
+  },
+  {
+    slug: "axe",
+    name: "axe DevTools",
+    category: "risco",
+    tagline: "Encontra falhas de acessibilidade e aponta o critério WCAG de cada uma.",
+    summary: "Motor de regras da Deque usado pela maioria das ferramentas de acessibilidade, inclusive pelo Lighthouse. Roda como extensão do navegador ou dentro do Playwright e do Cypress. Pega uma parte das falhas; o restante exige teclado, leitor de tela e julgamento.",
+    qaFocus: ["Rodar a extensão e ler impacto e critério WCAG", "O que a ferramenta automática não pega", "Testar só com teclado: ordem e visibilidade do foco", "axe-core dentro da automação (Playwright)"],
+    practice: { href: "/lab/ferramentas/acessibilidade", label: "Accessibility Inspector" },
+    docs: [
+      { title: "axe DevTools (Deque)", url: "https://www.deque.com/axe/devtools/", lang: "en", note: "Extensão gratuita para Chrome, Edge e Firefox." },
+      { title: "axe-core", url: "https://github.com/dequelabs/axe-core", lang: "en", note: "O motor de regras, para usar na automação." },
+      { title: "Testes de acessibilidade no Playwright", url: "https://playwright.dev/docs/accessibility-testing", lang: "en", note: "Como plugar o axe numa suíte E2E." },
+      { title: "WCAG 2.1 em português", url: "https://www.w3c.br/traducoes/wcag/wcag21-pt-BR/", lang: "pt", note: "Tradução oficial autorizada pelo W3C." },
+    ],
+    courses: [
+      { title: "Guia WCAG", url: "https://guia-wcag.com/", lang: "pt", note: "Critérios da WCAG explicados em português, com exemplos." },
+      { title: "W3C WAI: avaliar acessibilidade", url: "https://www.w3.org/WAI/test-evaluate/", lang: "en", note: "Guia oficial de como avaliar, do rápido ao completo." },
+      { title: "WAVE", url: "https://wave.webaim.org/", lang: "en", note: "Segunda opinião gratuita, com outra forma de mostrar os problemas." },
+    ],
+    videos: [
+      { title: "What is axe DevTools?", channel: "Deque Systems", lang: "en", youtubeId: "LUxS78U5SkI", kind: "video", official: true },
+      { title: "axe DevTools For Web overview", channel: "Deque Systems", lang: "en", youtubeId: "iiPRX_Zrvlc", kind: "video", official: true },
+      { title: "Quick Accessibility Audit with Axe DevTools", channel: "newline", lang: "en", youtubeId: "eksbiwCxikQ", kind: "video" },
+      { title: "Web Accessibility Audit: Testing with Lighthouse & axe DevTools", channel: "Udeme Emmanuel", lang: "en", youtubeId: "3MK1_XXY6BA", kind: "video" },
+    ],
+  },
+  {
+    slug: "owasp-zap",
+    name: "OWASP ZAP",
+    category: "risco",
+    tagline: "Proxy e scanner de segurança web, gratuito e open source.",
+    summary: "Fica entre o navegador e a aplicação, registra o tráfego e procura vulnerabilidades conhecidas (OWASP Top 10). Para QA, é a porta de entrada em testes de segurança. Use só em sistemas que você tem autorização para testar; o OWASP Juice Shop existe para treinar.",
+    qaFocus: ["Configurar o ZAP como proxy do navegador", "Spider e scan passivo antes do ativo", "Ler um alerta: risco, confiança e evidência", "Treinar no Juice Shop, nunca em sistema de terceiros"],
+    practice: { href: "/lab/ferramentas/seguranca", label: "Security Probe" },
+    docs: [
+      { title: "Getting started (ZAP)", url: "https://www.zaproxy.org/getting-started/", lang: "en", note: "Guia oficial de primeiros passos." },
+      { title: "Documentação do ZAP", url: "https://www.zaproxy.org/docs/", lang: "en", note: "Referência completa da ferramenta." },
+      { title: "OWASP Top 10", url: "https://owasp.org/www-project-top-ten/", lang: "en", note: "As categorias de risco que o ZAP procura." },
+    ],
+    courses: [
+      { title: "PortSwigger Web Security Academy", url: "https://portswigger.net/web-security", lang: "en", note: "Curso gratuito com laboratórios de cada vulnerabilidade." },
+      { title: "OWASP Juice Shop", url: "https://owasp.org/www-project-juice-shop/", lang: "en", note: "Aplicação vulnerável de propósito, para treinar com segurança." },
+    ],
+    videos: [
+      { title: "OWASP Zap, um Web Scanner open source – Código Seguro #027", channel: "Cássio Batista Pereira", lang: "pt", youtubeId: "GNjrrGKD6gY", kind: "video" },
+      { title: "Owasp Zap – Overview de Ferramentas de Testes", channel: "4ALL Tests", lang: "pt", youtubeId: "lmi_TiWiIGg", kind: "video" },
+      { title: "Getting Started with OWASP ZAP", channel: "Test Evolve", lang: "en", youtubeId: "ezxBkFhKXhw", kind: "video" },
+      { title: "OWASP ZAP Tutorial for Beginners", channel: "UnitK", lang: "en", youtubeId: "D2reRMTihVo", kind: "video" },
+    ],
+  },
+  {
+    slug: "jira",
+    name: "Jira",
+    category: "processo",
+    tagline: "Onde o time registra histórias, bugs e o andamento do trabalho.",
+    summary: "A ferramenta de gestão de trabalho mais comum nas vagas de QA. É nela que o bug report vive: título, passos, esperado, observado, evidência, severidade e o fluxo até ser validado. Saber escrever e filtrar no Jira é parte do trabalho diário.",
+    qaFocus: ["Criar um bug com passos, esperado, observado e evidência", "Fluxo do bug até Ready for QA e Done", "Board Kanban e Scrum: ler o andamento do time", "Filtros e JQL para achar o que mudou"],
+    practice: { href: "/lab/triagem", label: "Triagem de bugs" },
+    docs: [
+      { title: "Guias do Jira (em português)", url: "https://www.atlassian.com/br/software/jira/guides", lang: "pt", note: "Guia oficial, do básico às funções avançadas." },
+      { title: "Suporte do Jira Software Cloud", url: "https://support.atlassian.com/jira-software-cloud/", lang: "en", note: "Documentação de referência." },
+    ],
+    courses: [
+      { title: "Atlassian University", url: "https://university.atlassian.com/", lang: "en", note: "Cursos oficiais; a maioria das trilhas introdutórias é gratuita." },
+      { title: "Tutoriais de Agile da Atlassian", url: "https://www.atlassian.com/br/agile/tutorials", lang: "pt", note: "Scrum e Kanban na prática dentro do Jira, em português." },
+    ],
+    videos: [
+      { title: "Jira – Como criar um ticket do tipo Bug", channel: "QA hacks e dicas", lang: "pt", youtubeId: "Sfr1V7bno60", kind: "video" },
+      { title: "Jira – Bug life cycle – Ready for QA", channel: "QA hacks e dicas", lang: "pt", youtubeId: "rZCknk0wc-s", kind: "video" },
+      { title: "Jira Software Tutoriais em Português", channel: "ORafael Oficial", lang: "pt", youtubeId: "PL7yCYKrfBGNlyNzRdWPQb13stfzTr4zZo", kind: "playlist" },
+      { title: "Jira Tutorial for QA Testers", channel: "Jira Bro", lang: "en", youtubeId: "F1FcTI2VDeQ", kind: "video" },
+    ],
+  },
 ];
+
+// Curso da plataforma que ensina a mesma ferramenta. Mantido à parte para que um
+// curso novo seja uma linha aqui, sem tocar no texto de cada guia.
+const internalCourses: Record<string, ToolGuide["internalCourse"]> = {
+  playwright: { href: "/trilhas/playwright", title: "Trilha Playwright", detail: "Módulos com prática no Broto, entregável e código de exemplo." },
+  cypress: { href: "/trilhas/cypress", title: "Trilha Cypress", detail: "Módulos com prática no Broto, entregável e código de exemplo." },
+  selenium: { href: "/trilhas/appium-selenium", title: "Trilha Selenium e Appium", detail: "Automação web e mobile, com prática guiada." },
+  appium: { href: "/trilhas/appium-selenium", title: "Trilha Selenium e Appium", detail: "Automação web e mobile, com prática guiada." },
+  postman: { href: "/trilhas/testes-api/postman", title: "Subtrilha Postman", detail: "Collections, scripts de teste e execução com Newman." },
+  bruno: { href: "/trilhas/testes-api/bruno", title: "Subtrilha Bruno", detail: "Coleções locais, versionadas e executadas pela CLI." },
+  swagger: { href: "/trilhas/testes-api", title: "Trilha Testes de API", detail: "Fundamentos de contrato, risco e comportamento de API." },
+  pact: { href: "/trilhas/testes-api", title: "Trilha Testes de API", detail: "Fundamentos de contrato, antes de automatizar com Pact." },
+  k6: { href: "/trilhas/k6", title: "Trilha k6", detail: "Do primeiro script ao gate de performance, contra a API de treino." },
+  gherkin: { href: "/trilhas/gherkin", title: "Trilha Gherkin", detail: "Escrever cenários que produto, dev e QA entendem igual." },
+  sql: { href: "/trilhas/sql-qa", title: "SQL para QA", detail: "Consultas para conferir dados e preparar massa de teste." },
+  "github-actions": { href: "/trilhas/cicd", title: "Trilha CI/CD", detail: "Pipeline, gates de qualidade e leitura de falhas no CI." },
+};
+
+for (const guide of toolGuides) guide.internalCourse ??= internalCourses[guide.slug];
+
+// Guias sugeridos ao fim de cada módulo da mentoria (chave = id do módulo em path-v2).
+const moduleGuideSlugs: Record<string, readonly string[]> = {
+  "produto-risco": ["devtools", "jira"],
+  "desenho-comunicacao": ["gherkin", "jira", "qase"],
+  "automacao-web": ["playwright", "cypress", "selenium", "appium", "jest"],
+  "api-confiabilidade": ["postman", "bruno", "swagger", "pact", "sql", "owasp-zap"],
+  "cicd-operacao": ["git", "github-actions", "docker", "grafana"],
+  "acessibilidade-performance": ["axe", "lighthouse", "k6"],
+};
+
+export function guidesForModule(moduleId: string): ToolGuide[] {
+  return (moduleGuideSlugs[moduleId] ?? []).map((slug) => findToolGuide(slug)).filter((guide): guide is ToolGuide => Boolean(guide));
+}
 
 export function findToolGuide(slug: string) {
   return toolGuides.find((guide) => guide.slug === slug);

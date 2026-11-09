@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { toolGuideCategories, toolGuides } from "./tool-guides";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { mentorshipPathV2 } from "./mentorship/path-v2";
+import { findToolGuide, guidesForModule, toolGuideCategories, toolGuides } from "./tool-guides";
 
 describe("guias de ferramentas", () => {
   test("slugs são únicos e seguros para URL", () => {
@@ -20,6 +23,23 @@ describe("guias de ferramentas", () => {
     for (const video of toolGuides.flatMap((guide) => guide.videos)) {
       if (video.kind === "video") expect(video.youtubeId).toMatch(/^[A-Za-z0-9_-]{11}$/);
       else expect(video.youtubeId).toMatch(/^PL[A-Za-z0-9_-]+$/);
+    }
+  });
+
+  test("guias por módulo resolvem e apontam para módulos que existem", () => {
+    const moduleIds = new Set(mentorshipPathV2.map((item) => item.id));
+    for (const moduleId of moduleIds) {
+      for (const guide of guidesForModule(moduleId)) expect(findToolGuide(guide.slug)).toBe(guide);
+    }
+    const covered = [...moduleIds].flatMap((id) => guidesForModule(id).map((guide) => guide.slug));
+    expect(new Set(covered).size).toBe(toolGuides.length);
+  });
+
+  test("curso interno aponta para uma rota que existe no app", () => {
+    for (const guide of toolGuides) {
+      if (!guide.internalCourse) continue;
+      const dir = join(import.meta.dir, "..", "app", ...guide.internalCourse.href.split("/").filter(Boolean));
+      expect(existsSync(join(dir, "page.tsx"))).toBe(true);
     }
   });
 
