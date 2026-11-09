@@ -9,7 +9,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { AccountNav, signOutAndGoHome, useAccount } from "@/components/auth/account-nav";
-import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 type NavLink = { href: string; label: string; hint?: string; match: (path: string) => boolean };
@@ -94,9 +93,6 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1">
           <div className="hidden sm:block"><AccountNav account={account} /></div>
-          <Button asChild size="sm" className="ml-1 hidden h-10 px-4 lg:inline-flex">
-            <OnboardingLink>Começar a praticar</OnboardingLink>
-          </Button>
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild>
               <Button type="button" variant="ghost" size="icon" className="size-11 lg:hidden" aria-label="Abrir menu"><Menu className="size-5" /></Button>
@@ -125,7 +121,6 @@ export function SiteHeader() {
               </nav>
 
               <div className="mt-auto grid gap-2 border-t border-border pt-5">
-                <Button asChild className="h-11 w-full"><OnboardingLink onClick={close}>Começar a praticar</OnboardingLink></Button>
                 {account.authenticated ? <>
                   <p className="truncate px-1 pt-2 text-xs text-muted-foreground">{account.displayName || "Minha conta"}</p>
                   <Link href="/perfil" onClick={close} className="flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm hover:bg-accent"><UserRound className="size-4 text-muted-foreground" aria-hidden="true" />Meu perfil</Link>
