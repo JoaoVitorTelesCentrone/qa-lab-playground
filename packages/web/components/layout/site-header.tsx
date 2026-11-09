@@ -3,86 +3,134 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { FlaskConical, Linkedin, Menu } from "lucide-react";
+import { ChevronDown, FlaskConical, FolderOpen, LogOut, Menu, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { AccountNav } from "@/components/auth/account-nav";
+import { AccountNav, signOutAndGoHome, useAccount } from "@/components/auth/account-nav";
 import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
-const LINKEDIN_URL = "https://www.linkedin.com/company/qa-lab-oficial/";
+type NavLink = { href: string; label: string; hint?: string; match: (path: string) => boolean };
+
+const under = (...prefixes: string[]) => (path: string) => prefixes.some((p) => path === p || path.startsWith(`${p}/`));
+
+// Quatro escolhas no primeiro nível. Labs é o caminho principal e fica a um
+// clique; tudo que é "estudar" mora num grupo só, com uma linha explicando a
+// diferença entre os itens — antes eram sete links do mesmo peso.
+const LABS: NavLink = { href: "/labs", label: "Labs", match: under("/labs") };
+const STUDY: NavLink[] = [
+  { href: "/conteudo", label: "Conteúdo", hint: "Módulos e casos para estudar no seu ritmo", match: under("/conteudo") },
+  { href: "/trilhas", label: "Trilhas", hint: "Percursos guiados por tema e ferramenta", match: under("/trilhas") },
+  { href: "/blog", label: "Blog", hint: "Artigos sobre a rotina de quem testa", match: under("/blog") },
+  { href: "/pesquisa", label: "Referências", hint: "Pesquisas que embasam a prática", match: under("/pesquisa") },
+];
+const TOOLS: NavLink = { href: "/ferramentas", label: "Ferramentas", match: (p) => under("/ferramentas", "/boards")(p) || p === "/lab/bdd" };
+const MENTORSHIP: NavLink = { href: "/mentoria", label: "Mentoria", match: under("/mentoria") };
+
+// Item ativo: sublinhado na linha de base do header (DESIGN.md), não pílula.
+const topItem = (active: boolean) => cn(
+  "relative inline-flex h-11 items-center gap-1 px-3 text-sm font-medium transition-colors",
+  "after:absolute after:inset-x-3 after:-bottom-[11px] after:h-0.5 after:bg-primary after:transition-opacity",
+  active ? "text-foreground after:opacity-100" : "text-muted-foreground after:opacity-0 hover:text-foreground",
+);
+
+function StudyMenu({ pathname }: { pathname: string }) {
+  const [open, setOpen] = useState(false);
+  const active = STUDY.some((item) => item.match(pathname));
+  return <Popover open={open} onOpenChange={setOpen}>
+    <PopoverTrigger className={cn(topItem(active), "data-[state=open]:text-foreground")}>
+      Estudar<ChevronDown className="size-3.5 transition-transform data-[open=true]:rotate-180" data-open={open} aria-hidden="true" />
+    </PopoverTrigger>
+    <PopoverContent align="start" sideOffset={14} className="w-80 rounded-sm border-border bg-popover p-1.5">
+      <ul className="grid">
+        {STUDY.map((item) => {
+          const current = item.match(pathname);
+          return <li key={item.href}>
+            <Link href={item.href} onClick={() => setOpen(false)} aria-current={current ? "page" : undefined}
+              className={cn("grid gap-0.5 rounded-sm px-3 py-2.5 transition-colors hover:bg-accent focus-visible:bg-accent", current && "bg-accent")}>
+              <span className={cn("text-sm font-semibold", current ? "text-primary" : "text-foreground")}>{item.label}</span>
+              <span className="text-xs leading-5 text-muted-foreground">{item.hint}</span>
+            </Link>
+          </li>;
+        })}
+      </ul>
+    </PopoverContent>
+  </Popover>;
+}
+
+function MobileLink({ item, pathname, onNavigate }: { item: NavLink; pathname: string; onNavigate: () => void }) {
+  const current = item.match(pathname);
+  return <Link href={item.href} onClick={onNavigate} aria-current={current ? "page" : undefined}
+    className={cn("flex min-h-11 items-center justify-between rounded-sm px-3 text-base font-medium transition-colors hover:bg-accent", current ? "bg-accent text-primary" : "text-foreground")}>
+    {item.label}
+    {current && <span className="text-xs font-normal text-muted-foreground">Você está aqui</span>}
+  </Link>;
+}
 
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const [menuOpen, setMenuOpen] = useState(false);
-  const labActive = pathname === "/labs" || pathname.startsWith("/labs/");
-  const tracksActive = pathname === "/trilhas" || pathname.startsWith("/trilhas/");
-  const contentActive = pathname === "/conteudo" || pathname.startsWith("/conteudo/");
-  const blogActive = pathname === "/blog" || pathname.startsWith("/blog/");
-  const referencesActive = pathname === "/pesquisa" || pathname.startsWith("/pesquisa/");
-  const mentorshipActive = pathname.startsWith("/mentoria");
-  const toolsActive = pathname === "/ferramentas" || pathname === "/lab/bdd" || pathname === "/boards" || pathname.startsWith("/boards/");
+  const account = useAccount(isSupabaseConfigured());
+  const close = () => setMenuOpen(false);
 
   return (
-    <header className="qa-site-header sticky top-0 z-50 w-full px-4 py-3 sm:px-6 sm:py-4">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-full border border-border bg-card/95 py-2 pl-4 pr-2 shadow-lg backdrop-blur sm:pl-5 sm:pr-3">
-        <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="QA Lab — início">
-          <span className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground"><FlaskConical className="size-4" /></span>
-          <span className="text-lg font-semibold tracking-[-0.02em]">QA Lab</span>
-        </Link>
+    <header className="qa-site-header sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
+        <div className="flex min-w-0 items-center gap-6">
+          <Link href="/" className="flex h-11 shrink-0 items-center gap-2.5" aria-label="QA Lab, início">
+            <span className="flex size-8 items-center justify-center rounded-sm bg-primary text-primary-foreground"><FlaskConical className="size-4" aria-hidden="true" /></span>
+            <span className="text-lg font-semibold tracking-[-0.02em]">QA Lab</span>
+          </Link>
 
-        <nav className="hidden items-center gap-1 xl:flex" aria-label="Navegação principal">
-          <Link href="/labs" aria-current={labActive ? "page" : undefined} className={cn("rounded-full px-2.5 py-2 text-sm font-medium transition-colors", labActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
-            Labs
-          </Link>
-          <Link href="/trilhas" aria-current={tracksActive ? "page" : undefined} className={cn("rounded-full px-2.5 py-2 text-sm font-medium transition-colors", tracksActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
-            Trilhas
-          </Link>
-          <Link href="/mentoria" aria-current={mentorshipActive ? "page" : undefined} className={cn("rounded-full px-2.5 py-2 text-sm font-medium transition-colors", mentorshipActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
-            Mentoria
-          </Link>
-          <Link href="/conteudo" aria-current={contentActive ? "page" : undefined} className={cn("rounded-full px-2.5 py-2 text-sm font-medium transition-colors", contentActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
-            Conteúdo
-          </Link>
-          <Link href="/blog" aria-current={blogActive ? "page" : undefined} className={cn("rounded-full px-2.5 py-2 text-sm font-medium transition-colors", blogActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
-            Blog
-          </Link>
-          <Link href="/pesquisa" aria-current={referencesActive ? "page" : undefined} className={cn("rounded-full px-2.5 py-2 text-sm font-medium transition-colors", referencesActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
-            Referências
-          </Link>
-          <Link href="/ferramentas" aria-current={toolsActive ? "page" : undefined} className={cn("rounded-full px-2.5 py-2 text-sm font-medium transition-colors", toolsActive ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>Ferramentas</Link>
-        </nav>
+          <nav className="hidden items-center lg:flex" aria-label="Navegação principal">
+            <Link href={LABS.href} aria-current={LABS.match(pathname) ? "page" : undefined} className={topItem(LABS.match(pathname))}>{LABS.label}</Link>
+            <StudyMenu pathname={pathname} />
+            <Link href={TOOLS.href} aria-current={TOOLS.match(pathname) ? "page" : undefined} className={topItem(TOOLS.match(pathname))}>{TOOLS.label}</Link>
+            <Link href={MENTORSHIP.href} aria-current={MENTORSHIP.match(pathname) ? "page" : undefined} className={topItem(MENTORSHIP.match(pathname))}>{MENTORSHIP.label}</Link>
+          </nav>
+        </div>
 
-        <div className="flex items-center gap-1.5">
-          <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" aria-label="QA Lab no LinkedIn" className="hidden size-9 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-primary 2xl:inline-flex">
-            <Linkedin className="size-4" />
-          </a>
-          <AccountNav configured={isSupabaseConfigured()} />
-          <Button asChild size="sm" className="hidden rounded-full px-4 2xl:inline-flex">
+        <div className="flex items-center gap-1">
+          <div className="hidden sm:block"><AccountNav account={account} /></div>
+          <Button asChild size="sm" className="ml-1 hidden h-10 px-4 lg:inline-flex">
             <OnboardingLink>Começar a praticar</OnboardingLink>
           </Button>
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild>
-              <Button type="button" variant="ghost" size="icon" className="rounded-full xl:hidden" aria-label="Abrir menu"><Menu className="size-5" /></Button>
+              <Button type="button" variant="ghost" size="icon" className="size-11 lg:hidden" aria-label="Abrir menu"><Menu className="size-5" /></Button>
             </SheetTrigger>
-            <SheetContent side="right" className="qa-site-header-menu flex w-[300px] flex-col gap-4 overflow-y-auto p-6">
+            <SheetContent side="right" className="qa-site-header-menu flex w-[min(320px,88vw)] flex-col gap-6 overflow-y-auto p-5">
               <SheetTitle className="flex items-center gap-2.5">
-                <span className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground"><FlaskConical className="size-4" /></span>
+                <span className="flex size-8 items-center justify-center rounded-sm bg-primary text-primary-foreground"><FlaskConical className="size-4" aria-hidden="true" /></span>
                 <span className="text-lg font-semibold">QA Lab</span>
               </SheetTitle>
-              <SheetDescription className="sr-only">Acesse as páginas e ferramentas do QA Lab.</SheetDescription>
-              <Link href="/labs" onClick={() => setMenuOpen(false)} aria-current={labActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Labs</Link>
-              <Link href="/trilhas" onClick={() => setMenuOpen(false)} aria-current={tracksActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Trilhas</Link>
-              <Link href="/mentoria" onClick={() => setMenuOpen(false)} className="text-base font-medium hover:text-primary">Mentoria</Link>
-              <Link href="/conteudo" onClick={() => setMenuOpen(false)} aria-current={contentActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Conteúdo</Link>
-              <Link href="/blog" onClick={() => setMenuOpen(false)} aria-current={blogActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Blog</Link>
-              <Link href="/pesquisa" onClick={() => setMenuOpen(false)} aria-current={referencesActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Referências</Link>
-              <Link href="/ferramentas" onClick={() => setMenuOpen(false)} aria-current={toolsActive ? "page" : undefined} className="text-base font-medium hover:text-primary">Ferramentas</Link>
-              <div className="mt-auto flex flex-col gap-2">
-                <Button asChild variant="outline" className="w-full rounded-full"><Link href="/login" onClick={() => setMenuOpen(false)}>Entrar na minha conta</Link></Button>
-                <Button asChild className="w-full rounded-full"><OnboardingLink onClick={() => setMenuOpen(false)}>Começar a praticar</OnboardingLink></Button>
-                <Button asChild variant="ghost" className="w-full rounded-full"><a href={LINKEDIN_URL} target="_blank" rel="noreferrer"><Linkedin className="size-4" /> LinkedIn do QA Lab</a></Button>
+              <SheetDescription className="sr-only">Páginas do QA Lab e da sua conta.</SheetDescription>
+
+              <nav aria-label="Navegação principal" className="grid gap-5">
+                <div className="grid gap-1">
+                  <p className="px-3 text-xs font-semibold text-muted-foreground">Praticar</p>
+                  <MobileLink item={LABS} pathname={pathname} onNavigate={close} />
+                  <MobileLink item={TOOLS} pathname={pathname} onNavigate={close} />
+                </div>
+                <div className="grid gap-1">
+                  <p className="px-3 text-xs font-semibold text-muted-foreground">Estudar</p>
+                  {STUDY.map((item) => <MobileLink key={item.href} item={item} pathname={pathname} onNavigate={close} />)}
+                </div>
+                <div className="grid gap-1">
+                  <MobileLink item={MENTORSHIP} pathname={pathname} onNavigate={close} />
+                </div>
+              </nav>
+
+              <div className="mt-auto grid gap-2 border-t border-border pt-5">
+                <Button asChild className="h-11 w-full"><OnboardingLink onClick={close}>Começar a praticar</OnboardingLink></Button>
+                {account.authenticated ? <>
+                  <p className="truncate px-1 pt-2 text-xs text-muted-foreground">{account.displayName || "Minha conta"}</p>
+                  <Link href="/perfil" onClick={close} className="flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm hover:bg-accent"><UserRound className="size-4 text-muted-foreground" aria-hidden="true" />Meu perfil</Link>
+                  <Link href="/perfil/portfolio" onClick={close} className="flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm hover:bg-accent"><FolderOpen className="size-4 text-muted-foreground" aria-hidden="true" />Portfólio</Link>
+                  <button type="button" onClick={() => void signOutAndGoHome()} className="flex min-h-11 items-center gap-3 rounded-sm px-3 text-left text-sm hover:bg-accent"><LogOut className="size-4 text-muted-foreground" aria-hidden="true" />Sair</button>
+                </> : <Button asChild variant="outline" className="h-11 w-full"><Link href="/login" onClick={close}>Entrar na minha conta</Link></Button>}
               </div>
             </SheetContent>
           </Sheet>

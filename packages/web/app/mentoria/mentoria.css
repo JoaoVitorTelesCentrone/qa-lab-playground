@@ -250,3 +250,7 @@
   .mentoria-lab-visual, .mentoria-broto-screen, .mentoria-steps::after { animation: none; }
   .mentoria-text-link { transition: color .15s ease; }
 }
+
+.mentoria-faq { max-width: 1152px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 62px) 100px; }
+.mentoria-faq h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
+@media (max-width: 700px) { .mentoria-faq { padding: 0 24px 75px; } }

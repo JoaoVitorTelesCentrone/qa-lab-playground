@@ -1,99 +1,91 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowDownRight, ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowDownRight, ArrowRight, Check } from "lucide-react";
 import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
-import { brotoSpaceSite } from "@/lib/mentorship/brotospace-track";
+import { labs, labLabel } from "@/lib/playground/catalog";
 import { HomeHeroScreens } from "./home-hero-screens";
 import { HomeReveal } from "./home-reveal";
 import { HomeInvestigationDemo } from "./home-investigation-demo";
 
-const surfaces = [
-  {
-    title: "Mente",
-    src: "/mentoria/broto-mente.webp",
-    alt: "Tela Mente do BrotoSpace com registros de demonstração.",
-    note: "Capturar e revisitar uma ideia",
-    className: "qa-home-shot-mente",
-  },
-  {
-    title: "Desafios",
-    src: "/mentoria/broto-desafio.webp",
-    alt: "Tela Desafios do BrotoSpace com um desafio de demonstração.",
-    note: "Relacionar uma ideia a um desafio",
-    className: "qa-home-shot-desafios",
-  },
-  {
-    title: "Hábitos",
-    src: "/mentoria/broto-habitos.webp",
-    alt: "Tela Hábitos do BrotoSpace com hábitos de demonstração.",
-    note: "Observar a continuidade de uma ação",
-    className: "qa-home-shot-habitos",
-  },
-];
-
-const practiceSteps = [
-  { title: "Comece pela pergunta.", text: "O que a pessoa precisa conseguir fazer? Defina o resultado antes de abrir a tela." },
-  { title: "Acompanhe a mesma ideia.", text: "Percorra o caminho no BrotoSpace e observe o que muda quando você sai e volta." },
-  { title: "Compare com o esperado.", text: "Coloque lado a lado o resultado previsto e o que realmente encontrou." },
-  { title: "Explique o que ocorreu.", text: "Registre os passos, o resultado e a evidência para outra pessoa entender." },
+// A home vende o QA Lab: missão → investigação → evidência. O BrotoSpace
+// aparece como o sistema que a pessoa vai testar, nunca como o produto, e
+// todos os CTAs levam para dentro do site.
+const steps = [
+  { title: "Receba uma missão.", text: "Cada Lab traz um objetivo, dados de treino e os critérios da entrega. Você sabe o que procurar antes de abrir o sistema." },
+  { title: "Investigue o sistema.", text: "Teste o BrotoSpace, um produto real, ou os ambientes de prática do QA Lab, que têm falhas plantadas de propósito. Compare o esperado com o que acontece." },
+  { title: "Entregue a evidência.", text: "Registre os passos, o resultado observado e a severidade. A entrega fica na sua conta e pode virar um case no seu portfólio, se você quiser." },
 ];
 
 const routes = [
-  { href: "/labs", title: "Labs", text: "Abra um caso de treino e pratique uma investigação do início ao fim." },
-  { href: "/trilhas", title: "Trilhas", text: "Siga uma sequência de práticas no contexto do BrotoSpace." },
-  { href: "/conteudo", title: "Conteúdo", text: "Leia explicações e exemplos para apoiar sua próxima investigação." },
+  { href: "/labs", title: "Labs", text: "Escolha uma missão e pratique uma investigação do início ao fim." },
+  { href: "/conteudo", title: "Conteúdo", text: "Módulos e casos para estudar antes ou depois de uma prática." },
+  { href: "/trilhas", title: "Trilhas", text: "Percursos guiados por tema e ferramenta, como Cypress e Playwright." },
 ];
 
+const difficultyLabel: Record<string, string> = { iniciante: "Iniciante", intermediario: "Intermediário", avancado: "Avançado" };
+
 export function ProductHome() {
+  const firstLab = labs.find((lab) => lab.status === "liberado");
+  const firstLabHref = firstLab ? `/labs/${firstLab.number}` : "/labs";
+  const firstLabName = firstLab ? `Lab ${labLabel(firstLab)}` : "primeiro Lab";
+
   return <div className="qa-home">
     <main className="mx-auto max-w-[1360px] px-5 pb-20 sm:px-8 lg:px-12">
       <HomeReveal><section data-onboarding="home-intro" className="qa-home-hero" aria-labelledby="home-title">
         <div className="qa-home-hero-copy">
-          <h1 id="home-title">Aprenda QA no BrotoSpace.</h1>
-          <p>O QA Lab ensina testes de software com práticas guiadas nos espaços Mente, Desafios e Hábitos do BrotoSpace.</p>
+          <h1 id="home-title">Aprenda QA na prática.</h1>
+          <p>Teste sistemas, investigue falhas e transforme suas descobertas em evidências que você pode mostrar.</p>
           <div className="qa-home-actions">
             <OnboardingLink data-onboarding="home-cta" className="qa-home-primary">Começar a praticar <ArrowRight aria-hidden="true" /></OnboardingLink>
-            <a className="qa-home-secondary" href={brotoSpaceSite.url} target="_blank" rel="noreferrer">Abrir o BrotoSpace <ExternalLink aria-hidden="true" /></a>
+            <Link className="qa-home-secondary" href="/labs">Ver os Labs</Link>
           </div>
+          {firstLab && <p className="qa-home-facts">
+            <span>Primeira missão: {firstLabName}</span>
+            <span>{firstLab.minutes} min</span>
+            <span>{difficultyLabel[firstLab.difficulty] ?? firstLab.difficulty}</span>
+            <span>Explore sem criar conta</span>
+          </p>}
         </div>
         <HomeHeroScreens />
         <a className="qa-home-scroll" href="#como-funciona"><ArrowDownRight aria-hidden="true" /> Veja como funciona</a>
       </section></HomeReveal>
 
-      <HomeReveal><section className="qa-home-showcase" aria-labelledby="home-showcase-title">
-        <div className="qa-home-section-heading">
-          <h2 id="home-showcase-title">Investigue jornadas reais.</h2>
-          <p>Use o BrotoSpace como contexto para observar uma jornada, levantar perguntas e reunir evidências. Os exemplos abaixo usam dados de demonstração.</p>
-        </div>
-        <div className="qa-home-mosaic">
-          {surfaces.map((surface) => <figure className={`qa-home-mosaic-item ${surface.className}`} key={surface.title}>
-            <div className="qa-home-mosaic-image"><Image src={surface.src} alt={surface.alt} fill sizes="(max-width: 700px) 48vw, 33vw" /></div>
-            <figcaption><strong>{surface.title}</strong><span>{surface.note}</span></figcaption>
-          </figure>)}
-          <div className="qa-home-mosaic-note"><p>Siga a jornada. Registre o que encontrou.</p></div>
-        </div>
-      </section></HomeReveal>
-
-      <HomeReveal><section id="como-funciona" className="qa-home-investigation" aria-labelledby="home-process-title">
-        <div className="qa-home-section-heading">
-          <h2 id="home-process-title">Uma ideia. Duas visitas.</h2>
-          <p>Faça uma pergunta antes de concluir. Neste exemplo, acompanhe um registro fictício e decida o que observar ao voltar.</p>
-        </div>
-        <HomeInvestigationDemo />
-      </section></HomeReveal>
-
-      <HomeReveal><section className="qa-home-method" aria-labelledby="home-method-title">
+      <HomeReveal><section id="como-funciona" className="qa-home-method" aria-labelledby="home-method-title">
         <div className="qa-home-method-intro">
-          <h2 id="home-method-title">Investigue com clareza.</h2>
-          <p>Uma boa investigação deixa claro o que você fez, o que esperava e o que encontrou.</p>
+          <h2 id="home-method-title">Da missão à evidência.</h2>
+          <p>Todo Lab segue o mesmo percurso. No fim, você tem uma entrega que outra pessoa consegue entender e verificar.</p>
         </div>
         <ol className="qa-home-steps">
-          {practiceSteps.map((step, index) => <li key={step.title}>
-            <span className="qa-home-step-number">{index + 1}</span>
+          {steps.map((step, index) => <li key={step.title}>
+            <span className="qa-home-step-number" aria-hidden="true">{index + 1}</span>
             <div><h3>{step.title}</h3><p>{step.text}</p></div>
           </li>)}
         </ol>
       </section></HomeReveal>
+
+      <HomeReveal><section className="qa-home-investigation" aria-labelledby="home-process-title">
+        <div className="qa-home-section-heading">
+          <h2 id="home-process-title">Pergunte antes de concluir.</h2>
+          <p>Um bom teste começa por uma pergunta clara. Este exemplo fictício mostra o raciocínio do {firstLabName}.</p>
+        </div>
+        <HomeInvestigationDemo />
+      </section></HomeReveal>
+
+      {firstLab && <HomeReveal><section className="qa-home-evidence" aria-labelledby="home-evidence-title">
+        <div className="qa-home-section-heading">
+          <h2 id="home-evidence-title">Termine com algo para mostrar.</h2>
+          <p>Cada entrega é conferida por critérios explícitos. Ao concluir, você pode publicá-la como case no seu portfólio e compartilhar o link com quem for avaliar seu trabalho.</p>
+        </div>
+        <div className="qa-home-sheet">
+          <div className="qa-home-sheet-head">
+            <span>Ficha de entrega · {firstLabName}</span>
+            <strong>{firstLab.title}</strong>
+          </div>
+          <p className="qa-home-sheet-label">Critérios para a entrega ser aceita</p>
+          <ul>
+            {firstLab.acceptanceCriteria.map((criterion) => <li key={criterion}><Check aria-hidden="true" />{criterion}</li>)}
+          </ul>
+        </div>
+      </section></HomeReveal>}
 
       <HomeReveal><nav className="qa-home-routes" aria-labelledby="home-routes-title">
         <div className="qa-home-section-heading">
@@ -106,8 +98,11 @@ export function ProductHome() {
       </nav></HomeReveal>
 
       <HomeReveal><section className="qa-home-closing" aria-labelledby="home-closing-title">
-        <div><h2 id="home-closing-title">Explore o BrotoSpace.</h2><p>Escolha uma jornada para investigar com atenção.</p></div>
-        <a href={brotoSpaceSite.url} target="_blank" rel="noreferrer">Visitar o BrotoSpace <ExternalLink aria-hidden="true" /></a>
+        <div>
+          <h2 id="home-closing-title">Comece pelo {firstLabName}.</h2>
+          <p>{firstLab ? `${firstLab.title}. Leva cerca de ${firstLab.minutes} minutos, e você só precisa de conta para salvar a entrega.` : "Escolha uma missão e comece a investigar."}</p>
+        </div>
+        <Link href={firstLabHref}>Abrir o {firstLabName} <ArrowRight aria-hidden="true" /></Link>
       </section></HomeReveal>
     </main>
   </div>;

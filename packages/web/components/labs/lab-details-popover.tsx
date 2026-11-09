@@ -48,7 +48,7 @@ export function LabDetailsPopover({ lab, testData }: { lab: Lab; testData?: stri
         align="start"
         sideOffset={12}
         collisionPadding={12}
-        className="max-h-[var(--radix-popover-content-available-height)] w-[calc(100vw-32px)] max-w-[420px] overflow-y-auto rounded-2xl p-5"
+        className="max-h-[var(--radix-popover-content-available-height)] w-[calc(100vw-32px)] max-w-[420px] overflow-y-auto rounded-md p-5"
       >
         <div className="flex flex-col gap-5">
           <div className="flex items-end justify-between px-1">

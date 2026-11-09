@@ -27,7 +27,7 @@ const practiceFeatures = [
   ["Agendamentos", "Conflito de horario", "/agendamentos#nova-reserva", "Tente 10:00 de 18/08/2026, ja ocupado por Ana Costa, e o mesmo horario em 25/08/2026, livre.", "agendamentos.conflito-permitido"],
   ["Agendamentos", "Reagendamento", "/agendamentos#agenda", "Mova Bruno Dias de 14:00 para 15:00 no mesmo dia e confira a grade antes e depois.", "agendamentos.conflito-permitido"],
   ["Agendamentos", "Cancelamento e liberacao do horario", "/agendamentos#por-dia", "Cancele Ana Costa e tente agendar outro cliente no horario liberado.", "agendamentos.cancelado-ocupa-horario"],
-  ["Agendamentos", "Atendimento fora da faixa configurada", "/agendamentos#disponibilidade", "Tente agendar as 20:00 e em um domingo, que nao tem faixa configurada.", ""],
+  ["Agendamentos", "Atendimento fora da faixa configurada", "/agendamentos#disponibilidade", "Tente agendar às 20:00 e em um domingo, que não tem faixa configurada.", ""],
   ["CRM", "Funil e valor do pipeline", "/crm#funil", "Cinco oportunidades no seed, somando 194.000 sem a perdida (consultoria pontual, 12.000).", "crm.pipeline-soma-perdidos"],
   ["CRM", "Mudanca de estagio de oportunidade", "/crm#funil", "Mova o piloto de automacao (18.000) de Novo ate Ganho e depois marque outra como Perdido.", "crm.pipeline-soma-perdidos"],
   ["CRM", "Busca de contatos", "/crm#contatos", "Contatos do seed: Marina Costa, Antonio Ribeiro (com acento no cadastro) e Pedro Lima.", "crm.busca-ignora-acentos"],
@@ -57,7 +57,7 @@ function practiceHint(route: string, bugId: string) {
   if (!bug) {
     // Sortear usa 50% por desvio, entao pode nao ligar nada: prometer sorteio
     // aqui faria o aluno validar contra um ambiente limpo achando que nao.
-    return `Este ponto nao tem desvio proprio: use "Restaurar massa" na barra do ambiente e valide contra o seed. Se for sortear, confira antes quantos desvios ficaram ativos — o sorteio pode nao ligar nenhum.`;
+    return `Este ponto não tem desvio próprio: use "Restaurar massa" na barra do ambiente e valide contra o seed. Se for sortear, confira antes quantos desvios ficaram ativos — o sorteio pode não ligar nenhum.`;
   }
 
   return `${setup} e marque "${bug.title}" (severidade ${bug.severity}). Com ele ligado o sintoma e: ${bug.symptom} Compare com o comportamento correto e use "Restaurar massa" para voltar ao seed antes de cada rodada.`;
@@ -162,30 +162,30 @@ export const systemChallenges: SystemChallenge[] = allFeatures.flatMap(({ area, 
       // Os ambientes novos entram por fora da escala da loja: validar o fluxo e
       // basico, investigar o mesmo ponto e um degrau acima.
       difficulty: sample ? (flow ? "Basico" : "Intermediario") : feature <= 15 ? "Basico" : feature <= 35 ? "Intermediario" : "Avancado",
-      objective: flow ? `Produzir evidencia de que ${title.toLowerCase()} atende ao comportamento esperado.` : `Investigar um risco real em ${title.toLowerCase()} e registrar um bug reproduzivel ou uma conclusao justificada.`,
+      objective: flow ? `Produzir evidência de que ${title.toLowerCase()} atende ao comportamento esperado.` : `Investigar um risco real em ${title.toLowerCase()} e registrar um bug reproduzível ou uma conclusão justificada.`,
       testData: flow
-        ? sample || "Usuario: standard_user · senha: qa_lab_secret · CEP: 01310-100 · cupom: QA10."
-        : `${sample ? `${sample} ` : ""}Use valor vazio, limite (0 / 999999), caractere especial, recarregamento e navegacao por teclado.`,
-      expected: flow ? "O fluxo deve informar o resultado, preservar dados quando aplicavel e manter foco/feedback acessivel." : "A aplicacao deve bloquear entradas invalidas, explicar a falha e nao corromper estado ou calculos.",
+        ? sample || "Usuário: standard_user · senha: qa_lab_secret · CEP: 01310-100 · cupom: QA10."
+        : `${sample ? `${sample} ` : ""}Use valor vazio, limite (0 / 999999), caractere especial, recarregamento e navegação por teclado.`,
+      expected: flow ? "O fluxo deve informar o resultado, preservar dados quando aplicável e manter foco e feedback acessíveis." : "A aplicação deve bloquear entradas inválidas, explicar a falha e não corromper estado ou cálculos.",
       steps: flow ? [
-        `Abra ${title.toLowerCase()} pela superficie indicada e registre a pre-condicao.`,
+        `Abra ${title.toLowerCase()} pela superfície indicada e registre a pré-condição.`,
         "Execute o caminho principal usando os dados de teste fornecidos.",
-        "Valide valor exibido, persistencia apos recarregar e mensagem para leitor de tela (aria-live).",
-        "Colete resultado obtido e anote se ele corresponde ao oraculo.",
+        "Valide o valor exibido, a persistência após recarregar e a mensagem para leitor de tela (aria-live).",
+        "Colete resultado obtido e anote se ele corresponde ao oráculo.",
       ] : [
         `Mapeie o comportamento normal de ${title.toLowerCase()} antes de tentar falhar.`,
-        "Aplique uma variacao invalida e uma variacao de limite; repita usando somente teclado.",
-        "Recarregue a pagina no meio do fluxo e compare estado, valor e mensagem.",
-        "Registre passos minimos de reproducao, impacto, severidade e evidencia.",
+        "Aplique uma variação inválida e uma variação de limite; repita usando somente teclado.",
+        "Recarregue a página no meio do fluxo e compare estado, valor e mensagem.",
+        "Registre passos mínimos de reprodução, impacto, severidade e evidência.",
       ],
-      acceptance: flow ? ["Passos reproduziveis", "Resultado obtido comparado ao esperado", "Evidencia com valor ou mensagem exibida"] : ["Passos minimos para reproduzir", "Impacto e severidade justificados", "Resultado esperado e real claramente separados"],
+      acceptance: flow ? ["Passos reproduzíveis", "Resultado obtido comparado ao esperado", "Evidência com valor ou mensagem exibida"] : ["Passos mínimos para reproduzir", "Impacto e severidade justificados", "Resultado esperado e real claramente separados"],
       plantedBug: flow
         ? sample
           ? practiceHint(route, bugId)
-          : "Ative /shop/checkout?bug=wrong-total ao testar calculos relacionados; para os demais, valide tambem foco e persistencia."
+          : "Ative /shop/checkout?bug=wrong-total ao testar cálculos relacionados; para os demais, valide também foco e persistência."
         // Modo investigacao nao nomeia o desvio: entregar o sintoma aqui mataria
         // o exercicio, que e justamente descobrir o que esta errado.
-        : `Procure inconsistencias de validacao, estado apos recarregar, feedback acessivel e fronteiras em ${title.toLowerCase()}.`,
+        : `Procure inconsistências de validação, estado após recarregar, feedback acessivel e fronteiras em ${title.toLowerCase()}.`,
     };
   });
 });

@@ -20,6 +20,14 @@ const steps = [
   { icon: ClipboardCheck, title: "Apresente", detail: "Defenda a decisão" },
 ] as const;
 
+const faq = [
+  { q: "Para quem é a mentoria?", a: "Para pessoas iniciantes e intermediárias em QA. Iniciantes constroem fundamentos e a primeira evidência de trabalho; intermediárias aprofundam estratégia, automação, CI/CD e comunicação. O mesmo caso aceita profundidades diferentes para cada nível." },
+  { q: "Como é uma semana?", a: "Você estuda o conteúdo técnico gravado no seu ritmo, pratica nos ambientes do QA Lab e faz uma entrega. O mentor dá feedback e você pode reenviar. Uma vez por semana há um encontro ao vivo sobre comunicação, autonomia, carreira e entrevistas." },
+  { q: "O que eu tenho no fim?", a: "Cases revisados por mentor que mostram como você testa e decide, prontos para o seu portfólio, se você escolher publicá-los." },
+  { q: "A mentoria garante uma vaga?", a: "Não. Nenhum programa pode garantir uma contratação. A mentoria ajuda você a ter o que mostrar e a explicar seu trabalho com clareza numa entrevista." },
+  { q: "Preciso do QA Lab Pro para participar?", a: "Não. A mentoria é uma oferta separada do QA Lab Pro." },
+];
+
 export default async function MentorshipLandingPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const query = await searchParams;
   const first = (value: string | string[] | undefined) => Array.isArray(value) ? value[0] : value;
@@ -93,10 +101,22 @@ export default async function MentorshipLandingPage({ searchParams }: { searchPa
           <h3>{openOffer.title}</h3>
           <p>{openOffer.summary}</p>
           <div className="mentoria-offer-details"><strong>{new Intl.NumberFormat("pt-BR", { style: "currency", currency: openOffer.currency }).format(openOffer.price)}</strong><span>{openOffer.cohort.name} · início {new Date(`${openOffer.cohort.starts_on}T12:00:00`).toLocaleDateString("pt-BR")} · {Math.max(0, openOffer.cohort.capacity - openOffer.occupied)} vagas</span></div>
-          <dl className="mt-5 grid gap-3 border-t border-white/10 pt-4 text-sm leading-6 sm:grid-cols-2"><div><dt className="font-bold text-off-white">Formato</dt><dd className="text-[#AAB2BC]">{openOffer.delivery_format}</dd></div><div><dt className="font-bold text-off-white">Ritmo semanal</dt><dd className="text-[#AAB2BC]">{openOffer.weekly_rhythm}</dd></div><div><dt className="font-bold text-off-white">Gravações</dt><dd className="text-[#AAB2BC]">{openOffer.recordings_policy}</dd></div><div><dt className="font-bold text-off-white">Resposta do suporte</dt><dd className="text-[#AAB2BC]">Em até {openOffer.support_response_hours} horas</dd></div><div className="sm:col-span-2"><dt className="font-bold text-off-white">Resultado esperado</dt><dd className="text-[#AAB2BC]">{openOffer.expected_outcome}</dd></div></dl>
+          <dl className="mt-5 grid gap-3 border-t border-border pt-4 text-sm leading-6 sm:grid-cols-2"><div><dt className="font-bold text-foreground">Formato</dt><dd className="text-muted-foreground">{openOffer.delivery_format}</dd></div><div><dt className="font-bold text-foreground">Ritmo semanal</dt><dd className="text-muted-foreground">{openOffer.weekly_rhythm}</dd></div><div><dt className="font-bold text-foreground">Gravações</dt><dd className="text-muted-foreground">{openOffer.recordings_policy}</dd></div><div><dt className="font-bold text-foreground">Resposta do suporte</dt><dd className="text-muted-foreground">Em até {openOffer.support_response_hours} horas</dd></div><div className="sm:col-span-2"><dt className="font-bold text-foreground">Resultado esperado</dt><dd className="text-muted-foreground">{openOffer.expected_outcome}</dd></div></dl>
           <Button asChild><Link href={enrollmentHref}>Ver condições e se inscrever <ArrowRight aria-hidden="true" className="size-4" /></Link></Button>
         </article> : offers.length === 0 ? <div className="mentoria-waitlist"><span className="mentoria-status"><span /> Próxima turma</span><h3>Inscrições em breve.</h3><p>Datas, vagas e valores serão divulgados aqui.</p><Button asChild className="mt-6"><Link href={waitlistHref}>Entrar na lista <ArrowRight aria-hidden="true" className="size-4" /></Link></Button></div> : <p className="mentoria-closed">As inscrições das turmas publicadas estão fechadas. <Link href={waitlistHref} className="font-bold text-mint underline">Entre na lista</Link> para receber novidades.</p>}
         {offers.filter((offer) => !isOfferOpen(offer)).map((offer) => <article key={offer.id} className="mentoria-past-offer"><h3>{offer.cohort.name}</h3><p>{offer.occupied >= offer.cohort.capacity ? "Turma completa" : "Inscrições fechadas"}</p></article>)}
+      </div>
+    </section>
+
+    {/* Só o que o programa já define (PRODUCT.md). Preço, datas e vagas vêm da
+        oferta publicada; nada aqui promete resultado de carreira. */}
+    <section className="mentoria-faq" aria-labelledby="faq-title">
+      <h2 id="faq-title">Perguntas frequentes</h2>
+      <div className="mt-6 divide-y divide-border border-y border-border">
+        {faq.map((item) => <details key={item.q} className="group">
+          <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-base font-semibold">{item.q}<span aria-hidden="true" className="text-xl text-muted-foreground transition-transform group-open:rotate-45">+</span></summary>
+          <p className="max-w-2xl pb-5 text-sm leading-6 text-muted-foreground">{item.a}</p>
+        </details>)}
       </div>
     </section>
   </main>;

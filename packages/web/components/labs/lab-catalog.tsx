@@ -86,7 +86,7 @@ function LabMeta({ lab }: { lab: Lab }) {
 }
 
 function FeaturedLab({ lab, status }: { lab: Lab; status?: LabProgress["status"] }) {
-  return <article data-onboarding={`lab-${lab.number}`} className="mt-4 grid overflow-hidden rounded-xl bg-card md:grid-cols-[minmax(0,1fr)_minmax(220px,34%)]">
+  return <article data-onboarding={`lab-${lab.number}`} className="mt-4 grid overflow-hidden rounded-md bg-card md:grid-cols-[minmax(0,1fr)_minmax(220px,34%)]">
     <div className="flex flex-col p-6 sm:p-8 lg:p-10">
       <div className="flex flex-wrap items-center gap-3"><span className="font-mono text-sm text-primary">LAB {labLabel(lab)}</span><Status status={status} /></div>
       <h3 className="mt-5 max-w-xl text-2xl font-semibold leading-tight tracking-[-0.025em] sm:text-3xl">{lab.title}</h3>
@@ -96,12 +96,12 @@ function FeaturedLab({ lab, status }: { lab: Lab; status?: LabProgress["status"]
         {status === "started" ? "Continuar Lab" : status === "completed" ? "Revisitar Lab" : "Abrir missão"} <ArrowRight className="size-4" aria-hidden="true" />
       </Link>
     </div>
-    <div className="hidden flex-col justify-between border-t border-border bg-[#1B2520] p-6 sm:p-8 md:flex md:border-l md:border-t-0">
+    <div className="hidden flex-col justify-between border-t border-border bg-secondary p-6 sm:p-8 md:flex md:border-l md:border-t-0">
       <p className="text-sm font-medium text-primary">O que você vai entregar</p>
       <p className="mt-3 text-lg leading-7 text-foreground">{lab.delivery}</p>
       <div className="mt-8 flex items-center justify-between gap-3 border-t border-white/10 pt-5 text-sm text-muted-foreground"><span>{lab.requiredFeature}</span><LabDetailsPopover lab={lab} testData={systemChallenges.find((item) => item.id === lab.slug)?.testData} /></div>
     </div>
-    <details className="border-t border-border bg-[#1B2520] px-6 py-3 md:hidden">
+    <details className="border-t border-border bg-secondary px-6 py-3 md:hidden">
       <summary className="min-h-11 cursor-pointer content-center text-sm font-medium text-primary">O que você vai entregar</summary>
       <p className="pb-2 text-sm leading-6 text-foreground">{lab.delivery}</p>
       <div className="flex items-center justify-between gap-3 border-t border-white/10 pt-3 text-xs text-muted-foreground"><span>{lab.requiredFeature}</span><LabDetailsPopover lab={lab} testData={systemChallenges.find((item) => item.id === lab.slug)?.testData} /></div>

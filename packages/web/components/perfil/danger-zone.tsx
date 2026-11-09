@@ -21,7 +21,7 @@ export function DangerZone({ onDelete }: { onDelete: () => Promise<string | null
   }
 
   return (
-    <section className="rounded-xl border border-destructive/25 bg-destructive/[0.035] p-5 sm:p-6" aria-labelledby="perigo-title">
+    <section className="rounded-md border border-destructive/25 bg-destructive/[0.035] p-5 sm:p-6" aria-labelledby="perigo-title">
       <div className="flex items-center gap-2.5">
         <TriangleAlert className="size-4 text-destructive" aria-hidden="true" />
         <h2 id="perigo-title" className="text-base font-semibold">Excluir conta</h2>

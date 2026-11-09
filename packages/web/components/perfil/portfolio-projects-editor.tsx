@@ -61,7 +61,7 @@ export function PortfolioProjectsEditor({ projects, submissions, username, portf
     }
   }
 
-  return <section className="rounded-xl border border-border bg-card p-5 sm:p-6" aria-labelledby="portfolio-projects-title">
+  return <section className="rounded-md border border-border bg-card p-5 sm:p-6" aria-labelledby="portfolio-projects-title">
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="flex items-center gap-2.5"><BriefcaseBusiness className="size-4 text-primary" aria-hidden="true" /><h2 id="portfolio-projects-title" className="text-base font-semibold">Projetos do portfólio</h2></div>
       {!creating && <Button type="button" size="sm" variant="outline" onClick={() => setCreating(true)}><Plus className="size-3.5" /> Novo projeto</Button>}

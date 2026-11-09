@@ -2,13 +2,17 @@ import { expect, test } from "@playwright/test";
 
 test("@smoke apresenta o QA Lab e os caminhos de prática", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Aprenda QA no BrotoSpace.", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Começar a praticar", exact: true })).toHaveAttribute("href", "/comecar");
-  await expect(page.getByRole("link", { name: "Abrir o BrotoSpace", exact: true })).toHaveAttribute("href", "https://www.brotospace.com/");
+  await expect(page.getByRole("heading", { name: "Aprenda QA na prática.", exact: true })).toBeVisible();
+  const main = page.locator("main");
+  await expect(main.getByRole("link", { name: "Começar a praticar", exact: true })).toHaveAttribute("href", "/comecar");
+  await expect(main.getByRole("link", { name: "Ver os Labs", exact: true })).toHaveAttribute("href", "/labs");
+  // A home não manda o visitante para fora do QA Lab.
+  await expect(main.locator("a[target=_blank]")).toHaveCount(0);
+  await expect(main.getByRole("link", { name: /^Abrir o Lab 01/ })).toHaveAttribute("href", "/labs/101");
 
   await page.getByRole("link", { name: "Veja como funciona", exact: true }).click();
   await expect(page).toHaveURL(/#como-funciona$/);
-  await expect(page.getByRole("heading", { name: "Uma ideia. Duas visitas.", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Da missão à evidência.", exact: true })).toBeVisible();
 
   const routes = page.getByRole("navigation", { name: "Escolha por onde continuar." });
   await expect(routes.getByRole("link", { name: /^Labs/ })).toHaveAttribute("href", "/labs");
