@@ -1,27 +1,27 @@
 import { expect, test } from "@playwright/test";
 
-test("@smoke apresenta o QA Lab e os caminhos de prática", async ({ page }) => {
+test("@smoke home apresenta o autor, os CTAs e as seções de autoridade", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Aprenda QA na prática.", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /Hands-on QA labs with real bugs, built by a QA Automation Engineer/i })).toBeVisible();
+  await expect(page.getByTestId("author-byline").first()).toContainText("João Centrone");
   const main = page.locator("main");
-  await expect(main.getByRole("link", { name: "Começar a praticar", exact: true })).toHaveAttribute("href", "/comecar");
-  await expect(main.getByRole("link", { name: "Ver os Labs", exact: true })).toHaveAttribute("href", "/labs");
-  // A home não manda o visitante para fora do QA Lab.
-  await expect(main.locator("a[target=_blank]")).toHaveCount(0);
-  await expect(main.getByRole("link", { name: /^Abrir o Lab 01/ })).toHaveAttribute("href", "/labs/101");
+  await expect(main.getByRole("link", { name: "Start a lab", exact: true })).toHaveAttribute("href", "/labs");
+  await expect(main.getByRole("link", { name: "Weekly challenge", exact: true })).toHaveAttribute("href", "/desafio");
+  for (const name of ["Pick a bug to hunt", "From the blog", "What I've built"]) {
+    await expect(main.getByRole("heading", { level: 2, name })).toBeVisible();
+  }
+  await expect(main.getByRole("heading", { level: 2, name: /Find the \d+ bugs/ })).toBeVisible();
 
-  await page.getByRole("link", { name: "Veja como funciona", exact: true }).click();
-  await expect(page).toHaveURL(/#como-funciona$/);
-  await expect(page.getByRole("heading", { name: "Da missão à evidência.", exact: true })).toBeVisible();
-
-  const routes = page.getByRole("navigation", { name: "Escolha por onde continuar." });
-  await expect(routes.getByRole("link", { name: /^Labs/ })).toHaveAttribute("href", "/labs");
-  await expect(routes.getByRole("link", { name: /^Caminho/ })).toHaveAttribute("href", "/conteudo");
-  // Conteúdo e Trilhas não são mais entradas da home: os cursos ficam em "Aprofundar" dentro do Caminho.
-  await expect(routes.getByRole("link", { name: /^Trilhas/ })).toHaveCount(0);
-
-  await routes.getByRole("link", { name: /^Labs/ }).click();
+  await main.getByRole("link", { name: "Start a lab", exact: true }).click();
   await expect(page).toHaveURL(/\/labs\/?$/);
+});
+
+test("@smoke menu leva às páginas de autoridade, sem mentoria", async ({ page }) => {
+  await page.goto("/");
+  const nav = page.getByRole("navigation", { name: "Navegação principal" }).first();
+  for (const [name, href] of [["Labs", "/labs"], ["Weekly challenge", "/desafio"], ["Blog", "/blog"], ["About", "/sobre"]]) {
+    await expect(nav.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
+  }
 });
 
 test("@smoke playground legado leva à página atual do Lab", async ({ page }) => {

@@ -33,7 +33,7 @@ export default function ChallengePage() {
         </li>)}</ol>
         <Link href={challenge.labHref} data-event="start_lab" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-md bg-gold px-5 text-sm font-bold text-[#14110b] hover:bg-gold/90">Open the lab <ArrowRight className="size-4" aria-hidden="true" /></Link>
       </div>
-      <aside className="rounded-lg border border-border bg-card p-5">
+      <aside className="self-start rounded-lg border border-border bg-card p-5">
         <h2 className="flex items-center gap-2 text-sm font-semibold"><Bug className="size-4 text-gold" aria-hidden="true" />{challenge.bugCount} bugs hidden in</h2>
         <ul className="mt-3 grid gap-2 font-mono text-sm">{challenge.endpoints.map((endpoint) => <li key={endpoint}>{endpoint}</li>)}</ul>
       </aside>

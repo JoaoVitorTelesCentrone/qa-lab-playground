@@ -60,7 +60,7 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
 | 0 | Consertar o CI | ✅ feito |
 | 1 | Flag `FEATURE_MENTORSHIP` | ✅ feito |
 | 2 | Identidade de autor | ✅ feito |
-| 3 | Home nova | pendente |
+| 3 | Home nova | ✅ feito |
 | 4 | `/labs` por trilha | pendente |
 | 5 | `/desafio` | ✅ feito |
 | 6 | Blog em MDX, PT e EN | pendente |
@@ -154,11 +154,35 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
   - CV em PDF, colocado em `public/cv/`.
   - Confirmar o GitHub.
 
-### 3. Home
+### 3. Home ✅
 
-- Hero: "Hands-on QA labs with real bugs, built by a QA Automation Engineer", com nome,
-  foto e os CTAs "Start a lab" e "Weekly challenge".
-- Abaixo: Labs em destaque, desafio da semana, último post e projetos.
+- **`app/page.tsx`:** usa `components/authority/authority-home.tsx`. A home antiga
+  (`components/home/product-home.tsx`) continua no repo, sem uso.
+- **Hero em inglês:** "Hands-on QA labs with real bugs, built by a QA Automation
+  Engineer", com o card do autor (foto, nome e título, levando para `/sobre`) e os CTAs
+  "Start a lab" (`/labs`) e "Weekly challenge" (`/desafio`).
+- **Seções:**
+  - Labs em destaque, lidos de `content/featured-labs.json`: Login, Waits e
+    Acessibilidade, cada um com link para o modo bugado; e o API CRUD.
+  - O desafio da semana.
+  - O último post, por `publishedAt`.
+  - Projetos, lidos de `content/projects.json`. O BIST está como `draft: true` até o
+    João preencher; rascunho não aparece.
+- **Menu:** Labs · Weekly challenge · Blog · About (mais Mentoria, só com a flag).
+  - Caminho, Ferramentas e Referências científicas (`/pesquisa`) saíram do menu, mas as
+    rotas continuam.
+  - Projects e References entram na etapa 7.
+- **Onboarding:** o guia flutuante continua, e o passo 1 destaca os CTAs do hero
+  (`data-onboarding="home-cta"`).
+- **Testes:**
+  - `launch-smoke.e2e.ts` cobre a home (autor, CTAs, seções) e o menu.
+  - `onboarding.e2e.ts` foi adaptado à home e ao menu novos.
+  - `lib/authority/content.test.ts` cobre os dados.
+- **Validado sem env:** build ok; smoke com 37 passando e 2 pulados. Screenshots
+  conferidos da home (desktop e mobile) e do `/desafio`.
+- **Pendências:**
+  - O logo do header ainda é verde (a identidade antiga). Avaliar o âmbar na etapa 8.
+  - O resto da interface (Labs, blog) continua em PT.
 
 ### 4. `/labs` por trilha
 

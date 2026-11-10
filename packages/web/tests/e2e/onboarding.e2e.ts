@@ -4,7 +4,8 @@ const storageKey = "qa-lab:onboarding:floating:v1";
 
 test("@smoke guia flutua sobre as páginas e acompanha a prática real", async ({ page }) => {
   await page.goto("/");
-  await page.locator("main").getByRole("link", { name: "Começar a praticar", exact: true }).click();
+  // A home de autoridade não tem CTA de onboarding: o guia abre pelo botão flutuante.
+  await page.getByRole("button", { name: "Abrir guia de primeiros passos" }).click();
   await expect(page).toHaveURL(/\/$/);
   const guide = page.getByRole("dialog", { name: "Aprenda QA fazendo." });
   await expect(guide).toHaveAttribute("aria-modal", "false");
@@ -59,8 +60,8 @@ test("guia não bloqueia a página e links antigos abrem o painel flutuante", as
   await page.goto("/comecar");
   await expect(page.getByRole("dialog", { name: "Aprenda QA fazendo." })).toBeVisible();
   await expect(page).toHaveURL(/\/$/);
-  await page.getByRole("navigation", { name: "Navegação principal" }).getByRole("link", { name: "Caminho", exact: true }).click();
-  await expect(page).toHaveURL(/\/conteudo$/);
+  await page.getByRole("navigation", { name: "Navegação principal" }).getByRole("link", { name: "Labs", exact: true }).click();
+  await expect(page).toHaveURL(/\/labs$/);
   await expect(page.getByRole("dialog", { name: "Aprenda QA fazendo." })).toBeVisible();
   await page.getByRole("dialog", { name: "Aprenda QA fazendo." }).getByRole("button", { name: "Ver esta etapa" }).click();
   await expect(page).toHaveURL(/\/$/);

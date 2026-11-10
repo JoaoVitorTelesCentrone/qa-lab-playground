@@ -1,0 +1,24 @@
+[
+  {
+    "slug": "qa-lab-playground",
+    "name": "QA Lab Playground",
+    "tagline": "Hands-on QA labs with real, switchable bugs.",
+    "description": "A playground of practice systems (shop, API, login, waits, accessibility) where every lab has a correct mode and a bug mode, plus guided missions and Markdown bug reports.",
+    "stack": ["Next.js", "React", "TypeScript", "Supabase", "Playwright", "Bun", "Tailwind CSS"],
+    "demo": "/",
+    "video": null,
+    "github": "https://github.com/JoaoVitorTelesCentrone/qa-lab-playground",
+    "draft": false
+  },
+  {
+    "slug": "bist",
+    "name": "BIST",
+    "tagline": "TODO(João): one-line description.",
+    "description": "TODO(João): what BIST does, the problem it solves and your role in it.",
+    "stack": [],
+    "demo": null,
+    "video": null,
+    "github": null,
+    "draft": true
+  }
+]

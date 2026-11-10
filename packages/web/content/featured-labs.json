@@ -1,0 +1,29 @@
+[
+  {
+    "title": "A login that lies about locked accounts",
+    "track": "UI",
+    "summary": "Credentials, lockout and error messages. In bug mode a locked user gets the wrong message.",
+    "href": "/labs/login",
+    "bugHref": "/labs/login?bug=locked-message"
+  },
+  {
+    "title": "Waits, spinners and infinite loading",
+    "track": "UI",
+    "summary": "Async UI with dynamic delays. In bug mode the spinner never ends.",
+    "href": "/labs/waits",
+    "bugHref": "/labs/waits?bug=infinite-loading"
+  },
+  {
+    "title": "Keyboard focus that disappears",
+    "track": "Non-functional",
+    "summary": "An accessibility lab. In bug mode focus is lost and the outline is hidden.",
+    "href": "/labs/acessibilidade",
+    "bugHref": "/labs/acessibilidade?bug=missing-focus"
+  },
+  {
+    "title": "A REST API with real contract bugs",
+    "track": "API",
+    "summary": "Bookings CRUD with auth, pagination and reset. The public API has a bug mode too.",
+    "href": "/labs/api-crud"
+  }
+]
