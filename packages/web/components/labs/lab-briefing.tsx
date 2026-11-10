@@ -17,6 +17,8 @@
 // a aba, entrar na conta e voltar sem perder nada. Quem decide se a entrega
 // entra é a API, com a mesma regra mínima de sempre.
 
+import { labReportMarkdown, reportFileName } from "@/lib/authority/lab-report";
+import { DownloadMarkdownButton } from "@/components/labs/download-markdown";
 import { Byline } from "@/components/authority/byline";
 import { ShareOnLinkedIn } from "@/components/authority/share-on-linkedin";
 import { MENTORSHIP_ENABLED } from "@/lib/product/features";
@@ -362,7 +364,10 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
           </div>
 
           <div className="grid gap-3 border-t border-border pt-4">
-            <h3 className="text-sm font-semibold">Sua entrega até agora</h3>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="text-sm font-semibold">Sua entrega até agora</h3>
+              <DownloadMarkdownButton fileName={reportFileName(`lab-${label}`, challenge.title)} build={() => labReportMarkdown({ label, title: challenge.title, path: `/labs/${challenge.number}`, fields: draft.fields, notes: draft.notes })} />
+            </div>
             <ul className="grid gap-2" aria-live="polite">
               {checks.map((check) => <li key={check.id} className={`flex items-start gap-2 text-sm ${check.ok ? "" : "text-[var(--field-copper)]"}`}>
                 <span aria-hidden="true" className={`mt-0.5 grid size-4 shrink-0 place-items-center rounded-full text-[0.65rem] font-bold ${check.ok ? "bg-primary text-primary-foreground" : "border-[1.5px] border-[var(--field-copper)]"}`}>{check.ok ? "✓" : "!"}</span>

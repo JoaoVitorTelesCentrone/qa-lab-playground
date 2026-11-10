@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { LabBrief, LabShell } from "./login-lab";
+import { resolveBug } from "@/lib/labs/bug-mode";
 
 export function WaitsLab() {
   const params = useSearchParams();
   const initialDelay = Number(params.get("delay") ?? 500);
-  const bug = params.get("bug");
+  const bug = resolveBug(params.get("bug"), "infinite-loading");
   const [delay, setDelay] = useState(initialDelay);
   const [unstable, setUnstable] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -38,7 +39,7 @@ export function WaitsLab() {
   }
 
   return (
-    <LabShell title="Lab 5: waits inteligentes" description="Use estado observavel da UI, rede e acessibilidade para esperar o comportamento correto sem sleep fixo.">
+    <LabShell bug={bug} title="Lab 5: waits inteligentes" description="Use estado observavel da UI, rede e acessibilidade para esperar o comportamento correto sem sleep fixo.">
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
         <section className="rounded-lg border border-white/10 bg-card p-5">
           <div className="flex flex-wrap items-center gap-4">

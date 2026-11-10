@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { LabBrief, LabShell } from "./login-lab";
+import { resolveBug } from "@/lib/labs/bug-mode";
+
+/** Repassa o modo bugado da página para a API do Lab (que entende ?bug=<id>). */
+export function withBug(path: string, bug: string | null) {
+  if (!bug) return path;
+  return `${path}${path.includes("?") ? "&" : "?"}bug=${encodeURIComponent(bug)}`;
+}
 
 const sampleBooking = {
   firstname: "Marina",
@@ -13,24 +21,25 @@ const sampleBooking = {
 };
 
 export function ApiCrudLab() {
+  const bug = resolveBug(useSearchParams().get("bug"), "delete-without-auth");
   const [token, setToken] = useState("");
   const [output, setOutput] = useState("Execute uma chamada para ver o response.");
 
   async function call(label: string, path: string, init?: RequestInit) {
-    const response = await fetch(path, { ...init, headers: { "content-type": "application/json", ...(token ? { authorization: `Bearer ${token}` } : {}), ...init?.headers } });
+    const response = await fetch(withBug(path, bug), { ...init, headers: { "content-type": "application/json", ...(token ? { authorization: `Bearer ${token}` } : {}), ...init?.headers } });
     const text = response.status === 204 ? "" : JSON.stringify(await response.json(), null, 2);
     setOutput(`${label}\nHTTP ${response.status}\n${text}`);
   }
 
   async function login() {
-    const response = await fetch("/api/auth/login", { method: "POST", body: JSON.stringify({ username: "standard_user", password: "qa_lab_secret" }) });
+    const response = await fetch(withBug("/api/auth/login", bug), { method: "POST", body: JSON.stringify({ username: "standard_user", password: "qa_lab_secret" }) });
     const result = await response.json() as { data: { token: string } };
     setToken(result.data.token);
     setOutput(JSON.stringify(result, null, 2));
   }
 
   return (
-    <LabShell title="Lab 21: API CRUD de reservas" description="Pratique contrato REST com reset de dados, auth simples, filtros, paginacao, PUT, PATCH e DELETE.">
+    <LabShell bug={bug} title="Lab 21: API CRUD de reservas" description="Pratique contrato REST com reset de dados, auth simples, filtros, paginacao, PUT, PATCH e DELETE.">
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
         <section className="rounded-lg border border-white/10 bg-card p-5">
           <div className="flex flex-wrap gap-2">

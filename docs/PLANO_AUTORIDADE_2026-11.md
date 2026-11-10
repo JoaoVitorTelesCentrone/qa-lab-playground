@@ -61,7 +61,7 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
 | 1 | Flag `FEATURE_MENTORSHIP` | ✅ feito |
 | 2 | Identidade de autor | ✅ feito |
 | 3 | Home nova | ✅ feito |
-| 4 | `/labs` por trilha | pendente |
+| 4 | `/labs` por trilha | ✅ feito |
 | 5 | `/desafio` | ✅ feito |
 | 6 | Blog em MDX, PT e EN | pendente |
 | 7 | `/referencias`, `/projetos` e `/sobre` | parcial (`/sobre` mínimo) |
@@ -184,13 +184,52 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
   - O logo do header ainda é verde (a identidade antiga). Avaliar o âmbar na etapa 8.
   - O resto da interface (Labs, blog) continua em PT.
 
-### 4. `/labs` por trilha
+### 4. `/labs` por trilha ✅
 
-- Trilhas: UI, API, Exploratório, Produto, CI e Não-funcionais. Todos os Labs ganham
-  uma trilha.
-- `?bug=` padronizado em todos os Labs, ligando os bugs plantados.
-- Export de relatório em Markdown.
-- Byline e "Share on LinkedIn" em cada Lab, reaproveitando `linkedInPost()`.
+- **Trilhas:** `lib/authority/lab-tracks.ts` mapeia a área de cada Lab
+  (`requiredFeature`) para UI, API, Exploratory, Product, CI ou Non-functional.
+  - Os Labs de pipeline (Broto 150–156, 211, 232, 286, 306) vão para CI, mesmo
+    morando numa área de ferramenta.
+  - Um teste falha se algum Lab liberado ficar sem trilha. Área nova precisa entrar
+    no mapa.
+  - Contagem atual: UI 120, API 41, Exploratory 49, Product 25, CI 11,
+    Non-functional 35.
+  - Não confundir com `lib/product/tracks.ts`, que são as trilhas de certificado,
+    desligadas.
+- **`/labs`:**
+  - Filtro por trilha com contagem, guardado em `?trilha=` (abre direto pela URL).
+  - Em cada trilha, os Labs do playground com modo bugado aparecem primeiro
+    (`PLAYGROUND_LABS`), com link "Open in bug mode".
+  - A interface do catálogo foi para o inglês; o conteúdo dos Labs segue em PT.
+  - A linha decorativa central do content-atlas foi desligada no catálogo.
+- **`?bug=` padronizado** (`lib/labs/bug-mode.ts`):
+  - `?bug=1`, `true` ou `on` ligam o bug padrão do Lab. Os ids antigos continuam
+    valendo. Sem `?bug`, ou com `0`/`false`, é o modo correto.
+  - Ligado em login (`locked-message`), waits (`infinite-loading`), acessibilidade
+    (`missing-focus`), API CRUD (`delete-without-auth`, repassado para as chamadas
+    da API) e checkout da loja (`wrong-total`).
+  - A faixa `BugModeBanner` mostra o modo e alterna entre os dois. Seu
+    `data-state` é o que o E2E lê.
+- **`LabShell`:** todo Lab do playground ganhou byline, "Share on LinkedIn" e
+  "Bug report (.md)".
+- **Markdown** (`lib/authority/lab-report.ts`, testado):
+  - O Lab numerado exporta o relatório da entrega (fiz, esperava, aconteceu,
+    conclusão e notas).
+  - Os Labs do playground exportam um bug report pré-preenchido com URL e modo.
+  - O exploratório mantém o export próprio.
+- **Testes:** `tests/e2e/labs-tracks.e2e.ts` (smoke) cobre:
+  - as 6 trilhas e o filtro;
+  - login com `?bug=1` bugado e sem `?bug` correto;
+  - a alternância de modo;
+  - a API CRUD repassando o bug;
+  - os downloads em Markdown.
+- **Validado sem env:** build ok; smoke com 42 passando e 2 pulados. Screenshots
+  conferidos de `/labs` e `/labs/login?bug=1`.
+- **Pendências:**
+  - Os Labs numerados da loja (1–100) e do Broto não têm faixa de modo: a prática
+    acontece em `/shop` ou no Broto real, que não tem bug plantado.
+  - O "Share on LinkedIn" ainda compartilha só o link. Gerar o texto do post por
+    Lab fica para a etapa 8, junto com as OG images.
 
 ### 5. `/desafio` ✅
 

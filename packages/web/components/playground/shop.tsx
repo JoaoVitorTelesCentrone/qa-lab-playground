@@ -1,5 +1,6 @@
 "use client";
 
+import { resolveBug } from "@/lib/labs/bug-mode";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -213,7 +214,7 @@ export function CartPage() {
 }
 
 export function CheckoutPage() {
-  const bug = useSearchParams().get("bug");
+  const bug = resolveBug(useSearchParams().get("bug"), "wrong-total");
   const router = useRouter();
   const { items, save, remote, activeBugs } = useCart();
   const rows = items.map((item) => ({ ...item, product: shopProducts.find((product) => product.id === item.productId)! })).filter((item) => item.product);

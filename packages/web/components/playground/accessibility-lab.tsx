@@ -3,10 +3,11 @@
 import { useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { LabShell } from "./login-lab";
+import { resolveBug } from "@/lib/labs/bug-mode";
 import { SelectField, toOptions } from "@/components/ui/select-field";
 
 export function AccessibilityLab() {
-  const bug = useSearchParams().get("bug");
+  const bug = resolveBug(useSearchParams().get("bug"), "missing-focus");
   const [modal, setModal] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   function close() {
@@ -14,7 +15,7 @@ export function AccessibilityLab() {
     if (bug !== "missing-focus") triggerRef.current?.focus();
   }
   return (
-    <LabShell title="Lab 89: acessibilidade por teclado" description="Conclua login, carrinho e checkout sem mouse e valide foco, labels, aria-live e modal acessivel.">
+    <LabShell bug={bug} title="Lab 89: acessibilidade por teclado" description="Conclua login, carrinho e checkout sem mouse e valide foco, labels, aria-live e modal acessivel.">
       <a href="#a11y-main" className="sr-only focus:not-sr-only focus:rounded-lg focus:bg-neon focus:px-3 focus:py-2 focus:text-[#101319]">Pular para conteudo</a>
       <main id="a11y-main" className={bug === "missing-focus" ? "[&_*:focus-visible]:outline-none" : ""}>
         <section className="grid gap-4 rounded-lg border border-white/10 bg-card p-5 sm:grid-cols-3">

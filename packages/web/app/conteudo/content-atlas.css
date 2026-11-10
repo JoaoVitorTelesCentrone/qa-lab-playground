@@ -21,6 +21,8 @@
   background: radial-gradient(ellipse 55% 60% at 80% 16%, #ffffff0d, transparent 76%), linear-gradient(90deg, transparent 0 49.9%, #ffffff1f 50%, transparent 50.1%);
   pointer-events: none;
 }
+/* No catálogo de Labs a linha central cruzaria os filtros e os cards: fica só o brilho. */
+.content-atlas.ca-catalog::before { background: radial-gradient(ellipse 55% 60% at 80% 16%, #ffffff0d, transparent 76%); }
 .ca-topbar { max-width: 85rem; margin: 0 auto; padding: 0.8rem clamp(1.25rem, 4vw, 3.75rem); display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; border-bottom: 1px solid var(--ca-line); }
 .ca-topbar-brand { color: var(--ca-text); display: inline-flex; align-items: center; gap: .6rem; text-decoration: none; font-size: .9rem; font-weight: 800; white-space: nowrap; }
 .ca-topbar-brand svg { color: var(--ca-green); }

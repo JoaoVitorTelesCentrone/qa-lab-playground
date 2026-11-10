@@ -1,32 +1,29 @@
 "use client";
 
-import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Search, Wrench } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Bug, Check, Search, Wrench } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { releasedLabsInOrder as labs, labLabel, type Lab } from "@/lib/playground/catalog";
 import { qaToolLabSpecs } from "@/lib/qa-tool-labs";
 import { qaTools } from "@/lib/qa-tools";
 import type { LabProgress } from "@/lib/product/journey";
+import { LAB_TRACKS, labTrackOf, PLAYGROUND_LABS, type LabTrackId } from "@/lib/authority/lab-tracks";
 import "@/app/conteudo/content-atlas.css";
 
 const PAGE_SIZE = 10;
 
-// Blocos da lista, na ordem em que aparecem: Broto e mentoria, automação por
-// ferramenta e a loja de treino.
-const AUTOMATION_AREAS = ["Cypress", "Playwright", "Selenium e Appium", "k6", "Postman", "Bruno"];
-const QA_TOOL_AREAS = qaTools.map((tool) => tool.title);
-const groupOf = (lab: Lab) => lab.number <= 100 ? "Loja de treino" : QA_TOOL_AREAS.includes(lab.requiredFeature) ? "Ferramentas interativas" : AUTOMATION_AREAS.includes(lab.requiredFeature) ? "Automação por ferramenta" : MENTORSHIP_ENABLED ? "Broto e mentoria" : "Broto";
+const trackLabel = (lab: Lab) => LAB_TRACKS.find((track) => track.id === labTrackOf(lab))?.label ?? "Other";
+const countByTrack = new Map(LAB_TRACKS.map((track) => [track.id, labs.filter((lab) => labTrackOf(lab) === track.id).length]));
 
 // Busca sem acento e sem diferenciar maiúsculas: "automação" encontra "automacao".
 const plain = (text: string) => text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
-// A lista de Labs tem o mesmo desenho da lista de módulos do Caminho: uma linha
-// por Lab, número grande, título, resumo e contagens à direita. Broto e mentoria
-// vêm primeiro; a loja de treino (1–100) fica no fim.
-export function LabCatalog({ progress = [], initialPage }: { progress?: Array<Pick<LabProgress, "status"> & { slug: string }>; initialPage?: string }) {
+// Uma linha por Lab, número grande, título, resumo e contagens à direita. O
+// filtro de trilha (?trilha=) e a página (?pagina=) vivem na URL.
+export function LabCatalog({ progress = [], initialPage, initialTrack }: { progress?: Array<Pick<LabProgress, "status"> & { slug: string }>; initialPage?: string; initialTrack?: LabTrackId }) {
   const [query, setQuery] = useState("");
+  const [track, setTrackState] = useState<LabTrackId | "all">(initialTrack ?? "all");
   // A página vive na URL (?pagina=3): voltar de um Lab devolve a mesma página.
   // Vem do servidor (searchParams da página) em vez de useSearchParams: sem
   // Supabase configurado a rota seria pré-renderizada e o Next exigiria um
@@ -38,12 +35,23 @@ export function LabCatalog({ progress = [], initialPage }: { progress?: Array<Pi
   const byLab = new Map(progress.map((item) => [item.slug, item.status]));
   const term = plain(query.trim());
   const filtered = useMemo(() => labs.filter((lab) =>
-    !term || plain([lab.title, lab.objective, lab.requiredFeature, lab.difficulty, labLabel(lab)].join(" ")).includes(term)
-  ), [term]);
+    (track === "all" || labTrackOf(lab) === track)
+    && (!term || plain([lab.title, lab.objective, lab.requiredFeature, lab.difficulty, labLabel(lab)].join(" ")).includes(term))
+  ), [term, track]);
+  const playground = PLAYGROUND_LABS.filter((lab) => track === "all" || lab.track === track);
   const completed = labs.filter((lab) => byLab.get(lab.slug) === "completed").length;
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const current = Math.min(page, pageCount);
   const visible = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
+
+  function setTrack(next: LabTrackId | "all") {
+    setTrackState(next);
+    setChosen(1);
+    const url = new URL(window.location.href);
+    if (next === "all") url.searchParams.delete("trilha"); else url.searchParams.set("trilha", next);
+    url.searchParams.delete("pagina");
+    window.history.replaceState(null, "", url);
+  }
 
   function goTo(next: number, { scroll = true } = {}) {
     const target = Math.min(Math.max(1, next), pageCount);
@@ -54,29 +62,48 @@ export function LabCatalog({ progress = [], initialPage }: { progress?: Array<Pi
     if (scroll) listTop.current?.scrollIntoView({ block: "start" });
   }
 
-  return <div className="content-atlas"><main className="ca-shell">
+  return <div className="content-atlas ca-catalog"><main lang="en" className="ca-shell">
     <header data-onboarding="lab-catalog" className="ca-map-head">
       <div>
         <h1>Labs</h1>
-        <p>{progress.length > 0 ? `${completed} de ${labs.length} concluídos. ` : ""}Escolha uma missão, investigue e registre o que encontrou.</p>
-        <Link href="/lab/ferramentas" className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-md border border-mint/25 px-3 text-xs font-bold text-mint hover:bg-mint/10"><Wrench aria-hidden="true" className="size-3.5" />Abrir {qaTools.length} ferramentas · {qaToolLabSpecs.length} Labs</Link>
+        <p>{progress.length > 0 ? `${completed} of ${labs.length} completed. ` : ""}Pick a track, hunt the bug and write the report.</p>
+        <Link href="/lab/ferramentas" className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-md border border-mint/25 px-3 text-xs font-bold text-mint hover:bg-mint/10"><Wrench aria-hidden="true" className="size-3.5" />Open {qaTools.length} tools · {qaToolLabSpecs.length} labs</Link>
       </div>
       <label className="relative w-full sm:w-72">
-        <span className="sr-only">Buscar Lab</span>
+        <span className="sr-only">Search labs</span>
         <Search className="pointer-events-none absolute left-3 top-3 size-4 text-muted-foreground" aria-hidden="true" />
-        <Input value={query} onChange={(event) => { setQuery(event.target.value); goTo(1, { scroll: false }); }} placeholder="Buscar por tema, área ou número" className="pl-10" />
+        <Input value={query} onChange={(event) => { setQuery(event.target.value); goTo(1, { scroll: false }); }} placeholder="Search by topic, area or number" className="pl-10" />
       </label>
     </header>
 
+    <nav aria-label="Tracks" className="flex flex-wrap gap-2 pb-6">
+      {[{ id: "all" as const, label: "All", count: labs.length }, ...LAB_TRACKS.map((item) => ({ id: item.id, label: item.label, count: countByTrack.get(item.id) ?? 0 }))].map((item) =>
+        <button key={item.id} type="button" onClick={() => setTrack(item.id)} aria-pressed={track === item.id} data-track={item.id}
+          className={`inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors ${track === item.id ? "border-gold bg-gold/15 text-gold" : "border-border text-muted-foreground hover:text-foreground"}`}>
+          {item.label}<span className="text-xs font-normal opacity-80">{item.count}</span>
+        </button>)}
+    </nav>
+    {track !== "all" && <p className="-mt-3 pb-6 text-sm" style={{ color: "var(--ca-muted)" }}>{LAB_TRACKS.find((item) => item.id === track)?.description}</p>}
+
+    {playground.length > 0 && current === 1 && !term && <section aria-labelledby="bug-mode-labs" className="pb-8">
+      <h2 id="bug-mode-labs" className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-gold"><Bug aria-hidden="true" className="size-4" />Bug-mode labs</h2>
+      <ul className="mt-3 grid gap-3 sm:grid-cols-2">{playground.map((lab) => <li key={lab.href} className="rounded-lg border border-border p-4">
+        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{LAB_TRACKS.find((item) => item.id === lab.track)?.label}</span>
+        <Link href={lab.href} data-event="start_lab" className="mt-1 block font-semibold hover:text-gold">{lab.title}</Link>
+        <p className="mt-1 text-sm" style={{ color: "var(--ca-muted)" }}>{lab.summary}</p>
+        {lab.hasBugMode && <Link href={`${lab.href}?bug=1`} data-event="start_lab" className="mt-2 inline-flex min-h-9 items-center gap-1.5 text-sm font-semibold text-gold"><Bug aria-hidden="true" className="size-3.5" />Open in bug mode</Link>}
+      </li>)}</ul>
+    </section>}
+
     <section ref={listTop} aria-labelledby="labs-title" className="scroll-mt-20 pb-8">
-      <h2 id="labs-title" className="sr-only">Lista de Labs</h2>
+      <h2 id="labs-title" className="sr-only">Lab list</h2>
       {filtered.length === 0
-        ? <p className="border-y py-10 text-sm" style={{ borderColor: "var(--ca-line)", color: "var(--ca-muted)" }}>Nenhum Lab encontrado. Altere a busca.</p>
-        : <ol className="ca-module-list">{visible.map((lab, index) => <LabRow key={lab.slug} lab={lab} status={byLab.get(lab.slug)} heading={index === 0 || groupOf(visible[index - 1]) !== groupOf(lab) ? groupOf(lab) : undefined} />)}</ol>}
-      {filtered.length > PAGE_SIZE && <nav aria-label="Paginação dos Labs" className="ca-pager">
-        <button type="button" onClick={() => goTo(current - 1)} disabled={current === 1}><ArrowLeft aria-hidden="true" className="size-4" /> Anterior</button>
-        <p aria-live="polite">Página <strong>{current}</strong> de {pageCount}<span> · Labs {(current - 1) * PAGE_SIZE + 1}–{Math.min(current * PAGE_SIZE, filtered.length)} de {filtered.length}</span></p>
-        <button type="button" onClick={() => goTo(current + 1)} disabled={current === pageCount}>Próxima <ArrowRight aria-hidden="true" className="size-4" /></button>
+        ? <p className="border-y py-10 text-sm" style={{ borderColor: "var(--ca-line)", color: "var(--ca-muted)" }}>No lab found. Change the search or the track.</p>
+        : <ol className="ca-module-list">{visible.map((lab, index) => <LabRow key={lab.slug} lab={lab} status={byLab.get(lab.slug)} heading={index === 0 || trackLabel(visible[index - 1]) !== trackLabel(lab) ? trackLabel(lab) : undefined} />)}</ol>}
+      {filtered.length > PAGE_SIZE && <nav aria-label="Lab pages" className="ca-pager">
+        <button type="button" onClick={() => goTo(current - 1)} disabled={current === 1}><ArrowLeft aria-hidden="true" className="size-4" /> Previous</button>
+        <p aria-live="polite">Page <strong>{current}</strong> of {pageCount}<span> · Labs {(current - 1) * PAGE_SIZE + 1}–{Math.min(current * PAGE_SIZE, filtered.length)} of {filtered.length}</span></p>
+        <button type="button" onClick={() => goTo(current + 1)} disabled={current === pageCount}>Next <ArrowRight aria-hidden="true" className="size-4" /></button>
       </nav>}
     </section>
   </main></div>;
@@ -85,14 +112,14 @@ export function LabCatalog({ progress = [], initialPage }: { progress?: Array<Pi
 function LabRow({ lab, status, heading }: { lab: Lab; status?: LabProgress["status"]; heading?: string }) {
   return <li className="ca-module-row">
     {heading && <h3 className="ca-group-head">{heading}</h3>}
-    <Link href={"/labs/" + lab.number} data-onboarding={`lab-${lab.number}`} aria-label={`Abrir Lab ${labLabel(lab)}: ${lab.title}`}>
+    <Link href={"/labs/" + lab.number} data-onboarding={`lab-${lab.number}`} aria-label={`Open Lab ${labLabel(lab)}: ${lab.title}`}>
       <span className="ca-module-index" aria-hidden="true">{labLabel(lab)}</span>
       <span><strong className="ca-module-title">{lab.title}</strong><span className="ca-module-summary">{lab.objective}</span></span>
       <span className="ca-module-meta">
         {lab.requiredFeature} · <span className="capitalize">{lab.difficulty}</span><br />
-        {lab.minutes} min · {lab.acceptanceCriteria.length} critérios
-        {status === "completed" && <><br /><span style={{ color: "var(--ca-green)" }}><Check aria-hidden="true" className="inline size-3" /> Concluído</span></>}
-        {status === "started" && <><br /><span style={{ color: "var(--ca-green)" }}>Em andamento</span></>}
+        {lab.minutes} min · {lab.acceptanceCriteria.length} criteria
+        {status === "completed" && <><br /><span style={{ color: "var(--ca-green)" }}><Check aria-hidden="true" className="inline size-3" /> Completed</span></>}
+        {status === "started" && <><br /><span style={{ color: "var(--ca-green)" }}>In progress</span></>}
       </span>
       <ArrowUpRight aria-hidden="true" className="ca-module-arrow size-5" />
     </Link>

@@ -1,7 +1,9 @@
 "use client";
 
+import { playgroundReportMarkdown, reportFileName } from "@/lib/authority/lab-report";
+import { DownloadMarkdownButton } from "@/components/labs/download-markdown";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { LogIn } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -9,9 +11,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { shopUsers } from "@/lib/playground/shop-data";
+import { Byline } from "@/components/authority/byline";
+import { ShareOnLinkedIn } from "@/components/authority/share-on-linkedin";
+import { BugModeBanner } from "@/components/labs/bug-mode-banner";
+import { resolveBug } from "@/lib/labs/bug-mode";
 
 export function LoginLab() {
-  const bug = useSearchParams().get("bug");
+  const bug = resolveBug(useSearchParams().get("bug"), "locked-message");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -48,7 +54,7 @@ export function LoginLab() {
   }
 
   return (
-    <LabShell title="Lab 1: login quebravel" description="Valide campos obrigatorios, credenciais invalidas, usuario bloqueado, foco em erro e rota protegida.">
+    <LabShell bug={bug} title="Lab 1: login quebravel" description="Valide campos obrigatorios, credenciais invalidas, usuario bloqueado, foco em erro e rota protegida.">
       <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
         <Card>
           <CardHeader>
@@ -85,13 +91,27 @@ export function LoginLab() {
   );
 }
 
-export function LabShell({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
+/**
+ * Moldura dos Labs do playground. Com `bug` definido (string ou null), o Lab tem
+ * modo bugado e mostra a faixa que alterna entre os modos; sem a prop, não tem.
+ */
+export function LabShell({ title, description, children, bug }: { title: string; description: string; children: React.ReactNode; bug?: string | null }) {
+  const pathname = usePathname() ?? "/labs";
   return (
     <div className="qa-simple">
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
       <Button asChild variant="link" className="h-auto px-0"><Link href="/labs">Voltar para labs</Link></Button>
       <h1 className="mt-4 text-4xl font-semibold tracking-tight text-foreground">{title}</h1>
       <p className="mt-3 max-w-3xl text-base leading-7 text-muted-foreground">{description}</p>
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-y border-border py-2">
+        <Byline />
+        <div className="flex flex-wrap gap-2">
+          <DownloadMarkdownButton fileName={reportFileName("bug-report", title)} label="Bug report (.md)"
+            build={() => playgroundReportMarkdown({ title, url: typeof window === "undefined" ? pathname : window.location.pathname + window.location.search, bug })} />
+          <ShareOnLinkedIn url={pathname} />
+        </div>
+      </div>
+      {bug !== undefined && <div className="mt-4"><BugModeBanner bug={bug} /></div>}
       <div className="mt-8">{children}</div>
       </div>
     </div>
