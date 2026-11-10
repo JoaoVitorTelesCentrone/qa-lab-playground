@@ -17,6 +17,8 @@
 // a aba, entrar na conta e voltar sem perder nada. Quem decide se a entrega
 // entra é a API, com a mesma regra mínima de sempre.
 
+import { Byline } from "@/components/authority/byline";
+import { ShareOnLinkedIn } from "@/components/authority/share-on-linkedin";
 import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 import Link from "next/link";
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
@@ -234,6 +236,10 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
       {status !== "completed" && started && signedIn && <Badge variant="secondary">em andamento</Badge>}
     </header>
     <p className="mt-3 text-sm text-muted-foreground">Lab {label} · {challenge.area} · {difficultyLabel[challenge.difficulty] ?? challenge.difficulty} · {modeLabel[challenge.mode] ?? challenge.mode}{lab ? ` · cerca de ${lab.minutes} min` : ""}</p>
+    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-y border-border py-2">
+      <Byline />
+      <ShareOnLinkedIn url={`/labs/${challenge.number}`} />
+    </div>
 
     {submissions.length > 0 && state !== "done" && <Link href={`/labs/${challenge.number}/conclusao`} className="mt-4 flex items-center justify-between gap-3 rounded-sm border border-primary/30 bg-primary/[0.04] p-3 text-sm transition hover:border-primary">
       <span>Você já entregou evidência neste Lab. <strong className="font-medium text-primary">Abrir o case e publicar</strong></span>

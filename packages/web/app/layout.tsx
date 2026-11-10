@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Anton, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -9,7 +9,9 @@ import { FloatingOnboarding } from "@/components/onboarding/floating-onboarding"
 import { firstLab as launchFirstLab, labLabel } from "@/lib/playground/catalog";
 import { AttributionCapture } from "@/components/analytics/attribution-capture";
 
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
+// Identidade QA Lab: Plus Jakarta Sans no texto, Anton nos títulos de destaque.
+const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin"], display: "swap" });
+const anton = Anton({ variable: "--font-anton", weight: "400", subsets: ["latin"], display: "swap" });
 const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
@@ -31,8 +33,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const firstLab = launchFirstLab;
   const tourLab = firstLab ? { number: firstLab.number, label: labLabel(firstLab), title: firstLab.title } : null;
   return (
-    <html lang="pt-BR">
-      <body className={`${inter.variable} ${mono.variable} min-h-screen bg-background font-sans text-foreground antialiased`}>
+    // As variáveis de fonte ficam no <html> para que o :root consiga derivar
+    // --font-display delas (globals.css).
+    <html lang="pt-BR" className={`${jakarta.variable} ${anton.variable} ${mono.variable}`}>
+      <body className={`min-h-screen bg-background font-sans text-foreground antialiased`}>
         {/* Primeiro elemento focável da página: precisa vir antes do header. */}
         <a
           href="#main-content"

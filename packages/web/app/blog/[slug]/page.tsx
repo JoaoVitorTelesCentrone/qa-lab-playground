@@ -1,3 +1,6 @@
+import { Byline } from "@/components/authority/byline";
+import { ShareOnLinkedIn } from "@/components/authority/share-on-linkedin";
+import { author } from "@/content/site";
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -25,14 +28,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: post.resumo,
     metadataBase: new URL(siteUrl),
     alternates: { canonical },
-    authors: [{ name: post.autor }],
+    authors: [{ name: author.name, url: author.aboutHref }],
     openGraph: {
       title: post.titulo,
       description: post.resumo,
       url: canonical,
       type: "article",
       locale: "pt_BR",
-      authors: [post.autor],
+      authors: [author.name],
       ...(post.publishedAt ? { publishedTime: post.publishedAt } : {}),
       ...(post.updatedAt ? { modifiedTime: post.updatedAt } : {}),
       tags: post.tags,
@@ -71,7 +74,7 @@ export default async function BlogPostPage({ params }: Props) {
     description: post.resumo,
     inLanguage: "pt-BR",
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
-    author: { "@type": "Organization", name: post.autor },
+    author: { "@type": "Person", name: author.name, jobTitle: author.title, url: new URL(author.aboutHref, siteUrl).toString(), sameAs: [author.links.linkedin, author.links.github] },
     publisher: { "@type": "Organization", name: "QA Lab" },
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
     ...(post.updatedAt ? { dateModified: post.updatedAt } : {}),
@@ -94,9 +97,12 @@ export default async function BlogPostPage({ params }: Props) {
             <h1>{post.titulo}</h1>
             <p>{post.resumo}</p>
             <div className="qa-editorial-article-meta">
-              <span>{post.autor}</span>
               {post.publishedAt && <span><Calendar className="size-4" aria-hidden="true" />{formatDate(post.publishedAt)}</span>}
               <span><Clock3 className="size-4" aria-hidden="true" />{post.tempoLeitura} min de leitura</span>
+            </div>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <Byline label="Written by" />
+              <ShareOnLinkedIn url={`/blog/${post.slug}`} />
             </div>
           </div>
           {post.editorial && <section className="qa-editorial-artifact" data-composition={post.editorial.composition} aria-label={`Ficha de investigação: ${post.editorial.artifact.join("; ")}`}>

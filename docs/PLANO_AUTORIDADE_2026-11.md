@@ -59,12 +59,12 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
 |---|-------|--------|
 | 0 | Consertar o CI | ✅ feito |
 | 1 | Flag `FEATURE_MENTORSHIP` | ✅ feito |
-| 2 | Identidade de autor | pendente |
+| 2 | Identidade de autor | ✅ feito |
 | 3 | Home nova | pendente |
 | 4 | `/labs` por trilha | pendente |
 | 5 | `/desafio` | pendente |
 | 6 | Blog em MDX, PT e EN | pendente |
-| 7 | `/referencias`, `/projetos` e `/sobre` | pendente |
+| 7 | `/referencias`, `/projetos` e `/sobre` | parcial (`/sobre` mínimo) |
 | 8 | SEO e OG images | pendente |
 | 9 | Analytics | pendente |
 | 10 | Suíte E2E de autoridade | pendente |
@@ -121,13 +121,38 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
   - O `/conteudo` (Caminho) segue público, sem mentoria. Decidir na etapa 3 se sai
     da navegação.
 
-### 2. Identidade de autor
+### 2. Identidade de autor ✅
 
-- `content/site.ts` com nome, título, LinkedIn (`linkedin.com/in/joao-centrone`),
-  GitHub, foto e CV.
-- Fontes Anton e Plus Jakarta Sans, fundo escuro e destaque âmbar.
-- Componentes `<Byline>` ("Built by João Centrone", com foto e link para `/sobre`) e
-  `<ShareOnLinkedIn>`.
+- **`packages/web/content/site.ts`:** arquivo editável com nome, título, bio curta,
+  foto, LinkedIn, GitHub, CV e `SITE_URL`. Os TODOs do João estão marcados ali.
+- **Fontes:** Plus Jakarta Sans no texto do site inteiro (substitui a Inter) e Anton
+  em `.font-display`. As duas são carregadas por `next/font` em `app/layout.tsx`.
+  - As variáveis de fonte ficam no `<html>`, e o `:root` define `--font-display`.
+  - Antes, `--font-display` apontava para si mesma e nenhuma fonte de destaque
+    carregava. Isso afetava inclusive o not-found e a sidebar.
+- **Destaque âmbar:** token `--gold` (`#F5B841`), usado nas utilities `text-gold`,
+  `border-gold` e `bg-gold`.
+- **Componentes:**
+  - `components/authority/byline.tsx`: "Built by João Centrone", com foto e link
+    para `/sobre`.
+  - `components/authority/share-on-linkedin.tsx`: tem `data-event="share"` para a
+    etapa 9.
+  - A lógica de compartilhar fica em `lib/authority/share.ts`, com teste.
+- **Onde já aparecem:**
+  - Em todo Lab (`lab-briefing.tsx`): byline e share.
+  - Em todo post: "Written by" e share.
+  - O post agora é atribuído a João Centrone na metadata e no JSON-LD, como
+    `Person`, com `sameAs` apontando para LinkedIn e GitHub.
+- **`/sobre` mínimo:** em inglês, com título, bio curta e links, mais o CV quando
+  `author.cv` existir. Entrou no sitemap para a byline não apontar para um 404.
+- **Testes:** `tests/e2e/authority.e2e.ts` (smoke) cobre a byline e o share no Lab,
+  a byline no post e os links do `/sobre`.
+- **Validado sem env:** build ok; smoke com 33 passando e 2 pulados. Screenshots
+  conferidos em `/labs/101` (desktop e mobile), num post e no `/sobre`.
+- **Pendências do João:**
+  - Foto real (hoje é um monograma SVG em `public/author/joao-centrone.svg`).
+  - CV em PDF, colocado em `public/cv/`.
+  - Confirmar o GitHub.
 
 ### 3. Home
 
