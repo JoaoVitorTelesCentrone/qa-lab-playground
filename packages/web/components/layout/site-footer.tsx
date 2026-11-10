@@ -10,6 +10,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
+import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 
 const LINKEDIN_URL = "https://www.linkedin.com/company/qa-lab-oficial/";
 
@@ -26,8 +27,10 @@ export function SiteFooter() {
         <span>© {new Date().getFullYear()} QA Lab</span>
         <nav aria-label="Rodapé" className="flex flex-wrap items-center gap-x-5">
           <OnboardingLink className="inline-flex min-h-11 items-center transition hover:text-foreground">Primeiros passos</OnboardingLink>
-          <Link href="/planos" className="inline-flex min-h-11 items-center transition hover:text-foreground">Planos</Link>
-          <Link href="/mentoria" className="inline-flex min-h-11 items-center transition hover:text-foreground">Mentoria</Link>
+          {MENTORSHIP_ENABLED && <>
+            <Link href="/planos" className="inline-flex min-h-11 items-center transition hover:text-foreground">Planos</Link>
+            <Link href="/mentoria" className="inline-flex min-h-11 items-center transition hover:text-foreground">Mentoria</Link>
+          </>}
           <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center transition hover:text-foreground">LinkedIn<span className="sr-only"> (abre em nova aba)</span></a>
         </nav>
       </div>

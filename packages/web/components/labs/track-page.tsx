@@ -1,6 +1,7 @@
 // Percurso de uma trilha: os Labs na ordem, o progresso e o próximo passo.
 // Server Component — o progresso já vem resolvido do banco.
 
+import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Circle, CircleDot, Lock } from "lucide-react";
 import { mentorshipPathV2, type ModuleV2 } from "@/lib/mentorship/path-v2";
@@ -31,7 +32,7 @@ export function TrackPage({ progress, signedIn, certificateCode, canOpen = false
 
     <header className="mt-6">
       <h1 className="text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">{track.name}</h1>
-      {pathModule && <p className="mt-2 text-sm text-[var(--field-copper)]">Módulo {moduleNumber} da mentoria · {pathModule.title} · {steps.length} de {progress.steps.length} Labs abertos ao público</p>}
+      {pathModule && <p className="mt-2 text-sm text-[var(--field-copper)]">Módulo {moduleNumber}{MENTORSHIP_ENABLED ? " da mentoria" : ""} · {pathModule.title} · {steps.length} de {progress.steps.length} Labs abertos ao público</p>}
       <p className="mt-3 text-muted-foreground">{track.objective}</p>
       <details className="mt-3 text-sm">
         <summary className="w-fit cursor-pointer text-primary">O que você vai aprender</summary>
@@ -84,8 +85,8 @@ function ModuleSteps({ module, steps, signedIn, canOpen }: { module: ModuleV2; s
         {group.steps.map((step) => open(step)
           ? <Step key={step.lab.slug} step={step} signedIn={signedIn} />
           : <li key={step.lab.slug} className="flex flex-wrap items-center justify-between gap-3 py-4 text-sm">
-              <span className="min-w-0"><span className="block font-medium text-muted-foreground">{step.lab.title}</span><span className="text-xs text-muted-foreground">Faz parte da mentoria</span></span>
-              <Link href="/mentoria" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-primary"><Lock className="size-4" aria-hidden="true" /> Conhecer a mentoria</Link>
+              <span className="min-w-0"><span className="block font-medium text-muted-foreground">{step.lab.title}</span><span className="text-xs text-muted-foreground">{MENTORSHIP_ENABLED ? "Faz parte da mentoria" : "Em breve"}</span></span>
+              {MENTORSHIP_ENABLED ? <Link href="/mentoria" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-primary"><Lock className="size-4" aria-hidden="true" /> Conhecer a mentoria</Link> : <Lock className="size-4 text-muted-foreground" aria-label="Em breve" />}
             </li>)}
       </ol>
     </section>)}

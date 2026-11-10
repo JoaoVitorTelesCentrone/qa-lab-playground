@@ -57,7 +57,7 @@ export default function ToolsPage() {
 
     <section id="guias" aria-labelledby="tools-guides-title" className="mt-16 scroll-mt-20">
       <h2 id="tools-guides-title" className="text-lg font-semibold">Guias de estudo das ferramentas do mercado</h2>
-      <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">As ferramentas que aparecem na mentoria, cada uma com documentação oficial, cursos gratuitos e vídeos selecionados.</p>
+      <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">As ferramentas usadas nos Labs, cada uma com documentação oficial, cursos gratuitos e vídeos selecionados.</p>
       <div className="mt-6 grid gap-8 md:grid-cols-2">
         {guideGroups.map(([category, guides]) => <div key={category}>
           <h3 className="text-sm font-semibold">{toolGuideCategories[category].title}</h3>

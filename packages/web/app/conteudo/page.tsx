@@ -1,3 +1,4 @@
+import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import LegacyContentPage from "@/app/mentoria/conteudo/page";
@@ -23,13 +24,13 @@ export default async function ContentCatalogPage() {
   const next = progress.find((item) => !item.complete);
   const resumeChapter = next?.module.chapters.find((chapter) => !pathV2ChapterDone(chapter, completed, approved, delivered)) ?? next?.module.chapters[0];
   const journeyComplete = dashboard?.enrollment.programVersion === "v2" && !next;
-  const startHref = journeyComplete ? "/mentoria/app" : next && resumeChapter ? pathV2ChapterHref(next.module, resumeChapter) : pathV2ChapterHref(mentorshipPathV2[0], mentorshipPathV2[0].chapters[0]);
+  const startHref = journeyComplete && MENTORSHIP_ENABLED ? "/mentoria/app" : next && resumeChapter ? pathV2ChapterHref(next.module, resumeChapter) : pathV2ChapterHref(mentorshipPathV2[0], mentorshipPathV2[0].chapters[0]);
 
   return <main className="ca-shell">
     <header className="ca-map-head">
       <div>
         <h1>Aprenda QA <em>fazendo.</em></h1>
-        <p>{dashboard?.enrollment.programVersion === "v2" ? next ? `Próximo módulo: ${next.module.title}.` : "Percurso concluído. Veja seu case e feedback na mentoria." : "Módulos com aulas e Labs, na ordem. Leitura livre; progresso e feedback são da mentoria."}</p>
+        <p>{dashboard?.enrollment.programVersion === "v2" ? next ? `Próximo módulo: ${next.module.title}.` : "Percurso concluído. Veja seu case e feedback na mentoria." : MENTORSHIP_ENABLED ? "Módulos com aulas e Labs, na ordem. Leitura livre; progresso e feedback são da mentoria." : "Módulos com aulas e Labs, na ordem. Leitura livre."}</p>
       </div>
       <div className="ca-hero-actions">
         <Link href={startHref} className="ca-button">{journeyComplete ? "Ver meu case" : dashboard?.enrollment.programVersion === "v2" && next ? "Continuar meu percurso" : "Começar pelo primeiro capítulo"}<ArrowRight aria-hidden="true" className="size-4" /></Link>

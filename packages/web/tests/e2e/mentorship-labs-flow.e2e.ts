@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { mentorshipPathV2, pathV2ChapterHref } from "../../lib/mentorship/path-v2";
 import { labsForChapter, lessonForLab } from "../../lib/mentorship/lesson-labs";
+import { mentorshipEnabled } from "./helpers/features";
 
 // Fluxo público (sem login): aula → Lab → rascunho → pedido de login que preserva
 // a volta. O fluxo autenticado até a conclusão exige o banco local e fica em
@@ -28,8 +29,13 @@ test("@smoke capítulo mostra os Labs de cada aula e leva ao Lab certo", async (
 test("@smoke Lab público mostra a aula da mentoria e as três etapas", async ({ page }) => {
   const placement = lessonForLab(101)!;
   await page.goto("/labs/101");
-  await expect(page.getByText(`prática da aula “${placement.lessonTitle}”`)).toBeVisible();
-  await expect(page.getByRole("link", { name: "Conhecer a mentoria" })).toHaveAttribute("href", "/mentoria");
+  if (mentorshipEnabled) {
+    await expect(page.getByText(`prática da aula “${placement.lessonTitle}”`)).toBeVisible();
+    await expect(page.getByRole("link", { name: "Conhecer a mentoria" })).toHaveAttribute("href", "/mentoria");
+  } else {
+    // Sem a flag, o Lab não vende a mentoria.
+    await expect(page.getByRole("link", { name: "Conhecer a mentoria" })).toHaveCount(0);
+  }
   for (const name of [/^Etapa 1: Preparar/, /^Etapa 2: Testar/, /^Etapa 3: Entregar/]) {
     await expect(page.getByRole("button", { name })).toBeVisible();
   }

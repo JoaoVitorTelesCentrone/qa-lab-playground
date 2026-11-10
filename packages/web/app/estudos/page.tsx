@@ -1,3 +1,4 @@
+import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 import Link from "next/link";
 import { ArrowRight, BookOpenText, Clock3, Code2, MessageSquareText, PenLine, Route, Sparkles, Target } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -130,10 +131,10 @@ export default function EstudosPage() {
               acessibilidade, relatórios, flakiness e IA aplicada à automação.
             </p>
           </div>
-          <Link href="/cursos" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-neon px-5 text-sm font-black text-[#101319]">
+          {MENTORSHIP_ENABLED && <Link href="/cursos" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-neon px-5 text-sm font-black text-[#101319]">
             Abrir catálogo
             <ArrowRight className="size-4" />
-          </Link>
+          </Link>}
         </div>
       </section>
 

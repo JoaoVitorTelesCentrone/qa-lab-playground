@@ -2,13 +2,14 @@ import type { MetadataRoute } from "next";
 import { posts } from "@/lib/blog-posts";
 import { qaTools } from "@/lib/qa-tools";
 import { toolGuides } from "@/lib/tool-guides";
+import { isMentorshipPath, MENTORSHIP_ENABLED } from "@/lib/product/features";
 
 // Cursos que os guias de ferramenta recomendam; sem repetir a mesma trilha.
 const trackHrefs = [...new Set(toolGuides.flatMap((guide) => guide.internalCourse ? [guide.internalCourse.href] : []))];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app";
-  return [
+  const entries: MetadataRoute.Sitemap = [
     { url: baseUrl, changeFrequency: "weekly", priority: 1 },
     { url: `${baseUrl}/lab`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/lab/refinamento`, changeFrequency: "monthly", priority: 0.8 },
@@ -35,4 +36,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       };
     }),
   ];
+  // Com a mentoria desligada, o sitemap não anuncia rotas que respondem 404.
+  return MENTORSHIP_ENABLED ? entries : entries.filter((entry) => !isMentorshipPath(new URL(entry.url).pathname));
 }

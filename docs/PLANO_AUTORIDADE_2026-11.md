@@ -58,7 +58,7 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
 | # | Etapa | Status |
 |---|-------|--------|
 | 0 | Consertar o CI | ✅ feito |
-| 1 | Flag `FEATURE_MENTORSHIP` | pendente |
+| 1 | Flag `FEATURE_MENTORSHIP` | ✅ feito |
 | 2 | Identidade de autor | pendente |
 | 3 | Home nova | pendente |
 | 4 | `/labs` por trilha | pendente |
@@ -82,16 +82,44 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
 - **Validado sem env:** build ok, lint ok, 411 testes unitários e 23 smoke E2E passando.
   Os smoke tests nunca tinham rodado no CI, porque o build quebrava antes.
 
-### 1. Flag `FEATURE_MENTORSHIP` (padrão `false`)
+### 1. Flag `FEATURE_MENTORSHIP` (padrão `false`) ✅
 
-- Fica num ponto único, `lib/product/launch.ts`, lendo `process.env.FEATURE_MENTORSHIP`.
-- Com a flag desligada, o `proxy.ts` devolve 404 para `/mentoria/*`,
+- **Ponto único:** `lib/product/features.ts`, com `MENTORSHIP_ENABLED` e
+  `isMentorshipPath()` (testado em `features.test.ts`). A flag é embutida no build pelo
+  `env` do `next.config.ts`, então servidor, proxy e componentes de cliente leem o
+  mesmo valor. Mudar a flag exige um novo deploy.
+- **Rotas fechadas com a flag desligada:** `/mentoria/*`, `/planos`, `/cursos`,
   `/portfolio/*/mentoria/*`, `/api/v1/mentorship/*`, `/api/billing/*` e
-  `/api/cron/mentorship-emails`. `/planos` e `/cursos` entram também se o João confirmar.
-- Saem os links de header e footer e os textos de mentor/mentorado das páginas públicas.
-- O job "Mentorship v2" do CI roda com `FEATURE_MENTORSHIP=true`. Os smoke tests de
-  mentoria saem da tag `@smoke` ou rodam só com a flag ligada.
-- Teste E2E: rotas de mentoria respondem 404 com a flag desligada.
+  `/api/cron/mentorship-emails`. O `proxy.ts` responde 404: as páginas mostram o
+  not-found do site e as APIs devolvem JSON.
+- **Exceção:** `/mentoria/labs/*` e `/mentoria/performance` continuam abertas. São
+  bancadas de prática usadas por Labs públicos (159–164 e os do Broto). Na etapa 4,
+  avaliar mover essas bancadas para fora de `/mentoria`.
+- **Saíram da experiência pública:**
+  - "Mentoria" no header (desktop e mobile); "Planos" e "Mentoria" no footer.
+  - "Conhecer a mentoria" no Lab e na trilha.
+  - "Minha mentoria" no Caminho.
+  - A entrega com feedback do mentor nos capítulos.
+  - O CTA do catálogo pago em `/estudos`.
+  - "Cases da mentoria" no portfólio.
+  - As rotas fechadas foram filtradas do `sitemap.ts`.
+- **Textos neutralizados:** "Revisão de mentor" (Labs CI/CD e Pessoas), a descrição do
+  Caso Broto e a de `/ferramentas`.
+- **Testes:**
+  - `tests/e2e/mentorship-flag.e2e.ts` (smoke) cobre: rotas e APIs 404, bancadas
+    abertas e navegação sem mentoria.
+  - Os smoke tests de inscrição só rodam com a flag ligada.
+  - `scripts/test-mentorship-local.ts` (job "Mentorship v2") liga a flag.
+- **Validado:**
+  - Flag desligada, sem env: build ok; smoke com 30 passando e 2 pulados.
+  - Flag ligada: build ok; smoke com 23 passando e 9 pulados.
+- **Pendências:**
+  - Na Vercel não há nada a fazer: sem a variável, a mentoria some no próximo deploy.
+  - O workflow `mentorship-emails.yml` precisa continuar com
+    `MENTORSHIP_EMAIL_WORKER_ENABLED` diferente de `true` enquanto a flag estiver
+    desligada, porque o endpoint agora responde 404.
+  - O `/conteudo` (Caminho) segue público, sem mentoria. Decidir na etapa 3 se sai
+    da navegação.
 
 ### 2. Identidade de autor
 
@@ -157,9 +185,9 @@ Cenários, todos rodando no CI:
 
 1. **Idioma.** Sugestão: interface em EN e conteúdo dos Labs em PT. Alternativa: site
    em PT, com só o hero e o `/sobre` em EN.
-2. **O resto do site.** Destino de `/planos`, `/cursos`, `/conteudo`, `/trilhas`,
-   `/ferramentas`, dos ambientes, do workspace `/lab` e do login. Sugestão:
-   `/planos` e `/cursos` atrás da flag; o resto sai da navegação, mas as rotas ficam.
+2. **O resto do site.** `/planos` e `/cursos` já foram para trás da flag (etapa 1).
+   Falta decidir o destino de `/conteudo`, `/trilhas`, `/ferramentas`, dos ambientes, do
+   workspace `/lab` e do login. Sugestão: saem da navegação, mas as rotas ficam.
 3. **Analytics.** No Vercel Analytics, eventos customizados exigem o plano Pro. No
    Plausible há eventos em todos os planos, mas é pago.
 4. **Materiais do João.** Foto, CV em PDF, dados do BIST (descrição, stack, demo e

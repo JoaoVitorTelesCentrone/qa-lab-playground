@@ -8,7 +8,7 @@ import { contentStepHref } from "@/lib/mentorship/content-steps";
 
 export const metadata = {
   title: "Caso de treino no Broto Space | QA Lab",
-  description: "Uma jornada fictícia para praticar QA no Broto Space ao longo da mentoria.",
+  description: "Uma jornada fictícia para praticar QA no Broto Space, do primeiro módulo ao case final.",
 };
 
 const seedText = brotoTrainingCase.seed.map((entry) => `${entry.label}: ${entry.text}`).join("\n\n");

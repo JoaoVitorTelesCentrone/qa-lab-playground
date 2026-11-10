@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Embute a flag no build para que servidor, proxy e componentes de cliente
+  // leiam o mesmo valor (ver lib/product/features.ts).
+  env: { FEATURE_MENTORSHIP: process.env.FEATURE_MENTORSHIP === "true" ? "true" : "false" },
   async redirects() {
     // Legacy routes from earlier phases of the product — sent to "/" since they
     // have no direct equivalent in the current app.

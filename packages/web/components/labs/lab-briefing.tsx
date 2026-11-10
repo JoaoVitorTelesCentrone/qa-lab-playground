@@ -17,6 +17,7 @@
 // a aba, entrar na conta e voltar sem perder nada. Quem decide se a entrega
 // entra é a API, com a mesma regra mínima de sempre.
 
+import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 import Link from "next/link";
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
@@ -225,7 +226,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
       {mentee && path && <span>· <strong className="font-medium text-[var(--field-copper)]">Aula {path.lessonNumber}: {path.lessonTitle} · Lab {path.position} de {path.total}</strong></span>}
       {!mentee && trackProgress && trackStep && <span>· etapa {trackStep.position} de {trackProgress.steps.length}</span>}
     </nav>
-    {!mentee && path && <p className="mt-1 text-sm text-muted-foreground">Este Lab é a prática da aula &ldquo;{path.lessonTitle}&rdquo; da mentoria. <Link href="/mentoria" className="font-medium text-primary underline underline-offset-4">Conhecer a mentoria</Link></p>}
+    {MENTORSHIP_ENABLED && !mentee && path && <p className="mt-1 text-sm text-muted-foreground">Este Lab é a prática da aula &ldquo;{path.lessonTitle}&rdquo; da mentoria. <Link href="/mentoria" className="font-medium text-primary underline underline-offset-4">Conhecer a mentoria</Link></p>}
 
     <header className="mt-5 flex flex-wrap items-center gap-3">
       <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl">{challenge.title}</h1>
@@ -364,7 +365,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
             </ul>
             <details>
               <summary className="flex min-h-11 w-fit cursor-pointer items-center text-sm text-muted-foreground">Critérios do Lab ({challenge.acceptance.length})</summary>
-              <p className="mb-2 max-w-2xl text-xs leading-5 text-muted-foreground">O indicador mostra se os campos associados foram preenchidos; a qualidade do conteúdo continua sendo avaliada por você e pelo mentor.</p>
+              <p className="mb-2 max-w-2xl text-xs leading-5 text-muted-foreground">O indicador mostra se os campos associados foram preenchidos; a qualidade do conteúdo continua sendo avaliada por você{MENTORSHIP_ENABLED ? " e pelo mentor" : ""}.</p>
               <ul className="grid gap-2 text-sm">{acceptanceCoverage.map(({ criterion, fields, fieldsPresent }) => <li key={criterion} className="flex items-start gap-2">
                 <span aria-hidden="true" className={`mt-0.5 grid size-4 shrink-0 place-items-center rounded-full text-[0.65rem] font-bold ${fieldsPresent ? "bg-primary text-primary-foreground" : "border-[1.5px] border-[var(--field-copper)]"}`}>{fieldsPresent ? "✓" : "!"}</span>
                 <span className="text-muted-foreground">{criterion}<span className="block text-xs">{fieldsPresent ? "Campos associados preenchidos" : "Faltam campos associados"}{fields.length > 0 ? ` · ${fields.map((field) => deliveryFieldLabel[field]).join(", ")}` : " · sem vínculo definido"}</span></span>

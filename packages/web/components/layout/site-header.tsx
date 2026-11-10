@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from 
 import { cn } from "@/lib/utils";
 import { AccountNav, signOutAndGoHome, useAccount } from "@/components/auth/account-nav";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 
 type NavLink = { href: string; label: string; hint?: string; match: (path: string) => boolean };
 
@@ -87,7 +88,7 @@ export function SiteHeader() {
             <Link href={LABS.href} aria-current={LABS.match(pathname) ? "page" : undefined} className={topItem(LABS.match(pathname))}>{LABS.label}</Link>
             <MoreMenu pathname={pathname} />
             <Link href={TOOLS.href} aria-current={TOOLS.match(pathname) ? "page" : undefined} className={topItem(TOOLS.match(pathname))}>{TOOLS.label}</Link>
-            <Link href={MENTORSHIP.href} aria-current={MENTORSHIP.match(pathname) ? "page" : undefined} className={topItem(MENTORSHIP.match(pathname))}>{MENTORSHIP.label}</Link>
+            {MENTORSHIP_ENABLED && <Link href={MENTORSHIP.href} aria-current={MENTORSHIP.match(pathname) ? "page" : undefined} className={topItem(MENTORSHIP.match(pathname))}>{MENTORSHIP.label}</Link>}
           </nav>
         </div>
 
@@ -116,7 +117,7 @@ export function SiteHeader() {
                   {MORE.map((item) => <MobileLink key={item.href} item={item} pathname={pathname} onNavigate={close} />)}
                 </div>
                 <div className="grid gap-1">
-                  <MobileLink item={MENTORSHIP} pathname={pathname} onNavigate={close} />
+                  {MENTORSHIP_ENABLED && <MobileLink item={MENTORSHIP} pathname={pathname} onNavigate={close} />}
                 </div>
               </nav>
 

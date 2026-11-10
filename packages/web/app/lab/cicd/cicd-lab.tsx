@@ -159,7 +159,7 @@ function TrilhaMap({ solved, percent, complete, onContinue, onOpenModule, onSeeR
         <div>
           <p className="text-xs font-bold uppercase tracking-[.2em] text-neon">Trilha · entrega de software</p>
           <TextAnimate text="Trilha CI/CD" type="whipInUp" className="mt-3 text-4xl font-black text-off-white sm:text-5xl" />
-          <p className="mt-4 max-w-2xl leading-7 text-[#AAB2BC]">Dez Labs que percorrem um pipeline de ponta a ponta: do esqueleto do build à validação pós-release. Cada Lab reúne missões práticas e uma leitura de mentor.</p>
+          <p className="mt-4 max-w-2xl leading-7 text-[#AAB2BC]">Dez Labs que percorrem um pipeline de ponta a ponta: do esqueleto do build à validação pós-release. Cada Lab reúne missões práticas e uma leitura comentada.</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.96 }} onClick={complete ? onSeeReport : onContinue} className="inline-flex h-11 items-center gap-2 rounded-lg bg-neon px-5 text-sm font-black text-[#101319]">
               {complete ? <><Award className="size-4" />Ver relatório de confiabilidade</> : <>{started ? "Continuar trilha" : "Começar trilha"}<ArrowRight className="size-4" /></>}
@@ -383,7 +383,7 @@ function Stat({ value, label }: { value: ReactNode; label: string }) {
 function MentorNote({ note }: { note: string }) {
   return (
     <div className="mt-5 rounded-2xl border border-neon/20 bg-neon/[.04] p-5">
-      <p className="text-xs font-black uppercase tracking-wider text-neon">Revisão de mentor</p>
+      <p className="text-xs font-black uppercase tracking-wider text-neon">Revisão comentada</p>
       <p className="mt-3 text-sm leading-7 text-[#AAB2BC]">{note}</p>
     </div>
   );

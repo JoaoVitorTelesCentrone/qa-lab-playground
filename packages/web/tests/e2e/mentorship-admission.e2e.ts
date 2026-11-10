@@ -1,4 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
+import { mentorshipEnabled } from "./helpers/features";
+
+// Com FEATURE_MENTORSHIP desligada essas rotas são 404 (ver mentorship-flag.e2e.ts).
+test.skip(!mentorshipEnabled, "Requer FEATURE_MENTORSHIP=true.");
 
 async function signIn(page: Page, email: string, password: string) {
   await page.goto("/login?next=%2Fmentoria%2Finscricao");

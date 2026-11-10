@@ -72,6 +72,8 @@ const env: Record<string, string | undefined> = {
   NEXT_PUBLIC_SUPABASE_ANON_KEY: status.ANON_KEY,
   SUPABASE_SERVICE_ROLE_KEY: status.SERVICE_ROLE_KEY,
   NEXT_PUBLIC_SITE_URL: "http://127.0.0.1:3180",
+  // A suíte de mentoria testa o produto com a flag ligada (build e Playwright).
+  FEATURE_MENTORSHIP: "true",
   MENTORSHIP_E2E_LOCAL: "true",
   MENTORSHIP_E2E_REQUIRED: "true",
   MENTORSHIP_EMAIL_ENABLED: "true",

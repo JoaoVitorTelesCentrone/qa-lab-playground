@@ -1,5 +1,6 @@
 "use client";
 
+import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Search, Wrench } from "lucide-react";
@@ -16,7 +17,7 @@ const PAGE_SIZE = 10;
 // ferramenta e a loja de treino.
 const AUTOMATION_AREAS = ["Cypress", "Playwright", "Selenium e Appium", "k6", "Postman", "Bruno"];
 const QA_TOOL_AREAS = qaTools.map((tool) => tool.title);
-const groupOf = (lab: Lab) => lab.number <= 100 ? "Loja de treino" : QA_TOOL_AREAS.includes(lab.requiredFeature) ? "Ferramentas interativas" : AUTOMATION_AREAS.includes(lab.requiredFeature) ? "Automação por ferramenta" : "Broto e mentoria";
+const groupOf = (lab: Lab) => lab.number <= 100 ? "Loja de treino" : QA_TOOL_AREAS.includes(lab.requiredFeature) ? "Ferramentas interativas" : AUTOMATION_AREAS.includes(lab.requiredFeature) ? "Automação por ferramenta" : MENTORSHIP_ENABLED ? "Broto e mentoria" : "Broto";
 
 // Busca sem acento e sem diferenciar maiúsculas: "automação" encontra "automacao".
 const plain = (text: string) => text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();

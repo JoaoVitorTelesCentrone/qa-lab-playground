@@ -1,3 +1,4 @@
+import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -59,7 +60,7 @@ export function PortfolioPresentation({ portfolio, appearance: input, preview = 
       sections={portfolio.sections}
     />
 
-    {portfolio.mentorshipCases.length > 0 && <section className="portfolio-mentorship mt-12 border-t border-border pt-8"><p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">Cases da mentoria</p><div className="mt-4 grid gap-3">{portfolio.mentorshipCases.map((item) => <Link key={item.id} href={`/portfolio/${portfolio.username}/mentoria/${item.id}`} className="rounded-xl border border-border p-5 transition hover:border-primary"><h2 className="text-lg font-semibold">{item.title}</h2><p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">{item.summary}</p></Link>)}</div></section>}
+    {MENTORSHIP_ENABLED && portfolio.mentorshipCases.length > 0 && <section className="portfolio-mentorship mt-12 border-t border-border pt-8"><p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">Cases da mentoria</p><div className="mt-4 grid gap-3">{portfolio.mentorshipCases.map((item) => <Link key={item.id} href={`/portfolio/${portfolio.username}/mentoria/${item.id}`} className="rounded-xl border border-border p-5 transition hover:border-primary"><h2 className="text-lg font-semibold">{item.title}</h2><p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">{item.summary}</p></Link>)}</div></section>}
 
     {!preview && <div className="portfolio-export mt-12"><PortfolioExportPanel username={portfolio.username} /></div>}
 

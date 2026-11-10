@@ -1,3 +1,4 @@
+import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 import Link from "next/link";
 import { ArrowUpRight, BookOpenText, Sprout } from "lucide-react";
 import "./content-atlas.css";
@@ -9,7 +10,7 @@ export default function ContentLayout({ children }: Readonly<{ children: React.R
       <div className="ca-topbar-links">
         <Link href="/conteudo">Módulos</Link>
         <Link href="/conteudo/broto"><Sprout aria-hidden="true" className="size-4" /> Caso Broto</Link>
-        <Link href="/mentoria/app">Minha mentoria <ArrowUpRight aria-hidden="true" className="size-3.5" /></Link>
+        {MENTORSHIP_ENABLED && <Link href="/mentoria/app">Minha mentoria <ArrowUpRight aria-hidden="true" className="size-3.5" /></Link>}
       </div>
     </nav>
     {children}

@@ -8,6 +8,7 @@
 // passos, oráculo e critérios: nos níveis de cima eles empurram tudo para
 // baixo e impedem a leitura em varredura.
 
+import { MENTORSHIP_ENABLED } from "@/lib/product/features";
 import { Badge } from "@/components/ui/badge";
 import { caseSkills, headline, type QaCase } from "@/lib/product/case";
 import { AttachmentGallery, EvidenceText } from "./evidence-body";
@@ -73,7 +74,7 @@ export function CaseView({ item }: { item: QaCase }) {
     </Section>}
 
     {item.deliveryCoverage && <Section title="Cobertura registrada">
-      <p className="mb-3 text-xs leading-5 text-muted-foreground">Este resumo indica quais campos associados estão preenchidos. A revisão do conteúdo continua sendo feita por você e pelo mentor.</p>
+      <p className="mb-3 text-xs leading-5 text-muted-foreground">Este resumo indica quais campos associados estão preenchidos. A revisão do conteúdo continua sendo feita por você{MENTORSHIP_ENABLED ? " e pelo mentor" : ""}.</p>
       <ul className="grid gap-2">
         {item.deliveryCoverage.map(({ criterion, fields, fieldsPresent }) => <li key={criterion} className="flex flex-col gap-1 border-b border-border/60 pb-2 text-sm last:border-0 last:pb-0 sm:flex-row sm:items-start sm:justify-between">
           <span className="leading-6">{criterion}</span>

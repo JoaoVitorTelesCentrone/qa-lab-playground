@@ -233,7 +233,7 @@ function Review({ scenario, reflections, toggle }: { scenario: PeopleScenario; r
     <div className="mt-7">
       <div className="rounded-2xl border border-neon/20 bg-neon/[.04] p-5">
         <Brain className="size-5 text-neon" />
-        <h3 className="mt-3 font-black text-off-white">Revisão de mentor</h3>
+        <h3 className="mt-3 font-black text-off-white">Revisão comentada</h3>
         <p className="mt-3 text-sm leading-7 text-[#AAB2BC]">{scenario.mentorNote}</p>
         <p className="mt-5 text-xs font-bold uppercase tracking-wider text-neon">Uma resposta madura considera</p>
         <div className="mt-3 space-y-2">
