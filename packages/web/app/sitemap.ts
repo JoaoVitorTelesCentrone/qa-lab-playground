@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/mentoria/labs/oraculo`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/mentoria/labs/incidente`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/sobre`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/desafio`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/conteudo`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/labs`, changeFrequency: "weekly", priority: 0.8 },

@@ -1,0 +1,51 @@
+{
+  "week": "2026-W46",
+  "title": "Find the 4 bugs in the QA Lab API",
+  "summary": "The public API has a bug mode. Turn it on with ?scenario=bug, compare it with the correct mode and report every bug you can prove.",
+  "publishedAt": "2026-11-09",
+  "solutionReleaseAt": "2026-11-16T15:00:00Z",
+  "bugCount": 4,
+  "labHref": "/labs/api-crud",
+  "track": "API",
+  "start": [
+    "Read the docs at GET /api/docs.",
+    "Call each endpoint twice: once as is and once with ?scenario=bug.",
+    "For every difference, write what you sent, what came back and what the contract says should come back."
+  ],
+  "endpoints": [
+    "GET /api/health",
+    "GET /api/users/:id",
+    "POST /api/users",
+    "DELETE /api/products/:id"
+  ],
+  "solution": [
+    {
+      "title": "Missing user answers 200",
+      "request": "GET /api/users/999?scenario=bug",
+      "expected": "404 with { error: \"Not Found\", statusCode: 404 }",
+      "actual": "200 with { error: \"Usuario nao encontrado\" }",
+      "why": "Clients that branch on the status code treat the error as a success."
+    },
+    {
+      "title": "Created user loses fields",
+      "request": "POST /api/users?scenario=bug with telefone and cargo",
+      "expected": "201 echoing telefone and cargo",
+      "actual": "201 with telefone and cargo as empty strings",
+      "why": "The request succeeds, so the data loss only shows up later."
+    },
+    {
+      "title": "DELETE says yes but deletes nothing",
+      "request": "DELETE /api/products/1?scenario=bug",
+      "expected": "204 and X-Resource-Deleted: true",
+      "actual": "204 and X-Resource-Deleted: false",
+      "why": "A status-only assertion passes; the side effect has to be checked."
+    },
+    {
+      "title": "Health check hides a dead database",
+      "request": "GET /api/health?scenario=bug",
+      "expected": "A non-healthy status when a dependency is down",
+      "actual": "status: \"healthy\" with services.database: \"down\"",
+      "why": "Monitors that only read status never alert."
+    }
+  ]
+}

@@ -62,7 +62,7 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
 | 2 | Identidade de autor | ✅ feito |
 | 3 | Home nova | pendente |
 | 4 | `/labs` por trilha | pendente |
-| 5 | `/desafio` | pendente |
+| 5 | `/desafio` | ✅ feito |
 | 6 | Blog em MDX, PT e EN | pendente |
 | 7 | `/referencias`, `/projetos` e `/sobre` | parcial (`/sobre` mínimo) |
 | 8 | SEO e OG images | pendente |
@@ -168,10 +168,27 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
 - Export de relatório em Markdown.
 - Byline e "Share on LinkedIn" em cada Lab, reaproveitando `linkedInPost()`.
 
-### 5. `/desafio`
+### 5. `/desafio` ✅
 
-- Lê `content/challenge.json` (semana, Labs, N bugs, `solutionReleaseAt`).
-- A página de solução só abre depois de `solutionReleaseAt`.
+- **Dados:** `packages/web/content/challenge.json`, trocado toda semana. Campos:
+  título, resumo, `bugCount`, Lab, endpoints, passos, `solutionReleaseAt` e gabarito.
+- **Lógica:** `lib/authority/challenge.ts` com `isSolutionReleased()`, testado. Um
+  teste também trava a coerência do arquivo: o gabarito tem `bugCount` itens.
+- **`/desafio`:** página em inglês com byline, share, "Open the lab" e a data em que a
+  solução abre.
+- **`/desafio/solucao`:** responde 404 antes de `solutionReleaseAt`. As duas páginas
+  são dinâmicas, então a data é avaliada a cada requisição.
+- **Primeiro desafio (2026-W46):** "Find the 4 bugs in the QA Lab API", no modo
+  `?scenario=bug`. Os 4 bugs foram conferidos com curl contra o servidor, comparando o
+  modo bugado com o correto:
+  - `GET /api/users/999` responde 200 em vez de 404.
+  - O POST de usuário perde `telefone` e `cargo`.
+  - O DELETE de produto responde 204 sem apagar nada.
+  - O health diz `healthy` com o banco `down`.
+- Saiu o redirect legado `/desafio → /lab` do `next.config.ts`. Ele era permanente,
+  então navegadores que já o visitaram podem ter o 308 em cache.
+- **Testes:** `tests/e2e/challenge.e2e.ts` (smoke). Eles leem a mesma config do app,
+  então continuam válidos depois da liberação.
 
 ### 6. Blog em MDX
 

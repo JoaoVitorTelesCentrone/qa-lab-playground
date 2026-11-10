@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
       { source: "/mentoria/conteudo", destination: "/conteudo", permanent: true },
       { source: "/mentoria/conteudo/:path*", destination: "/conteudo/:path*", permanent: true },
       // Legacy practice URLs go to the current Lab entry point.
-      { source: "/desafio", destination: "/lab", permanent: true },
+      // /desafio deixou de ser rota legada: agora é o desafio da semana.
       { source: "/desafios/:path*", destination: "/lab", permanent: true },
       { source: "/missoes/:path*", destination: "/lab", permanent: true },
       { source: "/datas/:path*", destination: "/lab", permanent: true },
