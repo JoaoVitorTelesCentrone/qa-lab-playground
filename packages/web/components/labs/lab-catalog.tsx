@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Search, Wrench } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -25,10 +24,13 @@ const plain = (text: string) => text.normalize("NFD").replace(/[̀-ͯ]/g, "").to
 // A lista de Labs tem o mesmo desenho da lista de módulos do Caminho: uma linha
 // por Lab, número grande, título, resumo e contagens à direita. Broto e mentoria
 // vêm primeiro; a loja de treino (1–100) fica no fim.
-export function LabCatalog({ progress = [] }: { progress?: Array<Pick<LabProgress, "status"> & { slug: string }> }) {
+export function LabCatalog({ progress = [], initialPage }: { progress?: Array<Pick<LabProgress, "status"> & { slug: string }>; initialPage?: string }) {
   const [query, setQuery] = useState("");
   // A página vive na URL (?pagina=3): voltar de um Lab devolve a mesma página.
-  const requested = Number(useSearchParams().get("pagina"));
+  // Vem do servidor (searchParams da página) em vez de useSearchParams: sem
+  // Supabase configurado a rota seria pré-renderizada e o Next exigiria um
+  // <Suspense>, que deixaria a lista vazia no HTML inicial.
+  const requested = Number(initialPage);
   const [chosen, setChosen] = useState<number | null>(null);
   const page = chosen ?? (Number.isInteger(requested) && requested > 0 ? requested : 1);
   const listTop = useRef<HTMLElement>(null);

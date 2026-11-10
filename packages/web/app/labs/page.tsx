@@ -3,10 +3,11 @@ import { getJourney, getSessionUser } from "@/lib/product/store";
 
 export const metadata = { title: "Labs de QA na prática", description: "Escolha uma missão, teste um sistema com dados de treino e registre suas descobertas. Aprenda QA com prática e evidências." };
 
-export default async function LabsPage() {
+export default async function LabsPage({ searchParams }: { searchParams: Promise<{ pagina?: string | string[] }> }) {
   // A lista funciona deslogada; quando há sessão, marca o que já foi feito.
   const user = await getSessionUser();
   const journey = user ? await getJourney(user.id) : null;
   const progress = journey?.labs.map((item) => ({ slug: item.lab.slug, status: item.status })) ?? [];
-  return <LabCatalog progress={progress} />;
+  const { pagina } = await searchParams;
+  return <LabCatalog progress={progress} initialPage={Array.isArray(pagina) ? pagina[0] : pagina} />;
 }
