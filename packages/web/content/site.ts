@@ -3,7 +3,7 @@
  * Byline, /sobre, schema.org Person, OG images e o botão de compartilhar leem daqui.
  */
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app").replace(/\/$/, "");
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground-web.vercel.app").replace(/\/$/, "");
 
 export const author = {
   name: "João Centrone",

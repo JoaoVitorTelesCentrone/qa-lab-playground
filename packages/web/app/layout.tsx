@@ -16,7 +16,7 @@ const anton = Anton({ variable: "--font-anton", weight: "400", subsets: ["latin"
 const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground-web.vercel.app"),
   title: { default: LABS_ENABLED ? "QA Lab — Aprenda QA na prática" : "QA Lab — Conteúdo sobre qualidade de software", template: "%s | QA Lab" },
   description: LABS_ENABLED ? "Aprenda QA na prática. Teste sistemas, investigue falhas e transforme suas descobertas em evidências nos ambientes de prática do QA Lab." : "Artigos e projetos sobre qualidade de software e automação de testes.",
   openGraph: {

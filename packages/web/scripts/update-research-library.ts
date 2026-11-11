@@ -313,7 +313,7 @@ async function searchOpenAlex(query: string, fromDate: string, perPage: number) 
   }
 
   const response = await fetch(`https://api.openalex.org/works?${params.toString()}`, {
-    headers: { "User-Agent": "QA Lab Research Updater (https://qa-lab-playground.vercel.app)" },
+    headers: { "User-Agent": "QA Lab Research Updater (https://qa-lab-playground-web.vercel.app)" },
   });
 
   if (!response.ok) {
@@ -360,7 +360,7 @@ async function searchSemanticScholar(query: string, fromDate: string, perPage: n
   });
 
   const response = await fetch(`https://api.semanticscholar.org/graph/v1/paper/search?${params.toString()}`, {
-    headers: { "User-Agent": "QA Lab Research Updater (https://qa-lab-playground.vercel.app)" },
+    headers: { "User-Agent": "QA Lab Research Updater (https://qa-lab-playground-web.vercel.app)" },
   });
 
   if (!response.ok) {
@@ -381,7 +381,7 @@ async function searchArxiv(query: string, perPage: number) {
   });
 
   const response = await fetch(`https://export.arxiv.org/api/query?${params.toString()}`, {
-    headers: { "User-Agent": "QA Lab Research Updater (https://qa-lab-playground.vercel.app)" },
+    headers: { "User-Agent": "QA Lab Research Updater (https://qa-lab-playground-web.vercel.app)" },
   });
 
   if (!response.ok) {

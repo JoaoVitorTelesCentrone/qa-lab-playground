@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (mdx) return mdxPostMetadata(mdx, mdx.defaultLang);
   const post = getPostBySlug(slug);
   if (!post) return { title: "Artigo não encontrado" };
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground-web.vercel.app";
   const canonical = new URL(`/blog/${post.slug}`, siteUrl).toString();
   return {
     title: post.titulo,
@@ -73,7 +73,7 @@ export default async function BlogPostPage({ params }: Props) {
   const previous = index > 0 ? seriesPosts[index - 1] : undefined;
   const next = index >= 0 ? seriesPosts[index + 1] : undefined;
   const related = getRelatedPosts(post.slug, 3).filter((item) => item.slug !== previous?.slug && item.slug !== next?.slug).slice(0, 2);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground-web.vercel.app";
   const canonical = new URL(`/blog/${post.slug}`, siteUrl).toString();
   const jsonLd = {
     "@context": "https://schema.org",

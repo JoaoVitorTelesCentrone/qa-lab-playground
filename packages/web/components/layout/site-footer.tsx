@@ -31,6 +31,7 @@ export function SiteFooter() {
             <Link href="/planos" className="inline-flex min-h-11 items-center transition hover:text-foreground">Planos</Link>
             <Link href="/mentoria" className="inline-flex min-h-11 items-center transition hover:text-foreground">Mentoria</Link>
           </>}
+          <Link href="/privacidade" className="inline-flex min-h-11 items-center transition hover:text-foreground">Privacidade</Link>
           <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center transition hover:text-foreground">LinkedIn<span className="sr-only"> (abre em nova aba)</span></a>
         </nav>
       </div>

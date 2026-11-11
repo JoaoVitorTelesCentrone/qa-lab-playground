@@ -8,7 +8,7 @@ import { isLabPath, isMentorshipPath, LABS_ENABLED, MENTORSHIP_ENABLED } from "@
 const trackHrefs = [...new Set(toolGuides.flatMap((guide) => guide.internalCourse ? [guide.internalCourse.href] : []))];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground-web.vercel.app";
   const entries: MetadataRoute.Sitemap = [
     { url: baseUrl, changeFrequency: "weekly", priority: 1 },
     { url: `${baseUrl}/lab`, changeFrequency: "weekly", priority: 0.9 },
@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/mentoria/labs/incidente`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/sobre`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/desafio`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/privacidade`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/conteudo`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/labs`, changeFrequency: "weekly", priority: 0.8 },

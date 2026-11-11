@@ -107,6 +107,6 @@ export default async function ConclusionPage({ params }: { params: Promise<{ num
     next={next}
     milestone={milestone}
     pathLabel={placement ? `Módulo ${placement.moduleNumber} · Cap ${placement.chapter.id} · ${placement.lessonTitle}` : null}
-    siteUrl={process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app"}
+    siteUrl={process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground-web.vercel.app"}
   />;
 }
