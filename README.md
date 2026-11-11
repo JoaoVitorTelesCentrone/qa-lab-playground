@@ -4,11 +4,11 @@ Plataforma de prática de QA com aplicações que simulam produtos reais, Labs g
 
 ## Estado do lançamento
 
-O lançamento público destaca os Labs de prática e as trilhas disponíveis. A home leva à jornada principal do QA Lab; desafios e ambientes de prática ficam em suas áreas próprias.
+O lançamento público apresenta artigos e projetos do QA Lab. Labs, desafios e ambientes de prática estão fora da versão pública.
 
 O estado do produto, decisões e pendências estão em [`docs/PRODUCTIZATION_PLAN.md`](docs/PRODUCTIZATION_PLAN.md), [`docs/QA_LAB_DECISIONS.md`](docs/QA_LAB_DECISIONS.md) e [`docs/QA_LAB_PRODUCT_PLAN.md`](docs/QA_LAB_PRODUCT_PLAN.md).
 
-No lançamento público, os Labs e as trilhas abrem sem conta. Rascunhos e progresso local ficam no navegador; o relatório do Lab pode ser baixado em Markdown. Login, cadastro, perfil e mentoria ficam desativados por padrão. `FEATURE_ACCOUNTS=true` reativa as contas em um novo build.
+No lançamento público, login, cadastro, perfil, mentoria e Labs ficam desativados por padrão. `FEATURE_ACCOUNTS=true` e `FEATURE_LABS=true` reativam esses recursos em um novo build.
 
 ## Rodar localmente
 

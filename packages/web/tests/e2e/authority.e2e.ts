@@ -1,7 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { labsEnabled } from "./helpers/features";
 
 // Elementos de autoridade: quem construiu o QA Lab aparece em todo Lab e post.
 test("@smoke Lab mostra a byline do autor e o botão de compartilhar", async ({ page }) => {
+  test.skip(!labsEnabled, "Labs desativados neste ambiente.");
   await page.goto("/labs/101");
   const byline = page.getByTestId("author-byline");
   await expect(byline).toContainText("Built by");

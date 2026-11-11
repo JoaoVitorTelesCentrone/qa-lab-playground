@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { allPosts as posts } from "@/lib/blog/all-posts";
 import { qaTools } from "@/lib/qa-tools";
 import { toolGuides } from "@/lib/tool-guides";
-import { isMentorshipPath, MENTORSHIP_ENABLED } from "@/lib/product/features";
+import { isLabPath, isMentorshipPath, LABS_ENABLED, MENTORSHIP_ENABLED } from "@/lib/product/features";
 
 // Cursos que os guias de ferramenta recomendam; sem repetir a mesma trilha.
 const trackHrefs = [...new Set(toolGuides.flatMap((guide) => guide.internalCourse ? [guide.internalCourse.href] : []))];
@@ -42,5 +42,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }),
   ];
   // Com a mentoria desligada, o sitemap não anuncia rotas que respondem 404.
-  return MENTORSHIP_ENABLED ? entries : entries.filter((entry) => !isMentorshipPath(new URL(entry.url).pathname));
+  return entries.filter((entry) => {
+    const pathname = new URL(entry.url).pathname;
+    return (MENTORSHIP_ENABLED || !isMentorshipPath(pathname)) && (LABS_ENABLED || !isLabPath(pathname));
+  });
 }

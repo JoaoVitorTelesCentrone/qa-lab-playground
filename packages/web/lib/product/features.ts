@@ -14,6 +14,19 @@ export const MENTORSHIP_ENABLED = process.env.FEATURE_MENTORSHIP === "true";
 /** Contas ficam fora do lançamento público; a mentoria ainda pode usá-las quando reativada. */
 export const ACCOUNTS_ENABLED = MENTORSHIP_ENABLED || process.env.FEATURE_ACCOUNTS === "true";
 
+/** As bancadas e desafios ficam fora da versão pública editorial. */
+export const LABS_ENABLED = process.env.FEATURE_LABS === "true";
+
+const LAB_PREFIXES = [
+  "/labs", "/lab", "/trilhas", "/desafio", "/playground", "/comecar", "/conteudo",
+  "/mentoria/labs", "/mentoria/performance", "/boards", "/test-suite", "/api-playground",
+  "/api/v1/submissions", "/api/v1/evidence", "/api/v1/bdd-drafts",
+];
+
+export function isLabPath(pathname: string) {
+  return LAB_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+}
+
 export function isAccountPath(pathname: string) {
   return ["/login", "/cadastro", "/recuperar", "/auth", "/perfil"].some((prefix) =>
     pathname === prefix || pathname.startsWith(`${prefix}/`));

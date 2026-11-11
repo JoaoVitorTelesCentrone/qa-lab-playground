@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";
+import { labsEnabled } from "./helpers/features";
+
+test.skip(!labsEnabled, "Labs desativados neste ambiente.");
 
 test("@smoke a primeira aula apresenta captura e retomada no BrotoSpace", async ({ page }) => {
   await page.goto("/conteudo/modulos/produto-risco/produto-jornada");

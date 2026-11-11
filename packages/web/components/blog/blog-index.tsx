@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowDown, ArrowRight, Search } from "lucide-react";
 import type { BlogPost } from "@/lib/blog-posts";
 import { BlogEventCapture } from "@/components/blog/blog-event";
+import { LABS_ENABLED } from "@/lib/product/features";
 
 export type BlogIndexArticle = Pick<BlogPost, "slug" | "titulo" | "resumo" | "tempoLeitura" | "tags" | "editorial">;
 export type BlogIndexSeries = {
@@ -62,12 +63,12 @@ export function BlogIndex({ sections, featured }: Props) {
             Começar por: {featured.titulo}<ArrowDown className="size-4" aria-hidden="true" />
           </Link>
         </div>
-        <article className="qa-editorial-featured" aria-label="Prática gratuita do QA Lab">
+        {LABS_ENABLED && <article className="qa-editorial-featured" aria-label="Prática gratuita do QA Lab">
           <span>Depois da leitura</span>
           <strong>Investigue o primeiro caso gratuito.</strong>
           <small>Leve uma pergunta para o BrotoSpace, observe o resultado e registre a evidência.</small>
           <BlogEventCapture className="qa-editorial-featured-event" event="practice_cta_click" slug={featured.slug}><Link href={`/labs/101?fromBlog=${featured.slug}`} className="qa-editorial-featured-action">Abrir o Lab 01 <ArrowRight className="size-4" aria-hidden="true" /></Link></BlogEventCapture>
-        </article>
+        </article>}
       </header>
 
       <nav className="qa-editorial-index" aria-label="Temas do blog">

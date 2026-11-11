@@ -5,6 +5,7 @@ import { author } from "@/content/site";
 import { challenge, formatRelease, isSolutionReleased } from "@/lib/authority/challenge";
 import { featuredLabs, latestPost, projects } from "@/lib/authority/content";
 import { formatDate } from "@/lib/blog-posts";
+import { LABS_ENABLED } from "@/lib/product/features";
 
 // Home do site de autoridade: quem construiu, o que construiu e onde acompanhar.
 // Todo o conteúdo vem de content/ (site.ts, featured-labs.json, challenge.json,
@@ -32,12 +33,17 @@ export function AuthorityHome() {
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">QA Lab · by {author.name}</p>
           <h1 id="hero-title" className="font-display mt-4 text-5xl uppercase leading-[0.92] sm:text-7xl">
-            Hands-on QA labs with <span className="text-gold">real bugs</span>, built by a QA Automation Engineer
+            {LABS_ENABLED ? <>Hands-on QA labs with <span className="text-gold">real bugs</span>, built by a QA Automation Engineer</> : <>Quality engineering, <span className="text-gold">ideas and projects</span> by João Centrone</>}
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">Every lab has a correct mode and a bug mode. Switch the bug on, find it, prove it and write the report.</p>
+          <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">{LABS_ENABLED ? "Every lab has a correct mode and a bug mode. Switch the bug on, find it, prove it and write the report." : "Articles and projects about software quality, automation and the decisions behind reliable products."}</p>
           <div data-onboarding="home-cta" className="mt-8 flex flex-wrap gap-3">
-            <Link href="/labs" data-event="start_lab" className="inline-flex min-h-12 items-center gap-2 rounded-md bg-gold px-6 text-base font-bold text-[#14110b] transition-colors hover:bg-gold/90">Start a lab <ArrowRight className="size-4" aria-hidden="true" /></Link>
-            <Link href="/desafio" className="inline-flex min-h-12 items-center gap-2 rounded-md border border-gold/50 px-6 text-base font-bold text-gold transition-colors hover:bg-gold/10"><Bug className="size-4" aria-hidden="true" />Weekly challenge</Link>
+            {LABS_ENABLED ? <>
+              <Link href="/labs" data-event="start_lab" className="inline-flex min-h-12 items-center gap-2 rounded-md bg-gold px-6 text-base font-bold text-[#14110b] transition-colors hover:bg-gold/90">Start a lab <ArrowRight className="size-4" aria-hidden="true" /></Link>
+              <Link href="/desafio" className="inline-flex min-h-12 items-center gap-2 rounded-md border border-gold/50 px-6 text-base font-bold text-gold transition-colors hover:bg-gold/10"><Bug className="size-4" aria-hidden="true" />Weekly challenge</Link>
+            </> : <>
+              <Link href="/blog" className="inline-flex min-h-12 items-center gap-2 rounded-md bg-gold px-6 text-base font-bold text-[#14110b] transition-colors hover:bg-gold/90">Read the blog <ArrowRight className="size-4" aria-hidden="true" /></Link>
+              <Link href="/sobre" className="inline-flex min-h-12 items-center gap-2 rounded-md border border-gold/50 px-6 text-base font-bold text-gold transition-colors hover:bg-gold/10">About the author</Link>
+            </>}
           </div>
         </div>
         <Link href={author.aboutHref} data-testid="author-byline" className="group flex items-center gap-5 rounded-xl border border-border bg-card p-5 transition-colors hover:border-gold/60 lg:flex-col lg:items-start">
@@ -52,7 +58,7 @@ export function AuthorityHome() {
     </section>
 
     <div className="mx-auto grid max-w-6xl gap-16 px-5 py-14 sm:px-8 sm:py-20">
-      <section aria-labelledby="featured-title">
+      {LABS_ENABLED && <section aria-labelledby="featured-title">
         <SectionHead id="featured-title" kicker="Featured labs" title="Pick a bug to hunt" href="/labs" linkLabel="All labs" />
         <ul className="mt-6 grid gap-4 sm:grid-cols-2">{featuredLabs.map((lab) => <li key={lab.href} className="flex flex-col rounded-lg border border-border bg-card p-5">
           <span className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">{lab.track}</span>
@@ -63,9 +69,9 @@ export function AuthorityHome() {
             {lab.bugHref && <Link href={lab.bugHref} data-event="start_lab" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-gold"><Bug className="size-4" aria-hidden="true" />Bug mode</Link>}
           </div>
         </li>)}</ul>
-      </section>
+      </section>}
 
-      <section aria-labelledby="challenge-title" className="rounded-xl border border-gold/40 p-6 sm:p-8">
+      {LABS_ENABLED && <section aria-labelledby="challenge-title" className="rounded-xl border border-gold/40 p-6 sm:p-8">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Weekly challenge · {challenge.week}</p>
         <h2 id="challenge-title" className="font-display mt-2 text-3xl uppercase leading-none sm:text-5xl">{challenge.title}</h2>
         <p className="mt-4 max-w-2xl leading-7 text-muted-foreground">{challenge.summary}</p>
@@ -73,7 +79,7 @@ export function AuthorityHome() {
           <Link href="/desafio" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-gold px-5 text-sm font-bold text-[#14110b] hover:bg-gold/90">Take the challenge <ArrowRight className="size-4" aria-hidden="true" /></Link>
           <span className="inline-flex items-center gap-2 text-sm text-muted-foreground"><CalendarClock className="size-4" aria-hidden="true" />{released ? "Solution is out" : `Solution on ${formatRelease(challenge.solutionReleaseAt)}`}</span>
         </div>
-      </section>
+      </section>}
 
       {post && <section aria-labelledby="post-title">
         <SectionHead id="post-title" kicker="Latest post" title="From the blog" href="/blog" linkLabel="All posts" />

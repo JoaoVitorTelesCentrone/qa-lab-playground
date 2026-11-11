@@ -1,7 +1,9 @@
 import { expect, test } from "@playwright/test";
 import { mentorshipPathV2, pathV2ChapterHref } from "../../lib/mentorship/path-v2";
 import { labsForChapter, lessonForLab } from "../../lib/mentorship/lesson-labs";
-import { accountsEnabled, mentorshipEnabled } from "./helpers/features";
+import { accountsEnabled, labsEnabled, mentorshipEnabled } from "./helpers/features";
+
+test.skip(!labsEnabled, "Labs desativados neste ambiente.");
 
 // Fluxo público (sem login): aula → Lab → rascunho → pedido de login que preserva
 // a volta. O fluxo autenticado até a conclusão exige o banco local e fica em

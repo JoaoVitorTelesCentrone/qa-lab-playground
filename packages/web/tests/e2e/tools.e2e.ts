@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { toolGuides } from "../../lib/tool-guides";
 import { qaTools } from "../../lib/qa-tools";
+import { labsEnabled } from "./helpers/features";
 
 test("@smoke o índice de ferramentas leva a todos os guias", async ({ page }) => {
   await page.goto("/ferramentas");
@@ -21,7 +22,7 @@ test("@smoke cada guia abre com documentação e vídeos", async ({ page }) => {
     for (const link of await page.locator("main a[target=_blank]").all()) {
       await expect(link).toHaveAttribute("rel", /noopener/);
     }
-    if (guide.internalCourse) await expect(page.locator(`main a[href="${guide.internalCourse.href}"]`)).toBeVisible();
+    if (guide.internalCourse) await expect(page.locator(`main a[href="${guide.internalCourse.href}"]`)).toHaveCount(labsEnabled ? 1 : 0);
   }
 });
 
@@ -31,6 +32,7 @@ test("@smoke guia inexistente é 404", async ({ page }) => {
 });
 
 test("@smoke cada bancada abre no primeiro Lab", async ({ page }) => {
+  test.skip(!labsEnabled, "Labs desativados neste ambiente.");
   for (const tool of qaTools) {
     await page.goto(`/lab/ferramentas/${tool.id}`);
     await expect(page.getByRole("heading", { level: 1, name: tool.title })).toBeVisible();
@@ -39,6 +41,7 @@ test("@smoke cada bancada abre no primeiro Lab", async ({ page }) => {
 });
 
 test("a bancada de SQL encontra o pedido com total negativo", async ({ page }) => {
+  test.skip(!labsEnabled, "Labs desativados neste ambiente.");
   await page.goto("/lab/ferramentas/sql?lab=401");
   await page.getByRole("button", { name: "Executar" }).click();
   await expect(page.getByRole("cell", { name: "QL-1046" })).toBeVisible();
@@ -46,6 +49,7 @@ test("a bancada de SQL encontra o pedido com total negativo", async ({ page }) =
 });
 
 test("o Lab 411 mostra o status e o total com tipo errado na mesma resposta", async ({ page }) => {
+  test.skip(!labsEnabled, "Labs desativados neste ambiente.");
   await page.goto("/lab/ferramentas/contrato?lab=411");
   await page.getByRole("button", { name: "Validar contrato" }).click();
   await expect(page.getByText('Esperado: número 200 ou 422 · recebido: "200"')).toBeVisible();

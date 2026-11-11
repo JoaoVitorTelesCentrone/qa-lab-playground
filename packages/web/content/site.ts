@@ -9,7 +9,7 @@ export const author = {
   name: "João Centrone",
   title: "QA Automation Engineer",
   /** Usado na byline: "Built by João Centrone". */
-  shortBio: "QA Automation Engineer building hands-on labs with real bugs.",
+  shortBio: "QA Automation Engineer writing about software quality and building practical tools.",
   /**
    * TODO(João): trocar pelo arquivo real (ex.: /author/joao-centrone.jpg, quadrado,
    * pelo menos 400×400). Enquanto isso, um monograma em SVG.

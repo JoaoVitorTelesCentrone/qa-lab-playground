@@ -8,6 +8,7 @@ import { NavigationProgress } from "@/components/layout/navigation-progress";
 import { FloatingOnboarding } from "@/components/onboarding/floating-onboarding";
 import { firstLab as launchFirstLab, labLabel } from "@/lib/playground/catalog";
 import { AttributionCapture } from "@/components/analytics/attribution-capture";
+import { LABS_ENABLED } from "@/lib/product/features";
 
 // Identidade QA Lab: Plus Jakarta Sans no texto, Anton nos títulos de destaque.
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin"], display: "swap" });
@@ -16,15 +17,15 @@ const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], 
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app"),
-  title: { default: "QA Lab — Aprenda QA na prática", template: "%s | QA Lab" },
-  description: "Aprenda QA na prática. Teste sistemas, investigue falhas e transforme suas descobertas em evidências nos ambientes de prática do QA Lab.",
+  title: { default: LABS_ENABLED ? "QA Lab — Aprenda QA na prática" : "QA Lab — Conteúdo sobre qualidade de software", template: "%s | QA Lab" },
+  description: LABS_ENABLED ? "Aprenda QA na prática. Teste sistemas, investigue falhas e transforme suas descobertas em evidências nos ambientes de prática do QA Lab." : "Artigos e projetos sobre qualidade de software e automação de testes.",
   openGraph: {
-    title: "QA Lab — Aprenda QA na prática",
-    description: "Teste sistemas, investigue falhas e transforme suas descobertas em evidências. Escolha um Lab e comece a praticar QA.",
+    title: LABS_ENABLED ? "QA Lab — Aprenda QA na prática" : "QA Lab — Conteúdo sobre qualidade de software",
+    description: LABS_ENABLED ? "Teste sistemas, investigue falhas e transforme suas descobertas em evidências. Escolha um Lab e comece a praticar QA." : "Artigos e projetos sobre qualidade de software e automação de testes.",
     type: "website",
     locale: "pt_BR",
   },
-  twitter: { card: "summary_large_image", title: "QA Lab — Aprenda QA na prática", description: "Teste sistemas, investigue falhas e construa evidências do que você sabe fazer." },
+  twitter: { card: "summary_large_image", title: LABS_ENABLED ? "QA Lab — Aprenda QA na prática" : "QA Lab — Conteúdo sobre qualidade de software", description: LABS_ENABLED ? "Teste sistemas, investigue falhas e construa evidências do que você sabe fazer." : "Artigos e projetos sobre qualidade de software e automação de testes." },
 };
 
 export const viewport: Viewport = { themeColor: "#131313", colorScheme: "dark" };
@@ -32,6 +33,13 @@ export const viewport: Viewport = { themeColor: "#131313", colorScheme: "dark" }
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const firstLab = launchFirstLab;
   const tourLab = firstLab ? { number: firstLab.number, label: labLabel(firstLab), title: firstLab.title } : null;
+  const site = <>
+    <NavigationProgress />
+    <SiteHeader />
+    <div id="main-content" tabIndex={-1} className="outline-none">{children}</div>
+    <Toaster />
+    <SiteFooter />
+  </>;
   return (
     // As variáveis de fonte ficam no <html> para que o :root consiga derivar
     // --font-display delas (globals.css).
@@ -45,15 +53,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           Pular para o conteúdo
         </a>
         <AttributionCapture />
-        <FloatingOnboarding lab={tourLab}>
-        <NavigationProgress />
-        <SiteHeader />
-        <div id="main-content" tabIndex={-1} className="outline-none">
-          {children}
-        </div>
-        <Toaster />
-        <SiteFooter />
-        </FloatingOnboarding>
+        {LABS_ENABLED ? <FloatingOnboarding lab={tourLab}>{site}</FloatingOnboarding> : site}
       </body>
     </html>
   );

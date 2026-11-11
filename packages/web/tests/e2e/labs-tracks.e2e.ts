@@ -1,5 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
+import { labsEnabled } from "./helpers/features";
+
+test.skip(!labsEnabled, "Labs desativados neste ambiente.");
 
 test("@smoke /labs lista as 6 trilhas e filtra pela URL", async ({ page }) => {
   await page.goto("/labs");

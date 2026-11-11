@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { mentorshipEnabled } from "./helpers/features";
+import { labsEnabled, mentorshipEnabled } from "./helpers/features";
 
 // Com FEATURE_MENTORSHIP desligada, a mentoria, os planos e o checkout somem da
 // experiência pública: páginas e APIs respondem 404. Código e tabelas ficam.
@@ -28,7 +28,7 @@ test.describe("mentoria desligada", () => {
   test("@smoke bancadas de prática sob /mentoria continuam abertas", async ({ page }) => {
     for (const path of ["/mentoria/labs/oraculo", "/mentoria/performance"]) {
       const response = await page.goto(path);
-      expect(response?.status(), path).toBe(200);
+      expect(response?.status(), path).toBe(labsEnabled ? 200 : 404);
     }
   });
 

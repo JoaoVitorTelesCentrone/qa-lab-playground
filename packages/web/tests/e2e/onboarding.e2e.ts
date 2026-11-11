@@ -1,4 +1,7 @@
 import { expect, test } from "@playwright/test";
+import { labsEnabled } from "./helpers/features";
+
+test.skip(!labsEnabled, "Labs desativados neste ambiente.");
 
 const storageKey = "qa-lab:onboarding:floating:v1";
 

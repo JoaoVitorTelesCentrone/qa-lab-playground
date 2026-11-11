@@ -10,7 +10,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
-import { MENTORSHIP_ENABLED } from "@/lib/product/features";
+import { LABS_ENABLED, MENTORSHIP_ENABLED } from "@/lib/product/features";
 
 const LINKEDIN_URL = "https://www.linkedin.com/company/qa-lab-oficial/";
 
@@ -26,7 +26,7 @@ export function SiteFooter() {
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-5 py-3 text-sm text-muted-foreground sm:px-8">
         <span>© {new Date().getFullYear()} QA Lab</span>
         <nav aria-label="Rodapé" className="flex flex-wrap items-center gap-x-5">
-          <OnboardingLink className="inline-flex min-h-11 items-center transition hover:text-foreground">Primeiros passos</OnboardingLink>
+          {LABS_ENABLED && <OnboardingLink className="inline-flex min-h-11 items-center transition hover:text-foreground">Primeiros passos</OnboardingLink>}
           {MENTORSHIP_ENABLED && <>
             <Link href="/planos" className="inline-flex min-h-11 items-center transition hover:text-foreground">Planos</Link>
             <Link href="/mentoria" className="inline-flex min-h-11 items-center transition hover:text-foreground">Mentoria</Link>

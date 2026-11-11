@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Bug, Code2, FileCode2, FolderKanban, ListChecks, SearchCode, Sparkles, TestTube2, WandSparkles } from "lucide-react";
 import { toolGuideCategories, toolGuides, type ToolGuideCategory } from "@/lib/tool-guides";
-import { ACCOUNTS_ENABLED } from "@/lib/product/features";
+import { ACCOUNTS_ENABLED, LABS_ENABLED } from "@/lib/product/features";
 
 export const metadata = {
   title: "Ferramentas de QA | QA Lab",
@@ -33,7 +33,7 @@ export default function ToolsPage() {
       <p className="mt-4 text-base leading-7 text-muted-foreground">Escolha o que precisa para planejar, testar ou investigar.</p>
     </header>
 
-    <section aria-labelledby="tools-main-title" className="mt-10">
+    {LABS_ENABLED && <section aria-labelledby="tools-main-title" className="mt-10">
       <h2 id="tools-main-title" className="text-lg font-semibold">BDD e board</h2>
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         {featured.map((item) => <Link key={item.href} href={item.href} className="group flex min-h-40 flex-col border border-border bg-card p-5 transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
@@ -43,9 +43,9 @@ export default function ToolsPage() {
           <span className="mt-3 text-xs text-muted-foreground">{ACCOUNTS_ENABLED ? "Entre para salvar na sua conta" : item.access}</span>
         </Link>)}
       </div>
-    </section>
+    </section>}
 
-    <section aria-labelledby="tools-other-title" className="mt-12">
+    {LABS_ENABLED && <section aria-labelledby="tools-other-title" className="mt-12">
       <h2 id="tools-other-title" className="text-lg font-semibold">Mais ferramentas</h2>
       <div className="mt-4 divide-y divide-border border-y border-border">
         {available.map((item) => <Link key={item.href} href={item.href} className="group grid min-h-24 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-2 py-4 transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:gap-6 sm:px-4">
@@ -54,11 +54,11 @@ export default function ToolsPage() {
           <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
         </Link>)}
       </div>
-    </section>
+    </section>}
 
     <section id="guias" aria-labelledby="tools-guides-title" className="mt-16 scroll-mt-20">
       <h2 id="tools-guides-title" className="text-lg font-semibold">Guias de estudo das ferramentas do mercado</h2>
-      <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">As ferramentas usadas nos Labs, cada uma com documentação oficial, cursos gratuitos e vídeos selecionados.</p>
+      <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">Documentação oficial, cursos gratuitos e vídeos selecionados para estudar ferramentas de QA.</p>
       <div className="mt-6 grid gap-8 md:grid-cols-2">
         {guideGroups.map(([category, guides]) => <div key={category}>
           <h3 className="text-sm font-semibold">{toolGuideCategories[category].title}</h3>

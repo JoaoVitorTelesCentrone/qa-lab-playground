@@ -1,4 +1,7 @@
 import { expect, test } from "@playwright/test";
+import { labsEnabled } from "./helpers/features";
+
+test.skip(!labsEnabled, "Conteúdo de prática desativado neste ambiente.");
 
 test("@smoke conteúdo leva do mapa ao capítulo e ao caso do Broto", async ({ page }) => {
   await page.goto("/conteudo");

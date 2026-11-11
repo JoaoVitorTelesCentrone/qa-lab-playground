@@ -4,3 +4,4 @@
  */
 export const mentorshipEnabled = process.env.FEATURE_MENTORSHIP === "true";
 export const accountsEnabled = mentorshipEnabled || process.env.FEATURE_ACCOUNTS === "true";
+export const labsEnabled = process.env.FEATURE_LABS === "true";

@@ -9,7 +9,7 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from 
 import { cn } from "@/lib/utils";
 import { AccountNav, signOutAndGoHome, useAccount } from "@/components/auth/account-nav";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
-import { ACCOUNTS_ENABLED, MENTORSHIP_ENABLED } from "@/lib/product/features";
+import { ACCOUNTS_ENABLED, LABS_ENABLED, MENTORSHIP_ENABLED } from "@/lib/product/features";
 
 type NavLink = { href: string; label: string; hint?: string; match: (path: string) => boolean };
 
@@ -19,8 +19,10 @@ const under = (...prefixes: string[]) => (path: string) => prefixes.some((p) => 
 // trabalho do autor. Caminho, Ferramentas e Referências científicas continuam
 // existindo como rotas, só saíram do menu. Projetos e Referências entram na etapa 7.
 const NAV: NavLink[] = [
-  { href: "/labs", label: "Labs", match: under("/labs") },
-  { href: "/desafio", label: "Weekly challenge", match: under("/desafio") },
+  ...(LABS_ENABLED ? [
+    { href: "/labs", label: "Labs", match: under("/labs") },
+    { href: "/desafio", label: "Weekly challenge", match: under("/desafio") },
+  ] : []),
   { href: "/blog", label: "Blog", match: under("/blog") },
   { href: "/sobre", label: "About", match: under("/sobre") },
 ];

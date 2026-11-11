@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   env: {
     FEATURE_MENTORSHIP: process.env.FEATURE_MENTORSHIP === "true" ? "true" : "false",
     FEATURE_ACCOUNTS: process.env.FEATURE_ACCOUNTS === "true" ? "true" : "false",
+    FEATURE_LABS: process.env.FEATURE_LABS === "true" ? "true" : "false",
   },
   // Os posts em MDX são lidos do disco (metadados e tempo de leitura): garante
   // que content/blog vá junto para as funções serverless.

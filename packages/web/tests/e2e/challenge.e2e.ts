@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { challenge, isSolutionReleased } from "../../lib/authority/challenge";
+import { labsEnabled } from "./helpers/features";
+
+test.skip(!labsEnabled, "Labs desativados neste ambiente.");
 
 test("@smoke /desafio mostra o desafio da semana com autor e link para o lab", async ({ page }) => {
   await page.goto("/desafio");
