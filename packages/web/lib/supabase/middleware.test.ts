@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { NextRequest } from "next/server";
+import { ACCOUNTS_ENABLED } from "@/lib/product/features";
 import { updateSession } from "./middleware";
 
 const previousUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -40,16 +41,23 @@ describe("updateSession", () => {
     expect(response.headers.get("location")).toBeNull();
   });
 
-  test.each(["/boards", "/boards/demo", "/lab/bdd"])(
-    "redireciona visitante de %s para o login",
+  test("redireciona visitante de um board privado para o login", async () => {
+    const response = await updateSession(new NextRequest("https://qa-lab.test/boards/demo"));
+
+    expect(response.status).toBe(307);
+    const location = new URL(response.headers.get("location")!);
+    expect(location.pathname).toBe("/login");
+    expect(location.searchParams.get("next")).toBe("/boards/demo");
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
+  });
+
+  test.each(["/boards", "/lab/bdd"])(
+    "mantem %s publico quando contas estao desativadas",
     async (pathname) => {
       const response = await updateSession(new NextRequest(`https://qa-lab.test${pathname}`));
 
-      expect(response.status).toBe(307);
-      const location = new URL(response.headers.get("location")!);
-      expect(location.pathname).toBe("/login");
-      expect(location.searchParams.get("next")).toBe(pathname);
-      expect(response.headers.get("cache-control")).toBe("private, no-store");
+      expect(response.status).toBe(ACCOUNTS_ENABLED ? 307 : 200);
+      if (!ACCOUNTS_ENABLED) expect(response.headers.get("location")).toBeNull();
     },
   );
 

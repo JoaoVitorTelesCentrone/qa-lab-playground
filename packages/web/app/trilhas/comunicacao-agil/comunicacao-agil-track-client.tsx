@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AccountLink } from "@/components/auth/account-link";
 import { useState, useTransition } from "react";
 import { useLocalProgress } from "@/app/trilhas/_components/local-progress";
 import { setCommunicationAgileCompletion } from "./actions";
@@ -23,7 +24,7 @@ export function CommunicationAgileTrackOverview({ modules, initialCompleted, sig
     <section className="mt-8 border-y border-border py-5" aria-label="Progresso da trilha">
       <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-sm font-semibold">{done} de {modules.length} Labs concluídos</p><p className="mt-1 text-sm text-muted-foreground">Pratique uma conversa por vez.</p></div><span className="font-mono text-sm text-primary">{percent}%</span></div>
       <div className="mt-3 h-1.5 bg-muted" role="progressbar" aria-label="Progresso da trilha" aria-valuemin={0} aria-valuemax={modules.length} aria-valuenow={done}><div className="h-full bg-primary transition-[width]" style={{ width: `${percent}%` }} /></div>
-      <p className="mt-3 text-xs text-muted-foreground">{signedIn ? "Progresso salvo na sua conta." : <>Salvo neste navegador. <Link className="text-primary underline-offset-4 hover:underline" href="/login?next=%2Ftrilhas%2Fcomunicacao-agil">Entre para acompanhar na conta.</Link></>}</p>
+      <p className="mt-3 text-xs text-muted-foreground">{signedIn ? "Progresso salvo na sua conta." : <>Salvo neste navegador. <AccountLink className="text-primary underline-offset-4 hover:underline" href="/login?next=%2Ftrilhas%2Fcomunicacao-agil">Entre para acompanhar na conta.</AccountLink></>}</p>
       {next && <Link href={`/trilhas/comunicacao-agil/${next.id}`} className="mt-4 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline">Continuar: {next.title}</Link>}
     </section>
     <ol className="mt-7 divide-y divide-border border-y border-border" aria-label="Labs da trilha">
@@ -65,7 +66,7 @@ export function CommunicationAgileCompletionButton({ moduleId, initialCompleted,
   return <div className="border-y border-border py-5">
     <button type="button" onClick={toggleCompletion} disabled={pending} aria-pressed={completed} className="inline-flex min-h-11 items-center gap-3 border border-border px-4 py-2 text-sm font-semibold transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-wait disabled:opacity-60"><span aria-hidden="true" className={`grid size-5 place-items-center border ${completed ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground"}`}>{completed ? "✓" : ""}</span>{pending ? "Salvando…" : completed ? "Desmarcar conclusão" : "Marcar Lab como concluído"}</button>
     <p className="mt-2 text-xs text-muted-foreground">Marque depois de praticar e revisar os critérios.</p>
-    {!signedIn && <p className="mt-2 text-xs text-muted-foreground">Salvo neste navegador. <Link href={`/login?next=${encodeURIComponent(`/trilhas/comunicacao-agil/${moduleId}`)}`} className="text-primary underline-offset-4 hover:underline">Entre para salvar na conta.</Link></p>}
+    {!signedIn && <p className="mt-2 text-xs text-muted-foreground">Salvo neste navegador. <AccountLink href={`/login?next=${encodeURIComponent(`/trilhas/comunicacao-agil/${moduleId}`)}`} className="text-primary underline-offset-4 hover:underline">Entre para salvar na conta.</AccountLink></p>}
     {message && <p role="alert" className="mt-2 text-sm text-destructive">{message}</p>}
   </div>;
 }

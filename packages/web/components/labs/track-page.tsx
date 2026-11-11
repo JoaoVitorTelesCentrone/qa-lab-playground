@@ -2,6 +2,7 @@
 // Server Component — o progresso já vem resolvido do banco.
 
 import { MENTORSHIP_ENABLED } from "@/lib/product/features";
+import { ACCOUNTS_ENABLED } from "@/lib/product/features";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Circle, CircleDot, Lock } from "lucide-react";
 import { mentorshipPathV2, type ModuleV2 } from "@/lib/mentorship/path-v2";
@@ -50,7 +51,7 @@ export function TrackPage({ progress, signedIn, certificateCode, canOpen = false
       <TrackCertificate trackSlug={track.slug} eligible={status.eligible} missing={status.missing} code={certificateCode} />
     </section>}
 
-    {!signedIn && <p className="mt-8 text-sm text-muted-foreground">
+    {ACCOUNTS_ENABLED && !signedIn && <p className="mt-8 text-sm text-muted-foreground">
       <Link href={`/login?next=/trilhas/${track.slug}`} className="text-primary underline-offset-4 hover:underline">Entre para salvar seu progresso</Link>. Os Labs estão abertos sem login.
     </p>}
 

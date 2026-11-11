@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createStudio } from "./actions";
 import { BlogPracticeArrival } from "@/components/blog/blog-event";
+import { ACCOUNTS_ENABLED } from "@/lib/product/features";
 
 export const metadata = {
   title: "Test Design Studio | QA Lab",
@@ -15,6 +16,12 @@ type Project = { id: string; title: string; description: string | null; color: s
 type Workspace = { id: string; project_id: string; objective: string | null; status: string; updated_at: string };
 
 export default async function StudioPage() {
+  if (!ACCOUNTS_ENABLED) return <main className="mx-auto max-w-3xl px-5 py-16 sm:px-8">
+    <p className="text-xs font-black uppercase tracking-[.2em] text-neon">Test Design Studio</p>
+    <h1 className="mt-3 text-3xl font-black text-off-white">Studio indisponível nesta versão</h1>
+    <p className="mt-4 text-sm leading-7 text-[#AAB2BC]">O Studio salva projetos em uma conta. Enquanto o QA Lab está aberto sem login, pratique nos Labs públicos e exporte suas respostas.</p>
+    <Link href="/labs" className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-neon px-5 text-sm font-bold text-[#101319]">Explorar Labs <ArrowRight className="size-4" /></Link>
+  </main>;
   let projects: Project[] = [];
   let workspaces: Workspace[] = [];
   if (isSupabaseConfigured()) {

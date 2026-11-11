@@ -1,5 +1,14 @@
 import { describe, expect, test } from "bun:test";
-import { isMentorshipPath } from "./features";
+import { isAccountPath, isMentorshipPath } from "./features";
+
+test("contas ficam fora das rotas públicas sem fechar o Lab de login simulado", () => {
+  for (const path of ["/login", "/cadastro", "/recuperar", "/auth/callback", "/perfil/portfolio"]) {
+    expect(isAccountPath(path)).toBe(true);
+  }
+  for (const path of ["/labs/login", "/labs/101", "/api/auth/login", "/blog"]) {
+    expect(isAccountPath(path)).toBe(false);
+  }
+});
 
 describe("isMentorshipPath", () => {
   test("fecha a mentoria, planos, cursos pagos e as APIs de cobrança", () => {

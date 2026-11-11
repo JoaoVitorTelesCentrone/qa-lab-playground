@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { mentorshipPathV2, pathV2ChapterHref } from "../../lib/mentorship/path-v2";
 import { labsForChapter, lessonForLab } from "../../lib/mentorship/lesson-labs";
-import { mentorshipEnabled } from "./helpers/features";
+import { accountsEnabled, mentorshipEnabled } from "./helpers/features";
 
 // Fluxo público (sem login): aula → Lab → rascunho → pedido de login que preserva
 // a volta. O fluxo autenticado até a conclusão exige o banco local e fica em
@@ -41,18 +41,21 @@ test("@smoke Lab público mostra a aula da mentoria e as três etapas", async ({
   }
 });
 
-test("@smoke entrega anônima guarda o rascunho e pede login com volta ao Lab", async ({ page }) => {
+test("@smoke entrega anônima mantém o rascunho e oferece exportação", async ({ page }) => {
   await page.goto("/labs/101?etapa=entregar");
   await page.getByLabel("O que você fez").fill("Criei um pensamento fictício e procurei por ele depois de recarregar a página.");
   await page.getByLabel("O que você esperava").fill("Encontrar o mesmo pensamento, com o mesmo texto.");
   await page.getByLabel("O que aconteceu").fill("O pensamento apareceu na busca com o texto original e a data correta.");
   await page.getByText("Funciona como esperado", { exact: true }).click();
-  await page.getByRole("button", { name: "Entregar evidência" }).click();
-
-  const alert = page.getByRole("alert").filter({ hasText: "entre na sua conta" });
-  await expect(alert).toBeVisible();
-  const login = alert.getByRole("link", { name: "Já tenho conta" });
-  await expect(login).toHaveAttribute("href", `/login?next=${encodeURIComponent("/labs/101?etapa=entregar")}`);
+  if (accountsEnabled) {
+    await page.getByRole("button", { name: "Entregar evidência" }).click();
+    const alert = page.getByRole("alert").filter({ hasText: "entre na sua conta" });
+    await expect(alert.getByRole("link", { name: "Já tenho conta" })).toHaveAttribute("href", `/login?next=${encodeURIComponent("/labs/101?etapa=entregar")}`);
+  } else {
+    await expect(page.getByRole("button", { name: "Entregar evidência" })).toHaveCount(0);
+    await expect(page.getByText(/Baixe o relatório em Markdown/)).toBeVisible();
+    await expect(page.locator('a[href^="/login"]')).toHaveCount(0);
+  }
 
   // O rascunho sobrevive ao recarregamento: quem volta do login não perde o texto.
   await page.reload();

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AccountLink } from "@/components/auth/account-link";
 import { useState, useTransition } from "react";
 import { useLocalProgress } from "@/app/trilhas/_components/local-progress";
 import { setAppiumSeleniumLabCompletion } from "./actions";
@@ -49,7 +50,7 @@ export function AppiumSeleniumTrackOverview({ modules, initialCompleted, signedI
       <div className="mt-3 h-1.5 bg-muted" role="progressbar" aria-label="Progresso da trilha" aria-valuemin={0} aria-valuemax={modules.length} aria-valuenow={doneCount}>
         <div className="h-full bg-primary transition-[width]" style={{ width: `${percent}%` }} />
       </div>
-      {!signedIn && <p className="mt-3 text-xs text-muted-foreground">Salvo neste navegador. <Link className="text-primary underline-offset-4 hover:underline" href="/login?next=%2Ftrilhas%2Fappium-selenium">Entre para acompanhar na conta.</Link></p>}
+      {!signedIn && <p className="mt-3 text-xs text-muted-foreground">Salvo neste navegador. <AccountLink className="text-primary underline-offset-4 hover:underline" href="/login?next=%2Ftrilhas%2Fappium-selenium">Entre para acompanhar na conta.</AccountLink></p>}
       {signedIn && <p className="mt-3 text-xs text-muted-foreground">Seu progresso está salvo na conta.</p>}
       {next && <Link href={`/trilhas/appium-selenium/${next.id}`} className="mt-4 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline">Continuar: {next.title}</Link>}
     </section>
@@ -111,7 +112,7 @@ export function AppiumSeleniumCompletionButton({ moduleId, initialCompleted, sig
       <span aria-hidden="true" className={`grid size-5 place-items-center border ${completed ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground"}`}>{completed ? "✓" : ""}</span>
       {pending ? "Salvando…" : completed ? "Desmarcar conclusão" : "Marcar Lab como concluído"}
     </button>
-    {!signedIn && <p className="mt-2 text-xs text-muted-foreground">Salvo apenas neste navegador. <Link href={`/login?next=${encodeURIComponent(`/trilhas/appium-selenium/${moduleId}`)}`} className="text-primary underline-offset-4 hover:underline">Entre para salvar na conta.</Link></p>}
+    {!signedIn && <p className="mt-2 text-xs text-muted-foreground">Salvo apenas neste navegador. <AccountLink href={`/login?next=${encodeURIComponent(`/trilhas/appium-selenium/${moduleId}`)}`} className="text-primary underline-offset-4 hover:underline">Entre para salvar na conta.</AccountLink></p>}
     {message && <p role="alert" className="mt-2 text-sm text-destructive">{message}</p>}
   </div>;
 }

@@ -102,6 +102,7 @@ test("painel cabe no celular, navega por teclado e permite pular", async ({ page
 });
 
 test("cadastro preserva a prática específica e o guia fica fora da autenticação", async ({ page }) => {
+  test.skip(process.env.FEATURE_MENTORSHIP !== "true" && process.env.FEATURE_ACCOUNTS !== "true", "Contas estão fora do lançamento público.");
   await page.goto("/login?next=%2Flabs%2F103");
   await expect(page.getByRole("link", { name: "Criar conta", exact: true })).toHaveAttribute("href", "/cadastro?next=%2Flabs%2F103");
   await expect(page.getByRole("dialog")).toHaveCount(0);

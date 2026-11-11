@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Bug, Code2, FileCode2, FolderKanban, ListChecks, SearchCode, Sparkles, TestTube2, WandSparkles } from "lucide-react";
 import { toolGuideCategories, toolGuides, type ToolGuideCategory } from "@/lib/tool-guides";
+import { ACCOUNTS_ENABLED } from "@/lib/product/features";
 
 export const metadata = {
   title: "Ferramentas de QA | QA Lab",
@@ -8,14 +9,14 @@ export const metadata = {
 };
 
 const featured = [
-  { href: "/lab/bdd", title: "Gerador de BDD", description: "Escreva cenários Gherkin e crie cards de teste.", icon: FileCode2, access: "Entre para usar" },
-  { href: "/boards", title: "Board de testes", description: "Organize casos e acompanhe o trabalho em equipe.", icon: FolderKanban, access: "Entre para usar" },
+  { href: "/lab/bdd", title: "Gerador de BDD", description: "Escreva cenários Gherkin e exporte o resultado.", icon: FileCode2, access: "Aberto para praticar" },
+  { href: "/boards", title: "Board de testes", description: "Explore um board de exemplo.", icon: FolderKanban, access: "Demo pública" },
 ] as const;
 
 const available = [
   { href: "/api-playground", title: "API Playground", description: "Teste endpoints e compare respostas.", icon: Code2 },
   { href: "/test-suite", title: "Test Suite", description: "Organize specs, fixtures e casos.", icon: TestTube2 },
-  { href: "/lab/studio", title: "Test Design Studio", description: "Estruture riscos, cobertura e casos.", icon: Sparkles },
+  ...(ACCOUNTS_ENABLED ? [{ href: "/lab/studio", title: "Test Design Studio", description: "Estruture riscos, cobertura e casos.", icon: Sparkles }] : []),
   { href: "/lab/refinamento", title: "Refinamento", description: "Melhore PBIs e bugs mal escritos.", icon: WandSparkles },
   { href: "/lab/criterios", title: "Critérios de aceite", description: "Transforme demandas em critérios testáveis.", icon: ListChecks },
   { href: "/lab/triagem", title: "Triagem de bugs", description: "Avalie impacto, prioridade e próximos passos.", icon: Bug },
@@ -39,7 +40,7 @@ export default function ToolsPage() {
           <span className="flex items-center justify-between"><item.icon className="size-6 text-primary" aria-hidden="true" /><ArrowUpRight className="size-4 text-muted-foreground transition-colors group-hover:text-primary" aria-hidden="true" /></span>
           <span className="mt-5 text-lg font-semibold">{item.title}</span>
           <span className="mt-1 text-sm leading-6 text-muted-foreground">{item.description}</span>
-          <span className="mt-3 text-xs text-muted-foreground">{item.access}</span>
+          <span className="mt-3 text-xs text-muted-foreground">{ACCOUNTS_ENABLED ? "Entre para salvar na sua conta" : item.access}</span>
         </Link>)}
       </div>
     </section>

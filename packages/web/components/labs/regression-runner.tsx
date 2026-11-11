@@ -84,7 +84,7 @@ export function RegressionRunner({ signedIn, initialRuns, instructor = false }: 
     <h1 className="mt-2 text-4xl font-semibold tracking-[-0.03em]">Packs de regressão</h1>
     <p className="mt-3 max-w-2xl text-muted-foreground">Cenários de regressão do ambiente liberado, das camadas de UI e validação até acessibilidade, resiliência, segurança e governança. Cada cenário parte da massa de teste restaurada e aponta para a tela onde ele roda.</p>
 
-    {!signedIn && <p className="mt-5 rounded-md border border-border bg-muted/40 p-4 text-sm text-muted-foreground"><Link href="/login?next=/labs/regressao" className="text-primary">Entre na sua conta</Link> para marcar cada execução e acompanhar a cobertura na sua jornada.</p>}
+    {!signedIn && <p className="mt-5 rounded-md border border-border bg-muted/40 p-4 text-sm text-muted-foreground">A execução fica nesta sessão do navegador; registre os resultados antes de sair.</p>}
     {error && <p role="alert" className="mt-5 rounded-md border border-destructive/30 p-3 text-sm text-destructive">{error}</p>}
 
     <div className="mt-8 flex flex-wrap items-end gap-3 border-y border-border py-4">

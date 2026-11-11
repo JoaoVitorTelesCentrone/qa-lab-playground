@@ -14,6 +14,7 @@ import type { ReactNode } from "react";
 import type { PracticeApp } from "@/lib/product/apps";
 import type { PracticeSettings } from "@/lib/product/practice/store";
 import { EnvironmentBar } from "./environment-bar";
+import { ACCOUNTS_ENABLED } from "@/lib/product/features";
 
 export function EnvironmentShell({ app, settings, signedIn, children }: {
   app: PracticeApp;
@@ -37,8 +38,7 @@ export function EnvironmentShell({ app, settings, signedIn, children }: {
       </div>
 
       {!signedIn && <p className="mt-3 text-xs leading-5 text-muted-foreground">
-            Praticando sem conta: o que criar aqui some ao sair.{" "}
-            <Link href={`/login?next=${encodeURIComponent(app.route)}`} className="text-primary">Entre para salvar</Link>.
+            {ACCOUNTS_ENABLED ? <>Praticando sem conta: o que criar aqui some ao sair. <Link href={`/login?next=${encodeURIComponent(app.route)}`} className="text-primary">Entre para salvar</Link>.</> : "Pratique livremente; dados criados aqui podem ser temporários."}
           </p>}
 
       {signedIn && <div className="mt-5"><EnvironmentBar appId={app.id} settings={settings} /></div>}

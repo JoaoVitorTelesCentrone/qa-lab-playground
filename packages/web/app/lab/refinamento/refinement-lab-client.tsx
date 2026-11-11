@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { ACCOUNTS_ENABLED } from "@/lib/product/features";
 import { ArrowLeft, CheckCircle2, ChevronLeft, ChevronRight, ClipboardCheck, RotateCcw, Save, Shuffle, Sparkles } from "lucide-react";
 import { refinementItems, scoreRefinement, type RefinementItem } from "@/lib/refinement-lab";
 import { saveRefinementSubmission } from "./actions";
@@ -63,14 +64,14 @@ export function RefinementLabClient({ initialItemId, completedIds, saved = false
       </aside>
       <section className="rounded-2xl border border-white/10 bg-[#171B21] p-5">
         <div className="flex flex-col gap-3 border-b border-white/10 pb-5 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-mint">Sua versao refinada</p><h2 className="mt-2 text-2xl font-black text-off-white">Editar, testar clareza e salvar</h2></div><div className="rounded-xl border border-white/10 bg-[#101319] px-4 py-3"><p className="text-[10px] font-bold uppercase text-[#69737E]">Score</p><strong className={`text-2xl ${result.ready ? "text-mint" : "text-coral"}`}>{result.score}</strong></div></div>
-        <form action={saveRefinementSubmission} className="mt-5 space-y-4"><input type="hidden" name="item_id" value={item.id} />
+        <form action={ACCOUNTS_ENABLED ? saveRefinementSubmission : undefined} onSubmit={(event) => { if (!ACCOUNTS_ENABLED) event.preventDefault(); }} className="mt-5 space-y-4"><input type="hidden" name="item_id" value={item.id} />
           <label className="block text-xs font-bold text-[#AAB2BC]">Titulo refinado<input name="title" value={title} onChange={(event) => setTitle(event.target.value)} className="field mt-2 w-full" /></label>
           <label className="block text-xs font-bold text-[#AAB2BC]">Descricao refinada<textarea name="body" value={body} onChange={(event) => setBody(event.target.value)} rows={7} className="field mt-2 w-full resize-y" /></label>
           <label className="block text-xs font-bold text-[#AAB2BC]">Criterios de aceite / verificacao<textarea name="criteria" value={criteria} onChange={(event) => setCriteria(event.target.value)} rows={6} className="field mt-2 w-full resize-y" /></label>
           <label className="block text-xs font-bold text-[#AAB2BC]">Perguntas abertas<textarea name="questions" value={questions} onChange={(event) => setQuestions(event.target.value)} rows={4} className="field mt-2 w-full resize-y" /></label>
           <div className="grid gap-3 sm:grid-cols-4">{(["clarity", "testability", "value", "scope"] as const).map((key) => <label key={key} className="text-xs font-bold capitalize text-[#AAB2BC]">{key}<select name={key} value={ratings[key]} onChange={(event) => setRatings((current) => ({ ...current, [key]: Number(event.target.value) }))} className="field mt-2 w-full">{[1,2,3,4,5].map((n) => <option key={n} value={n}>{n}</option>)}</select></label>)}</div>
           {!!result.missing.length && <div className="rounded-xl border border-coral/20 bg-coral/[.04] p-4 text-xs leading-6 text-[#D7B0AC]"><strong>Falta:</strong> {result.missing.join(", ")}</div>}
-          <div className="flex flex-col gap-2 sm:flex-row"><button className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-mint px-5 text-sm font-black text-[#101319]"><Save className="size-4" />Salvar refinamento</button><Link href="/lab/studio" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-neon/25 px-5 text-sm font-bold text-neon"><Sparkles className="size-4" />Levar ao Studio</Link></div>
+          <div className="flex flex-col gap-2 sm:flex-row">{ACCOUNTS_ENABLED ? <button className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-mint px-5 text-sm font-black text-[#101319]"><Save className="size-4" />Salvar refinamento</button> : <p className="text-xs text-muted-foreground">Copie suas respostas antes de sair.</p>}{ACCOUNTS_ENABLED && <Link href="/lab/studio" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-neon/25 px-5 text-sm font-bold text-neon"><Sparkles className="size-4" />Levar ao Studio</Link>}</div>
         </form>
       </section>
     </section>

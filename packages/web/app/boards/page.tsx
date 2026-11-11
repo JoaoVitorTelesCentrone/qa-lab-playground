@@ -6,12 +6,14 @@ import { BoardError, ensurePersonalBoard, listBoards } from "@/lib/board/store";
 import { BoardsIndexClient } from "./boards-index-client";
 import { BoardClient } from "./[boardId]/board-client";
 import { demoBoard } from "@/lib/board/demo";
+import { ACCOUNTS_ENABLED } from "@/lib/product/features";
 
 export const metadata = { title: "Boards" };
 export const dynamic = "force-dynamic";
 
 export default async function BoardsPage() {
   const user = await getSessionUser();
+  if (!ACCOUNTS_ENABLED) return <BoardClient initial={demoBoard} viewerId="guest" publicDemo />;
   if (!user) redirect("/login?next=%2Fboards");
 
   let boards;

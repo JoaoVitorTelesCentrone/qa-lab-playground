@@ -9,7 +9,7 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from 
 import { cn } from "@/lib/utils";
 import { AccountNav, signOutAndGoHome, useAccount } from "@/components/auth/account-nav";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
-import { MENTORSHIP_ENABLED } from "@/lib/product/features";
+import { ACCOUNTS_ENABLED, MENTORSHIP_ENABLED } from "@/lib/product/features";
 
 type NavLink = { href: string; label: string; hint?: string; match: (path: string) => boolean };
 
@@ -46,7 +46,7 @@ function MobileLink({ item, pathname, onNavigate }: { item: NavLink; pathname: s
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const [menuOpen, setMenuOpen] = useState(false);
-  const account = useAccount(isSupabaseConfigured());
+  const account = useAccount(ACCOUNTS_ENABLED && isSupabaseConfigured());
   const close = () => setMenuOpen(false);
 
   return (
@@ -64,7 +64,7 @@ export function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-1">
-          <div className="hidden sm:block"><AccountNav account={account} /></div>
+          {ACCOUNTS_ENABLED && <div className="hidden sm:block"><AccountNav account={account} /></div>}
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild>
               <Button type="button" variant="ghost" size="icon" className="size-11 lg:hidden" aria-label="Abrir menu"><Menu className="size-5" /></Button>
@@ -74,20 +74,20 @@ export function SiteHeader() {
                 <span className="flex size-8 items-center justify-center rounded-sm bg-primary text-primary-foreground"><FlaskConical className="size-4" aria-hidden="true" /></span>
                 <span className="text-lg font-semibold">QA Lab</span>
               </SheetTitle>
-              <SheetDescription className="sr-only">Páginas do QA Lab e da sua conta.</SheetDescription>
+              <SheetDescription className="sr-only">Páginas do QA Lab.</SheetDescription>
 
               <nav aria-label="Navegação principal" className="grid gap-1">
                 {items().map((item) => <MobileLink key={item.href} item={item} pathname={pathname} onNavigate={close} />)}
               </nav>
 
-              <div className="mt-auto grid gap-2 border-t border-border pt-5">
+              {ACCOUNTS_ENABLED && <div className="mt-auto grid gap-2 border-t border-border pt-5">
                 {account.authenticated ? <>
                   <p className="truncate px-1 pt-2 text-xs text-muted-foreground">{account.displayName || "Minha conta"}</p>
                   <Link href="/perfil" onClick={close} className="flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm hover:bg-accent"><UserRound className="size-4 text-muted-foreground" aria-hidden="true" />Meu perfil</Link>
                   <Link href="/perfil/portfolio" onClick={close} className="flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm hover:bg-accent"><FolderOpen className="size-4 text-muted-foreground" aria-hidden="true" />Portfólio</Link>
                   <button type="button" onClick={() => void signOutAndGoHome()} className="flex min-h-11 items-center gap-3 rounded-sm px-3 text-left text-sm hover:bg-accent"><LogOut className="size-4 text-muted-foreground" aria-hidden="true" />Sair</button>
                 </> : <Button asChild variant="outline" className="h-11 w-full"><Link href="/login" onClick={close}>Entrar na minha conta</Link></Button>}
-              </div>
+              </div>}
             </SheetContent>
           </Sheet>
         </div>

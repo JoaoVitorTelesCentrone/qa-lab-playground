@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AccountLink } from "@/components/auth/account-link";
 import { useState, useTransition } from "react";
 import { useLocalProgress } from "@/app/trilhas/_components/local-progress";
 import { setGherkinLabCompletion } from "./actions";
@@ -34,7 +35,7 @@ export function GherkinTrackOverview({ modules, initialCompleted, signedIn }: {
       <div className="mt-3 h-1.5 bg-muted" role="progressbar" aria-label="Progresso da trilha" aria-valuemin={0} aria-valuemax={modules.length} aria-valuenow={doneCount}>
         <div className="h-full bg-primary transition-[width]" style={{ width: `${percent}%` }} />
       </div>
-      {!signedIn && <p className="mt-3 text-xs text-muted-foreground">Neste navegador: o progresso fica salvo localmente. <Link className="text-primary underline-offset-4 hover:underline" href="/login?next=%2Ftrilhas%2Fgherkin">Entre para acompanhar sua jornada na conta.</Link></p>}
+      {!signedIn && <p className="mt-3 text-xs text-muted-foreground">Neste navegador: o progresso fica salvo localmente. <AccountLink className="text-primary underline-offset-4 hover:underline" href="/login?next=%2Ftrilhas%2Fgherkin">Entre para acompanhar sua jornada na conta.</AccountLink></p>}
       {signedIn && <p className="mt-3 text-xs text-muted-foreground">Seu progresso está salvo na conta.</p>}
       {next && <Link href={`/trilhas/gherkin/${next.id}`} className="mt-4 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline">Continuar: {next.title}</Link>}
     </section>
@@ -97,7 +98,7 @@ export function GherkinCompletionButton({ moduleId, initialCompleted, signedIn }
       {pending ? "Salvando…" : completed ? "Desmarcar conclusão" : "Marcar Lab como concluído"}
     </button>
     <p className="mt-3 max-w-2xl text-xs leading-5 text-muted-foreground">Marque depois de revisar o exemplo e praticar. O QA Lab salva sua autoavaliação; a conversa e a decisão de negócio continuam com seu time.</p>
-    {!signedIn && <p className="mt-2 text-xs text-muted-foreground">Salvo apenas neste navegador. <Link href={`/login?next=${encodeURIComponent(`/trilhas/gherkin/${moduleId}`)}`} className="text-primary underline-offset-4 hover:underline">Entre para salvar na conta.</Link></p>}
+    {!signedIn && <p className="mt-2 text-xs text-muted-foreground">Salvo apenas neste navegador. <AccountLink href={`/login?next=${encodeURIComponent(`/trilhas/gherkin/${moduleId}`)}`} className="text-primary underline-offset-4 hover:underline">Entre para salvar na conta.</AccountLink></p>}
     {message && <p role="alert" className="mt-2 text-sm text-destructive">{message}</p>}
   </div>;
 }

@@ -21,7 +21,7 @@ import { labReportMarkdown, reportFileName } from "@/lib/authority/lab-report";
 import { DownloadMarkdownButton } from "@/components/labs/download-markdown";
 import { Byline } from "@/components/authority/byline";
 import { ShareOnLinkedIn } from "@/components/authority/share-on-linkedin";
-import { MENTORSHIP_ENABLED } from "@/lib/product/features";
+import { ACCOUNTS_ENABLED, MENTORSHIP_ENABLED } from "@/lib/product/features";
 import Link from "next/link";
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
@@ -122,6 +122,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
   const missing = checks.filter((check) => !check.ok);
   const trackStep = trackProgress?.steps.find((item) => item.lab.slug === challenge.id);
   const loginNext = `/labs/${challenge.number}?etapa=entregar`;
+  const canSave = ACCOUNTS_ENABLED && signedIn;
 
   // Etapa da URL e rascunho salvo: lidos depois de montar para não divergir do HTML do servidor.
   useEffect(() => {
@@ -178,7 +179,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
   const setField = <K extends keyof DeliveryFields>(key: K, value: DeliveryFields[K]) => setDraft((current) => ({ ...current, fields: { ...current.fields, [key]: value } }));
 
   async function start() {
-    if (!signedIn || starting || started) return;
+    if (!canSave || starting || started) return;
     setStarting(true);
     try {
       const response = await fetch("/api/v1/progress", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ labSlug: challenge.id }) });
@@ -193,7 +194,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
-    if (!signedIn) { setAskLogin(true); return; }
+    if (!canSave) { if (ACCOUNTS_ENABLED) setAskLogin(true); return; }
     const evidence = composeEvidence(draft.fields);
     const local = evaluateEvidence({ evidence, attachments: attachments.length });
     if (!local.passed) { setError(local.issues[0]?.message ?? "Preencha a entrega antes de enviar."); return; }
@@ -235,7 +236,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
     <header className="mt-5 flex flex-wrap items-center gap-3">
       <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl">{challenge.title}</h1>
       {status === "completed" && <Badge variant="secondary" className="gap-1"><CheckCircle2 className="size-3" aria-hidden="true" /> concluído</Badge>}
-      {status !== "completed" && started && signedIn && <Badge variant="secondary">em andamento</Badge>}
+      {status !== "completed" && started && canSave && <Badge variant="secondary">em andamento</Badge>}
     </header>
     <p className="mt-3 text-sm text-muted-foreground">Lab {label} · {challenge.area} · {difficultyLabel[challenge.difficulty] ?? challenge.difficulty} · {modeLabel[challenge.mode] ?? challenge.mode}{lab ? ` · cerca de ${lab.minutes} min` : ""}</p>
     <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-y border-border py-2">
@@ -358,9 +359,9 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
 
           <div className="grid gap-2">
             <span className="text-sm font-semibold">Anexos</span>
-            {signedIn
+            {canSave
               ? <EvidenceField labSlug={challenge.id} attachments={attachments} onAttachmentsChange={setAttachments} disabled={state === "saving"} />
-              : <p className="text-sm text-muted-foreground">Prints e vídeos podem ser anexados depois de entrar na conta.</p>}
+              : <p className="text-sm text-muted-foreground">Descreva prints e vídeos no relatório; anexos não são enviados nesta versão.</p>}
           </div>
 
           <div className="grid gap-3 border-t border-border pt-4">
@@ -385,12 +386,13 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <Button disabled={state === "saving"}>{state === "saving" ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Send className="size-4" aria-hidden="true" />} Entregar evidência</Button>
-            {missing.length > 0 && state !== "saving" && <span className="text-xs text-muted-foreground">Dá para enviar agora, mas {missing.length === 1 ? "falta 1 item" : `faltam ${missing.length} itens`} para a entrega ficar completa.</span>}
+            {ACCOUNTS_ENABLED && <Button disabled={state === "saving"}>{state === "saving" ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Send className="size-4" aria-hidden="true" />} Entregar evidência</Button>}
+            {ACCOUNTS_ENABLED && missing.length > 0 && state !== "saving" && <span className="text-xs text-muted-foreground">Dá para enviar agora, mas {missing.length === 1 ? "falta 1 item" : `faltam ${missing.length} itens`} para a entrega ficar completa.</span>}
+            {!ACCOUNTS_ENABLED && <p className="text-sm text-muted-foreground">O rascunho fica neste navegador. Baixe o relatório em Markdown acima para guardar ou compartilhar sua entrega.</p>}
           </div>
         </form>
 
-        {askLogin && !signedIn && <div role="alert" className="rounded-sm border border-border bg-muted/40 p-4 text-sm">
+        {ACCOUNTS_ENABLED && askLogin && !signedIn && <div role="alert" className="rounded-sm border border-border bg-muted/40 p-4 text-sm">
           <p>Para entregar, entre na sua conta. Sua entrega fica salva neste navegador e você volta direto para cá.</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Button asChild size="sm"><Link href={`/cadastro?next=${encodeURIComponent(loginNext)}`}>Criar conta grátis</Link></Button>
@@ -416,7 +418,7 @@ export function LabBriefing({ challenge, status, submissions, trackProgress, sig
       {step < steps.length - 1 && <Button type="button" onClick={() => setStep(step + 1)}>{step === 0 ? "Ir para o teste" : "Registrar a entrega"} <ArrowRight className="size-4" aria-hidden="true" /></Button>}
     </div>
 
-    {!signedIn && step < 2 && <p className="mt-6 flex gap-3 border-t border-border pt-4 text-sm leading-6 text-muted-foreground">
+    {ACCOUNTS_ENABLED && !signedIn && step < 2 && <p className="mt-6 flex gap-3 border-t border-border pt-4 text-sm leading-6 text-muted-foreground">
       <Info className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
       <span>Você pode fazer o Lab inteiro sem conta. Para enviar a entrega,{" "}
         <Link href={`/login?next=${encodeURIComponent(loginNext)}`} className="font-medium text-primary underline underline-offset-4">entre</Link> ou{" "}

@@ -11,6 +11,14 @@
  */
 export const MENTORSHIP_ENABLED = process.env.FEATURE_MENTORSHIP === "true";
 
+/** Contas ficam fora do lançamento público; a mentoria ainda pode usá-las quando reativada. */
+export const ACCOUNTS_ENABLED = MENTORSHIP_ENABLED || process.env.FEATURE_ACCOUNTS === "true";
+
+export function isAccountPath(pathname: string) {
+  return ["/login", "/cadastro", "/recuperar", "/auth", "/perfil"].some((prefix) =>
+    pathname === prefix || pathname.startsWith(`${prefix}/`));
+}
+
 /** Rotas que só existem com a mentoria ligada (páginas e APIs). */
 const MENTORSHIP_PREFIXES = [
   "/mentoria",

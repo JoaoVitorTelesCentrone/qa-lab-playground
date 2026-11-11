@@ -8,6 +8,8 @@ O lançamento público destaca os Labs de prática e as trilhas disponíveis. A 
 
 O estado do produto, decisões e pendências estão em [`docs/PRODUCTIZATION_PLAN.md`](docs/PRODUCTIZATION_PLAN.md), [`docs/QA_LAB_DECISIONS.md`](docs/QA_LAB_DECISIONS.md) e [`docs/QA_LAB_PRODUCT_PLAN.md`](docs/QA_LAB_PRODUCT_PLAN.md).
 
+No lançamento público, os Labs e as trilhas abrem sem conta. Rascunhos e progresso local ficam no navegador; o relatório do Lab pode ser baixado em Markdown. Login, cadastro, perfil e mentoria ficam desativados por padrão. `FEATURE_ACCOUNTS=true` reativa as contas em um novo build.
+
 ## Rodar localmente
 
 Requisitos: Bun 1.x ou Node.js 20+.

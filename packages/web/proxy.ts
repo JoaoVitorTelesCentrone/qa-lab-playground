@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { isMentorshipPath, MENTORSHIP_ENABLED } from "@/lib/product/features";
+import { ACCOUNTS_ENABLED, isAccountPath, isMentorshipPath, MENTORSHIP_ENABLED } from "@/lib/product/features";
 import { VIEW_ONLY_LAUNCH } from "@/lib/product/launch";
 import { updateSession } from "@/lib/supabase/middleware";
 
@@ -13,7 +13,7 @@ const NOT_FOUND_PATH = "/__feature-disabled";
 // somente leitura.
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (!MENTORSHIP_ENABLED && isMentorshipPath(pathname)) {
+  if ((!MENTORSHIP_ENABLED && isMentorshipPath(pathname)) || (!ACCOUNTS_ENABLED && isAccountPath(pathname))) {
     if (pathname.startsWith("/api/")) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), { status: 404 });
   }
