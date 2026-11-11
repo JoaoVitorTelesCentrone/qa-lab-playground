@@ -1,3 +1,5 @@
+import { MdxArticle, mdxPostMetadata } from "@/components/blog/mdx-article";
+import { findMdxPost, loadMdxPosts } from "@/lib/blog/mdx-posts";
 import { Byline } from "@/components/authority/byline";
 import { ShareOnLinkedIn } from "@/components/authority/share-on-linkedin";
 import { author } from "@/content/site";
@@ -14,11 +16,15 @@ import { BlogArticleView, BlogEventCapture } from "@/components/blog/blog-event"
 type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }));
+  // Rascunhos MDX também são gerados: abrem pelo link direto para revisão (noindex).
+  const drafts = loadMdxPosts().filter((post) => post.draft).map((post) => ({ slug: post.slug }));
+  return [...posts.map((post) => ({ slug: post.slug })), ...drafts];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const mdx = findMdxPost(slug);
+  if (mdx) return mdxPostMetadata(mdx, mdx.defaultLang);
   const post = getPostBySlug(slug);
   if (!post) return { title: "Artigo não encontrado" };
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app";
@@ -57,6 +63,8 @@ function BlockView({ block }: { block: Block }) {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
+  const mdx = findMdxPost(slug);
+  if (mdx) return <MdxArticle post={mdx} lang={mdx.defaultLang} />;
   const post = getPostBySlug(slug);
   if (!post) notFound();
 

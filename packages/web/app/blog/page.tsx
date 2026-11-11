@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { BlogIndex, type BlogIndexSection } from "@/components/blog/blog-index";
 import { CollaborateCta } from "@/components/blog/collaborate-cta";
 import { editorialSeries } from "@/lib/blog-editorial";
-import { posts } from "@/lib/blog-posts";
+import { allPosts as posts } from "@/lib/blog/all-posts";
 
 export const metadata: Metadata = {
   title: "Blog de QA: investigação, testes e qualidade de software",
@@ -61,7 +61,7 @@ function buildSections(): BlogIndexSection[] {
       }));
 
     if (definition.id === "fundamentos-investigacao") {
-      const legacyPosts = posts.filter((post) => !post.editorial);
+      const legacyPosts = posts.filter((post) => !post.editorial && !post.mdx);
       if (legacyPosts.length) {
         series.unshift({
           id: "fundamentos-qa-lab",
@@ -70,6 +70,11 @@ function buildSections(): BlogIndexSection[] {
           color: "#95d4a7",
           articles: legacyPosts,
         });
+      }
+      // Posts em MDX (content/blog) abrem o blog: são os mais recentes.
+      const mdxPosts = posts.filter((post) => post.mdx);
+      if (mdxPosts.length) {
+        series.unshift({ id: "novos-posts", title: "Novos posts", href: "/blog", color: "#F5B841", articles: mdxPosts });
       }
     }
 

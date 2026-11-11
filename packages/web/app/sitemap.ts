@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { posts } from "@/lib/blog-posts";
+import { allPosts as posts } from "@/lib/blog/all-posts";
 import { qaTools } from "@/lib/qa-tools";
 import { toolGuides } from "@/lib/tool-guides";
 import { isMentorshipPath, MENTORSHIP_ENABLED } from "@/lib/product/features";
@@ -28,6 +28,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...toolGuides.map((guide) => ({ url: `${baseUrl}/ferramentas/${guide.slug}`, changeFrequency: "monthly" as const, priority: 0.6 })),
     { url: `${baseUrl}/lab/ferramentas`, changeFrequency: "monthly", priority: 0.7 },
     ...qaTools.map((tool) => ({ url: `${baseUrl}/lab/ferramentas/${tool.id}`, changeFrequency: "monthly" as const, priority: 0.5 })),
+    // Versões de um post MDX em outro idioma: /blog/<slug>/<lang>.
+    ...posts.flatMap((post) => (post.mdx?.langs ?? []).filter((lang) => lang !== post.mdx?.defaultLang)
+      .map((lang) => ({ url: `${baseUrl}/blog/${post.slug}/${lang}`, changeFrequency: "monthly" as const, priority: 0.6 }))),
     ...posts.map((post) => {
       const lastModified = post.updatedAt;
       return {

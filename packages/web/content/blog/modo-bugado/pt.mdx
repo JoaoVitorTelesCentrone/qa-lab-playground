@@ -1,0 +1,40 @@
+---
+title: "Modo bugado: por que todo Lab do QA Lab tem um bug que liga e desliga"
+summary: "Um Lab com o comportamento certo e o errado lado a lado ensina mais do que uma lista de defeitos. Veja como o ?bug=1 funciona e como usar."
+date: 2026-11-09
+tags: [labs, bug-mode, api, testes]
+draft: true
+---
+
+Achar um bug é metade do trabalho. A outra metade é **provar** que é um bug: mostrar o que você mandou, o que voltou e o que deveria ter voltado.
+
+Por isso todo Lab do QA Lab que tem um defeito plantado funciona em dois modos.
+
+## Os dois modos
+
+- **Modo correto** (sem `?bug`): o sistema se comporta como a regra diz.
+- **Modo bugado** (`?bug=1`): o mesmo sistema, com um defeito real ligado.
+
+Uma faixa no topo do Lab mostra em qual modo você está e troca de um para o outro com um clique.
+
+## Um exemplo: o login
+
+No Lab de login, o usuário `locked_out_user` existe e está bloqueado.
+
+| Modo | Mensagem |
+| --- | --- |
+| Correto | Usuario bloqueado. |
+| Bugado | Credenciais invalidas. |
+
+A mensagem errada parece inofensiva, mas manda a pessoa tentar a senha de novo, e de novo, em vez de procurar o suporte. O teste que pega isso compara a mensagem com a regra, não só o status da tela.
+
+## Na API também
+
+A API pública do Lab aceita `?scenario=bug`. O desafio da semana é justamente achar os quatro bugs que esse modo esconde, como um `DELETE` que responde `204` e não apaga nada.
+
+## Como usar
+
+1. Abra um Lab da trilha que você quer treinar em [/labs](/labs).
+2. Rode o fluxo no modo correto e anote o comportamento esperado.
+3. Ligue o bug, rode de novo e compare.
+4. Baixe o bug report em Markdown e preencha com a sua evidência.

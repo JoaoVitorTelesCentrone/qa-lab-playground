@@ -47,6 +47,8 @@ export interface BlogPost {
     source?: { label: string; href: string };
   };
   blocos: Block[];
+  /** Post escrito em MDX (content/blog/<slug>/<lang>.mdx); `blocos` fica vazio. */
+  mdx?: { defaultLang: "pt" | "en"; langs: Array<"pt" | "en">; draft: boolean };
 }
 
 import { editorialPosts } from "./blog-editorial";
@@ -145,6 +147,9 @@ const allPosts: BlogPost[] = [
 // Helpers
 // ==============================
 
+// Só os posts escritos em TypeScript: este módulo também roda no cliente
+// (estúdio de carrossel). Para a lista completa, com os posts em MDX, use
+// lib/blog/all-posts.ts no servidor.
 export const posts: BlogPost[] = [...allPosts.filter((post) => post.publicado), ...editorialPosts];
 
 const postsBySlug = new Map(posts.map((post) => [post.slug, post]));

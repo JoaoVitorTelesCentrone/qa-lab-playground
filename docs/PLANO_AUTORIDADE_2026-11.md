@@ -63,7 +63,7 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
 | 3 | Home nova | ✅ feito |
 | 4 | `/labs` por trilha | ✅ feito |
 | 5 | `/desafio` | ✅ feito |
-| 6 | Blog em MDX, PT e EN | pendente |
+| 6 | Blog em MDX, PT e EN | ✅ feito |
 | 7 | `/referencias`, `/projetos` e `/sobre` | parcial (`/sobre` mínimo) |
 | 8 | SEO e OG images | pendente |
 | 9 | Analytics | pendente |
@@ -253,11 +253,45 @@ Vercel. O `proxy.ts` não tem gate: todas as rotas são públicas.
 - **Testes:** `tests/e2e/challenge.e2e.ts` (smoke). Eles leem a mesma config do app,
   então continuam válidos depois da liberação.
 
-### 6. Blog em MDX
+### 6. Blog em MDX ✅
 
-- Posts em `content/blog/<slug>.<pt|en>.mdx`, com tag, data e tempo de leitura.
-- Os posts atuais em TypeScript continuam renderizando por um adaptador.
-- Byline, share e schema Article em cada post.
+- **Posts:** `packages/web/content/blog/<slug>/pt.mdx` e/ou `en.mdx`. Frontmatter:
+  `title`, `summary`, `date` (AAAA-MM-DD), `updated?`, `tags: [a, b]` e
+  `draft: true|false`.
+- **Ferramentas:** `@next/mdx` 16.4.1, com `remark-frontmatter` e `remark-gfm` passados
+  por nome, como o Turbopack exige. `mdx-components.tsx` fica na raiz do web e é
+  obrigatório.
+- **Leitura dos posts:** `lib/blog/mdx-posts.ts` lê do disco os metadados e o tempo de
+  leitura (200 palavras/min). O parser de frontmatter é próprio
+  (`lib/blog/frontmatter.ts`), sem dependência, e tudo tem teste. O corpo é
+  renderizado por import dinâmico do `.mdx`.
+  - `next.config.ts` tem `outputFileTracingIncludes` para `content/blog`.
+- **Rotas:**
+  - `/blog/<slug>` mostra a versão principal (PT quando existe).
+  - `/blog/<slug>/<lang>` mostra a outra versão. O idioma principal redireciona para
+    `/blog/<slug>`, e um idioma sem arquivo dá 404.
+  - Tem link de troca de idioma, `hreflang` nos alternates, canonical, Article JSON-LD
+    com autor `Person`, byline e share.
+- **Rascunho (`draft: true`):** fica fora do índice, do sitemap e da home, mas abre
+  pelo link direto, com `noindex` e um aviso no topo, para revisão.
+- **Adaptador:** o post MDX vira `BlogPost` (`toBlogPost`), então o índice, o sitemap
+  (com as versões em outro idioma) e a home tratam MDX e posts antigos do mesmo jeito.
+  - A lista completa fica em `lib/blog/all-posts.ts`, só no servidor.
+  - `lib/blog-posts.ts` continua sem `fs`, porque o estúdio de carrossel (cliente)
+    importa esse módulo. O primeiro build quebrou exatamente por isso.
+  - No `/blog`, os posts MDX abrem a primeira seção, na série "Novos posts".
+- **Estilo do corpo:** a classe `.qa-mdx-body` devolve listas, tabelas e código inline.
+  O `.qa-article-body` antigo põe `li` em flex.
+- **Primeiro post:** `content/blog/modo-bugado/`, em PT e EN, sobre o modo bugado.
+  Está como **rascunho**: o João revisa e troca para `draft: false`.
+- **Testes:** `tests/e2e/blog-mdx.e2e.ts` (smoke) cobre:
+  - a renderização (data, tempo de leitura, tags, autor, tabela e frontmatter fora
+    do texto);
+  - a troca PT/EN;
+  - o redirect do idioma principal e o 404 de idioma inexistente;
+  - o rascunho fora do índice.
+- **Validado sem env:** build ok; smoke com 46 passando e 2 pulados. Screenshot do
+  post conferido.
 
 ### 7. `/referencias`, `/projetos` e `/sobre`
 

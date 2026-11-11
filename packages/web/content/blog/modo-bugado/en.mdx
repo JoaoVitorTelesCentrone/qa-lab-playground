@@ -1,0 +1,40 @@
+---
+title: "Bug mode: why every QA Lab lab ships with a bug you can switch on and off"
+summary: "A lab that shows the right and the wrong behavior side by side teaches more than a list of defects. Here is how ?bug=1 works and how to use it."
+date: 2026-11-09
+tags: [labs, bug-mode, api, testing]
+draft: true
+---
+
+Finding a bug is half the job. The other half is **proving** it is a bug: showing what you sent, what came back and what should have come back.
+
+That is why every QA Lab lab with a planted defect runs in two modes.
+
+## The two modes
+
+- **Correct mode** (no `?bug`): the system behaves the way the rule says.
+- **Bug mode** (`?bug=1`): the same system with a real defect switched on.
+
+A banner at the top of the lab tells you which mode you are in and switches between them in one click.
+
+## An example: the login
+
+In the login lab, the user `locked_out_user` exists and is locked.
+
+| Mode | Message |
+| --- | --- |
+| Correct | Usuario bloqueado. (User locked.) |
+| Bug | Credenciais invalidas. (Invalid credentials.) |
+
+The wrong message looks harmless, but it sends people back to retry their password instead of contacting support. The test that catches it checks the message against the rule, not just the screen state.
+
+## The API too
+
+The lab's public API accepts `?scenario=bug`. This week's challenge is to find the four bugs that mode hides, like a `DELETE` that answers `204` and deletes nothing.
+
+## How to use it
+
+1. Open a lab from the track you want to practice at [/labs](/labs).
+2. Run the flow in correct mode and write down the expected behavior.
+3. Turn the bug on, run it again and compare.
+4. Download the Markdown bug report and fill it in with your evidence.

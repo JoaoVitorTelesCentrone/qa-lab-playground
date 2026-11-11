@@ -1,9 +1,13 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   // Embute a flag no build para que servidor, proxy e componentes de cliente
   // leiam o mesmo valor (ver lib/product/features.ts).
   env: { FEATURE_MENTORSHIP: process.env.FEATURE_MENTORSHIP === "true" ? "true" : "false" },
+  // Os posts em MDX são lidos do disco (metadados e tempo de leitura): garante
+  // que content/blog vá junto para as funções serverless.
+  outputFileTracingIncludes: { "/**": ["./content/blog/**/*"] },
   async redirects() {
     // Legacy routes from earlier phases of the product — sent to "/" since they
     // have no direct equivalent in the current app.
@@ -35,4 +39,10 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Posts em content/blog/<slug>/<lang>.mdx. Plugins por nome (string) para
+// funcionar com o Turbopack: frontmatter sai do corpo, gfm traz tabelas.
+const withMDX = createMDX({
+  options: { remarkPlugins: ["remark-frontmatter", "remark-gfm"] },
+});
+
+export default withMDX(nextConfig);

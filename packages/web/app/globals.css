@@ -864,3 +864,20 @@ html { accent-color: var(--primary); scrollbar-color: var(--field-line) var(--fi
 /* O botão flutuante do guia fica no canto inferior direito; no celular, o fim
    da página ganha espaço para ele não cobrir o último conteúdo. */
 @media (max-width: 640px) { body { padding-bottom: 4rem; } }
+
+/* Corpo dos posts em MDX (components/blog/mdx-article.tsx). O .qa-article-body
+   foi desenhado para os blocos dos posts antigos (li em flex, sem marcador); aqui
+   o HTML vem do Markdown, então listas, tabelas e código inline voltam ao normal. */
+.qa-article-body.qa-mdx-body { max-width: none; margin-top: 2.5rem; }
+.qa-article-body.qa-mdx-body :is(ul, ol) { display: block; padding-left: 1.4rem; }
+.qa-article-body.qa-mdx-body ul { list-style: disc; }
+.qa-article-body.qa-mdx-body ol { list-style: decimal; }
+.qa-article-body.qa-mdx-body li { display: list-item; padding-left: .25rem; }
+.qa-article-body.qa-mdx-body li + li { margin-top: .5rem; }
+.qa-article-body.qa-mdx-body li::marker { color: var(--gold); font-weight: 700; }
+.qa-article-body.qa-mdx-body a { color: var(--gold); text-decoration: underline; text-underline-offset: 4px; }
+.qa-article-body.qa-mdx-body strong { color: #F8FBF9; }
+.qa-article-body.qa-mdx-body :not(pre) > code { padding: .1rem .35rem; border-radius: 4px; background: #ffffff12; font-family: var(--font-jetbrains), monospace; font-size: .88em; }
+.qa-article-body.qa-mdx-body table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: .95rem; }
+.qa-article-body.qa-mdx-body :is(th, td) { padding: .6rem .8rem; border-bottom: 1px solid var(--border); text-align: left; color: #CDD5D0; }
+.qa-article-body.qa-mdx-body th { color: #F8FBF9; font-weight: 600; border-bottom-color: var(--gold); }

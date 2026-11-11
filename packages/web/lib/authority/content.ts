@@ -1,6 +1,7 @@
 import featuredLabsData from "@/content/featured-labs.json";
 import projectsData from "@/content/projects.json";
-import { posts, type BlogPost } from "@/lib/blog-posts";
+import type { BlogPost } from "@/lib/blog-posts";
+import { allPosts as posts } from "@/lib/blog/all-posts";
 
 export type FeaturedLab = { title: string; track: string; summary: string; href: string; bugHref?: string };
 
