@@ -10,6 +10,7 @@ import { ArrowLeft, ArrowRight, Calendar, Clock3 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { formatDate, getPostBySlug, getRelatedPosts, getSeriesPosts, posts, type Block } from "@/lib/blog-posts";
 import { CollaborateCta } from "@/components/blog/collaborate-cta";
+import { FULL_BLOG_ENABLED, LABS_ENABLED } from "@/lib/product/features";
 import { PracticeCta } from "@/components/blog/practice-cta";
 import { BlogArticleView, BlogEventCapture } from "@/components/blog/blog-event";
 
@@ -96,7 +97,7 @@ export default async function BlogPostPage({ params }: Props) {
       <article className="mx-auto max-w-6xl px-5 pb-16 pt-8 sm:px-8 lg:pb-24 lg:pt-12">
         <nav className="qa-editorial-breadcrumb" aria-label="Navegação estrutural">
           <Link href="/blog"><ArrowLeft className="size-4" aria-hidden="true" /> Blog</Link>
-          {post.editorial && <><span aria-hidden="true">/</span><Link href={post.editorial.seriesHref}>{post.editorial.seriesTitle}</Link><span aria-current="page">Parte {post.editorial.number} de 3</span></>}
+          {post.editorial && <><span aria-hidden="true">/</span>{LABS_ENABLED ? <Link href={post.editorial.seriesHref}>{post.editorial.seriesTitle}</Link> : <span>{post.editorial.seriesTitle}</span>}{FULL_BLOG_ENABLED && <span aria-current="page">Parte {post.editorial.number} de 3</span>}</>}
         </nav>
 
         <header className={`qa-editorial-article-hero${post.editorial ? " has-artifact" : ""}`} data-composition={post.editorial?.composition}>
@@ -109,7 +110,7 @@ export default async function BlogPostPage({ params }: Props) {
               <span><Clock3 className="size-4" aria-hidden="true" />{post.tempoLeitura} min de leitura</span>
             </div>
             <div className="mt-5 flex flex-wrap items-center gap-3">
-              <Byline label="Written by" />
+              <Byline label="Escrito por" />
               <ShareOnLinkedIn url={`/blog/${post.slug}`} />
             </div>
           </div>
@@ -126,14 +127,14 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="qa-editorial-reading-main">
             <div className="qa-article-body">{post.blocos.map((block, blockIndex) => <BlockView key={`${block.type}-${blockIndex}`} block={block} />)}</div>
             {post.editorial?.source && <p className="qa-editorial-source">Para aprofundar na ferramenta: <a href={post.editorial.source.href} target="_blank" rel="noopener noreferrer">{post.editorial.source.label}</a>.</p>}
-            {post.editorial ? (
+            {LABS_ENABLED && (post.editorial ? (
               <aside className="qa-editorial-practice" aria-labelledby="article-practice-title">
                 <span className="qa-editorial-eyebrow">Continue na prática</span>
                 <h2 id="article-practice-title">Leve esta pergunta para a trilha.</h2>
                 <p>Os exercícios da trilha de {post.editorial.seriesTitle} ajudam você a aplicar o que acabou de ler e registrar sua própria evidência.</p>
                 <BlogEventCapture event="practice_cta_click" slug={post.slug}><Link href={`${post.editorial.seriesHref}?fromBlog=${post.slug}`}>Abrir trilha de {post.editorial.seriesTitle} <ArrowRight className="size-4" aria-hidden="true" /></Link></BlogEventCapture>
               </aside>
-            ) : <PracticeCta postSlug={post.slug} />}
+            ) : <PracticeCta postSlug={post.slug} />)}
           </div>
         </div>
 

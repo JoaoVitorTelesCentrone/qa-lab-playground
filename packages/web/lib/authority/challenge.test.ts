@@ -19,6 +19,6 @@ describe("desafio da semana", () => {
   });
 
   test("formata a liberação em UTC", () => {
-    expect(formatRelease("2026-11-16T15:00:00Z")).toBe("Nov 16, 2026, 3:00 PM UTC");
+    expect(formatRelease("2026-11-16T15:00:00Z")).toBe("16 de nov. de 2026, 15:00 UTC");
   });
 });

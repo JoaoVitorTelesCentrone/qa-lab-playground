@@ -14,12 +14,12 @@ test("@smoke robots permite descobrir as areas publicas de pratica", async ({ re
 test("@smoke home apresenta o autor, os CTAs e as seções de autoridade", async ({ page }) => {
   test.skip(!labsEnabled, "Labs desativados neste ambiente.");
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1, name: /Hands-on QA labs with real bugs, built by a QA Automation Engineer/i })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /Labs práticos de QA com bugs reais, feitos por um Engenheiro de Automação de QA/i })).toBeVisible();
   await expect(page.getByTestId("author-byline").first()).toContainText("João Centrone");
   const main = page.locator("main");
   await expect(main.getByRole("link", { name: "Start a lab", exact: true })).toHaveAttribute("href", "/labs");
-  await expect(main.getByRole("link", { name: "Weekly challenge", exact: true })).toHaveAttribute("href", "/desafio");
-  for (const name of ["Pick a bug to hunt", "From the blog", "What I've built"]) {
+  await expect(main.getByRole("link", { name: "Desafio da semana", exact: true })).toHaveAttribute("href", "/desafio");
+  for (const name of ["Escolha um bug para caçar", "Do blog", "O que eu construí"]) {
     await expect(main.getByRole("heading", { level: 2, name })).toBeVisible();
   }
   await expect(main.getByRole("heading", { level: 2, name: /Find the \d+ bugs/ })).toBeVisible();
@@ -32,7 +32,7 @@ test("@smoke menu leva às páginas de autoridade, sem mentoria", async ({ page 
   test.skip(!labsEnabled, "Labs desativados neste ambiente.");
   await page.goto("/");
   const nav = page.getByRole("navigation", { name: "Navegação principal" }).first();
-  for (const [name, href] of [["Labs", "/labs"], ["Weekly challenge", "/desafio"], ["Blog", "/blog"], ["Ferramentas", "/ferramentas"], ["Referências", "/pesquisa"], ["About", "/sobre"]]) {
+  for (const [name, href] of [["Labs", "/labs"], ["Desafio da semana", "/desafio"], ["Blog", "/blog"], ["Ferramentas", "/ferramentas"], ["Referências", "/pesquisa"], ["Sobre", "/sobre"]]) {
     await expect(nav.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
   }
 });

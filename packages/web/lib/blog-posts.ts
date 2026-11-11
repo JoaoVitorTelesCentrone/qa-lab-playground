@@ -1,3 +1,4 @@
+import { isPublicPost } from "@/lib/product/features";
 // ==============================
 // Types
 // ==============================
@@ -150,7 +151,7 @@ const allPosts: BlogPost[] = [
 // Só os posts escritos em TypeScript: este módulo também roda no cliente
 // (estúdio de carrossel). Para a lista completa, com os posts em MDX, use
 // lib/blog/all-posts.ts no servidor.
-export const posts: BlogPost[] = [...allPosts.filter((post) => post.publicado), ...editorialPosts];
+export const posts: BlogPost[] = [...allPosts.filter((post) => post.publicado), ...editorialPosts].filter((post) => isPublicPost(post.slug));
 
 const postsBySlug = new Map(posts.map((post) => [post.slug, post]));
 

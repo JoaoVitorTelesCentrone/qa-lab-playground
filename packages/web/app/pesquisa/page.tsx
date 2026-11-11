@@ -1,7 +1,8 @@
 import Blog2 from "@/components/blog2";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { FeaturedList } from "@/components/pesquisa/featured-list";
 import { ResearchCardTooltip } from "@/components/pesquisa/research-card-tooltip";
-import { getRecentResearch, summarizeAbstract } from "@/lib/research-library";
+import { getRecentResearch, getResearchStats, summarizeAbstract } from "@/lib/research-library";
 
 export const metadata = {
   title: "Pesquisa Cientifica",
@@ -25,13 +26,8 @@ export default function PesquisaPage() {
   // O Blog2 entrega só `href` para o `renderCardLink`, então o resumo viaja
   // por um mapa href -> resumo em vez de vir junto do post.
   const summaries = new Map(works.map((work) => [work.url, summarizeAbstract(work.abstract)]));
-  // As estatísticas batem com os trabalhos exibidos, não com a biblioteca
-  // inteira — senão o "trabalhos indexados" mostra um número que ninguém vê.
-  const stats = {
-    total: works.length,
-    topics: new Set(works.flatMap((work) => work.topics)).size,
-    sources: new Set(works.map((work) => work.source)).size,
-  };
+  // Estatísticas da biblioteca inteira, as mesmas que a home mostra.
+  const stats = getResearchStats();
   return (
     <div className="qa-research mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
       <section className="border-b border-border pb-9">
@@ -42,6 +38,15 @@ export default function PesquisaPage() {
           Um espaço dedicado exclusivamente a trabalhos sobre qualidade de software: modelos de qualidade,
           garantia da qualidade, testes, defeitos, confiabilidade e manutenibilidade.
         </p>
+      </section>
+
+      <section aria-labelledby="fila-title" className="mt-8 border border-gold/40 bg-card p-5 sm:p-6">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Em destaque</p>
+        <h2 id="fila-title" className="font-display mt-2 text-2xl uppercase sm:text-3xl">Leituras para começar</h2>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">As referências mais recentes da biblioteca, a um clique.</p>
+        <div className="mt-5">
+          <FeaturedList linkLabel="Abrir" items={works.filter((work) => work.title.length <= 180).slice(0, 5).map((work) => ({ title: work.title, meta: `${work.year} · ${work.source}`, href: work.url, external: true }))} />
+        </div>
       </section>
 
       <section className="mt-8 grid gap-3 sm:grid-cols-3">

@@ -28,5 +28,5 @@ export function isSolutionReleased(item: Pick<WeeklyChallenge, "solutionReleaseA
 
 /** Data de liberação legível, em inglês e UTC, para não depender do fuso do servidor. */
 export function formatRelease(iso: string) {
-  return new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" }).format(new Date(iso)) + " UTC";
+  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" }).format(new Date(iso)) + " UTC";
 }

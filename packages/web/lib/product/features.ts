@@ -14,6 +14,22 @@ export const MENTORSHIP_ENABLED = process.env.FEATURE_MENTORSHIP === "true";
 /** Contas ficam fora do lançamento público; a mentoria ainda pode usá-las quando reativada. */
 export const ACCOUNTS_ENABLED = MENTORSHIP_ENABLED || process.env.FEATURE_ACCOUNTS === "true";
 
+/**
+ * Blog completo (60+ artigos). Desligado: só os posts de PUBLIC_BLOG_SLUGS
+ * existem no site; os demais respondem 404 e saem de índice, home e sitemap.
+ */
+export const FULL_BLOG_ENABLED = process.env.FEATURE_FULL_BLOG === "true";
+
+export const PUBLIC_BLOG_SLUGS = [
+  "qa-antes-de-executar-testes",
+  "gargalo-do-teste-qa-de-bombeiro-a-parceiro-estrategico",
+  "bug-report-reproduzivel",
+];
+
+export function isPublicPost(slug: string) {
+  return FULL_BLOG_ENABLED || PUBLIC_BLOG_SLUGS.includes(slug);
+}
+
 /** As bancadas e desafios ficam fora da versão pública editorial. */
 export const LABS_ENABLED = process.env.FEATURE_LABS === "true";
 

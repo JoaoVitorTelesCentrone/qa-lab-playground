@@ -21,12 +21,12 @@ const under = (...prefixes: string[]) => (path: string) => prefixes.some((p) => 
 const NAV: NavLink[] = [
   ...(LABS_ENABLED ? [
     { href: "/labs", label: "Labs", match: under("/labs") },
-    { href: "/desafio", label: "Weekly challenge", match: under("/desafio") },
+    { href: "/desafio", label: "Desafio da semana", match: under("/desafio") },
   ] : []),
   { href: "/blog", label: "Blog", match: under("/blog") },
   { href: "/ferramentas", label: "Ferramentas", match: under("/ferramentas") },
   { href: "/pesquisa", label: "Referências", match: under("/pesquisa") },
-  { href: "/sobre", label: "About", match: under("/sobre") },
+  { href: "/sobre", label: "Sobre", match: under("/sobre") },
 ];
 const MENTORSHIP: NavLink = { href: "/mentoria", label: "Mentoria", match: under("/mentoria") };
 const items = () => MENTORSHIP_ENABLED ? [...NAV, MENTORSHIP] : NAV;

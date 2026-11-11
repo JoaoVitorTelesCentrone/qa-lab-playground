@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ArrowUpRight, Bug, Code2, FileCode2, FolderKanban, ListChecks, SearchCode, Sparkles, TestTube2, WandSparkles } from "lucide-react";
 import { toolGuideCategories, toolGuides, type ToolGuideCategory } from "@/lib/tool-guides";
+import { FeaturedList } from "@/components/pesquisa/featured-list";
 import { ACCOUNTS_ENABLED, LABS_ENABLED } from "@/lib/product/features";
 
 export const metadata = {
-  title: "Ferramentas de QA | QA Lab",
-  description: "Acesse as ferramentas de planejamento, testes e investigação do QA Lab.",
+  title: "Ferramentas de QA",
+  description: "Guias de estudo das ferramentas de QA: documentação oficial, cursos gratuitos e vídeos selecionados.",
 };
 
 const featured = [
@@ -25,6 +26,15 @@ const available = [
 
 const guideGroups = (Object.keys(toolGuideCategories) as ToolGuideCategory[])
   .map((category) => [category, toolGuides.filter((guide) => guide.category === category)] as const);
+
+// Ferramentas que mais aparecem em vaga e rotina de QA, na ordem em que eu estudaria.
+const startHere = ["playwright", "postman", "git", "sql", "k6"]
+  .flatMap((slug) => toolGuides.filter((guide) => guide.slug === slug))
+  .map((guide) => ({
+    title: `${guide.name}: ${guide.tagline}`,
+    meta: toolGuideCategories[guide.category].title,
+    href: `/ferramentas/${guide.slug}`,
+  }));
 
 export default function ToolsPage() {
   return <main className="qa-tools mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
@@ -56,18 +66,27 @@ export default function ToolsPage() {
       </div>
     </section>}
 
+    <section aria-labelledby="fila-title" className="mt-10 border border-gold/40 bg-card p-5 sm:p-6">
+      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Em destaque</p>
+      <h2 id="fila-title" className="font-display mt-2 text-2xl uppercase sm:text-3xl">Por onde começar</h2>
+      <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Cinco guias para abrir primeiro, na ordem em que eu estudaria.</p>
+      <div className="mt-5"><FeaturedList items={startHere} linkLabel="Ver guia" /></div>
+    </section>
+
     <section id="guias" aria-labelledby="tools-guides-title" className="mt-16 scroll-mt-20">
       <h2 id="tools-guides-title" className="text-lg font-semibold">Guias de estudo das ferramentas do mercado</h2>
       <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">Documentação oficial, cursos gratuitos e vídeos selecionados para estudar ferramentas de QA.</p>
-      <div className="mt-6 grid gap-8 md:grid-cols-2">
-        {guideGroups.map(([category, guides]) => <div key={category}>
-          <h3 className="text-sm font-semibold">{toolGuideCategories[category].title}</h3>
-          <p className="mt-1 text-sm text-muted-foreground">{toolGuideCategories[category].description}</p>
-          <ul className="mt-3 divide-y divide-border border-y border-border">
+      <div className="mt-8 divide-y divide-border border-y border-border">
+        {guideGroups.map(([category, guides]) => <div key={category} className="grid gap-5 py-8 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-10">
+          <div>
+            <h3 className="text-base font-semibold">{toolGuideCategories[category].title}</h3>
+            <p className="mt-1 text-sm leading-6 text-muted-foreground">{toolGuideCategories[category].description}</p>
+          </div>
+          <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {guides.map((guide) => <li key={guide.slug}>
-              <Link href={`/ferramentas/${guide.slug}`} className="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-2 py-3 transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
-                <span className="min-w-0"><span className="block font-semibold">{guide.name}</span><span className="block truncate text-sm text-muted-foreground">{guide.tagline}</span></span>
-                <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+              <Link href={`/ferramentas/${guide.slug}`} className="group flex h-full flex-col border border-border bg-card p-4 transition-colors hover:border-gold/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+                <span className="flex items-center justify-between gap-2"><span className="font-semibold">{guide.name}</span><ArrowUpRight className="size-4 shrink-0 text-gold transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" /></span>
+                <span className="mt-1.5 text-sm leading-6 text-muted-foreground">{guide.tagline}</span>
               </Link>
             </li>)}
           </ul>

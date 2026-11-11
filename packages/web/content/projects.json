@@ -2,8 +2,8 @@
   {
     "slug": "qa-lab-playground",
     "name": "QA Lab Playground",
-    "tagline": "Hands-on QA labs with real, switchable bugs.",
-    "description": "A playground of practice systems (shop, API, login, waits, accessibility) where every lab has a correct mode and a bug mode, plus guided missions and Markdown bug reports.",
+    "tagline": "Sistemas de prática para treinar testes de QA.",
+    "description": "Um playground de sistemas de prática (loja, API, login, esperas, acessibilidade) com um modo correto e um modo com bug, para treinar investigação e relatórios de bug em Markdown.",
     "stack": ["Next.js", "React", "TypeScript", "Supabase", "Playwright", "Bun", "Tailwind CSS"],
     "demo": "/",
     "video": null,

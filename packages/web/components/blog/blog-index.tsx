@@ -11,7 +11,7 @@ export type BlogIndexArticle = Pick<BlogPost, "slug" | "titulo" | "resumo" | "te
 export type BlogIndexSeries = {
   id: string;
   title: string;
-  href: string;
+  href?: string;
   color: string;
   articles: BlogIndexArticle[];
 };
@@ -58,7 +58,7 @@ export function BlogIndex({ sections, featured }: Props) {
       <header className="qa-editorial-home-hero">
         <div>
           <h1>Aprenda QA investigando situações reais.</h1>
-          <p>Este caderno transforma perguntas de qualidade em exemplos, passos de investigação e práticas que você pode levar para o QA Lab.</p>
+          <p>{LABS_ENABLED ? "Este caderno transforma perguntas de qualidade em exemplos, passos de investigação e práticas que você pode levar para o QA Lab." : "Este caderno transforma perguntas de qualidade em exemplos, passos de investigação e práticas que você pode aplicar no seu trabalho."}</p>
           <Link href={`/blog/${featured.slug}`} className="qa-editorial-start">
             Começar por: {featured.titulo}<ArrowDown className="size-4" aria-hidden="true" />
           </Link>
@@ -108,7 +108,7 @@ export function BlogIndex({ sections, featured }: Props) {
             <section key={series.id} className="qa-editorial-track" aria-labelledby={`${series.id}-title`} style={{ "--essay-accent": series.color } as CSSProperties}>
               <div className="qa-editorial-track-heading">
                 <h3 id={`${series.id}-title`}>{series.title}</h3>
-                <Link href={series.href}>Abrir trilha <ArrowRight className="size-3.5" aria-hidden="true" /></Link>
+                {series.href && <Link href={series.href}>Abrir trilha <ArrowRight className="size-3.5" aria-hidden="true" /></Link>}
               </div>
               <div className="qa-editorial-story-grid">
                 {series.articles.map((article) => (

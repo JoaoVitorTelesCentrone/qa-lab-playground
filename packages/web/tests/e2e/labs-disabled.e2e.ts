@@ -12,8 +12,8 @@ test.describe("lançamento sem Labs", () => {
 
   test("@smoke home, blog e menu não anunciam Labs", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Quality engineering");
-    await expect(page.getByRole("link", { name: "Read the blog" })).toHaveAttribute("href", "/blog");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("qualidade de software");
+    await expect(page.getByRole("link", { name: "Ler o blog" })).toHaveAttribute("href", "/blog");
     await expect(page.locator('a[href^="/labs"], a[href^="/lab"], a[href="/desafio"]')).toHaveCount(0);
     await page.goto("/blog");
     await expect(page.locator('a[href^="/labs"], a[href^="/lab"]')).toHaveCount(0);

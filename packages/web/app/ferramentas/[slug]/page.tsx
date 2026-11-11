@@ -93,7 +93,7 @@ export default async function ToolGuidePage({ params }: PageProps) {
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-6 text-muted-foreground">
           {guide.qaFocus.map((item) => <li key={item}>{item}</li>)}
         </ol>
-        {guide.practice && <Link href={guide.practice.href} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+        {LABS_ENABLED && guide.practice && <Link href={guide.practice.href} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
           <FlaskConical className="size-4" aria-hidden="true" /> Praticar no QA Lab: {guide.practice.label}
         </Link>}
       </aside>

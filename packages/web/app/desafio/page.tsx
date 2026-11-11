@@ -22,7 +22,7 @@ export default function ChallengePage() {
     <p className="mt-5 max-w-2xl text-lg leading-8 text-muted-foreground">{challenge.summary}</p>
     <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-y border-border py-2">
       <Byline />
-      <ShareOnLinkedIn url="/desafio" text={`This week's QA challenge: ${challenge.title}. How many can you find?`} />
+      <ShareOnLinkedIn url="/desafio" text={`Desafio de QA da semana: ${challenge.title}. Quantos você encontra?`} />
     </div>
 
     <section aria-labelledby="start-title" className="mt-10 grid gap-8 sm:grid-cols-[1.4fr_1fr]">

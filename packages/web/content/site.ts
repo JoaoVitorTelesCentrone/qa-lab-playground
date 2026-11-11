@@ -7,9 +7,9 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-pla
 
 export const author = {
   name: "João Centrone",
-  title: "QA Automation Engineer",
-  /** Usado na byline: "Built by João Centrone". */
-  shortBio: "QA Automation Engineer writing about software quality and building practical tools.",
+  title: "Engenheiro de Automação de QA",
+  /** Usado na byline: "Feito por João Centrone". */
+  shortBio: "Engenheiro de Automação de QA. Escrevo sobre qualidade de software e construo ferramentas práticas.",
   /**
    * TODO(João): trocar pelo arquivo real (ex.: /author/joao-centrone.jpg, quadrado,
    * pelo menos 400×400). Enquanto isso, um monograma em SVG.

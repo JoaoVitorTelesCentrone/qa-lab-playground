@@ -97,7 +97,7 @@ export const foundationSeries: EditorialSeries[] = [
         example: "‘Carrinho quebra’ é vago. ‘Total do carrinho ignora o desconto após alterar a quantidade de 1 para 2’ aponta a condição e o efeito. Com dados do item, cupom e ambiente, outra pessoa consegue testar a hipótese.",
         steps: ["Comece pelo efeito sobre usuário ou negócio e dê um título específico.", "Liste pré-condições e os menores passos que reproduzem o comportamento.", "Separe resultado atual, esperado e evidência; repita seus próprios passos antes de enviar."],
         caution: "Se o comportamento esperado ainda não está acordado, registre a dúvida em vez de apresentá-la como defeito confirmado.",
-        exercise: "Use uma falha observada em um Lab e entregue um bug report com título, ambiente, pré-condições, dados sintéticos, passos mínimos, resultado atual, resultado esperado e impacto. Inclua uma evidência que ajude a distinguir os resultados e peça a outra pessoa que repita os passos sem explicação adicional. Se a regra esperada não estiver confirmada, registre a dúvida em vez de declarar defeito."
+        exercise: "Use uma falha observada em um sistema que você esteja testando e entregue um bug report com título, ambiente, pré-condições, dados sintéticos, passos mínimos, resultado atual, resultado esperado e impacto. Inclua uma evidência que ajude a distinguir os resultados e peça a outra pessoa que repita os passos sem explicação adicional. Se a regra esperada não estiver confirmada, registre a dúvida em vez de declarar defeito."
       },
       {
         slug: "investigando-bugs-intermitentes", title: "Investigando bugs intermitentes", summary: "Quando a falha não se repete sempre, o contexto vira a principal evidência.",
