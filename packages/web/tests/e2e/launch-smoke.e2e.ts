@@ -1,5 +1,15 @@
 import { expect, test } from "@playwright/test";
 
+test("@smoke robots permite descobrir as areas publicas de pratica", async ({ request }) => {
+  const response = await request.get("/robots.txt");
+  expect(response.ok()).toBe(true);
+  const robots = await response.text();
+  for (const path of ["/lab", "/labs", "/trilhas"]) {
+    expect(robots).not.toContain(`Disallow: ${path}`);
+  }
+  expect(robots).toContain("Sitemap:");
+});
+
 test("@smoke home apresenta o autor, os CTAs e as seções de autoridade", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1, name: /Hands-on QA labs with real bugs, built by a QA Automation Engineer/i })).toBeVisible();

@@ -1,10 +1,9 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/content/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground.vercel.app";
-
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/auth/", "/lab", "/labs", "/trilhas", "/perfil", "/login", "/cadastro", "/recuperar"] },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/auth/", "/perfil", "/login", "/cadastro", "/recuperar"] },
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }
