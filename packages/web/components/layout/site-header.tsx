@@ -16,14 +16,16 @@ type NavLink = { href: string; label: string; hint?: string; match: (path: strin
 const under = (...prefixes: string[]) => (path: string) => prefixes.some((p) => path === p || path.startsWith(`${p}/`));
 
 // Menu do site de autoridade (docs/PLANO_AUTORIDADE_2026-11.md): o que prova o
-// trabalho do autor. Caminho, Ferramentas e Referências científicas continuam
-// existindo como rotas, só saíram do menu. Projetos e Referências entram na etapa 7.
+// trabalho do autor. Ferramentas (guias com vídeos) e Referências científicas
+// voltaram ao menu no lançamento público; Caminho segue só como rota.
 const NAV: NavLink[] = [
   ...(LABS_ENABLED ? [
     { href: "/labs", label: "Labs", match: under("/labs") },
     { href: "/desafio", label: "Weekly challenge", match: under("/desafio") },
   ] : []),
   { href: "/blog", label: "Blog", match: under("/blog") },
+  { href: "/ferramentas", label: "Ferramentas", match: under("/ferramentas") },
+  { href: "/pesquisa", label: "Referências", match: under("/pesquisa") },
   { href: "/sobre", label: "About", match: under("/sobre") },
 ];
 const MENTORSHIP: NavLink = { href: "/mentoria", label: "Mentoria", match: under("/mentoria") };
