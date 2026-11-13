@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import researchCuration from "@/data/research-curation.json";
 import {
   filterResearchWorks,
   getAllResearch,
@@ -7,6 +8,7 @@ import {
   researchQueries,
   researchThemeId,
   researchThemes,
+  researchLibrary,
   type ResearchWork,
 } from "./research-library";
 
@@ -30,6 +32,19 @@ function work(overrides: Partial<ResearchWork> = {}): ResearchWork {
 }
 
 describe("biblioteca de pesquisa", () => {
+  test("cada registro do catálogo tem uma decisão editorial única", () => {
+    const approved = new Set(researchCuration.includedIds);
+    const excluded = new Set(researchCuration.excluded.map((item) => item.id));
+    const catalog = new Set(researchLibrary.items.map((item) => item.id));
+
+    expect(catalog.size).toBe(researchLibrary.items.length);
+    expect(approved.size).toBe(researchCuration.includedIds.length);
+    expect(excluded.size).toBe(researchCuration.excluded.length);
+    expect([...approved].some((id) => excluded.has(id))).toBe(false);
+    expect(new Set([...approved, ...excluded])).toEqual(catalog);
+    expect(new Set(getAllResearch().map((item) => item.id))).toEqual(approved);
+  });
+
   test("mapeia todas as consultas para um tema conhecido", () => {
     const ids = new Set(researchThemes.map((theme) => theme.id));
     for (const item of getAllResearch()) {

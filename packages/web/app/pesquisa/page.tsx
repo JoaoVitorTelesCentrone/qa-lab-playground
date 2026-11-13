@@ -181,6 +181,7 @@ export default async function PesquisaPage({
         </h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
           Busque por título, autoria, tema ou DOI. Combine com tema e ano para chegar mais rápido.
+          A seleção considera a relação direta com qualidade de software; a presença aqui não atesta revisão por pares.
         </p>
 
         <form

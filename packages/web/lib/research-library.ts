@@ -1,4 +1,5 @@
 import generatedLibrary from "@/data/research-library.generated.json";
+import researchCuration from "@/data/research-curation.json";
 
 export type ResearchWork = {
   id: string;
@@ -158,36 +159,10 @@ export function filterResearchWorks(
 
 export const researchLibrary = generatedLibrary as ResearchLibrary;
 
-const softwareQualityTerms = [
-  "software quality",
-  "quality of software",
-  "software quality assurance",
-  "software quality engineering",
-  "software testing",
-  "software test automation",
-  "software defect",
-  "defect prediction",
-  "defect detection",
-  "software reliability",
-  "software maintainability",
-  "code quality",
-  "static analysis",
-  "software verification",
-  "software validation",
-  "software regression testing",
-  "software mutation testing",
-  "software fault localization",
-];
-
-function isSoftwareQualityWork(work: ResearchWork) {
-  if (work.source === "Curated") return true;
-
-  const title = work.title.toLowerCase();
-  return title.includes("software") && softwareQualityTerms.some((term) => title.includes(term));
-}
+const approvedResearchIds = new Set<string>(researchCuration.includedIds);
 
 export function getSoftwareQualityResearch() {
-  return researchLibrary.items.filter(isSoftwareQualityWork);
+  return researchLibrary.items.filter((work) => approvedResearchIds.has(work.id));
 }
 
 export function getAllResearch() {

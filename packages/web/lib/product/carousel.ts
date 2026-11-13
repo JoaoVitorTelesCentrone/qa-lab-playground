@@ -1,6 +1,6 @@
 import { posts, type BlogPost } from "@/lib/blog-posts";
 import { challenges, type Challenge } from "@/lib/challenges";
-import { researchLibrary, type ResearchWork } from "@/lib/research-library";
+import { getAllResearch, type ResearchWork } from "@/lib/research-library";
 
 export type CarouselSourceKind = "tema" | "blog" | "desafio" | "referencia";
 
@@ -156,7 +156,7 @@ export function listCarouselSources(): CarouselSourceOption[] {
   const temas = readyTopics.map((topic) => ({ kind: "tema" as const, id: topic.id, label: topic.label, hint: topic.hint }));
   const blog = posts.map((post) => ({ kind: "blog" as const, id: post.slug, label: post.titulo, hint: `${slugTitle("blog")} · ${post.tempoLeitura} min` }));
   const desafios = challenges.map((challenge) => ({ kind: "desafio" as const, id: challenge.id, label: challenge.titulo, hint: `${slugTitle("desafio")} · ${challenge.dificuldade}` }));
-  const referencias = researchLibrary.items.slice(0, 60).map((work) => ({ kind: "referencia" as const, id: work.id, label: work.title, hint: `${slugTitle("referencia")} · ${work.year}` }));
+  const referencias = getAllResearch().slice(0, 60).map((work) => ({ kind: "referencia" as const, id: work.id, label: work.title, hint: `${slugTitle("referencia")} · ${work.year}` }));
   return [...temas, ...blog, ...desafios, ...referencias];
 }
 
@@ -173,6 +173,6 @@ export function buildCarouselDeck(kind: CarouselSourceKind, id: string): Carouse
     const challenge = challenges.find((item) => item.id === id);
     return challenge ? slidesFromChallenge(challenge) : null;
   }
-  const work = researchLibrary.items.find((item) => item.id === id);
+  const work = getAllResearch().find((item) => item.id === id);
   return work ? slidesFromResearch(work) : null;
 }
