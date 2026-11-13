@@ -5,8 +5,8 @@ import {
   getAllResearch,
   getResearchStats,
   getResearchYears,
-  researchQueries,
   researchThemeId,
+  researchThemeIds,
   researchThemes,
   researchLibrary,
   type ResearchWork,
@@ -51,20 +51,20 @@ describe("biblioteca de pesquisa", () => {
   test("mapeia todas as consultas para um tema conhecido", () => {
     const ids = new Set(researchThemes.map((theme) => theme.id));
     for (const item of getAllResearch()) {
-      expect(ids.has(researchThemeId(item))).toBe(true);
+      expect(researchThemeIds(item).length).toBeGreaterThan(0);
+      expect(researchThemeIds(item).every((id) => ids.has(id))).toBe(true);
     }
   });
 
-  test("toda consulta curada tem um tema próprio", () => {
-    for (const query of researchQueries) {
-      expect(researchThemeId({ query })).not.toBe("outros");
-    }
+  test("todos os selecionados têm classificação editorial própria", () => {
+    expect(Object.keys(researchCuration.themeIdsByWorkId).sort()).toEqual([...researchCuration.includedIds].sort());
+    for (const item of getAllResearch()) expect(researchThemeId(item)).not.toBe("outros");
   });
 
   test("busca ignora caixa e acentos", () => {
     const items = [
       work({ id: "qualidade", title: "Qualidade de software" }),
-      work({ id: "defect", title: "Defect prediction", query: "software defect prediction" }),
+      work({ id: "defect", title: "Defect prediction", abstract: "Predicting faulty modules.", venue: "Research Journal", query: "software defect prediction" }),
     ];
     expect(filterResearchWorks(items, { q: "QUALIDADE" }).map((item) => item.id)).toEqual(["qualidade"]);
     expect(filterResearchWorks(items, { q: "defect" }).map((item) => item.id)).toEqual(["defect"]);
@@ -79,6 +79,26 @@ describe("biblioteca de pesquisa", () => {
     expect(filterResearchWorks(items, { tema: "defeitos" }).map((item) => item.id)).toEqual(["defeitos"]);
     expect(filterResearchWorks(items, { ano: 2024 }).map((item) => item.id)).toEqual(["garantia", "outros"]);
     expect(filterResearchWorks(items, { tema: "outros", ano: 2024 }).map((item) => item.id)).toEqual(["outros"]);
+  });
+
+  test("tema usa o assunto revisado, não a consulta que encontrou o trabalho", () => {
+    const misclassifiedByQuery = getAllResearch().find((item) => item.title.startsWith("Empirical insights on the use of large language models"));
+    expect(misclassifiedByQuery).toBeDefined();
+    expect(researchThemeIds(misclassifiedByQuery!)).toContain("testes");
+    expect(researchThemeIds(misclassifiedByQuery!)).not.toContain("manutenibilidade");
+  });
+
+  test("busca não devolve um artigo só porque sua consulta de descoberta contém o termo", () => {
+    const items = [work({ title: "A study of software testing", abstract: "Test cases and test automation.", query: "software defect prediction" })];
+    expect(filterResearchWorks(items, { q: "defect prediction" })).toEqual([]);
+  });
+
+  test("busca em português encontra o assunto em inglês sem trazer menções incidentais do resumo", () => {
+    const items = [
+      work({ id: "abstract", title: "Another study", abstract: "Software defect prediction is discussed." }),
+      work({ id: "title", title: "Software Defect Prediction", abstract: "A study of classification." }),
+    ];
+    expect(filterResearchWorks(items, { q: "predição de defeitos" }).map((item) => item.id)).toEqual(["title"]);
   });
 
   test("anos aparecem do mais recente para o mais antigo", () => {

@@ -10,11 +10,24 @@ test("@smoke biblioteca científica busca, filtra e carrega mais", async ({ page
   const cards = page.locator("#trabalhos article");
   await expect(cards).toHaveCount(12);
 
-  await page.getByLabel("Buscar na biblioteca").fill("defect prediction");
+  await page.locator("#research-theme").selectOption("testes");
+  await page.getByRole("button", { name: "Filtrar" }).click();
+  await expect(page).toHaveURL(/tema=testes/);
+  await expect(count).toContainText("13 trabalhos");
+
+  await page.locator("#research-year").selectOption("2026");
+  await page.getByRole("button", { name: "Filtrar" }).click();
+  await expect(page).toHaveURL(/tema=testes.*ano=2026/);
+  await expect(count).toContainText("de 2026");
+
+  await page.getByRole("link", { name: "Limpar" }).click();
+  await expect(count).toContainText("48 trabalhos selecionados");
+
+  await page.getByLabel("Buscar na biblioteca").fill("predição de defeitos");
   await page.getByRole("button", { name: "Filtrar" }).click();
   await expect(page).toHaveURL(/\/pesquisa\?/);
   await expect(page).toHaveURL(/#trabalhos$/);
-  await expect(count).toContainText(/trabalhos/);
+  await expect(count).toContainText("13 trabalhos");
 
   const filteredCount = await cards.count();
   expect(filteredCount).toBeGreaterThan(0);

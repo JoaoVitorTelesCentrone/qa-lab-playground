@@ -87,6 +87,7 @@ export const researchQueries = [
 export type ResearchThemeId =
   | "produto"
   | "garantia"
+  | "testes"
   | "modelo"
   | "medicao"
   | "manutenibilidade"
@@ -96,10 +97,11 @@ export type ResearchThemeId =
 export const researchThemes: ReadonlyArray<{ id: ResearchThemeId; label: string }> = [
   { id: "produto", label: "Qualidade de produto" },
   { id: "garantia", label: "Garantia da qualidade" },
+  { id: "testes", label: "Testes e automação" },
   { id: "modelo", label: "Modelos de qualidade" },
   { id: "medicao", label: "Medição de qualidade" },
   { id: "manutenibilidade", label: "Manutenibilidade e confiabilidade" },
-  { id: "defeitos", label: "Predição de defeitos" },
+  { id: "defeitos", label: "Defeitos e predição" },
   { id: "outros", label: "Outros temas" },
 ];
 
@@ -112,8 +114,13 @@ const researchThemeByQuery: Record<string, ResearchThemeId> = {
   "software defect prediction": "defeitos",
 };
 
-export function researchThemeId(work: Pick<ResearchWork, "query">): ResearchThemeId {
-  return researchThemeByQuery[work.query] ?? "outros";
+export function researchThemeIds(work: Pick<ResearchWork, "id" | "query">): ResearchThemeId[] {
+  const reviewed = researchCuration.themeIdsByWorkId[work.id as keyof typeof researchCuration.themeIdsByWorkId];
+  return reviewed ? reviewed as ResearchThemeId[] : [researchThemeByQuery[work.query] ?? "outros"];
+}
+
+export function researchThemeId(work: Pick<ResearchWork, "id" | "query">): ResearchThemeId {
+  return researchThemeIds(work)[0];
 }
 
 export function researchThemeLabel(id: ResearchThemeId) {
@@ -127,6 +134,60 @@ export function normalizeResearchText(value: string) {
     .toLocaleLowerCase("pt-BR");
 }
 
+const researchSearchAliases: Record<string, string[]> = {
+  qualidade: ["quality"],
+  garantia: ["assurance"],
+  teste: ["test"],
+  testes: ["test"],
+  automacao: ["automat"],
+  defeito: ["defect", "bug", "fault"],
+  defeitos: ["defect", "bug", "fault"],
+  predicao: ["predict"],
+  confiabilidade: ["reliab"],
+  manutenibilidade: ["maintainab"],
+  medicao: ["measur"],
+  metrica: ["metric"],
+  metricas: ["metric"],
+  modelo: ["model"],
+  modelos: ["model"],
+  verificacao: ["verif"],
+  validacao: ["valid"],
+  bug: ["defect", "fault"],
+  bugs: ["defect", "fault"],
+};
+
+const researchSearchStopwords = new Set(["a", "as", "o", "os", "de", "da", "das", "do", "dos", "e", "em", "para", "com"]);
+
+function researchSearchTerms(query: string) {
+  return normalizeResearchText(query)
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter((term) => term && !researchSearchStopwords.has(term))
+    .map((term) => [term, ...(researchSearchAliases[term] ?? [])]);
+}
+
+function researchSearchScore(work: ResearchWork, query: string, terms: string[][]) {
+  const fields = [
+    [work.title, 20],
+    [work.authors.join(" "), 12],
+    [researchThemeIds(work).map(researchThemeLabel).join(" "), 10],
+    [work.doi, 2],
+    [work.url, 2],
+  ] as const;
+  const normalized = fields.map(([value, weight]) => [normalizeResearchText(value), weight] as const);
+  let score = 0;
+
+  for (const variants of terms) {
+    const match = normalized
+      .filter(([value]) => variants.some((variant) => value.includes(variant)))
+      .reduce((best, [, weight]) => Math.max(best, weight), 0);
+    if (!match) return 0;
+    score += match;
+  }
+
+  if (normalizeResearchText(work.title).includes(query)) score += 50;
+  return score;
+}
+
 export type ResearchFilters = {
   q?: string;
   tema?: ResearchThemeId | "todos";
@@ -138,23 +199,14 @@ export function filterResearchWorks(
   { q = "", tema = "todos", ano = "todos" }: ResearchFilters = {},
 ) {
   const query = normalizeResearchText(q.trim());
-  return items.filter((item) => {
-    if (tema !== "todos" && researchThemeId(item) !== tema) return false;
-    if (ano !== "todos" && item.year !== ano) return false;
-    if (!query) return true;
+  const terms = researchSearchTerms(query);
+  const results = items
+    .filter((item) => (tema === "todos" || researchThemeIds(item).includes(tema)) && (ano === "todos" || item.year === ano))
+    .map((item) => ({ item, score: terms.length ? researchSearchScore(item, query, terms) : 1 }))
+    .filter(({ score }) => score > 0);
 
-    const searchable = normalizeResearchText([
-      item.title,
-      item.abstract,
-      item.authors.join(" "),
-      item.venue,
-      item.source,
-      item.doi,
-      item.query,
-      researchThemeLabel(researchThemeId(item)),
-    ].join(" "));
-    return searchable.includes(query);
-  });
+  if (terms.length) results.sort((a, b) => b.score - a.score || Date.parse(b.item.publishedAt) - Date.parse(a.item.publishedAt));
+  return results.map(({ item }) => item);
 }
 
 export const researchLibrary = generatedLibrary as ResearchLibrary;

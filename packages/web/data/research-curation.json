@@ -276,5 +276,183 @@
       "reason": "Levantamento de vagas e competências em teste quântico, sem avaliar qualidade de software.",
       "url": "http://arxiv.org/abs/2512.14861v2"
     }
-  ]
+  ],
+  "themeIdsByWorkId": {
+    "doi-doi-org-10-1007-s10664-026-10952-x": [
+      "produto",
+      "manutenibilidade"
+    ],
+    "doi-doi-org-10-1007-s10664-026-10971-8": [
+      "garantia",
+      "testes"
+    ],
+    "doi-doi-org-10-4114-inteletica-vol3iss6pp77-104": [
+      "defeitos",
+      "medicao"
+    ],
+    "doi-doi-org-10-63158-journalisi-v8i5-1823": [
+      "defeitos"
+    ],
+    "doi-doi-org-10-15408-jti-v19i2-53564": [
+      "testes",
+      "garantia"
+    ],
+    "doi-doi-org-10-64898-2026-10-01-755028": [
+      "garantia",
+      "manutenibilidade"
+    ],
+    "doi-doi-org-10-15294-rji-v4i2-64137": [
+      "testes"
+    ],
+    "doi-doi-org-10-15439-2026f0950": [
+      "testes",
+      "manutenibilidade"
+    ],
+    "doi-doi-org-10-54254-2755-2721-2026-ld36950": [
+      "testes"
+    ],
+    "doi-doi-org-10-70267-aitia-2026300307": [
+      "testes"
+    ],
+    "doi-doi-org-10-5281-zenodo-22341782": [
+      "garantia"
+    ],
+    "doi-doi-org-10-59562-jessi-v7i3-11711": [
+      "medicao",
+      "modelo"
+    ],
+    "doi-doi-org-10-3390-math14173176": [
+      "manutenibilidade"
+    ],
+    "doi-doi-org-10-3390-systems14091078": [
+      "produto",
+      "modelo"
+    ],
+    "arxiv-arxiv-org-abs-2609-29705v1": [
+      "produto",
+      "modelo"
+    ],
+    "doi-doi-org-10-3389-fcomp-2026-1936730": [
+      "garantia",
+      "testes"
+    ],
+    "doi-doi-org-10-21203-rs-3-rs-10572455-v1": [
+      "testes",
+      "medicao"
+    ],
+    "semantic-75e017f27903c50ed4a1a187b0ea8ed856217321": [
+      "medicao",
+      "manutenibilidade"
+    ],
+    "doi-doi-org-10-1002-stvr-70028": [
+      "manutenibilidade",
+      "defeitos"
+    ],
+    "doi-doi-org-10-14483-23448350-24627": [
+      "modelo",
+      "produto"
+    ],
+    "doi-doi-org-10-1007-s11219-026-09775-2": [
+      "produto",
+      "garantia"
+    ],
+    "doi-doi-org-10-1145-3820355-3820394": [
+      "garantia"
+    ],
+    "doi-doi-org-10-1145-3803437-3805580": [
+      "medicao"
+    ],
+    "arxiv-arxiv-org-abs-2607-01842v1": [
+      "defeitos",
+      "medicao"
+    ],
+    "doi-doi-org-10-3390-info17070624": [
+      "produto",
+      "modelo"
+    ],
+    "arxiv-arxiv-org-abs-2606-24968v1": [
+      "defeitos"
+    ],
+    "doi-doi-org-10-25258-ijddt-16-48s-109": [
+      "testes",
+      "garantia"
+    ],
+    "arxiv-arxiv-org-abs-2605-20788v1": [
+      "defeitos",
+      "testes"
+    ],
+    "doi-doi-org-10-1109-icieam69213-2026-11549731": [
+      "produto",
+      "modelo"
+    ],
+    "doi-doi-org-10-1109-ms-2026-3662321": [
+      "produto",
+      "medicao"
+    ],
+    "arxiv-arxiv-org-abs-2604-20742v1": [
+      "defeitos",
+      "medicao"
+    ],
+    "doi-doi-org-10-1109-rams50514-2026-11424466": [
+      "manutenibilidade",
+      "testes"
+    ],
+    "arxiv-arxiv-org-abs-2601-18477v1": [
+      "defeitos",
+      "medicao"
+    ],
+    "arxiv-arxiv-org-abs-2601-02454v1": [
+      "testes"
+    ],
+    "doi-doi-org-10-63282-3050-922x-ijeret-v7i3p110": [
+      "garantia",
+      "manutenibilidade"
+    ],
+    "arxiv-arxiv-org-abs-2512-23875v1": [
+      "defeitos"
+    ],
+    "arxiv-arxiv-org-abs-2512-17460v1": [
+      "defeitos"
+    ],
+    "arxiv-arxiv-org-abs-2509-09192v2": [
+      "defeitos"
+    ],
+    "arxiv-arxiv-org-abs-2508-04408v1": [
+      "defeitos",
+      "medicao"
+    ],
+    "arxiv-arxiv-org-abs-2504-19181v1": [
+      "defeitos",
+      "medicao"
+    ],
+    "seed-swebok-v4-software-quality": [
+      "garantia",
+      "produto"
+    ],
+    "seed-iso-25010": [
+      "modelo",
+      "produto"
+    ],
+    "arxiv-arxiv-org-abs-2107-13687v1": [
+      "medicao"
+    ],
+    "arxiv-arxiv-org-abs-2101-03669v1": [
+      "medicao",
+      "produto"
+    ],
+    "seed-tmap-quality-engineering": [
+      "garantia",
+      "testes"
+    ],
+    "arxiv-arxiv-org-abs-1503-06934v1": [
+      "produto",
+      "medicao"
+    ],
+    "arxiv-arxiv-org-abs-1412-2977v1": [
+      "modelo"
+    ],
+    "arxiv-arxiv-org-abs-1312-1042v1": [
+      "modelo"
+    ]
+  }
 }

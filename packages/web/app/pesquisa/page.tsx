@@ -10,6 +10,7 @@ import {
   getAllResearch,
   getResearchStats,
   getResearchYears,
+  researchThemeIds,
   researchThemeLabel,
   researchThemes,
   summarizeAbstract,
@@ -88,6 +89,9 @@ export default async function PesquisaPage({
 
   const allWorks = getAllResearch();
   const years = getResearchYears(allWorks);
+  const themeOptions = researchThemes
+    .map((theme) => ({ ...theme, count: allWorks.filter((work) => researchThemeIds(work).includes(theme.id)).length }))
+    .filter((theme) => theme.count > 0);
   const requestedYear = Number.parseInt(first(params.ano) ?? "", 10);
   const ano: number | "todos" = years.includes(requestedYear) ? requestedYear : "todos";
 
@@ -185,6 +189,7 @@ export default async function PesquisaPage({
         </p>
 
         <form
+          key={`${q}|${tema}|${ano}`}
           action="/pesquisa#trabalhos"
           method="get"
           role="search"
@@ -216,8 +221,8 @@ export default async function PesquisaPage({
               className="min-h-11 w-full border border-border bg-background px-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               <option value="">Todos os temas</option>
-              {researchThemes.map((theme) => (
-                <option key={theme.id} value={theme.id}>{theme.label}</option>
+              {themeOptions.map((theme) => (
+                <option key={theme.id} value={theme.id}>{theme.label} ({theme.count})</option>
               ))}
             </select>
           </label>
