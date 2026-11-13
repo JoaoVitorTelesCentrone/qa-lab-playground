@@ -1,23 +1,25 @@
 # Curadoria da biblioteca de qualidade de software
 
-Revisão temática em 13/11/2026 do catálogo `packages/web/data/research-library.generated.json` (snapshot de 12/11/2026). Foram examinados os títulos, resumos disponíveis e metadados dos **213 registros**. A decisão individual de cada ID está em `packages/web/data/research-curation.json`: **202 incluídos** e **11 excluídos**.
+Revisão temática em 13/11/2026 do catálogo `packages/web/data/research-library.generated.json` (snapshot de 12/11/2026). Foram examinados os títulos, resumos disponíveis e metadados dos **213 registros**. A decisão individual de cada ID está em `packages/web/data/research-curation.json`: **48 selecionados para a biblioteca pública**, **154 pertinentes ao tema mas não selecionados** e **11 fora do recorte**.
 
 ## Critério
 
-Um trabalho entra na biblioteca pública quando seu objeto principal é a qualidade do produto ou do processo de software: garantia da qualidade, testes, verificação, validação, confiabilidade, manutenibilidade, métricas, modelos de qualidade, análise de código ou defeitos. Estudos aplicados a um domínio específico entram quando investigam uma dessas questões no software. Dados e pacotes de replicação diretamente ligados a esses temas também entram, embora não sejam artigos.
+Um trabalho é pertinente quando seu objeto principal é a qualidade do produto ou do processo de software: garantia da qualidade, testes, verificação, validação, confiabilidade, manutenibilidade, métricas, modelos de qualidade, análise de código ou defeitos. Estudos aplicados a um domínio específico também podem ser pertinentes quando investigam uma dessas questões no software. Dados e pacotes de replicação diretamente ligados a esses temas são pertinentes, embora não sejam artigos.
 
 Foram excluídas menções incidentais a “software”, publicidade, notas de correção sem pesquisa própria e estudos de vagas ou ensino que não avaliam qualidade de software. Consulta de busca, tópico atribuído pela API e presença isolada de palavras-chave não bastam para inclusão.
 
-| Consulta de descoberta | Incluídos | Excluídos |
-| --- | ---: | ---: |
-| Predição de defeitos | 87 | 4 |
-| Garantia da qualidade | 43 | 5 |
-| Qualidade de produto | 14 | 0 |
-| Manutenibilidade e confiabilidade | 21 | 0 |
-| Modelos de qualidade | 27 | 2 |
-| Medição de qualidade | 8 | 0 |
-| Consultas históricas adicionais | 2 | 0 |
-| **Total** | **202** | **11** |
+Para a biblioteca pública, a seleção prioriza referências fundamentais, revisões e estudos empíricos com pergunta e método identificáveis no registro. Ela cobre modelos, medição, testes, confiabilidade e defeitos, reduzindo repetições de propostas semelhantes de aprendizado de máquina. Os 154 trabalhos pertinentes que ficaram fora da vitrine permanecem no catálogo para eventual revisão; isso **não** significa que sejam inválidos.
+
+| Consulta de descoberta | Selecionados |
+| --- | ---: |
+| Predição de defeitos | 10 |
+| Garantia da qualidade | 12 |
+| Qualidade de produto | 4 |
+| Manutenibilidade e confiabilidade | 5 |
+| Modelos de qualidade | 13 |
+| Medição de qualidade | 3 |
+| Consultas históricas adicionais | 1 |
+| **Total** | **48** |
 
 ## Exclusões
 
@@ -37,4 +39,4 @@ O arquivo de curadoria registra o título, ID e motivo específico dos 11 regist
 
 Esta é uma **triagem de pertinência temática**, feita com os metadados e resumos disponíveis; não é uma avaliação de qualidade metodológica, verificação de revisão por pares nem leitura integral de todos os textos. O registro pode tratar de qualidade de software e ainda ter evidência fraca. Alguns itens não têm resumo indexado e foram mantidos quando o título apontava diretamente para um tema de qualidade de software.
 
-Novos registros capturados pelo atualizador ficam fora da biblioteca pública até receberem uma decisão em `research-curation.json`. A suíte de testes exige que cada ID do catálogo tenha exatamente uma decisão, para que a atualização da fonte sinalize registros pendentes de revisão.
+Novos registros capturados pelo atualizador ficam fora da biblioteca pública até receberem uma decisão em `research-curation.json`. A suíte de testes exige que cada ID do catálogo esteja em exatamente um dos três grupos, para que a atualização da fonte sinalize registros pendentes de revisão.

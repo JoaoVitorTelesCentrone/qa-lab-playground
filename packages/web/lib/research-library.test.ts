@@ -34,14 +34,17 @@ function work(overrides: Partial<ResearchWork> = {}): ResearchWork {
 describe("biblioteca de pesquisa", () => {
   test("cada registro do catálogo tem uma decisão editorial única", () => {
     const approved = new Set(researchCuration.includedIds);
+    const notSelected = new Set(researchCuration.notSelectedIds);
     const excluded = new Set(researchCuration.excluded.map((item) => item.id));
     const catalog = new Set(researchLibrary.items.map((item) => item.id));
 
     expect(catalog.size).toBe(researchLibrary.items.length);
     expect(approved.size).toBe(researchCuration.includedIds.length);
+    expect(notSelected.size).toBe(researchCuration.notSelectedIds.length);
     expect(excluded.size).toBe(researchCuration.excluded.length);
-    expect([...approved].some((id) => excluded.has(id))).toBe(false);
-    expect(new Set([...approved, ...excluded])).toEqual(catalog);
+    expect([...approved].some((id) => excluded.has(id) || notSelected.has(id))).toBe(false);
+    expect([...notSelected].some((id) => excluded.has(id))).toBe(false);
+    expect(new Set([...approved, ...notSelected, ...excluded])).toEqual(catalog);
     expect(new Set(getAllResearch().map((item) => item.id))).toEqual(approved);
   });
 

@@ -209,7 +209,7 @@ export function getResearchStats() {
   return {
     total: items.length,
     topics: topics.size,
-    sources: researchSources.length,
+    sources: new Set(items.map((item) => item.source)).size,
     newestDate: newest?.publishedAt ?? researchLibrary.updatedAt,
   };
 }

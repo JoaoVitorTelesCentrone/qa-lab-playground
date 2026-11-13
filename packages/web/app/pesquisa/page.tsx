@@ -138,7 +138,7 @@ export default async function PesquisaPage({
       ? "Nenhum trabalho encontrado"
       : hasFilters
         ? `${resultCount} ${filtered.length === 1 ? "encontrado" : "encontrados"}`
-        : `${resultCount} indexados`;
+        : `${resultCount} selecionados`;
 
   return (
     <div className="qa-research mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
@@ -163,9 +163,9 @@ export default async function PesquisaPage({
 
       <section className="mt-8 grid gap-3 sm:grid-cols-3">
         {[
-          [stats.total, "trabalhos indexados"],
+          [stats.total, "trabalhos selecionados"],
           [stats.topics, "tópicos mapeados"],
-          [stats.sources, "fontes ativas"],
+          [stats.sources, "origens no acervo"],
         ].map(([value, label], index) => (
           <div key={label} className="border border-border bg-card p-5">
             <p className={`text-3xl font-bold ${["text-primary", "text-[#9EB8C6]", "text-copper"][index]}`}>{value}</p>
