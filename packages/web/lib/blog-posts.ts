@@ -187,11 +187,4 @@ export function getSeriesPosts(slug: string): BlogPost[] {
     .sort((a, b) => (a.editorial?.number ?? 0) - (b.editorial?.number ?? 0));
 }
 
-export function formatDate(dateStr: string): string {
-  const date = new Date(dateStr + "T00:00:00");
-  return date.toLocaleDateString("pt-BR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
+export { formatDate } from "./format-date";

@@ -83,6 +83,79 @@ export const researchQueries = [
   "software defect prediction",
 ] as const;
 
+export type ResearchThemeId =
+  | "produto"
+  | "garantia"
+  | "modelo"
+  | "medicao"
+  | "manutenibilidade"
+  | "defeitos"
+  | "outros";
+
+export const researchThemes: ReadonlyArray<{ id: ResearchThemeId; label: string }> = [
+  { id: "produto", label: "Qualidade de produto" },
+  { id: "garantia", label: "Garantia da qualidade" },
+  { id: "modelo", label: "Modelos de qualidade" },
+  { id: "medicao", label: "Medição de qualidade" },
+  { id: "manutenibilidade", label: "Manutenibilidade e confiabilidade" },
+  { id: "defeitos", label: "Predição de defeitos" },
+  { id: "outros", label: "Outros temas" },
+];
+
+const researchThemeByQuery: Record<string, ResearchThemeId> = {
+  "software product quality": "produto",
+  "software quality assurance": "garantia",
+  "software quality model": "modelo",
+  "software quality measurement": "medicao",
+  "software maintainability reliability": "manutenibilidade",
+  "software defect prediction": "defeitos",
+};
+
+export function researchThemeId(work: Pick<ResearchWork, "query">): ResearchThemeId {
+  return researchThemeByQuery[work.query] ?? "outros";
+}
+
+export function researchThemeLabel(id: ResearchThemeId) {
+  return researchThemes.find((theme) => theme.id === id)?.label ?? "Outros temas";
+}
+
+export function normalizeResearchText(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR");
+}
+
+export type ResearchFilters = {
+  q?: string;
+  tema?: ResearchThemeId | "todos";
+  ano?: number | "todos";
+};
+
+export function filterResearchWorks(
+  items: ResearchWork[],
+  { q = "", tema = "todos", ano = "todos" }: ResearchFilters = {},
+) {
+  const query = normalizeResearchText(q.trim());
+  return items.filter((item) => {
+    if (tema !== "todos" && researchThemeId(item) !== tema) return false;
+    if (ano !== "todos" && item.year !== ano) return false;
+    if (!query) return true;
+
+    const searchable = normalizeResearchText([
+      item.title,
+      item.abstract,
+      item.authors.join(" "),
+      item.venue,
+      item.source,
+      item.doi,
+      item.query,
+      researchThemeLabel(researchThemeId(item)),
+    ].join(" "));
+    return searchable.includes(query);
+  });
+}
+
 export const researchLibrary = generatedLibrary as ResearchLibrary;
 
 const softwareQualityTerms = [
@@ -117,10 +190,18 @@ export function getSoftwareQualityResearch() {
   return researchLibrary.items.filter(isSoftwareQualityWork);
 }
 
+export function getAllResearch() {
+  return [...getSoftwareQualityResearch()].sort(
+    (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
+  );
+}
+
+export function getResearchYears(items: ResearchWork[] = getAllResearch()) {
+  return [...new Set(items.map((item) => item.year))].sort((a, b) => b - a);
+}
+
 export function getRecentResearch(limit = 12) {
-  return [...getSoftwareQualityResearch()]
-    .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
-    .slice(0, limit);
+  return getAllResearch().slice(0, limit);
 }
 
 /**

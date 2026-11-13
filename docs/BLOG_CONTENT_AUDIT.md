@@ -88,3 +88,15 @@ Para cada revisão, registrar decisão (`manter`, `revisar`, `unir/redirecionar`
 | duplicidade-de-contatos-e-oportunidades | Funil comercial | — | Revisão editorial pendente |
 
 As 60 datas compartilhadas e sem fonte foram removidas do modelo. A data do artigo legado permanece como dado existente no catálogo, mas sua fonte também precisa ser confirmada antes de ser chamada de verificada. Não há datas de revisão substantiva confirmadas, portanto `lastModified` é omitido do sitemap. Registrar novas datas somente com histórico confiável.
+
+> **Atualização 2026-11-12:** o caderno editorial voltou a declarar uma data
+> compartilhada no catálogo, agora com fonte: `2026-10-28`, commit
+> `39a3697` ("feat(blog): publicar artigos para todas as trilhas"). É a data
+> de entrada do caderno no ar, não uma data editorial individual verificada;
+> cada história pode sobrescrever `EditorialStory.publishedAt` quando houver
+> histórico próprio.
+
+> **Atualização 2026-11-12 (publicação):** as trilogias `QA do Zero` e
+> `Bug report` foram publicadas completas no lançamento enxuto, com 7 posts
+> no total. A revisão editorial continua pendente para todos os artigos, como
+> registrado no inventário abaixo.

@@ -25,6 +25,14 @@ export const author = {
    * Enquanto for null, o botão de baixar CV não aparece.
    */
   cv: null as string | null,
+  /** Conteúdo da página /sobre. A trajetória é a do projeto, não uma lista de empregos. */
+  about: {
+    intro: "Meu trabalho é transformar qualidade de software em algo que se possa ver: um bug reproduzível, uma evidência anexada, uma decisão de teste explicada.",
+    story: "O QA Lab começou como um lugar para praticar o que falta em muitos tutoriais: sistemas com defeitos de verdade, um modo correto para comparar e um relatório que registra o que foi encontrado. A partir daí, o projeto cresceu em três frentes.",
+    stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Supabase", "Bun", "Playwright"],
+    stackNote: "Tecnologias com que mantenho o QA Lab Playground, o produto, os testes e o conteúdo deste site.",
+    contactNote: "Para conversar sobre QA, automação ou o QA Lab, me encontre no LinkedIn. O código do projeto está no GitHub.",
+  },
   /** Página com a bio completa. */
   aboutHref: "/sobre",
 } as const;

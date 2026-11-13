@@ -1,16 +1,15 @@
 ﻿// Bloco "Blog 2" do Watermelon UI (registry `blog-2`). Três ajustes ao
 // projeto — o resto é o componente original:
 //
-// 1. `FaBookmark` do react-icons virou `Bookmark` do lucide com `fill-current`:
-//    react-icons não está instalado e o projeto usa lucide como biblioteca de
-//    ícones (components.json). Não vale um pacote inteiro por um ícone.
+// 1. Sem o ícone de bookmark do original: ele parecia um controle de salvar,
+//    mas não tinha ação. O card inteiro já é o link.
 // 2. `header` é opcional — a página de pesquisa não tem título, descrição nem
 //    CTA nesse bloco.
 // 3. `avatar` é opcional e o acesso é protegido: os trabalhos da biblioteca não
 //    têm foto de autoria, e o original quebraria no `.startsWith` de undefined.
 //    O fallback de iniciais já existia no componente.
 
-import { ArrowRight, ArrowUpRight, Bookmark } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface BlogAuthor {
@@ -106,13 +105,10 @@ export default function Blog2({
                 )}
               >
                 <div className="flex flex-1 flex-col">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center">
                     <span className="text-foreground/80 text-md font-bold">
                       {post.meta}
                     </span>
-                    <div className="text-foreground/50 hover:text-foreground/90 transition-colors">
-                      <Bookmark className="size-5 fill-current" strokeWidth={1.5} />
-                    </div>
                   </div>
 
                   <div className="flex flex-1 flex-col justify-center py-6">

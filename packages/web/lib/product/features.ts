@@ -21,9 +21,15 @@ export const ACCOUNTS_ENABLED = MENTORSHIP_ENABLED || process.env.FEATURE_ACCOUN
 export const FULL_BLOG_ENABLED = process.env.FEATURE_FULL_BLOG === "true";
 
 export const PUBLIC_BLOG_SLUGS = [
+  // Duas trilogias completas no lançamento enxuto: QA do Zero e Bug report.
   "qa-antes-de-executar-testes",
-  "gargalo-do-teste-qa-de-bombeiro-a-parceiro-estrategico",
+  "da-regra-ao-caso-de-teste",
+  "primeiro-plano-de-testes-enxuto",
   "bug-report-reproduzivel",
+  "investigando-bugs-intermitentes",
+  "evidencia-util-em-bug-report",
+  // Leitura avulsa de fundamentos.
+  "gargalo-do-teste-qa-de-bombeiro-a-parceiro-estrategico",
 ];
 
 export function isPublicPost(slug: string) {

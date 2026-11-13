@@ -5,9 +5,10 @@ import Link from "next/link";
 import { ArrowDown, ArrowRight, Search } from "lucide-react";
 import type { BlogPost } from "@/lib/blog-posts";
 import { BlogEventCapture } from "@/components/blog/blog-event";
+import { formatShortDate } from "@/lib/format-date";
 import { LABS_ENABLED } from "@/lib/product/features";
 
-export type BlogIndexArticle = Pick<BlogPost, "slug" | "titulo" | "resumo" | "tempoLeitura" | "tags" | "editorial">;
+export type BlogIndexArticle = Pick<BlogPost, "slug" | "titulo" | "resumo" | "tempoLeitura" | "tags" | "editorial" | "publishedAt">;
 export type BlogIndexSeries = {
   id: string;
   title: string;
@@ -26,6 +27,8 @@ type Props = {
   sections: BlogIndexSection[];
   featured: BlogIndexArticle;
 };
+
+const FILTERS_MIN_ARTICLES = 12;
 
 function normalize(value: string) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
@@ -53,6 +56,10 @@ export function BlogIndex({ sections, featured }: Props) {
   })).filter((section) => section.series.length > 0), [sections, normalizedQuery]);
   const resultCount = filtered.reduce((total, section) => total + section.series.reduce((sum, series) => sum + series.articles.length, 0), 0);
 
+  // Índice por tema e busca só fazem sentido com uma biblioteca grande; com
+  // poucos artigos (lançamento enxuto) são ruído.
+  const totalArticles = sections.reduce((total, section) => total + section.series.reduce((sum, series) => sum + series.articles.length, 0), 0);
+  const showFilters = totalArticles > FILTERS_MIN_ARTICLES;
   return (
     <div>
       <header className="qa-editorial-home-hero">
@@ -71,16 +78,16 @@ export function BlogIndex({ sections, featured }: Props) {
         </article>}
       </header>
 
-      <nav className="qa-editorial-index" aria-label="Temas do blog">
+      {showFilters && <nav className="qa-editorial-index" aria-label="Temas do blog">
         {sections.map((section) => (
           <a key={section.id} href={`#${section.id}`}>
             <span>{String(section.series.reduce((sum, series) => sum + series.articles.length, 0)).padStart(2, "0")}</span>
             {section.title}
           </a>
         ))}
-      </nav>
+      </nav>}
 
-      <div className="qa-editorial-search">
+      {showFilters && <div className="qa-editorial-search">
         <label htmlFor="blog-search">Encontre um assunto</label>
         <div className="qa-editorial-search-control">
           <Search className="size-4" aria-hidden="true" />
@@ -94,7 +101,7 @@ export function BlogIndex({ sections, featured }: Props) {
           />
           <span aria-live="polite" aria-atomic="true">{resultCount} {resultCount === 1 ? "artigo" : "artigos"}</span>
         </div>
-      </div>
+      </div>}
 
       {filtered.length === 0 ? (
         <p className="qa-editorial-empty" role="status">Nenhum artigo encontrado. Tente outro tema, ferramenta ou título.</p>
@@ -119,8 +126,8 @@ export function BlogIndex({ sections, featured }: Props) {
                     data-composition={article.editorial?.composition ?? "field"}
                   >
                     <span className="qa-editorial-story-card-top">
-                      <span>{article.editorial?.number ? `Parte ${article.editorial.number} de 3` : "Artigo"}</span>
-                      <span>{article.tempoLeitura} min</span>
+                      <span>{article.editorial?.number ? (series.articles.length === 3 ? `Parte ${article.editorial.number} de 3` : `Parte ${article.editorial.number}`) : "Artigo"}</span>
+                      <span>{article.publishedAt ? `${formatShortDate(article.publishedAt)} · ` : ""}{article.tempoLeitura} min</span>
                     </span>
                     <strong>{article.titulo}</strong>
                     <span className="qa-editorial-story-summary">{article.resumo}</span>

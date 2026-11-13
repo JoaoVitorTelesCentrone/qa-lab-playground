@@ -2,6 +2,8 @@ export type EditorialStory = {
   slug: string;
   title: string;
   summary: string;
+  /** Data editorial própria; quando ausente, usa a data de lançamento do caderno. */
+  publishedAt?: string;
   opening: string;
   example: string;
   steps: [string, string, string];

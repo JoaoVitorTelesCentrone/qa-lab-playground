@@ -11,6 +11,10 @@ export const editorialSeries = [
   ...labSeries,
 ];
 
+// Data em que o caderno editorial entrou no ar. Cada história pode sobrescrever
+// com `publishedAt` quando tiver uma data editorial própria.
+const EDITORIAL_LAUNCH_DATE = "2026-10-28";
+
 export const editorialPosts: BlogPost[] = editorialSeries.flatMap((series) =>
   series.stories.map((story, index) => {
     const words = [story.opening, story.example, ...story.steps, story.caution, story.exercise].join(" ").split(/\s+/).length;
@@ -19,6 +23,7 @@ export const editorialPosts: BlogPost[] = editorialSeries.flatMap((series) =>
       titulo: story.title,
       resumo: story.summary,
       autor: "QA Lab",
+      publishedAt: story.publishedAt ?? EDITORIAL_LAUNCH_DATE,
       tags: [series.id, `section:${series.section}`],
       tempoLeitura: Math.max(2, Math.ceil(words / 170)),
       publicado: true,

@@ -10,7 +10,7 @@ import { ArrowLeft, ArrowRight, Calendar, Clock3 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { formatDate, getPostBySlug, getRelatedPosts, getSeriesPosts, posts, type Block } from "@/lib/blog-posts";
 import { CollaborateCta } from "@/components/blog/collaborate-cta";
-import { FULL_BLOG_ENABLED, LABS_ENABLED } from "@/lib/product/features";
+import { LABS_ENABLED } from "@/lib/product/features";
 import { PracticeCta } from "@/components/blog/practice-cta";
 import { BlogArticleView, BlogEventCapture } from "@/components/blog/blog-event";
 
@@ -73,7 +73,8 @@ export default async function BlogPostPage({ params }: Props) {
   const index = seriesPosts.findIndex((item) => item.slug === post.slug);
   const previous = index > 0 ? seriesPosts[index - 1] : undefined;
   const next = index >= 0 ? seriesPosts[index + 1] : undefined;
-  const related = getRelatedPosts(post.slug, 3).filter((item) => item.slug !== previous?.slug && item.slug !== next?.slug).slice(0, 2);
+  const seriesSlugs = new Set(seriesPosts.map((item) => item.slug));
+  const related = getRelatedPosts(post.slug, 6).filter((item) => !seriesSlugs.has(item.slug)).slice(0, 2);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://qa-lab-playground-web.vercel.app";
   const canonical = new URL(`/blog/${post.slug}`, siteUrl).toString();
   const jsonLd = {
@@ -97,7 +98,7 @@ export default async function BlogPostPage({ params }: Props) {
       <article className="mx-auto max-w-6xl px-5 pb-16 pt-8 sm:px-8 lg:pb-24 lg:pt-12">
         <nav className="qa-editorial-breadcrumb" aria-label="Navegação estrutural">
           <Link href="/blog"><ArrowLeft className="size-4" aria-hidden="true" /> Blog</Link>
-          {post.editorial && <><span aria-hidden="true">/</span>{LABS_ENABLED ? <Link href={post.editorial.seriesHref}>{post.editorial.seriesTitle}</Link> : <span>{post.editorial.seriesTitle}</span>}{FULL_BLOG_ENABLED && <span aria-current="page">Parte {post.editorial.number} de 3</span>}</>}
+          {post.editorial && <><span aria-hidden="true">/</span>{LABS_ENABLED ? <Link href={post.editorial.seriesHref}>{post.editorial.seriesTitle}</Link> : <span>{post.editorial.seriesTitle}</span>}<span aria-current="page">Parte {post.editorial.number}{seriesPosts.length === 3 ? " de 3" : ""}</span></>}
         </nav>
 
         <header className={`qa-editorial-article-hero${post.editorial ? " has-artifact" : ""}`} data-composition={post.editorial?.composition}>
@@ -106,7 +107,7 @@ export default async function BlogPostPage({ params }: Props) {
             <h1>{post.titulo}</h1>
             <p>{post.resumo}</p>
             <div className="qa-editorial-article-meta">
-              {post.publishedAt && <span><Calendar className="size-4" aria-hidden="true" />{formatDate(post.publishedAt)}</span>}
+              {post.publishedAt && <span><Calendar className="size-4" aria-hidden="true" /><time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time></span>}
               <span><Clock3 className="size-4" aria-hidden="true" />{post.tempoLeitura} min de leitura</span>
             </div>
             <div className="mt-5 flex flex-wrap items-center gap-3">
