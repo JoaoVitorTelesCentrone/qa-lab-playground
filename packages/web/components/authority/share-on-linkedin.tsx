@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
  */
 export function ShareOnLinkedIn({ url, text, className, label = "Compartilhar no LinkedIn" }: { url: string; text?: string; className?: string; label?: string }) {
   return <a href={linkedInShareUrl({ url, text })} target="_blank" rel="noopener noreferrer" data-event="share" data-share-target="linkedin"
-    className={cn("inline-flex min-h-11 items-center gap-2 rounded-md border border-gold/40 px-3 text-sm font-semibold text-gold transition-colors hover:bg-gold/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold", className)}>
+    className={cn("inline-flex min-h-11 items-center gap-2 rounded-md border border-brand-accent/40 px-3 text-sm font-semibold text-brand-accent transition-colors hover:bg-brand-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent", className)}>
     <Linkedin className="size-4" aria-hidden="true" />{label}<span className="sr-only"> (abre em nova aba)</span>
   </a>;
 }

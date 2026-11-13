@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 
 export type FeaturedItem = { title: string; meta: string; href: string; external?: boolean };
 
-const rowClass = "group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border border-border bg-muted px-4 py-3 transition-colors hover:border-gold/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:gap-4";
+const rowClass = "group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border border-border bg-muted px-4 py-3 transition-colors hover:border-brand-accent/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:gap-4";
 
 /**
  * Destaque de acesso rápido: poucas linhas numeradas, cada uma um link inteiro.
@@ -19,7 +19,7 @@ export function FeaturedList({ items, linkLabel }: { items: FeaturedItem[]; link
             <span className="line-clamp-2 text-base font-medium leading-snug">{item.title}</span>
             <span className="mt-0.5 block font-mono text-xs text-muted-foreground">{item.meta}</span>
           </span>
-          <span className="flex items-center gap-1 text-xs font-semibold text-gold">
+          <span className="flex items-center gap-1 text-xs font-semibold text-brand-accent">
             <span className="hidden sm:inline">{linkLabel}</span>
             <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
           </span>

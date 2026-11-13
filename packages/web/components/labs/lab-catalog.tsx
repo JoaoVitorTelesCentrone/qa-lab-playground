@@ -79,19 +79,19 @@ export function LabCatalog({ progress = [], initialPage, initialTrack }: { progr
     <nav aria-label="Tracks" className="flex flex-wrap gap-2 pb-6">
       {[{ id: "all" as const, label: "All", count: labs.length }, ...LAB_TRACKS.map((item) => ({ id: item.id, label: item.label, count: countByTrack.get(item.id) ?? 0 }))].map((item) =>
         <button key={item.id} type="button" onClick={() => setTrack(item.id)} aria-pressed={track === item.id} data-track={item.id}
-          className={`inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors ${track === item.id ? "border-gold bg-gold/15 text-gold" : "border-border text-muted-foreground hover:text-foreground"}`}>
+          className={`inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors ${track === item.id ? "border-brand-accent bg-brand-accent/15 text-brand-accent" : "border-border text-muted-foreground hover:text-foreground"}`}>
           {item.label}<span className="text-xs font-normal opacity-80">{item.count}</span>
         </button>)}
     </nav>
     {track !== "all" && <p className="-mt-3 pb-6 text-sm" style={{ color: "var(--ca-muted)" }}>{LAB_TRACKS.find((item) => item.id === track)?.description}</p>}
 
     {playground.length > 0 && current === 1 && !term && <section aria-labelledby="bug-mode-labs" className="pb-8">
-      <h2 id="bug-mode-labs" className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-gold"><Bug aria-hidden="true" className="size-4" />Bug-mode labs</h2>
+      <h2 id="bug-mode-labs" className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-brand-accent"><Bug aria-hidden="true" className="size-4" />Bug-mode labs</h2>
       <ul className="mt-3 grid gap-3 sm:grid-cols-2">{playground.map((lab) => <li key={lab.href} className="rounded-lg border border-border p-4">
         <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{LAB_TRACKS.find((item) => item.id === lab.track)?.label}</span>
-        <Link href={lab.href} data-event="start_lab" className="mt-1 block font-semibold hover:text-gold">{lab.title}</Link>
+        <Link href={lab.href} data-event="start_lab" className="mt-1 block font-semibold hover:text-brand-accent">{lab.title}</Link>
         <p className="mt-1 text-sm" style={{ color: "var(--ca-muted)" }}>{lab.summary}</p>
-        {lab.hasBugMode && <Link href={`${lab.href}?bug=1`} data-event="start_lab" className="mt-2 inline-flex min-h-9 items-center gap-1.5 text-sm font-semibold text-gold"><Bug aria-hidden="true" className="size-3.5" />Open in bug mode</Link>}
+        {lab.hasBugMode && <Link href={`${lab.href}?bug=1`} data-event="start_lab" className="mt-2 inline-flex min-h-9 items-center gap-1.5 text-sm font-semibold text-brand-accent"><Bug aria-hidden="true" className="size-3.5" />Open in bug mode</Link>}
       </li>)}</ul>
     </section>}
 

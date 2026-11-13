@@ -22,9 +22,9 @@ export const metadata: Metadata = {
   },
 };
 
-const linkClass = "inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 text-sm font-semibold transition-colors hover:border-gold hover:text-gold";
-const actionClass = "inline-flex min-h-11 w-full items-center gap-2 rounded-md border border-border px-4 text-sm font-semibold transition-colors hover:border-gold hover:text-gold";
-const kickerClass = "text-xs font-semibold uppercase tracking-[0.2em] text-gold";
+const linkClass = "inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 text-sm font-semibold transition-colors hover:border-brand-accent hover:text-brand-accent";
+const actionClass = "inline-flex min-h-11 w-full items-center gap-2 rounded-md border border-border px-4 text-sm font-semibold transition-colors hover:border-brand-accent hover:text-brand-accent";
+const kickerClass = "text-xs font-semibold uppercase tracking-[0.2em] text-brand-accent";
 const sectionTitleClass = "font-display mt-2 text-3xl uppercase leading-none sm:text-4xl";
 const bodyClass = "mt-4 leading-8 text-muted-foreground";
 
@@ -70,7 +70,7 @@ export default function AboutPage() {
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
     <header className="grid gap-8 border-b border-border pb-10 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-end">
-      <Image src={author.photo} alt={`Foto de ${author.name}`} width={160} height={160} unoptimized priority className="size-32 rounded-full border-2 border-gold object-cover sm:size-40" />
+      <Image src={author.photo} alt={`Foto de ${author.name}`} width={160} height={160} unoptimized priority className="size-32 rounded-full border-2 border-brand-accent object-cover sm:size-40" />
       <div>
         <p className={kickerClass}>{author.name}</p>
         <h1 className="font-display mt-2 text-5xl uppercase leading-[0.95] sm:text-6xl">{author.title}</h1>
@@ -91,10 +91,10 @@ export default function AboutPage() {
           <p className={bodyClass}>{author.about.story}</p>
           <ol className="mt-8 space-y-7">
             {trajectory.map((item, index) => <li key={item.title} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-4">
-              <span className="flex size-10 items-center justify-center rounded-full border border-gold/40 bg-gold/10 text-gold" aria-hidden="true"><item.icon className="size-5" /></span>
+              <span className="flex size-10 items-center justify-center rounded-full border border-brand-accent/40 bg-brand-accent/10 text-brand-accent" aria-hidden="true"><item.icon className="size-5" /></span>
               <div>
                 <div className="flex flex-wrap items-baseline gap-x-3">
-                  <span className="font-mono text-xs text-gold">0{index + 1}</span>
+                  <span className="font-mono text-xs text-brand-accent">0{index + 1}</span>
                   <h3 className="text-lg font-semibold">{item.title}</h3>
                 </div>
                 <p className="mt-2 text-sm leading-7 text-muted-foreground">{item.text}</p>
@@ -119,16 +119,16 @@ export default function AboutPage() {
             {projects.map((project) => <li key={project.slug}>
               <article className="rounded-xl border border-border bg-card p-5 sm:p-6">
                 <h3 className="text-xl font-semibold">{project.name}</h3>
-                <p className="mt-1 text-sm font-medium text-gold">{project.tagline}</p>
+                <p className="mt-1 text-sm font-medium text-brand-accent">{project.tagline}</p>
                 <p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground">{project.description}</p>
                 {project.stack.length > 0 && <ul aria-label={`Tecnologias de ${project.name}`} className="mt-4 flex flex-wrap gap-1.5">
                   {project.stack.map((item) => <li key={item} className="rounded border border-border px-2 py-0.5 font-mono text-xs text-muted-foreground">{item}</li>)}
                 </ul>}
                 <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
                   {project.demo && (external(project.demo)
-                    ? <a href={project.demo} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold hover:text-gold">Abrir demo<ArrowUpRight className="size-4" aria-hidden="true" /></a>
-                    : <Link href={project.demo} className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold hover:text-gold">Ver o site<ArrowRight className="size-4" aria-hidden="true" /></Link>)}
-                  {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold hover:text-gold"><Github className="size-4" aria-hidden="true" />Código no GitHub<ArrowUpRight className="size-4" aria-hidden="true" /></a>}
+                    ? <a href={project.demo} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold hover:text-brand-accent">Abrir demo<ArrowUpRight className="size-4" aria-hidden="true" /></a>
+                    : <Link href={project.demo} className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold hover:text-brand-accent">Ver o site<ArrowRight className="size-4" aria-hidden="true" /></Link>)}
+                  {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold hover:text-brand-accent"><Github className="size-4" aria-hidden="true" />Código no GitHub<ArrowUpRight className="size-4" aria-hidden="true" /></a>}
                 </div>
               </article>
             </li>)}
@@ -136,7 +136,7 @@ export default function AboutPage() {
         </section>
       </div>
 
-      <aside aria-labelledby="contato-title" className="h-fit rounded-xl border border-gold/40 bg-card p-6 lg:sticky lg:top-24">
+      <aside aria-labelledby="contato-title" className="h-fit rounded-xl border border-brand-accent/40 bg-card p-6 lg:sticky lg:top-24">
         <p className={kickerClass}>Contato</p>
         <h2 id="contato-title" className="font-display mt-2 text-2xl uppercase leading-none">Vamos conversar</h2>
         <p className="mt-3 text-sm leading-6 text-muted-foreground">{author.about.contactNote}</p>

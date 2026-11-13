@@ -65,7 +65,7 @@ export async function MdxArticle({ post, lang }: { post: MdxPost; lang: BlogLang
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     <article className="mx-auto max-w-3xl px-5 pb-16 pt-8 sm:px-8 lg:pb-24 lg:pt-12">
       <Link href="/blog" className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="size-4" aria-hidden="true" />Blog</Link>
-      {post.draft && <p role="note" className="mt-4 rounded-md border border-gold/50 bg-gold/10 px-4 py-2 text-sm font-semibold text-gold">Draft: unlisted and not indexed. Set <code>draft: false</code> to publish.</p>}
+      {post.draft && <p role="note" className="mt-4 rounded-md border border-brand-accent/50 bg-brand-accent/10 px-4 py-2 text-sm font-semibold text-brand-accent">Draft: unlisted and not indexed. Set <code>draft: false</code> to publish.</p>}
       <header className="mt-6">
         <ul aria-label="Tags" className="flex flex-wrap gap-2">{version.tags.map((tag) => <li key={tag} className="rounded-full border border-border px-2.5 py-0.5 font-mono text-xs text-muted-foreground">#{tag}</li>)}</ul>
         <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-[-0.03em] sm:text-5xl">{version.title}</h1>
@@ -74,7 +74,7 @@ export async function MdxArticle({ post, lang }: { post: MdxPost; lang: BlogLang
           <span className="inline-flex items-center gap-1.5"><Calendar className="size-4" aria-hidden="true" /><time dateTime={version.date}>{formatPostDate(version.date, lang)}</time></span>
           <span className="inline-flex items-center gap-1.5" data-testid="reading-time"><Clock3 className="size-4" aria-hidden="true" />{version.readingMinutes} min {lang === "pt" ? "de leitura" : "read"}</span>
           {others.length > 0 && <span className="inline-flex items-center gap-1.5"><Languages className="size-4" aria-hidden="true" />
-            {others.map((other) => <Link key={other} href={mdxPostPath(post, other)} hrefLang={HTML_LANG[other]} lang={HTML_LANG[other]} className="font-semibold text-gold underline underline-offset-4">{LANG_LABEL[other]}</Link>)}
+            {others.map((other) => <Link key={other} href={mdxPostPath(post, other)} hrefLang={HTML_LANG[other]} lang={HTML_LANG[other]} className="font-semibold text-brand-accent underline underline-offset-4">{LANG_LABEL[other]}</Link>)}
           </span>}
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-y border-border py-2">

@@ -11,7 +11,7 @@
   --font-body: var(--font-jakarta);
   --font-mono: var(--font-jetbrains);
   --font-display: var(--font-anton);
-  --color-gold: var(--gold);
+  --color-brand-accent: var(--brand-accent);
 
   --color-gray-base: var(--gray-base);
   --color-mint: var(--mint);
@@ -75,8 +75,8 @@
   --field-muted: #b9b9b4;
   --field-green: #95d4a7;
   --field-copper: #f0b886;
-  /* Destaque âmbar/dourado da identidade de autor (byline, share, OG). */
-  --gold: #F5B841;
+  /* Destaque verde da identidade de autor, alinhado à paleta do caderno. */
+  --brand-accent: var(--field-green);
   /* O @theme inline não gera variáveis em runtime; as classes que usam
      var(--font-display) direto (.font-display, not-found, sidebar) leem esta. */
   --font-display: var(--font-anton);
@@ -877,10 +877,10 @@ html { accent-color: var(--primary); scrollbar-color: var(--field-line) var(--fi
 .qa-article-body.qa-mdx-body ol { list-style: decimal; }
 .qa-article-body.qa-mdx-body li { display: list-item; padding-left: .25rem; }
 .qa-article-body.qa-mdx-body li + li { margin-top: .5rem; }
-.qa-article-body.qa-mdx-body li::marker { color: var(--gold); font-weight: 700; }
-.qa-article-body.qa-mdx-body a { color: var(--gold); text-decoration: underline; text-underline-offset: 4px; }
+.qa-article-body.qa-mdx-body li::marker { color: var(--brand-accent); font-weight: 700; }
+.qa-article-body.qa-mdx-body a { color: var(--brand-accent); text-decoration: underline; text-underline-offset: 4px; }
 .qa-article-body.qa-mdx-body strong { color: #F8FBF9; }
 .qa-article-body.qa-mdx-body :not(pre) > code { padding: .1rem .35rem; border-radius: 4px; background: #ffffff12; font-family: var(--font-jetbrains), monospace; font-size: .88em; }
 .qa-article-body.qa-mdx-body table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: .95rem; }
 .qa-article-body.qa-mdx-body :is(th, td) { padding: .6rem .8rem; border-bottom: 1px solid var(--border); text-align: left; color: #CDD5D0; }
-.qa-article-body.qa-mdx-body th { color: #F8FBF9; font-weight: 600; border-bottom-color: var(--gold); }
+.qa-article-body.qa-mdx-body th { color: #F8FBF9; font-weight: 600; border-bottom-color: var(--brand-accent); }

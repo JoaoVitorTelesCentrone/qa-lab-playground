@@ -75,7 +75,7 @@ function buildSections(): BlogIndexSection[] {
       // Posts em MDX (content/blog) abrem o blog: são os mais recentes.
       const mdxPosts = posts.filter((post) => post.mdx);
       if (mdxPosts.length) {
-        series.unshift({ id: "novos-posts", title: "Novos posts", href: "/blog", color: "#F5B841", articles: mdxPosts });
+        series.unshift({ id: "novos-posts", title: "Novos posts", href: "/blog", color: "#95D4A7", articles: mdxPosts });
       }
     }
 

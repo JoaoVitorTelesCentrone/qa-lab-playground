@@ -152,8 +152,8 @@ export default async function PesquisaPage({
         </p>
       </section>
 
-      <section aria-labelledby="fila-title" className="mt-8 border border-gold/40 bg-card p-5 sm:p-6">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Em destaque</p>
+      <section aria-labelledby="fila-title" className="mt-8 border border-brand-accent/40 bg-card p-5 sm:p-6">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-accent">Em destaque</p>
         <h2 id="fila-title" className="font-display mt-2 text-2xl uppercase sm:text-3xl">Leituras para começar</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">As referências mais recentes da biblioteca, a um clique.</p>
         <div className="mt-5">
@@ -175,7 +175,7 @@ export default async function PesquisaPage({
       </section>
 
       <section id="trabalhos" className="mt-10 scroll-mt-24" aria-labelledby="trabalhos-title">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Biblioteca</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-accent">Biblioteca</p>
         <h2 id="trabalhos-title" className="font-display mt-2 text-2xl uppercase sm:text-3xl">
           Explore os {stats.total} trabalhos
         </h2>
@@ -239,14 +239,14 @@ export default async function PesquisaPage({
           <div className="flex gap-2 sm:col-span-2 lg:col-span-1">
             <button
               type="submit"
-              className="inline-flex min-h-11 flex-1 items-center justify-center bg-gold px-5 text-sm font-bold text-background transition-colors hover:bg-gold/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring lg:flex-none"
+              className="inline-flex min-h-11 flex-1 items-center justify-center bg-brand-accent px-5 text-sm font-bold text-background transition-colors hover:bg-brand-accent/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring lg:flex-none"
             >
               Filtrar
             </button>
             {hasFilters && (
               <Link
                 href="/pesquisa#trabalhos"
-                className="inline-flex min-h-11 items-center justify-center gap-1.5 border border-border px-4 text-sm font-medium text-muted-foreground transition-colors hover:border-gold/50 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="inline-flex min-h-11 items-center justify-center gap-1.5 border border-border px-4 text-sm font-medium text-muted-foreground transition-colors hover:border-brand-accent/50 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 <X className="size-4" aria-hidden="true" />
                 Limpar
@@ -287,7 +287,7 @@ export default async function PesquisaPage({
             <p className="mt-2 text-sm text-muted-foreground">Tente outro termo, tema ou ano.</p>
             <Link
               href="/pesquisa#trabalhos"
-              className="mt-5 inline-flex min-h-11 items-center justify-center border border-gold/50 px-4 text-sm font-semibold text-gold transition-colors hover:bg-gold hover:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className="mt-5 inline-flex min-h-11 items-center justify-center border border-brand-accent/50 px-4 text-sm font-semibold text-brand-accent transition-colors hover:bg-brand-accent hover:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               Limpar filtros
             </Link>
@@ -298,7 +298,7 @@ export default async function PesquisaPage({
           <div className="mt-8 flex flex-col items-center gap-2">
             <Link
               href={nextHref}
-              className="inline-flex min-h-12 items-center justify-center gap-2 border border-gold/50 px-6 text-sm font-semibold text-gold transition-colors hover:bg-gold hover:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className="inline-flex min-h-12 items-center justify-center gap-2 border border-brand-accent/50 px-6 text-sm font-semibold text-brand-accent transition-colors hover:bg-brand-accent hover:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               Carregar mais
               <ArrowDown className="size-4" aria-hidden="true" />

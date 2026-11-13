@@ -13,7 +13,7 @@ export function DownloadMarkdownButton({ fileName, build, label = "Download repo
     URL.revokeObjectURL(url);
   }
   return <button type="button" onClick={download} data-testid="download-report"
-    className={cn("inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-semibold transition-colors hover:border-gold hover:text-gold", className)}>
+    className={cn("inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-semibold transition-colors hover:border-brand-accent hover:text-brand-accent", className)}>
     <FileDown className="size-4" aria-hidden="true" />{label}
   </button>;
 }

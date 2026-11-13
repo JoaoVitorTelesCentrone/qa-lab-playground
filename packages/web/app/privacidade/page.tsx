@@ -33,7 +33,7 @@ export default function PrivacyPage() {
     <p className={p}>Pela LGPD você pode pedir confirmação de tratamento, acesso, correção ou eliminação de dados. Como não mantemos dados pessoais seus nesta versão, a resposta tende a ser que não há o que informar, mas o pedido será atendido do mesmo jeito.</p>
 
     <h2 className={h2}>Contato</h2>
-    <p className={p}>Fale com {author.name} pelo <a href={author.links.linkedin} target="_blank" rel="noopener noreferrer" className="underline hover:text-gold">LinkedIn</a>.</p>
+    <p className={p}>Fale com {author.name} pelo <a href={author.links.linkedin} target="_blank" rel="noopener noreferrer" className="underline hover:text-brand-accent">LinkedIn</a>.</p>
 
     <h2 className={h2}>Mudanças</h2>
     <p className={p}>Se o site passar a coletar mais dados (por exemplo, com contas de usuário), esta página será atualizada antes e a data acima mudará.</p>

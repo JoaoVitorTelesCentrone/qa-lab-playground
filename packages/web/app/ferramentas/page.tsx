@@ -66,8 +66,8 @@ export default function ToolsPage() {
       </div>
     </section>}
 
-    <section aria-labelledby="fila-title" className="mt-10 border border-gold/40 bg-card p-5 sm:p-6">
-      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Em destaque</p>
+    <section aria-labelledby="fila-title" className="mt-10 border border-brand-accent/40 bg-card p-5 sm:p-6">
+      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-accent">Em destaque</p>
       <h2 id="fila-title" className="font-display mt-2 text-2xl uppercase sm:text-3xl">Por onde começar</h2>
       <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Cinco guias para abrir primeiro, na ordem em que eu estudaria.</p>
       <div className="mt-5"><FeaturedList items={startHere} linkLabel="Ver guia" /></div>
@@ -84,8 +84,8 @@ export default function ToolsPage() {
           </div>
           <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {guides.map((guide) => <li key={guide.slug}>
-              <Link href={`/ferramentas/${guide.slug}`} className="group flex h-full flex-col border border-border bg-card p-4 transition-colors hover:border-gold/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
-                <span className="flex items-center justify-between gap-2"><span className="font-semibold">{guide.name}</span><ArrowUpRight className="size-4 shrink-0 text-gold transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" /></span>
+              <Link href={`/ferramentas/${guide.slug}`} className="group flex h-full flex-col border border-border bg-card p-4 transition-colors hover:border-brand-accent/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+                <span className="flex items-center justify-between gap-2"><span className="font-semibold">{guide.name}</span><ArrowUpRight className="size-4 shrink-0 text-brand-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" /></span>
                 <span className="mt-1.5 text-sm leading-6 text-muted-foreground">{guide.tagline}</span>
               </Link>
             </li>)}
