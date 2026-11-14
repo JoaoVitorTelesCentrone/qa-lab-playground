@@ -1,6 +1,49 @@
 {
-  "updatedAt": "2026-11-13T17:14:28.949Z",
+  "updatedAt": "2026-11-14T15:50:40.006Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-24205395",
+      "title": "Software Quality Assurance Course Syllabus, Saarathi Academy, Kathmandu",
+      "abstract": "Week-by-week syllabus of the Software Quality Assurance course taught at Saarathi Academy in Old Baneshwor, Kathmandu, Nepal. It shows what each week covers, the tools used and how the certification exam works. Classes are in person with up to 10 students in the room, and online. Course page, with the fee and the next batch: https://saarathiacademy.com.np/software-quality-assurance-course-in-nepal This is the public short syllabus, the same file the website gives out at https://saarathiacademy.com.np/course-syllabi/software-quality-assurance-syllabus.",
+      "authors": [
+        "Saarathi Academy"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-14",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.24205395",
+      "url": "https://doi.org/10.5281/zenodo.24205395",
+      "topics": [
+        "Quality assurance",
+        "Certification",
+        "Syllabus",
+        "Course (navigation)",
+        "Software",
+        "Software engineering"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-11-14T15:50:40.006Z"
+    },
+    {
+      "id": "doi-doi-org-10-1038-s41598-026-78674-0",
+      "title": "Policy-gated firmware trust and anti-rollback resilience for autonomous UAV edge platforms: a software validation study",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Md Shahanur Islam Shagor"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-14",
+      "source": "Crossref",
+      "venue": "Scientific Reports",
+      "doi": "https://doi.org/10.1038/s41598-026-78674-0",
+      "url": "https://doi.org/10.1038/s41598-026-78674-0",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-11-14T15:50:40.006Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-24055169",
       "title": "Experimental Results for an Integrated Lagrangian-Optimized PCA and SMOTE–AdaBoost Framework for Software Defect Prediction",
