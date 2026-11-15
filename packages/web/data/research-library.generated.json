@@ -1,6 +1,33 @@
 {
-  "updatedAt": "2026-11-14T15:50:40.006Z",
+  "updatedAt": "2026-11-15T16:23:47.215Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-24217563",
+      "title": "Artificial Intelligence For Software Testing: A Review Of Automated Test Generation, Defect Prediction, Test Prioritization And LLM-Assisted Testing",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Varhadi Shreya Sachin",
+        "Prof. S. S. Bhor",
+        "Prof. M. C. Kolse",
+        "Prof. S. K. Said"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-14",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.24217563",
+      "url": "https://doi.org/10.5281/zenodo.24217563",
+      "topics": [
+        "Computer science",
+        "Test (biology)",
+        "Software",
+        "Prioritization",
+        "Artificial intelligence",
+        "Applications of artificial intelligence"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-11-15T16:23:47.215Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-24205395",
       "title": "Software Quality Assurance Course Syllabus, Saarathi Academy, Kathmandu",
