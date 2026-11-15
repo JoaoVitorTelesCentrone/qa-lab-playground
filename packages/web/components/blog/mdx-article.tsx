@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, Clock3, Languages } from "lucide-react";
 import { Byline } from "@/components/authority/byline";
 import { ShareOnLinkedIn } from "@/components/authority/share-on-linkedin";
-import { author, SITE_URL } from "@/content/site";
+import { author, coAuthors, coAuthorsJsonLd, projectAuthors, qaLabJsonLd, SITE_URL } from "@/content/site";
 import type { BlogLang, MdxPost } from "@/lib/blog/mdx-posts";
 
 const LANG_LABEL: Record<BlogLang, string> = { pt: "Português", en: "English" };
@@ -25,7 +25,7 @@ export function mdxPostMetadata(post: MdxPost, lang: BlogLang): Metadata {
     title: version.title,
     description: version.summary,
     alternates: { canonical: mdxPostPath(post, lang), languages },
-    authors: [{ name: author.name, url: author.aboutHref }],
+    authors: [{ name: author.name, url: author.aboutHref }, ...coAuthors.map((person) => ({ name: person.name, url: person.linkedin }))],
     // Rascunho abre pelo link direto para revisão, mas não é indexado.
     ...(post.draft ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
@@ -34,7 +34,7 @@ export function mdxPostMetadata(post: MdxPost, lang: BlogLang): Metadata {
       url: mdxPostPath(post, lang),
       type: "article",
       locale: lang === "pt" ? "pt_BR" : "en_US",
-      authors: [author.name],
+      authors: projectAuthors.map((person) => person.name),
       publishedTime: version.date,
       ...(version.updated ? { modifiedTime: version.updated } : {}),
       tags: version.tags,
@@ -57,8 +57,8 @@ export async function MdxArticle({ post, lang }: { post: MdxPost; lang: BlogLang
     ...(version.updated ? { dateModified: version.updated } : {}),
     keywords: version.tags.join(", "),
     mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${path}` },
-    author: { "@type": "Person", name: author.name, jobTitle: author.title, url: `${SITE_URL}${author.aboutHref}`, sameAs: [author.links.linkedin, author.links.github] },
-    publisher: { "@type": "Person", name: author.name },
+    author: [{ "@type": "Person", name: author.name, jobTitle: author.title, url: `${SITE_URL}${author.aboutHref}`, sameAs: [author.links.linkedin, author.links.github] }, ...coAuthorsJsonLd],
+    publisher: qaLabJsonLd,
   };
 
   return <main lang={HTML_LANG[lang]} className="qa-blog">

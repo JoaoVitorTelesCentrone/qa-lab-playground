@@ -11,8 +11,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OnboardingLink } from "@/components/onboarding/floating-onboarding";
 import { LABS_ENABLED, MENTORSHIP_ENABLED } from "@/lib/product/features";
+import { qaLab } from "@/content/site";
 
-const LINKEDIN_URL = "https://www.linkedin.com/company/qa-lab-oficial/";
+const LINKEDIN_URL = qaLab.linkedin;
 
 /** Rotas que renderizam sem rodapé. Comparação exata: /labs/101 continua com ele. */
 const WITHOUT_FOOTER = ["/labs"];

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, BookOpen, Download, Github, Linkedin, Microscope, TestTube2 } from "lucide-react";
-import { author, SITE_URL } from "@/content/site";
+import { author, coAuthorsJsonLd, projectAuthors, qaLab, qaLabJsonLd, SITE_URL } from "@/content/site";
 import { projects } from "@/lib/authority/content";
 import { getResearchStats } from "@/lib/research-library";
 
@@ -63,7 +63,9 @@ export default function AboutPage() {
       url: `${SITE_URL}${author.aboutHref}`,
       sameAs: [author.links.linkedin, author.links.github],
       knowsAbout: author.about.stack,
+      worksFor: qaLabJsonLd,
     },
+    about: { ...qaLabJsonLd, founder: [{ "@type": "Person", name: author.name }, ...coAuthorsJsonLd] },
   };
 
   return <main className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
@@ -89,6 +91,12 @@ export default function AboutPage() {
           <p className={kickerClass}>Trajetória</p>
           <h2 id="trajetoria-title" className={sectionTitleClass}>Do playground à biblioteca</h2>
           <p className={bodyClass}>{author.about.story}</p>
+          <p data-testid="project-authors" className="mt-4 text-sm leading-7 text-muted-foreground">
+            O QA Lab é um projeto de {projectAuthors.map((person, index) => <span key={person.name}>
+              {index > 0 && (index === projectAuthors.length - 1 ? " e " : ", ")}
+              <a href={person.linkedin} target="_blank" rel="noopener noreferrer" className="font-semibold text-foreground underline-offset-4 hover:text-brand-accent hover:underline">{person.name}</a>
+            </span>)}. Acompanhe o projeto na <a href={qaLab.linkedin} target="_blank" rel="noopener noreferrer" className="font-semibold text-foreground underline-offset-4 hover:text-brand-accent hover:underline">página do QA Lab no LinkedIn</a>.
+          </p>
           <ol className="mt-8 space-y-7">
             {trajectory.map((item, index) => <li key={item.title} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-4">
               <span className="flex size-10 items-center justify-center rounded-full border border-brand-accent/40 bg-brand-accent/10 text-brand-accent" aria-hidden="true"><item.icon className="size-5" /></span>
@@ -141,6 +149,7 @@ export default function AboutPage() {
         <h2 id="contato-title" className="font-display mt-2 text-2xl uppercase leading-none">Vamos conversar</h2>
         <p className="mt-3 text-sm leading-6 text-muted-foreground">{author.about.contactNote}</p>
         <div className="mt-5 grid gap-2">
+          <a href={qaLab.linkedin} target="_blank" rel="noopener noreferrer" className={actionClass}><Linkedin className="size-4" aria-hidden="true" />QA Lab no LinkedIn<ArrowUpRight className="ml-auto size-4" aria-hidden="true" /></a>
           <a href={author.links.linkedin} target="_blank" rel="noopener noreferrer" className={actionClass}><Linkedin className="size-4" aria-hidden="true" />LinkedIn<ArrowUpRight className="ml-auto size-4" aria-hidden="true" /></a>
           <a href={author.links.github} target="_blank" rel="noopener noreferrer" className={actionClass}><Github className="size-4" aria-hidden="true" />GitHub<ArrowUpRight className="ml-auto size-4" aria-hidden="true" /></a>
           {author.cv && <a href={author.cv} download className={actionClass}><Download className="size-4" aria-hidden="true" />Baixar currículo<ArrowUpRight className="ml-auto size-4" aria-hidden="true" /></a>}

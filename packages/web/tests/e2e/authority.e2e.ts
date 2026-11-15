@@ -7,7 +7,7 @@ test("@smoke Lab mostra a byline do autor e o botão de compartilhar", async ({ 
   await page.goto("/labs/101");
   const byline = page.getByTestId("author-byline");
   await expect(byline).toContainText("Feito por");
-  await expect(byline).toContainText("João Centrone");
+  await expect(byline).toContainText("João Centrone e Gustavo Alves");
   await expect(byline).toHaveAttribute("href", "/sobre");
   await expect(page.getByRole("link", { name: /Compartilhar no LinkedIn/ })).toHaveAttribute("href", /linkedin\.com\/sharing\/share-offsite\/\?url=.*%2Flabs%2F101/);
 });
@@ -33,6 +33,9 @@ test("@smoke /sobre tem trajetória, stack, projetos e os links do autor", async
   const profiles = page.getByRole("navigation", { name: "Perfis" });
   await expect(profiles.getByRole("link", { name: "LinkedIn" })).toHaveAttribute("href", "https://www.linkedin.com/in/joao-centrone");
   await expect(profiles.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", /^https:\/\/github\.com\//);
+  const authors = page.getByTestId("project-authors");
+  await expect(authors.getByRole("link", { name: "Gustavo Alves" })).toHaveAttribute("href", "https://www.linkedin.com/in/gustavo-alves-83b621243/");
+  await expect(page.getByRole("link", { name: /QA Lab no LinkedIn/ })).toHaveAttribute("href", "https://www.linkedin.com/company/qa-lab-oficial/");
   const jsonLd = await page.locator('script[type="application/ld+json"]').evaluate((element) => element.textContent);
   expect(jsonLd).toContain('"@type":"ProfilePage"');
 });

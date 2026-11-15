@@ -38,3 +38,29 @@ export const author = {
 } as const;
 
 export type Author = typeof author;
+
+/** O projeto como organização: publisher do blog e o link "LinkedIn" do rodapé. */
+export const qaLab = {
+  name: "QA Lab",
+  linkedin: "https://www.linkedin.com/company/qa-lab-oficial/",
+} as const;
+
+/** Coautores do projeto, além do `author`. */
+export const coAuthors = [
+  { name: "Gustavo Alves", linkedin: "https://www.linkedin.com/in/gustavo-alves-83b621243/" },
+] as const;
+
+/** Todos os autores do projeto, na ordem de exibição. */
+export const projectAuthors = [
+  { name: author.name, linkedin: author.links.linkedin },
+  ...coAuthors,
+] as const;
+
+/** Coautores como schema.org Person, para somar ao `author` no JSON-LD. */
+export const coAuthorsJsonLd = coAuthors.map((person) => ({ "@type": "Person", name: person.name, sameAs: [person.linkedin] }));
+
+/** O QA Lab como schema.org Organization (publisher). */
+export const qaLabJsonLd = { "@type": "Organization", name: qaLab.name, url: SITE_URL, sameAs: [qaLab.linkedin] };
+
+/** "João Centrone e Gustavo Alves". */
+export const authorNames = new Intl.ListFormat("pt-BR", { style: "long", type: "conjunction" }).format(projectAuthors.map((a) => a.name));

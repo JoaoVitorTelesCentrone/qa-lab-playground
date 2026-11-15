@@ -1,9 +1,9 @@
-import { author } from "@/content/site";
+import { author, projectAuthors, qaLab } from "@/content/site";
 import { conclusionLabels, severityLabels, type DeliveryFields } from "@/lib/product/delivery";
 import { absoluteUrl } from "./share";
 
 const section = (title: string, body: string) => `## ${title}\n\n${body.trim() || "_(not filled in)_"}`;
-const footer = () => `---\n_Generated with QA Lab, hands-on QA labs built by ${author.name} (${absoluteUrl(author.aboutHref)})._\n`;
+const footer = () => `---\n_Generated with QA Lab, hands-on QA labs built by ${projectAuthors.map((person) => person.name).join(" and ")} (${absoluteUrl(author.aboutHref)}). Follow QA Lab on LinkedIn: ${qaLab.linkedin}_\n`;
 
 /** Nome de arquivo seguro: `lab-101-investigar-a-captura.md`. */
 export function reportFileName(prefix: string, title: string) {

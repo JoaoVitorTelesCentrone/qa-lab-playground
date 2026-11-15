@@ -2,7 +2,7 @@ import { MdxArticle, mdxPostMetadata } from "@/components/blog/mdx-article";
 import { findMdxPost, loadMdxPosts } from "@/lib/blog/mdx-posts";
 import { Byline } from "@/components/authority/byline";
 import { ShareOnLinkedIn } from "@/components/authority/share-on-linkedin";
-import { author } from "@/content/site";
+import { author, coAuthors, coAuthorsJsonLd, projectAuthors, qaLabJsonLd } from "@/content/site";
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -35,14 +35,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: post.resumo,
     metadataBase: new URL(siteUrl),
     alternates: { canonical },
-    authors: [{ name: author.name, url: author.aboutHref }],
+    authors: [{ name: author.name, url: author.aboutHref }, ...coAuthors.map((person) => ({ name: person.name, url: person.linkedin }))],
     openGraph: {
       title: post.titulo,
       description: post.resumo,
       url: canonical,
       type: "article",
       locale: "pt_BR",
-      authors: [author.name],
+      authors: projectAuthors.map((person) => person.name),
       ...(post.publishedAt ? { publishedTime: post.publishedAt } : {}),
       ...(post.updatedAt ? { modifiedTime: post.updatedAt } : {}),
       tags: post.tags,
@@ -84,8 +84,8 @@ export default async function BlogPostPage({ params }: Props) {
     description: post.resumo,
     inLanguage: "pt-BR",
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
-    author: { "@type": "Person", name: author.name, jobTitle: author.title, url: new URL(author.aboutHref, siteUrl).toString(), sameAs: [author.links.linkedin, author.links.github] },
-    publisher: { "@type": "Organization", name: "QA Lab" },
+    author: [{ "@type": "Person", name: author.name, jobTitle: author.title, url: new URL(author.aboutHref, siteUrl).toString(), sameAs: [author.links.linkedin, author.links.github] }, ...coAuthorsJsonLd],
+    publisher: qaLabJsonLd,
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
     ...(post.updatedAt ? { dateModified: post.updatedAt } : {}),
     ...(post.editorial ? { articleSection: post.editorial.section, isPartOf: { "@type": "CreativeWorkSeries", name: post.editorial.seriesTitle } } : {}),

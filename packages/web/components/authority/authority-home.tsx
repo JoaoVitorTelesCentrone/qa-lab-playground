@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, BookOpen, Bug, CalendarClock, Clock3, Github, Microscope, Wrench } from "lucide-react";
-import { author } from "@/content/site";
+import { author, authorNames, coAuthors } from "@/content/site";
 import { challenge, formatRelease, isSolutionReleased } from "@/lib/authority/challenge";
 import { featuredLabs, latestPost, projects } from "@/lib/authority/content";
 import { formatDate } from "@/lib/blog-posts";
@@ -40,7 +40,7 @@ export function AuthorityHome() {
     <section aria-labelledby="hero-title" className="border-b border-border">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[1.5fr_1fr] lg:items-center">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-accent">{LABS_ENABLED ? <>QA Lab · por {author.name}</> : "QA Lab · conteúdo sobre qualidade de software"}</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-accent">{LABS_ENABLED ? <>QA Lab · por {authorNames}</> : "QA Lab · conteúdo sobre qualidade de software"}</p>
           <h1 id="hero-title" className="font-display mt-4 text-5xl uppercase leading-[0.92] sm:text-7xl">
             {LABS_ENABLED ? <>Labs práticos de QA com <span className="text-brand-accent">bugs reais</span>, feitos por um {author.title}</> : <>Conteúdo para quem leva <span className="text-brand-accent">qualidade de software</span> a sério</>}
           </h1>
@@ -61,6 +61,7 @@ export function AuthorityHome() {
             <span className="block text-sm text-muted-foreground">Feito por</span>
             <span className="font-display block text-3xl uppercase leading-tight group-hover:text-brand-accent">{author.name}</span>
             <span className="block text-sm text-muted-foreground">{author.title}</span>
+            <span className="mt-2 block text-sm text-muted-foreground">com <span className="font-semibold text-foreground">{coAuthors.map((person) => person.name).join(", ")}</span></span>
           </span>
         </Link>
       </div>
