@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, BookOpen, Bug, CalendarClock, Clock3, Github, Microscope, Wrench } from "lucide-react";
-import { author, authorNames, coAuthors } from "@/content/site";
+import { author, authorNames } from "@/content/site";
 import { challenge, formatRelease, isSolutionReleased } from "@/lib/authority/challenge";
 import { featuredLabs, latestPost, projects } from "@/lib/authority/content";
 import { formatDate } from "@/lib/blog-posts";
@@ -59,9 +59,7 @@ export function AuthorityHome() {
           <Image src={author.photo} alt={`Foto de ${author.name}`} width={160} height={160} priority unoptimized className="size-24 rounded-full border-2 border-brand-accent object-cover lg:size-36" />
           <span>
             <span className="block text-sm text-muted-foreground">Feito por</span>
-            <span className="font-display block text-3xl uppercase leading-tight group-hover:text-brand-accent">{author.name}</span>
-            <span className="block text-sm text-muted-foreground">{author.title}</span>
-            <span className="mt-2 block text-sm text-muted-foreground">com <span className="font-semibold text-foreground">{coAuthors.map((person) => person.name).join(", ")}</span></span>
+            <span className="font-display block text-3xl uppercase leading-tight group-hover:text-brand-accent">{authorNames}</span>
           </span>
         </Link>
       </div>
