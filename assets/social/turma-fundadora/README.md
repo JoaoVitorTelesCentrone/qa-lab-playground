@@ -1,8 +1,8 @@
 # Templates sociais — turma fundadora
 
-**Formato:** 1080 × 1080 px, quadrado. O [arquivo de prévia](index.html) apresenta 3 carrosséis de 3 slides e 3 posts de peça única. O [painel de comparação](overview.html) mostra as seis direções lado a lado. O texto editável está em `content.js`; cores, tipografia e layout estão em `styles.css`.
+**Formato:** 1080 × 1080 px, quadrado. O [arquivo de prévia](index.html) apresenta 3 carrosséis de 3 slides e 4 posts de peça única. O [painel de comparação](overview.html) mostra as sete direções lado a lado. O texto editável está em `content.js`; cores, tipografia e layout estão em `styles.css`.
 
-## Seis direções
+## Sete direções
 
 | Peça | Estilo | Assunto | Uso |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | Post 01 | Headline máxima: tipografia grande com um único argumento | Verde não é prova | Provocação curta com explicação na legenda. |
 | Post 02 | Comparação: duas perguntas lado a lado | Antes de automatizar | Ensinar critério de escolha. |
 | Post 03 | Convite: fundo neon e chamada direta | Seu raciocínio merece um case | Levar à lista de interesse da mentoria. |
+| Post 04 | Divulgação: fundo escuro, headline coral e CTA neon | Pense como QA | Apresentar o QA Lab e convidar a explorar projetos e conteúdos. |
 
 Os carrosséis já têm **capa → desenvolvimento → fechamento**. Para criar uma versão de 5–7 slides, duplique o slide do meio mantendo a mesma estrutura e acrescente apenas uma decisão ou evidência por slide. O último slide tem um único CTA.
 
@@ -29,9 +30,11 @@ Os carrosséis já têm **capa → desenvolvimento → fechamento**. Para criar 
 
 **Post 03:** “A Mentoria QA Lab foi desenhada para transformar prática em entregas revisadas e um case apresentável. São 12 semanas, missões com critérios, feedback humano e um encontro ao vivo por semana. As datas e condições da turma serão divulgadas na página oficial. Entre na lista de interesse se quiser receber o aviso.”
 
+**Post 04:** “QA se aprende fazendo: explore projetos e conteúdos do QA Lab para desenvolver seu olhar de qualidade, praticar investigação e comunicar decisões com evidências.”
+
 ## Editar e exportar
 
-1. Abra `index.html` no navegador para ver a galeria. Para ver uma peça isolada em 1080 × 1080, acrescente `?export=post-01-provocacao` à URL local.
+1. Abra `index.html` no navegador para ver a galeria. Para ver uma peça isolada em 1080 × 1080, acrescente `?export=post-04-divulgacao-qa-lab` à URL local.
 2. Edite o texto do item correspondente em `content.js`. Cada carrossel usa três IDs com o mesmo número (`capa`, `meio`, `fecho`).
 3. Mantenha títulos curtos e texto importante a pelo menos 70 px das bordas. Use até duas famílias tipográficas por peça e um CTA.
 4. Rode `node assets/social/turma-fundadora/render.mjs` a partir da raiz. O comando gera 12 PNGs e um painel comparativo em `exports/`.

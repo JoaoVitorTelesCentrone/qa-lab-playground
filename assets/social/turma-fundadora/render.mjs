@@ -11,7 +11,7 @@ const ids = [
   "carrossel-01-capa", "carrossel-01-meio", "carrossel-01-fecho",
   "carrossel-02-capa", "carrossel-02-meio", "carrossel-02-fecho",
   "carrossel-03-capa", "carrossel-03-meio", "carrossel-03-fecho",
-  "post-01-provocacao", "post-02-comparacao", "post-03-convite",
+  "post-01-provocacao", "post-02-comparacao", "post-03-convite", "post-04-divulgacao-qa-lab",
 ];
 
 await mkdir(output, { recursive: true });

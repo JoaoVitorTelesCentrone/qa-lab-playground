@@ -106,6 +106,17 @@ const cards = [
       <div class="invite-bottom"><p>12 semanas de prática.<br>Entregas com critérios.<br>Feedback humano.</p>
       <div class="invite-cta">ENTRE NA LISTA <span>↗</span></div></div></div>
       <div class="footerline"><span>Mentoria QA Lab</span><span>03</span></div>`
+  },
+  {
+    id: "post-04-divulgacao-qa-lab", label: "Post 04 · Divulgação QA Lab", style: "post-divulgacao",
+    html: `<div class="topline"><strong class="brand">QA<span> LAB</span></strong><span>APRENDA QA / 04</span></div>
+      <div class="promo-mark"><span>?</span><span>✓</span><span>↗</span></div>
+      <div class="promo-main"><span class="promo-tag">QA SE APRENDE FAZENDO</span>
+      <h2>PENSE<br>COMO<br><em>QA.</em></h2>
+      <div class="promo-rule"></div>
+      <p>Explore projetos e conteúdos para transformar curiosidade em investigação, evidência e decisão.</p>
+      <div class="promo-cta">CONHEÇA O QA LAB <span>↗</span></div></div>
+      <div class="footerline"><span>Prática que desenvolve seu olhar de qualidade</span><span>04</span></div>`
   }
 ];
 
