@@ -1,6 +1,30 @@
 {
-  "updatedAt": "2026-11-15T16:23:47.215Z",
+  "updatedAt": "2026-11-16T19:38:47.895Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-5281-zenodo-24237889",
+      "title": "Data preprocessing for software defect prediction: replication data for a systematic review",
+      "abstract": "Screening decisions, study-level extraction table and quality appraisal scores supporting a systematic review of data preprocessing for software defect prediction.",
+      "authors": [
+        "Ahmad Muhaimin Ismail"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-15",
+      "source": "OpenAlex",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "doi": "https://doi.org/10.5281/zenodo.24237889",
+      "url": "https://doi.org/10.5281/zenodo.24237889",
+      "topics": [
+        "Computer science",
+        "Preprocessor",
+        "Data extraction",
+        "Data pre-processing",
+        "Data mining",
+        "Software"
+      ],
+      "query": "software defect prediction",
+      "discoveredAt": "2026-11-16T19:38:47.895Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-24217563",
       "title": "Artificial Intelligence For Software Testing: A Review Of Automated Test Generation, Defect Prediction, Test Prioritization And LLM-Assisted Testing",
