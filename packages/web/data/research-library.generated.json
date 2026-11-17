@@ -1,6 +1,48 @@
 {
-  "updatedAt": "2026-11-16T19:38:47.895Z",
+  "updatedAt": "2026-11-17T18:36:32.049Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1007-978-3-032-44472-1-20",
+      "title": "Auditing AI-Assisted Software: Development Traces, Code Quality, and Trustworthiness in a Remote-Sensing Pipeline",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Oraib Almegdadi",
+        "Miguel Monteiro",
+        "Nuno C. Marques"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-17",
+      "source": "Crossref",
+      "venue": "Lecture Notes in Computer Science",
+      "doi": "https://doi.org/10.1007/978-3-032-44472-1_20",
+      "url": "https://doi.org/10.1007/978-3-032-44472-1_20",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-11-17T18:36:32.049Z"
+    },
+    {
+      "id": "doi-doi-org-10-3390-electronics15225361",
+      "title": "DSSA: A Deep Reinforcement Learning-Enhanced Sparrow Search Algorithm for Feature Selection in Software Defect Prediction",
+      "abstract": "Software defect prediction plays a critical role in the software development life cycle. Its predictive performance largely depends on the quality of the input features, whereas software defect datasets often contain irrelevant and redundant features. Wrapper-based feature selection (FS) has been proven effective in mitigating these issues. Nevertheless, efficiently identifying an optimal feature subset from a high-dimensional feature space remains a challenging combinatorial optimization problem. To improve the search efficiency and solution quality of FS, this paper proposes DSSA, a two-stage algorithm that enhances the sparrow search algorithm (SSA) with deep reinforcement learning. In the offline stage, interaction data generated during the SSA search process are collected and used to train an adaptive decision-making model. In the online stage, DSSA employs the trained model to dynamically configure the parameters governing the population search process. By replacing the fixed parameter scheme of conventional SSA with a dynamic parameter-control mechanism, DSSA adaptively balances exploration and exploitation, thereby improving solution quality. Comprehensive experiments are conducted on 20 widely studied software defect datasets to assess the performance of the proposed approach using four evaluation metrics. Experimental results demonstrate that DSSA achieves the best average Friedman ranks of 1.45, 1.50, 1.55, and 1.65 across the four metrics, confirming its superior performance.",
+      "authors": [
+        "Weijie Huang",
+        "Ting Shu",
+        "Jinsong Xia"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-17",
+      "source": "Crossref",
+      "venue": "Electronics",
+      "doi": "https://doi.org/10.3390/electronics15225361",
+      "url": "https://doi.org/10.3390/electronics15225361",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software product quality",
+      "discoveredAt": "2026-11-17T18:36:32.049Z"
+    },
     {
       "id": "doi-doi-org-10-5281-zenodo-24237889",
       "title": "Data preprocessing for software defect prediction: replication data for a systematic review",
