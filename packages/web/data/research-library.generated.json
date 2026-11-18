@@ -1,6 +1,56 @@
 {
-  "updatedAt": "2026-11-17T18:36:32.049Z",
+  "updatedAt": "2026-11-18T18:07:28.849Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-1186-s42162-026-00704-y",
+      "title": "The P2P-ironing platform: evaluating the software quality and user acceptance of a decentralized cyber-physical marketplace for shore-to-ship power",
+      "abstract": "Abstract Decarbonizing the maritime industry through shore-to-ship power (cold-ironing) requires robust transactive energy systems. However, implementing decentralized peer-to-peer (P2P) energy markets introduces significant socio-technical challenges, including the operational friction of pure Web3 applications and conflicting stakeholder demands regarding billing transparency. This paper presents the software engineering lifecycle and empirical evaluation of the P2P-Ironing platform, a cyber-physical marketplace designed for smart ports. Driven by a two-phase mixed-methods requirements analysis involving key maritime and energy stakeholders ( N = 18, N = 15), the platform utilizes a decoupled, hybrid Web2.5 architecture to abstract blockchain complexity from the end-user. To practically evaluate this cyber-physical integration despite physical infrastructure limitations, the system incorporates a hardware-in-the-loop (HIL) testbed and synthetic vessel-load generation to simulate automated smart-contract escrow settlements. An empirical evaluation ( N = 30) utilizing the Short User Experience Questionnaire (UEQ-S) indicated high pragmatic and hedonic software quality. These findings are consistent with the design objective of reducing the operational friction traditionally associated with decentralized ledgers. Furthermore, descriptive operational metrics indicated stakeholder trust in the hardware-automated settlement logic, a preference for transparent P2P market structures, and perceived alignment with port decarbonization goals. Ultimately, this research establishes a Technology Readiness Level (TRL) 6 architectural foundation, demonstrating a user-centric approach to maritime transactive energy that navigates current legislative constraints while preparing for future physical grid integrations.",
+      "authors": [
+        "Achilleas Achilleos",
+        "Houssam Hamrouni",
+        "Sofia Dima",
+        "Muhammad Ahmed Qureshi",
+        "Kipros Tylliros",
+        "Nicholas Christofides",
+        "Marios Lestas",
+        "Kyriacos Pavlou"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-18",
+      "source": "Crossref",
+      "venue": "Energy Informatics",
+      "doi": "https://doi.org/10.1186/s42162-026-00704-y",
+      "url": "https://doi.org/10.1186/s42162-026-00704-y",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-11-18T18:07:28.849Z"
+    },
+    {
+      "id": "arxiv-arxiv-org-abs-2611-22323v1",
+      "title": "Agent Trajectories as Evidence for Software Quality Assurance",
+      "abstract": "Autonomous software agents increasingly plan, implement, and test software with limited human oversight. Their decisions may introduce implicit assumptions that final code and passing tests do not adequately expose. We propose analyzing observable agent trajectories alongside software and agent specifications and AI generated artifacts as evidence for targeted quality assurance. The aim is to prioritize consequential decisions for scrutiny, investigate their possible contribution to software problems, and inform improvements to specifications and development practices. Industrial experience motivates the idea; available execution records and preliminary analysis methods make it plausible. However, trajectories alone do not establish that decisions are justified, outcomes acceptable, or corrective changes effective. We ask how this evidence can support review, diagnosis, and continuous quality improvement, and when simpler QA approaches suffice. Perspectives from requirements engineering, verification and validation, agent systems, causal inference, empirical software engineering, and human factors could help develop and evaluate the idea.",
+      "authors": [
+        "Jonathan Ullrich",
+        "Julien Siebert",
+        "Michael Kläs",
+        "Adam Trendowicz",
+        "Andreas Jedlitschka"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-17",
+      "source": "arXiv",
+      "venue": "arXiv",
+      "doi": "",
+      "url": "http://arxiv.org/abs/2611.22323v1",
+      "topics": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-11-18T18:07:28.849Z"
+    },
     {
       "id": "doi-doi-org-10-1007-978-3-032-44472-1-20",
       "title": "Auditing AI-Assisted Software: Development Traces, Code Quality, and Trustworthiness in a Remote-Sensing Pipeline",
