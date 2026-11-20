@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-19T18:19:44.822Z",
+  "updatedAt": "2026-11-20T17:50:58.894Z",
   "items": [
     {
       "id": "doi-doi-org-10-1186-s42162-026-00704-y",
@@ -1271,6 +1271,25 @@
       "discoveredAt": "2026-10-02T15:51:03.694Z"
     },
     {
+      "id": "doi-doi-org-10-32520-stmsi-v15i9-6819",
+      "title": "The Impact of Commitment to Software Quality on Project Management Performance",
+      "abstract": "This paper aims to address project management solutions based on three key requirements for software management project development\" project execution, software quality, and implementation of Level 2 (Managed) practices in the Capability Maturity Model Integration (CMMI)\". Project execution relies on effective organization and management of project personnel, especially for large projects or multiple projects being carried out simultaneously. Successful execution also depends on institutionalized management of project resources, which is supported by Level 2 process areas of CMMI.in the framework of total quality management, both the degree of project execution and execution capability have a direct impact on software quality. Therefore, this study investigates how software organizations can strengthen project execution and execution capabilities to enhance software quality through three perspectives: abstract object-oriented project organizational structure, project development models, and CMMI Level 2 project management practices.",
+      "authors": [
+        "Shaymaa A. Chyad"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-30",
+      "source": "Semantic Scholar",
+      "venue": "SISTEMASI",
+      "doi": "https://doi.org/10.32520/stmsi.v15i9.6819",
+      "url": "https://doi.org/10.32520/stmsi.v15i9.6819",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-11-20T17:50:58.894Z"
+    },
+    {
       "id": "doi-doi-org-10-15294-rji-v4i2-64137",
       "title": "A Comparative Analysis of the Effectiveness and Efficiency of Manual and Automated Testing in Software Quality Assurance",
       "abstract": "Purpose: This study aims to analyze the effectiveness, bottlenecks, and reliability of automated testing and manual testing, as well as to compare the two approaches in detecting bugs and supporting software product quality. Accelerating release cycles can be counterproductive if functional stability is ignored; thus, evaluating these two quality assurance methods is crucial to finding an optimal balance in software development.\nMethods/Study design/approach: The study employed a quantitative approach through a survey of 105 respondents, comprising QA Engineers, software developers, and academics, using a five-level Likert scale questionnaire. The collected data were rigorously analyzed using descriptive statistics, the Wilcoxon Signed-Rank Test, and the Friedman Test to objectively evaluate the performance, reliability, and operational bottlenecks of both testing methods. \nResult/Findings: The results demonstrate that automated testing is highly effective for regression testing and repetitive execution, while manual testing remains significantly effective for UI/UX evaluation and complex dynamic cases. Both methods face distinct challenges. Automated testing is bottlenecked by script maintenance efforts and flaky tests, whereas manual testing is hindered by lengthy execution times and human error. Automated testing was found to be significantly more accurate in detecting recurring functional bugs. Furthermore, an integrated combination of both automated and manual testing was proven to substantially reduce escaped defects.\nNovelty/Originality/Value: This research provides empirical evidence confirming that despite the strong push for automation in modern Agile and DevOps environments, neither method can completely replace the other. Both testing approaches are most effective when utilized complementarily according to their intrinsic characteristics. This synergy is essential to prevent bottlenecks in the software release cycle and ensure superior product quality.",
@@ -1954,6 +1973,29 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-09-02T13:42:31.786Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-iccit70127-2026-11749335",
+      "title": "Software Quality Evaluation of Education Management Information Systems in Disadvantaged Regions Using ISO/IEC 25010",
+      "abstract": "The Education Management Information System (EMIS) is essential for data-driven governance in primary and secondary schooling, yet empirical evidence regarding its soft-ware quality in frontier, remote, and disadvantaged (3T) regions remains scarce. This research aims to evaluate the software quality of the \"Dapodik\" system within these resource-constrained environments to identify technical barriers to effective implementation. Focusing on 344 school operators in Timor Tengah Selatan, East Nusa Tenggara, the study employs a descriptive quantitative approach utilizing the ISO/IEC 25010 quality model. Data collected via Likert-scale questionnaires underwent rigorous validity and reliability testing, with all constructs meeting acceptable Cronbach’s Alpha thresholds. The results indicate that while the system achieves an \"Excellent\" overall quality level (83.79%), significant disparities exist among quality characteristics. Security and functional suitability emerged as the strongest attributes; however, performance efficiency and reliability were rated lower due to frequent residual data issues in low-connectivity contexts. This study concludes that performance and reliability are the primary determinants of EMIS success in disadvantaged regions, suggesting that a \"one-size-fits-all\" software deployment fails to account for regional infrastructure gaps. These findings provide a critical baseline for policymakers to implement targeted technical optimizations. Future research should involve a longitudinal analysis across diverse 3T provinces to develop a specialized software quality framework for low-bandwidth educational environments, bridging the gap between standardized quality requirements and local infrastructural realities.",
+      "authors": [
+        "Tiwuk Widiastuti",
+        "E. Sediyono",
+        "Krismiyati",
+        "K. Hartomo",
+        "I. Sembiring"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-01",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Communications and Information Technology",
+      "doi": "https://doi.org/10.1109/ICCIT70127.2026.11749335",
+      "url": "https://doi.org/10.1109/ICCIT70127.2026.11749335",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality model",
+      "discoveredAt": "2026-11-20T17:50:58.894Z"
     },
     {
       "id": "arxiv-arxiv-org-abs-2609-29705v1",
