@@ -1,6 +1,26 @@
 {
-  "updatedAt": "2026-11-20T17:50:58.894Z",
+  "updatedAt": "2026-11-21T16:48:48.080Z",
   "items": [
+    {
+      "id": "doi-doi-org-10-38124-ijisrt-26nov573",
+      "title": "A Review of Cross-Project and Just-in-Time Software Defect Prediction with Lessons from Real-World Failures",
+      "abstract": "Software defects that escape into production can ground airline fleets, halt trading desks and disrupt essential services within minutes. This review connects the research on software defect prediction with the real cost of such failures. It first examines a set of widely reported incidents in aviation, airlines, finance and banking, drawn from official investigation reports, company filings and news coverage, and summarises their causes and documented losses. It then reviews two lines of defect prediction research that matter most in industrial settings. Cross-project defect prediction (CPDP) addresses the common situation in which a new or small project has too little history to train its own model, and must borrow knowledge from other projects through instance selection, feature transformation, transfer learning and deep domain adaptation. Just-in-time defect prediction (JIT-DP) scores each code change at the moment it is committed, so that risky changes can be reviewed before they reach production; deep learning models for JIT-DP learn directly from commit messages and code diffs. The review compares methods, datasets and evaluation practices in both lines, and then asks a practical question: for each incident, at which stage could a prediction model plausibly have raised a warning, and where were the causes outside its reach? It closes with a research agenda for deployment-aware defect prediction that combines cross-project knowledge, change-level risk scores and release-time safeguards.",
+      "authors": [
+        "Radhalakshmi Rajagopalan",
+        "Radha V."
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-21",
+      "source": "Crossref",
+      "venue": "International Journal of Innovative Science and Research Technology",
+      "doi": "https://doi.org/10.38124/ijisrt/26nov573",
+      "url": "https://doi.org/10.38124/ijisrt/26nov573",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software maintainability reliability",
+      "discoveredAt": "2026-11-21T16:48:48.080Z"
+    },
     {
       "id": "doi-doi-org-10-1186-s42162-026-00704-y",
       "title": "The P2P-ironing platform: evaluating the software quality and user acceptance of a decentralized cyber-physical marketplace for shore-to-ship power",
