@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-21T16:48:48.080Z",
+  "updatedAt": "2026-11-22T17:11:07.944Z",
   "items": [
     {
       "id": "doi-doi-org-10-38124-ijisrt-26nov573",
@@ -20,6 +20,25 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-11-21T16:48:48.080Z"
+    },
+    {
+      "id": "doi-doi-org-10-55640-ijcsis-volume11issue11-02",
+      "title": "A Review of NLP-Driven Test Case Generation Using Large Language Models for Software Quality Assurance",
+      "abstract": "The rapid transformation of software development practices, from Waterfall to Agile and DevOps, has augmented the demand for effective, scalable and precise testing methodology. Conventional manual test case generation is lengthy, inaccurate and in most cases unable to meet current continuous delivery cycles. Recently, advancements in Natural Language Processing (NLP) and Large Language Models (LLMs) have presented exciting opportunities for generating automated test cases. This survey discusses how NLP-based and LLM-based methods can transform the nature of software quality assurance by examining the requirement documents, categorizing intents, creating formalized test cases, and validating the results using automated simulation frameworks. An overview of the architectures of software quality assurance its process and its importance in development is also outlined extensively. Recent literature has shown great improvements including higher coverage of tests, high defect detection rates, and less manual work. Nevertheless, the issues of hallucination, data quality restrictions, computational costs, and the inability to test dynamic interfaces remain. The present review summarizes the existing knowledge, identifies a gap in literature, and provides knowledge of the future of automated generation of test cases with intelligence, scalability, and reliability.",
+      "authors": [
+        "Nilesh Jain"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-18",
+      "source": "Semantic Scholar",
+      "venue": "International Journal of Computer Science &amp; Information System",
+      "doi": "https://doi.org/10.55640/ijcsis/volume11issue11-02",
+      "url": "https://doi.org/10.55640/ijcsis/volume11issue11-02",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality assurance",
+      "discoveredAt": "2026-11-22T17:11:07.944Z"
     },
     {
       "id": "doi-doi-org-10-1186-s42162-026-00704-y",
@@ -206,6 +225,26 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-11-14T15:50:40.006Z"
+    },
+    {
+      "id": "doi-doi-org-10-1007-s10515-026-00701-1",
+      "title": "Qualifying AI software quality evaluators: a measurement systems analysis protocol for LLM code review and automated quality gates",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Hong-Suo Yan",
+        "Zong-Quan Sun"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-11-12",
+      "source": "Semantic Scholar",
+      "venue": "International Conference on Automated Software Engineering",
+      "doi": "https://doi.org/10.1007/s10515-026-00701-1",
+      "url": "https://doi.org/10.1007/s10515-026-00701-1",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality measurement",
+      "discoveredAt": "2026-11-22T17:11:07.944Z"
     },
     {
       "id": "doi-doi-org-10-5281-zenodo-24055169",
@@ -1993,6 +2032,27 @@
       ],
       "query": "software maintainability reliability",
       "discoveredAt": "2026-09-02T13:42:31.786Z"
+    },
+    {
+      "id": "doi-doi-org-10-1109-ubmk71847-2026-11745375",
+      "title": "LAPIS-Based Software Quality Management: A Multidimensional Measurement and Decision Support Approach for Agile Processes",
+      "abstract": "Quality in agile software development processes is a multidimensional concept that requires the joint evaluation of code quality, process performance, delivery success, defect management, and team dynamics. Monitoring metrics obtained from different tools separately makes it difficult to establish an integrated and actionable view of software quality. In this study, the Logo Agile Process Improvement System (LAPIS) approach used at Logo Software is combined with the multidimensional quality assessment framework proposed in the authors' previous work to introduce the LAPIS Software Quality Index (LSQI). LSQI transforms metrics obtained from code, process, and team dimensions into comparable values and supports both integrated and dimension-based monitoring of software quality. The main contribution of the study is extending LAPIS's measurement and continuous improvement approach into a multidimensional software quality management and decision-support structure.",
+      "authors": [
+        "Nurdan Canbaz Horozlu",
+        "Tuğba Öztürk Kaya",
+        "Ismail Duran"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-09-01",
+      "source": "Semantic Scholar",
+      "venue": "2026 11th International Conference on Computer Science and Engineering (UBMK)",
+      "doi": "https://doi.org/10.1109/UBMK71847.2026.11745375",
+      "url": "https://doi.org/10.1109/UBMK71847.2026.11745375",
+      "topics": [
+        "unclassified"
+      ],
+      "query": "software quality measurement",
+      "discoveredAt": "2026-11-22T17:11:07.944Z"
     },
     {
       "id": "doi-doi-org-10-1109-iccit70127-2026-11749335",
@@ -4238,6 +4298,25 @@
       ],
       "query": "software quality assurance",
       "discoveredAt": "2026-09-01T14:10:27.703Z"
+    },
+    {
+      "id": "doi-doi-org-10-4230-lipics-esem-2026-56",
+      "title": "QModel: A Time-Aware GitHub Mining Framework for Empirical Software Quality Studies",
+      "abstract": "Resumo nao disponivel na fonte indexada.",
+      "authors": [
+        "Dmytro Polishchuk"
+      ],
+      "year": 2026,
+      "publishedAt": "2026-01-01",
+      "source": "Semantic Scholar",
+      "venue": "International Symposium on Empirical Software Engineering and Measurement",
+      "doi": "https://doi.org/10.4230/LIPIcs.ESEM.2026.56",
+      "url": "https://doi.org/10.4230/LIPIcs.ESEM.2026.56",
+      "topics": [
+        "Computer Science"
+      ],
+      "query": "software quality measurement",
+      "discoveredAt": "2026-11-22T17:11:07.944Z"
     },
     {
       "id": "doi-doi-org-10-32604-cmc-2026-088522",
