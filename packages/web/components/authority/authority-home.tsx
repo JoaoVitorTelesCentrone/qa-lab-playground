@@ -7,7 +7,7 @@ import { featuredLabs, latestPost, projects } from "@/lib/authority/content";
 import { formatDate } from "@/lib/blog-posts";
 import { LABS_ENABLED } from "@/lib/product/features";
 import { allPosts } from "@/lib/blog/all-posts";
-import { getResearchStats } from "@/lib/research-library";
+import { getLibraryStats } from "@/lib/reference-library";
 import { toolGuides } from "@/lib/tool-guides";
 
 // Home do site de autoridade: quem construiu, o que construiu e onde acompanhar.
@@ -29,7 +29,7 @@ function SectionHead({ id, kicker, title, href, linkLabel }: { id: string; kicke
 const pillars = () => [
   { href: "/blog", icon: BookOpen, title: "Artigos", count: allPosts.length, unit: allPosts.length === 1 ? "artigo" : "artigos", text: "Textos práticos sobre testes, investigação de bugs e as decisões que fazem um produto ser confiável." },
   { href: "/ferramentas", icon: Wrench, title: "Guias de ferramentas", count: toolGuides.length, unit: "guias", text: "Documentação oficial, cursos gratuitos e vídeos selecionados para estudar as ferramentas que o mercado de QA usa." },
-  { href: "/pesquisa", icon: Microscope, title: "Referências científicas", count: getResearchStats().total, unit: "trabalhos", text: "Uma biblioteca de pesquisas acadêmicas sobre qualidade de software, para embasar o que você pratica." },
+  { href: "/biblioteca", icon: Microscope, title: "Biblioteca de QA", count: getLibraryStats().total, unit: "referências", text: "Livros, artigos fundamentais, normas e pesquisa recente sobre qualidade de software, com trilhas de leitura e citações prontas." },
 ];
 
 export function AuthorityHome() {

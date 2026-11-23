@@ -32,7 +32,7 @@ test("@smoke menu leva às páginas de autoridade, sem mentoria", async ({ page 
   test.skip(!labsEnabled, "Labs desativados neste ambiente.");
   await page.goto("/");
   const nav = page.getByRole("navigation", { name: "Navegação principal" }).first();
-  for (const [name, href] of [["Labs", "/labs"], ["Desafio da semana", "/desafio"], ["Blog", "/blog"], ["Ferramentas", "/ferramentas"], ["Referências", "/pesquisa"], ["Sobre", "/sobre"]]) {
+  for (const [name, href] of [["Labs", "/labs"], ["Desafio da semana", "/desafio"], ["Blog", "/blog"], ["Ferramentas", "/ferramentas"], ["Biblioteca", "/biblioteca"], ["Sobre", "/sobre"]]) {
     await expect(nav.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
   }
 });

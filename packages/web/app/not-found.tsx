@@ -41,7 +41,7 @@ export default function NotFound() {
             </Link>
           </Button>
           <Button asChild className="gap-2">
-            <Link href="/pesquisa">
+            <Link href="/biblioteca">
               <Library className="size-4" />
               Abrir a Biblioteca
             </Link>
