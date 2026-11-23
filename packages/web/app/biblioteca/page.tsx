@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowDown, ArrowRight, Search, X } from "lucide-react";
+import { Byline } from "@/components/authority/byline";
 import { EntryRow, KindBadge, ReferenceCard, focusRing, kickerClass, kindStyle } from "@/components/biblioteca/library-ui";
 import { researchSources } from "@/lib/research-library";
 import {
@@ -132,6 +133,7 @@ export default async function BibliotecaPage({ searchParams }: { searchParams: P
         Livros, artigos fundamentais, normas, guias abertos e pesquisa recente sobre qualidade de software.
         Cada referência curada tem resumo, ideias principais, como aplicar no trabalho e citação pronta em ABNT, APA e BibTeX.
       </p>
+      <Byline label="Curadoria de" className="mt-6" />
 
       <form action="/biblioteca#acervo" method="get" role="search" aria-label="Buscar na biblioteca" className="mt-7 flex max-w-2xl gap-2">
         <label htmlFor="library-hero-q" className="sr-only">Buscar na biblioteca</label>
@@ -281,7 +283,7 @@ export default async function BibliotecaPage({ searchParams }: { searchParams: P
         <p className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
           Legenda: {libraryKinds.map((kind) => <KindBadge key={kind.id} kind={kind.id} />)}
         </p>
-        <p className="mt-3 text-xs text-muted-foreground">Sentiu falta de uma referência? Fale comigo pelo <Link href="/sobre" className="underline underline-offset-4 hover:text-foreground">Sobre</Link>.</p>
+        <p className="mt-3 text-xs text-muted-foreground">Sentiu falta de uma referência? Fale com a gente pelo <Link href="/sobre" className="underline underline-offset-4 hover:text-foreground">Sobre</Link>.</p>
       </div>
     </section>
   </main>;

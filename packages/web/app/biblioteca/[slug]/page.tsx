@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { AlertTriangle, ArrowLeft, ArrowUpRight, Lightbulb, Route, Wrench } from "lucide-react";
+import { Byline } from "@/components/authority/byline";
 import { CitationBox } from "@/components/biblioteca/citation-box";
 import { AccessTag, KindBadge, LevelTag, ReferenceCard, Tag, focusRing, kickerClass } from "@/components/biblioteca/library-ui";
 import { SITE_URL } from "@/content/site";
@@ -105,6 +106,7 @@ export default async function ReferencePage({ params }: PageProps) {
           <Tag>{ref.lang === "pt" ? "Português" : "Inglês"}</Tag>
           {ref.topics.map((topic) => <Link key={topic} href={`/biblioteca?tema=${topic}#acervo`} className={cn("inline-flex items-center border border-border px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-brand-accent/60 hover:text-brand-accent", focusRing)}>{topicLabel(topic)}</Link>)}
         </div>
+        <Byline label="Resumo e curadoria de" className="mt-6" />
       </div>
 
       <aside className="border border-border bg-card p-5">

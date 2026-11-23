@@ -66,9 +66,9 @@ Na semana do Natal e na do Ano-novo os posts vão para segunda, terça e quarta,
 **P01 · Ler. Praticar. Provar.**
 > QA se aprende fazendo, mas também lendo, comparando e provando.
 >
-> O QA Lab junta num lugar só o que eu queria ter tido quando comecei: artigos curtos que terminam em exercício, guias das ferramentas que o mercado usa, uma biblioteca de referências e uma API com bugs de propósito para você praticar.
+> O QA Lab junta num lugar só o que a gente queria ter tido quando começou: artigos curtos que terminam em exercício, guias das ferramentas que o mercado usa, uma biblioteca de referências e uma API com bugs de propósito para você praticar.
 >
-> Tudo gratuito. Nas próximas semanas vou mostrar cada parte por aqui.
+> Tudo gratuito. Nas próximas semanas vamos mostrar cada parte por aqui.
 >
 > Link no primeiro comentário.
 
@@ -81,7 +81,7 @@ Na semana do Natal e na do Ano-novo os posts vão para segunda, terça e quarta,
 >
 > Não sabe por onde começar? São 7 trilhas de leitura, cada uma com a ordem e o motivo de cada leitura.
 >
-> Qual referência você acha que não pode faltar? Vou ler todas as sugestões.
+> Qual referência você acha que não pode faltar? Vamos ler todas as sugestões.
 
 **P03 · O título já é metade do report**
 > "Carrinho quebra" é um título que gera cinco perguntas de volta.
@@ -125,7 +125,7 @@ Na semana do Natal e na do Ano-novo os posts vão para segunda, terça e quarta,
 >
 > Parece um requisito pronto, mas ainda não diz quais dados usar nem o que deve acontecer em cada situação. No carrossel: três passos para sair da regra e chegar a casos que separam comportamentos.
 >
-> Exercício: monte a tabela do último slide e poste nos comentários. Eu comento as primeiras.
+> Exercício: monte a tabela do último slide e poste nos comentários. A gente comenta as primeiras.
 
 **P09 · O login que mente** *(requer Labs no ar)*
 > Um usuário bloqueado tenta entrar. A mensagem que aparece está errada.

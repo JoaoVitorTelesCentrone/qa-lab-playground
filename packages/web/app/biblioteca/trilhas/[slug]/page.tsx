@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Byline } from "@/components/authority/byline";
 import { AccessTag, KindBadge, focusRing, kickerClass } from "@/components/biblioteca/library-ui";
 import { authorLine, findReadingPath, levelLabel, pathReferences, readingPaths } from "@/lib/reference-library";
 import { cn } from "@/lib/utils";
@@ -42,6 +43,7 @@ export default async function ReadingPathPage({ params }: PageProps) {
       <p className="mt-4 text-lg leading-8">{path.audience}</p>
       <p className="mt-2 max-w-2xl text-base leading-7 text-muted-foreground">{path.description}</p>
       <p className="mt-4 font-mono text-xs text-muted-foreground">{steps.length} leituras, nesta ordem</p>
+      <Byline label="Trilha montada por" className="mt-5" />
     </header>
 
     <ol className="mt-8">
