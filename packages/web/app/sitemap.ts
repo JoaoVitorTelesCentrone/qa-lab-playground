@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { allPosts as posts } from "@/lib/blog/all-posts";
 import { qaTools } from "@/lib/qa-tools";
 import { toolGuides } from "@/lib/tool-guides";
+import { readingPaths, references } from "@/lib/reference-library";
 import { isLabPath, isMentorshipPath, LABS_ENABLED, MENTORSHIP_ENABLED } from "@/lib/product/features";
 
 // Cursos que os guias de ferramenta recomendam; sem repetir a mesma trilha.
@@ -27,6 +28,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...trackHrefs.map((href) => ({ url: `${baseUrl}${href}`, changeFrequency: "monthly" as const, priority: 0.6 })),
     { url: `${baseUrl}/ferramentas`, changeFrequency: "monthly", priority: 0.7 },
     ...toolGuides.map((guide) => ({ url: `${baseUrl}/ferramentas/${guide.slug}`, changeFrequency: "monthly" as const, priority: 0.6 })),
+    { url: `${baseUrl}/biblioteca`, changeFrequency: "weekly", priority: 0.8 },
+    ...readingPaths.map((path) => ({ url: `${baseUrl}/biblioteca/trilhas/${path.slug}`, changeFrequency: "monthly" as const, priority: 0.7 })),
+    ...references.map((ref) => ({ url: `${baseUrl}/biblioteca/${ref.slug}`, changeFrequency: "monthly" as const, priority: 0.6 })),
     { url: `${baseUrl}/lab/ferramentas`, changeFrequency: "monthly", priority: 0.7 },
     ...qaTools.map((tool) => ({ url: `${baseUrl}/lab/ferramentas/${tool.id}`, changeFrequency: "monthly" as const, priority: 0.5 })),
     // Versões de um post MDX em outro idioma: /blog/<slug>/<lang>.

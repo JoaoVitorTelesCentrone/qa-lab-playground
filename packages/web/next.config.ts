@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
       // Conteúdo tem uma área própria; links legados da mentoria continuam válidos.
       { source: "/mentoria/conteudo", destination: "/conteudo", permanent: true },
       { source: "/mentoria/conteudo/:path*", destination: "/conteudo/:path*", permanent: true },
+      // A área de referências virou a Biblioteca de QA; links antigos (posts, redes) seguem valendo.
+      { source: "/pesquisa", destination: "/biblioteca", permanent: true },
+      { source: "/pesquisa/:path*", destination: "/biblioteca/:path*", permanent: true },
       // Legacy practice URLs go to the current Lab entry point.
       // /desafio deixou de ser rota legada: agora é o desafio da semana.
       { source: "/desafios/:path*", destination: "/lab", permanent: true },

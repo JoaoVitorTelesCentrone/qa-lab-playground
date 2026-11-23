@@ -71,7 +71,7 @@ export const researchSources = [
   {
     name: "Curadoria QA Lab",
     description: "Selecao manual para manter standards e textos essenciais sempre visiveis.",
-    url: "/pesquisa",
+    url: "/biblioteca",
   },
 ] as const;
 

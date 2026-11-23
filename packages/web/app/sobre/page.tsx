@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight, BookOpen, Download, Github, Linkedin, Microscope, TestTube2 } from "lucide-react";
 import { author, coAuthorsJsonLd, projectAuthors, qaLab, qaLabJsonLd, SITE_URL } from "@/content/site";
 import { projects } from "@/lib/authority/content";
-import { getResearchStats } from "@/lib/research-library";
+import { getLibraryStats } from "@/lib/reference-library";
 
 // Página de confiança do site: quem construiu, como trabalha e onde encontrar
 // o trabalho. A trajetória é a do projeto, porque o repositório não tem datas
@@ -33,7 +33,7 @@ function external(href: string) {
 }
 
 export default function AboutPage() {
-  const research = getResearchStats();
+  const library = getLibraryStats();
   const trajectory = [
     {
       icon: TestTube2,
@@ -48,7 +48,7 @@ export default function AboutPage() {
     {
       icon: Microscope,
       title: "Pesquisa para decidir",
-      text: `${research.total} trabalhos acadêmicos indexados, organizados por tema e ano, para consultar evidências antes de decidir.`,
+      text: `Uma biblioteca com ${library.total} referências, de livros clássicos e normas a pesquisa recente, com ${library.paths} trilhas de leitura, para consultar evidências antes de decidir.`,
     },
   ];
   const jsonLd = {
@@ -162,7 +162,7 @@ export default function AboutPage() {
       <h2 id="explore-title" className="font-display mt-2 text-2xl uppercase">Veja o trabalho em prática</h2>
       <div className="mt-4 flex flex-wrap gap-3">
         <Link href="/blog" className={linkClass}><BookOpen className="size-4" aria-hidden="true" />Ler os artigos</Link>
-        <Link href="/pesquisa" className={linkClass}><Microscope className="size-4" aria-hidden="true" />Explorar a biblioteca</Link>
+        <Link href="/biblioteca" className={linkClass}><Microscope className="size-4" aria-hidden="true" />Explorar a biblioteca</Link>
       </div>
     </section>
   </main>;

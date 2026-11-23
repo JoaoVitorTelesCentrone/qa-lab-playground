@@ -1,0 +1,109 @@
+/* Série de divulgação dez/2026 – jan/2027. Base (artboard, topline, footerline, brand,
+   modo de exportação) vem de ../turma-fundadora/styles.css; aqui ficam só os temas e
+   os blocos reutilizáveis desta série. Cada peça = tema (dark/light/neon) + pilar (cor). */
+
+.s { --bg: #10151b; --fg: #f0f6fc; --muted: #a9b6ba; --line: #ffffff24; --panel: #ffffff0a; background: var(--bg); color: var(--fg); }
+.s.light { --bg: #e8f2e9; --fg: #132321; --muted: #45645e; --line: #13232130; --panel: #ffffff8c; }
+.s.neon { --bg: #a3e635; --fg: #101a13; --muted: #2d482d; --line: #101a1340; --panel: #ffffff40; }
+
+/* Pilares: QA Lab (menta), Biblioteca (cobre), Blog (coral), Playground (neon). */
+.s.acc-lab { --accent: #2dd4bf; }
+.s.acc-bib { --accent: #f0b886; }
+.s.acc-blog { --accent: #fb7185; }
+.s.acc-play { --accent: #a3e635; }
+.s.light.acc-lab { --accent: #087969; }
+.s.light.acc-bib { --accent: #a4501f; }
+.s.light.acc-blog { --accent: #b8304a; }
+.s.light.acc-play { --accent: #3f6b0a; }
+.s.neon { --accent: #0a5a4c; }
+
+.s .brand { color: var(--accent); }
+.s .topline > span, .s .footerline { color: var(--muted); }
+.s .footerline span:last-child { color: var(--accent); }
+
+/* Ornamento grande e discreto atrás do conteúdo. */
+.s .orn { position: absolute; z-index: 0; right: -60px; top: 150px; color: var(--accent); opacity: .09; font: 900 560px/.8 Georgia, serif; transform: rotate(-9deg); pointer-events: none; }
+.s.light .orn, .s.neon .orn { opacity: .12; }
+.s .ring { position: absolute; z-index: 0; width: 640px; height: 640px; right: -260px; top: -200px; border: 3px solid var(--accent); opacity: .28; border-radius: 50%; box-shadow: 0 0 0 90px #ffffff04, 0 0 0 180px #ffffff03; }
+
+.s .main { position: absolute; z-index: 2; left: 72px; right: 72px; top: 165px; bottom: 140px; display: flex; flex-direction: column; justify-content: center; }
+.s .main.top { justify-content: flex-start; top: 190px; }
+
+.s .tag { color: var(--accent); font: 800 19px/1.3 Consolas, monospace; letter-spacing: .14em; text-transform: uppercase; }
+.s h2 { margin: 24px 0 22px; font: 900 112px/.9 'Arial Narrow', Arial, sans-serif; letter-spacing: -.065em; text-transform: uppercase; }
+.s h2.xl { font-size: 150px; line-height: .86; }
+.s h2.md { font-size: 90px; }
+.s h2.sm { font-size: 72px; line-height: .94; }
+.s h2 em { font-style: normal; color: var(--accent); }
+.s .lead { max-width: 880px; margin: 0; color: var(--muted); font: 500 32px/1.28 Arial, sans-serif; }
+.s .lead strong { color: var(--fg); }
+.s .rule { width: 380px; height: 10px; margin: 4px 0 28px; background: var(--accent); }
+
+/* Lista numerada em blocos. */
+.s .items { display: grid; gap: 14px; margin: 8px 0 0; padding: 0; list-style: none; }
+.s .items li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 20px 24px; border: 2px solid var(--line); background: var(--panel); font: 700 29px/1.22 Arial, sans-serif; }
+.s .items li b { color: var(--accent); font: 900 23px/1 Consolas, monospace; }
+.s .items li small { display: block; margin-top: 7px; color: var(--muted); font: 500 23px/1.3 Arial, sans-serif; }
+.s .items.tight li { padding: 15px 22px; font-size: 26px; }
+
+/* Citação. */
+.s .quote { position: relative; margin: 30px 0 34px; font: 700 66px/1.08 Georgia, serif; letter-spacing: -.02em; }
+.s .quote::before { content: '“'; position: absolute; left: -12px; top: -92px; color: var(--accent); font: 900 200px/1 Georgia, serif; opacity: .9; }
+.s .quote em { font-style: normal; color: var(--accent); }
+.s .cite { font: 800 22px/1.4 Consolas, monospace; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
+.s .cite strong { color: var(--fg); }
+
+/* Número grande. */
+.s .stat { display: flex; align-items: flex-end; gap: 28px; margin: 18px 0 22px; }
+.s .stat b { color: var(--accent); font: 900 290px/.78 'Arial Narrow', Arial, sans-serif; letter-spacing: -.07em; }
+.s .stat span { padding-bottom: 14px; font: 900 54px/.95 'Arial Narrow', Arial, sans-serif; letter-spacing: -.04em; text-transform: uppercase; }
+
+/* Grade de números. */
+.s .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
+.s .tiles div { padding: 22px 22px 20px; border: 2px solid var(--line); background: var(--panel); }
+.s .tiles b { display: block; color: var(--accent); font: 900 92px/.85 'Arial Narrow', Arial, sans-serif; letter-spacing: -.05em; }
+.s .tiles span { display: block; margin-top: 10px; font: 700 23px/1.15 Arial, sans-serif; }
+.s .tiles div.wide { grid-column: span 2; }
+
+/* Comparação. */
+.s .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.s .compare div { min-height: 250px; padding: 30px 26px; border-radius: 14px; }
+.s .compare .no { background: #fb71851f; border: 2px solid #fb718566; }
+.s .compare .yes { background: #2dd4bf1a; border: 2px solid #2dd4bf66; }
+.s.light .compare .no { background: #f4d8dc; border-color: transparent; }
+.s.light .compare .yes { background: #15352d; color: #effff5; border-color: transparent; }
+.s .compare b { font: 900 18px/1 Consolas, monospace; letter-spacing: .12em; }
+.s .compare .no b { color: #fb7185; }
+.s .compare .yes b { color: #a3e635; }
+.s.light .compare .no b { color: #aa4f5e; }
+.s .compare p { margin: 26px 0 0; font: 800 33px/1.2 Arial, sans-serif; }
+
+/* Janela de terminal para request/response. */
+.s .term { border: 2px solid #32594c; border-radius: 18px; background: #0d1716; overflow: hidden; color: #e7f6ef; }
+.s .term .bar { display: flex; align-items: center; gap: 10px; height: 58px; padding: 0 26px; border-bottom: 2px solid #32594c; background: #182623; }
+.s .term .bar i { width: 13px; height: 13px; border-radius: 50%; background: #fb7185; }
+.s .term .bar i:nth-child(2) { background: #f0c040; }
+.s .term .bar i:nth-child(3) { background: #2dd4bf; }
+.s .term .bar span { margin-left: auto; color: #799b8c; font: 700 16px Consolas, monospace; }
+.s .term pre { margin: 0; padding: 26px 30px; white-space: pre-wrap; font: 700 25px/1.45 Consolas, monospace; }
+.s .term .k { color: #a3e635; }
+.s .term .bad { color: #fb7185; }
+.s .term .ok { color: #2dd4bf; }
+.s .term .dim { color: #799b8c; }
+
+/* Chips. */
+.s .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.s .chips span { padding: 13px 20px; border: 2px solid var(--line); border-radius: 50px; font: 800 19px/1 Consolas, monospace; letter-spacing: .04em; }
+
+/* CTA final. */
+.s .cta { display: inline-flex; align-items: center; gap: 26px; width: max-content; margin-top: 34px; padding: 22px 26px; background: var(--accent); color: var(--bg); font: 900 22px/1 Consolas, monospace; letter-spacing: .04em; text-transform: uppercase; }
+.s.neon .cta { background: #101a13; color: #d9ff8b; }
+.s .path { margin-top: 18px; color: var(--muted); font: 800 22px/1.2 Consolas, monospace; letter-spacing: .04em; }
+
+/* Modo carrossel em PDF: slides empilhados, um por página. */
+.pdf-mode { width: 1080px; background: transparent; }
+.pdf-mode .board-header, .pdf-mode .preview-label { display: none; }
+.pdf-mode .gallery { display: block; width: 1080px; padding: 0; margin: 0; }
+.pdf-mode .preview { break-after: page; }
+.pdf-mode .frame { width: 1080px; height: 1080px; box-shadow: none; }
+.pdf-mode .artboard { transform: none; }

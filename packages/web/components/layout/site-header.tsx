@@ -16,7 +16,7 @@ type NavLink = { href: string; label: string; hint?: string; match: (path: strin
 const under = (...prefixes: string[]) => (path: string) => prefixes.some((p) => path === p || path.startsWith(`${p}/`));
 
 // Menu do site de autoridade (docs/PLANO_AUTORIDADE_2026-11.md): o que prova o
-// trabalho do autor. Ferramentas (guias com vídeos) e Referências científicas
+// trabalho do autor. Ferramentas (guias com vídeos) e Biblioteca
 // voltaram ao menu no lançamento público; Caminho segue só como rota.
 const NAV: NavLink[] = [
   ...(LABS_ENABLED ? [
@@ -25,7 +25,7 @@ const NAV: NavLink[] = [
   ] : []),
   { href: "/blog", label: "Blog", match: under("/blog") },
   { href: "/ferramentas", label: "Ferramentas", match: under("/ferramentas") },
-  { href: "/pesquisa", label: "Referências", match: under("/pesquisa") },
+  { href: "/biblioteca", label: "Biblioteca", match: under("/biblioteca") },
   { href: "/sobre", label: "Sobre", match: under("/sobre") },
 ];
 const MENTORSHIP: NavLink = { href: "/mentoria", label: "Mentoria", match: under("/mentoria") };

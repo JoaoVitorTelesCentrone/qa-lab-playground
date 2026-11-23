@@ -1,5 +1,6 @@
 // Guias de estudo das ferramentas reais citadas na mentoria.
-// Todos os links foram conferidos em 2026-11-09: documentação e cursos responderam
+// Links conferidos em 2026-11-09 (REST Assured, Pytest, JUnit, BrowserStack, Allure,
+// WireMock, MSW, Xray, TestRail e os demais guias criados depois deles em 2026-11-23): documentação e cursos responderam
 // HTTP 200 e cada vídeo/playlist teve título e canal confirmados pelo oEmbed do YouTube.
 // Ao trocar um vídeo, confira de novo com:
 //   https://www.youtube.com/oembed?format=json&url=<link do vídeo>
@@ -23,7 +24,9 @@ export type GuideVideo = {
   official?: boolean;
 };
 
-export type ToolGuideCategory = "automacao" | "api" | "performance" | "risco" | "base" | "processo";
+export type ToolGuideCategory =
+  | "web" | "mobile" | "unidade" | "api" | "contrato" | "performance"
+  | "observabilidade" | "risco" | "cicd" | "base" | "processo";
 
 export type ToolGuide = {
   slug: string;
@@ -42,12 +45,17 @@ export type ToolGuide = {
 };
 
 export const toolGuideCategories: Record<ToolGuideCategory, { title: string; description: string }> = {
-  automacao: { title: "Automação de testes", description: "Frameworks para automatizar fluxos de interface, mobile e unidade." },
-  api: { title: "APIs", description: "Clientes para explorar e testar APIs e o contrato que as descreve." },
-  performance: { title: "Performance e observabilidade", description: "Carga, métricas de página e leitura de sinais em produção." },
+  web: { title: "Automação web", description: "Frameworks para automatizar fluxos de interface no navegador." },
+  mobile: { title: "Mobile e device cloud", description: "Automação de apps e execução em dispositivos e navegadores reais." },
+  unidade: { title: "Unidade e runners", description: "A base da pirâmide, em JavaScript, Python e Java." },
+  api: { title: "APIs", description: "Explorar APIs na mão e automatizar os testes em código." },
+  contrato: { title: "Contrato, mocks e massa de dados", description: "O que a API promete, como simular dependências e como preparar dados para o teste." },
+  performance: { title: "Performance", description: "Carga no servidor e performance da página." },
+  observabilidade: { title: "Observabilidade", description: "Ler métricas, logs e traces para confirmar o que aconteceu em produção." },
   risco: { title: "Acessibilidade e segurança", description: "Riscos que a regressão funcional não pega." },
+  cicd: { title: "CI/CD e relatórios", description: "Rodar a suíte no pipeline e mostrar o resultado para o time." },
   base: { title: "Base técnica", description: "O que todo QA usa todo dia, mesmo sem perceber." },
-  processo: { title: "Processo e gestão", description: "Especificação por exemplos e gestão de casos de teste." },
+  processo: { title: "Processo e gestão", description: "Especificação por exemplos, bugs e gestão de casos de teste." },
 };
 
 export function youtubeUrl(video: GuideVideo) {
@@ -64,7 +72,7 @@ export const toolGuides: ToolGuide[] = [
   {
     slug: "playwright",
     name: "Playwright",
-    category: "automacao",
+    category: "web",
     tagline: "Testes E2E em Chromium, Firefox e WebKit com uma API só.",
     summary: "Framework da Microsoft para automação de navegador. Espera os elementos sozinho, grava traces com tela, rede e console de cada passo e também faz requisições de API no mesmo teste.",
     qaFocus: ["Localizadores por papel e texto (getByRole, getByText)", "Assertions com espera automática (expect)", "Trace Viewer para investigar falhas", "Codegen para gravar o primeiro rascunho"],
@@ -86,7 +94,7 @@ export const toolGuides: ToolGuide[] = [
   {
     slug: "cypress",
     name: "Cypress",
-    category: "automacao",
+    category: "web",
     tagline: "Testes E2E que rodam dentro do navegador, com viagem no tempo entre os comandos.",
     summary: "Framework JavaScript que executa os testes junto da aplicação. O runner mostra cada comando com um snapshot da tela, o que deixa o debug visual e rápido. Muito usado em vagas de QA no Brasil.",
     qaFocus: ["Estrutura describe/it e comandos encadeados", "cy.intercept para observar e simular requisições", "Seletores estáveis (data-cy) em vez de CSS frágil", "Comandos customizados e fixtures"],
@@ -107,7 +115,7 @@ export const toolGuides: ToolGuide[] = [
   {
     slug: "selenium",
     name: "Selenium",
-    category: "automacao",
+    category: "web",
     tagline: "O padrão W3C de automação de navegador, em Java, Python, C# e mais.",
     summary: "O mais antigo dos frameworks de automação web e base do protocolo WebDriver. Ainda domina em empresas grandes e em projetos Java. Entender Selenium explica como os outros frameworks funcionam por baixo.",
     qaFocus: ["Localizadores (id, css, xpath) e quando cada um quebra", "Esperas explícitas em vez de sleep", "Page Object Model", "Selenium Grid para rodar em paralelo"],
@@ -129,7 +137,7 @@ export const toolGuides: ToolGuide[] = [
   {
     slug: "appium",
     name: "Appium",
-    category: "automacao",
+    category: "mobile",
     tagline: "Automação de apps Android e iOS com o protocolo WebDriver.",
     summary: "Servidor que traduz comandos WebDriver para os drivers nativos de Android (UiAutomator2) e iOS (XCUITest). Quem já sabe Selenium aproveita quase tudo. O Appium Inspector ajuda a achar os elementos na tela do app.",
     qaFocus: ["Capabilities: como dizer qual app e qual dispositivo usar", "Appium Inspector para localizar elementos", "Diferenças entre emulador e dispositivo real", "Gestos (toque, scroll, swipe)"],
@@ -150,14 +158,15 @@ export const toolGuides: ToolGuide[] = [
   },
   {
     slug: "jest",
-    name: "Jest",
-    category: "automacao",
+    name: "Jest / Vitest",
+    category: "unidade",
     tagline: "Testes de unidade em JavaScript e TypeScript.",
-    summary: "Framework de testes de unidade mais popular do ecossistema JavaScript. QA usa para ler e revisar os testes do time de desenvolvimento, escrever testes de funções puras e entender a base da pirâmide de testes.",
+    summary: "Jest ainda é o framework de unidade mais comum em projetos JavaScript, mas os projetos novos com Vite estão migrando para o Vitest, que tem quase a mesma API. QA usa para ler e revisar os testes do time de desenvolvimento, escrever testes de funções puras e entender a base da pirâmide de testes.",
     qaFocus: ["Matchers (toBe, toEqual, toThrow)", "Mocks e spies", "Testes assíncronos", "Relatório de cobertura e o que ele não garante"],
     docs: [
       { title: "Primeiros passos (em português)", url: "https://jestjs.io/pt-BR/docs/getting-started", lang: "pt", note: "Documentação oficial traduzida." },
       { title: "Getting started (original)", url: "https://jestjs.io/docs/getting-started", lang: "en", note: "Versão em inglês, sempre a mais atualizada." },
+      { title: "Guia do Vitest", url: "https://vitest.dev/guide/", lang: "en", note: "O sucessor do Jest em projetos com Vite; quem sabe um aprende o outro rápido." },
     ],
     courses: [],
     videos: [
@@ -211,7 +220,7 @@ export const toolGuides: ToolGuide[] = [
   {
     slug: "swagger",
     name: "Swagger / OpenAPI",
-    category: "api",
+    category: "contrato",
     tagline: "O contrato da API: endpoints, campos, tipos e respostas possíveis.",
     summary: "OpenAPI é a especificação que descreve uma API, e Swagger é o conjunto de ferramentas em volta dela (Editor, UI). Para QA, o documento é o oráculo: diz o que a API promete e permite testar contrato antes de testar regra.",
     qaFocus: ["Ler paths, parâmetros e schemas", "Campos obrigatórios e tipos", "Respostas de erro documentadas (4xx e 5xx)", "Testar pelo Swagger UI e comparar com o que a API devolve"],
@@ -278,7 +287,7 @@ export const toolGuides: ToolGuide[] = [
   {
     slug: "grafana",
     name: "Grafana",
-    category: "performance",
+    category: "observabilidade",
     tagline: "Painéis de métricas, logs e traces em um lugar só.",
     summary: "Plataforma de visualização usada para acompanhar sistemas em produção. QA usa para confirmar o impacto de um bug, cruzar o horário de uma falha com métricas e logs, e ler os resultados de testes de carga.",
     qaFocus: ["Ler um painel: métrica, intervalo e agregação", "Logs (Loki) e traces (Tempo) ligados por trace id", "Alertas e o que dispara cada um", "Separar sintoma de causa"],
@@ -386,7 +395,7 @@ export const toolGuides: ToolGuide[] = [
   {
     slug: "github-actions",
     name: "GitHub Actions",
-    category: "base",
+    category: "cicd",
     tagline: "Rodar os testes automaticamente a cada push e pull request.",
     summary: "Plataforma de CI/CD do GitHub. Workflows em YAML rodam a suíte de testes, publicam relatórios e bloqueiam o merge quando algo falha. É onde a automação de testes passa a valer para o time inteiro.",
     qaFocus: ["Estrutura de um workflow: on, jobs, steps", "Rodar testes em pull request", "Artefatos: relatórios, vídeos e traces", "Secrets e variáveis de ambiente"],
@@ -405,10 +414,10 @@ export const toolGuides: ToolGuide[] = [
   },
   {
     slug: "gherkin",
-    name: "Gherkin (BDD)",
+    name: "Cucumber e Gherkin (BDD)",
     category: "processo",
     tagline: "Escrever comportamento como exemplos: Dado, Quando, Então.",
-    summary: "Linguagem estruturada para descrever cenários de forma que produto, desenvolvimento e QA entendam igual. Funciona em português (Funcionalidade, Cenário, Dado, Quando, Então) e serve de base para automação com Cucumber.",
+    summary: "Gherkin é a linguagem estruturada para descrever cenários de forma que produto, desenvolvimento e QA entendam igual; Cucumber é a ferramenta que liga cada passo ao código de automação. Funciona em português (Funcionalidade, Cenário, Dado, Quando, Então).",
     qaFocus: ["Funcionalidade, Cenário, Dado, Quando, Então", "Esquema do Cenário com Exemplos", "Cenários declarativos em vez de passo a passo de clique", "BDD é conversa antes de ser ferramenta"],
     practice: { href: "/lab/bdd", label: "Gerador de BDD" },
     docs: [
@@ -450,7 +459,7 @@ export const toolGuides: ToolGuide[] = [
   {
     slug: "pact",
     name: "Pact",
-    category: "api",
+    category: "contrato",
     tagline: "Teste de contrato guiado pelo consumidor, entre serviços.",
     summary: "Em vez de subir todos os serviços para um teste ponta a ponta, o consumidor registra o que espera da API e o provedor verifica se cumpre. Pega quebra de contrato no pull request, antes de chegar em homologação.",
     qaFocus: ["Consumidor, provedor e o arquivo de pacto", "Matchers: validar formato em vez de valor exato", "Verificação do provedor no CI", "Pact Broker e a pergunta can-i-deploy"],
@@ -496,10 +505,10 @@ export const toolGuides: ToolGuide[] = [
   },
   {
     slug: "owasp-zap",
-    name: "OWASP ZAP",
+    name: "ZAP (antigo OWASP ZAP)",
     category: "risco",
     tagline: "Proxy e scanner de segurança web, gratuito e open source.",
-    summary: "Fica entre o navegador e a aplicação, registra o tráfego e procura vulnerabilidades conhecidas (OWASP Top 10). Para QA, é a porta de entrada em testes de segurança. Use só em sistemas que você tem autorização para testar; o OWASP Juice Shop existe para treinar.",
+    summary: "Desde 2024 se chama ZAP by Checkmarx e continua gratuito e open source. Fica entre o navegador e a aplicação, registra o tráfego e procura vulnerabilidades conhecidas (OWASP Top 10). Para QA, é a porta de entrada em testes de segurança. Use só em sistemas que você tem autorização para testar; o OWASP Juice Shop existe para treinar.",
     qaFocus: ["Configurar o ZAP como proxy do navegador", "Spider e scan passivo antes do ativo", "Ler um alerta: risco, confiança e evidência", "Treinar no Juice Shop, nunca em sistema de terceiros"],
     practice: { href: "/lab/ferramentas/seguranca", label: "Security Probe" },
     docs: [
@@ -541,6 +550,442 @@ export const toolGuides: ToolGuide[] = [
       { title: "Jira Tutorial for QA Testers", channel: "Jira Bro", lang: "en", youtubeId: "F1FcTI2VDeQ", kind: "video" },
     ],
   },
+  {
+    slug: "rest-assured",
+    name: "REST Assured",
+    category: "api",
+    tagline: "Testes de API em Java, com sintaxe given, when, then.",
+    summary: "A biblioteca mais pedida em vagas de automação de API com Java. Os testes ficam no repositório, rodam no CI junto com JUnit ou TestNG e validam status, corpo, headers e schema. É o passo seguinte para quem já testa API no Postman.",
+    qaFocus: ["given / when / then e o que vai em cada parte", "Validar corpo com JSON path e Hamcrest matchers", "Request e response specification para não repetir configuração", "Validação de schema JSON"],
+    docs: [
+      { title: "Site oficial do REST Assured", url: "https://rest-assured.io/", lang: "en", note: "Visão geral, versões e exemplos curtos." },
+      { title: "Guia de uso (wiki)", url: "https://github.com/rest-assured/rest-assured/wiki/Usage", lang: "en", note: "Referência completa: requisição, validação, autenticação e schema." },
+    ],
+    courses: [
+      { title: "Test Automation University", url: "https://testautomationu.applitools.com/", lang: "en", note: "Tem cursos gratuitos de REST Assured com certificado." },
+    ],
+    videos: [
+      { title: "Série \"Para que serve esta ferramenta?\": RestAssured", channel: "Julio de Lima", lang: "pt", youtubeId: "xqZz0NbjgaE", kind: "video" },
+      { title: "Como automatizar testes de API Rest com RestAssured (Aula 11)", channel: "Julio de Lima", lang: "pt", youtubeId: "kWdAhtcyxw8", kind: "video" },
+      { title: "Como testar API usando rest assured | Criando o projeto", channel: "QaOps", lang: "pt", youtubeId: "EjXimnUwAns", kind: "video" },
+      { title: "REST Assured API Testing Tutorial Crash Course 2024", channel: "Testers Talk", lang: "en", youtubeId: "o9KJhGHl49M", kind: "video" },
+    ],
+  },
+  {
+    slug: "pytest",
+    name: "Pytest",
+    category: "unidade",
+    tagline: "O runner de testes do Python, de unidade a API e E2E.",
+    summary: "Padrão de mercado para testes em Python. Usa assert simples, fixtures para preparar e limpar o ambiente e parametrização para rodar o mesmo teste com vários dados. Serve de base para automação de API (com requests) e de interface (com Playwright ou Selenium).",
+    qaFocus: ["assert simples e a mensagem de falha que ele gera", "Fixtures e escopo (function, module, session)", "parametrize para testar várias entradas", "Marcadores para separar smoke de regressão"],
+    docs: [
+      { title: "Primeiros passos", url: "https://docs.pytest.org/en/stable/getting-started.html", lang: "en", note: "Instalar, escrever e rodar o primeiro teste." },
+      { title: "Fixtures", url: "https://docs.pytest.org/en/stable/how-to/fixtures.html", lang: "en", note: "O recurso que mais diferencia o pytest." },
+      { title: "Parametrização", url: "https://docs.pytest.org/en/stable/how-to/parametrize.html", lang: "en", note: "Um teste, várias massas de dados." },
+    ],
+    courses: [],
+    videos: [
+      { title: "PyTest - testes profissionais para seus códigos Python", channel: "Hashtag Programação", lang: "pt", youtubeId: "FW-mYXr2M8w", kind: "video" },
+      { title: "O mínimo que você deveria saber sobre testes unitários - #30diasdepython", channel: "Eduardo Mendes", lang: "pt", youtubeId: "pZvhZ-Lr-PE", kind: "video" },
+      { title: "Pytest Tutorial – How to Test Python Code", channel: "freeCodeCamp.org", lang: "en", youtubeId: "cHYq1MRoyI0", kind: "video" },
+      { title: "Please Learn How To Write Tests in Python… • Pytest Tutorial", channel: "Tech With Tim", lang: "en", youtubeId: "EgpLj86ZHFQ", kind: "video" },
+    ],
+  },
+  {
+    slug: "junit",
+    name: "JUnit 5",
+    category: "unidade",
+    tagline: "O runner de testes do Java, base para Selenium e REST Assured.",
+    summary: "Quase toda suíte de automação em Java roda em cima do JUnit ou do TestNG. Entender anotações, ciclo de vida e testes parametrizados é o que permite ler o projeto do time e organizar a própria suíte.",
+    qaFocus: ["@Test, @BeforeEach e @AfterEach: o ciclo de vida", "Assertions e assertAll", "@ParameterizedTest com fontes de dados", "Tags para separar suítes no CI"],
+    docs: [
+      { title: "Guia do usuário do JUnit", url: "https://docs.junit.org/current/user-guide/", lang: "en", note: "Documentação oficial completa." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Como Fazer Testes Unitários em Java com JUnit 5 e Mockito: Passo a Passo 2023", channel: "Javanauta", lang: "pt", youtubeId: "rVSwDX9KUt8", kind: "video" },
+      { title: "[TUTORIAL] Dominando testes unitários com JUnit 5 e Mockito", channel: "Felix Gilioli", lang: "pt", youtubeId: "zqzoCXk2k-k", kind: "video" },
+      { title: "Java Testing - JUnit 5 Crash Course", channel: "freeCodeCamp.org", lang: "en", youtubeId: "flpmSXVTqBI", kind: "video" },
+      { title: "JUnit 5 Tutorial - Crash Course", channel: "Marco Codes", lang: "en", youtubeId: "6uSnF6IuWIw", kind: "video" },
+    ],
+  },
+  {
+    slug: "browserstack",
+    name: "BrowserStack",
+    category: "mobile",
+    tagline: "Navegadores e celulares reais na nuvem para rodar a suíte.",
+    summary: "Em vez de manter um laboratório de aparelhos, o time roda os testes de Playwright, Selenium e Appium em milhares de combinações de navegador, sistema e dispositivo. Aparece com frequência em vagas internacionais; Sauce Labs e LambdaTest são as alternativas mais comuns.",
+    qaFocus: ["Montar a matriz de navegadores e dispositivos pelo risco, não por tudo", "Rodar uma suíte existente apontando para a nuvem", "Ler vídeo, log e rede de uma execução que falhou", "Teste manual em aparelho real (Live)"],
+    docs: [
+      { title: "Playwright no BrowserStack", url: "https://www.browserstack.com/docs/automate/playwright", lang: "en", note: "Rodar testes web existentes na nuvem." },
+      { title: "Selenium no BrowserStack", url: "https://www.browserstack.com/docs/automate/selenium", lang: "en", note: "O mesmo, para suítes em Selenium." },
+      { title: "Appium no App Automate", url: "https://www.browserstack.com/docs/app-automate/appium", lang: "en", note: "Testes mobile em aparelhos reais." },
+    ],
+    courses: [],
+    videos: [
+      { title: "BrowserStack Tutorial for Beginners - Mobile app and cross-platform testing", channel: "Software Testing 101", lang: "en", youtubeId: "lO1qS2mctN0", kind: "video" },
+      { title: "App Automate - An Overview", channel: "BrowserStack", lang: "en", youtubeId: "7Jn6nL8lwwI", kind: "video", official: true },
+    ],
+  },
+  {
+    slug: "allure",
+    name: "Allure Report",
+    category: "cicd",
+    tagline: "Relatório de testes legível, com passos, anexos e histórico.",
+    summary: "Transforma o resultado da suíte em um relatório navegável, com passos, screenshots, categorias de falha e tendência entre execuções. Funciona com Playwright, Cypress, pytest, JUnit e TestNG, e costuma ser publicado pelo pipeline para o time inteiro ver.",
+    qaFocus: ["Gerar o relatório a partir dos resultados da suíte", "Passos e anexos para a falha se explicar sozinha", "Categorias: bug de produto, de teste ou de ambiente", "Histórico e testes instáveis (flaky)"],
+    docs: [
+      { title: "Documentação do Allure Report", url: "https://allurereport.org/docs/", lang: "en", note: "Instalação e integração com cada framework." },
+      { title: "Allure com Playwright", url: "https://allurereport.org/docs/playwright/", lang: "en", note: "Exemplo direto para a stack mais comum hoje." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Cypress - adicionando relatório com o Allure Reports Plugin", channel: "Agilizei", lang: "pt", youtubeId: "y3QZQF2wBW4", kind: "video" },
+      { title: "Crie um Pipeline de Testes Contínuos com Jenkins, Playwright e Allure Reports #QATW1", channel: "Papito | Roverstack", lang: "pt", youtubeId: "BQGOeGrR4pA", kind: "video" },
+      { title: "Introduction to Allure Report | A Universal Report", channel: "PrinceAutomationDestination", lang: "en", youtubeId: "G0kcL9lReh4", kind: "video" },
+      { title: "Playwright with Allure Report Step by Step | Reporting in Test Automation", channel: "PrinceAutomationDestination", lang: "en", youtubeId: "2LqFaYJlBVM", kind: "video" },
+    ],
+  },
+  {
+    slug: "wiremock",
+    name: "WireMock",
+    category: "contrato",
+    tagline: "Simula APIs de terceiros para testar sem depender delas.",
+    summary: "Sobe um servidor falso que responde como o serviço real. Com ele dá para testar timeout, erro 500, resposta lenta ou campo faltando, situações difíceis de provocar no sistema verdadeiro. Roda em Java, em Docker ou como processo isolado.",
+    qaFocus: ["Stub: dada esta requisição, devolva esta resposta", "Simular falhas: atraso, 500, conexão cortada", "Verificar que a chamada foi feita como esperado", "Mock não substitui teste de contrato"],
+    docs: [
+      { title: "Documentação do WireMock", url: "https://wiremock.org/docs/", lang: "en", note: "Formas de rodar e conceitos." },
+      { title: "Stubbing", url: "https://wiremock.org/docs/stubbing/", lang: "en", note: "Como montar as respostas simuladas." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Wiremock: Simule integrações entre sistemas", channel: "Full Cycle", lang: "pt", youtubeId: "cCUoC4WLtwk", kind: "video" },
+      { title: "Mock Any API with WireMock | Step-by-Step Tutorial for Developers", channel: "Murat Öksüzer", lang: "en", youtubeId: "b8mS38xAdTg", kind: "video" },
+      { title: "WireMock in 30min", channel: "ProdBug108", lang: "en", youtubeId: "iEDeiBPDFjs", kind: "video" },
+    ],
+  },
+  {
+    slug: "msw",
+    name: "MSW (Mock Service Worker)",
+    category: "contrato",
+    tagline: "Mock de API no front-end, no navegador e nos testes.",
+    summary: "Intercepta as requisições da aplicação no nível da rede, então o código do front não sabe que está falando com um mock. O mesmo conjunto de respostas serve para desenvolvimento, testes de unidade e testes de componente, o que ajuda a reproduzir estados de erro e de lista vazia.",
+    qaFocus: ["Handlers: qual rota devolve o quê", "Sobrescrever um handler num teste para forçar erro", "Cobrir estados vazios, de carregamento e de falha", "Onde o MSW para e o E2E começa"],
+    docs: [
+      { title: "Documentação do MSW", url: "https://mswjs.io/docs/", lang: "en", note: "Conceitos e integrações." },
+      { title: "Quick start", url: "https://mswjs.io/docs/quick-start", lang: "en", note: "O primeiro mock em poucos minutos." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Conheça o Mock Service Worker - MSW", channel: "Kevin Uehara", lang: "pt", youtubeId: "rQqz6DXJ29U", kind: "video" },
+      { title: "What is Mock Service Worker (MSW)?", channel: "Mock Service Worker", lang: "en", youtubeId: "HcQCqboatZk", kind: "video", official: true },
+      { title: "Mock a Basic HTTP Response — Mocking REST API with Mock Service Worker", channel: "Mock Service Worker", lang: "en", youtubeId: "e8lbbqSa4e4", kind: "video", official: true },
+    ],
+  },
+  {
+    slug: "xray",
+    name: "Xray (Jira)",
+    category: "processo",
+    tagline: "Casos de teste, execuções e cobertura dentro do próprio Jira.",
+    summary: "Em muitas empresas a gestão de testes não é uma ferramenta separada: roda dentro do Jira com Xray ou Zephyr. Cada teste vira uma issue ligada à história, as execuções ficam registradas e a automação envia resultados pela API. É o que mais aparece em vagas internacionais junto do TestRail.",
+    qaFocus: ["Test, Test Set, Test Plan e Test Execution", "Ligar o teste à história para ter cobertura", "Registrar resultado e evidência numa execução", "Importar resultados da automação (JUnit XML)"],
+    docs: [
+      { title: "Documentação do Xray", url: "https://docs.getxray.app/", lang: "en", note: "Referência para Cloud e Data Center." },
+    ],
+    courses: [
+      { title: "Xray Academy", url: "https://academy.getxray.app/", lang: "en", note: "Cursos oficiais de gestão de testes com Xray." },
+    ],
+    videos: [
+      { title: "08 - Jira - Testando com XRay", channel: "QA hacks e dicas", lang: "pt", youtubeId: "fAOqxIjKTHA", kind: "video" },
+      { title: "09 - Jira - Testes com Xray Test Run", channel: "QA hacks e dicas", lang: "pt", youtubeId: "gK7HY-Q098o", kind: "video" },
+      { title: "Como Executar Testes no Xray Jira e Registrar Resultados | Curso Xray #04", channel: "Willames Vital", lang: "pt", youtubeId: "GWSywiEJ1O0", kind: "video" },
+      { title: "Xray Test Management App - Quick demo", channel: "Xray", lang: "en", youtubeId: "uKZng5ZmtJM", kind: "video", official: true },
+      { title: "Jira Xray Tutorial #3 - How to Create Test Cases in Jira Xray", channel: "Software Testing Mentor", lang: "en", youtubeId: "MlvtSJbeqog", kind: "video" },
+    ],
+  },
+  {
+    slug: "testrail",
+    name: "TestRail",
+    category: "processo",
+    tagline: "A ferramenta de gestão de testes mais citada em vagas internacionais.",
+    summary: "Organiza casos em suítes e seções, monta planos e execuções, registra resultado por caso e gera relatórios de progresso. Integra com Jira e recebe resultados da automação. Os conceitos são os mesmos do Qase e do Xray, então aprender um ajuda nos outros.",
+    qaFocus: ["Projetos, suítes, seções e casos", "Test runs e test plans", "Registrar resultado com evidência e defeito no Jira", "Relatórios de progresso para o time"],
+    docs: [
+      { title: "Introdução ao TestRail", url: "https://support.testrail.com/hc/en-us/articles/7076810203028-Introduction-to-TestRail", lang: "en", note: "Ponto de partida da central de ajuda oficial." },
+    ],
+    courses: [
+      { title: "TestRail Academy", url: "https://academy.testrail.com/", lang: "en", note: "Cursos oficiais e gratuitos, com certificado." },
+    ],
+    videos: [
+      { title: "Escrevendo Casos de teste Com TestRail", channel: "DevTrends", lang: "pt", youtubeId: "3RnyDdPZacQ", kind: "video" },
+      { title: "TestRail 101", channel: "TestRail", lang: "en", youtubeId: "gznZnIA80Ro", kind: "video", official: true },
+      { title: "Latest Tutorial On TestRail - Test Management Tool (Test Cases, Execution, Test Suites & Reports)", channel: "Naveen AutomationLabs", lang: "en", youtubeId: "S8ZWLCn8HkY", kind: "video" },
+    ],
+  },
+  {
+    slug: "maestro",
+    name: "Maestro",
+    category: "mobile",
+    tagline: "Testes mobile em YAML, com espera automática e pouca configuração.",
+    summary: "Framework de automação mobile que cresceu rápido por ser simples: os fluxos são arquivos YAML, a ferramenta espera os elementos sozinha e roda em Android, iOS, React Native e Flutter. Não substitui o Appium em todo projeto, mas é o caminho mais curto até o primeiro teste mobile estável.",
+    qaFocus: ["Flows em YAML: tapOn, inputText, assertVisible", "Maestro Studio para achar elementos e gravar passos", "Por que ele é menos flaky que um script cheio de esperas", "Quando ainda faz sentido escolher o Appium"],
+    docs: [
+      { title: "Documentação do Maestro", url: "https://docs.maestro.dev/", lang: "en", note: "Conceitos, comandos e exemplos." },
+      { title: "Instalação", url: "https://docs.maestro.dev/getting-started/installing-maestro", lang: "en", note: "Do zero ao primeiro flow rodando." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Seu Primeiro Teste Mobile em 15 Minutos, Sem Programar (Maestro)", channel: "Jeferson Caye", lang: "pt", youtubeId: "74NP_z3jguA", kind: "video" },
+      { title: "Painless Mobile Test Automation with Maestro?", channel: "Software Testing by Daniel Knott", lang: "en", youtubeId: "EcO1QVtnqxw", kind: "video" },
+      { title: "Live Demo + Q&A: Automate Mobile & Web Testing with Maestro", channel: "Maestro", lang: "en", youtubeId: "2gXvhoTlPJM", kind: "video", official: true },
+    ],
+  },
+  {
+    slug: "visual-testing",
+    name: "Regressão visual (Applitools, Percy, Playwright)",
+    category: "web",
+    tagline: "Pega o layout quebrado que a asserção funcional não vê.",
+    summary: "O teste compara uma captura da tela com uma imagem de referência aprovada. O Playwright faz isso de graça com toHaveScreenshot; Applitools e Percy adicionam comparação inteligente, que ignora ruído de renderização, e um painel para aprovar mudanças. O trabalho de QA é decidir o que comparar e revisar as diferenças.",
+    qaFocus: ["Baseline: quem aprova a imagem de referência", "Mascarar o que muda sozinho (datas, anúncios, animações)", "Comparação pixel a pixel x comparação visual por IA", "Rodar em poucos tamanhos de tela, escolhidos pelo risco"],
+    docs: [
+      { title: "Comparação visual no Playwright", url: "https://playwright.dev/docs/test-snapshots", lang: "en", note: "toHaveScreenshot, sem ferramenta paga." },
+      { title: "Documentação do Applitools", url: "https://applitools.com/docs/", lang: "en", note: "Eyes e integrações com cada framework." },
+      { title: "Percy (BrowserStack)", url: "https://www.browserstack.com/docs/percy", lang: "en", note: "A principal alternativa ao Applitools." },
+    ],
+    courses: [
+      { title: "Test Automation University", url: "https://testautomationu.applitools.com/", lang: "en", note: "Mantida pela Applitools; tem cursos gratuitos de teste visual." },
+    ],
+    videos: [
+      { title: "Playwright Visual Testing with toHaveScreenshot() | Visual Regression Testing", channel: "Lets Learn QA", lang: "en", youtubeId: "Wtw5kZbvvd0", kind: "video" },
+      { title: "Visual Testing with Applitools: A Step-by-Step Setup Guide", channel: "Bondar Academy", lang: "en", youtubeId: "iabKypI3lhU", kind: "video" },
+      { title: "Visual Testing Masterclass Part 1", channel: "Applitools: AI-powered testing you can depend on.", lang: "en", youtubeId: "JSdHv4YaMm4", kind: "video", official: true },
+    ],
+  },
+  {
+    slug: "jenkins",
+    name: "Jenkins",
+    category: "cicd",
+    tagline: "O servidor de CI mais comum em empresas grandes.",
+    summary: "Ferramenta open source de integração contínua que ainda domina em bancos, varejo e empresas com infraestrutura própria. O pipeline fica num Jenkinsfile versionado. Para QA, o importante é entender onde a suíte roda, como ler o log de uma falha e como publicar o relatório.",
+    qaFocus: ["Jenkinsfile: stages, steps e post", "Disparar a suíte por commit, agendamento ou parâmetro", "Ler o console de um build que falhou", "Publicar relatório (JUnit, Allure) e arquivar evidências"],
+    docs: [
+      { title: "Documentação do Jenkins", url: "https://www.jenkins.io/doc/", lang: "en", note: "Instalação e conceitos." },
+      { title: "Pipeline", url: "https://www.jenkins.io/doc/book/pipeline/", lang: "en", note: "Como escrever o Jenkinsfile." },
+    ],
+    courses: [],
+    videos: [
+      { title: "O que é Jenkins | Guia prático para começar com Jenkins", channel: "Fabricio Veronez", lang: "pt", youtubeId: "mvtVL5eivzo", kind: "video" },
+      { title: "Criando primeira Pipeline no Jenkins", channel: "netodevel", lang: "pt", youtubeId: "BVE9En1lIx8", kind: "video" },
+      { title: "Crie um Pipeline de Testes Contínuos com Jenkins, Playwright e Allure Reports #QATW1", channel: "Papito | Roverstack", lang: "pt", youtubeId: "BQGOeGrR4pA", kind: "video" },
+      { title: "Learn Jenkins! Complete Jenkins Course - Zero to Hero", channel: "DevOps Journey", lang: "en", youtubeId: "6YZvp2GwT0A", kind: "video" },
+      { title: "Jenkins for Beginners", channel: "Telusko", lang: "en", youtubeId: "1LE1llhafOE", kind: "video" },
+    ],
+  },
+  {
+    slug: "gitlab-ci",
+    name: "GitLab CI",
+    category: "cicd",
+    tagline: "Pipeline de CI/CD integrado ao repositório do GitLab.",
+    summary: "Para quem trabalha em empresa que usa GitLab, o pipeline é um arquivo .gitlab-ci.yml na raiz do projeto. A lógica é a mesma do GitHub Actions: jobs, stages, artefatos e regras de quando rodar. Saber os dois cobre a maior parte das vagas.",
+    qaFocus: [".gitlab-ci.yml: stages, jobs e scripts", "Artefatos e relatórios de teste no merge request", "rules para rodar smoke no MR e regressão na main", "Variáveis e segredos sem vazar no log"],
+    docs: [
+      { title: "GitLab CI/CD", url: "https://docs.gitlab.com/ci/", lang: "en", note: "Referência oficial." },
+      { title: "Quick start", url: "https://docs.gitlab.com/ci/quick_start/", lang: "en", note: "O primeiro pipeline, passo a passo." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Pipelines no GitLab #01 — Sua primeira automação em 20 minutos!", channel: "Code In Loop", lang: "pt", youtubeId: "TBlBnlIEzBk", kind: "video" },
+      { title: "GitLab CI CD Tutorial for Beginners [Crash Course]", channel: "TechWorld with Nana", lang: "en", youtubeId: "qP8kir2GUgo", kind: "video" },
+      { title: "GitLab CI/CD Pipeline Tutorial for Beginners", channel: "Valentin Despa", lang: "en", youtubeId: "z7nLsJvEyMY", kind: "video" },
+    ],
+  },
+  {
+    slug: "jmeter",
+    name: "JMeter",
+    category: "performance",
+    tagline: "Teste de carga com interface gráfica, ainda muito pedido em vagas.",
+    summary: "Ferramenta da Apache para testes de carga e performance. O k6 é mais moderno e mais fácil de versionar, mas o JMeter continua presente em empresas tradicionais e em muitas descrições de vaga. Os conceitos (usuários virtuais, ramp-up, percentis) são os mesmos nas duas.",
+    qaFocus: ["Thread Group: usuários, ramp-up e duração", "Samplers HTTP, extratores e correlação de tokens", "Assertions e listeners: o que olhar no resultado", "Rodar sem interface (modo CLI) para não distorcer a medição"],
+    docs: [
+      { title: "Getting started", url: "https://jmeter.apache.org/usermanual/get-started.html", lang: "en", note: "Manual oficial: instalação e execução." },
+      { title: "Plano de teste web", url: "https://jmeter.apache.org/usermanual/build-web-test-plan.html", lang: "en", note: "O primeiro teste de carga HTTP." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Testes de Performance com JMeter — Guia Prático para QAs", channel: "Guga Martins", lang: "pt", youtubeId: "goVsnPikjU4", kind: "video" },
+      { title: "JMeter do Zero:  Como realizar teste de performance na prática | GUIA COMPLETO", channel: "Build & Run", lang: "pt", youtubeId: "fLbHcr52xwk", kind: "video" },
+      { title: "JMeter Full Course Masterclass | Step by Step for Beginners | Raghav Pal |", channel: "Automation Step by Step", lang: "en", youtubeId: "SoW2pBak1_Q", kind: "video" },
+    ],
+  },
+  {
+    slug: "datadog",
+    name: "Datadog",
+    category: "observabilidade",
+    tagline: "Métricas, logs, traces e monitoramento sintético num produto só.",
+    summary: "Plataforma de observabilidade comum em empresas de produto, especialmente fora do Brasil. QA usa para achar o trace de uma requisição que falhou, cruzar o horário de um bug com erros e latência, e criar testes sintéticos que rodam em produção.",
+    qaFocus: ["Achar o trace de uma requisição pelo id", "Filtrar logs por serviço, ambiente e status", "Dashboards e monitores: o que dispara um alerta", "Testes sintéticos de API e de navegador"],
+    docs: [
+      { title: "Getting started", url: "https://docs.datadoghq.com/getting_started/", lang: "en", note: "Visão geral de cada produto." },
+    ],
+    courses: [
+      { title: "Datadog Learning Center", url: "https://learn.datadoghq.com/", lang: "en", note: "Cursos oficiais gratuitos, com laboratório." },
+    ],
+    videos: [
+      { title: "DATADOG NA PRÁTICA EM PORTUGUÊS", channel: "Max Lima", lang: "pt", youtubeId: "jbZxQmSuzkA", kind: "video" },
+      { title: "Datadog 101 Course | Datadog Tutorial for Beginners | SRE | DevOps", channel: "Thetips4you", lang: "en", youtubeId: "Js06FTU3nXo", kind: "video" },
+    ],
+  },
+  {
+    slug: "sentry",
+    name: "Sentry",
+    category: "observabilidade",
+    tagline: "Erros reais dos usuários, com stack trace e contexto.",
+    summary: "Captura exceções do front-end, do back-end e de apps mobile e agrupa por causa. Para QA, é a forma mais rápida de saber se um bug acontece em produção, com quantos usuários, em qual versão e com quais passos antes do erro.",
+    qaFocus: ["Ler uma issue: stack trace, breadcrumbs e tags", "Quantos usuários e quais versões são afetados", "Ligar o erro a um release para achar a mudança que quebrou", "Usar o Sentry para priorizar bugs com dado real"],
+    docs: [
+      { title: "Documentação do Sentry", url: "https://docs.sentry.io/", lang: "en", note: "SDKs e conceitos." },
+      { title: "Issues", url: "https://docs.sentry.io/product/issues/", lang: "en", note: "Como os erros são agrupados e lidos." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Como rastrear erros em seu aplicativo usando a ferramenta Sentry", channel: "Renan Zumas", lang: "pt", youtubeId: "Aury0O71BWs", kind: "video" },
+      { title: "Sentry in Six Minutes", channel: "Sentry", lang: "en", youtubeId: "4djseRVSan8", kind: "video", official: true },
+      { title: "Sentry 101: Error Monitoring For Frontend Applications", channel: "Sentry", lang: "en", youtubeId: "cl8tPBI4qUc", kind: "video", official: true },
+    ],
+  },
+  {
+    slug: "opentelemetry",
+    name: "OpenTelemetry",
+    category: "observabilidade",
+    tagline: "O padrão aberto para gerar métricas, logs e traces.",
+    summary: "Não é uma tela para olhar, é o padrão que os serviços usam para emitir sinais que depois aparecem no Grafana, no Datadog ou em outra ferramenta. Para QA, entender trace, span e propagação de contexto explica como seguir uma requisição por vários serviços.",
+    qaFocus: ["Trace, span e atributos", "Propagação de contexto entre serviços", "Usar o trace id para reproduzir um bug distribuído", "Instrumentação automática x manual"],
+    docs: [
+      { title: "Documentação do OpenTelemetry", url: "https://opentelemetry.io/docs/", lang: "en", note: "Guias por linguagem." },
+      { title: "Conceitos", url: "https://opentelemetry.io/docs/concepts/", lang: "en", note: "Sinais, contexto e coletor." },
+    ],
+    courses: [],
+    videos: [
+      { title: "OpenTelemetry: Tudo o que você precisa saber para trabalhar com Observabilidade. #cortesfullcycle", channel: "Full Cycle", lang: "pt", youtubeId: "tKfummynBbg", kind: "video" },
+      { title: "OpenTelemetry: Como Funciona de Verdade? | Do Código à Observabilidade — EP. 1", channel: "Decoding", lang: "pt", youtubeId: "JymQ3qBJAoA", kind: "video" },
+      { title: "What is OpenTelemetry? - Explanation and Demo", channel: "Better Stack", lang: "en", youtubeId: "LzLULxhyIpU", kind: "video" },
+    ],
+  },
+  {
+    slug: "burp-suite",
+    name: "Burp Suite",
+    category: "risco",
+    tagline: "O proxy de referência para teste de segurança web manual.",
+    summary: "Intercepta e altera as requisições entre navegador e servidor. Enquanto o ZAP brilha no scan automatizado, o Burp é a ferramenta padrão para explorar à mão: trocar ids, repetir chamadas, mexer em tokens. A versão Community é gratuita e basta para aprender. Use só em sistemas que você tem autorização para testar.",
+    qaFocus: ["Proxy e Intercept: ver e alterar a requisição", "Repeater para testar variações de uma chamada", "Testar controle de acesso trocando ids (IDOR)", "Treinar nos laboratórios da Web Security Academy"],
+    docs: [
+      { title: "Getting started", url: "https://portswigger.net/burp/documentation/desktop/getting-started", lang: "en", note: "Documentação oficial da PortSwigger." },
+      { title: "Burp Suite Community (download)", url: "https://portswigger.net/burp/communitydownload", lang: "en", note: "Versão gratuita." },
+    ],
+    courses: [
+      { title: "PortSwigger Web Security Academy", url: "https://portswigger.net/web-security", lang: "en", note: "Laboratórios gratuitos feitos pelos criadores do Burp." },
+    ],
+    videos: [
+      { title: "Dominando o Burp Suite", channel: "Solyd Offensive Security", lang: "pt", youtubeId: "qOJmTB_9-3g", kind: "video" },
+      { title: "Burpsuite Basics (FREE Community Edition)", channel: "John Hammond", lang: "en", youtubeId: "G3hpAeoZ4ek", kind: "video" },
+      { title: "How to use Burp Suite for Beginners", channel: "Elevate Cyber", lang: "en", youtubeId: "GxvFqgCBW-8", kind: "video" },
+    ],
+  },
+  {
+    slug: "nvda",
+    name: "NVDA (leitor de tela)",
+    category: "risco",
+    tagline: "O teste de acessibilidade que nenhuma ferramenta automática substitui.",
+    summary: "Leitor de tela gratuito para Windows e um dos mais usados no mundo. As ferramentas automáticas acham só parte dos problemas; ouvir a página como um usuário cego mostra rótulos sem sentido, ordem de leitura errada e mudanças que não são anunciadas. No Mac e no iPhone, o equivalente é o VoiceOver.",
+    qaFocus: ["Comandos básicos: ler, navegar por título, link e campo", "Nome acessível: o que o leitor anuncia em cada controle", "Mensagens de erro e mudanças dinâmicas são anunciadas?", "Combinar com o teste só por teclado"],
+    practice: { href: "/lab/ferramentas/acessibilidade", label: "Accessibility Inspector" },
+    docs: [
+      { title: "Usando o NVDA para avaliar acessibilidade", url: "https://webaim.org/articles/nvda/", lang: "en", note: "Guia da WebAIM focado em quem testa." },
+      { title: "Guia do usuário do NVDA", url: "https://www.nvaccess.org/files/nvda/documentation/userGuide.html", lang: "en", note: "Referência de todos os comandos." },
+      { title: "Download do NVDA", url: "https://www.nvaccess.org/download/", lang: "en", note: "Gratuito e open source." },
+    ],
+    courses: [
+      { title: "W3C WAI: avaliar acessibilidade", url: "https://www.w3.org/WAI/test-evaluate/", lang: "en", note: "Onde o leitor de tela entra numa avaliação completa." },
+    ],
+    videos: [
+      { title: "Screen Reader Basics: NVDA -- A11ycasts #09", channel: "Chrome for Developers", lang: "en", youtubeId: "Jao3s_CwdRU", kind: "video" },
+      { title: "Accessibility Testing with the NVDA Screenreader", channel: "Deque Systems", lang: "en", youtubeId: "Vx1vSd5uYS8", kind: "video" },
+      { title: "NVDA Screen Reader Tutorial: How to Use It for Accessibility Testing", channel: "Software Testing 101", lang: "en", youtubeId: "aAh1PFsgcBY", kind: "video" },
+    ],
+  },
+  {
+    slug: "trivy",
+    name: "Trivy",
+    category: "risco",
+    tagline: "Scanner de vulnerabilidades em dependências, imagens e configuração.",
+    summary: "Ferramenta open source que procura vulnerabilidades conhecidas em imagens Docker, dependências do projeto e arquivos de infraestrutura. Roda em segundos no pipeline e pode reprovar o build. Snyk e Dependabot cobrem parte do mesmo espaço. É a porta de entrada de QA em DevSecOps.",
+    qaFocus: ["Scan de imagem, de repositório e de arquivo de configuração", "Ler severidade, CVE e versão com correção", "Reprovar o pipeline só a partir de uma severidade", "Diferença entre vulnerabilidade conhecida e teste de segurança"],
+    docs: [
+      { title: "Site oficial do Trivy", url: "https://trivy.dev/", lang: "en", note: "Documentação e instalação." },
+      { title: "Repositório do Trivy", url: "https://github.com/aquasecurity/trivy", lang: "en", note: "Exemplos de uso e integração com CI." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Trivy - Scan de Vulnerabilidade de Containers na sua Pipeline!", channel: "Matheus Fidelis", lang: "pt", youtubeId: "s1ZvnRqP-wk", kind: "video" },
+      { title: "Trivy: Segurança do código ao Kubernetes", channel: "Fabricio Veronez", lang: "pt", youtubeId: "4JexIwjS2eg", kind: "video" },
+      { title: "Container Image Scanning with Trivy -- Ep. 1 Trivy Overview", channel: "Aqua Security Open Source", lang: "en", youtubeId: "-IH5inFyEqU", kind: "video", official: true },
+    ],
+  },
+  {
+    slug: "testcontainers",
+    name: "Testcontainers",
+    category: "contrato",
+    tagline: "Banco, fila e serviços reais e descartáveis dentro do teste.",
+    summary: "Biblioteca que sobe containers Docker durante o teste e derruba no fim. Em vez de mockar o banco ou depender de um ambiente compartilhado, cada execução tem um Postgres, um Kafka ou um Redis limpo. Muito pedida em vagas de QA de back-end, e disponível em Java, Python, Node, Go e .NET.",
+    qaFocus: ["Subir um banco real no início do teste", "Massa de dados isolada por execução", "Por que isso reduz testes instáveis por ambiente", "Custo: tempo de subida e Docker no CI"],
+    docs: [
+      { title: "Getting started", url: "https://testcontainers.com/getting-started/", lang: "en", note: "Conceitos e primeiro teste." },
+      { title: "Guias", url: "https://testcontainers.com/guides/", lang: "en", note: "Exemplos prontos por linguagem e serviço." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Testcontainers - Testes de Integração com Contêineres - José Dias", channel: "Dias Neto", lang: "pt", youtubeId: "MG5R9qvYvQE", kind: "video" },
+      { title: "Spring Boot + Testcontainers: Testes de integração fáceis e completos", channel: "O Igor Rudel", lang: "pt", youtubeId: "lZbFm8FiWiw", kind: "video" },
+      { title: "Testcontainers – From Zero to Hero. By @MarcoCodes", channel: "IntelliJ IDEA, a JetBrains IDE", lang: "en", youtubeId: "v3eQCIWLYOw", kind: "video" },
+      { title: "Testcontainers have forever changed the way I write tests", channel: "Dreams of Code", lang: "en", youtubeId: "sNg0bnMF_qY", kind: "video" },
+    ],
+  },
+  {
+    slug: "faker",
+    name: "Faker",
+    category: "contrato",
+    tagline: "Gera nomes, e-mails, CPFs e endereços falsos para massa de teste.",
+    summary: "Biblioteca que gera dados realistas e aleatórios, com versões para JavaScript (@faker-js/faker) e Python. Evita testes que dependem de um usuário fixo e quebram quando alguém apaga o registro. Com uma seed fixa, o mesmo dado se repete e a falha pode ser reproduzida.",
+    qaFocus: ["Gerar massa por teste em vez de usar dado fixo", "Seed para reproduzir a falha", "Locale pt_BR: nomes, CPF e endereço brasileiros", "Dado aleatório não substitui caso de borda escolhido"],
+    docs: [
+      { title: "Faker (JavaScript)", url: "https://fakerjs.dev/guide/", lang: "en", note: "Guia da versão JS e TS." },
+      { title: "Faker (Python)", url: "https://faker.readthedocs.io/en/master/", lang: "en", note: "Documentação da versão Python, com locale pt_BR." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Geração de dados falsos de teste com Python: módulo faker", channel: "Programadores Visie", lang: "pt", youtubeId: "bCkQpwD2A_0", kind: "video" },
+      { title: "Crie Dados Simulados (Falsos) usando Python Faker + Ferramenta Online", channel: "Alexandre Polselli | Data Universe", lang: "pt", youtubeId: "dwxhtcDoZcM", kind: "video" },
+      { title: "How to Generate Random Test Data in Playwright with Faker.js | TypeScript", channel: "Code And Test", lang: "en", youtubeId: "qOMyITr7x9U", kind: "video" },
+      { title: "Python for Testers #45 - How to Generate Test Data using Python Faker", channel: "Software Testing Mentor", lang: "en", youtubeId: "4K97iY0MiQ0", kind: "video" },
+    ],
+  },
+  {
+    slug: "schemathesis",
+    name: "Schemathesis",
+    category: "contrato",
+    tagline: "Gera milhares de testes de API a partir do OpenAPI.",
+    summary: "Lê a especificação OpenAPI e gera requisições automaticamente, inclusive com valores estranhos, para encontrar respostas 500 e respostas que não batem com o contrato. Complementa o Pact quando a API não tem consumidores escrevendo pactos.",
+    qaFocus: ["Rodar contra um OpenAPI existente pela CLI", "Ler uma falha e reproduzir com o curl gerado", "Erro 500 x resposta fora do schema", "Rodar no CI como rede de segurança do contrato"],
+    docs: [
+      { title: "Documentação do Schemathesis", url: "https://schemathesis.readthedocs.io/", lang: "en", note: "Instalação, CLI e integração com pytest." },
+      { title: "Repositório", url: "https://github.com/schemathesis/schemathesis", lang: "en", note: "Exemplos rápidos e integração com CI." },
+    ],
+    courses: [],
+    videos: [
+      { title: "Automating API Testing Using OpenAPI And Schemathesis", channel: "Cloud-Native Development", lang: "en", youtubeId: "4r7OC-lBKMg", kind: "video" },
+      { title: "Your API docs say 200. The server says 500? Try Schemathesis", channel: "The AI Toolbox", lang: "en", youtubeId: "F0O2UGi7r-o", kind: "video" },
+    ],
+  },
 ];
 
 // Curso da plataforma que ensina a mesma ferramenta. Mantido à parte para que um
@@ -554,9 +999,12 @@ const internalCourses: Record<string, ToolGuide["internalCourse"]> = {
   bruno: { href: "/trilhas/testes-api/bruno", title: "Subtrilha Bruno", detail: "Coleções locais, versionadas e executadas pela CLI." },
   swagger: { href: "/trilhas/testes-api", title: "Trilha Testes de API", detail: "Fundamentos de contrato, risco e comportamento de API." },
   pact: { href: "/trilhas/testes-api", title: "Trilha Testes de API", detail: "Fundamentos de contrato, antes de automatizar com Pact." },
+  "rest-assured": { href: "/trilhas/testes-api", title: "Trilha Testes de API", detail: "O que testar numa API, antes de automatizar em Java." },
   k6: { href: "/trilhas/k6", title: "Trilha k6", detail: "Do primeiro script ao gate de performance, contra a API de treino." },
   gherkin: { href: "/trilhas/gherkin", title: "Trilha Gherkin", detail: "Escrever cenários que produto, dev e QA entendem igual." },
   sql: { href: "/trilhas/sql-qa", title: "SQL para QA", detail: "Consultas para conferir dados e preparar massa de teste." },
+  jenkins: { href: "/trilhas/cicd", title: "Trilha CI/CD", detail: "Pipeline, gates de qualidade e leitura de falhas no CI." },
+  "gitlab-ci": { href: "/trilhas/cicd", title: "Trilha CI/CD", detail: "Pipeline, gates de qualidade e leitura de falhas no CI." },
   "github-actions": { href: "/trilhas/cicd", title: "Trilha CI/CD", detail: "Pipeline, gates de qualidade e leitura de falhas no CI." },
 };
 
@@ -565,11 +1013,11 @@ for (const guide of toolGuides) guide.internalCourse ??= internalCourses[guide.s
 // Guias sugeridos ao fim de cada módulo da mentoria (chave = id do módulo em path-v2).
 const moduleGuideSlugs: Record<string, readonly string[]> = {
   "produto-risco": ["devtools", "jira"],
-  "desenho-comunicacao": ["gherkin", "jira", "qase"],
-  "automacao-web": ["playwright", "cypress", "selenium", "appium", "jest"],
-  "api-confiabilidade": ["postman", "bruno", "swagger", "pact", "sql", "owasp-zap"],
-  "cicd-operacao": ["git", "github-actions", "docker", "grafana"],
-  "acessibilidade-performance": ["axe", "lighthouse", "k6"],
+  "desenho-comunicacao": ["gherkin", "jira", "xray", "testrail", "qase"],
+  "automacao-web": ["playwright", "cypress", "selenium", "visual-testing", "appium", "maestro", "browserstack", "jest", "pytest", "junit"],
+  "api-confiabilidade": ["postman", "bruno", "rest-assured", "swagger", "pact", "schemathesis", "wiremock", "msw", "testcontainers", "faker", "sql", "owasp-zap", "burp-suite"],
+  "cicd-operacao": ["git", "github-actions", "jenkins", "gitlab-ci", "allure", "docker", "trivy", "grafana", "datadog", "sentry", "opentelemetry"],
+  "acessibilidade-performance": ["axe", "nvda", "lighthouse", "k6", "jmeter"],
 };
 
 export function guidesForModule(moduleId: string): ToolGuide[] {
